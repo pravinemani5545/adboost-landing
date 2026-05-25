@@ -202,9 +202,10 @@ section { position: relative; z-index: 1; }
 .bcard { position: relative; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; overflow: hidden; transition: transform .3s, box-shadow .3s, border-color .3s; display: flex; flex-direction: column; }
 .bcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--line-2); }
 .bcard .tag { position: absolute; top: 18px; left: 20px; font-family: "Geist Mono", monospace; font-size: 10.5px; color: var(--mute); letter-spacing: .08em; z-index: 2; }
-.bcard .body { padding: 22px 24px 26px; z-index: 2; }
-.bcard h3 { margin: 0 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -.015em; line-height: 1.18; text-wrap: balance; }
+.bcard .body { padding: 26px 26px 28px; z-index: 2; }
+.bcard h3 { margin: 0 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -.015em; line-height: 1.22; text-wrap: balance; }
 .bcard p { margin: 0; color: var(--mute); font-size: 14px; line-height: 1.55; text-wrap: pretty; }
+.b3 .body, .b5 .body, .b6 .body { border-top: 1px solid var(--line); }
 
 .b1 { grid-column: span 4; background: linear-gradient(180deg, #fff, #f3f5fa); }
 .b2 { grid-column: span 2; }
@@ -213,13 +214,13 @@ section { position: relative; z-index: 1; }
 .b5 { grid-column: span 3; }
 .b6 { grid-column: span 3; }
 
-.b1 .vis { flex: 1; position: relative; padding: 36px 24px 12px; display: flex; align-items: center; align-content: center; justify-content: center; gap: 14px 18px; flex-wrap: wrap; }
+.b1 .vis { flex: 1; position: relative; padding: 28px 24px 28px; display: flex; align-items: center; align-content: center; justify-content: center; gap: 14px 18px; flex-wrap: wrap; }
 .b1 .cat { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px 9px 9px; font-size: 13.5px; font-weight: 500; box-shadow: var(--shadow-sm); transition: transform .3s ease; animation: catRise .7s ease-out backwards; }
 @keyframes catRise { from { opacity: 0; transform: translateY(10px); } }
 .b1 .cat .ico { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; }
 .b1 .cat:hover { transform: translateY(-3px); }
 .b1 .cat .meta { font-family: "Geist Mono", monospace; font-size: 11px; color: var(--mute); font-weight: 400; margin-left: 4px; }
-.b1 .body { padding-top: 18px; }
+.b1 .body { padding-top: 22px; border-top: 1px solid var(--line); }
 .b1 .vis::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 40% at 50% 0%, rgba(0, 87, 255, .07), transparent 65%); pointer-events: none; }
 
 .b2 .vis { flex: 1; display: grid; place-items: center; padding: 24px; background: linear-gradient(180deg, #fafbfd, #f0f3fa); }
