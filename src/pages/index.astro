@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+
+const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoCal link
 ---
 
 <!doctype html>
@@ -7,15 +9,15 @@ import '../styles/global.css';
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AdBoost Health — Growth Marketing for Health & Telehealth Brands</title>
-<meta name="description" content="Growth marketing built exclusively for GLP-1, telehealth, supplement & wellness brands. Lower CAC, scale spend profitably — without compliance landmines." />
+<title>AdBoost Health, Growth Marketing for Health & Telehealth Brands</title>
+<meta name="description" content="Growth marketing built exclusively for GLP-1, telehealth, supplement & wellness brands. Lower CAC, scale spend profitably, without compliance landmines." />
 <meta name="theme-color" content="#0057ff" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="AdBoost Health — Growth Marketing for Health Brands" />
-<meta property="og:description" content="Lower CAC, improve LTV, and scale paid — without compliance landmines. 71+ founders served. $153M+ tracked." />
+<meta property="og:title" content="AdBoost Health, Growth Marketing for Health Brands" />
+<meta property="og:description" content="Lower CAC, improve LTV, and scale paid, without compliance landmines. 71+ founders served. $153M+ tracked." />
 <meta property="og:site_name" content="AdBoost Health" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="AdBoost Health — Growth Marketing for Health Brands" />
+<meta name="twitter:title" content="AdBoost Health, Growth Marketing for Health Brands" />
 <meta name="twitter:description" content="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,7 +39,7 @@ import '../styles/global.css';
       <a href="#process">Process</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a class="btn btn-primary" href="#cta">
+    <a class="btn btn-primary" href={NEOCAL_URL} target="_blank" rel="noopener">
       Book a call
       <span class="chev">
         <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -64,95 +66,125 @@ import '../styles/global.css';
         for <span class="serif">fast-growing</span><br />
         <span class="underline">health</span> brands.
       </h1>
-      <p class="lede reveal d2">We help GLP-1, telehealth, supplement, and health-app brands lower CAC, improve LTV, and scale paid — without the compliance landmines.</p>
+      <p class="lede reveal d2">We help health and wellness brands acquire more customers profitably and increase retention through high-converting ads, funnels, and creative strategy, without the compliance landmines.</p>
       <div class="ctas reveal d3">
-        <a class="btn btn-primary btn-lg" href="#cta">
+        <a class="btn btn-primary btn-lg" href={NEOCAL_URL} target="_blank" rel="noopener">
           Book a free strategy call
           <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
         <a class="btn btn-ghost btn-lg" href="#process">See the process</a>
       </div>
       <div class="hero-perks reveal d3">
-        <span>No pitch deck</span>
-        <span>Free 48h written audit</span>
+        <span>Meet a senior strategist</span>
+        <span>Free live audit</span>
         <span>Plan you keep either way</span>
       </div>
       <div class="meta reveal d3">
-        <div class="avatars"><span></span><span></span><span></span><span></span></div>
+        <div class="avatars">
+          <span style="background-image:url('https://i.pravatar.cc/80?img=12')"></span>
+          <span style="background-image:url('https://i.pravatar.cc/80?img=47')"></span>
+          <span style="background-image:url('https://i.pravatar.cc/80?img=33')"></span>
+          <span style="background-image:url('https://i.pravatar.cc/80?img=68')"></span>
+        </div>
         <span>Trusted by <b style="color:var(--ink)">71+ founders</b> · 4.9 / 5 average rating · <b style="color:var(--ink)">4 spots left</b> this month</span>
       </div>
     </div>
 
     <div class="reveal d2">
       <div class="ops" id="ops">
-        <div class="ops-shelf s1"><span class="av">+</span><span><b>+$2.4M</b> tracked this week</span></div>
         <div class="ops-shelf s2"><span class="av" style="background:linear-gradient(135deg,#16a34a,#0d6b32)">↓</span><span>CAC <b>↓ 18%</b> · last 7d</span></div>
 
         <div class="ops-head">
           <div class="title">
             <span class="live-dot"></span>
-            <span>Partner operations · <span class="mono" style="color:var(--mute);font-size:12px">live</span></span>
+            <span>Performance overview · <span class="mono" style="color:var(--mute);font-size:12px">live</span></span>
           </div>
           <span class="time" id="opsTime">10:47:21 AM</span>
         </div>
         <div class="ops-tabs">
           <span class="active">Overview</span>
-          <span>Spend</span>
+          <span>Acquisition</span>
+          <span>Retention</span>
           <span>Creative</span>
           <span>Channels</span>
         </div>
 
+        <div class="ops-colheads">
+          <div></div>
+          <div><b>CAC</b><small>vs. prior 30 days</small></div>
+          <div><b>ROAS</b><small>vs. prior 30 days</small></div>
+          <div class="ch-trend">90 DAY TREND</div>
+        </div>
+
         <div class="ops-row">
           <div class="opclient">
-            <div class="av a1">NC</div>
-            <div><div class="nm">NutriCore</div><div class="cat">GLP-1 SUPPORT</div></div>
+            <div class="av a1" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 3.5l6 6-11 11-6-6 11-11z M5 13l6 6"/></svg>
+            </div>
+            <div><div class="nm">GLP-1 Brand</div><div class="cat">Subscription</div></div>
           </div>
-          <div class="met"><span>CAC</span>$32.10 <span class="delta down">↓ 28%</span></div>
-          <div class="met"><span>ROAS</span>3.4× <span class="delta up">↑ 12%</span></div>
+          <div class="met">$86.90 <span class="delta down">↓ 75%</span></div>
+          <div class="met">2.1× <span class="delta up">↑ 12%</span></div>
           <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,28 C12,26 24,22 36,20 S60,18 72,14 96,8 120,6" stroke="#0057ff" stroke-width="1.6" fill="none"/></svg>
+            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,18 C6,22 14,27 22,25 C34,21 50,14 70,10 C90,7 105,5 120,3" stroke="#8b5cf6" stroke-width="1.7" fill="none"/></svg>
           </div>
         </div>
 
         <div class="ops-row">
           <div class="opclient">
-            <div class="av a2">VT</div>
-            <div><div class="nm">Vitaly</div><div class="cat">DAILY SUPPLEMENTS</div></div>
+            <div class="av a2" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </div>
+            <div><div class="nm">Telehealth Brand</div><div class="cat">Patient Acquisition</div></div>
           </div>
-          <div class="met"><span>CAC</span>$24.80 <span class="delta down">↓ 41%</span></div>
-          <div class="met"><span>ROAS</span>4.1× <span class="delta up">↑ 26%</span></div>
+          <div class="met">$32.10 <span class="delta down">↓ 21%</span></div>
+          <div class="met">1.7× <span class="delta up">↑ 17%</span></div>
           <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,30 C18,28 30,18 50,16 S78,8 100,4 120,3 120,3" stroke="#16a34a" stroke-width="1.6" fill="none"/></svg>
+            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,16 C8,20 18,26 26,23 C40,18 56,12 76,8 C92,6 108,4 120,3" stroke="#16a34a" stroke-width="1.7" fill="none"/></svg>
           </div>
         </div>
 
         <div class="ops-row">
           <div class="opclient">
-            <div class="av a3">LH</div>
-            <div><div class="nm">Lumen Health</div><div class="cat">TELEHEALTH</div></div>
+            <div class="av a3" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3.5C9 8 6.5 11.5 6.5 14.5a5.5 5.5 0 0011 0c0-3-2.5-6.5-5.5-11z"/></svg>
+            </div>
+            <div><div class="nm">Supplement Brand</div><div class="cat">DTC</div></div>
           </div>
-          <div class="met"><span>CAC</span>$58.20 <span class="delta down">↓ 14%</span></div>
-          <div class="met"><span>ROAS</span>2.6× <span class="delta up">↑ 8%</span></div>
+          <div class="met">$18.90 <span class="delta down">↓ 53%</span></div>
+          <div class="met">2.3× <span class="delta up">↑ 23%</span></div>
           <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,26 C16,22 30,28 50,20 S74,18 90,12 120,10 120,10" stroke="#0057ff" stroke-width="1.6" fill="none"/></svg>
+            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,17 C6,21 14,27 24,24 C36,18 52,12 72,8 C90,6 106,4 120,3" stroke="#f59e0b" stroke-width="1.7" fill="none"/></svg>
           </div>
         </div>
 
         <div class="ops-row">
           <div class="opclient">
-            <div class="av a4">PR</div>
-            <div><div class="nm">Pulse Rx</div><div class="cat">HEALTH APP</div></div>
+            <div class="av a4" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="2"/><circle cx="12" cy="18.2" r=".9" fill="#fff" stroke="none"/></svg>
+            </div>
+            <div><div class="nm">Health App</div><div class="cat">Mobile</div></div>
           </div>
-          <div class="met"><span>CAC</span>$19.50 <span class="delta down">↓ 33%</span></div>
-          <div class="met"><span>ROAS</span>5.2× <span class="delta up">↑ 31%</span></div>
+          <div class="met">$1.85 <span class="delta down">↓ 37%</span></div>
+          <div class="met">5.3× <span class="delta up">↑ 31%</span></div>
           <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,30 C20,30 36,22 56,16 S84,4 120,2" stroke="#16a34a" stroke-width="1.6" fill="none"/></svg>
+            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,18 C8,23 16,28 24,25 C36,18 54,12 76,8 C94,5 110,3 120,2" stroke="#0057ff" stroke-width="1.7" fill="none"/></svg>
           </div>
         </div>
 
-        <div class="ops-foot">
-          <span>4 of 71 partners</span>
-          <div class="total">Tracked rev. <b>$<span id="opsRev">0</span></b></div>
+        <div class="ops-stats">
+          <div class="ops-stat">
+            <span class="ico" style="background:rgba(0,87,255,.1);color:#0057ff">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 21a7 7 0 0114 0M12 12a4 4 0 100-8 4 4 0 000 8z"/></svg>
+            </span>
+            <div class="kv"><span class="v">70+</span><span class="l">Health brands managed</span></div>
+          </div>
+          <div class="ops-stat">
+            <span class="ico" style="background:rgba(22,163,74,.12);color:#16a34a">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v18M16 7H10a3 3 0 100 6h4a3 3 0 110 6H8"/></svg>
+            </span>
+            <div class="kv"><span class="v">$<span id="opsRev">12.4M+</span></span><span class="l">Tracked revenue this quarter</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -168,18 +200,20 @@ import '../styles/global.css';
     </div>
     <div class="marquee-wrap">
       <div class="marquee" id="marquee">
-        <span class="logo"><span class="lm">N</span> NutriCore</span>
-        <span class="logo serif-l">Vitaly</span>
-        <span class="logo"><span class="lm">L</span> Lumen Health</span>
-        <span class="logo serif-l">Pulse&nbsp;Rx</span>
-        <span class="logo"><span class="lm">W</span> WellBound</span>
-        <span class="logo serif-l">Hum&nbsp;&amp;&nbsp;Co</span>
-        <span class="logo"><span class="lm">K</span> Korelab</span>
-        <span class="logo serif-l">Bioluxe</span>
-        <span class="logo"><span class="lm">A</span> Alveos</span>
-        <span class="logo serif-l">Florae</span>
-        <span class="logo"><span class="lm">B</span> Brightline</span>
-        <span class="logo serif-l">Plantam</span>
+        <span class="logo" data-tall><img src="/logos/adidas.svg" alt="adidas" /></span>
+        <span class="logo"><img src="/logos/jnj.svg" alt="Johnson &amp; Johnson" /></span>
+        <span class="logo"><img src="/logos/alveos.svg" alt="alveos" /></span>
+        <span class="logo logo-tile"><img src="/logos/liv.svg" alt="Liv" /></span>
+        <span class="logo"><img src="/logos/fitbiomics.png" alt="FITBIOMICS" /></span>
+        <span class="logo"><img src="/logos/nectar.svg" alt="Nectar" /></span>
+        <span class="logo"><img src="/logos/gtg.svg" alt="GTG Energy" /></span>
+        <span class="logo logo-compound">
+          <img src="/logos/undefined-health.png" alt="" class="logo-mark" />
+          <span class="logo-text">
+            <span class="logo-name">undefined health</span>
+            <span class="logo-tag">Live Undefined</span>
+          </span>
+        </span>
       </div>
     </div>
   </div>
@@ -189,28 +223,28 @@ import '../styles/global.css';
 <section class="creative-strip">
   <div class="container">
     <div class="strip-head reveal">
-      <h3>Creative built for the <span class="serif" style="color:var(--blue)">scroll</span> — and the rules of every health platform.</h3>
+      <h3>Creative built for the <span class="serif" style="color:var(--blue)">scroll</span>, and the rules of every health platform.</h3>
       <div class="right">2,400+ static & motion creatives shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.</div>
     </div>
   </div>
   <div class="phone-rail-wrap reveal d1">
     <div class="phone-rail" id="phoneRail">
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c1"></div><div class="meta-tag">META · STATIC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">No more</span><b>BLOAT.</b></div><div class="ad-cta">SHOP</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c2"></div><div class="meta-tag">TIKTOK · UGC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">40, juicy</span><b>& fully booked.</b></div><div class="ad-badge">CAC ↓ 32%</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c3"></div><div class="meta-tag">META · MOTION</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">This is</span><b>NOT<br />Ozempic.</b></div><div class="ad-badge">ROAS ↑ 2.4×</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c4"></div><div class="meta-tag">GOOGLE · DEMAND</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Marathoners,</span><b style="font-size:22px">Bonus drop.</b></div><div class="ad-cta">JOIN</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c5"></div><div class="meta-tag">META · STATIC</div><div class="ad-title" style="color:#3a2510"><span class="serif" style="display:block;font-size:18px">It's like</span><b style="color:#3a2510">honey<br />in a bottle.</b></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c6"></div><div class="meta-tag">TIKTOK · STATIC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Sleep,</span><b>then everything.</b></div><div class="ad-badge">CTR 2.8%</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c7"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · MOTION</div><div class="ad-title" style="color:#0a0a0f"><span class="serif" style="display:block;font-size:18px;color:#0a0a0f">Clinically</span><b style="color:#0a0a0f">studied.</b></div><div class="ad-cta" style="color:#0a0a0f;border-color:rgba(0,0,0,.5)">LEARN MORE</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c8"></div><div class="meta-tag">SNAP · UGC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Mood meets</span><b>magnesium.</b></div><div class="ad-badge">+18k orders</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c1"></div><div class="meta-tag">META · STATIC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">No more</span><b>BLOAT.</b></div><div class="ad-cta">SHOP</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c2"></div><div class="meta-tag">TIKTOK · UGC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">40, juicy</span><b>& fully booked.</b></div><div class="ad-badge">CAC ↓ 32%</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c3"></div><div class="meta-tag">META · MOTION</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">This is</span><b>NOT<br />Ozempic.</b></div><div class="ad-badge">ROAS ↑ 2.4×</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c4"></div><div class="meta-tag">GOOGLE · DEMAND</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Marathoners,</span><b style="font-size:22px">Bonus drop.</b></div><div class="ad-cta">JOIN</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c5"></div><div class="meta-tag">META · STATIC</div><div class="ad-title" style="color:#3a2510"><span class="serif" style="display:block;font-size:18px">It's like</span><b style="color:#3a2510">honey<br />in a bottle.</b></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c6"></div><div class="meta-tag">TIKTOK · STATIC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Sleep,</span><b>then everything.</b></div><div class="ad-badge">CTR 2.8%</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c7"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · MOTION</div><div class="ad-title" style="color:#0a0a0f"><span class="serif" style="display:block;font-size:18px;color:#0a0a0f">Clinically</span><b style="color:#0a0a0f">studied.</b></div><div class="ad-cta" style="color:#0a0a0f;border-color:rgba(0,0,0,.5)">LEARN MORE</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad ad-c8"></div><div class="meta-tag">SNAP · UGC</div><div class="ad-title"><span class="serif" style="display:block;font-size:18px">Mood meets</span><b>magnesium.</b></div><div class="ad-badge">+18k orders</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">ADVERTORIAL</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">TIKTOK · UGC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">ADVERTORIAL</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.png')"></div><div class="meta-tag">META · STATIC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.png')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">TIKTOK · UGC</div></div></div>
     </div>
   </div>
 </section>
@@ -221,7 +255,7 @@ import '../styles/global.css';
     <div class="section-head reveal">
       <span class="eyebrow"><span class="dot"></span>WHY PARTNERS LOVE US</span>
       <h2>Built for health brands. <span class="serif">Designed to scale.</span></h2>
-      <p>Five things every founder gets from day one — and the reason our partners average <b style="color:var(--ink)">24% lower CAC</b> in the first 30 days.</p>
+      <p>Five things every founder gets from day one, and the reason our partners average <b style="color:var(--ink)">24% lower CAC</b> in the first 30 days.</p>
     </div>
 
     <div class="bento-grid">
@@ -251,7 +285,7 @@ import '../styles/global.css';
               <div class="pv">BS</div>
               <div><div class="who">Brandon Scott</div><div class="role">GROWTH LEAD · 7Y</div></div>
             </div>
-            <div class="msg">New angle live tonight — should pull CAC under $38 by Friday ✦</div>
+            <div class="msg">New angle live tonight, should pull CAC under $38 by Friday ✦</div>
             <div class="status"><span class="pulse"></span>Replies in 12m on avg.</div>
           </div>
         </div>
@@ -283,7 +317,7 @@ import '../styles/global.css';
         </div>
         <div class="body">
           <h3>Compliance-first creative.</h3>
-          <p>Pre-approved against health-vertical policies — so launches don't get yanked.</p>
+          <p>Pre-approved against health-vertical policies, so launches don't get yanked.</p>
         </div>
       </div>
 
@@ -292,14 +326,23 @@ import '../styles/global.css';
         <div class="body">
           <span class="tag">04 · CREATIVE ENGINE</span>
           <h3>20+ new creatives shipped every month.</h3>
-          <p>Static, motion, and UGC — produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.</p>
+          <p>Static, motion, and UGC, produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.</p>
           <div style="display:flex;gap:24px;margin-top:18px;flex-wrap:wrap">
             <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">CREATIVES SHIPPED</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">2,418</div></div>
             <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">WIN RATE</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">18%</div></div>
             <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">UGC CREATORS</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">340+</div></div>
           </div>
         </div>
-        <div class="vis"><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div><div class="tile"></div></div>
+        <div class="vis">
+          <div class="tile" style="background-image:url('/ads/ozempic.png')"></div>
+          <div class="tile" style="background-image:url('/ads/alveos.png')"></div>
+          <div class="tile" style="background-image:url('/ads/nectar.png')"></div>
+          <div class="tile" style="background-image:url('/ads/vnella.png')"></div>
+          <div class="tile" style="background-image:url('/ads/limitless.png')"></div>
+          <div class="tile" style="background-image:url('/ads/mentaid.png')"></div>
+          <div class="tile" style="background-image:url('/ads/sweating.png')"></div>
+          <div class="tile" style="background-image:url('/ads/cabo.png')"></div>
+        </div>
       </div>
 
       <!-- B5 compounding system -->
@@ -329,7 +372,7 @@ import '../styles/global.css';
         </div>
         <div class="body">
           <h3>A system that compounds while you sleep.</h3>
-          <p>Tested creative library, optimized landers, and clean attribution — all working in lockstep, week after week.</p>
+          <p>Tested creative library, optimized landers, and clean attribution, all working in lockstep, week after week.</p>
         </div>
       </div>
 
@@ -365,7 +408,7 @@ import '../styles/global.css';
         <span class="eyebrow"><span class="dot"></span>REAL RESULTS</span>
         <h2>Numbers from <span class="serif">real</span> partners.</h2>
       </div>
-      <div class="r">Snapshots from the last 12 months. Brand names anonymized — happy to walk through the underlying account on a call.</div>
+      <div class="r">Snapshots from the last 12 months. Brand names anonymized, happy to walk through the underlying account on a call.</div>
     </div>
     <div class="case-grid">
 
@@ -387,7 +430,7 @@ import '../styles/global.css';
         </div>
         <div class="stats">
           <div class="s"><div class="l">ROAS</div><div class="v">0.8× → <span class="blue">3.5×</span></div></div>
-          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−52%</span></div></div>
+          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−64%</span></div></div>
           <div class="s"><div class="l">TIME</div><div class="v">60 days</div></div>
         </div>
       </div>
@@ -410,7 +453,7 @@ import '../styles/global.css';
         </div>
         <div class="stats">
           <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−40%</span></div></div>
-          <div class="s"><div class="l">AOV</div><div class="v">+<span class="blue">22%</span></div></div>
+          <div class="s"><div class="l">ROAS</div><div class="v">1.2× → <span class="blue">2.8×</span></div></div>
           <div class="s"><div class="l">TIME</div><div class="v">14 days</div></div>
         </div>
       </div>
@@ -428,13 +471,13 @@ import '../styles/global.css';
           </div>
         </div>
         <div class="body">
-          <h4>$0 → $4.8M in 9 months.</h4>
+          <h4>$0 → $1.6M in 9 months.</h4>
           <p>Built the full acquisition engine from a cold start: positioning, creative system, paid social, lifecycle.</p>
         </div>
         <div class="stats">
-          <div class="s"><div class="l">REVENUE</div><div class="v"><span class="blue">$4.8M</span></div></div>
-          <div class="s"><div class="l">INSTALLS</div><div class="v">218k</div></div>
-          <div class="s"><div class="l">PAYBACK</div><div class="v"><span class="green">28d</span></div></div>
+          <div class="s"><div class="l">REVENUE</div><div class="v"><span class="blue">$1.6M</span></div></div>
+          <div class="s"><div class="l">LTV</div><div class="v">+<span class="blue">32%</span></div></div>
+          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−80%</span></div></div>
         </div>
       </div>
 
@@ -449,7 +492,7 @@ import '../styles/global.css';
       <div class="process-left reveal">
         <span class="eyebrow"><span class="dot"></span>HOW IT WORKS</span>
         <h2>Set up in 5 days.<span class="serif">Results in 31.</span></h2>
-        <p>No 90-day onboarding. No "strategy decks." Health brands can't afford to lose a quarter to a slow agency — neither can we.</p>
+        <p>No 90-day onboarding. No "strategy decks." Health brands can't afford to lose a quarter to a slow agency, neither can we.</p>
         <div class="stamps">
           <span class="stamp">5-DAY SETUP</span>
           <span class="stamp">DAILY SLACK</span>
@@ -466,7 +509,7 @@ import '../styles/global.css';
           <span class="num">01 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16l-7-3.5L5 20V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
-            <div><h4>Book a free strategy call</h4><p>We pull your account, audit your spend, and walk you through where the real growth lives — before you pay a dollar.</p>
+            <div><h4>Book a free strategy call</h4><p>We pull your account, audit your spend, and walk you through where the real growth lives, before you pay a dollar.</p>
               <span class="duration">DAY 0–1</span>
             </div>
           </div>
@@ -502,7 +545,7 @@ import '../styles/global.css';
           <span class="num">03 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19l5-5 4 4 7-9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><h4>Build the winning system</h4><p>Clean creative testing framework, scalable spend bands, weekly iteration. The system compounds — every week beats the last.</p>
+            <div><h4>Build the winning system</h4><p>Clean creative testing framework, scalable spend bands, weekly iteration. The system compounds, every week beats the last.</p>
               <span class="duration">DAY 6–31</span>
             </div>
           </div>
@@ -528,22 +571,22 @@ import '../styles/global.css';
   <div class="container">
     <div class="spot-grid">
       <div class="spot-pic reveal">
-        <span class="label"><span class="ldot"></span>FOUNDER · NUTRICORE</span>
+        <span class="label"><span class="ldot"></span>FOUNDER · PONTEM</span>
         <span class="silhouette"></span>
-        <div class="metric"><span class="ml">CAC · LAST 90D</span><span class="mv"><span style="color:#9bbcff">−52%</span></span></div>
+        <div class="metric"><span class="ml">CAC · LAST 90D</span><span class="mv"><span style="color:#9bbcff">−64%</span></span></div>
         <div class="person-card">
-          <div class="name">Eric Zhubi</div>
-          <div class="role">CEO · NUTRICORE</div>
+          <div class="name">Edis Zhubi</div>
+          <div class="role">CEO @ PONTEM</div>
         </div>
       </div>
       <div class="spot-quote reveal d1">
         <div class="stars">★★★★★</div>
         <blockquote>
-          "AdBoost helped us launch, scale, and expand into the right channels — driving stronger acquisition and retention as we grew. We went from <b>0.8 ROAS to 3.5 ROAS within 60 days</b>, and it's <span class="serif">never gone back</span>."
+          "AdBoost helped us launch, scale, and expand into the right channels, driving stronger acquisition and retention as we grew. We went from <b>0.8 ROAS to 3.5 ROAS within 60 days</b>, and it's <span class="serif">never gone back</span>."
         </blockquote>
         <div class="who">
           <div class="whoav">EZ</div>
-          <div><div class="nm">Eric Zhubi</div><div class="rl">CEO · NUTRICORE</div></div>
+          <div><div class="nm">Edis Zhubi</div><div class="rl">CEO @ PONTEM</div></div>
         </div>
       </div>
     </div>
@@ -561,51 +604,22 @@ import '../styles/global.css';
       <div class="tcard reveal">
         <div class="stars">★★★★★</div>
         <blockquote>"Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome."</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f5a623,#ec6b1c)">VS</div><div><div class="who">Vincent Sko</div><div class="where">CO-FOUNDER · V/X</div></div></div>
+        <div class="person"><div class="pav" style="background:url('/people/vincent.png') center/cover"></div><div><div class="who">Vincent Siva</div><div class="where">CO-FOUNDER @ V/X</div></div></div>
       </div>
       <div class="tcard reveal d1">
         <div class="stars">★★★★★</div>
         <blockquote>"They reduced CAC by <b>40% in the first two weeks</b>. The team is specialized for our industry in a way no one else is."</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#76d39a,#22a559)">AJ</div><div><div class="who">Abi Jess</div><div class="where">GROWTH · IN-BOOST</div></div></div>
+        <div class="person"><div class="pav" style="background:url('/people/abi.png') center/cover"></div><div><div class="who">Abi J</div><div class="where">GROWTH @ BOOST</div></div></div>
       </div>
       <div class="tcard reveal d2">
         <div class="stars">★★★★★</div>
-        <blockquote>"Genuinely customer-first throughout. They went beyond what was strictly necessary — from email to creative to performance strategy."</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#a8b5ff,#5b7cff)">OO</div><div><div class="who">Oliver Oosterwoom</div><div class="where">CO-FOUNDER · ALVEOS</div></div></div>
+        <blockquote>"Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy."</blockquote>
+        <div class="person"><div class="pav" style="background:url('/people/oliver.png') center/cover"></div><div><div class="who">Oliver Obolgogiani</div><div class="where">CO-FOUNDER @ ALVEOS</div></div></div>
       </div>
       <div class="tcard reveal d3">
         <div class="stars">★★★★★</div>
-        <blockquote>"They know their stuff. Keyword strategy, ad copy, optimization — every move <b>backed by data</b>, every week."</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f6b6c3,#e26b8c)">CD</div><div><div class="who">Claire May Von Doorin</div><div class="where">DIRECTOR · PAINFACTORY</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<section class="stats">
-  <div class="container">
-    <div class="stat-grid reveal">
-      <div class="stat">
-        <div class="l"><span class="label">FOUNDERS SERVED</span><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 21a7 7 0 0114 0M12 12a4 4 0 100-8 4 4 0 000 8z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
-        <div class="n"><span class="counter" data-target="71" data-suffix="+">0</span></div>
-        <div class="sub">Health & telehealth brands</div>
-      </div>
-      <div class="stat">
-        <div class="l"><span class="label">AVG CAC REDUCTION</span><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 17l5-5 4 4 6-8M5 17h6M19 8v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <div class="n"><span class="blue counter" data-target="24" data-suffix="%">0</span></div>
-        <div class="sub">In the first 30 days</div>
-        <div class="mini"><svg viewBox="0 0 100 32" preserveAspectRatio="none"><path class="drawline" d="M0,8 C20,10 35,18 50,22 S80,28 100,28" stroke="#0057ff" stroke-width="1.6" fill="none"/></svg></div>
-      </div>
-      <div class="stat">
-        <div class="l"><span class="label">REVENUE GENERATED</span><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M16 7H10a3 3 0 100 6h4a3 3 0 110 6H8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
-        <div class="n">$<span class="counter" data-target="153" data-suffix="M+">0</span></div>
-        <div class="sub">Across all partner brands</div>
-      </div>
-      <div class="stat">
-        <div class="l"><span class="label">AVG. RATING</span><span class="ico"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3l3 6 6 1-4.5 4.5L18 21l-6-3-6 3 1.5-6.5L3 10l6-1z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span></div>
-        <div class="n"><span class="counter" data-target="4.9" data-decimals="1" data-suffix="/5">0</span></div>
-        <div class="sub" style="display:flex;gap:6px;align-items:center"><span style="color:var(--amber);letter-spacing:.08em">★★★★★</span> <span style="color:var(--mute)">from 71 founders</span></div>
+        <blockquote>"They know their stuff. Keyword strategy, ad copy, optimization, every move <b>backed by data</b>, every week."</blockquote>
+        <div class="person"><div class="pav" style="background:url('/people/claire.png') center/cover"></div><div><div class="who">Claire May Von Doelln</div><div class="where">DIRECTOR @ RAINFACTORY</div></div></div>
       </div>
     </div>
   </div>
@@ -621,17 +635,15 @@ import '../styles/global.css';
         <p>If you're vetting agencies right now, these are the questions we hear before every kickoff. Still curious? Drop us a line.</p>
         <div class="helpcta">
           <p class="hl">Want a different answer?</p>
-          <p class="hp">Most founders just send us their account login — we send back a written audit in 48h.</p>
+          <p class="hp">Most founders just send us their account login, we send back a written audit in 48h.</p>
           <a class="btn btn-primary" href="#cta">Get a free audit <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         </div>
       </div>
       <div class="faq-list reveal d1" id="faqList">
-        <div class="qa"><button>How is AdBoost different from other agencies?<span class="plus"></span></button><div class="ans"><div class="ans-inner">We only work with health, telehealth, and supplement brands — so every playbook, creative angle, and compliance check is purpose-built for your category. No generic "DTC agency" mistakes that cost you 30 days.</div></div></div>
+        <div class="qa"><button>How is AdBoost different from other agencies?<span class="plus"></span></button><div class="ans"><div class="ans-inner">We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic "DTC agency" mistakes that cost you 30 days.</div></div></div>
         <div class="qa"><button>Do you have experience with compliant health advertising?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We've shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
         <div class="qa"><button>Do you create ad creatives too?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.</div></div></div>
-        <div class="qa"><button>What budget do I need to get started?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Most partners are profitably spending $50k+/month within 90 days. We have no hard floor — but if you're under $20k/month in ad spend we'll be transparent about whether we're the right fit yet.</div></div></div>
-        <div class="qa"><button>What's your pricing structure?<span class="plus"></span></button><div class="ans"><div class="ans-inner">A monthly retainer plus a performance bonus tied to your KPI — typically CAC, blended ROAS, or contribution margin. Pricing is shared on the strategy call once we've scoped your account.</div></div></div>
-        <div class="qa"><button>When can I expect results?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
+<div class="qa"><button>When can I expect results?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
         <div class="qa"><button>Do you sign DPAs / NDAs?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Yes. Standard for any health partner. We also operate inside your existing BAA structure when relevant.</div></div></div>
       </div>
     </div>
@@ -643,9 +655,9 @@ import '../styles/global.css';
   <div class="container inner">
     <div class="reveal"><span class="pill"><span class="pdot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Booking <b>4 founders</b> this month</span></span></div>
     <h2 class="reveal d1">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
-    <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck — just a real plan you can take to your team, whether you work with us or not.</p>
+    <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
     <div class="ctas reveal d3">
-      <a class="btn btn-primary btn-lg" href="#"><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <a class="btn btn-primary btn-lg" href={NEOCAL_URL} target="_blank" rel="noopener"><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
       <a class="btn btn-ghost btn-lg" href="#">Email us</a>
     </div>
     <div class="perks reveal d3">
@@ -657,7 +669,7 @@ import '../styles/global.css';
 </section>
 
 <!-- MOBILE STICKY CTA -->
-<a class="mobile-cta" href="#cta" aria-label="Book a free strategy call">
+<a class="mobile-cta" href={NEOCAL_URL} target="_blank" rel="noopener" aria-label="Book a free strategy call">
   <span>Book a free strategy call</span>
   <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 </a>
@@ -688,7 +700,7 @@ import '../styles/global.css';
       </div>
       <div>
         <h6>BOOK A CALL</h6>
-        <a class="btn btn-primary" href="#">Free strategy call <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="btn btn-primary" href={NEOCAL_URL} target="_blank" rel="noopener">Free strategy call <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         <div class="socials" style="margin-top:18px">
           <a href="#" aria-label="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M18 4h3l-7 8 8 12h-6l-5-7-6 7H2l8-9-8-11h6l4 6z"/></svg></a>
           <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M4 4h4v16H4zM6 1a2 2 0 110 4 2 2 0 010-4zM10 8h4v2h.1c.5-1 2-2 4-2 4 0 4.9 2.5 4.9 5.5V20h-4v-5.5c0-1.4 0-3-2-3s-2 1.6-2 3V20h-4V8z"/></svg></a>
@@ -829,19 +841,6 @@ import '../styles/global.css';
     });
   }, { threshold: .25, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.drawline').forEach(el => drawIO.observe(el));
-
-  // ---- ops revenue counter (looped subtle increment)
-  const opsRev = document.getElementById('opsRev');
-  let baseRev = 153420113;
-  function paintRev(n) {
-    if (!opsRev) return;
-    opsRev.textContent = Math.round(n).toLocaleString('en-US');
-  }
-  paintRev(baseRev);
-  setInterval(() => {
-    baseRev += Math.floor(Math.random() * 400) + 80;
-    paintRev(baseRev);
-  }, 1700);
 
   // ---- ops row subtle live blink
   setInterval(() => {

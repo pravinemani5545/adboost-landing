@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 80">
+  <g transform="translate(8 24)">
+    <path d="M2,12 Q12,2 22,12 T42,12 T62,12" stroke="#2ba1d6" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M2,24 Q12,14 22,24 T42,24 T62,24" stroke="#2ba1d6" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="18" r="3.5" fill="#2ba1d6"/>
+  </g>
+  <text x="86" y="42" font-family="Inter, Helvetica, Arial, sans-serif" font-weight="500" font-size="26" fill="#1a1a1a" letter-spacing="-0.4">undefined health</text>
+  <text x="86" y="62" font-family="Inter, Helvetica, Arial, sans-serif" font-style="italic" font-weight="500" font-size="14" fill="#2ba1d6">Live Undefined</text>
+</svg>

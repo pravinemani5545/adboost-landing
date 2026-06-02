@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 70" fill="#0a0a0f">
+  <g transform="translate(40 35)">
+    <g fill="#0a0a0f">
+      <circle cx="0" cy="-25" r="4.6"/>
+      <circle cx="17.7" cy="-17.7" r="4.6"/>
+      <circle cx="25" cy="0" r="4.6"/>
+      <circle cx="17.7" cy="17.7" r="4.6"/>
+      <circle cx="0" cy="25" r="4.6"/>
+      <circle cx="-17.7" cy="17.7" r="4.6"/>
+      <circle cx="-25" cy="0" r="4.6"/>
+      <circle cx="-17.7" cy="-17.7" r="4.6"/>
+    </g>
+  </g>
+  <text x="90" y="50" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-weight="700" font-size="42" letter-spacing="1.5" fill="#0a0a0f">FITBIOMICS</text>
+</svg>
