@@ -55,7 +55,7 @@ img, svg { display: block; max-width: 100%; }
 .nav.scrolled { background: rgba(255, 255, 255, .78); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--line); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .brand { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -.015em; font-size: 15.5px; }
-.brand-mark { width: 24px; height: 24px; border-radius: 7px; background: linear-gradient(135deg, var(--ink), #2b2d36); display: grid; place-items: center; color: #fff; font-size: 12px; font-weight: 700; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.brand-mark { width: 28px; height: 28px; background: url('/logos/adboost-mark.svg') center/contain no-repeat; }
 .nav-links { display: flex; align-items: center; gap: 30px; }
 .nav-links a { font-size: 13.5px; color: var(--ink-2); transition: color .15s; }
 .nav-links a:hover { color: var(--blue); }
@@ -265,14 +265,14 @@ section { position: relative; z-index: 1; }
 .b4 .vis { padding: 24px; position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; align-content: center; }
 .b4 .vis .tile { aspect-ratio: 9/16; border-radius: 8px; background: linear-gradient(160deg, #23252e, #0f1015); background-size: cover; background-position: center; background-repeat: no-repeat; position: relative; overflow: hidden; animation: tileFlash 4s ease-in-out infinite; }
 .b4 .vis .tile::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255, 255, 255, .06), transparent); }
-.b4 .vis .tile:nth-child(1) { background: linear-gradient(160deg, #ff5184, #9d0e3f); animation-delay: 0s; }
-.b4 .vis .tile:nth-child(2) { background: linear-gradient(160deg, #0a0a0f, #2a2d3a); animation-delay: .3s; }
-.b4 .vis .tile:nth-child(3) { background: linear-gradient(160deg, #0d2240, #0a4480); animation-delay: .6s; }
-.b4 .vis .tile:nth-child(4) { background: linear-gradient(160deg, #f3deb8, #caa372); animation-delay: .9s; }
-.b4 .vis .tile:nth-child(5) { background: linear-gradient(160deg, #1c5938, #0b3a22); animation-delay: 1.2s; }
-.b4 .vis .tile:nth-child(6) { background: linear-gradient(160deg, #ff3aa8, #7a0f6a); animation-delay: 1.5s; }
-.b4 .vis .tile:nth-child(7) { background: linear-gradient(160deg, #3a1c5c, #1a0735); animation-delay: 1.8s; }
-.b4 .vis .tile:nth-child(8) { background: linear-gradient(160deg, #fff, #dfe4ec); animation-delay: 2.1s; }
+.b4 .vis .tile:nth-child(1) { animation-delay: 0s; }
+.b4 .vis .tile:nth-child(2) { animation-delay: .3s; }
+.b4 .vis .tile:nth-child(3) { animation-delay: .6s; }
+.b4 .vis .tile:nth-child(4) { animation-delay: .9s; }
+.b4 .vis .tile:nth-child(5) { animation-delay: 1.2s; }
+.b4 .vis .tile:nth-child(6) { animation-delay: 1.5s; }
+.b4 .vis .tile:nth-child(7) { animation-delay: 1.8s; }
+.b4 .vis .tile:nth-child(8) { animation-delay: 2.1s; }
 @keyframes tileFlash { 50% { transform: scale(1.04); box-shadow: 0 8px 18px -6px rgba(0, 87, 255, .5); } }
 
 .b5 .vis { flex: 1; position: relative; background: linear-gradient(180deg, #fafbfd, #f0f3fa); overflow: hidden; }
@@ -440,7 +440,7 @@ section.stats { padding: 0 0 96px; }
 footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36px; border-top: 1px solid rgba(255, 255, 255, .08); }
 .foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr 1.2fr; gap: 36px; align-items: start; }
 .foot .brand { color: #fff; font-size: 17px; }
-.foot .brand-mark { background: #fff; color: #0a0a0f; }
+.foot .brand-mark { background: url('/logos/adboost-mark.svg') center/contain no-repeat; }
 .foot p.about { margin: 16px 0 18px; font-size: 13.5px; line-height: 1.55; max-width: 36ch; color: rgba(255, 255, 255, .5); }
 .foot h6 { color: #fff; font-size: 12px; margin: 0 0 16px; font-weight: 500; letter-spacing: .08em; font-family: "Geist Mono", monospace; text-transform: uppercase; }
 .foot ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; font-size: 13.5px; }

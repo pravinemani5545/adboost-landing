@@ -1,7 +1,9 @@
 ---
 import '../styles/global.css';
 
-const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoCal link
+const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
+const CAL_NAMESPACE = 'strategy-call';
+const CAL_URL = `https://cal.com/${CAL_LINK}`;
 ---
 
 <!doctype html>
@@ -22,7 +24,12 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/svg+xml" href="/logos/adboost-mark.svg" />
+<script is:inline define:vars={{ CAL_NAMESPACE, CAL_LINK }}>
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", CAL_NAMESPACE, { origin: "https://cal.com" });
+  Cal.ns[CAL_NAMESPACE]("ui", { hideEventTypeDetails: false, layout: "month_view" });
+</script>
 </head>
 <body>
 
@@ -30,7 +37,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
 <nav class="nav" id="nav">
   <div class="container nav-inner">
     <a class="brand" href="#">
-      <span class="brand-mark">+</span>
+      <span class="brand-mark" aria-hidden="true"></span>
       <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
     </a>
     <div class="nav-links">
@@ -39,7 +46,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
       <a href="#process">Process</a>
       <a href="#faq">FAQ</a>
     </div>
-    <a class="btn btn-primary" href={NEOCAL_URL} target="_blank" rel="noopener">
+    <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
       Book a call
       <span class="chev">
         <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -68,7 +75,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
       </h1>
       <p class="lede reveal d2">We help health and wellness brands acquire more customers profitably and increase retention through high-converting ads, funnels, and creative strategy, without the compliance landmines.</p>
       <div class="ctas reveal d3">
-        <a class="btn btn-primary btn-lg" href={NEOCAL_URL} target="_blank" rel="noopener">
+        <a class="btn btn-primary btn-lg" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
           Book a free strategy call
           <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>
@@ -657,7 +664,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
     <h2 class="reveal d1">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
     <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
     <div class="ctas reveal d3">
-      <a class="btn btn-primary btn-lg" href={NEOCAL_URL} target="_blank" rel="noopener"><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+      <a class="btn btn-primary btn-lg" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
       <a class="btn btn-ghost btn-lg" href="#">Email us</a>
     </div>
     <div class="perks reveal d3">
@@ -669,7 +676,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
 </section>
 
 <!-- MOBILE STICKY CTA -->
-<a class="mobile-cta" href={NEOCAL_URL} target="_blank" rel="noopener" aria-label="Book a free strategy call">
+<a class="mobile-cta" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}' aria-label="Book a free strategy call">
   <span>Book a free strategy call</span>
   <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 </a>
@@ -679,7 +686,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
   <div class="container">
     <div class="foot">
       <div>
-        <a class="brand" href="#"><span class="brand-mark">+</span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
+        <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
         <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands. 71+ founders served. $153M+ in tracked revenue.</p>
         <div class="news">
           <input type="email" placeholder="hello@yourcompany.com" />
@@ -700,7 +707,7 @@ const NEOCAL_URL = 'https://neocal.io/PLACEHOLDER'; // TODO: swap with real NeoC
       </div>
       <div>
         <h6>BOOK A CALL</h6>
-        <a class="btn btn-primary" href={NEOCAL_URL} target="_blank" rel="noopener">Free strategy call <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+        <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>Free strategy call <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
         <div class="socials" style="margin-top:18px">
           <a href="#" aria-label="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M18 4h3l-7 8 8 12h-6l-5-7-6 7H2l8-9-8-11h6l4 6z"/></svg></a>
           <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M4 4h4v16H4zM6 1a2 2 0 110 4 2 2 0 010-4zM10 8h4v2h.1c.5-1 2-2 4-2 4 0 4.9 2.5 4.9 5.5V20h-4v-5.5c0-1.4 0-3-2-3s-2 1.6-2 3V20h-4V8z"/></svg></a>
