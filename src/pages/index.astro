@@ -852,21 +852,28 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         cell, node,
         base: parseFloat(text),
         format: (v) => v.toFixed(1) + '× ',
-        jitter: 0.06,            // ±6% for small multipliers
+        jitter: 0.10,            // ±10% for multipliers - wider so .toFixed(1) actually shifts
       });
     }
   });
 
-  setInterval(() => {
+  // Maintain a shuffled queue so every cell gets refreshed within one full cycle.
+  let opsQueue = [];
+  function refillQueue() {
+    opsQueue = opsCells.slice().sort(() => Math.random() - 0.5);
+  }
+  function tickOne() {
     if (!opsCells.length) return;
-    const pick = opsCells[Math.floor(Math.random() * opsCells.length)];
+    if (!opsQueue.length) refillQueue();
+    const pick = opsQueue.shift();
     // gaussian-ish: average of two uniforms keeps drift centered on base
     const noise = ((Math.random() + Math.random()) / 2 - 0.5) * 2 * pick.jitter * pick.base;
     pick.node.nodeValue = pick.format(pick.base + noise);
     pick.cell.style.transition = 'background .25s ease';
     pick.cell.style.background = 'rgba(0, 87, 255, .08)';
     setTimeout(() => { pick.cell.style.background = ''; }, 500);
-  }, 1600);
+  }
+  setInterval(() => { tickOne(); tickOne(); }, 1100);
 
   // ---- FAQ accordion
   document.querySelectorAll('#faqList .qa').forEach(qa => {
