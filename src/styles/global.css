@@ -637,9 +637,14 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .spot-pic { aspect-ratio: 4/5; height: auto; min-height: 380px; max-width: 340px; margin: 0 auto; }
   .spot-quote blockquote { font-size: 17px; line-height: 1.5; }
 
-  .foot { grid-template-columns: 1fr; gap: 32px; align-items: start; }
-  .foot-proof, .foot-contact { padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, .08); }
+  .foot { grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .foot-brand { grid-column: span 2; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, .08); }
+  .foot-proof ul, .foot-contact ul { gap: 12px; }
   .foot-proof ul li b { font-size: 18px; }
+  .foot h6 { margin-bottom: 14px; }
+  .foot-contact ul li a { word-break: break-word; overflow-wrap: anywhere; }
+  .foot-contact ul { font-size: 12.5px; }
+  .foot-loc { font-size: 11px; }
 
   .trust-inner { grid-template-columns: 1fr; }
   .trust-label { border-right: 0; border-bottom: 1px solid var(--line); padding-right: 0; height: auto; padding: 18px 0; text-align: center; }
@@ -703,4 +708,10 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .nav .brand span:last-child { font-size: 14px; }
   .bigcta h2 { font-size: 32px; }
   .section-head h2, .cases-head h2 { font-size: 30px; }
+  /* Very narrow phones: footer collapses to single col */
+  .foot { grid-template-columns: 1fr; }
+  .foot-brand { grid-column: span 1; }
+  .foot-proof, .foot-contact { padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, .08); }
+  .foot-contact ul { font-size: 13.5px; }
+  .foot-loc { font-size: 12px; }
 }
