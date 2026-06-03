@@ -612,7 +612,11 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .bcard p { font-size: 13.5px; }
   .bcard .tag { font-size: 10px; top: 16px; left: 18px; }
   .bcard .body { padding: 22px 22px 24px; }
-  .b1 .vis { padding: 22px 18px; gap: 10px; }
+  .b1 .vis { padding: 56px 18px 22px; gap: 10px; }
+  .b5 { min-height: 280px; }
+  .b5 .vis { padding-top: 50px; min-height: 200px; }
+  .b6 { min-height: 320px; }
+  .b6 .vis { padding-top: 56px; min-height: 240px; }
   .b1 .cat { font-size: 12.5px; padding: 8px 14px 8px 8px; }
   .b1 .cat .ico { width: 24px; height: 24px; font-size: 12px; }
 
