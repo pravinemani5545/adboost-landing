@@ -87,12 +87,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         <span>Plan you keep either way</span>
       </div>
       <div class="meta reveal d3">
-        <div class="avatars">
-          <span style="background-image:url('https://i.pravatar.cc/80?img=12')"></span>
-          <span style="background-image:url('https://i.pravatar.cc/80?img=47')"></span>
-          <span style="background-image:url('https://i.pravatar.cc/80?img=33')"></span>
-          <span style="background-image:url('https://i.pravatar.cc/80?img=68')"></span>
-        </div>
+        <div class="avatars"><span></span><span></span><span></span><span></span></div>
         <span>Trusted by <b style="color:var(--ink)">71+ founders</b> · 4.9 / 5 average rating · <b style="color:var(--ink)">4 spots left</b> this month</span>
       </div>
     </div>
@@ -161,7 +156,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <div class="met">$18.90 <span class="delta down">↓ 53%</span></div>
           <div class="met">2.3× <span class="delta up">↑ 23%</span></div>
           <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,14 L4,12 L8,15 L12,11 L16,9 L20,12 L24,8 L28,14 L32,17 L36,21 L40,25 L44,27 L48,26 L52,28 L56,25 L60,22 L64,19 L68,16 L72,13 L76,10 L80,7 L84,9 L88,5 L92,7 L96,4 L100,6 L104,3 L108,5 L112,2 L116,4 L120,3" stroke="#f59e0b" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,18 L4,16 L8,18 L12,14 L16,16 L20,13 L24,15 L28,17 L32,19 L36,21 L40,20 L44,22 L48,19 L52,17 L56,14 L60,16 L64,12 L68,10 L72,12 L76,8 L80,10 L84,6 L88,8 L92,5 L96,7 L100,4 L104,6 L108,3 L112,5 L116,3 L120,3" stroke="#f59e0b" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
           </div>
         </div>
 
@@ -611,22 +606,22 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       <div class="tcard reveal">
         <div class="stars">★★★★★</div>
         <blockquote>"Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome."</blockquote>
-        <div class="person"><div class="pav" style="background:url('/people/vincent.webp') center/cover"></div><div><div class="who">Vincent Siva</div><div class="where">CO-FOUNDER @ V/X</div></div></div>
+        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f5a623,#ec6b1c)">VS</div><div><div class="who">Vincent Siva</div><div class="where">CO-FOUNDER @ V/X</div></div></div>
       </div>
       <div class="tcard reveal d1">
         <div class="stars">★★★★★</div>
         <blockquote>"They reduced CAC by <b>40% in the first two weeks</b>. The team is specialized for our industry in a way no one else is."</blockquote>
-        <div class="person"><div class="pav" style="background:url('/people/abi.webp') center/cover"></div><div><div class="who">Abi J</div><div class="where">GROWTH @ BOOST</div></div></div>
+        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#76d39a,#22a559)">AJ</div><div><div class="who">Abi J</div><div class="where">GROWTH @ BOOST</div></div></div>
       </div>
       <div class="tcard reveal d2">
         <div class="stars">★★★★★</div>
         <blockquote>"Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy."</blockquote>
-        <div class="person"><div class="pav" style="background:url('/people/oliver.webp') center/cover"></div><div><div class="who">Oliver Obolgogiani</div><div class="where">CO-FOUNDER @ ALVEOS</div></div></div>
+        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#a8b5ff,#5b7cff)">OO</div><div><div class="who">Oliver Obolgogiani</div><div class="where">CO-FOUNDER @ ALVEOS</div></div></div>
       </div>
       <div class="tcard reveal d3">
         <div class="stars">★★★★★</div>
         <blockquote>"They know their stuff. Keyword strategy, ad copy, optimization, every move <b>backed by data</b>, every week."</blockquote>
-        <div class="person"><div class="pav" style="background:url('/people/claire.webp') center/cover"></div><div><div class="who">Claire May Von Doelln</div><div class="where">DIRECTOR @ RAINFACTORY</div></div></div>
+        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f6b6c3,#e26b8c)">CD</div><div><div class="who">Claire May Von Doelln</div><div class="where">DIRECTOR @ RAINFACTORY</div></div></div>
       </div>
     </div>
   </div>
@@ -665,7 +660,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
     <div class="ctas reveal d3">
       <a class="btn btn-primary btn-lg" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-      <a class="btn btn-ghost btn-lg" href="#">Email us</a>
     </div>
     <div class="perks reveal d3">
       <span>30 minutes</span>
@@ -688,10 +682,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       <div>
         <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
         <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands. 71+ founders served. $153M+ in tracked revenue.</p>
-        <div class="news">
-          <input type="email" placeholder="hello@yourcompany.com" />
-          <button>Subscribe</button>
-        </div>
       </div>
       <div>
         <h6>COMPANY</h6>
@@ -708,11 +698,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       <div>
         <h6>BOOK A CALL</h6>
         <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>Free strategy call <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        <div class="socials" style="margin-top:18px">
-          <a href="#" aria-label="Twitter"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M18 4h3l-7 8 8 12h-6l-5-7-6 7H2l8-9-8-11h6l4 6z"/></svg></a>
-          <a href="#" aria-label="LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M4 4h4v16H4zM6 1a2 2 0 110 4 2 2 0 010-4zM10 8h4v2h.1c.5-1 2-2 4-2 4 0 4.9 2.5 4.9 5.5V20h-4v-5.5c0-1.4 0-3-2-3s-2 1.6-2 3V20h-4V8z"/></svg></a>
-          <a href="#" aria-label="Instagram"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="rgba(255,255,255,.7)"/></svg></a>
-        </div>
       </div>
     </div>
     <div class="legal">
