@@ -404,15 +404,7 @@ section.stats { padding: 0 0 96px; }
 
 /* ============ FAQ ============ */
 .faq { padding: 96px 0; background: linear-gradient(180deg, #fff, #fafbfd); }
-.faq-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 60px; align-items: flex-start; }
-.faq-left { position: sticky; top: 120px; padding-top: 8px; }
-.faq-left h2 { font-size: clamp(34px, 4.6vw, 52px); letter-spacing: -.03em; font-weight: 600; line-height: 1.02; margin: 14px 0 18px; }
-.faq-left h2 .serif { color: var(--blue); display: block; }
-.faq-left p { color: var(--mute); font-size: 15px; line-height: 1.55; max-width: 34ch; }
-.faq-left .helpcta { margin-top: 22px; padding: 18px; border: 1px dashed var(--line-2); border-radius: 14px; background: #fff; max-width: 340px; }
-.faq-left .helpcta .hl { font-size: 13.5px; font-weight: 500; margin: 0 0 6px; }
-.faq-left .helpcta .hp { font-size: 13px; color: var(--mute); margin: 0 0 12px; line-height: 1.5; }
-.faq-list { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+.faq-list { background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; max-width: 880px; margin: 0 auto; box-shadow: 0 20px 50px -30px rgba(10, 10, 15, .12); }
 .qa { border-bottom: 1px solid var(--line); position: relative; transition: background .2s ease; }
 .qa::before { content: ""; position: absolute; left: 0; top: 50%; height: 0; width: 3px; background: var(--blue); transition: height .25s ease; transform: translateY(-50%); border-radius: 0 2px 2px 0; }
 .qa:hover::before, .qa.open::before { height: 60%; }
@@ -454,15 +446,21 @@ section.stats { padding: 0 0 96px; }
 
 /* ============ FOOTER ============ */
 footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36px; border-top: 1px solid rgba(255, 255, 255, .08); }
-.foot { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.foot-cta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
-.foot-cta p { color: rgba(255, 255, 255, .55); font-size: 14px; line-height: 1.55; margin: 14px 0 18px; max-width: 38ch; }
+.foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; align-items: start; }
 .foot .brand { color: #fff; font-size: 17px; }
 .foot .brand-mark { background: url('/logos/adboost-mark.webp') center/contain no-repeat; }
 .foot p.about { margin: 16px 0 18px; font-size: 13.5px; line-height: 1.55; max-width: 36ch; color: rgba(255, 255, 255, .5); }
-.foot h6 { color: #fff; font-size: 12px; margin: 0 0 16px; font-weight: 500; letter-spacing: .08em; font-family: "Geist Mono", monospace; text-transform: uppercase; }
-.foot ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; font-size: 13.5px; }
+.foot h6 { color: #fff; font-size: 11px; margin: 0 0 18px; font-weight: 700; letter-spacing: .14em; font-family: "Geist Mono", monospace; text-transform: uppercase; }
+.foot ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; font-size: 13.5px; color: rgba(255, 255, 255, .65); }
+.foot ul a { color: rgba(255, 255, 255, .65); transition: color .15s; }
 .foot ul a:hover { color: #fff; }
+.foot-meta { margin-top: 16px; }
+.foot-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px 6px 10px; border-radius: 999px; background: rgba(0, 87, 255, .14); border: 1px solid rgba(0, 87, 255, .28); font-size: 12px; color: #fff; }
+.foot-chip .ldot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(22, 163, 74, .6); animation: pulse 1.8s ease-out infinite; }
+.foot-proof ul li { display: flex; flex-direction: column; gap: 2px; }
+.foot-proof ul li b { color: #fff; font-weight: 600; font-size: 22px; letter-spacing: -.02em; }
+.foot-proof ul li span { font-size: 12px; color: rgba(255, 255, 255, .55); font-family: "Geist Mono", monospace; letter-spacing: .04em; }
+.foot-loc { font-family: "Geist Mono", monospace; font-size: 12px; color: rgba(255, 255, 255, .45); letter-spacing: .04em; }
 .news { display: flex; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .1); border-radius: 999px; padding: 4px; align-items: center; max-width: 340px; margin-top: 14px; }
 .news input { flex: 1; background: transparent; border: 0; color: #fff; font: inherit; font-size: 13.5px; padding: 0 14px; height: 36px; outline: none; }
 .news input::placeholder { color: rgba(255, 255, 255, .4); }
@@ -535,9 +533,6 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .case-grid { grid-template-columns: 1fr 1fr; }
   .case-grid .ccard:last-child { grid-column: span 2; }
   .cases-head { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .faq-grid { grid-template-columns: 1fr; gap: 40px; }
-  .faq-left { position: static; }
-
   /* B3 vertical stack at tablet too (3-col wide can't fit shield + side pills) */
   .b3 .vis { padding: 50px 18px 26px; min-height: 0; }
   .b3 .shield-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
@@ -642,10 +637,9 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .spot-pic { aspect-ratio: 4/5; height: auto; min-height: 380px; max-width: 340px; margin: 0 auto; }
   .spot-quote blockquote { font-size: 17px; line-height: 1.5; }
 
-  .foot { grid-template-columns: 1fr; gap: 28px; align-items: start; }
-  .foot-cta { text-align: left; align-items: flex-start; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.08); width: 100%; }
-  .foot-cta h6 { margin-top: 0; }
-  .foot-cta p { max-width: 36ch; }
+  .foot { grid-template-columns: 1fr; gap: 32px; align-items: start; }
+  .foot-proof, .foot-contact { padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, .08); }
+  .foot-proof ul li b { font-size: 18px; }
 
   .trust-inner { grid-template-columns: 1fr; }
   .trust-label { border-right: 0; border-bottom: 1px solid var(--line); padding-right: 0; height: auto; padding: 18px 0; text-align: center; }
@@ -681,8 +675,6 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
 
   .qa button { font-size: 14.5px; padding: 18px 20px; }
   .qa .ans-inner { padding: 0 20px 20px; font-size: 13.5px; }
-  .faq-left h2 { font-size: 36px; }
-  .faq-left p { font-size: 14.5px; }
 
   .nav { padding: 0; }
   .nav .nav-links { display: none; }
@@ -710,5 +702,5 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .ops-stat .ico svg { width: 12px; height: 12px; }
   .nav .brand span:last-child { font-size: 14px; }
   .bigcta h2 { font-size: 32px; }
-  .section-head h2, .cases-head h2, .faq-left h2 { font-size: 30px; }
+  .section-head h2, .cases-head h2 { font-size: 30px; }
 }
