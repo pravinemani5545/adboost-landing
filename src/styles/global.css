@@ -219,7 +219,8 @@ section { position: relative; z-index: 1; }
 .bento-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; grid-auto-rows: minmax(280px, auto); }
 .bcard { position: relative; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; overflow: hidden; transition: transform .3s, box-shadow .3s, border-color .3s; display: flex; flex-direction: column; }
 .bcard:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--line-2); }
-.bcard .tag { position: absolute; top: 18px; left: 20px; font-family: "Geist Mono", monospace; font-size: 10.5px; color: var(--mute); letter-spacing: .08em; z-index: 2; }
+.bcard .tag { position: absolute; top: 18px; left: 20px; font-family: "Geist Mono", monospace; font-size: 10.5px; color: #fff; background: var(--ink); padding: 5px 10px; border-radius: 999px; letter-spacing: .08em; z-index: 2; box-shadow: 0 4px 12px -4px rgba(10, 10, 15, .35); }
+.bcard.b4 .tag { background: #fff; color: var(--ink); box-shadow: 0 4px 12px -4px rgba(0, 0, 0, .4); }
 .bcard .body { padding: 26px 26px 28px; z-index: 2; }
 .bcard h3 { margin: 0 0 8px; font-size: 20px; font-weight: 600; letter-spacing: -.015em; line-height: 1.22; text-wrap: balance; }
 .bcard p { margin: 0; color: var(--mute); font-size: 14px; line-height: 1.55; text-wrap: pretty; }
