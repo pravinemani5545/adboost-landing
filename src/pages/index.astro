@@ -23,12 +23,27 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 <meta name="twitter:description" content="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://cal.com" />
+<link rel="dns-prefetch" href="https://app.cal.com" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="icon" type="image/png" href="/logos/adboost-mark.png" />
 <script is:inline define:vars={{ CAL_NAMESPACE, CAL_LINK }}>
-  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-  Cal("init", CAL_NAMESPACE, { origin: "https://cal.com" });
-  Cal.ns[CAL_NAMESPACE]("ui", { hideEventTypeDetails: false, layout: "month_view" });
+  // Defer Cal.com embed until first user interaction or idle to keep TTI fast.
+  (function () {
+    let loaded = false;
+    function loadCal() {
+      if (loaded) return; loaded = true;
+      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", CAL_NAMESPACE, { origin: "https://cal.com" });
+      Cal.ns[CAL_NAMESPACE]("ui", { hideEventTypeDetails: false, layout: "month_view" });
+    }
+    const triggers = ['pointerdown', 'scroll', 'keydown', 'touchstart'];
+    function arm() { triggers.forEach(t => window.addEventListener(t, fire, { once: true, passive: true })); }
+    function fire() { triggers.forEach(t => window.removeEventListener(t, fire)); loadCal(); }
+    arm();
+    if ('requestIdleCallback' in window) window.requestIdleCallback(loadCal, { timeout: 4000 });
+    else setTimeout(loadCal, 2500);
+  })();
 </script>
 </head>
 <body>
@@ -115,8 +130,8 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
             </div>
             <div><div class="nm">GLP-1 Brand</div><div class="cat">Subscription</div></div>
           </div>
-          <div class="met">$86.90 <span class="delta down">↓ 75%</span></div>
-          <div class="met">2.1× <span class="delta up">↑ 12%</span></div>
+          <div class="met">$86.90 <span class="delta down">↓ 22%</span></div>
+          <div class="met">2.1× <span class="delta up">↑ 18%</span></div>
           <div class="spark">
             <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,17 L4,15 L8,19 L12,16 L16,18 L20,15 L24,17 L28,19 L32,16 L36,18 L40,15 L44,17 L48,14 L52,17 L56,13 L60,15 L64,12 L68,14 L72,11 L76,13 L80,10 L84,12 L88,8 L92,11 L96,7 L100,9 L104,6 L108,8 L112,5 L116,7 L120,5" stroke="#8b5cf6" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
           </div>
@@ -143,8 +158,8 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
             </div>
             <div><div class="nm">Supplement Brand</div><div class="cat">DTC</div></div>
           </div>
-          <div class="met">$18.90 <span class="delta down">↓ 53%</span></div>
-          <div class="met">2.3× <span class="delta up">↑ 23%</span></div>
+          <div class="met">$18.90 <span class="delta down">↓ 28%</span></div>
+          <div class="met">2.3× <span class="delta up">↑ 31%</span></div>
           <div class="spark">
             <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,18 L4,16 L8,18 L12,14 L16,16 L20,13 L24,15 L28,17 L32,19 L36,21 L40,20 L44,22 L48,19 L52,17 L56,14 L60,16 L64,12 L68,10 L72,12 L76,8 L80,10 L84,6 L88,8 L92,5 L96,7 L100,4 L104,6 L108,3 L112,5 L116,3 L120,3" stroke="#f59e0b" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
           </div>
@@ -157,8 +172,8 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
             </div>
             <div><div class="nm">Health App</div><div class="cat">Mobile</div></div>
           </div>
-          <div class="met">$1.85 <span class="delta down">↓ 37%</span></div>
-          <div class="met">5.3× <span class="delta up">↑ 31%</span></div>
+          <div class="met">$1.85 <span class="delta down">↓ 34%</span></div>
+          <div class="met">5.3× <span class="delta up">↑ 42%</span></div>
           <div class="spark">
             <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,28 L4,30 L8,27 L12,29 L16,28 L20,30 L24,27 L28,29 L32,26 L36,28 L40,25 L44,27 L48,24 L52,22 L56,19 L60,16 L64,12 L68,15 L72,9 L76,7 L80,10 L84,5 L88,7 L92,3 L96,5 L100,2 L104,4 L108,2 L112,3 L116,1 L120,2" stroke="#0057ff" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
           </div>
@@ -475,7 +490,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         <div class="stats">
           <div class="s"><div class="l">REVENUE</div><div class="v"><span class="blue">$1.6M</span></div></div>
           <div class="s"><div class="l">LTV</div><div class="v">+<span class="blue">32%</span></div></div>
-          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−80%</span></div></div>
+          <div class="s"><div class="l">CAC · 90d</div><div class="v"><span class="green">−80%</span></div></div>
         </div>
       </div>
 
@@ -679,16 +694,8 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands. 71+ founders served. $153M+ in tracked revenue.</p>
       </div>
       <div>
-        <h6>COMPANY</h6>
-        <ul><li><a href="#">About</a></li><li><a href="#">Case Studies</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul>
-      </div>
-      <div>
-        <h6>SERVICES</h6>
-        <ul><li><a href="#">Paid Social</a></li><li><a href="#">Paid Search</a></li><li><a href="#">Creative</a></li><li><a href="#">Lifecycle</a></li></ul>
-      </div>
-      <div>
-        <h6>RESOURCES</h6>
-        <ul><li><a href="#">Blog</a></li><li><a href="#">Playbooks</a></li><li><a href="#">Compliance Guide</a></li><li><a href="#">Contact</a></li></ul>
+        <h6>EXPLORE</h6>
+        <ul><li><a href="#why">Why us</a></li><li><a href="#results">Results</a></li><li><a href="#process">Process</a></li><li><a href="#faq">FAQ</a></li></ul>
       </div>
       <div>
         <h6>BOOK A CALL</h6>
