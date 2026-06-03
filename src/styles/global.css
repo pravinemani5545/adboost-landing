@@ -238,6 +238,9 @@ section { position: relative; z-index: 1; }
 .b1 .cat .ico { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; }
 .b1 .cat:hover { transform: translateY(-3px); }
 .b1 .cat .meta { font-family: "Geist Mono", monospace; font-size: 11px; color: var(--mute); font-weight: 400; margin-left: 4px; }
+.b1 .cat-more { background: transparent; border: 1px dashed var(--line-2); color: var(--mute); box-shadow: none; }
+.b1 .cat-more .ico { background: transparent; color: var(--mute); border: 1px dashed var(--line-2); font-weight: 500; }
+.b1 .cat-more .meta { color: var(--mute); }
 .b1 .body { padding-top: 22px; border-top: 1px solid var(--line); }
 .b1 .vis::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 40% at 50% 0%, rgba(0, 87, 255, .07), transparent 65%); pointer-events: none; }
 

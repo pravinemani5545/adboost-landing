@@ -275,7 +275,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <span class="cat" style="animation-delay:.2s"><span class="ico" style="background:linear-gradient(135deg,#f59e0b,#c47200)">A</span>Health apps<span class="meta">8 brands</span></span>
           <span class="cat" style="animation-delay:.3s"><span class="ico" style="background:linear-gradient(135deg,#8b5cf6,#5b21b6)">M</span>Mental health<span class="meta">6 brands</span></span>
           <span class="cat" style="animation-delay:.4s"><span class="ico" style="background:linear-gradient(135deg,#06b6d4,#0e7490)">F</span>Fitness & recovery<span class="meta">9 brands</span></span>
-          <span class="cat" style="animation-delay:.5s"><span class="ico" style="background:linear-gradient(135deg,#6b7280,#3f4855)">+</span>And 6 more<span class="meta">verticals</span></span>
+          <span class="cat cat-more" style="animation-delay:.5s"><span class="ico" aria-hidden="true">+</span>And 6 more<span class="meta">verticals</span></span>
         </div>
         <div class="body">
           <h3>The only categories we work in are the ones we've already scaled.</h3>
@@ -313,7 +313,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
               <span class="r">Rx language</span>
             </div>
             <div class="shield">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 5l8 14 6-9" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div class="ch-rules right">
               <span class="r">HIPAA-aware</span>
@@ -371,10 +371,16 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
             <path id="b5Line" class="drawline" d="M0,178 C60,170 120,166 180,158 S300,128 375,102 480,52 600,22" fill="none" stroke="#0057ff" stroke-width="2.2" stroke-linecap="round"/>
             <path d="M0,178 C60,170 120,166 180,158 S300,128 375,102 480,52 600,22 L600,220 L0,220 Z" fill="url(#g5)"/>
             <circle cx="375" cy="102" r="4.5" fill="#0057ff" stroke="#fff" stroke-width="2.5"/>
-            <g transform="translate(388 82)">
-              <rect width="98" height="22" rx="6" fill="#fff" stroke="#e5e7ee"/>
-              <text x="9" y="15" font-family="Geist Mono" font-size="11" fill="#0a0a0f">$182k · Day 31</text>
+            <g transform="translate(388 78)">
+              <rect width="120" height="30" rx="8" fill="#fff" stroke="#e5e7ee" filter="url(#b5shadow)"/>
+              <text x="12" y="13" font-family="Geist Mono" font-size="9" fill="#6b6f7a" letter-spacing="0.5">DAY 31</text>
+              <text x="12" y="25" font-family="Geist" font-size="13" font-weight="600" fill="#0a0a0f">$182k tracked</text>
             </g>
+            <defs>
+              <filter id="b5shadow" x="-10%" y="-30%" width="120%" height="170%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0a0a0f" flood-opacity="0.08"/>
+              </filter>
+            </defs>
           </svg>
         </div>
         <div class="body">
