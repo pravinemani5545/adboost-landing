@@ -94,8 +94,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 
     <div class="reveal d2">
       <div class="ops" id="ops">
-        <div class="ops-shelf s2"><span class="av" style="background:linear-gradient(135deg,#16a34a,#0d6b32)">↓</span><span>CAC <b>↓ 18%</b> · last 7d</span></div>
-
         <div class="ops-head">
           <div class="title">
             <span class="live-dot"></span>
@@ -103,14 +101,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           </div>
           <span class="time" id="opsTime">10:47:21 AM</span>
         </div>
-        <div class="ops-tabs">
-          <span class="active">Overview</span>
-          <span>Acquisition</span>
-          <span>Retention</span>
-          <span>Creative</span>
-          <span>Channels</span>
-        </div>
-
         <div class="ops-colheads">
           <div></div>
           <div><b>CAC</b><small>vs. prior 30 days</small></div>
@@ -187,6 +177,12 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
             </span>
             <div class="kv"><span class="v">$<span id="opsRev">12.4M+</span></span><span class="l">Tracked revenue this quarter</span></div>
           </div>
+          <div class="ops-stat">
+            <span class="ico" style="background:rgba(139,92,246,.12);color:#8b5cf6">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21a7 7 0 0114 0M12 12a4 4 0 100-8 4 4 0 000 8zM18 4l3 3-3 3M21 7h-6"/></svg>
+            </span>
+            <div class="kv"><span class="v">22%</span><span class="l">Avg. increase in returning customer rate</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -202,13 +198,13 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     </div>
     <div class="marquee-wrap">
       <div class="marquee" id="marquee">
-        <span class="logo" data-tall><img src="/logos/adidas.svg" alt="adidas"  loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/jnj.svg" alt="Johnson &amp; Johnson" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/alveos.svg" alt="alveos"  loading="lazy" decoding="async" /></span>
-        <span class="logo logo-tile"><img src="/logos/liv.svg" alt="Liv" loading="lazy" decoding="async" /></span>
+        <span class="logo" data-tall><img src="/logos/adidas.webp" alt="adidas"  loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/jnj.webp" alt="Johnson &amp; Johnson" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/alveos.webp" alt="alveos"  loading="lazy" decoding="async" /></span>
+        <span class="logo logo-tile"><img src="/logos/liv.webp" alt="Liv" loading="lazy" decoding="async" /></span>
         <span class="logo"><img src="/logos/fitbiomics.webp" alt="FITBIOMICS" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/nectar.svg" alt="Nectar" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/gtg.svg" alt="GTG Energy" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/nectar.webp" alt="Nectar" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/gtg.webp" alt="GTG Energy" loading="lazy" decoding="async" /></span>
         <span class="logo logo-compound">
           <img src="/logos/undefined-health.webp" alt="" class="logo-mark" loading="lazy" decoding="async" />
           <span class="logo-text">
@@ -231,22 +227,22 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
   </div>
   <div class="phone-rail-wrap reveal d1">
     <div class="phone-rail" id="phoneRail">
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">ADVERTORIAL</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">TIKTOK · UGC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">ADVERTORIAL</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div><div class="meta-tag">META · STATIC</div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div><div class="meta-tag" style="background:rgba(10,10,15,.6)">TIKTOK · UGC</div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div></div></div>
+      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div></div></div>
     </div>
   </div>
 </section>
@@ -267,14 +263,14 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         <div class="vis">
           <span class="cat" style="animation-delay:.0s"><span class="ico" style="background:linear-gradient(135deg,#3b7bff,#0040c2)">G</span>GLP-1 & weight care<span class="meta">12 brands</span></span>
           <span class="cat" style="animation-delay:.1s"><span class="ico" style="background:linear-gradient(135deg,#16a34a,#0a6b34)">S</span>Supplements & DTC<span class="meta">22 brands</span></span>
-          <span class="cat" style="animation-delay:.2s"><span class="ico" style="background:linear-gradient(135deg,#ec4899,#a8174a)">T</span>Telehealth<span class="meta">9 brands</span></span>
-          <span class="cat" style="animation-delay:.3s"><span class="ico" style="background:linear-gradient(135deg,#f59e0b,#c47200)">A</span>Health apps<span class="meta">8 brands</span></span>
-          <span class="cat" style="animation-delay:.4s"><span class="ico" style="background:linear-gradient(135deg,#8b5cf6,#5b21b6)">M</span>Mental health<span class="meta">6 brands</span></span>
-          <span class="cat" style="animation-delay:.5s"><span class="ico" style="background:linear-gradient(135deg,#06b6d4,#0e7490)">F</span>Fitness & recovery<span class="meta">14 brands</span></span>
+          <span class="cat" style="animation-delay:.2s"><span class="ico" style="background:linear-gradient(135deg,#f59e0b,#c47200)">A</span>Health apps<span class="meta">8 brands</span></span>
+          <span class="cat" style="animation-delay:.3s"><span class="ico" style="background:linear-gradient(135deg,#8b5cf6,#5b21b6)">M</span>Mental health<span class="meta">6 brands</span></span>
+          <span class="cat" style="animation-delay:.4s"><span class="ico" style="background:linear-gradient(135deg,#06b6d4,#0e7490)">F</span>Fitness & recovery<span class="meta">9 brands</span></span>
+          <span class="cat" style="animation-delay:.5s"><span class="ico" style="background:linear-gradient(135deg,#6b7280,#3f4855)">+</span>And 6 more<span class="meta">verticals</span></span>
         </div>
         <div class="body">
           <h3>The only categories we work in are the ones we've already scaled.</h3>
-          <p>We don't take "interesting" briefs outside health. That's why we know every Meta health policy by heart, and why we ship faster than a generalist agency ever could.</p>
+          <p>We don't work outside health. That's why we know every Meta health policy by heart, and why we ship faster than a generalist agency ever could.</p>
         </div>
       </div>
 
@@ -293,7 +289,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         </div>
         <div class="body">
           <h3>A senior growth partner, not a junior pod.</h3>
-          <p>Paired with a strategist who has scaled health brands past $20M.</p>
+          <p>Paired with strategists who have scaled health brands past $20M.</p>
         </div>
       </div>
 
@@ -330,9 +326,9 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <h3>20+ new creatives shipped every month.</h3>
           <p>Static, motion, and UGC, produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.</p>
           <div style="display:flex;gap:24px;margin-top:18px;flex-wrap:wrap">
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">CREATIVES SHIPPED</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">2,418</div></div>
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">WIN RATE</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">18%</div></div>
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">UGC CREATORS</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">340+</div></div>
+            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">CREATIVES SHIPPED</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">8,416</div></div>
+            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">WIN RATE</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">38%</div></div>
+            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">UGC CREATORS</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">140+</div></div>
           </div>
         </div>
         <div class="vis">
@@ -454,8 +450,8 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <p>UGC creative refactor + LP redesign + offer test on day 3. Held the new floor for 6 months.</p>
         </div>
         <div class="stats">
-          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−40%</span></div></div>
           <div class="s"><div class="l">ROAS</div><div class="v">1.2× → <span class="blue">2.8×</span></div></div>
+          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−40%</span></div></div>
           <div class="s"><div class="l">TIME</div><div class="v">14 days</div></div>
         </div>
       </div>
@@ -473,7 +469,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           </div>
         </div>
         <div class="body">
-          <h4>$0 → $1.6M in 9 months.</h4>
+          <h4>$0 → $1.6M in 90 days.</h4>
           <p>Built the full acquisition engine from a cold start: positioning, creative system, paid social, lifecycle.</p>
         </div>
         <div class="stats">
