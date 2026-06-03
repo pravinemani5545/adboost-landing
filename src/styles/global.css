@@ -608,8 +608,10 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .spot-pic { aspect-ratio: 4/5; height: auto; min-height: 380px; }
   .spot-quote blockquote { font-size: 17px; line-height: 1.5; }
 
-  .foot { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .foot > div:first-child { grid-column: span 2; }
+  .foot { grid-template-columns: 1fr; gap: 28px; align-items: start; }
+  .foot-cta { text-align: left; align-items: flex-start; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.08); width: 100%; }
+  .foot-cta h6 { margin-top: 0; }
+  .foot-cta p { max-width: 36ch; }
 
   .trust-inner { grid-template-columns: 1fr; }
   .trust-label { border-right: 0; border-bottom: 1px solid var(--line); padding-right: 0; height: auto; padding: 18px 0; text-align: center; }
@@ -675,6 +677,4 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
   .nav .brand span:last-child { font-size: 14px; }
   .bigcta h2 { font-size: 32px; }
   .section-head h2, .cases-head h2, .faq-left h2 { font-size: 30px; }
-  .foot { grid-template-columns: 1fr; }
-  .foot > div:first-child { grid-column: span 1; }
 }
