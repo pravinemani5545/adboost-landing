@@ -833,15 +833,40 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
   }, { threshold: .25, rootMargin: '0px 0px -20px 0px' });
   document.querySelectorAll('.drawline').forEach(el => drawIO.observe(el));
 
-  // ---- ops row subtle live blink
+  // ---- ops row subtle live blink + value tick
+  // Anchor each cell's base value so micro-fluctuations stay tethered around the original.
+  const opsCells = [];
+  document.querySelectorAll('.ops-row .met').forEach(cell => {
+    const node = cell.firstChild;
+    if (!node || node.nodeType !== 3) return;
+    const text = node.nodeValue.trim();
+    if (text.startsWith('$')) {
+      opsCells.push({
+        cell, node,
+        base: parseFloat(text.replace('$', '').replace(/,/g, '')),
+        format: (v) => '$' + v.toFixed(2) + ' ',
+        jitter: 0.025,           // ±2.5%
+      });
+    } else if (text.includes('×')) {
+      opsCells.push({
+        cell, node,
+        base: parseFloat(text),
+        format: (v) => v.toFixed(1) + '× ',
+        jitter: 0.06,            // ±6% for small multipliers
+      });
+    }
+  });
+
   setInterval(() => {
-    const rows = document.querySelectorAll('.ops-row .met');
-    if (!rows.length) return;
-    const target = rows[Math.floor(Math.random() * rows.length)];
-    target.style.transition = 'background .25s';
-    target.style.background = 'rgba(0,87,255,.06)';
-    setTimeout(() => target.style.background = '', 500);
-  }, 2200);
+    if (!opsCells.length) return;
+    const pick = opsCells[Math.floor(Math.random() * opsCells.length)];
+    // gaussian-ish: average of two uniforms keeps drift centered on base
+    const noise = ((Math.random() + Math.random()) / 2 - 0.5) * 2 * pick.jitter * pick.base;
+    pick.node.nodeValue = pick.format(pick.base + noise);
+    pick.cell.style.transition = 'background .25s ease';
+    pick.cell.style.background = 'rgba(0, 87, 255, .08)';
+    setTimeout(() => { pick.cell.style.background = ''; }, 500);
+  }, 1600);
 
   // ---- FAQ accordion
   document.querySelectorAll('#faqList .qa').forEach(qa => {
