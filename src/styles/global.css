@@ -257,11 +257,11 @@ section { position: relative; z-index: 1; }
 
 .b3 .vis { flex: 1; display: grid; place-items: center; background: linear-gradient(180deg, #fafbfd, #f0f3fa); padding: 36px 22px; min-height: 240px; }
 .shield-wrap { position: relative; width: 100%; display: grid; place-items: center; }
-.shield { width: 90px; height: 100px; background: linear-gradient(180deg, var(--blue), #003fbf); border-radius: 14px 14px 50% 50%/14px 14px 60% 60%; display: grid; place-items: center; color: #fff; box-shadow: 0 14px 30px -12px var(--blue-glow); position: relative; z-index: 2; }
-.shield svg { width: 38px; height: 38px; }
-.ch-rules { position: absolute; display: flex; flex-direction: column; gap: 14px; }
-.ch-rules.left { left: 4%; top: 50%; transform: translateY(-50%); }
-.ch-rules.right { right: 4%; top: 50%; transform: translateY(-50%); }
+.shield { width: 78px; height: 88px; background: linear-gradient(180deg, var(--blue), #003fbf); border-radius: 14px 14px 50% 50%/14px 14px 60% 60%; display: grid; place-items: center; color: #fff; box-shadow: 0 14px 30px -12px var(--blue-glow); position: relative; z-index: 2; }
+.shield svg { width: 34px; height: 34px; }
+.ch-rules { position: absolute; display: flex; flex-direction: column; gap: 14px; max-width: calc(50% - 60px); }
+.ch-rules.left { left: 0; top: 50%; transform: translateY(-50%); align-items: flex-start; }
+.ch-rules.right { right: 0; top: 50%; transform: translateY(-50%); align-items: flex-end; }
 .ch-rules .r { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px 8px 10px; font-size: 11px; font-family: "Geist Mono", monospace; color: var(--ink-2); display: flex; align-items: center; gap: 7px; box-shadow: var(--shadow-sm); }
 .ch-rules .r::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
 
