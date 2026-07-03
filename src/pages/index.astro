@@ -13,7 +13,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>AdBoost Health, Growth Marketing for Health & Telehealth Brands</title>
 <meta name="description" content="Growth marketing built exclusively for GLP-1, telehealth, supplement & wellness brands. Lower CAC, scale spend profitably, without compliance landmines." />
-<meta name="theme-color" content="#0057ff" />
+<meta name="theme-color" content="#ffffff" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="AdBoost Health, Growth Marketing for Health Brands" />
 <meta property="og:description" content="Lower CAC, improve LTV, and scale paid, without compliance landmines. 71+ founders served. $153M+ tracked." />
@@ -25,7 +25,9 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://cal.com" />
 <link rel="dns-prefetch" href="https://app.cal.com" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'" />
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" /></noscript>
 <link rel="icon" type="image/png" href="/logos/adboost-mark.png" />
 <script is:inline define:vars={{ CAL_NAMESPACE, CAL_LINK }}>
   // Defer Cal.com embed until first user interaction or idle to keep TTI fast.
@@ -102,7 +104,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         <span>Plan you keep either way</span>
       </div>
       <div class="meta reveal d3">
-        <div class="avatars"><span></span><span></span><span></span><span></span></div>
+        <div class="avatars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
         <span>Trusted by <b style="color:var(--ink)">71+ founders</b> · 4.9 / 5 average rating · <b style="color:var(--ink)">4 spots left</b> this month</span>
       </div>
     </div>
@@ -213,14 +215,14 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     </div>
     <div class="marquee-wrap">
       <div class="marquee" id="marquee">
-        <span class="logo" data-tall><img src="/logos/adidas.webp" alt="adidas"  loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/jnj.webp" alt="Johnson &amp; Johnson" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/alveos.webp" alt="alveos"  loading="lazy" decoding="async" /></span>
-        <span class="logo logo-tile"><img src="/logos/liv.webp" alt="Liv" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/fitbiomics.webp" alt="FITBIOMICS" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/nectar.webp" alt="Nectar" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/gtg.webp" alt="GTG Energy" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/undefined-health.webp" alt="undefined health" loading="lazy" decoding="async" /></span>
+        <span class="logo" data-tall><img src="/logos/adidas.webp" alt="adidas" width="136" height="100" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/jnj.webp" alt="Johnson &amp; Johnson" width="307" height="80" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/alveos.webp" alt="alveos" width="290" height="70" loading="lazy" decoding="async" /></span>
+        <span class="logo logo-tile"><img src="/logos/liv.webp" alt="Liv" width="75" height="90" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/fitbiomics.webp" alt="FITBIOMICS" width="430" height="70" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/nectar.webp" alt="Nectar" width="180" height="90" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/gtg.webp" alt="GTG Energy" width="126" height="90" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/undefined-health.webp" alt="undefined health" width="337" height="70" loading="lazy" decoding="async" /></span>
       </div>
     </div>
   </div>
@@ -230,7 +232,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 <section class="creative-strip">
   <div class="container">
     <div class="strip-head reveal">
-      <h3>Creative built for the <span class="serif" style="color:var(--blue)">scroll</span>, and the rules of every health platform.</h3>
+      <h2>Creative built for the <span class="serif" style="color:var(--blue)">scroll</span>, and the rules of every health platform.</h2>
       <div class="right">2,400+ static & motion creatives shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.</div>
     </div>
   </div>
@@ -279,7 +281,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         </div>
         <div class="body">
           <h3>The only categories we work in are the ones we've already scaled.</h3>
-          <p>We don't work outside health. That's why we know every Meta health policy by heart, and why we ship faster than a generalist agency ever could.</p>
+          <p>We don’t work outside health. That’s why we know every Meta health policy by heart, and why we ship faster than a generalist agency ever could.</p>
         </div>
       </div>
 
@@ -324,7 +326,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         </div>
         <div class="body">
           <h3>Compliance-first creative.</h3>
-          <p>Pre-approved against health-vertical policies, so launches don't get yanked.</p>
+          <p>Pre-approved against health-vertical policies, so launches don’t get yanked.</p>
         </div>
       </div>
 
@@ -438,7 +440,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           </div>
         </div>
         <div class="body">
-          <h4>Scaled paid social 6× while halving CAC.</h4>
+          <h3>Scaled paid social 6× while halving CAC.</h3>
           <p>From a single-channel test to a multi-platform system shipping 25+ creatives a week.</p>
         </div>
         <div class="stats">
@@ -461,7 +463,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           </div>
         </div>
         <div class="body">
-          <h4>40% CAC reduction inside 14 days.</h4>
+          <h3>40% CAC reduction inside 14 days.</h3>
           <p>UGC creative refactor + LP redesign + offer test on day 3. Held the new floor for 6 months.</p>
         </div>
         <div class="stats">
@@ -484,7 +486,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           </div>
         </div>
         <div class="body">
-          <h4>$0 → $1.6M in 90 days.</h4>
+          <h3>$0 → $1.6M in 90 days.</h3>
           <p>Built the full acquisition engine from a cold start: positioning, creative system, paid social, lifecycle.</p>
         </div>
         <div class="stats">
@@ -505,7 +507,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       <div class="process-left reveal">
         <span class="eyebrow"><span class="dot"></span>HOW IT WORKS</span>
         <h2>Set up in 5 days.<span class="serif">Results in 31.</span></h2>
-        <p>No 90-day onboarding. No "strategy decks." Health brands can't afford to lose a quarter to a slow agency, neither can we.</p>
+        <p>No 90-day onboarding. No “strategy decks.” Health brands can’t afford to lose a quarter to a slow agency, neither can we.</p>
         <div class="stamps">
           <span class="stamp">5-DAY SETUP</span>
           <span class="stamp">DAILY SLACK</span>
@@ -522,7 +524,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <span class="num">01 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16l-7-3.5L5 20V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
-            <div><h4>Book a free strategy call</h4><p>We pull your account, audit your spend, and walk you through where the real growth lives, before you pay a dollar.</p>
+            <div><h3>Book a free strategy call</h3><p>We pull your account, audit your spend, and walk you through where the real growth lives, before you pay a dollar.</p>
               <span class="duration">DAY 0–1</span>
             </div>
           </div>
@@ -538,7 +540,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <span class="num">02 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 13l4 4 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><h4>Fast audit & onboarding</h4><p>We map your channels, creative library, and offer architecture in 5 days. You leave with a punch list of fixes, ranked by lift.</p>
+            <div><h3>Fast audit & onboarding</h3><p>We map your channels, creative library, and offer architecture in 5 days. You leave with a punch list of fixes, ranked by lift.</p>
               <span class="duration">DAY 2–5</span>
             </div>
           </div>
@@ -558,7 +560,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
           <span class="num">03 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19l5-5 4 4 7-9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><h4>Build the winning system</h4><p>Clean creative testing framework, scalable spend bands, weekly iteration. The system compounds, every week beats the last.</p>
+            <div><h3>Build the winning system</h3><p>Clean creative testing framework, scalable spend bands, weekly iteration. The system compounds, every week beats the last.</p>
               <span class="duration">DAY 6–31</span>
             </div>
           </div>
@@ -593,9 +595,9 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
         </div>
       </div>
       <div class="spot-quote reveal d1">
-        <div class="stars">★★★★★</div>
+        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
         <blockquote>
-          "AdBoost helped us launch, scale, and expand into the right channels, driving stronger acquisition and retention as we grew. We went from <b>0.8 ROAS to 3.5 ROAS within 60 days</b>, and it's <span class="serif">never gone back</span>."
+          “AdBoost helped us launch, scale, and expand into the right channels, driving stronger acquisition and retention as we grew. We went from <b>0.8 ROAS to 3.5 ROAS within 60 days</b>, and it’s <span class="serif">never gone back</span>.”
         </blockquote>
         <div class="who">
           <div class="whoav">EZ</div>
@@ -615,23 +617,23 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     </div>
     <div class="t-grid">
       <div class="tcard reveal">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome."</blockquote>
+        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+        <blockquote>“Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome.”</blockquote>
         <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f5a623,#ec6b1c)">VS</div><div><div class="who">Vincent Siva</div><div class="where">CO-FOUNDER @ V/X</div></div></div>
       </div>
       <div class="tcard reveal d1">
-        <div class="stars">★★★★★</div>
-        <blockquote>"They reduced CAC by <b>40% in the first two weeks</b>. The team is specialized for our industry in a way no one else is."</blockquote>
+        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+        <blockquote>“They reduced CAC by <b>40% in the first two weeks</b>. The team is specialized for our industry in a way no one else is.”</blockquote>
         <div class="person"><div class="pav" style="background:linear-gradient(135deg,#76d39a,#22a559)">AJ</div><div><div class="who">Abi J</div><div class="where">GROWTH @ BOOST</div></div></div>
       </div>
       <div class="tcard reveal d2">
-        <div class="stars">★★★★★</div>
-        <blockquote>"Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy."</blockquote>
+        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+        <blockquote>“Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy.”</blockquote>
         <div class="person"><div class="pav" style="background:linear-gradient(135deg,#a8b5ff,#5b7cff)">OO</div><div><div class="who">Oliver Obolgogiani</div><div class="where">CO-FOUNDER @ ALVEOS</div></div></div>
       </div>
       <div class="tcard reveal d3">
-        <div class="stars">★★★★★</div>
-        <blockquote>"They know their stuff. Keyword strategy, ad copy, optimization, every move <b>backed by data</b>, every week."</blockquote>
+        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
+        <blockquote>“They know their stuff. Keyword strategy, ad copy, optimization, every move <b>backed by data</b>, every week.”</blockquote>
         <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f6b6c3,#e26b8c)">CD</div><div><div class="who">Claire May Von Doelln</div><div class="where">DIRECTOR @ RAINFACTORY</div></div></div>
       </div>
     </div>
@@ -644,13 +646,13 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     <div class="section-head reveal">
       <span class="eyebrow"><span class="dot"></span>FAQ</span>
       <h2>Answers to <span class="serif">popular questions.</span></h2>
-      <p>If you're vetting agencies right now, these are the questions we hear before every kickoff.</p>
+      <p>If you’re vetting agencies right now, these are the questions we hear before every kickoff.</p>
     </div>
     <div class="faq-list reveal d1" id="faqList">
-      <div class="qa"><button>How is AdBoost different from other agencies?<span class="plus"></span></button><div class="ans"><div class="ans-inner">We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic "DTC agency" mistakes that cost you 30 days.</div></div></div>
-      <div class="qa"><button>Do you have experience with compliant health advertising?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We've shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
-      <div class="qa"><button>Do you create ad creatives too?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.</div></div></div>
-      <div class="qa"><button>When can I expect results?<span class="plus"></span></button><div class="ans"><div class="ans-inner">Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a1">How is AdBoost different from other agencies?<span class="plus"></span></button></h3><div class="ans" id="faq-a1"><div class="ans-inner">We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a2">Do you have experience with compliant health advertising?<span class="plus"></span></button></h3><div class="ans" id="faq-a2"><div class="ans-inner">Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a3">Do you create ad creatives too?<span class="plus"></span></button></h3><div class="ans" id="faq-a3"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a4">When can I expect results?<span class="plus"></span></button></h3><div class="ans" id="faq-a4"><div class="ans-inner">Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
     </div>
   </div>
 </section>
@@ -667,7 +669,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     <div class="perks reveal d3">
       <span>30 minutes</span>
       <span>Free account audit</span>
-      <span>Written plan, even if we don't work together</span>
+      <span>Written plan, even if we don’t work together</span>
     </div>
   </div>
 </section>
@@ -720,9 +722,17 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // ---- duplicate marquee for seamless loop
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- duplicate marquee for seamless loop (clones hidden from assistive tech)
   const m = document.getElementById('marquee');
-  if (m) m.innerHTML = m.innerHTML + m.innerHTML;
+  if (m) {
+    Array.from(m.children).forEach(el => {
+      const clone = el.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      m.appendChild(clone);
+    });
+  }
 
   // ---- ops clock
   const opsTime = document.getElementById('opsTime');
@@ -773,32 +783,6 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
   }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // ---- animated counters (supports decimals + commas)
-  const fmt = (n, dec) => {
-    if (dec > 0) return n.toFixed(dec);
-    return Math.round(n).toLocaleString('en-US');
-  };
-  const counterIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      const target = parseFloat(el.dataset.target);
-      const suffix = el.dataset.suffix || '';
-      const dec = parseInt(el.dataset.decimals || '0', 10);
-      const dur = 1500;
-      const t0 = performance.now();
-      const tick = (t) => {
-        const k = Math.min(1, (t - t0) / dur);
-        const eased = 1 - Math.pow(1 - k, 3);
-        el.textContent = fmt(target * eased, dec) + suffix;
-        if (k < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-      counterIO.unobserve(el);
-    });
-  }, { threshold: .4 });
-  document.querySelectorAll('.counter').forEach(el => counterIO.observe(el));
-
   // ---- meter (bento)
   const meterIO = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -807,6 +791,12 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       const num = document.getElementById('meterNum');
       if (!ring || !num) return;
       const target = 47;
+      if (reduceMotion) {
+        ring.setAttribute('stroke-dasharray', `${target} 100`);
+        num.textContent = target + '%';
+        meterIO.unobserve(e.target);
+        return;
+      }
       const dur = 1500;
       const t0 = performance.now();
       const tick = (t) => {
@@ -880,16 +870,37 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
     pick.cell.style.background = 'rgba(0, 87, 255, .08)';
     setTimeout(() => { pick.cell.style.background = ''; }, 500);
   }
-  setInterval(() => { tickOne(); tickOne(); }, 1100);
+  if (!reduceMotion) setInterval(() => { tickOne(); tickOne(); }, 1100);
 
   // ---- FAQ accordion
   document.querySelectorAll('#faqList .qa').forEach(qa => {
-    qa.querySelector('button').addEventListener('click', () => qa.classList.toggle('open'));
+    const btn = qa.querySelector('button');
+    btn.addEventListener('click', () => {
+      const open = qa.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
   });
+
+  // ---- mobile sticky CTA: appear once the hero CTAs scroll away, hide over the big CTA section
+  const mcta = document.querySelector('.mobile-cta');
+  const heroCtas = document.querySelector('.hero .ctas');
+  const bigCta = document.getElementById('cta');
+  if (mcta && heroCtas && bigCta) {
+    let pastHero = false, overBigCta = false;
+    const update = () => mcta.classList.toggle('show', pastHero && !overBigCta);
+    new IntersectionObserver(([e]) => {
+      pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+      update();
+    }, { threshold: 0 }).observe(heroCtas);
+    new IntersectionObserver(([e]) => {
+      overBigCta = e.isIntersecting;
+      update();
+    }, { threshold: .2 }).observe(bigCta);
+  }
 
   // ---- subtle ops parallax on mouse
   const ops = document.getElementById('ops');
-  if (ops) {
+  if (ops && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
     document.addEventListener('mousemove', (e) => {
       const w = window.innerWidth, h = window.innerHeight;
       const x = (e.clientX / w - .5);
