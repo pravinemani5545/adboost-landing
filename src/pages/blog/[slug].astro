@@ -7,13 +7,32 @@ export async function getStaticPaths() {
   const posts = await getPublishedPosts();
   return posts.map((post) => ({
     params: { slug: post.id },
-    props: { post },
+    props: { post, all: posts },
   }));
 }
 
-const { post } = Astro.props;
+const { post, all } = Astro.props;
 const { Content } = await render(post);
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+
+const readMinutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 200));
+
+// Related: most shared tags first, then recency. Top 3.
+const related = all
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({
+    p,
+    overlap: p.data.tags.filter((t) => post.data.tags.includes(t)).length,
+  }))
+  .sort((a, b) => b.overlap - a.overlap || b.p.data.pubDate.valueOf() - a.p.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map(({ p }) => ({
+    href: `/blog/${p.id}/`,
+    title: p.data.title,
+    description: p.data.description,
+    heroImage: p.data.heroImage,
+    heroAlt: p.data.heroAlt,
+  }));
 ---
 
 <BlogLayout
@@ -21,6 +40,8 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
   description={post.data.description}
   canonical={`${site}/blog/${post.id}/`}
   post={post.data}
+  readMinutes={readMinutes}
+  related={related}
 >
   <Content />
 </BlogLayout>
