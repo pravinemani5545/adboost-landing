@@ -4,7 +4,7 @@ import { getPublishedPosts } from '../../lib/blog';
 
 const posts = await getPublishedPosts();
 
-const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 

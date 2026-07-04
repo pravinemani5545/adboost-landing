@@ -13,7 +13,7 @@ export async function getStaticPaths() {
 
 const { post, all } = Astro.props;
 const { Content } = await render(post);
-const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
 const readMinutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 200));
 

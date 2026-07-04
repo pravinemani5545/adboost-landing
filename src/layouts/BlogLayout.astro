@@ -32,7 +32,7 @@ interface Props {
 }
 
 const { title, description, canonical, post, readMinutes, related = [] } = Astro.props;
-const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
 // Social scrapers (Facebook especially) don't render WebP — og images are JPEG copies.
 const ogImage = post?.heroImage

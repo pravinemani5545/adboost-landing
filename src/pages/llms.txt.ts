@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getPublishedPosts } from '../lib/blog';
 
 export const GET: APIRoute = async ({ site }) => {
-  const base = site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+  const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
   const posts = await getPublishedPosts();
 
   const body = `# AdBoost Health
