@@ -22,9 +22,11 @@ Any page or content change must keep these true:
 - **Friday auto-publish**: GH Actions `friday-publish.yml` (Fri 12:00 UTC) hits a Vercel deploy hook (repo secret `VERCEL_DEPLOY_HOOK_URL`) → rebuild picks up posts whose `pubDate` has arrived. Queue currently runs through 2026-09-11 — top it up with new Friday-dated posts before it dries out.
 - New post checklist: markdown file with full frontmatter (incl. `heroImage`/`heroAlt`) → hero webp + og jpg generated → build check.
 
-## Hero image system (Higgsfield)
+## Hero image system (Higgsfield) — "operator-premium" v3
 
-Flat editorial vector, one oversized `#0057ff` focal glyph (~55% frame), faint blueprint grid, ≤2 light-gray support cards, single coral `#ff6b3d`/green `#16a34a` micro-dots, strictly no 3D/no text-in-image. Generate with GPT Image 2, 16:9, passing `public/blog/og/glp1-advertising-compliance-2026.jpg` as `--image` style reference so new heroes match the set. Then: `cwebp -q 82 -resize 1600 0` → `public/blog/`, 1200w JPEG → `public/blog/og/`.
+Stripe/Linear-class light dimensional style: airy white→pale-blue (`#eef2fa`) gradient with faint blue glow, floating 2.5D glassmorphic dashboard cards with vivid `#0057ff` charts, ALL card text greeked (gray bars, never characters), one narrative focal object per post staged in front (shield, funnel, padlock, magnifier…), one coral `#ff6b3d` + one green `#16a34a` micro-dot, soft cinematic lighting, generous negative space. **No readable text/letters/numbers/logos ever.**
+
+Generate with GPT Image 2, 16:9, 2k, passing `public/blog/og/glp1-advertising-compliance-2026.jpg` (the anchor) as `--image` style reference so new heroes match the set. Then: `cwebp -q 82 -resize 1600 0` → `public/blog/<slug>.webp`, 1200w JPEG → `public/blog/og/<slug>.jpg`. Higgsfield gotchas: ≤7 concurrent jobs, retry 502/504 with backoff.
 
 ## Design tokens
 
