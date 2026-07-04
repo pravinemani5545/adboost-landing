@@ -4,6 +4,54 @@ import '../styles/global.css';
 const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 const CAL_NAMESPACE = 'strategy-call';
 const CAL_URL = `https://cal.com/${CAL_LINK}`;
+
+const SITE = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${SITE}/#org`,
+      name: 'AdBoost Health',
+      url: `${SITE}/`,
+      logo: { '@type': 'ImageObject', url: `${SITE}/logos/adboost-mark.png` },
+      email: 'hello@adboost.health',
+      description: 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.',
+      address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
+    },
+    {
+      '@type': 'WebSite',
+      name: 'AdBoost Health',
+      url: `${SITE}/`,
+      publisher: { '@id': `${SITE}/#org` },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How is AdBoost different from other agencies?',
+          acceptedAnswer: { '@type': 'Answer', text: 'We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic DTC agency mistakes that cost you 30 days.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you have experience with compliant health advertising?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We have shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'Do you create ad creatives too?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.' },
+        },
+        {
+          '@type': 'Question',
+          name: 'When can I expect results?',
+          acceptedAnswer: { '@type': 'Answer', text: 'Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.' },
+        },
+      ],
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -21,6 +69,11 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="AdBoost Health, Growth Marketing for Health Brands" />
 <meta name="twitter:description" content="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked." />
+<link rel="canonical" href={`${SITE}/`} />
+<meta property="og:url" content={`${SITE}/`} />
+<link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${SITE}/rss.xml`} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="preconnect" href="https://cal.com" />
@@ -62,6 +115,7 @@ const CAL_URL = `https://cal.com/${CAL_LINK}`;
       <a href="#results">Results</a>
       <a href="#process">Process</a>
       <a href="#faq">FAQ</a>
+      <a href="/blog/">Blog</a>
     </div>
     <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
       Book a call

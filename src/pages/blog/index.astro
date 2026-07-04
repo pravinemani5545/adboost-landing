@@ -1,0 +1,49 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getPublishedPosts } from '../../lib/blog';
+
+const posts = await getPublishedPosts();
+
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://adboost.health';
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BlogLayout
+  title="Health Brand Growth Blog | AdBoost Health"
+  description="Playbooks on compliant health advertising, telehealth CAC benchmarks, and scaling paid media for GLP-1, supplement & wellness brands."
+  canonical={`${site}/blog/`}
+>
+  <div class="blog-head">
+    <span class="eyebrow"><span class="dot"></span>Blog</span>
+    <h1>Growth playbooks for <span class="serif">health</span> brands.</h1>
+    <p>What we learn managing paid media for 71+ health, telehealth, and supplement founders — written down.</p>
+  </div>
+  <div class="post-list">
+    {posts.map((post) => (
+      <a class="post-card" href={`/blog/${post.id}/`}>
+        {post.data.heroImage && <img src={post.data.heroImage} alt={post.data.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
+        <div class="post-card-body">
+          <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+          <h2>{post.data.title}</h2>
+          <p>{post.data.description}</p>
+          <span class="read-more">Read article →</span>
+        </div>
+      </a>
+    ))}
+  </div>
+</BlogLayout>
+
+<style>
+  .blog-head { max-width: 640px; margin-bottom: 52px; }
+  .blog-head h1 { font-size: clamp(32px, 5vw, 52px); letter-spacing: -.03em; line-height: 1.08; font-weight: 600; color: var(--ink); margin: 14px 0; }
+  .blog-head p { color: var(--mute); font-size: 16px; line-height: 1.6; }
+  .post-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 26px; }
+  .post-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; transition: transform .18s ease, box-shadow .22s ease, border-color .2s; }
+  .post-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--line-2); }
+  .post-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid var(--line); }
+  .post-card-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .post-card time { font-size: 12px; color: var(--mute-2); font-weight: 500; letter-spacing: .02em; }
+  .post-card h2 { font-size: 18.5px; letter-spacing: -.015em; line-height: 1.3; font-weight: 600; color: var(--ink); }
+  .post-card p { font-size: 14px; color: var(--mute); line-height: 1.55; flex: 1; }
+  .read-more { font-size: 13.5px; font-weight: 500; color: var(--blue); }
+</style>
