@@ -1,6 +1,9 @@
 ---
 title: "Retention Is Your Real CAC Strategy: Email, SMS, and LTV Systems for Health Brands"
-description: "The health brands that outbid everyone on paid media aren't better at ads — they can afford higher CAC. How retention, subscription cohorts, and lifecycle flows raise your allowable acquisition cost."
+seoTitle: "Retention & LTV Systems for Health Brands | AdBoost Health"
+description: "Raise allowable CAC 1.5-2.5x with retention: cohort math, the 5 email and SMS flows that move LTV, and compliant lifecycle messaging for health brands."
+ctaHeading: "What's your real allowable CAC?"
+ctaText: "Book a free 30-min call — we run the cohort math on your account and send a written plan either way."
 pubDate: 2026-08-21
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -23,7 +26,7 @@ Health is unusually well-suited to this game. Supplements, telehealth programs, 
 
 ## What does a healthy subscription cohort actually look like?
 
-Founders quote a single "churn rate" — a blended, mostly useless number. What matters is the shape of the cohort curve: what percentage of a monthly signup cohort is still active at each cycle.
+A healthy cohort holds 75%+ through the first rebill and flattens by cycle 3 — the shape of the curve, not a blended "churn rate," is what matters: what percentage of a monthly signup cohort is still active at each cycle.
 
 | Cycle | Struggling account | Healthy account |
 |---|---|---|
@@ -40,7 +43,7 @@ For health products the second failure mode has a specific cause: **most health 
 
 ## Which email and SMS flows actually move LTV?
 
-Most health brands have a welcome series and a campaign calendar, which is to say they have nothing. The flows that move cohort curves, roughly in order of impact we see:
+Five flows move LTV: onboarding, pre-rebill notices, cancel-intercepts, win-backs, and replenishment reminders. Most health brands have a welcome series and a campaign calendar instead — which is to say they have nothing. In order of impact we see across AdBoost Health partner accounts:
 
 1. **Post-purchase onboarding (days 0–30).** What to expect, how to take it, when most people notice a difference. This is the highest-leverage flow in a health account because it directly attacks the "is it working?" cancel.
 2. **Pre-rebill notice with an off-ramp menu.** Counterintuitive, but warning customers before the charge — with options to delay, downsize, or swap instead of cancel — reduces both churn and chargebacks. A skipped month is a retained customer; a surprise charge is a refund and a lost one.
@@ -52,7 +55,7 @@ SMS earns its place in exactly two of these: rebill notices and replenishment nu
 
 ## How do you keep lifecycle messaging compliant?
 
-The discipline you apply to ads doesn't stop at the inbox. Email and SMS feel private, but the FTC reads them the same way it reads your landing page — and structure/function rules don't have a "but it was just a newsletter" exemption.
+Apply the same claim discipline to flows that you apply to ads. Email and SMS feel private, but the [FTC reads them the same way](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) it reads your landing page — and structure/function rules don't have a "but it was just a newsletter" exemption.
 
 - **Same claim language everywhere.** "Supports," "helps maintain," "promotes" — the hedged claim architecture from your [ad creative system](/blog/health-ad-creative-rejected-fix/) is the same one your flows should inherit. If the ad can't say "fixes your gut," the day-14 email can't either.
 - **Testimonials in flows need the same substantiation** as testimonials in ads. Customer quotes claiming disease outcomes ("cured my insomnia") can't be forwarded to your list just because a customer said them.

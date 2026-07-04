@@ -1,6 +1,9 @@
 ---
 title: "A Creative Testing Framework for Health Ads: Budgets, Kill Criteria, and Reading Results Without Fooling Yourself"
-description: "The exact test structure we run on health ad accounts: cell design, minimum spend per variant, leading indicators vs ROAS, and the kill criteria that stop teams from lying to themselves."
+seoTitle: "Creative Testing Framework for Health Ads | AdBoost Health"
+description: "Get the exact creative test structure we run on health ad accounts: 1-1.5x CPA spend per variant, written kill criteria, and a 70/30 iteration split."
+ctaHeading: "What did your last test decide?"
+ctaText: "Book a free 30-min call — we map your last 90 days of creative spend and hand you a written testing plan."
 pubDate: 2026-08-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -11,7 +14,7 @@ heroAlt: "Test matrix of ad variants with scale and kill markers in AdBoost blue
 
 Ask a health brand's media buyer how creative testing works in the account and you'll usually get one of two answers: "we put new ads in and see what happens," or a testing framework so elaborate it hasn't produced a decision in six weeks. Both fail the same way — money goes out, and nobody can say what the account *learned*.
 
-Testing isn't launching ads. Testing is a structure that converts spend into decisions. Here's the framework we run across health, telehealth, and supplement partners, including the numbers.
+Testing isn't launching ads. Testing is a structure that converts spend into decisions. Here's the framework AdBoost Health runs across health, telehealth, and supplement partners, including the numbers.
 
 ## How should you structure a creative test cell?
 
@@ -28,9 +31,9 @@ Test angles before hooks, and hooks before formats. An angle is a reason to buy;
 
 ## How much should you spend per variant before deciding?
 
-The most expensive habit in creative testing is killing ads on $30 of feelings. The second most expensive is running losers for three weeks out of hope. The escape from both is deciding the budget *before* launch.
+Roughly 1–1.5x your target CPA per variant before any conversion-based judgment — decided *before* launch. The most expensive habit in creative testing is killing ads on $30 of feelings; the second most expensive is running losers for three weeks out of hope, and a pre-committed budget is the escape from both.
 
-Our rule of thumb: **each variant gets roughly 1–1.5x your target CPA in spend before any conversion-based judgment.** Selling a $60 product with a $50 target CPA? A variant hasn't been tested until it's spent $50–75. Anything less and a single random conversion — or its absence — decides the ad's fate, which is a coin flip wearing a spreadsheet.
+The rule in practice: Selling a $60 product with a $50 target CPA? A variant hasn't been tested until it's spent $50–75. Anything less and a single random conversion — or its absence — decides the ad's fate, which is a coin flip wearing a spreadsheet.
 
 Work backwards from that and you get the honest constraint most teams dodge: **testing budget determines testing velocity.** At a $50 target CPA, testing 20 variants a month costs $1,000–1,500 in dedicated test spend. We hold test spend at 10–20% of account budget for scaling accounts. If your budget only supports properly testing six variants a month, test six — twenty half-tested variants produce zero decisions, and a decision is the unit of output.
 

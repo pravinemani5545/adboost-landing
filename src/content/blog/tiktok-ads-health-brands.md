@@ -1,6 +1,9 @@
 ---
 title: "TikTok Ads for Health & Wellness Brands: What Passes Review and What Actually Converts"
-description: "TikTok has the strictest health ad policies of any major platform. How to pass review, when to use Spark Ads and creators, and where TikTok actually belongs in a health brand's funnel."
+seoTitle: "TikTok Ads for Health Brands: Review Rules | AdBoost Health"
+description: "Learn what passes TikTok's strict health ad review: Spark Ads, creator briefs, comment moderation, and TikTok's real job in a health brand's funnel."
+ctaHeading: "Would your ads survive TikTok review?"
+ctaText: "Book a free 30-min call — we audit your TikTok fit and creative and send you a written plan either way."
 pubDate: 2026-08-14
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -11,11 +14,11 @@ heroAlt: "Phone screen showing a TikTok health ad next to a review checklist in 
 
 TikTok is where health brands go to find cheap attention and lose ad accounts. The platform delivers the lowest CPMs and the youngest, most trend-driven health buyers of any major channel — and it enforces the strictest health advertising policies of Meta, Google, or TikTok by a comfortable margin. Most founders discover the second fact after they've built a strategy around the first.
 
-We run TikTok for health, telehealth, and supplement partners, and the accounts that work treat the platform differently from Meta in three specific ways: what they submit for review, who fronts the creative, and what job TikTok is assigned in the funnel.
+At AdBoost Health we run TikTok for health, telehealth, and supplement partners, and the accounts that work treat the platform differently from Meta in three specific ways: what they submit for review, who fronts the creative, and what job TikTok is assigned in the funnel.
 
 ## Why is TikTok the hardest platform for health ads?
 
-Meta's health policies are mostly about *framing* — personal attributes, before/after structure, unhedged claims. TikTok inherits all of that and adds category-level restrictions on top:
+TikTok is the hardest platform because it inherits Meta's framing rules and stacks category-level restrictions on top. [Meta's health policies](https://transparency.meta.com/policies/ad-standards/) are mostly about *framing* — personal attributes, before/after structure, unhedged claims. TikTok adds:
 
 - **Weight management is gated by region and product type.** Fasting apps, appetite suppressants, and most weight-loss positioning are restricted or banned outright depending on market. GLP-1-adjacent brands face the tightest rules of all — the [GLP-1 compliance playbook](/blog/glp1-advertising-compliance-2026/) covers that category in depth.
 - **Ingestibles trigger extra scrutiny.** Supplements are allowed, but claims that would survive on Meta ("supports deep sleep," fine) get flagged when paired with TikTok-native visual tropes — pill-in-hand shots, dramatic morning-after reactions, "results" text overlays.
@@ -49,7 +52,7 @@ On sourcing: TikTok's creator marketplace is a fine top-of-funnel for finding he
 
 ## Where does TikTok belong in a health brand's funnel?
 
-Here's the reframe that changes how you read the numbers: **TikTok is a discovery layer, not a closer.** Health purchases are considered purchases — a first-touch TikTok view rarely converts in-session, especially for subscription products at telehealth or premium-supplement price points.
+**TikTok is a discovery layer, not a closer** — that reframe changes how you read the numbers. Health purchases are considered purchases — a first-touch TikTok view rarely converts in-session, especially for subscription products at telehealth or premium-supplement price points.
 
 What TikTok reliably does is fill the top of the system with cheap, qualified attention: branded search lifts, Meta retargeting pools grow, and email capture gets cheaper. Accounts that judge TikTok on last-click ROAS alone almost always kill it six weeks before the blended numbers would have vindicated it. Judge it on cost per qualified visitor, new-customer branded-search lift, and the CAC of the retargeting layer it feeds — benchmarks by vertical are in our [telehealth CAC data](/blog/telehealth-cac-benchmarks-2026/).
 

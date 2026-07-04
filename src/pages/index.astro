@@ -18,6 +18,7 @@ const jsonLd = {
       email: 'hello@adboost.health',
       description: 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.',
       address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
+      contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'hello@adboost.health', areaServed: 'Worldwide' },
     },
     {
       '@type': 'WebSite',
@@ -31,12 +32,12 @@ const jsonLd = {
         {
           '@type': 'Question',
           name: 'How is AdBoost different from other agencies?',
-          acceptedAnswer: { '@type': 'Answer', text: 'We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic DTC agency mistakes that cost you 30 days.' },
+          acceptedAnswer: { '@type': 'Answer', text: 'We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.' },
         },
         {
           '@type': 'Question',
           name: 'Do you have experience with compliant health advertising?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We have shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.' },
+          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.' },
         },
         {
           '@type': 'Question',
@@ -59,7 +60,7 @@ const jsonLd = {
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AdBoost Health, Growth Marketing for Health & Telehealth Brands</title>
+<title>Growth Marketing for Health & Telehealth Brands | AdBoost Health</title>
 <meta name="description" content="Growth marketing built exclusively for GLP-1, telehealth, supplement & wellness brands. Lower CAC, scale spend profitably, without compliance landmines." />
 <meta name="theme-color" content="#ffffff" />
 <meta property="og:type" content="website" />
@@ -83,7 +84,8 @@ const jsonLd = {
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'" />
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" /></noscript>
-<link rel="icon" type="image/png" href="/logos/adboost-mark.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script is:inline define:vars={{ CAL_NAMESPACE, CAL_LINK }}>
   // Defer Cal.com embed until first user interaction or idle to keep TTI fast.
   (function () {
@@ -119,14 +121,26 @@ const jsonLd = {
       <a href="#faq">FAQ</a>
       <a href="/blog/">Blog</a>
     </div>
-    <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
-      Book a call
-      <span class="chev">
-        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-    </a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
+        Book a call
+        <span class="chev">
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
+<div class="mnav" id="mnav">
+  <a href="#why">Why us</a>
+  <a href="#results">Results</a>
+  <a href="#process">Process</a>
+  <a href="#faq">FAQ</a>
+  <a href="/blog/">Blog</a>
+</div>
 
 <!-- HERO -->
 <header class="hero">
@@ -278,7 +292,7 @@ const jsonLd = {
         <span class="logo"><img src="/logos/fitbiomics.webp" alt="FITBIOMICS" width="430" height="70" loading="lazy" decoding="async" /></span>
         <span class="logo"><img src="/logos/nectar.webp" alt="Nectar" width="180" height="90" loading="lazy" decoding="async" /></span>
         <span class="logo"><img src="/logos/gtg.webp" alt="GTG Energy" width="126" height="90" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/undefined-health.webp" alt="undefined health" width="337" height="70" loading="lazy" decoding="async" /></span>
+        <span class="logo"><img src="/logos/undefined-health.webp" alt="Undefined Health" width="337" height="70" loading="lazy" decoding="async" /></span>
       </div>
     </div>
   </div>
@@ -706,9 +720,9 @@ const jsonLd = {
     </div>
     <div class="faq-list reveal d1" id="faqList">
       <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a1">How is AdBoost different from other agencies?<span class="plus"></span></button></h3><div class="ans" id="faq-a1"><div class="ans-inner">We only work with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a2">Do you have experience with compliant health advertising?<span class="plus"></span></button></h3><div class="ans" id="faq-a2"><div class="ans-inner">Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a3">Do you create ad creatives too?<span class="plus"></span></button></h3><div class="ans" id="faq-a3"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a4">When can I expect results?<span class="plus"></span></button></h3><div class="ans" id="faq-a4"><div class="ans-inner">Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a2">Do you have experience with compliant health advertising?<span class="plus"></span></button></h3><div class="ans" id="faq-a2"><div class="ans-inner">Yes. Every account is reviewed against <a href="/blog/glp1-advertising-compliance-2026/">Meta, Google, and TikTok health-vertical policies</a> before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a3">Do you create ad creatives too?<span class="plus"></span></button></h3><div class="ans" id="faq-a3"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get <a href="/blog/health-ad-creative-rejected-fix/">20+ new creative variants per month</a>, indexed against winning angles in our library.</div></div></div>
+      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a4">When can I expect results?<span class="plus"></span></button></h3><div class="ans" id="faq-a4"><div class="ans-inner">Most partners see <a href="/blog/telehealth-cac-benchmarks-2026/">directional movement on CAC or ROAS</a> within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
     </div>
   </div>
 </section>
@@ -748,7 +762,7 @@ const jsonLd = {
         </div>
       </div>
       <div class="foot-proof">
-        <h6>BY THE NUMBERS</h6>
+        <p class="foot-label">BY THE NUMBERS</p>
         <ul>
           <li><b>71+</b><span>founders served</span></li>
           <li><b>4.9 / 5</b><span>average rating</span></li>
@@ -756,7 +770,7 @@ const jsonLd = {
         </ul>
       </div>
       <div class="foot-contact">
-        <h6>GET IN TOUCH</h6>
+        <p class="foot-label">GET IN TOUCH</p>
         <ul>
           <li><a href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>Book a strategy call</a></li>
           <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
@@ -766,7 +780,7 @@ const jsonLd = {
     </div>
     <div class="legal">
       <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span>Privacy · Terms · Cookies</span>
+      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
     </div>
   </div>
 </footer>
@@ -777,6 +791,17 @@ const jsonLd = {
   const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 6);
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  // ---- mobile menu
+  const burger = document.getElementById('burger');
+  const mnav = document.getElementById('mnav');
+  if (burger && mnav) {
+    burger.addEventListener('click', () => {
+      const open = mnav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    });
+    mnav.addEventListener('click', (e) => { if (e.target.tagName === 'A') mnav.classList.remove('open'); });
+  }
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

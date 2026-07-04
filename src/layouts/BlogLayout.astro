@@ -15,6 +15,8 @@ interface RelatedPost {
 
 interface Props {
   title: string;
+  /** Short SERP title tag (≤60 chars); falls back to title */
+  pageTitle?: string;
   description: string;
   canonical: string;
   /** Present on post pages, absent on the blog index */
@@ -26,12 +28,15 @@ interface Props {
     tags: string[];
     heroImage?: string;
     heroAlt?: string;
+    ctaHeading?: string;
+    ctaText?: string;
   };
   readMinutes?: number;
   related?: RelatedPost[];
 }
 
-const { title, description, canonical, post, readMinutes, related = [] } = Astro.props;
+const { title, pageTitle, description, canonical, post, readMinutes, related = [] } = Astro.props;
+const metaTitle = pageTitle ?? title;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
 // Social scrapers (Facebook especially) don't render WebP — og images are JPEG copies.
@@ -39,21 +44,22 @@ const ogImage = post?.heroImage
   ? `${site}${post.heroImage.replace('/blog/', '/blog/og/').replace('.webp', '.jpg')}`
   : `${site}/og/og-home.png`;
 
+const displayTitleEarly = title.replace(/ \| AdBoost Health$/, '');
 const jsonLd = post
   ? {
       '@context': 'https://schema.org',
       '@graph': [
         {
           '@type': 'BlogPosting',
-          headline: title,
+          headline: displayTitleEarly,
           description,
           url: canonical,
           datePublished: post.pubDate.toISOString(),
           dateModified: (post.updatedDate ?? post.pubDate).toISOString(),
           image: ogImage,
           keywords: post.tags.join(', '),
-          author: { '@type': 'Person', name: post.author, jobTitle: post.authorTitle, worksFor: { '@type': 'Organization', name: 'AdBoost Health' } },
-          publisher: { '@type': 'Organization', name: 'AdBoost Health', url: site, logo: { '@type': 'ImageObject', url: `${site}/logos/adboost-mark.png` } },
+          author: { '@type': 'Person', name: post.author, jobTitle: post.authorTitle, worksFor: { '@id': `${site}/#org` } },
+          publisher: { '@type': 'Organization', '@id': `${site}/#org`, name: 'AdBoost Health', url: `${site}/`, logo: { '@type': 'ImageObject', url: `${site}/logos/adboost-mark.png` } },
           mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
         },
         {
@@ -61,7 +67,7 @@ const jsonLd = post
           itemListElement: [
             { '@type': 'ListItem', position: 1, name: 'Home', item: `${site}/` },
             { '@type': 'ListItem', position: 2, name: 'Blog', item: `${site}/blog/` },
-            { '@type': 'ListItem', position: 3, name: title, item: canonical },
+            { '@type': 'ListItem', position: 3, name: displayTitleEarly, item: canonical },
           ],
         },
       ],
@@ -72,7 +78,7 @@ const jsonLd = post
       name: 'AdBoost Health Blog',
       description,
       url: canonical,
-      publisher: { '@type': 'Organization', name: 'AdBoost Health', url: site },
+      publisher: { '@type': 'Organization', '@id': `${site}/#org`, name: 'AdBoost Health', url: `${site}/` },
     };
 
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -85,12 +91,12 @@ const category = post?.tags[0]?.toUpperCase();
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{title}</title>
+<title>{metaTitle}</title>
 <meta name="description" content={description} />
 <meta name="theme-color" content="#ffffff" />
 <link rel="canonical" href={canonical} />
 <meta property="og:type" content={post ? 'article' : 'website'} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={metaTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:site_name" content="AdBoost Health" />
@@ -98,7 +104,7 @@ const category = post?.tags[0]?.toUpperCase();
 {post && <meta property="article:published_time" content={post.pubDate.toISOString()} />}
 {post && <meta property="article:author" content={post.author} />}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={metaTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 <link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${site}/rss.xml`} />
@@ -109,7 +115,8 @@ const category = post?.tags[0]?.toUpperCase();
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'" />
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" /></noscript>
-<link rel="icon" type="image/png" href="/logos/adboost-mark.png" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 <script is:inline define:vars={{ CAL_NAMESPACE, CAL_LINK }}>
   (function () {
@@ -143,14 +150,26 @@ const category = post?.tags[0]?.toUpperCase();
       <a href="/#process">Process</a>
       <a href="/blog/">Blog</a>
     </div>
-    <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
-      Book a call
-      <span class="chev">
-        <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </span>
-    </a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
+        Book a call
+        <span class="chev">
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+      <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
+<div class="mnav" id="mnav">
+  <a href="/#why">Why us</a>
+  <a href="/#results">Results</a>
+  <a href="/#process">Process</a>
+  <a href="/#faq">FAQ</a>
+  <a href="/blog/">Blog</a>
+</div>
 
 <main class="blog-main">
   {post ? (
@@ -185,8 +204,8 @@ const category = post?.tags[0]?.toUpperCase();
       <section class="cta-banner-wrap container">
         <div class="cta-banner">
           <div class="cta-banner-text">
-            <h2>Lower CAC. Scale profitably.</h2>
-            <p>A free 30-minute strategy call with a full account audit — you leave with a written plan, whether we work together or not.</p>
+            <h2>{post.ctaHeading ?? 'Lower CAC. Scale profitably.'}</h2>
+            <p>{post.ctaText ?? 'A free 30-minute strategy call with a full account audit — you leave with a written plan, whether we work together or not.'}</p>
           </div>
           <a class="btn btn-light" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
             Book a free strategy call
@@ -220,12 +239,10 @@ const category = post?.tags[0]?.toUpperCase();
   )}
 </main>
 
-{post && (
-  <a class="mobile-cta" id="mcta" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}' aria-label="Book a free strategy call">
-    <span>Book a free strategy call</span>
-    <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-  </a>
-)}
+<a class="mobile-cta" id="mcta" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}' aria-label="Book a free strategy call">
+  <span>Book a free strategy call</span>
+  <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+</a>
 
 <footer>
   <div class="container">
@@ -235,7 +252,7 @@ const category = post?.tags[0]?.toUpperCase();
         <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands.</p>
       </div>
       <div class="foot-proof">
-        <h6>BY THE NUMBERS</h6>
+        <p class="foot-label">BY THE NUMBERS</p>
         <ul>
           <li><b>71+</b><span>founders served</span></li>
           <li><b>4.9 / 5</b><span>average rating</span></li>
@@ -243,7 +260,7 @@ const category = post?.tags[0]?.toUpperCase();
         </ul>
       </div>
       <div class="foot-contact">
-        <h6>GET IN TOUCH</h6>
+        <p class="foot-label">GET IN TOUCH</p>
         <ul>
           <li><a href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>Book a strategy call</a></li>
           <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
@@ -253,7 +270,7 @@ const category = post?.tags[0]?.toUpperCase();
     </div>
     <div class="legal">
       <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span>Privacy · Terms · Cookies</span>
+      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
     </div>
   </div>
 </footer>
@@ -328,17 +345,28 @@ const category = post?.tags[0]?.toUpperCase();
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => nav.classList.add('scrolled'), { passive: true });
 
-  // mobile sticky CTA: show once past the hero figure, hide over the CTA banner
+  // mobile menu
+  const burger = document.getElementById('burger');
+  const mnav = document.getElementById('mnav');
+  if (burger && mnav) {
+    burger.addEventListener('click', () => {
+      const open = mnav.classList.toggle('open');
+      burger.setAttribute('aria-expanded', String(open));
+    });
+    mnav.addEventListener('click', (e) => { if (e.target.tagName === 'A') mnav.classList.remove('open'); });
+  }
+
+  // mobile sticky CTA: show once past the header area, hide over the CTA banner (if present)
   const mcta = document.getElementById('mcta');
-  const heroFig = document.querySelector('.hero-figure') || document.querySelector('.byline');
+  const heroRef = document.querySelector('.hero-figure') || document.querySelector('.byline') || document.querySelector('.blog-head') || document.querySelector('h1');
   const banner = document.querySelector('.cta-banner');
-  if (mcta && heroFig && banner) {
+  if (mcta && heroRef) {
     let past = false, over = false;
     const update = () => mcta.classList.toggle('show', past && !over);
     new IntersectionObserver(([e]) => {
       past = !e.isIntersecting && e.boundingClientRect.top < 0; update();
-    }, { threshold: 0 }).observe(heroFig);
-    new IntersectionObserver(([e]) => { over = e.isIntersecting; update(); }, { threshold: 0 }).observe(banner);
+    }, { threshold: 0 }).observe(heroRef);
+    if (banner) new IntersectionObserver(([e]) => { over = e.isIntersecting; update(); }, { threshold: 0 }).observe(banner);
   }
 </script>
 

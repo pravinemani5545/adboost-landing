@@ -30,4 +30,10 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
 Sitemap: https://www.adboost.health/sitemap-index.xml

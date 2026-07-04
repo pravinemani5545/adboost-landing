@@ -1,6 +1,9 @@
 ---
 title: "Google Ads for Telehealth: Certification, Keyword Strategy, and Why Search Is Your Cheapest Patients"
-description: "The Google Ads playbook for telehealth brands: LegitScript and healthcare certification requirements, demand capture vs. demand creation, keyword and negative structure that protects budget, and why Performance Max needs a leash in health."
+seoTitle: "Google Ads for Telehealth: Full Playbook | AdBoost Health"
+description: "Learn Google Ads for telehealth: LegitScript certification timelines, keyword and negative structure, and why Performance Max needs a leash in health."
+ctaHeading: "Is Google burning your budget?"
+ctaText: "Book a free 30-min call — we audit your search account live and send a written plan either way."
 pubDate: 2026-08-07
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -15,7 +18,7 @@ Across partner accounts, high-intent non-brand search is consistently among the 
 
 ## What certification does Google require before you can advertise?
 
-Google gates healthcare advertising hard, and the gate depends on what you actually offer:
+Google gates [healthcare advertising](https://support.google.com/adspolicy/answer/176031) hard, and the gate depends on what you actually offer:
 
 | What you offer | What Google requires |
 |---|---|
@@ -32,16 +35,16 @@ Three things founders consistently get wrong here:
 
 ## Should you capture demand or create it on Google?
 
-Both exist on Google, and confusing them wrecks budgets. The mental model:
+Capture first — fund demand creation only after capture is saturated. Both exist on Google, and confusing them wrecks budgets. The mental model:
 
 - **Demand capture** — search terms where the patient already wants a solution: condition + treatment ("online TRT clinic"), competitor names, "near me"/"online" service queries, and your brand. Highest intent, finite volume. This is where you start and where the cheap patients live.
 - **Demand creation** — YouTube, Display, Discover. Real reach, but it behaves like social: it needs creative volume, longer windows, and it will not show search-like CACs. Fund it after capture is saturated, not instead.
 
-The practical sequencing we run: own brand first (cheap insurance, and competitors will bid on you), then condition/treatment non-brand, then competitor terms once your lander can win the comparison, then YouTube when search impression share says you've bought all the intent that exists. What "good" looks like at each stage varies enormously by vertical — anchor expectations with our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) before judging a four-week-old campaign.
+The practical sequencing we run at AdBoost Health: own brand first (cheap insurance, and competitors will bid on you), then condition/treatment non-brand, then competitor terms once your lander can win the comparison, then YouTube when search impression share says you've bought all the intent that exists. What "good" looks like at each stage varies enormously by vertical — anchor expectations with our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) before judging a four-week-old campaign.
 
 ## How should you structure keywords and negatives?
 
-Health search has a property most categories don't: **enormous informational query volume that looks transactional to broad match.** "Semaglutide side effects," "does TRT cause hair loss," "insomnia in pregnancy" — a loosely fenced account will happily spend your budget educating people who are researching, not buying, or who can't be served at all.
+Structure campaigns by intent tier, keep match types on a leash, and build the negative list before launch — because health search has a property most categories don't: **enormous informational query volume that looks transactional to broad match.** "Semaglutide side effects," "does TRT cause hair loss," "insomnia in pregnancy" — a loosely fenced account will happily spend your budget educating people who are researching, not buying, or who can't be served at all.
 
 Structure that holds up:
 
@@ -52,7 +55,7 @@ Structure that holds up:
 
 ## Why does Performance Max need a leash in health?
 
-PMax is Google's push-button answer, and in most verticals it's fine. In telehealth it needs adult supervision, for reasons specific to the category:
+PMax needs a leash in health because its automation hides queries, cannibalizes brand, and drifts placements. It's Google's push-button answer, and in most verticals it's fine — in telehealth it needs adult supervision:
 
 - **Query opacity.** PMax hides most search terms, which means you can't fully see whether you're showing against safety-sensitive or non-compliant queries — a compliance posture problem, not just an optimization one.
 - **Brand cannibalization.** Left unfenced, PMax loves to "win" your own brand searches and report them as performance. Apply brand exclusions or you're paying a platform tax on demand you already owned.

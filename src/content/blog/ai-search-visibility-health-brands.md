@@ -1,6 +1,9 @@
 ---
 title: "How Health Brands Get Recommended by ChatGPT, Perplexity, and AI Search in 2026"
-description: "A growing share of health buyers now ask AI assistants what to take and who to trust. How GEO works for health brands: citable content, llms.txt, crawler access, brand mentions, and the trust signals AI answers actually use."
+seoTitle: "AI Search Visibility for Health Brands: GEO | AdBoost Health"
+description: "Get your health brand cited by ChatGPT and Perplexity: citable content structure, llms.txt, AI crawler access, and the trust signals AI answers use."
+ctaHeading: "What does AI say about your brand?"
+ctaText: "Book a free 30-min call — we run the AI-visibility audit and send you a written plan to change the answers."
 pubDate: 2026-09-11
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -11,11 +14,11 @@ heroAlt: "Chat interface recommending a health brand with citation cards in AdBo
 
 A meaningful slice of your future customers will never see your ads, your search listing, or your homepage. They'll ask ChatGPT "what's a good magnesium supplement for sleep" or Perplexity "best telehealth option for hormone testing," read a three-paragraph answer citing two or three brands, and shortlist from that. If your brand isn't in the answer, you didn't lose the click — you were never in the consideration set.
 
-This channel has a name — generative engine optimization, GEO — and health is one of the verticals where it matters most, because health queries are exactly the kind of high-stakes, research-heavy questions people increasingly route to AI instead of scrolling ten blue links. Across partner accounts we now routinely see AI assistants appearing as a self-reported discovery source in post-purchase surveys, from effectively zero two years ago.
+This channel has a name — generative engine optimization, GEO — and health is one of the verticals where it matters most, because health queries are exactly the kind of high-stakes, research-heavy questions people increasingly route to AI instead of scrolling ten blue links. Across AdBoost Health partner accounts we now routinely see AI assistants appearing as a self-reported discovery source in post-purchase surveys, from effectively zero two years ago.
 
 ## How do AI assistants actually pick which brands to recommend?
 
-Demystify the machine first, because the tactics follow from it. When someone asks a commercial health question, systems like ChatGPT's search mode and Perplexity typically run live web retrieval, pull a set of pages, and synthesize an answer from what those pages *say* — with citations. The model's own training data supplies background familiarity with your brand; retrieval supplies the specifics.
+AI assistants recommend the brands that retrievable, trustworthy sources describe in specific, positive text. Demystify the machine, because the tactics follow from it. When someone asks a commercial health question, systems like ChatGPT's search mode and Perplexity typically run live web retrieval, pull a set of pages, and synthesize an answer from what those pages *say* — with citations. The model's own training data supplies background familiarity with your brand; retrieval supplies the specifics.
 
 Which means your brand gets recommended when three things are true:
 
@@ -33,11 +36,11 @@ AI engines quote passages, not pages. Content earns citations when a self-contai
 - **Specifics over adjectives.** "Third-party tested, 200mg magnesium glycinate, $34/month subscription" is quotable; "premium quality you can trust" is invisible to a system assembling a factual answer.
 - **Comparison and "best for" framing.** Engines answering "best X for Y" prefer sources that already did the comparison. An honest page comparing your product to alternatives — including who *shouldn't* buy yours — is disproportionately citable, and the candor reads as trust to humans and machines alike.
 - **Tables, FAQs, and structured data.** Pricing tables, dosage/format tables, FAQ schema — structure survives extraction; prose walls don't.
-- **Claim discipline still applies.** The same structure/function language rules that govern your ads govern this content — arguably more, since your sentences may be re-quoted verbatim inside a health answer stripped of your page's context and disclaimers. The claim architecture from our [creative compliance playbook](/blog/health-ad-creative-rejected-fix/) is the same one to write citable content in.
+- **Claim discipline still applies.** The same [structure/function language rules](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) that govern your ads govern this content — arguably more, since your sentences may be re-quoted verbatim inside a health answer stripped of your page's context and disclaimers. The claim architecture from our [creative compliance playbook](/blog/health-ad-creative-rejected-fix/) is the same one to write citable content in.
 
 ## Do llms.txt and AI crawler access actually matter?
 
-The unglamorous prerequisite: **AI engines can only cite what they can crawl.** Before any content strategy, check the plumbing.
+Yes — because **AI engines can only cite what they can crawl.** Before any content strategy, check the plumbing.
 
 - **Audit robots.txt for AI crawlers.** GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Google-Extended and peers each identify themselves. Plenty of health sites blocked these bots wholesale during the 2023–24 "don't train on us" wave and forgot — which in 2026 means retrieval-time invisibility. Blocking training crawlers while allowing search/retrieval crawlers is a legitimate distinction; blocking everything is opting out of the channel.
 - **llms.txt is cheap insurance, not magic.** The emerging convention — a markdown file at your root summarizing what your site/brand is and pointing to key pages — has uneven adoption by engines, but it costs an hour, guides whatever does read it, and forces you to write the one-paragraph brand description you want machines to internalize.

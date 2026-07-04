@@ -1,6 +1,9 @@
 ---
 title: "UGC Ads for Health Brands: Sourcing Creators, Staying Compliant, and Scaling Winners"
-description: "The complete UGC system for health, telehealth, and supplement brands: where to source creators, briefs that keep claims compliant, whitelisting mechanics, why clinician-led UGC outperforms, and the testimonial rules that keep your account alive."
+seoTitle: "UGC Ads for Health Brands: Compliant Guide | AdBoost Health"
+description: "Get compliant UGC that converts: creator sourcing, claims-safe briefs, FTC testimonial rules, whitelisting, and clinician-led formats for health brands."
+ctaHeading: "Is your UGC pipeline a risk?"
+ctaText: "Book a free 30-min call — we audit your creative pipeline and send a written plan, work together or not."
 pubDate: 2026-07-24
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -21,7 +24,7 @@ It also fits the platform reality. Feed and Reels reward native-looking content,
 
 ## Where do you actually source health UGC creators?
 
-In rough order of quality-per-dollar as we see it across partner accounts:
+Four sources, in rough order of quality-per-dollar as we see it across AdBoost Health partner accounts:
 
 1. **Your own customers.** Post-purchase emails to repeat buyers or high-NPS patients. Highest authenticity, lowest polish, and they already believe the product — you're capturing conviction, not manufacturing it.
 2. **Creator marketplaces and UGC platforms.** Fast and scalable, but the median marketplace creator has never heard of a structure/function claim. Assume you're buying delivery skills, and that compliance is entirely your job.
@@ -32,11 +35,18 @@ Vet every creator for two things beyond delivery: willingness to do reshoots (co
 
 ## How do you brief creators so the claims stay compliant?
 
-The brief is where compliance actually happens — not in review, where you're just catching what the brief failed to prevent. Ours have three load-bearing parts:
+Give creators a claims allowlist, a banned-phrases list, and a loose story structure — the brief is where compliance actually happens, not in review, where you're just catching what the brief failed to prevent. Ours have three load-bearing parts:
 
 **A claims allowlist, not just guidelines.** Give creators the exact sanctioned phrases: what the product *supports*, what the program *includes*, what results are framed as typical. For supplements, that means structure/function language ("supports restful sleep") and never disease claims ("treats insomnia") — the line that separates a dietary supplement from an unapproved drug in the eyes of regulators.
 
-**A banned-phrases list with substitutes.** "Cured," "guaranteed," "clinically proven" (unless you can substantiate it), disease names next to product claims, personal-attribute hooks like "if you're overweight…" — each with a compliant alternative so creators aren't left guessing. For prescription-adjacent brands, drug names stay out of creator mouths entirely; the reasons are covered in our [GLP-1 advertising compliance playbook](/blog/glp1-advertising-compliance-2026/).
+**A banned-phrases list with substitutes.** "Cured," "guaranteed," "clinically proven" (unless you can substantiate it), disease names next to product claims, personal-attribute hooks like "if you're overweight…" — each with a compliant alternative so creators aren't left guessing. A few from our standing list:
+
+| Banned phrase | Compliant substitute |
+|---|---|
+| "Cures/treats insomnia" | "Supports restful sleep" |
+| "Clinically proven" (unsubstantiated) | "Formulated with studied ingredients" |
+| "Guaranteed results" | "Here's my experience — results vary" |
+| "If you're overweight…" | "If more energy is your goal…" | For prescription-adjacent brands, drug names stay out of creator mouths entirely; the reasons are covered in our [GLP-1 advertising compliance playbook](/blog/glp1-advertising-compliance-2026/).
 
 **Story structure, loose script.** Brief the arc — problem, discovery, experience, outcome-framed-as-personal — and let the creator's own words carry it. Scripted UGC dies in the auction; briefed UGC scales.
 
@@ -44,7 +54,7 @@ Then review every cut against platform policy *and* FTC standards before launch.
 
 ## What are the testimonial rules you can't break?
 
-This is FTC territory, not just platform policy, and it applies to every creator video you pay for:
+Four rules apply to every creator video you pay for: disclose the relationship, avoid atypical-results framing, use honest actual users, and own every claim. This is [FTC territory](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance), not just platform policy:
 
 - **Disclose the material connection.** Paid creator content needs a clear disclosure (#ad, "paid partnership") in the video or caption — burying it doesn't count.
 - **No atypical-results framing.** A testimonial claiming results your typical customer won't get is deceptive even if it's true for that creator. "I lost 40 lbs in 8 weeks" from your best-case customer is a liability, not an asset. Frame outcomes as individual experience, keep numbers modest and substantiated, and use typical-results context where numbers appear.

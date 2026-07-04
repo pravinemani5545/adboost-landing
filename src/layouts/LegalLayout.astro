@@ -1,0 +1,74 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+}
+const { title, description, canonicalPath } = Astro.props;
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={`${site}${canonicalPath}`} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={`${site}${canonicalPath}`} />
+<meta property="og:site_name" content="AdBoost Health" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+</head>
+<body>
+
+<nav class="nav scrolled">
+  <div class="container nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/#why">Why us</a>
+      <a href="/#results">Results</a>
+      <a href="/blog/">Blog</a>
+    </div>
+    <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call</a>
+  </div>
+</nav>
+
+<main class="legal-main container">
+  <div class="legal-prose">
+    <slot />
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="legal">
+      <span>© 2026 AdBoost Health. All rights reserved.</span>
+      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<style is:global>
+  .legal-main { padding: 120px 0 80px; }
+  .legal-prose { max-width: 720px; font-size: 15.5px; line-height: 1.7; color: var(--ink-2); }
+  .legal-prose h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.03em; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+  .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--ink); margin: 32px 0 10px; }
+  .legal-prose p { margin: 0 0 14px; }
+  .legal-prose ul { margin: 0 0 14px; padding-left: 22px; }
+  .legal-prose li { margin-bottom: 8px; }
+  .legal-prose a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+</style>
+
+</body>
+</html>

@@ -1,6 +1,9 @@
 ---
 title: "Scaling a Health Brand from $50K to $500K/Month in Ad Spend Without Breaking CAC"
-description: "Marginal CAC by spend tier, when to add channels, how much creative volume each tier demands, and the team and cash-flow structures that survive the climb from $50K to $500K/month."
+seoTitle: "Scale Health Brand Ad Spend $50K to $500K | AdBoost Health"
+description: "Learn to scale $50K to $500K/month without breaking CAC: marginal-CAC tiers, channel timing, creative volume math, and the cash-flow structure to survive."
+ctaHeading: "Hitting a spend-tier wall?"
+ctaText: "Book a free 30-min call — we audit your account against the tier map and send a written scaling plan."
 pubDate: 2026-09-04
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -11,11 +14,11 @@ heroAlt: "Spend-tier staircase chart climbing from 50K to 500K in AdBoost blue"
 
 Every founder who's scaled past $50K/month in ad spend has met the same wall: spend goes up 40%, CAC goes up 60%, and the P&L that worked at $50K quietly stops working at $90K. Most conclude the account is "saturated." It almost never is — what's actually happening is that the *system* that produced $50K/month efficiency was never built to produce $300K/month efficiency, and each tier of spend breaks a different part of it.
 
-We've sat inside this climb across 71+ partner accounts and $153M+ in tracked revenue. The wall moves, but what breaks at each altitude is predictable.
+At AdBoost Health we've sat inside this climb across 71+ partner accounts and $153M+ in tracked revenue. The wall moves, but what breaks at each altitude is predictable.
 
 ## Why does CAC rise as you scale — and how much is normal?
 
-The mechanism is marginal cost. Your first dollars buy your most obvious customers: high-intent audiences, proven creative, warm retargeting. Each additional dollar has to reach someone slightly less likely to convert. **Marginal CAC — what the *next* $10K/month costs, not the blended average — is the number that governs scaling**, and most dashboards don't show it.
+The mechanism is marginal cost, and a 10–25% blended-CAC drift per spend tier is normal. Your first dollars buy your most obvious customers: high-intent audiences, proven creative, warm retargeting. Each additional dollar has to reach someone slightly less likely to convert. **Marginal CAC — what the *next* $10K/month costs, not the blended average — is the number that governs scaling**, and most dashboards don't show it.
 
 What we see across partner accounts as spend steps up a tier on a single channel: blended CAC drifting up 10–25% per major tier is normal physics; 50%+ jumps mean something structural broke — usually creative supply or offer depth, not "audience saturation." The tiers, roughly:
 
@@ -42,9 +45,9 @@ Two mistakes dominate here. Adding a channel too early splits a creative team th
 
 ## How much creative volume does each tier demand?
 
-Creative supply is the binding constraint on scale in health — more binding than budget, audiences, or bids. Higher spend burns through creative faster (more impressions per day per ad), while health's compliant-angle constraint means you're drawing from a smaller pond than general DTC to begin with.
+Creative volume has to scale with spend, roughly linearly — supply is the binding constraint on scale in health, more binding than budget, audiences, or bids. Higher spend burns through creative faster (more impressions per day per ad), while health's compliant-angle constraint means you're drawing from a smaller pond than general DTC to begin with.
 
-The scaling reality most teams miss: **creative volume has to scale with spend, roughly linearly.** A testing cadence that sustained $50K/month — say, 10–15 variants — will visibly fatigue by $150K. Our in-house baseline is 20+ variants per partner per month at mid-tier spend, structured as ~70% iterations on winners and ~30% new concepts, and at the $250K+ tiers, partner accounts consume meaningfully more than that. It's also not just quantity: higher tiers need more *angle diversity*, because you're now buying customers outside your core segment, and the angle that converted your early adopters won't move the mainstream buyer. The full production system is in the [creative engine playbook](/blog/health-ad-creative-rejected-fix/).
+The scaling reality most teams miss: a testing cadence that sustained $50K/month — say, 10–15 variants — will visibly fatigue by $150K. Our in-house baseline is 20+ variants per partner per month at mid-tier spend, structured as ~70% iterations on winners and ~30% new concepts, and at the $250K+ tiers, partner accounts consume meaningfully more than that. It's also not just quantity: higher tiers need more *angle diversity*, because you're now buying customers outside your core segment, and the angle that converted your early adopters won't move the mainstream buyer. The full production system is in the [creative engine playbook](/blog/health-ad-creative-rejected-fix/).
 
 Budget for this. Creative production at scale is a real line item, and treating it as a fixed cost while spend triples is the quiet way accounts strangle themselves.
 

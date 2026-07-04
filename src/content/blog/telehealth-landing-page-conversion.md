@@ -1,6 +1,9 @@
 ---
 title: "The Telehealth Landing Page Teardown: Where Intake Funnels Lose 60% of Motivated Patients"
-description: "A section-by-section teardown of the telehealth intake funnel: above-the-fold trust, intake length and question order, eligibility friction, pricing transparency, and why your landing page is part of your ad as far as platform review is concerned."
+seoTitle: "Telehealth Landing Page Conversion Fixes | AdBoost Health"
+description: "Fix the intake funnel losing 60% of motivated patients: above-the-fold trust, question order, eligibility screening, and transparent pricing that converts."
+ctaHeading: "Where is your funnel leaking?"
+ctaText: "Book a free 30-min call — we tear down your funnel live and send you the written fix list either way."
 pubDate: 2026-07-31
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -15,9 +18,9 @@ Founders respond by buying more traffic, which is like fixing a leaking bucket b
 
 ## What has to happen above the fold?
 
-A patient landing from a health ad arrives with two questions running simultaneously: *is this for my situation?* and *can I trust these people with my health?* You have one screen to answer both.
+Above the fold has to answer two questions at once: *is this for my situation?* and *can I trust these people with my health?* A patient landing from a health ad arrives with both running simultaneously, and you have one screen to answer them.
 
-The above-the-fold checklist we hold landers to:
+The above-the-fold checklist we hold landers to at AdBoost Health:
 
 - **Message match with the ad.** The headline continues the exact promise the ad made. A patient who clicked "talk to a doctor about insomnia" and lands on a generic "Your health, simplified" hero has to re-orient — many don't bother.
 - **Concrete next step with time-cost.** "Start your 3-minute visit" beats "Get started." Patients fear an ordeal; tell them there isn't one.
@@ -52,7 +55,7 @@ What transparent means in practice: real numbers on the lander (or one click awa
 
 ## Why is your landing page part of your ad?
 
-Because platforms treat it that way — literally. Meta and Google crawl your landers during and after review, and lander violations trigger ad rejections and account-level damage even when every ad passed cleanly. For telehealth, the recurring offenders:
+Because platforms treat it that way — literally. Meta and Google crawl your landers during and after review, and lander violations trigger ad rejections and account-level damage under [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) even when every ad passed cleanly. For telehealth, the recurring offenders:
 
 - **Claims on the lander the ad never made** — outcome promises, drug names, before/after galleries that would never survive ad review
 - **Missing medical disclaimers and provider licensing info**, or hiding them in images where crawlers can't read them
@@ -64,5 +67,13 @@ The uncomfortable implication: your CRO roadmap and your compliance posture are 
 ## What should you fix first?
 
 In audit order: message match above the fold, contact-info timing in intake, early eligibility screening, visible pricing, then crawlable compliance elements. Most funnels have one dominant leak, and it's usually findable in an afternoon with funnel-step data — every step needs an event, or you're guessing.
+
+| Fix order | Leak | Quick check |
+|---|---|---|
+| 1 | Message match above the fold | Does the headline repeat the ad's promise? |
+| 2 | Contact-info timing | Is email asked before eligibility? |
+| 3 | Eligibility screening | State and age on the first intake screen? |
+| 4 | Pricing visibility | Real numbers within one click? |
+| 5 | Crawlable compliance | Disclaimers in text, not images? |
 
 This is also the fastest money in paid health marketing: creative takes weeks to test, but a funnel fix compounds on every click you're already buying. If you want a second set of eyes on yours, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) — we'll tear down your funnel and ad account live and send you the written plan even if we never speak again.

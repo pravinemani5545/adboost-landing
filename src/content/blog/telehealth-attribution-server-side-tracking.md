@@ -1,6 +1,9 @@
 ---
 title: "Attribution for Telehealth in the Privacy Era: Why Your ROAS Is Lying and How to Fix It"
-description: "Signal loss, HIPAA-aware tracking constraints, and health-data pixel restrictions mean your platform-reported ROAS is fiction. Here's the attribution stack telehealth brands actually need: server-side tracking done legally, post-purchase surveys, and incrementality basics."
+seoTitle: "Telehealth Attribution: Fix Your ROAS | AdBoost Health"
+description: "See why your telehealth ROAS is wrong and fix it: PHI-safe server-side tracking, post-purchase surveys, and incrementality tests that reprice channels."
+ctaHeading: "Suspect your ROAS is lying?"
+ctaText: "Book a free 30-min call — we audit your tracking setup and send you a written measurement plan either way."
 pubDate: 2026-07-17
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
@@ -15,17 +18,17 @@ This is the normal state of telehealth attribution now. Between iOS privacy chan
 
 ## Why is your platform-reported ROAS wrong?
 
-Three compounding causes:
+Your ROAS is wrong because three causes compound: signal loss, delayed conversion windows, and health-data restrictions.
 
 1. **Signal loss.** iOS App Tracking Transparency, Safari and Firefox cookie expiry, and ad blockers mean a meaningful share of your conversions never make it back to Meta or Google through a browser pixel. The platforms backfill with modeled conversions — statistical guesses that get worse as your volume gets smaller.
 2. **Delayed conversion windows.** Telehealth buyers research. A patient who clicks your ad, reads reviews for six days, then converts through a branded search often gets credited to the wrong channel — or nothing.
-3. **Health-data restrictions.** This is the vertical-specific one. Meta and Google both restrict what health and medical businesses can transmit through tracking tools, and regulators have made pixel misuse on health sites an enforcement priority. Many telehealth brands responded by stripping tracking to almost nothing — legally cautious, analytically blind.
+3. **Health-data restrictions.** This is the vertical-specific one. Meta and [Google](https://support.google.com/adspolicy/answer/176031) both restrict what health and medical businesses can transmit through tracking tools, and regulators have made pixel misuse on health sites an enforcement priority. Many telehealth brands responded by stripping tracking to almost nothing — legally cautious, analytically blind.
 
 The result: your dashboard ROAS is neither your true ROAS nor a consistent fraction of it. It drifts, which makes it dangerous for decisions.
 
 ## What can a telehealth brand legally send to ad platforms?
 
-This is where telehealth diverges from a normal ecommerce brand, and where most agencies get it wrong in one of two directions.
+The short answer: conversion events stripped of health context — never PHI. This is where telehealth diverges from a normal ecommerce brand, and where most agencies get it wrong in one of two directions.
 
 The constraint, stated plainly: **no PHI in pixels — ever.** If you're a HIPAA-covered entity (or business associate), patient health information cannot flow to Meta or Google, because ad platforms will not sign a BAA. And even outside strict HIPAA coverage, the FTC has pursued health platforms for sharing user health data with advertisers. That means:
 
@@ -51,7 +54,7 @@ What we see across partner accounts: survey data consistently surfaces channels 
 
 ## When do you need incrementality testing?
 
-Attribution asks "which touchpoint gets credit?" Incrementality asks the only question the CFO cares about: **"would these patients have converted without the spend?"** For telehealth brands with strong organic demand or brand search, the gap between the two can be enormous.
+You need incrementality testing once real budget rides on channel-level decisions. Attribution asks "which touchpoint gets credit?" Incrementality asks the only question the CFO cares about: **"would these patients have converted without the spend?"** For telehealth brands with strong organic demand or brand search, the gap between the two can be enormous.
 
 You don't need a data science team to start:
 
@@ -62,6 +65,8 @@ You don't need a data science team to start:
 Incrementality is a quarterly discipline, not a dashboard. Two or three clean tests a year will reprice your channels more accurately than any attribution model.
 
 ## What should your measurement stack look like?
+
+Four layers, each answering a different question — this is the stack AdBoost Health runs on telehealth partner accounts:
 
 | Layer | Tool | What it answers |
 |---|---|---|
