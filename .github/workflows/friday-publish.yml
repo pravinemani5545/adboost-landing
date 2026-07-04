@@ -1,0 +1,18 @@
+name: Friday blog publish
+
+# Rebuilds the site every Friday so future-dated posts whose pubDate has
+# arrived get picked up by the publish-date gate (src/lib/blog.ts).
+on:
+  schedule:
+    # Fridays 12:00 UTC = 8:00 AM Toronto (EDT)
+    - cron: '0 12 * * 5'
+  workflow_dispatch:
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel production rebuild
+        run: curl -sf -X POST "$DEPLOY_HOOK_URL"
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
