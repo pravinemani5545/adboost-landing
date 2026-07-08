@@ -57,7 +57,7 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
       Cal("init", CAL_NAMESPACE, { origin: "https://cal.com" });
       Cal.ns[CAL_NAMESPACE]("ui", { hideEventTypeDetails: false, layout: "month_view" });
     }
-    const triggers = ['pointerdown', 'scroll', 'keydown', 'touchstart'];
+    const triggers = ['scroll', 'keydown', 'mousemove'];
     function fire() { triggers.forEach(t => window.removeEventListener(t, fire)); loadCal(); }
     triggers.forEach(t => window.addEventListener(t, fire, { once: true, passive: true }));
     if ('requestIdleCallback' in window) window.requestIdleCallback(loadCal, { timeout: 4000 });
