@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return AD_POLICIES.map((p) => ({ params: { slug: p.slug } }));
+}
+const { slug } = Astro.params;
+const p = getAdPolicy(slug!)!;
+const SITE = siteBase(Astro.site);
+const path = `/advertising/${p.slug}/`;
+const title = `${p.vertical} on ${p.platform}: 2026 Ad Compliance Rules | AdBoost Health`;
+const description = p.answer.slice(0, 155);
+const updated = '2026-07-01';
+const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
+const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
+const jsonLd = [
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: '2026-05-01', dateModified: updated }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
+  faqPage(p.faq),
+];
+const toc = [
+  { id: 'status', label: 'Is it allowed?' },
+  { id: 'cert', label: 'Certification' },
+  { id: 'prohibited', label: 'Prohibited claims' },
+  { id: 'requirements', label: 'Disclaimers & requirements' },
+  { id: 'rejections', label: 'Top rejection reasons' },
+  { id: 'comply', label: 'How to stay compliant' },
+  { id: 'faq', label: 'FAQ' },
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{p.platform.toUpperCase()} · {p.vertical.toUpperCase()}</span>
+      <h1>{p.h1}</h1>
+      <div class="metabar" style="margin-top:14px">
+        <span class={`badge ${badgeClass}`}>{STATUS_LABEL[p.status]}</span>
+        <span class="dot"></span><span>Updated July 2026</span>
+        <span class="dot"></span><span>Verify against live policy</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="doc-grid">
+        <div class="doc-main">
+          <div class="answer-box reveal"><span class="al">The short answer</span>{p.answer}</div>
+          <div class="prose">
+            <h2 id="cert">Certification & authorization</h2>
+            <p>{p.certification}</p>
+
+            <h2 id="prohibited">What’s prohibited</h2>
+            <ul class="xlist">
+              {p.prohibited.map((x) => (
+                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
+              ))}
+            </ul>
+
+            <h2 id="requirements">Disclaimers & landing-page requirements</h2>
+            <div class="callout"><span class="cl-label">Requirements</span>{p.requirements}</div>
+
+            <h2 id="rejections">Top reasons ads get rejected</h2>
+            <ul class="xlist">
+              {p.rejectionReasons.map((x) => (
+                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
+              ))}
+            </ul>
+
+            <h2 id="comply">How compliant brands still advertise</h2>
+            <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span>{p.howToComply}</div>
+
+            <h2 id="faq">FAQ</h2>
+            <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
+
+            <h3>Sources</h3>
+            <p style="font-size:13px;color:var(--mute)">Ad policies change frequently and enforcement is tightening — treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+            <ul style="font-size:14px">
+              {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener nofollow">{s.label}</a></li>)}
+            </ul>
+          </div>
+        </div>
+
+        <aside class="doc-aside">
+          <div class="aside-toc">
+            <div class="at-label">On this page</div>
+            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+          </div>
+          <div class="aside-card">
+            <h4>{p.vertical} on other platforms</h4>
+            <div class="link-list">
+              {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
+              <a href="/blog/glp1-advertising-compliance-2026/">Full compliance guide</a>
+              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
+            </div>
+          </div>
+          <div class="aside-card dark">
+            <h4 style="color:#fff">We clear this before you launch</h4>
+            <p>Every account and asset reviewed against live {p.platform} policy — so launches don’t get yanked.</p>
+            <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading={`Launching ${p.vertical.toLowerCase()} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
+</BaseLayout>

@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, faqPage } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const path = '/tools/ad-budget-calculator/';
+const title = 'Free Ad Budget Calculator for Health Brands | AdBoost Health';
+const description = 'Reverse-engineer the monthly ad budget you need to hit a new-customer target at your CAC — with expected revenue and ROAS. Free health-marketing calculator.';
+const faq = [
+  { q: 'How do I calculate my ad budget?', a: 'Budget = target new customers × CAC. To hit 200 customers at a $150 CAC, you need roughly $30,000 in acquisition spend for the period.' },
+  { q: 'Should I budget on CAC or ROAS?', a: 'Plan on CAC and payback for subscription models, since ROAS ignores retention and margin. Use ROAS as a top-line efficiency check, not the target you optimize to.' },
+  { q: 'How much creative does that budget need?', a: 'In health, holding benchmark CAC takes 30–60 fresh creatives a month; running 5–10 typically pushes CAC 40–80% over. Budget for creative volume, not just media.' },
+];
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator', href: path }]),
+  faqPage(faq),
+  { '@type': 'WebApplication', name: 'Ad Budget Calculator', applicationCategory: 'BusinessApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, url: `${SITE}${path}` },
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
+      <h1>Ad budget calculator</h1>
+      <p class="phero-lede">Work backwards from a customer target to the monthly ad budget it takes — with the revenue and ROAS that budget should return.</p>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+     <div class="doc-grid">
+      <div class="doc-main">
+      <div class="calc reveal">
+        <div class="calc-fields">
+          <div class="calc-field">
+            <label for="target">Target new customers <span class="hint">(per month)</span></label>
+            <div class="calc-input"><input id="target" type="number" inputmode="decimal" value="200" min="0" style="padding-left:14px" /></div>
+          </div>
+          <div class="calc-field">
+            <label for="cac3">Target CAC</label>
+            <div class="calc-input"><span class="pfx">$</span><input id="cac3" type="number" inputmode="decimal" value="150" min="0" /></div>
+          </div>
+          <div class="calc-field">
+            <label for="aov">Avg. first-order / monthly revenue per customer</label>
+            <div class="calc-input"><span class="pfx">$</span><input id="aov" type="number" inputmode="decimal" value="199" min="0" /></div>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="cr-main">
+            <div class="cr-label">Monthly ad budget</div>
+            <div class="cr-value" id="budgetOut">$30,000</div>
+          </div>
+          <div class="cr-sub">
+            <div><div class="k">EXPECTED REVENUE</div><div class="v" id="revOut">$39,800</div></div>
+            <div><div class="k">BLENDED ROAS</div><div class="v" id="roasOut">1.3×</div></div>
+          </div>
+          <div class="cr-note">Plan on CAC and payback, not ROAS alone — retention decides the real return.</div>
+        </div>
+      </div>
+      <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC.</p>
+
+      <h2 class="sec-title" style="margin-top:40px">FAQ</h2>
+      <div style="margin-top:16px"><Faq items={faq} idPrefix="budget" /></div>
+      </div>
+      <aside class="doc-aside">
+        <div class="aside-card">
+          <h4>More free tools</h4>
+          <div class="link-list">
+            <a href="/tools/cac-calculator/">CAC calculator</a>
+            <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
+            <a href="/blog/telehealth-cac-benchmarks-2026/">Telehealth CAC benchmarks 2026</a>
+          </div>
+        </div>
+        <div class="aside-card dark">
+          <h4 style="color:#fff">Plan your next quarter</h4>
+          <p>We'll pressure-test your budget and targets against your vertical's benchmarks.</p>
+          <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
+        </div>
+      </aside>
+     </div>
+    </div>
+  </section>
+
+  <CtaBand />
+
+  <script is:inline>
+    (function () {
+      const target = document.getElementById('target');
+      const cac = document.getElementById('cac3');
+      const aov = document.getElementById('aov');
+      const budgetOut = document.getElementById('budgetOut');
+      const revOut = document.getElementById('revOut');
+      const roasOut = document.getElementById('roasOut');
+      const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
+      function calc() {
+        const t = parseFloat(target.value) || 0;
+        const c = parseFloat(cac.value) || 0;
+        const a = parseFloat(aov.value) || 0;
+        const budget = t * c;
+        const rev = t * a;
+        budgetOut.textContent = money(budget);
+        revOut.textContent = money(rev);
+        roasOut.textContent = budget > 0 ? (rev / budget).toFixed(1) + '×' : '—';
+      }
+      [target, cac, aov].forEach((el) => el.addEventListener('input', calc));
+      calc();
+    })();
+  </script>
+</BaseLayout>

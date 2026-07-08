@@ -1,0 +1,13 @@
+---
+// Visual FAQ accordion. Pair with faqPage() schema at the page level for AEO/GEO.
+interface Props { items: { q: string; a: string }[]; idPrefix?: string; }
+const { items, idPrefix = 'faq' } = Astro.props;
+---
+<div class="faq-list faq-block reveal">
+  {items.map((it, i) => (
+    <div class="qa">
+      <h3><button aria-expanded="false" aria-controls={`${idPrefix}-${i}`}>{it.q}<span class="plus"></span></button></h3>
+      <div class="ans" id={`${idPrefix}-${i}`}><div class="ans-inner" set:html={it.a} /></div>
+    </div>
+  ))}
+</div>

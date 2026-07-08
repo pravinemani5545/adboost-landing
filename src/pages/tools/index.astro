@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'Free Health-Marketing Calculators (CAC, LTV:CAC, Ad Budget) | AdBoost Health';
+const description = 'Free calculators for health and DTC brands: work out your CAC, LTV:CAC ratio and payback, and a compliant-scale ad budget — with built-in health benchmark context.';
+const tools = [
+  { href: '/tools/cac-calculator/', name: 'CAC Calculator', desc: 'Work out your true customer acquisition cost and see how it compares to your vertical’s benchmark.' },
+  { href: '/tools/ltv-cac-calculator/', name: 'LTV:CAC Calculator', desc: 'Check your unit economics: lifetime value, LTV:CAC ratio, and payback period in months.' },
+  { href: '/tools/ad-budget-calculator/', name: 'Ad Budget Calculator', desc: 'Reverse-engineer the monthly ad budget you need to hit a customer target at your CAC.' },
+];
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }])];
+---
+<BaseLayout {title} {description} canonicalPath="/tools/" {jsonLd}>
+  <section class="phero wide">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOLS</span>
+      <h1>Free <span class="serif">health-marketing</span> calculators</h1>
+      <p class="phero-lede">Run your own numbers in seconds — each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good.</p>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="grid-cards three">
+        {tools.map((t) => (
+          <a class="lcard reveal" href={t.href}>
+            <span class="lc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2zM9 7h6M9 11h6M9 15h3"/></svg></span>
+            <h3>{t.name}</h3>
+            <p>{t.desc}</p>
+            <span class="lc-more">Open calculator →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

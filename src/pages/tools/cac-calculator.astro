@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, faqPage } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const path = '/tools/cac-calculator/';
+const title = 'Free CAC Calculator for Health & DTC Brands | AdBoost Health';
+const description = 'Calculate your customer acquisition cost (CAC) in seconds and see how it compares to 2026 health-vertical benchmarks. Free, no signup.';
+const faq = [
+  { q: 'How is CAC calculated?', a: 'CAC = total acquisition spend ÷ new customers acquired in the same period. Include ad spend, agency/creative fees, and tools — not just media — for a fully-loaded number.' },
+  { q: 'What should I include in acquisition spend?', a: 'For a fully-loaded CAC, include paid media, creative production, agency or team cost attributable to acquisition, and martech. A media-only CAC understates what a customer really costs.' },
+  { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV — aim for an LTV:CAC of at least 3:1.' },
+];
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator', href: path }]),
+  faqPage(faq),
+  { '@type': 'WebApplication', name: 'CAC Calculator', applicationCategory: 'BusinessApplication', operatingSystem: 'Web', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, url: `${SITE}${path}` },
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
+      <h1>CAC calculator</h1>
+      <p class="phero-lede">Work out your true customer acquisition cost, then see how it stacks up against 2026 health-vertical benchmarks.</p>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+     <div class="doc-grid">
+      <div class="doc-main">
+      <div class="calc reveal">
+        <div class="calc-fields">
+          <div class="calc-field">
+            <label for="spend">Total acquisition spend <span class="hint">(media + creative + fees, per period)</span></label>
+            <div class="calc-input"><span class="pfx">$</span><input id="spend" type="number" inputmode="decimal" value="50000" min="0" /></div>
+          </div>
+          <div class="calc-field">
+            <label for="customers">New customers acquired <span class="hint">(same period)</span></label>
+            <div class="calc-input"><input id="customers" type="number" inputmode="decimal" value="220" min="0" style="padding-left:14px" /></div>
+          </div>
+          <div class="calc-field">
+            <label for="vertical">Your vertical <span class="hint">(for benchmark context)</span></label>
+            <div class="calc-input">
+              <select id="vertical" style="flex:1;border:0;background:transparent;padding:13px 14px;font:inherit;font-size:15px;color:var(--ink);outline:none">
+                <option value="40,200">Supplements / DTC ($40–$200)</option>
+                <option value="180,400" selected>GLP-1 / weight loss ($180–$400)</option>
+                <option value="150,500">Telehealth ($150–$500)</option>
+                <option value="180,300">TRT / hormone ($180–$300)</option>
+                <option value="130,285">Med spa ($130–$285)</option>
+                <option value="200,400">Mental health ($200–$400)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="cr-main">
+            <div class="cr-label">Your CAC</div>
+            <div class="cr-value" id="cacOut">$227</div>
+          </div>
+          <div class="cr-note" id="cacNote">Within the typical range for your vertical.</div>
+        </div>
+      </div>
+      <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs entirely in your browser — nothing is stored or sent. Benchmarks are directional 2026 ranges; verify against your own account.</p>
+
+      <h2 class="sec-title" style="margin-top:40px">How to read your CAC</h2>
+      <p style="color:var(--ink-2);line-height:1.7">CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC ratio</a> — aim for at least 3:1 — and see the full <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">CAC benchmarks</a>.</p>
+
+      <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
+      <div style="margin-top:16px"><Faq items={faq} idPrefix="cac" /></div>
+      </div>
+      <aside class="doc-aside">
+        <div class="aside-card">
+          <h4>More free tools</h4>
+          <div class="link-list">
+            <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
+            <a href="/tools/ad-budget-calculator/">Ad budget calculator</a>
+            <a href="/blog/telehealth-cac-benchmarks-2026/">Telehealth CAC benchmarks 2026</a>
+          </div>
+        </div>
+        <div class="aside-card dark">
+          <h4 style="color:#fff">Think your CAC is too high?</h4>
+          <p>Free audit — we benchmark your account and map the fastest levers to bring it down.</p>
+          <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
+        </div>
+      </aside>
+     </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Think your CAC is too high?" text="Book a free audit — we’ll benchmark your account and show you the fastest levers to bring CAC down." />
+
+  <script is:inline>
+    (function () {
+      const spend = document.getElementById('spend');
+      const customers = document.getElementById('customers');
+      const vertical = document.getElementById('vertical');
+      const out = document.getElementById('cacOut');
+      const note = document.getElementById('cacNote');
+      const fmt = (n) => '$' + Math.round(n).toLocaleString('en-US');
+      function calc() {
+        const s = parseFloat(spend.value) || 0;
+        const c = parseFloat(customers.value) || 0;
+        if (c <= 0) { out.textContent = '—'; out.className = 'cr-value'; note.textContent = 'Enter the number of customers acquired.'; return; }
+        const cac = s / c;
+        out.textContent = fmt(cac);
+        const [lo, hi] = vertical.value.split(',').map(Number);
+        if (cac < lo) { out.className = 'cr-value good'; note.textContent = 'Below the typical ' + fmt(lo) + '–' + fmt(hi) + ' range for your vertical — strong, if retention holds.'; }
+        else if (cac <= hi) { out.className = 'cr-value'; note.textContent = 'Within the typical ' + fmt(lo) + '–' + fmt(hi) + ' range for your vertical.'; }
+        else { out.className = 'cr-value bad'; note.textContent = 'Above the typical ' + fmt(lo) + '–' + fmt(hi) + ' range — there’s likely room to bring this down.'; }
+      }
+      [spend, customers, vertical].forEach((el) => el.addEventListener('input', calc));
+      calc();
+    })();
+  </script>
+</BaseLayout>

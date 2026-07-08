@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { GLOSSARY, getTerm } from '../../data/glossary';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, definedTerm } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return GLOSSARY.map((t) => ({ params: { term: t.slug } }));
+}
+const { term } = Astro.params;
+const t = getTerm(term!)!;
+const SITE = siteBase(Astro.site);
+const path = `/glossary/${t.slug}/`;
+const title = `${t.term}: Definition & Health Example | AdBoost Health`;
+const description = t.definition.slice(0, 155);
+const related = (t.related ?? []).map((r) => getTerm(r)).filter(Boolean);
+const jsonLd = [
+  definedTerm(SITE, { term: t.term, description: t.definition, path }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term, href: path }]),
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
+      <h1 style="margin-top:12px">{t.term}</h1>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+      <div class="doc-grid">
+        <div class="doc-main">
+          <div class="prose">
+            <div class="answer-box reveal"><span class="al">Definition</span>{t.definition}</div>
+            {t.formula && <div class="callout reveal"><span class="cl-label">Formula</span><code style="font-size:15px">{t.formula}</code></div>}
+            {t.body && <p class="reveal" set:html={t.body} />}
+
+            {related.length > 0 && (
+              <>
+                <h2 style="font-size:20px">Related terms</h2>
+                <div class="chips" style="margin-top:12px">
+                  {related.map((r) => <a class="chip" href={`/glossary/${r!.slug}/`}>{r!.term}</a>)}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <aside class="doc-aside">
+          <div class="aside-card">
+            <h4>Put the numbers to work</h4>
+            <p>Benchmark your own metrics against your vertical in seconds.</p>
+            <div class="link-list">
+              <a href="/tools/cac-calculator/">CAC calculator</a>
+              <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
+              <a href="/blog/telehealth-cac-benchmarks-2026/">Telehealth CAC benchmarks 2026</a>
+              <a href="/glossary/">Back to glossary</a>
+            </div>
+          </div>
+          <div class="aside-card dark">
+            <h4 style="color:#fff">Want these working in your favor?</h4>
+            <p>We benchmark your account and map the fastest levers to move it.</p>
+            <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a free audit →</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

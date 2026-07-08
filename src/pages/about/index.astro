@@ -1,0 +1,113 @@
+---
+import fs from 'node:fs';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, organizationNode, personNode } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const path = '/about/';
+const title = 'About AdBoost Health | The Health-Only Growth Agency';
+const description = 'AdBoost Health is a Toronto-based, remote-first growth agency working exclusively with health, telehealth, GLP-1, supplement and wellness brands. 71+ founders served, $153M+ tracked.';
+
+// Founders. Photo renders when the webp exists in public/people/, else initials.
+const team = [
+  {
+    name: 'Amir Salihovic',
+    role: 'Co-Founder & CEO',
+    initials: 'AS',
+    photo: '/people/amir.webp',
+    linkedin: 'https://www.linkedin.com/in/amir-salihovic-7b2844157/',
+    bio: 'Amir leads performance marketing for AdBoost Health’s partners and runs the Meta side of the house — creative-led acquisition that finds the right person mid-scroll. He’s scaled health and wellness brands to 7–8 figures and writes the agency’s benchmark and compliance guides.',
+  },
+  {
+    name: 'Pira Ahilan',
+    role: 'Co-Founder',
+    initials: 'PA',
+    photo: '/people/pira.webp',
+    linkedin: 'https://www.linkedin.com/in/piraahilan/',
+    bio: 'Pira owns the Google side and the full funnel — the account strategy, offer architecture, and upsell/retention systems that take a health brand from a 1.5 ROAS to 6+. A Schulich School of Business (York) grad, he’s helped generate $150M+ in tracked revenue across health and wellness brands and apps.',
+  },
+  {
+    name: 'Pravine Manivannan',
+    role: 'Chief Technology Officer',
+    initials: 'PM',
+    photo: '/people/pravine.webp',
+    linkedin: 'https://www.linkedin.com/in/pravinemani',
+    bio: 'Pravine runs the technology and AI side of the agency — the search and AI-visibility architecture, analytics and attribution infrastructure, and the automation that lets a lean senior team operate like a much bigger one. A Computer Engineering & Management grad from McMaster, he builds the systems that turn ad platforms, AI engines, and first-party data into a growth channel health brands can actually measure.',
+  },
+];
+const teamR = team.map((t) => ({ ...t, hasPhoto: fs.existsSync(`./public${t.photo}`) }));
+const jsonLd = [
+  organizationNode(SITE),
+  ...teamR.map((t) => personNode(SITE, { name: t.name, jobTitle: t.role, path, bio: t.bio, image: t.hasPhoto ? t.photo : undefined, sameAs: [t.linkedin] })),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'About', href: path }]),
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
+  <section class="phero wide">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>ABOUT</span>
+      <h1>The growth agency that only works in <span class="serif">health</span>.</h1>
+      <p class="phero-lede">AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one.</p>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+      <div class="stat-row reveal">
+        <div class="stat"><div class="sv">71+</div><div class="sl">Founders served</div></div>
+        <div class="stat"><div class="sv">$153M+</div><div class="sl">Tracked revenue</div></div>
+        <div class="stat"><div class="sv">4.9<span style="font-size:18px;color:var(--mute)"> / 5</span></div><div class="sl">Average partner rating</div></div>
+        <div class="stat"><div class="sv">8,400+</div><div class="sl">Creatives shipped</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+      <div class="doc-grid">
+        <div class="doc-main">
+          <div class="prose">
+            <h2>Why health-only</h2>
+            <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them — every Meta health policy, every LegitScript requirement, every rejection trigger — because health is the only thing we do.</p>
+            <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution — the full acquisition system, built for the one category we specialize in.</p>
+            <h2>Two founders, two platforms — and the engine underneath</h2>
+            <p>Amir runs Meta; Pira runs Google. One believes in creative that stops the scroll and finds the right person; the other believes in being there the moment they start searching. We argue, we test, we grow — and health brands get both halves of the auction covered by a founder, not a junior pod. Between us we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
+            <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing.</p>
+          </div>
+        </div>
+        <aside class="doc-aside">
+          <div class="aside-card">
+            <h4>Where we work</h4>
+            <p>Toronto-based and remote-first, serving health and telehealth brands across the US and Canada.</p>
+            <div class="link-list">
+              <a href="mailto:hello@adboost.health">hello@adboost.health</a>
+              <a href="/blog/">Benchmarks & guides on the blog</a>
+              <a href="/blog/choose-health-growth-agency/">How to choose a health growth agency</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <h2 class="sec-title" style="margin-top:48px">Meet the team</h2>
+      <div class="team-grid" style="margin-top:20px">
+        {teamR.map((t) => (
+          <div class="bio reveal">
+            <div class="avatar">{t.hasPhoto ? <img src={t.photo} width="56" height="56" alt={`${t.name}, ${t.role}`} loading="lazy" /> : t.initials}</div>
+            <h3>{t.name}</h3>
+            <div class="role">{t.role.toUpperCase()}</div>
+            <p>{t.bio}</p>
+            <div class="bio-links">
+              <a href={t.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
