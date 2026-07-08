@@ -4,7 +4,6 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
-import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
 
@@ -13,7 +12,6 @@ export function getStaticPaths() {
 }
 const { slug } = Astro.params;
 const p = getAdPolicy(slug!)!;
-const v = getVertical(p.verticalSlug);
 const SITE = siteBase(Astro.site);
 const path = `/advertising/${p.slug}/`;
 const title = `${p.vertical} on ${p.platform}: 2026 Ad Compliance Rules | AdBoost Health`;
@@ -100,8 +98,7 @@ const toc = [
             <div class="link-list">
               {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
               <a href="/guides/health-ad-compliance/">Full compliance guide</a>
-              {v && <a href={`/industries/${v.slug}/`}>{v.short} playbook</a>}
-              {v && <a href={`/benchmarks/${v.slug}/`}>{v.short} CAC benchmarks</a>}
+              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
             </div>
           </div>
           <div class="aside-card dark">

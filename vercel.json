@@ -4,23 +4,73 @@
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
       ]
     },
     {
       "source": "/(blog|logos|ads|people|og)/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/(favicon.ico|favicon.png|apple-touch-icon.png)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=604800, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/benchmarks/:path*",
+      "destination": "/blog/telehealth-cac-benchmarks-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/industries/:path*",
+      "destination": "/advertising/",
+      "permanent": false
+    },
+    {
+      "source": "/services/:path*",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/compare/:path*",
+      "destination": "/blog/choose-health-growth-agency/",
+      "permanent": false
+    },
+    {
+      "source": "/faq",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/faq/",
+      "destination": "/",
+      "permanent": false
     }
   ]
 }
