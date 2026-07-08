@@ -322,6 +322,8 @@ section { position: relative; z-index: 1; }
 .step h3 { margin: 0 0 6px; font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
 .step .top p { margin: 0; color: var(--mute); font-size: 14.5px; line-height: 1.55; max-width: 48ch; }
 .step .demo { margin-top: 22px; height: 170px; border-radius: 14px; background: linear-gradient(180deg, #fafbfd, #eff2f7); border: 1px solid var(--line); position: relative; overflow: hidden; }
+/* Chart chips as HTML overlays — immune to the SVG's slice-crop at any width */
+.demo-chip { position: absolute; z-index: 2; font-family: 'Geist Mono', monospace; font-size: 11px; font-weight: 500; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 4px 9px; white-space: nowrap; pointer-events: none; box-shadow: 0 1px 2px rgba(10,10,15,.04); }
 .step .num { position: absolute; right: 18px; top: 14px; font-family: "Geist Mono", monospace; font-size: 11.5px; color: var(--mute-2); letter-spacing: .06em; }
 .step .duration { display: inline-flex; align-items: center; gap: 5px; margin-top: 12px; font-family: "Geist Mono", monospace; font-size: 10.5px; color: var(--blue); background: var(--blue-soft); padding: 4px 9px; border-radius: 999px; letter-spacing: .05em; }
 
