@@ -67,6 +67,6 @@ Done this way, certification runs in the background instead of blocking your lau
 
 ## The bottom line
 
-LegitScript certification is table stakes for advertising telehealth, and the map keeps changing — 2026 saw eligibility extended to new markets, and platform rules shift constantly. Budget ~$975 + ~$2,150/year per site and 4–8 weeks, start it before anything else, and run compliant education ads in the meantime so you're never sitting idle. For the full picture of what's allowed on each platform, see our [health ad compliance guide](/guides/health-ad-compliance/) and [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
+LegitScript certification is table stakes for advertising telehealth, and the map keeps changing — 2026 saw eligibility extended to new markets, and platform rules shift constantly. Budget ~$975 + ~$2,150/year per site and 4–8 weeks, start it before anything else, and run compliant education ads in the meantime so you're never sitting idle. For the full picture of what's allowed on each platform, see our [health ad compliance guide](/blog/glp1-advertising-compliance-2026/) and [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
 
 At AdBoost Health, we map the certification path and account structure before launch, so telehealth partners go live on schedule instead of watching a suspended account on day one.

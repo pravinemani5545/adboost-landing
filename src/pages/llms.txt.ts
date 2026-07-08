@@ -25,7 +25,6 @@ ${AD_POLICIES.map((p) => `- [${p.vertical} on ${p.platform}](${base}/advertising
 
 ## Guides & reference
 
-- [Compliant health advertising in 2026](${base}/guides/health-ad-compliance/): Meta, Google & TikTok rules for GLP-1, supplements, telehealth, TRT, med spa
 - [Health & performance marketing glossary](${base}/glossary/): CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims — with health examples
 - [About](${base}/about/): The health-only growth agency, team, and approach
 

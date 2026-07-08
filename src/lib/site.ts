@@ -18,7 +18,6 @@ export const NAV = [
     href: '/tools/',
     children: [
       { label: 'Ad compliance', href: '/advertising/' },
-      { label: 'Compliance guide', href: '/guides/health-ad-compliance/' },
       { label: 'Free tools', href: '/tools/' },
       { label: 'Glossary', href: '/glossary/' },
       { label: 'Blog', href: '/blog/' },
