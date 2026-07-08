@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
+import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
 
@@ -12,15 +13,16 @@ export function getStaticPaths() {
 }
 const { slug } = Astro.params;
 const p = getAdPolicy(slug!)!;
+const v = getVertical(p.verticalSlug);
 const SITE = siteBase(Astro.site);
 const path = `/advertising/${p.slug}/`;
 const title = `${p.vertical} on ${p.platform}: 2026 Ad Compliance Rules | AdBoost Health`;
 const description = p.answer.slice(0, 155);
-const updated = '2026-07-01';
+const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const jsonLd = [
-  articleNode(SITE, { headline: p.h1, description, path, datePublished: '2026-05-01', dateModified: updated }),
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: p.updated }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];
@@ -42,7 +44,7 @@ const toc = [
       <h1>{p.h1}</h1>
       <div class="metabar" style="margin-top:14px">
         <span class={`badge ${badgeClass}`}>{STATUS_LABEL[p.status]}</span>
-        <span class="dot"></span><span>Updated July 2026</span>
+        <span class="dot"></span><span>Updated {updatedLabel}</span>
         <span class="dot"></span><span>Verify against live policy</span>
       </div>
     </div>
@@ -97,8 +99,9 @@ const toc = [
             <h4>{p.vertical} on other platforms</h4>
             <div class="link-list">
               {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
-              <a href="/blog/glp1-advertising-compliance-2026/">Full compliance guide</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
+              <a href="/guides/health-ad-compliance/">Full compliance guide</a>
+              {v && <a href={`/industries/${v.slug}/`}>{v.short} playbook</a>}
+              {v && <a href={`/benchmarks/${v.slug}/`}>{v.short} CAC benchmarks</a>}
             </div>
           </div>
           <div class="aside-card dark">

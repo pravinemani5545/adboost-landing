@@ -14,6 +14,12 @@ export function organizationNode(base: string) {
     description: 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.',
     address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
     areaServed: 'US',
+    founder: [
+      { '@type': 'Person', name: 'Amir Salihovic', sameAs: ['https://www.linkedin.com/in/amir-salihovic-7b2844157/'] },
+      { '@type': 'Person', name: 'Pira Ahilan', sameAs: ['https://www.linkedin.com/in/piraahilan/'] },
+    ],
+    knowsAbout: ['health marketing', 'telehealth advertising', 'GLP-1 advertising compliance', 'paid media', 'CAC optimization'],
+    // TODO: add LinkedIn company page URL to sameAs when confirmed
     sameAs: [] as string[],
   };
 }

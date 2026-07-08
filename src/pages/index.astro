@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '../styles/interior.css';
 import { NAV } from '../lib/site';
+import { organizationNode } from '../lib/schema';
 
 const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 const CAL_NAMESPACE = 'strategy-call';
@@ -12,14 +13,7 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'Organization',
-      '@id': `${SITE}/#org`,
-      name: 'AdBoost Health',
-      url: `${SITE}/`,
-      logo: { '@type': 'ImageObject', url: `${SITE}/logos/adboost-mark.png` },
-      email: 'hello@adboost.health',
-      description: 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.',
-      address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
+      ...organizationNode(SITE),
       contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'hello@adboost.health', areaServed: 'Worldwide' },
     },
     {
@@ -776,26 +770,28 @@ const jsonLd = {
       <div class="foot-col">
         <p class="foot-label">SERVICES</p>
         <ul>
-          <li>Paid media</li>
-          <li>Creative production</li>
-          <li>CRO & funnels</li>
-          <li>Compliance review</li>
+          <li><a href="/services/paid-media/">Paid media</a></li>
+          <li><a href="/services/creative/">Creative production</a></li>
+          <li><a href="/services/cro/">CRO & funnels</a></li>
+          <li><a href="/services/compliance/">Compliance review</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <p class="foot-label">INDUSTRIES</p>
         <ul>
-          <li><a href="/blog/glp1-advertising-compliance-2026/">GLP-1 & weight loss</a></li>
-          <li><a href="/advertising/telehealth-on-google/">Telehealth</a></li>
-          <li><a href="/blog/supplement-brand-lower-cac-playbook/">Supplements & DTC</a></li>
-          <li>Mental health, fitness & more</li>
+          <li><a href="/industries/glp-1-weight-loss/">GLP-1 & weight loss</a></li>
+          <li><a href="/industries/telehealth/">Telehealth</a></li>
+          <li><a href="/industries/supplements-dtc/">Supplements & DTC</a></li>
+          <li><a href="/industries/">All industries</a></li>
         </ul>
       </div>
       <div class="foot-col">
         <p class="foot-label">RESOURCES</p>
         <ul>
-          <li><a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks</a></li>
-          <li><a href="/blog/glp1-advertising-compliance-2026/">Ad compliance</a></li>
+          <li><a href="/benchmarks/">CAC benchmarks</a></li>
+          <li><a href="/advertising/">Ad compliance</a></li>
+          <li><a href="/tools/">Free tools</a></li>
+          <li><a href="/glossary/">Glossary</a></li>
           <li><a href="/blog/">Blog</a></li>
           <li><a href="/about/">About us</a></li>
         </ul>

@@ -26,7 +26,7 @@ Before any list, the criteria. A good GLP-1 agency should have:
 4. **A retention lens.** In GLP-1, 50–65% of non-diabetic patients discontinue within 12 months. An agency that only optimizes first-fill CAC is optimizing the wrong number.
 5. **Proof in *your* vertical.** GLP-1 economics differ from supplements or med spa. Look for GLP-1-specific results.
 
-For the deeper economics, see our [GLP-1 CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) and the [GLP-1 growth playbook](/blog/glp1-advertising-compliance-2026/).
+For the deeper economics, see our [GLP-1 CAC benchmarks](/benchmarks/glp-1-weight-loss/) and the [GLP-1 growth playbook](/industries/glp-1-weight-loss/).
 
 ## GLP-1 marketing agencies worth knowing in 2026
 
@@ -49,7 +49,7 @@ Broader, often oriented to clinics, hospitals, and enterprise — good if you ne
 
 ### When a specialist beats a generalist
 
-If you sell GLP-1, a generalist DTC agency is a real risk: they treat a weight-loss launch like a hoodie drop, run before/after creative, and lose you 30 days to a rejected launch. The compliance overhead is exactly where generalists cost health brands money. (More on that in our [AdBoost vs. a generalist DTC agency](/blog/choose-health-growth-agency/) comparison.)
+If you sell GLP-1, a generalist DTC agency is a real risk: they treat a weight-loss launch like a hoodie drop, run before/after creative, and lose you 30 days to a rejected launch. The compliance overhead is exactly where generalists cost health brands money. (More on that in our [AdBoost vs. a generalist DTC agency](/compare/generalist-dtc-agency-alternative/) comparison.)
 
 ## How to run the actual evaluation
 

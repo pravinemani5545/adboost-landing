@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import { COMPLIANCE_MATRIX, STATUS_LABEL, REG_BACKDROP } from '../../data/compliance';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const path = '/guides/health-ad-compliance/';
+const updated = '2026-07-01';
+const title = 'Compliant Health Advertising in 2026: Meta, Google & TikTok Rules | AdBoost Health';
+const description = 'The complete 2026 guide to advertising GLP-1, supplements, telehealth, TRT and med spa on Meta, Google and TikTok — what’s allowed, what gets you banned, and how compliant brands still scale.';
+const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
+const faq = [
+  { q: 'Can you advertise GLP-1 on Meta and Google in 2026?', a: 'Yes, within strict rules. Naming the Rx drug requires LegitScript certification plus platform authorization and US/CA/NZ targeting. Before/after imagery and “lose X lbs” claims are prohibited. TikTok bans GLP-1 ads outright in Western markets.' },
+  { q: 'Do telehealth ads need LegitScript certification?', a: 'On Google and Meta, telehealth and online-pharmacy advertisers generally need LegitScript certification before promoting prescription-related services. Google adds its own Prescription drug services certification on top.' },
+  { q: 'Why do supplement ads get rejected?', a: 'Almost always for disease claims (“treats/cures/prevents”), banned ingredients (ephedra, DMAA, prohormones), or unsubstantiated “clinically proven” language. Structure/function claims with the FDA disclaimer are the compliant path.' },
+  { q: 'Can med spas run before/after ads?', a: 'Before/after side-by-sides for wrinkle/anti-aging and weight-loss treatments are restricted on Meta and can get an account flagged. Single “after” shots and testimonials are the compliant alternative.' },
+];
+const jsonLd = [
+  articleNode(SITE, { headline: 'Compliant Health Advertising in 2026: Meta, Google & TikTok Rules', description, path, datePublished: '2026-05-01', dateModified: updated }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Guides', href: '/guides/' }, { label: 'Health ad compliance', href: path }]),
+  faqPage(faq),
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Guides', href: '/guides/' }, { label: 'Health ad compliance' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FLAGSHIP GUIDE · 2026</span>
+      <h1 class="wide" style="max-width:24ch">Compliant health advertising in 2026</h1>
+      <p class="phero-lede">What’s actually allowed for GLP-1, supplements, telehealth, TRT, and med spa across Meta, Google, and TikTok — what gets you banned, and how compliant brands still scale.</p>
+      <div class="metabar"><span>Updated July 2026</span><span class="dot"></span><span>Verify against live platform policy before launch</span></div>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+      <div class="answer-box reveal"><span class="al">The short version</span>
+        Every major platform allows some health advertising and prohibits or gates the rest. The recurring rules: no before/after or “lose X lbs” imagery, no disease claims, prescription promotion requires LegitScript certification, and drug-name promotion is limited to the US, Canada, and New Zealand. Compliant brands sell the program and outcome — not the molecule.
+      </div>
+
+      <div class="callout warn reveal"><span class="cl-label">Enforcement is tightening</span>
+        In December 2025, 35+ state attorneys general pressured Meta over misleading GLP-1 ads, and the FDA announced a DTC-marketing crackdown in September 2025. Policies and eligible-country lists change frequently — treat everything below as a starting point to verify against live policy.
+      </div>
+
+      <h2 class="sec-title">What’s allowed, by vertical and platform</h2>
+      <p style="color:var(--mute)">Status is directional; the rule column is what actually gets ads approved or rejected. For the full breakdown of a single combination — certification, prohibited claims, disclaimers, rejection triggers, and the compliant path — see the <a href="/advertising/" style="color:var(--blue)">platform × vertical ad-compliance pages</a>.</p>
+    </div>
+
+    <div class="container" style="margin-top:20px">
+      {COMPLIANCE_MATRIX.map((row) => (
+        <div class="reveal" style="margin-bottom:22px">
+          <h3 style="margin-bottom:8px">{row.vertical}</h3>
+          <div class="tablewrap">
+            <table class="dtable">
+              <thead><tr><th>Platform</th><th>Status</th><th>The rule that matters</th></tr></thead>
+              <tbody>
+                {row.cells.map((cell) => (
+                  <tr>
+                    <td class="row-h">{cell.platform}</td>
+                    <td><span class={`badge ${badgeClass(cell.status)}`}>{STATUS_LABEL[cell.status]}</span></td>
+                    <td style="color:var(--ink-2)">{cell.rule}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="container" style="margin-top:28px">
+      <h2 class="sec-title">The regulatory backdrop</h2>
+      <p style="color:var(--mute)">Platform rules exist because of these underlying US regulations — the standards that also draw FTC and FDA enforcement.</p>
+      <div style="margin-top:16px">
+        {REG_BACKDROP.map((r) => (
+          <div class="reveal" style="border-bottom:1px solid var(--line);padding:16px 0">
+            <h3 style="margin:0 0 4px;font-size:17px">{r.h}</h3>
+            <p style="margin:0;color:var(--ink-2);line-height:1.65">{r.p}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="aside-card dark reveal" style="margin-top:32px">
+        <h4 style="color:#fff">Don’t risk a disabled account</h4>
+        <p>We review every account and asset against these rules before launch. It’s the single biggest thing generalist agencies get wrong in health.</p>
+        <a class="btn btn-primary" href="/services/compliance/">See how compliance review works →</a>
+      </div>
+
+      <h2 class="sec-title" style="margin-top:40px">FAQ</h2>
+      <div style="margin-top:16px"><Faq items={faq} idPrefix="comp-guide" /></div>
+
+      <p style="color:var(--mute);font-size:12.5px;margin-top:28px">This guide is general information, not legal advice. Ad policies and regulations change frequently; confirm current requirements with each platform’s live policy and qualified counsel before launching.</p>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

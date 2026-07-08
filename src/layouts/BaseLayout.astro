@@ -6,7 +6,7 @@ import { CAL_LINK, CAL_NAMESPACE, CAL_URL, EMAIL, NAV, siteBase } from '../lib/s
 interface Props {
   title: string;
   description: string;
-  canonicalPath: string;      // e.g. "/about/"
+  canonicalPath: string;      // e.g. "/industries/telehealth/"
   ogImage?: string;           // absolute path from root, e.g. "/og/og-home.png"
   ogType?: string;
   jsonLd?: unknown;           // object or array of schema.org nodes
@@ -125,27 +125,43 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
 <!-- FOOTER -->
 <footer>
   <div class="container">
-    <div class="foot">
+    <div class="foot foot-expanded">
       <div class="foot-brand">
         <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
         <p class="about">Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.</p>
         <div class="foot-meta"><span class="foot-chip"><span class="ldot"></span>Booking 4 founders this month</span></div>
       </div>
       <div class="foot-col">
+        <p class="foot-label">SERVICES</p>
+        <ul>
+          <li><a href="/services/paid-media/">Paid media</a></li>
+          <li><a href="/services/creative/">Creative production</a></li>
+          <li><a href="/services/cro/">CRO & funnels</a></li>
+          <li><a href="/services/compliance/">Compliance review</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <p class="foot-label">INDUSTRIES</p>
+        <ul>
+          <li><a href="/industries/glp-1-weight-loss/">GLP-1 & weight loss</a></li>
+          <li><a href="/industries/telehealth/">Telehealth</a></li>
+          <li><a href="/industries/supplements-dtc/">Supplements & DTC</a></li>
+          <li><a href="/industries/">All industries</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
         <p class="foot-label">RESOURCES</p>
         <ul>
+          <li><a href="/benchmarks/">CAC benchmarks</a></li>
           <li><a href="/advertising/">Ad compliance</a></li>
           <li><a href="/tools/">Free tools</a></li>
           <li><a href="/glossary/">Glossary</a></li>
           <li><a href="/blog/">Blog</a></li>
         </ul>
       </div>
-      <div class="foot-col foot-contact">
-        <p class="foot-label">COMPANY</p>
+      <div class="foot-col">
+        <p class="foot-label">GET IN TOUCH</p>
         <ul>
-          <li><a href="/about/">About</a></li>
-          <li><a href="/privacy/">Privacy</a></li>
-          <li><a href="/terms/">Terms</a></li>
           <li><a href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>Book a strategy call</a></li>
           <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
           <li><span class="foot-loc">Toronto · Remote-first</span></li>

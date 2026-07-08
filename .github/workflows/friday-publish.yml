@@ -16,3 +16,12 @@ jobs:
         run: curl -sf -X POST "$DEPLOY_HOOK_URL"
         env:
           DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+
+      - name: Wait for deploy to propagate
+        run: sleep 180
+
+      - name: Ping IndexNow (Bing/Copilot/DuckDuckGo/Yandex)
+        run: |
+          curl -sf -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d '{"host":"www.adboost.health","key":"70b8bdc92dc75dde445e7495e95258f2","keyLocation":"https://www.adboost.health/70b8bdc92dc75dde445e7495e95258f2.txt","urlList":["https://www.adboost.health/blog/","https://www.adboost.health/sitemap-index.xml"]}' || true

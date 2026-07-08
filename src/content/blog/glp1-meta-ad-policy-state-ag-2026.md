@@ -58,7 +58,7 @@ The brands winning right now sell **the program and the outcome, not the molecul
 - **Move the clinical intake off-platform.** The eligibility quiz and prescribing flow live on your site, not in the ad.
 - **If you name the drug, get certified.** Complete LegitScript, obtain Meta authorization, geo-restrict to US/CA/NZ, add the consult disclaimer, and gate to 18+.
 
-This isn't a growth tax. Compliant brands consistently hold lower, more stable CAC than the ones playing whack-a-mole with rejections — because their accounts stay live long enough for the algorithm to learn. See our [GLP-1 CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) for what "good" looks like, and the [GLP-1 growth playbook](/blog/glp1-advertising-compliance-2026/) for the full funnel.
+This isn't a growth tax. Compliant brands consistently hold lower, more stable CAC than the ones playing whack-a-mole with rejections — because their accounts stay live long enough for the algorithm to learn. See our [GLP-1 CAC benchmarks](/benchmarks/glp-1-weight-loss/) for what "good" looks like, and the [GLP-1 growth playbook](/industries/glp-1-weight-loss/) for the full funnel.
 
 ## The bottom line
 

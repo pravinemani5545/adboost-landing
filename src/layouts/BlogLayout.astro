@@ -58,7 +58,17 @@ const jsonLd = post
           dateModified: (post.updatedDate ?? post.pubDate).toISOString(),
           image: ogImage,
           keywords: post.tags.join(', '),
-          author: { '@type': 'Person', name: post.author, jobTitle: post.authorTitle, worksFor: { '@id': `${site}/#org` } },
+          // @id matches the Person node personNode() emits on /about/ (same slug algorithm),
+          // so the author entity reconciles across pages. Author is always Amir Salihovic.
+          author: {
+            '@type': 'Person',
+            '@id': `${site}/about/#${post.author.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}`,
+            name: post.author,
+            jobTitle: post.authorTitle,
+            url: `${site}/about/`,
+            sameAs: ['https://www.linkedin.com/in/amir-salihovic-7b2844157/'],
+            worksFor: { '@id': `${site}/#org` },
+          },
           publisher: { '@type': 'Organization', '@id': `${site}/#org`, name: 'AdBoost Health', url: `${site}/`, logo: { '@type': 'ImageObject', url: `${site}/logos/adboost-mark.png` } },
           mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
         },

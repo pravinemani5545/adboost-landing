@@ -8,6 +8,8 @@ export type PolicyStatus = 'allowed' | 'restricted' | 'cert' | 'prohibited';
 
 export interface AdPolicy {
   slug: string;                 // e.g. "glp-1-on-meta"
+  published: string;            // ISO date — page first published
+  updated: string;              // ISO date — last policy review/update
   vertical: string;             // display
   verticalSlug: string;         // groups related policies across platforms
   platform: 'Meta' | 'Google' | 'TikTok';
@@ -34,6 +36,8 @@ export const AD_POLICIES: AdPolicy[] = [
   // ───────────────────────── GLP-1 ─────────────────────────
   {
     slug: 'glp-1-on-meta',
+    published: '2026-05-05',
+    updated: '2026-07-01',
     vertical: 'GLP-1 & weight loss',
     verticalSlug: 'glp-1-weight-loss',
     platform: 'Meta',
@@ -68,6 +72,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'glp-1-on-google',
+    published: '2026-05-05',
+    updated: '2026-06-29',
     vertical: 'GLP-1 & weight loss',
     verticalSlug: 'glp-1-weight-loss',
     platform: 'Google',
@@ -102,6 +108,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'glp-1-on-tiktok',
+    published: '2026-05-08',
+    updated: '2026-06-26',
     vertical: 'GLP-1 & weight loss',
     verticalSlug: 'glp-1-weight-loss',
     platform: 'TikTok',
@@ -137,6 +145,8 @@ export const AD_POLICIES: AdPolicy[] = [
   // ───────────────────────── Supplements ─────────────────────────
   {
     slug: 'supplements-on-meta',
+    published: '2026-05-12',
+    updated: '2026-06-10',
     vertical: 'Supplements & DTC',
     verticalSlug: 'supplements-dtc',
     platform: 'Meta',
@@ -171,6 +181,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'supplements-on-google',
+    published: '2026-05-12',
+    updated: '2026-06-03',
     vertical: 'Supplements & DTC',
     verticalSlug: 'supplements-dtc',
     platform: 'Google',
@@ -205,6 +217,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'supplements-on-tiktok',
+    published: '2026-05-15',
+    updated: '2026-06-08',
     vertical: 'Supplements & DTC',
     verticalSlug: 'supplements-dtc',
     platform: 'TikTok',
@@ -240,6 +254,8 @@ export const AD_POLICIES: AdPolicy[] = [
   // ───────────────────────── Telehealth ─────────────────────────
   {
     slug: 'telehealth-on-meta',
+    published: '2026-05-19',
+    updated: '2026-06-17',
     vertical: 'Telehealth & Rx',
     verticalSlug: 'telehealth',
     platform: 'Meta',
@@ -273,6 +289,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'telehealth-on-google',
+    published: '2026-05-19',
+    updated: '2026-06-22',
     vertical: 'Telehealth & Rx',
     verticalSlug: 'telehealth',
     platform: 'Google',
@@ -307,6 +325,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'telehealth-on-tiktok',
+    published: '2026-05-22',
+    updated: '2026-06-12',
     vertical: 'Telehealth & Rx',
     verticalSlug: 'telehealth',
     platform: 'TikTok',
@@ -342,6 +362,8 @@ export const AD_POLICIES: AdPolicy[] = [
   // ───────────────────────── TRT / hormone ─────────────────────────
   {
     slug: 'trt-on-meta',
+    published: '2026-05-26',
+    updated: '2026-06-15',
     vertical: 'TRT & hormone',
     verticalSlug: 'trt-hormone',
     platform: 'Meta',
@@ -376,6 +398,8 @@ export const AD_POLICIES: AdPolicy[] = [
   },
   {
     slug: 'trt-on-google',
+    published: '2026-05-26',
+    updated: '2026-06-19',
     vertical: 'TRT & hormone',
     verticalSlug: 'trt-hormone',
     platform: 'Google',
@@ -411,6 +435,8 @@ export const AD_POLICIES: AdPolicy[] = [
   // ───────────────────────── Med spa ─────────────────────────
   {
     slug: 'med-spa-on-meta',
+    published: '2026-06-02',
+    updated: '2026-06-24',
     vertical: 'Med spa & aesthetics',
     verticalSlug: 'med-spa',
     platform: 'Meta',

@@ -6,13 +6,34 @@ import path from 'node:path';
 // slug -> lastmod (updatedDate if present, else pubDate) read from post frontmatter
 const BLOG_DIR = './src/content/blog';
 const postDates = {};
+const futureSlugs = [];
 for (const f of fs.readdirSync(BLOG_DIR)) {
   if (!f.endsWith('.md')) continue;
   const src = fs.readFileSync(path.join(BLOG_DIR, f), 'utf8');
   const updated = src.match(/^updatedDate:\s*["']?(\d{4}-\d{2}-\d{2})/m);
   const pub = src.match(/^pubDate:\s*["']?(\d{4}-\d{2}-\d{2})/m);
-  postDates[f.replace(/\.md$/, '')] = (updated ?? pub)?.[1];
+  const slug = f.replace(/\.md$/, '');
+  postDates[slug] = (updated ?? pub)?.[1];
+  // Same gate as getPublishedPosts() in src/lib/blog.ts: pubDate <= now is live.
+  if (pub && new Date(pub[1]).valueOf() > Date.now()) futureSlugs.push(slug);
 }
+
+// Queued posts have no route until their Friday rebuild, but their hero/og
+// images live in public/ (the publish pipeline needs them ready). Strip those
+// static assets from dist so future slugs/artwork aren't pre-exposed.
+const pruneQueuedAssets = {
+  name: 'prune-queued-post-assets',
+  hooks: {
+    'astro:build:done': ({ dir }) => {
+      const dist = new URL(dir).pathname;
+      for (const slug of futureSlugs) {
+        for (const rel of [`blog/${slug}.webp`, `blog/og/${slug}.jpg`]) {
+          fs.rmSync(path.join(dist, rel), { force: true });
+        }
+      }
+    },
+  },
+};
 
 export default defineConfig({
   site: 'https://www.adboost.health',
@@ -25,5 +46,6 @@ export default defineConfig({
         return item;
       },
     }),
+    pruneQueuedAssets,
   ],
 });

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { VERTICALS } from '../../data/verticals';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'Health & Telehealth CAC Benchmarks (2026) | AdBoost Health';
+const description = 'What health, telehealth, GLP-1, supplement and DTC brands actually pay to acquire a customer in 2026 — CAC, ROAS, LTV and payback benchmarks by vertical, from real spend.';
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Benchmarks', href: '/benchmarks/' }]),
+  { '@type': 'CollectionPage', name: 'Health CAC benchmarks by vertical', url: `${SITE}/benchmarks/` },
+];
+// bar-chart data for the hero panel (scaled by CAC midpoint)
+const bars = VERTICALS.slice(0, 6).map((v) => ({ v, mid: (v.cacLow + v.cacHigh) / 2 }));
+const maxMid = Math.max(...bars.map((b) => b.mid));
+---
+<BaseLayout {title} {description} canonicalPath="/benchmarks/" {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container">
+      <div class="phero-grid">
+        <div>
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Benchmarks' }]} />
+          <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>2026 DATA</span>
+          <h1>Health & telehealth <span class="serif">CAC benchmarks</span></h1>
+          <p class="phero-lede">What brands actually pay to acquire a customer in 2026 — by vertical, with the ROAS, LTV and payback context that tells you whether your number is good. Triangulated from real spend and public 2025–2026 sources.</p>
+          <div class="phero-meta"><span>{VERTICALS.length} verticals</span><span>Fully-loaded CAC</span><span>Updated July 2026</span></div>
+        </div>
+        <div class="reveal d1">
+          <div class="hero-panel">
+            <div class="hp-head">
+              <span class="t"><span class="live-dot"></span>Fully-loaded CAC</span>
+              <span class="m">2026 · USD</span>
+            </div>
+            {bars.map((b) => (
+              <a class="hp-row" href={`/benchmarks/${b.v.slug}/`}>
+                <span class="nm" style="flex:0 0 92px;width:92px">{b.v.short.split(' & ')[0]}</span>
+                <span class="hp-bar"><span style={`width:${Math.max(18, Math.round((b.mid / maxMid) * 100))}%`}></span></span>
+                <span class="v" style="flex:0 0 88px;text-align:right">{b.v.cacDisplay}</span>
+              </a>
+            ))}
+            <div class="hp-foot">
+              <div class="kv"><span class="k">RANGE</span><div class="val">$40–$2K</div></div>
+              <div class="kv"><span class="k">SOURCE</span><div class="val">Real spend</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="tablewrap reveal">
+        <table class="dtable">
+          <thead>
+            <tr><th>Vertical</th><th class="num">Typical CAC</th><th>The one thing that decides if it’s good</th><th></th></tr>
+          </thead>
+          <tbody>
+            {VERTICALS.map((v) => (
+              <tr>
+                <td class="row-h">{v.short}</td>
+                <td class="num">{v.cacDisplay}</td>
+                <td style="color:var(--mute)">{v.goodVsConcerning.split('.')[0]}.</td>
+                <td><a href={`/benchmarks/${v.slug}/`} style="color:var(--blue);font-size:13px;white-space:nowrap">View →</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--mute);font-size:13px;margin-top:12px">Ranges reflect fully-loaded CAC (cost per paying customer/patient), not cost-per-lead or consult, which typically runs 40–60% lower. Figures triangulated from 2025–2026 sources; verify against your own account before planning.</p>
+
+      <div class="grid-cards three" style="margin-top:32px">
+        {VERTICALS.map((v) => (
+          <a class="lcard reveal" href={`/benchmarks/${v.slug}/`}>
+            <span class="lc-tag">{v.category}</span>
+            <h3>{v.short} CAC</h3>
+            <p style="font-size:24px;font-weight:600;letter-spacing:-.02em;color:var(--ink)">{v.cacDisplay}</p>
+            <span class="lc-more">Full benchmark →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Wondering how your CAC compares?" text="Book a free audit and we’ll benchmark your account against your vertical — and show you the fastest levers to close the gap." />
+</BaseLayout>

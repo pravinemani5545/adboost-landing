@@ -26,7 +26,7 @@ The criteria that separate a real telehealth partner from a generalist:
 4. **A retention and cross-sell plan.** Telehealth economics only work because episodic care becomes subscription revenue — refill cadence, condition stacking, multi-condition cross-sell.
 5. **State-by-state awareness.** You can only treat patients where you have a licensed provider; campaigns and eligibility have to be geo-gated to your covered states.
 
-For the underlying numbers, see our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) and the [telehealth growth playbook](/advertising/telehealth-on-google/).
+For the underlying numbers, see our [telehealth CAC benchmarks](/benchmarks/telehealth/) and the [telehealth growth playbook](/industries/telehealth/).
 
 ## Telehealth marketing agencies worth knowing in 2026
 
@@ -48,7 +48,7 @@ Broader remits — good when you need brand, content, or a full resource operati
 
 ### When to build in-house instead
 
-Once you're at real scale and want acquisition as a permanent core competency, an in-house team can make sense — though it takes 3–6 months to hire and rarely comes with health-compliance expertise on day one. Many brands use a specialist agency to set the foundation their in-house team later inherits. (See [AdBoost vs. hiring an in-house team](/blog/choose-health-growth-agency/).)
+Once you're at real scale and want acquisition as a permanent core competency, an in-house team can make sense — though it takes 3–6 months to hire and rarely comes with health-compliance expertise on day one. Many brands use a specialist agency to set the foundation their in-house team later inherits. (See [AdBoost vs. hiring an in-house team](/compare/in-house-growth-team-alternative/).)
 
 ## How to run the evaluation
 
