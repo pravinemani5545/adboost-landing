@@ -43,22 +43,62 @@
   ],
   "redirects": [
     {
-      "source": "/benchmarks/:path*",
+      "source": "/benchmarks",
       "destination": "/blog/telehealth-cac-benchmarks-2026/",
       "permanent": false
     },
     {
-      "source": "/industries/:path*",
+      "source": "/benchmarks/",
+      "destination": "/blog/telehealth-cac-benchmarks-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/benchmarks/:path+",
+      "destination": "/blog/telehealth-cac-benchmarks-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/industries",
       "destination": "/advertising/",
       "permanent": false
     },
     {
-      "source": "/services/:path*",
+      "source": "/industries/",
+      "destination": "/advertising/",
+      "permanent": false
+    },
+    {
+      "source": "/industries/:path+",
+      "destination": "/advertising/",
+      "permanent": false
+    },
+    {
+      "source": "/services",
       "destination": "/",
       "permanent": false
     },
     {
-      "source": "/compare/:path*",
+      "source": "/services/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/services/:path+",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/compare",
+      "destination": "/blog/choose-health-growth-agency/",
+      "permanent": false
+    },
+    {
+      "source": "/compare/",
+      "destination": "/blog/choose-health-growth-agency/",
+      "permanent": false
+    },
+    {
+      "source": "/compare/:path+",
       "destination": "/blog/choose-health-growth-agency/",
       "permanent": false
     },
@@ -69,6 +109,11 @@
     },
     {
       "source": "/faq/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/faq/:path+",
       "destination": "/",
       "permanent": false
     }
