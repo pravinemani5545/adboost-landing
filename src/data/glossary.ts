@@ -113,8 +113,8 @@ export const GLOSSARY: Term[] = [
     slug: 'legitscript-certification',
     term: 'LegitScript Certification',
     short: 'The third-party certification most platforms require for telehealth and pharmacy ads.',
-    definition: 'LegitScript certification is a third-party accreditation that verifies an online pharmacy or telehealth provider operates legally. Google, Meta, Bing, and TikTok require it before an advertiser can promote prescription-related services.',
-    body: 'For Google, LegitScript is step one, followed by Google’s own Prescription drug services certification. The process takes roughly 4–8 weeks and involves licensing and ownership documentation. Skipping it is why many telehealth accounts get disabled on day one.',
+    definition: 'LegitScript certification is a third-party accreditation that verifies an online pharmacy or telehealth provider operates legally. As of 2026 it costs roughly $975 to apply plus about $2,150 per year, per website, and takes 4–8 weeks. Google, Meta, Bing, and TikTok require it before an advertiser can promote prescription-related services.',
+    body: 'Cost: roughly <strong>$975 application fee</strong> plus <strong>~$2,150/year</strong> per certified website as of 2026 — exact fees vary by program and merchant count; see <a href="https://help.legitscript.com/s/article/How-much-does-certification-cost" target="_blank" rel="noopener">LegitScript’s published fee schedule</a>. Timeline: roughly 4–8 weeks, involving licensing and ownership documentation. For Google, LegitScript is step one, followed by Google’s own Prescription drug services certification. Skipping it is why many telehealth accounts get disabled on day one.',
     related: ['cac'],
   },
   {

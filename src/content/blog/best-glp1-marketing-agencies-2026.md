@@ -20,10 +20,10 @@ Choosing a marketing agency for a GLP-1 or weight-loss brand is a higher-stakes 
 
 Before any list, the criteria. A good GLP-1 agency should have:
 
-1. **Health-vertical compliance expertise, not general DTC knowledge.** They should know Meta's Health & Wellness policy, LegitScript certification, and the compounded-GLP-1 rules by heart. Ask them what changed after the 35-state-AG action — if they don't know, keep looking.
+1. **Health-vertical compliance expertise, not general DTC knowledge.** They should know [Meta's Health & Wellness policy](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/), LegitScript certification, and the compounded-GLP-1 rules by heart. Ask them what changed after the 35-state-AG action — if they don't know, keep looking.
 2. **Compliant creative production at volume.** GLP-1 accounts need 30–60 fresh creatives a month to hold CAC, and every one must clear review. Ask to see their compliant-creative process.
 3. **Clean, blended attribution.** They should measure fully-loaded paying-patient CAC (not consult CAC) on blended MER, not platform-reported ROAS.
-4. **A retention lens.** In GLP-1, 50–65% of non-diabetic patients discontinue within 12 months. An agency that only optimizes first-fill CAC is optimizing the wrong number.
+4. **A retention lens.** In GLP-1, published pharmacy-claims analyses put 12-month discontinuation among non-diabetic patients at roughly 50–65%. An agency that only optimizes first-fill CAC is optimizing the wrong number.
 5. **Proof in *your* vertical.** GLP-1 economics differ from supplements or med spa. Look for GLP-1-specific results.
 
 For the deeper economics, see our [GLP-1 CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) and the [GLP-1 growth playbook](/blog/glp1-advertising-compliance-2026/).

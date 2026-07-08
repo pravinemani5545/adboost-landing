@@ -20,7 +20,7 @@ const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-U
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const jsonLd = [
-  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: p.updated }),
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: p.updated, image: '/og/og-home.png' }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];

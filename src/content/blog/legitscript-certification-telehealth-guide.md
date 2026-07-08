@@ -39,7 +39,7 @@ You generally **don't** need it for pure education, brand awareness, or services
 
 Budget realistically:
 
-- **~$975 application fee**, plus roughly **$2,150 annually per website** (addiction/MAT programs run higher, into multiple thousands).
+- **~$975 application fee**, plus roughly **$2,150 annually per website** (addiction/MAT programs run higher, into multiple thousands) — see [LegitScript's published fee schedule](https://help.legitscript.com/s/article/How-much-does-certification-cost) for the current numbers by program.
 - **4–8 weeks lead time** from application to approval — sometimes longer.
 - Ongoing **monitoring and annual re-certification.**
 
@@ -70,3 +70,7 @@ Done this way, certification runs in the background instead of blocking your lau
 LegitScript certification is table stakes for advertising telehealth, and the map keeps changing — 2026 saw eligibility extended to new markets, and platform rules shift constantly. Budget ~$975 + ~$2,150/year per site and 4–8 weeks, start it before anything else, and run compliant education ads in the meantime so you're never sitting idle. For the full picture of what's allowed on each platform, see our [health ad compliance guide](/blog/glp1-advertising-compliance-2026/) and [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
 
 At AdBoost Health, we map the certification path and account structure before launch, so telehealth partners go live on schedule instead of watching a suspended account on day one.
+
+---
+
+**Sources:** [LegitScript certification fees](https://help.legitscript.com/s/article/How-much-does-certification-cost) · [Google Ads healthcare policy](https://support.google.com/adspolicy/answer/176031) · [Meta ad standards — health & wellness](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/) · [TikTok ads policy — healthcare & pharmaceuticals](https://ads.tiktok.com/help/article/tiktok-ads-policy-healthcare-pharmaceuticals). Fee and timeline figures verified July 2026; always confirm against LegitScript's live schedule before budgeting.

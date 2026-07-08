@@ -12,7 +12,7 @@ ctaHeading: "Keep your GLP-1 ads live through the crackdown."
 ctaText: "Free 30-minute call with a compliance-first account audit — you keep the written plan either way."
 ---
 
-If you run paid social for a GLP-1 or weight-loss brand, the ground moved under you at the end of 2025. In December, a bipartisan coalition of **35+ state attorneys general** pressured Meta to crack down on misleading, AI-generated weight-loss drug ads, and the FDA sent warning letters to 30 telehealth companies over compounded GLP-1 marketing. The enforcement environment is now the tightest it has ever been — and the brands still scaling are the ones that treated compliance as the strategy, not the afterthought.
+If you run paid social for a GLP-1 or weight-loss brand, the ground moved under you at the end of 2025. In December, a bipartisan coalition of **35+ state attorneys general** publicly pressured Meta to crack down on misleading, AI-generated weight-loss drug ads (per the coalition's December 2025 letter to Meta), and the FDA issued warning letters to telehealth companies over compounded GLP-1 marketing (per the FDA's published warning-letter database). The enforcement environment is now the tightest it has ever been — and the brands still scaling are the ones that treated compliance as the strategy, not the afterthought.
 
 Here's what actually changed, what didn't, and the exact way compliant GLP-1 brands keep their Meta accounts live in 2026.
 
@@ -65,3 +65,7 @@ This isn't a growth tax. Compliant brands consistently hold lower, more stable C
 The 35-state-AG action didn't kill GLP-1 advertising on Meta — it killed *lazy* GLP-1 advertising. Before/after creative, AI-faked testimonials, and compounded-equivalence claims are now enforcement magnets. Sell the program, keep the drug name off the creative unless you're certified, and move the clinical work off the ad. That's the version of this business that survives the crackdown and scales through it.
 
 At AdBoost Health, compliance review is the first gate every GLP-1 creative passes before a dollar of spend touches it — which is exactly why our partners' accounts don't get yanked mid-scale.
+
+---
+
+**Sources:** [Meta ad standards — drugs & pharmaceuticals](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/drugs-pharmaceuticals/) · [Meta ad standards — health & wellness](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/) · [Google Ads healthcare policy](https://support.google.com/adspolicy/answer/176031). The state-AG letter and FDA warning letters are public records; policy rules above reflect the platform pages as of July 2026.
