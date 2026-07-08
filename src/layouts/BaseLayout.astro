@@ -62,6 +62,15 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
     triggers.forEach(t => window.addEventListener(t, fire, { once: true, passive: true }));
     if ('requestIdleCallback' in window) window.requestIdleCallback(loadCal, { timeout: 4000 });
     else setTimeout(loadCal, 2500);
+    // Overlay-or-navigate, never both: when the embed is ready, cancel the
+    // anchor's target=_blank default so Cal's handler shows only the modal.
+    // If the embed isn't loaded (blocked/slow), default navigation still works.
+    document.addEventListener('click', function (e) {
+      var el = e.target && e.target.closest ? e.target.closest('[data-cal-link]') : null;
+      if (!el) return;
+      var C = window.Cal;
+      if (C && C.loaded && C.ns && typeof C.ns[CAL_NAMESPACE] === 'function') e.preventDefault();
+    }, true);
   })();
 </script>
 <script defer src="https://admin.adboost.health/t.js"></script>
