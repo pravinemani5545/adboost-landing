@@ -48,12 +48,7 @@
       "permanent": false
     },
     {
-      "source": "/benchmarks/",
-      "destination": "/blog/telehealth-cac-benchmarks-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/benchmarks/:path+",
+      "source": "/benchmarks/:path(.*)",
       "destination": "/blog/telehealth-cac-benchmarks-2026/",
       "permanent": false
     },
@@ -63,12 +58,7 @@
       "permanent": false
     },
     {
-      "source": "/industries/",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/industries/:path+",
+      "source": "/industries/:path(.*)",
       "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     },
@@ -78,12 +68,7 @@
       "permanent": false
     },
     {
-      "source": "/services/",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/services/:path+",
+      "source": "/services/:path(.*)",
       "destination": "/",
       "permanent": false
     },
@@ -93,12 +78,7 @@
       "permanent": false
     },
     {
-      "source": "/compare/",
-      "destination": "/blog/choose-health-growth-agency/",
-      "permanent": false
-    },
-    {
-      "source": "/compare/:path+",
+      "source": "/compare/:path(.*)",
       "destination": "/blog/choose-health-growth-agency/",
       "permanent": false
     },
@@ -108,12 +88,7 @@
       "permanent": false
     },
     {
-      "source": "/faq/",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/faq/:path+",
+      "source": "/faq/:path(.*)",
       "destination": "/",
       "permanent": false
     },
@@ -123,12 +98,7 @@
       "permanent": false
     },
     {
-      "source": "/guides/",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/guides/:path+",
+      "source": "/guides/:path(.*)",
       "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     },
@@ -138,12 +108,7 @@
       "permanent": false
     },
     {
-      "source": "/advertising/",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/advertising/:path+",
+      "source": "/advertising/:path(.*)",
       "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     }
