@@ -19,8 +19,7 @@ export function organizationNode(base: string) {
       { '@type': 'Person', name: 'Pira Ahilan', sameAs: ['https://www.linkedin.com/in/piraahilan/'] },
     ],
     knowsAbout: ['health marketing', 'telehealth advertising', 'GLP-1 advertising compliance', 'paid media', 'CAC optimization'],
-    // TODO: add LinkedIn company page URL to sameAs when confirmed
-    sameAs: [] as string[],
+    sameAs: ['https://www.linkedin.com/company/adboosthealth/'],
   };
 }
 
