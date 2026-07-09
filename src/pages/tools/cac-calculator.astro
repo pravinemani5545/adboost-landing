@@ -11,9 +11,9 @@ const path = '/tools/cac-calculator/';
 const title = 'Free CAC Calculator for Health & DTC Brands | AdBoost Health';
 const description = 'Calculate your customer acquisition cost (CAC) in seconds and see how it compares to 2026 health-vertical benchmarks. Free, no signup.';
 const faq = [
-  { q: 'How is CAC calculated?', a: 'CAC = total acquisition spend ÷ new customers acquired in the same period. Include ad spend, agency/creative fees, and tools — not just media — for a fully-loaded number.' },
+  { q: 'How is CAC calculated?', a: 'CAC = total acquisition spend ÷ new customers acquired in the same period. Include ad spend, agency/creative fees, and tools - not just media - for a fully-loaded number.' },
   { q: 'What should I include in acquisition spend?', a: 'For a fully-loaded CAC, include paid media, creative production, agency or team cost attributable to acquisition, and martech. A media-only CAC understates what a customer really costs.' },
-  { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV — aim for an LTV:CAC of at least 3:1.' },
+  { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV - aim for an LTV:CAC of at least 3:1.' },
 ];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator', href: path }]),
@@ -67,10 +67,10 @@ const jsonLd = [
           <div class="cr-note" id="cacNote">Within the typical range for your vertical.</div>
         </div>
       </div>
-      <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs entirely in your browser — nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional — verify against your own account.</p>
+      <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs entirely in your browser - nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional - verify against your own account.</p>
 
       <h2 class="sec-title" style="margin-top:40px">How to read your CAC</h2>
-      <p style="color:var(--ink-2);line-height:1.7">CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC ratio</a> — aim for at least 3:1 — and see the full <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">benchmarks by vertical</a>.</p>
+      <p style="color:var(--ink-2);line-height:1.7">CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC ratio</a> - aim for at least 3:1 - and see the full <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">benchmarks by vertical</a>.</p>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
       <div style="margin-top:16px"><Faq items={faq} idPrefix="cac" /></div>
@@ -86,7 +86,7 @@ const jsonLd = [
         </div>
         <div class="aside-card dark">
           <h4 style="color:#fff">Think your CAC is too high?</h4>
-          <p>Free audit — we benchmark your account and map the fastest levers to bring it down.</p>
+          <p>Free audit - we benchmark your account and map the fastest levers to bring it down.</p>
           <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
         </div>
       </aside>
@@ -94,7 +94,7 @@ const jsonLd = [
     </div>
   </section>
 
-  <CtaBand heading="Think your CAC is too high?" text="Book a free audit — we’ll benchmark your account and show you the fastest levers to bring CAC down." />
+  <CtaBand heading="Think your CAC is too high?" text="Book a free audit - we’ll benchmark your account and show you the fastest levers to bring CAC down." />
 
   <script is:inline>
     (function () {
@@ -107,13 +107,13 @@ const jsonLd = [
       function calc() {
         const s = parseFloat(spend.value) || 0;
         const c = parseFloat(customers.value) || 0;
-        if (c <= 0) { out.textContent = '—'; out.className = 'cr-value'; note.textContent = 'Enter the number of customers acquired.'; return; }
+        if (c <= 0) { out.textContent = '-'; out.className = 'cr-value'; note.textContent = 'Enter the number of customers acquired.'; return; }
         const cac = s / c;
         out.textContent = fmt(cac);
         const [lo, hi] = vertical.value.split(',').map(Number);
-        if (cac < lo) { out.className = 'cr-value good'; note.textContent = 'Below the typical ' + fmt(lo) + '–' + fmt(hi) + ' range for your vertical — strong, if retention holds.'; }
+        if (cac < lo) { out.className = 'cr-value good'; note.textContent = 'Below the typical ' + fmt(lo) + '–' + fmt(hi) + ' range for your vertical - strong, if retention holds.'; }
         else if (cac <= hi) { out.className = 'cr-value'; note.textContent = 'Within the typical ' + fmt(lo) + '–' + fmt(hi) + ' range for your vertical.'; }
-        else { out.className = 'cr-value bad'; note.textContent = 'Above the typical ' + fmt(lo) + '–' + fmt(hi) + ' range — there’s likely room to bring this down.'; }
+        else { out.className = 'cr-value bad'; note.textContent = 'Above the typical ' + fmt(lo) + '–' + fmt(hi) + ' range - there’s likely room to bring this down.'; }
       }
       [spend, customers, vertical].forEach((el) => el.addEventListener('input', calc));
       calc();

@@ -9,7 +9,7 @@ import { breadcrumb, faqPage } from '../../lib/schema';
 const SITE = siteBase(Astro.site);
 const path = '/tools/ad-budget-calculator/';
 const title = 'Free Ad Budget Calculator for Health Brands | AdBoost Health';
-const description = 'Reverse-engineer the monthly ad budget you need to hit a new-customer target at your CAC — with expected revenue and ROAS. Free health-marketing calculator.';
+const description = 'Reverse-engineer the monthly ad budget you need to hit a new-customer target at your CAC - with expected revenue and ROAS. Free health-marketing calculator.';
 const faq = [
   { q: 'How do I calculate my ad budget?', a: 'Budget = target new customers × CAC. To hit 200 customers at a $150 CAC, you need roughly $30,000 in acquisition spend for the period.' },
   { q: 'Should I budget on CAC or ROAS?', a: 'Plan on CAC and payback for subscription models, since ROAS ignores retention and margin. Use ROAS as a top-line efficiency check, not the target you optimize to.' },
@@ -27,7 +27,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator' }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
       <h1>Ad budget calculator</h1>
-      <p class="phero-lede">Work backwards from a customer target to the monthly ad budget it takes — with the revenue and ROAS that budget should return.</p>
+      <p class="phero-lede">Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return.</p>
     </div>
   </section>
 
@@ -59,7 +59,7 @@ const jsonLd = [
             <div><div class="k">EXPECTED REVENUE</div><div class="v" id="revOut">$39,800</div></div>
             <div><div class="k">BLENDED ROAS</div><div class="v" id="roasOut">1.3×</div></div>
           </div>
-          <div class="cr-note">Plan on CAC and payback, not ROAS alone — retention decides the real return.</div>
+          <div class="cr-note">Plan on CAC and payback, not ROAS alone - retention decides the real return.</div>
         </div>
       </div>
       <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">2026 health-vertical benchmarks</a>.</p>
@@ -105,7 +105,7 @@ const jsonLd = [
         const rev = t * a;
         budgetOut.textContent = money(budget);
         revOut.textContent = money(rev);
-        roasOut.textContent = budget > 0 ? (rev / budget).toFixed(1) + '×' : '—';
+        roasOut.textContent = budget > 0 ? (rev / budget).toFixed(1) + '×' : '-';
       }
       [target, cac, aov].forEach((el) => el.addEventListener('input', calc));
       calc();

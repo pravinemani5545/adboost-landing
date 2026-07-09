@@ -8,7 +8,7 @@ import { breadcrumb } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const title = 'Health Ad Compliance by Platform & Vertical (2026) | AdBoost Health';
-const description = 'What’s allowed when advertising GLP-1, supplements, telehealth, TRT and med spa on Meta, Google, and TikTok — certification, prohibited claims, rejection triggers, and how to stay compliant.';
+const description = 'What’s allowed when advertising GLP-1, supplements, telehealth, TRT and med spa on Meta, Google, and TikTok - certification, prohibited claims, rejection triggers, and how to stay compliant.';
 const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
 // group by vertical for a clean matrix
 const verticals = [...new Map(AD_POLICIES.map((p) => [p.verticalSlug, { name: p.vertical, slug: p.verticalSlug }])).values()];
@@ -49,10 +49,10 @@ const jsonLd = [
       ))}
       <div class="callout reveal" style="margin-top:8px">
         <span class="cl-label">The bigger picture</span>
-        For the FTC/FDA standards underneath these platform rules — structure/function claims, LegitScript, compounded GLP-1, health-data privacy — see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
+        For the FTC/FDA standards underneath these platform rules - structure/function claims, LegitScript, compounded GLP-1, health-data privacy - see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
       </div>
     </div>
   </section>
 
-  <CtaBand heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch — the single biggest thing generalist agencies get wrong in health." />
+  <CtaBand heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch - the single biggest thing generalist agencies get wrong in health." />
 </BaseLayout>

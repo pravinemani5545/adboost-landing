@@ -12,8 +12,8 @@ const title = 'Free LTV:CAC Ratio & Payback Calculator | AdBoost Health';
 const description = 'Calculate lifetime value, your LTV:CAC ratio, and payback period for a subscription health or DTC brand. Free, with the 3:1 benchmark built in.';
 const faq = [
   { q: 'What is a good LTV:CAC ratio?', a: '3:1 or higher is the standard benchmark for a healthy, scalable model. Below 3:1 usually means you’re buying revenue at a loss after overhead; far above 5:1 can mean you’re under-investing in growth.' },
-  { q: 'How is payback period calculated?', a: 'Payback (months) = CAC ÷ monthly gross profit per customer. It tells you how long until a customer repays their acquisition cost — critical for cash-efficient scaling in subscription health.' },
-  { q: 'How do I estimate lifetime value?', a: 'LTV ≈ monthly revenue × gross margin × average months retained. Retention is the biggest lever in subscription health — small changes in months-retained move LTV dramatically.' },
+  { q: 'How is payback period calculated?', a: 'Payback (months) = CAC ÷ monthly gross profit per customer. It tells you how long until a customer repays their acquisition cost - critical for cash-efficient scaling in subscription health.' },
+  { q: 'How do I estimate lifetime value?', a: 'LTV ≈ monthly revenue × gross margin × average months retained. Retention is the biggest lever in subscription health - small changes in months-retained move LTV dramatically.' },
 ];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'LTV:CAC Calculator', href: path }]),
@@ -27,7 +27,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'LTV:CAC Calculator' }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
       <h1>LTV:CAC & payback calculator</h1>
-      <p class="phero-lede">The single most important unit-economics check for a subscription health brand — lifetime value, LTV:CAC ratio, and how many months until a customer pays you back.</p>
+      <p class="phero-lede">The single most important unit-economics check for a subscription health brand - lifetime value, LTV:CAC ratio, and how many months until a customer pays you back.</p>
     </div>
   </section>
 
@@ -63,13 +63,13 @@ const jsonLd = [
             <div><div class="k">LIFETIME VALUE</div><div class="v" id="ltvOut">$1,493</div></div>
             <div><div class="k">PAYBACK</div><div class="v" id="pbOut">1.7 mo</div></div>
           </div>
-          <div class="cr-note" id="ratioNote">Healthy — at or above the 3:1 benchmark.</div>
+          <div class="cr-note" id="ratioNote">Healthy - at or above the 3:1 benchmark.</div>
         </div>
       </div>
       <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs in your browser; nothing is stored. LTV here is gross-profit LTV (revenue × margin × months). The 3:1 benchmark and vertical context come from our <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">2026 health-vertical benchmarks</a>.</p>
 
       <h2 class="sec-title" style="margin-top:40px">What the numbers mean</h2>
-      <p style="color:var(--ink-2);line-height:1.7">A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC — it’s <a href="/glossary/retention-rate/" style="color:var(--blue)">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. See <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">benchmarks by vertical</a> for context.</p>
+      <p style="color:var(--ink-2);line-height:1.7">A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC - it’s <a href="/glossary/retention-rate/" style="color:var(--blue)">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. See <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">benchmarks by vertical</a> for context.</p>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
       <div style="margin-top:16px"><Faq items={faq} idPrefix="ltv" /></div>
@@ -108,12 +108,12 @@ const jsonLd = [
         const gp = mrev * (margin / 100);
         const ltv = gp * months;
         ltvOut.textContent = money(ltv);
-        pbOut.textContent = gp > 0 ? (cac / gp).toFixed(1) + ' mo' : '—';
-        if (cac <= 0) { ratioOut.textContent = '—'; ratioOut.className = 'cr-value'; note.textContent = 'Enter your CAC to see the ratio.'; return; }
+        pbOut.textContent = gp > 0 ? (cac / gp).toFixed(1) + ' mo' : '-';
+        if (cac <= 0) { ratioOut.textContent = '-'; ratioOut.className = 'cr-value'; note.textContent = 'Enter your CAC to see the ratio.'; return; }
         const ratio = ltv / cac;
         ratioOut.textContent = ratio.toFixed(1) + '×';
-        if (ratio >= 3) { ratioOut.className = 'cr-value good'; note.textContent = 'Healthy — at or above the 3:1 benchmark.' + (ratio > 6 ? ' Very high — you may be under-investing in growth.' : ''); }
-        else { ratioOut.className = 'cr-value bad'; note.textContent = 'Below the 3:1 benchmark — you’re likely buying revenue at a loss after overhead.'; }
+        if (ratio >= 3) { ratioOut.className = 'cr-value good'; note.textContent = 'Healthy - at or above the 3:1 benchmark.' + (ratio > 6 ? ' Very high - you may be under-investing in growth.' : ''); }
+        else { ratioOut.className = 'cr-value bad'; note.textContent = 'Below the 3:1 benchmark - you’re likely buying revenue at a loss after overhead.'; }
       }
       ids.forEach((el) => el.addEventListener('input', calc));
       calc();

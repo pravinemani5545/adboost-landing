@@ -1,5 +1,5 @@
 // Shared site constants + navigation. Single source of truth for booking + nav.
-// Canonical domain is derived from Astro.site (astro.config.mjs) — never hardcode apex here.
+// Canonical domain is derived from Astro.site (astro.config.mjs) - never hardcode apex here.
 
 export const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 export const CAL_NAMESPACE = 'strategy-call';

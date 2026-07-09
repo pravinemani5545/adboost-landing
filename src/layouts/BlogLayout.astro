@@ -42,7 +42,7 @@ const { title, pageTitle, description, canonical, post, readMinutes, related = [
 const metaTitle = pageTitle ?? title;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
-// Social scrapers (Facebook especially) don't render WebP — og images are JPEG copies.
+// Social scrapers (Facebook especially) don't render WebP - og images are JPEG copies.
 const ogImage = post?.heroImage
   ? `${site}${post.heroImage.replace('/blog/', '/blog/og/').replace('.webp', '.jpg')}`
   : `${site}/og/og-home.png`;
@@ -239,7 +239,7 @@ const category = post?.tags[0]?.toUpperCase();
         <div class="cta-banner">
           <div class="cta-banner-text">
             <h2>{post.ctaHeading ?? 'Lower CAC. Scale profitably.'}</h2>
-            <p>{post.ctaText ?? 'A free 30-minute strategy call with a full account audit — you leave with a written plan, whether we work together or not.'}</p>
+            <p>{post.ctaText ?? 'A free 30-minute strategy call with a full account audit - you leave with a written plan, whether we work together or not.'}</p>
           </div>
           <a class="btn btn-light" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
             Book a free strategy call

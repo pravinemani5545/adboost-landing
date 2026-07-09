@@ -9,12 +9,12 @@ import { breadcrumb } from '../../lib/schema';
 const SITE = siteBase(Astro.site);
 const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
 const title = 'Health & Performance Marketing Glossary | AdBoost Health';
-const description = 'Plain-English definitions of the health-marketing and paid-media metrics that matter — CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims — with health-specific examples.';
+const description = 'Plain-English definitions of the health-marketing and paid-media metrics that matter - CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims - with health-specific examples.';
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }]),
   {
     '@type': 'DefinedTermSet',
-    name: 'AdBoost Health — Health & Performance Marketing Glossary',
+    name: 'AdBoost Health - Health & Performance Marketing Glossary',
     url: `${SITE}/glossary/`,
     hasDefinedTerm: sorted.map((t) => ({ '@type': 'DefinedTerm', name: t.term, url: `${SITE}/glossary/${t.slug}/` })),
   },
@@ -26,7 +26,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
       <h1>Health & performance marketing <span class="serif">glossary</span></h1>
-      <p class="phero-lede">The metrics and rules that decide whether a health brand scales profitably — defined in plain English, every example drawn from real health verticals.</p>
+      <p class="phero-lede">The metrics and rules that decide whether a health brand scales profitably - defined in plain English, every example drawn from real health verticals.</p>
     </div>
   </section>
 

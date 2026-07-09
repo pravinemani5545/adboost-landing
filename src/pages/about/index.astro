@@ -20,7 +20,7 @@ const team = [
     initials: 'AS',
     photo: '/people/amir.webp',
     linkedin: 'https://www.linkedin.com/in/amir-salihovic-7b2844157/',
-    bio: 'Amir leads performance marketing for AdBoost Health’s partners and runs the Meta side of the house — creative-led acquisition that finds the right person mid-scroll. He’s scaled health and wellness brands to 7–8 figures and writes the agency’s benchmark and compliance guides.',
+    bio: 'Amir leads performance marketing for AdBoost Health’s partners and runs the Meta side of the house - creative-led acquisition that finds the right person mid-scroll. He’s scaled health and wellness brands to 7–8 figures and writes the agency’s benchmark and compliance guides.',
   },
   {
     name: 'Pira Ahilan',
@@ -28,7 +28,7 @@ const team = [
     initials: 'PA',
     photo: '/people/pira.webp',
     linkedin: 'https://www.linkedin.com/in/piraahilan/',
-    bio: 'Pira owns the Google side and the full funnel — the account strategy, offer architecture, and upsell/retention systems that take a health brand from a 1.5 ROAS to 6+. A Schulich School of Business (York) grad, he’s helped generate $150M+ in tracked revenue across health and wellness brands and apps.',
+    bio: 'Pira owns the Google side and the full funnel - the account strategy, offer architecture, and upsell/retention systems that take a health brand from a 1.5 ROAS to 6+. A Schulich School of Business (York) grad, he’s helped generate $150M+ in tracked revenue across health and wellness brands and apps.',
   },
   {
     name: 'Pravine Manivannan',
@@ -36,7 +36,7 @@ const team = [
     initials: 'PM',
     photo: '/people/pravine.webp',
     linkedin: 'https://www.linkedin.com/in/pravinemani',
-    bio: 'Pravine runs the technology and AI side of the agency — the search and AI-visibility architecture, analytics and attribution infrastructure, and the automation that lets a lean senior team operate like a much bigger one. A Computer Engineering & Management grad from McMaster, he builds the systems that turn ad platforms, AI engines, and first-party data into a growth channel health brands can actually measure.',
+    bio: 'Pravine runs the technology and AI side of the agency: search and AI-engine visibility, attribution infrastructure, and the automation that lets a lean senior team operate like a much bigger one. He\'s a Computer Engineering & Management grad from McMaster.',
   },
 ];
 const teamR = team.map((t) => ({ ...t, hasPhoto: fs.existsSync(`./public${t.photo}`), photo: versioned(t.photo) }));
@@ -73,10 +73,10 @@ const jsonLd = [
         <div class="doc-main">
           <div class="prose">
             <h2>Why health-only</h2>
-            <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them — every Meta health policy, every LegitScript requirement, every rejection trigger — because health is the only thing we do.</p>
-            <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution — the full acquisition system, built for the one category we specialize in.</p>
-            <h2>Two founders, two platforms — and the engine underneath</h2>
-            <p>Amir runs Meta; Pira runs Google. One believes in creative that stops the scroll and finds the right person; the other believes in being there the moment they start searching. We argue, we test, we grow — and health brands get both halves of the auction covered by a founder, not a junior pod. Between us we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
+            <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them - every Meta health policy, every LegitScript requirement, every rejection trigger - because health is the only thing we do.</p>
+            <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution - the full acquisition system, built for the one category we specialize in.</p>
+            <h2>Two founders, two platforms - and the engine underneath</h2>
+            <p>Amir runs Meta; Pira runs Google. One believes in creative that stops the scroll and finds the right person; the other believes in being there the moment they start searching. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
             <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing.</p>
           </div>
         </div>

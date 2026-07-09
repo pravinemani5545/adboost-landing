@@ -1,5 +1,5 @@
 /* ============================================================
-   Interior pages — shared components layered on global.css tokens.
+   Interior pages - shared components layered on global.css tokens.
    Used by BaseLayout + all /services /industries /benchmarks /tools
    /glossary /guides /case-studies /compare /about /faq pages.
    ============================================================ */
@@ -42,7 +42,7 @@
 /* ---- page hero (interior) ---- */
 .phero { position: relative; padding: 120px 0 46px; overflow: hidden; background: linear-gradient(180deg, #fff, #fafbfd); border-bottom: 1px solid var(--line); }
 .phero::before { content: ""; position: absolute; left: 50%; top: -300px; width: 1100px; height: 1100px; border-radius: 50%; background: radial-gradient(50% 50% at 50% 50%, rgba(0,87,255,.08), transparent 70%); transform: translateX(-50%); pointer-events: none; }
-/* faint blueprint grid — ties interior heros to the homepage hero signature */
+/* faint blueprint grid - ties interior heros to the homepage hero signature */
 .phero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(10,10,15,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(10,10,15,.035) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(70% 65% at 30% 0%, #000, transparent 75%); mask-image: radial-gradient(70% 65% at 30% 0%, #000, transparent 75%); }
 .phero.dark::after { background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px); }
 .phero .container { position: relative; z-index: 1; }

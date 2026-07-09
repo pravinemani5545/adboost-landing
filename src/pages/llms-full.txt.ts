@@ -7,7 +7,7 @@ export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
   const posts = await getPublishedPosts();
 
-  const body = `# AdBoost Health — Full Content
+  const body = `# AdBoost Health - Full Content
 
 > Growth marketing agency built exclusively for health, telehealth, GLP-1, supplement & wellness brands. 71+ founders served, $153M+ in tracked revenue, 4.9/5 average partner rating. Toronto, remote-first. Book: https://cal.com/pira-ahilan-ef2dl8/strategy-call
 

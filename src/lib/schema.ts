@@ -68,7 +68,7 @@ export function definedTerm(base: string, opts: { term: string; description: str
     url: `${base}${opts.path}`,
     inDefinedTermSet: {
       '@type': 'DefinedTermSet',
-      name: 'AdBoost Health — Health & Performance Marketing Glossary',
+      name: 'AdBoost Health - Health & Performance Marketing Glossary',
       url: `${base}/glossary/`,
     },
   };
