@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { versioned } from '../lib/assets';
 
 const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 const CAL_NAMESPACE = 'strategy-call';
@@ -202,7 +203,7 @@ const category = post?.tags[0]?.toUpperCase();
         </div>
         <h1>{displayTitle}</h1>
         <div class="byline">
-          <img src="/people/amir.webp" alt={post.author} width="40" height="40" loading="eager" />
+          <img src={versioned('/people/amir.webp')} alt={post.author} width="40" height="40" loading="eager" />
           <div class="byline-meta">
             <b>{post.author}</b>
             <span>{post.authorTitle}</span>

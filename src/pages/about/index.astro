@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { siteBase } from '../../lib/site';
+import { versioned } from '../../lib/assets';
 import { breadcrumb, organizationNode, personNode } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
@@ -38,7 +39,7 @@ const team = [
     bio: 'Pravine runs the technology and AI side of the agency — the search and AI-visibility architecture, analytics and attribution infrastructure, and the automation that lets a lean senior team operate like a much bigger one. A Computer Engineering & Management grad from McMaster, he builds the systems that turn ad platforms, AI engines, and first-party data into a growth channel health brands can actually measure.',
   },
 ];
-const teamR = team.map((t) => ({ ...t, hasPhoto: fs.existsSync(`./public${t.photo}`) }));
+const teamR = team.map((t) => ({ ...t, hasPhoto: fs.existsSync(`./public${t.photo}`), photo: versioned(t.photo) }));
 const jsonLd = [
   organizationNode(SITE),
   ...teamR.map((t) => personNode(SITE, { name: t.name, jobTitle: t.role, path, bio: t.bio, image: t.hasPhoto ? t.photo : undefined, sameAs: [t.linkedin] })),
