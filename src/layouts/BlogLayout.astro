@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
+import '../styles/interior.css';
 import { versioned } from '../lib/assets';
+import { NAV } from '../lib/site';
 
 const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 const CAL_NAMESPACE = 'strategy-call';
@@ -165,12 +167,21 @@ const category = post?.tags[0]?.toUpperCase();
       <span class="brand-mark" aria-hidden="true"></span>
       <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
     </a>
-    <div class="nav-links">
-      <a href="/#why">Why us</a>
-      <a href="/#results">Results</a>
-      <a href="/#process">Process</a>
-      <a href="/#faq">FAQ</a>
-      <a href="/blog/">Blog</a>
+    <div class="nav-links" id="navLinks">
+      {NAV.map((item) => (
+        item.children ? (
+          <div class="nav-group">
+            <a href={item.href} class="nav-top">{item.label}
+              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <div class="nav-menu">
+              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
+            </div>
+          </div>
+        ) : (
+          <a href={item.href} class="nav-top">{item.label}</a>
+        )
+      ))}
     </div>
     <div style="display:flex;align-items:center;gap:10px">
       <a class="btn btn-primary" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
@@ -186,11 +197,12 @@ const category = post?.tags[0]?.toUpperCase();
   </div>
 </nav>
 <div class="mnav" id="mnav">
-  <a href="/#why">Why us</a>
-  <a href="/#results">Results</a>
-  <a href="/#process">Process</a>
-  <a href="/#faq">FAQ</a>
-  <a href="/blog/">Blog</a>
+  {NAV.map((item) => (
+    <>
+      <a href={item.href} class="mnav-top">{item.label}</a>
+      {item.children && <div class="mnav-sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
+    </>
+  ))}
 </div>
 
 <main class="blog-main">

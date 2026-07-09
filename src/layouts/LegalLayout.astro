@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import '../styles/interior.css';
+import { NAV } from '../lib/site';
 
 interface Props {
   title: string;
@@ -37,11 +39,20 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
       <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
     </a>
     <div class="nav-links">
-      <a href="/#why">Why us</a>
-      <a href="/#results">Results</a>
-      <a href="/#process">Process</a>
-      <a href="/#faq">FAQ</a>
-      <a href="/blog/">Blog</a>
+      {NAV.map((item) => (
+        item.children ? (
+          <div class="nav-group">
+            <a href={item.href} class="nav-top">{item.label}
+              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <div class="nav-menu">
+              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
+            </div>
+          </div>
+        ) : (
+          <a href={item.href} class="nav-top">{item.label}</a>
+        )
+      ))}
     </div>
     <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call</a>
   </div>
