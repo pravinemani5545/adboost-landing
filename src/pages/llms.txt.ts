@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
 import { getPublishedPosts } from '../lib/blog';
-import { AD_POLICIES } from '../data/adPolicies';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -17,11 +16,6 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 - [CAC calculator](${base}/tools/cac-calculator/): Calculate customer acquisition cost vs vertical benchmarks
 - [LTV:CAC calculator](${base}/tools/ltv-cac-calculator/): Unit economics, ratio, and payback period
 - [Ad budget calculator](${base}/tools/ad-budget-calculator/): Budget needed to hit a customer target
-
-## Ad compliance by platform × vertical
-
-- [Health ad compliance hub](${base}/advertising/): What's allowed advertising each health vertical on Meta, Google, and TikTok
-${AD_POLICIES.map((p) => `- [${p.vertical} on ${p.platform}](${base}/advertising/${p.slug}/): Certification, prohibited claims, rejection triggers, and the compliant path`).join('\n')}
 
 ## Guides & reference
 

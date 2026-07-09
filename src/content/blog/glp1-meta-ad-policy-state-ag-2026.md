@@ -29,7 +29,7 @@ Two things are worth internalizing:
 
 ## Can you still advertise GLP-1 on Meta in 2026?
 
-Yes - with real constraints. Naming the prescription drug (semaglutide, tirzepatide, Wegovy, Zepbound) requires active **LegitScript certification** plus Meta authorization, targeting only the US, Canada, and New Zealand, gated to 18+. Everything about the *creative* is where brands get burned. For the full breakdown, see our page on [advertising GLP-1 on Meta](/advertising/glp-1-on-meta/), but the headline rules are:
+Yes - with real constraints. Naming the prescription drug (semaglutide, tirzepatide, Wegovy, Zepbound) requires active **LegitScript certification** plus Meta authorization, targeting only the US, Canada, and New Zealand, gated to 18+. Everything about the *creative* is where brands get burned. For the full breakdown, see our [GLP-1 advertising compliance guide](/blog/glp1-advertising-compliance-2026/), but the headline rules are:
 
 - **No before/after or side-by-side transformation imagery.** This is the single fastest route to a rejection and an account-restriction trigger.
 - **No "lose X lbs," guaranteed, or rapid-results claims.**

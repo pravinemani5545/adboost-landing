@@ -59,17 +59,17 @@
     },
     {
       "source": "/industries",
-      "destination": "/advertising/",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     },
     {
       "source": "/industries/",
-      "destination": "/advertising/",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     },
     {
       "source": "/industries/:path+",
-      "destination": "/advertising/",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     },
     {
@@ -129,6 +129,21 @@
     },
     {
       "source": "/guides/:path+",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/advertising",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/advertising/",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
+      "permanent": false
+    },
+    {
+      "source": "/advertising/:path+",
       "destination": "/blog/glp1-advertising-compliance-2026/",
       "permanent": false
     }
