@@ -14,11 +14,38 @@ export function siteBase(site: URL | undefined): string {
 // (and as grouped sub-links in the mobile menu).
 export const NAV = [
   {
+    label: 'Services',
+    href: '/services/',
+    children: [
+      { label: 'Paid media', href: '/services/paid-media/' },
+      { label: 'Creative production', href: '/services/creative/' },
+      { label: 'CRO & funnels', href: '/services/cro/' },
+    ],
+  },
+  {
+    label: 'Industries',
+    href: '/industries/',
+    children: [
+      { label: 'GLP-1 & weight loss', href: '/industries/glp-1-weight-loss/' },
+      { label: 'Telehealth', href: '/industries/telehealth/' },
+      { label: 'Supplements & DTC', href: '/industries/supplements-dtc/' },
+      { label: 'TRT & hormone', href: '/industries/trt-hormone/' },
+      { label: 'Peptides', href: '/industries/peptides/' },
+      { label: 'Med spa', href: '/industries/med-spa/' },
+      { label: 'Mental health', href: '/industries/mental-health/' },
+      { label: 'Longevity', href: '/industries/longevity/' },
+      { label: 'Fertility & IVF', href: '/industries/fertility-ivf/' },
+    ],
+  },
+  {
     label: 'Resources',
     href: '/tools/',
     children: [
       { label: 'Free tools', href: '/tools/' },
       { label: 'Glossary', href: '/glossary/' },
+      { label: 'Case studies', href: '/case-studies/' },
+      { label: 'Compare', href: '/compare/' },
+      { label: 'FAQ', href: '/faq/' },
       { label: 'Blog', href: '/blog/' },
     ],
   },

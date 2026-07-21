@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { CASE_STUDIES } from '../../data/caseStudies';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'Case Studies: Real Health-Brand Results | AdBoost Health';
+const description = 'How health, telehealth, and supplement brands cut CAC and scaled spend with AdBoost Health - with the compliance, creative, and attribution work behind the numbers.';
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Case studies', href: '/case-studies/' }])];
+---
+<BaseLayout {title} {description} canonicalPath="/case-studies/" {jsonLd}>
+  <section class="phero wide">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Case studies' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>CASE STUDIES</span>
+      <h1>Numbers from <span class="serif">real</span> health brands.</h1>
+      <p class="phero-lede">The full story behind the results - the compliance rebuild, the creative engine, and the clean attribution that turned the economics around.</p>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="grid-cards">
+        {CASE_STUDIES.map((c) => (
+          <a class="lcard reveal" href={`/case-studies/${c.slug}/`}>
+            <span class="lc-tag">{c.categoryTag}</span>
+            <h3>{c.title}</h3>
+            <div class="stat-row three" style="margin:6px 0">
+              {c.hero.map((h) => (
+                <div style="border:0;padding:0;background:none">
+                  <div class="sv" style="font-size:24px"><span class="green">{h.metric}</span></div>
+                  <div class="sl">{h.label}</div>
+                </div>
+              ))}
+            </div>
+            <span class="lc-more">Read the case study →</span>
+          </a>
+        ))}
+      </div>
+      <p style="color:var(--mute);font-size:12.5px;margin-top:16px">Some entries are illustrative examples pending client sign-off, and are labelled as such on the page.</p>
+
+      <div class="prose" style="max-width:760px;margin-top:40px">
+        <h2>How we measure results</h2>
+        <p>Every number here is tracked on blended CAC, payback, and LTV:CAC, not platform-reported ROAS, which flatters spend by ignoring retention and margin. We rebuild attribution with server-side tracking before we claim a win, so the figures reflect real acquired customers rather than last-click credit.</p>
+        <p>The pattern behind most turnarounds is the same three-part system: a <a href="/services/">compliant acquisition engine</a>, a high-volume <a href="/services/creative/">creative operation</a>, and <a href="/services/cro/">funnels tuned to LTV</a>. See the <a href="/industries/">industry playbooks</a> for how it adapts by vertical, or benchmark your own numbers with the free <a href="/tools/cac-calculator/">CAC calculator</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

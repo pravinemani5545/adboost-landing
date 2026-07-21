@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { COMPARES } from '../../data/compare';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'AdBoost Health vs. Agencies, In-House & DTC Shops';
+const description = 'How a health-specialist paid-acquisition partner compares to a full-service healthcare agency, an in-house team, or a generalist DTC agency - an honest breakdown.';
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }])];
+---
+<BaseLayout {title} {description} canonicalPath="/compare/" {jsonLd}>
+  <section class="phero wide">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compare' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>COMPARE</span>
+      <h1>Weighing your <span class="serif">options?</span></h1>
+      <p class="phero-lede">An honest look at how a health-specialist acquisition partner compares to the alternatives - including when the alternative is the better call.</p>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="grid-cards">
+        {COMPARES.map((c) => (
+          <a class="lcard reveal" href={`/compare/${c.slug}/`}>
+            <h3>{c.h1}</h3>
+            <p>{c.intent}</p>
+            <span class="lc-more">See the comparison →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

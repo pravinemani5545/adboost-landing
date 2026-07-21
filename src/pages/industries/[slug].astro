@@ -1,0 +1,135 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import Faq from '../../components/Faq.astro';
+import { VERTICALS, getVertical } from '../../data/verticals';
+import { getPlaybook } from '../../data/vertical-playbooks';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return VERTICALS.map((v) => ({ params: { slug: v.slug } }));
+}
+
+const { slug } = Astro.params;
+const v = getVertical(slug!)!;
+const pb = getPlaybook(v.slug)!;
+const SITE = siteBase(Astro.site);
+const path = `/industries/${v.slug}/`;
+const title = `${v.short} Marketing Agency | AdBoost Health`;
+const description = v.lede.slice(0, 155);
+const faqAll = [...v.faq, ...pb.extraFaq];
+const jsonLd = [
+  serviceNode(SITE, { name: `Growth marketing for ${v.short} brands`, description: v.serviceDesc, path }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short, href: path }]),
+  faqPage(faqAll),
+];
+const services = [
+  { t: 'Compliant paid media', d: 'Meta, Google & TikTok, structured for this vertical’s auction.', href: '/services/paid-media/' },
+  { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/' },
+  { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/' },
+];
+const toc = [
+  { id: 'market', label: 'Market context' },
+  { id: 'playbook', label: 'The growth playbook' },
+  { id: 'landmine', label: 'Compliance landmines' },
+  { id: 'mistakes', label: 'Common mistakes' },
+  { id: 'good', label: 'What good looks like' },
+  { id: 'services', label: 'What we do' },
+  { id: 'faq', label: 'FAQ' },
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{v.category}</span>
+      <h1>{v.h1}</h1>
+      <p class="phero-lede">{v.lede}</p>
+      <div class="phero-meta">
+        <span>Typical CAC {v.cacDisplay}</span>
+        <span>Compliance-first</span>
+        <span>Setup in 5 days</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="doc-grid">
+        <div class="doc-main">
+          <div class="answer-box reveal">
+            <span class="al">The short answer</span>
+            {v.proofLine} We only work in health, so the playbook, creative, and compliance are purpose-built for {v.short.toLowerCase()} - not adapted from a generic DTC template.
+          </div>
+          <div class="prose">
+            <h2 id="market">Market context</h2>
+            <p>{pb.marketContext}</p>
+
+            <h2 id="playbook">The {v.short.toLowerCase()} growth playbook</h2>
+            <p>{v.painPoint}</p>
+            <div class="playbook">
+              {pb.growthPlaybook.map((s) => (
+                <div class="pb"><h3>{s.h}</h3><p>{s.p}</p></div>
+              ))}
+            </div>
+
+            <h2 id="landmine">Compliance landmines</h2>
+            <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href="/blog/health-ad-creative-rejected-fix/">Why health ads get rejected, and how to fix it →</a></div>
+
+            <h2 id="mistakes">Common mistakes in {v.short.toLowerCase()}</h2>
+            <ul class="xlist">
+              {pb.commonMistakes.map((m) => (
+                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{m}</li>
+              ))}
+            </ul>
+
+            <h2 id="good">What good looks like</h2>
+            <ul class="checks">
+              {pb.whatGoodLooksLike.map((k) => (
+                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{k}</li>
+              ))}
+            </ul>
+
+            <h3>Segments we work in</h3>
+            <div class="chips">{pb.subSegments.map((s) => <span class="chip">{s}</span>)}</div>
+
+            <h2 id="services">What we do for {v.short.toLowerCase()} brands</h2>
+            <div class="related-grid">
+              {services.map((s) => (
+                <a class="lcard" href={s.href}><h3 style="font-size:16px">{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
+              ))}
+            </div>
+
+            <h2 id="faq">{v.short} marketing FAQ</h2>
+            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} />
+          </div>
+        </div>
+
+        <aside class="doc-aside">
+          <div class="aside-toc">
+            <div class="at-label">On this page</div>
+            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+          </div>
+          <div class="aside-card">
+            <h4>{v.short} at a glance</h4>
+            <div class="link-list">
+              <a href="/glossary/cac/">Typical CAC {v.cacDisplay} →</a>
+              <a href="/tools/cac-calculator/">Benchmark your CAC</a>
+              <a href="/tools/ltv-cac-calculator/">Check your LTV:CAC</a>
+              <a href="/case-studies/">See results</a>
+            </div>
+          </div>
+          <div class="aside-card dark">
+            <h4 style="color:#fff">Lower CAC on your {v.short.toLowerCase()} brand</h4>
+            <p>Free audit with a senior strategist - a written plan you keep either way.</p>
+            <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading={`Ready to lower CAC on your ${v.short.toLowerCase()} brand?`} />
+</BaseLayout>

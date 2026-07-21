@@ -13,7 +13,7 @@ const { term } = Astro.params;
 const t = getTerm(term!)!;
 const SITE = siteBase(Astro.site);
 const path = `/glossary/${t.slug}/`;
-const title = `${t.term}: Definition & Health Example | AdBoost Health`;
+const title = `${t.term}: Definition | AdBoost`;
 const description = t.definition.slice(0, 155);
 const related = (t.related ?? []).map((r) => getTerm(r)).filter(Boolean);
 const jsonLd = [

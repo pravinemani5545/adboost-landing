@@ -1,6 +1,6 @@
 ---
 title: "The Best GLP-1 & Weight-Loss Marketing Agencies (2026)"
-seoTitle: "Best GLP-1 & Weight-Loss Marketing Agencies 2026 | AdBoost Health"
+seoTitle: "Best GLP-1 & Weight-Loss Agencies 2026 | AdBoost Health"
 description: "How to choose a GLP-1 marketing agency in 2026, the criteria that actually matter, and the agencies doing compliant paid acquisition for weight-loss and telehealth brands."
 pubDate: 2026-04-17
 author: "Amir Salihovic"

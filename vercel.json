@@ -43,6 +43,16 @@
   ],
   "redirects": [
     {
+      "source": "/services/compliance",
+      "destination": "/services/",
+      "permanent": false
+    },
+    {
+      "source": "/services/compliance/:path(.*)",
+      "destination": "/services/",
+      "permanent": false
+    },
+    {
       "source": "/benchmarks",
       "destination": "/blog/telehealth-cac-benchmarks-2026/",
       "permanent": false
@@ -50,46 +60,6 @@
     {
       "source": "/benchmarks/:path(.*)",
       "destination": "/blog/telehealth-cac-benchmarks-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/industries",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/industries/:path(.*)",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
-    },
-    {
-      "source": "/services",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/services/:path(.*)",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/compare",
-      "destination": "/blog/choose-health-growth-agency/",
-      "permanent": false
-    },
-    {
-      "source": "/compare/:path(.*)",
-      "destination": "/blog/choose-health-growth-agency/",
-      "permanent": false
-    },
-    {
-      "source": "/faq",
-      "destination": "/",
-      "permanent": false
-    },
-    {
-      "source": "/faq/:path(.*)",
-      "destination": "/",
       "permanent": false
     },
     {

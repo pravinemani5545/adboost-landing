@@ -11,6 +11,24 @@ export const GET: APIRoute = async ({ site }) => {
 
 AdBoost Health only works with health-vertical brands. Every playbook, creative angle, and compliance check is purpose-built for Meta, Google, and TikTok health advertising policies. Partners typically see directional CAC/ROAS movement within 2 weeks; the full system (tested creative library, optimized landers, clean attribution) compounds by day 31. Setup takes 5 days.
 
+## Services
+
+- [Paid media](${base}/services/paid-media/): Compliant Meta, Google & TikTok media buying for health brands
+- [Creative production](${base}/services/creative/): In-house, compliant ad creative built around winning angles
+- [CRO & funnels](${base}/services/cro/): Quiz funnels and landing pages tuned to LTV and payback
+
+## Industries we grow
+
+- [GLP-1 & weight loss](${base}/industries/glp-1-weight-loss/)
+- [Telehealth](${base}/industries/telehealth/)
+- [Supplements & DTC](${base}/industries/supplements-dtc/)
+- [TRT & hormone](${base}/industries/trt-hormone/)
+- [Peptides](${base}/industries/peptides/)
+- [Med spa](${base}/industries/med-spa/)
+- [Mental health](${base}/industries/mental-health/)
+- [Longevity](${base}/industries/longevity/)
+- [Fertility & IVF](${base}/industries/fertility-ivf/)
+
 ## Free tools
 
 - [CAC calculator](${base}/tools/cac-calculator/): Calculate customer acquisition cost vs vertical benchmarks
@@ -20,6 +38,9 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 ## Guides & reference
 
 - [Health & performance marketing glossary](${base}/glossary/): CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims - with health examples
+- [Case studies](${base}/case-studies/): Real health-brand results, with methodology and metrics
+- [Compare](${base}/compare/): AdBoost Health vs. full-service agencies, in-house teams, and generalist DTC shops
+- [FAQ](${base}/faq/): Answers on pricing, engagement, compliance, and how we work
 - [About](${base}/about/): The health-only growth agency, team, and approach
 
 ## Blog posts

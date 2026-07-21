@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { CASE_STUDIES, getCaseStudy } from '../../data/caseStudies';
+import { getVertical } from '../../data/verticals';
+import { siteBase } from '../../lib/site';
+import { breadcrumb, articleNode } from '../../lib/schema';
+
+export function getStaticPaths() {
+  return CASE_STUDIES.map((c) => ({ params: { slug: c.slug } }));
+}
+const { slug } = Astro.params;
+const c = getCaseStudy(slug!)!;
+const v = getVertical(c.vertical);
+const SITE = siteBase(Astro.site);
+const path = `/case-studies/${c.slug}/`;
+const title = `${c.seoTitle ?? c.brand} | AdBoost Health`;
+const description = c.summary.slice(0, 155);
+const jsonLd = [
+  articleNode(SITE, { headline: c.title, description: c.summary, path, datePublished: c.datePublished }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Case studies', href: '/case-studies/' }, { label: c.brand, href: path }]),
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container i-narrow" style="margin-inline:auto">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Case studies', href: '/case-studies/' }, { label: c.brand }]} />
+      <div style="margin-top:14px" class="chips">
+        <span class="chip">{c.categoryTag}</span>
+        {c.illustrative && <span class="badge amber">Illustrative example - pending sign-off</span>}
+      </div>
+      <h1 style="margin-top:14px">{c.title}</h1>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container">
+     <div class="doc-grid">
+      <div class="doc-main">
+      <div class="stat-row three reveal">
+        {c.hero.map((h) => (
+          <div class="stat"><div class="sv"><span class="green">{h.metric}</span></div><div class="sl">{h.label}</div></div>
+        ))}
+      </div>
+
+      <p class="reveal" style="font-size:18px;line-height:1.6;color:var(--ink);margin-top:26px">{c.summary}</p>
+
+      <h2 class="sec-title" style="margin-top:32px">The challenge</h2>
+      <p style="color:var(--ink-2);line-height:1.72">{c.challenge}</p>
+
+      <h2 class="sec-title" style="margin-top:32px">What we did</h2>
+      <ul class="checks">
+        {c.approach.map((a) => (
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{a}</li>
+        ))}
+      </ul>
+
+      <h2 class="sec-title" style="margin-top:32px">The results</h2>
+      <div class="tablewrap reveal">
+        <table class="dtable">
+          <thead><tr><th>Metric</th><th>Before → after</th></tr></thead>
+          <tbody>
+            {c.results.map((r) => <tr><td class="row-h">{r.k}</td><td class="num">{r.v}</td></tr>)}
+          </tbody>
+        </table>
+      </div>
+
+      {c.quote && (
+        <blockquote class="reveal">“{c.quote.text}”<br /><span style="font-style:normal;font-size:14px;color:var(--mute)">- {c.quote.who}, {c.quote.role}</span></blockquote>
+      )}
+
+      </div>
+      <aside class="doc-aside">
+        {v && (
+          <div class="aside-card">
+            <h4>{v.short} playbook</h4>
+            <p>How we approach {v.short.toLowerCase()} brands and what a good CAC looks like.</p>
+            <div class="link-list">
+              <a href={`/industries/${v.slug}/`}>{v.short} playbook</a>
+              <a href="/glossary/cac/">What good CAC looks like</a>
+              <a href="/case-studies/">All case studies</a>
+            </div>
+          </div>
+        )}
+        <div class="aside-card dark">
+          <h4 style="color:#fff">Want results like these?</h4>
+          <p>Free audit with a senior strategist - a written plan you keep either way.</p>
+          <a class="btn btn-primary" href="https://cal.com/pira-ahilan-ef2dl8/strategy-call" target="_blank" rel="noopener">Book a call →</a>
+        </div>
+      </aside>
+     </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

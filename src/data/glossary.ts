@@ -67,6 +67,7 @@ export const GLOSSARY: Term[] = [
     term: 'Paid CAC',
     short: 'Acquisition cost from paid media only.',
     definition: 'Paid CAC isolates the cost of customers acquired specifically through paid advertising, excluding organic and referral, giving a true read on channel efficiency.',
+    body: 'Paid CAC is the number that tells you whether ad spend is actually working - <a href="/glossary/blended-cac/">blended CAC</a> can look healthy while paid economics quietly break. In telehealth, track it by platform: a $180 Meta paid CAC next to a $320 Google paid CAC on the same offer usually points at the offer, not the channel.',
     related: ['blended-cac', 'cac', 'roas'],
   },
   {
@@ -91,6 +92,7 @@ export const GLOSSARY: Term[] = [
     term: 'Churn Rate',
     short: 'The share of customers who cancel in a period.',
     definition: 'Churn rate is the percentage of customers who cancel or lapse in a given period - the inverse of retention. Subscription-industry benchmark data puts typical supplement-brand churn at 5–8% monthly, with 20–30% first-month churn being normal.',
+    body: 'In subscription health, churn is the hidden lever on <a href="/glossary/ltv/">LTV</a>: shaving first-month churn from 30% to 20% can lift lifetime value more than any CAC cut. Separate involuntary churn (failed rebills) from voluntary churn - failed <strong>payment retries</strong> alone drive a large share of supplement cancellations and are fixable with dunning.',
     related: ['retention-rate', 'ltv'],
   },
   {
@@ -99,6 +101,7 @@ export const GLOSSARY: Term[] = [
     short: 'Cost per 1,000 ad impressions.',
     definition: 'CPM is the cost to serve 1,000 ad impressions. It reflects auction competition and audience value. Industry benchmark data puts health/medical Meta CPMs around $13, and supplement CPMs higher at ~$18 - both inflating year over year.',
     formula: 'CPM = (Ad spend ÷ Impressions) × 1,000',
+    body: 'CPM is mostly a signal about your audience and creative, not something to optimize directly. Health CPMs climb in Q4 and around open enrollment as competition spikes. A sudden CPM jump on a stable audience usually means your <strong>creative</strong> stopped earning delivery - the fix is fresh angles, not a lower bid. Watch CPM alongside <a href="/glossary/cpc/">CPC</a> to separate reach cost from click cost.',
     related: ['cpc', 'roas'],
   },
   {
@@ -107,6 +110,7 @@ export const GLOSSARY: Term[] = [
     short: 'Cost per ad click.',
     definition: 'CPC is the average cost for each click on an ad. Per industry benchmark data, Meta health/medical CPCs run ~$1.30, while Google health/fitness CPCs are far higher at ~$5.00 given the higher intent.',
     formula: 'CPC = Ad spend ÷ Clicks',
+    body: 'CPC is a diagnostic, not a goal. A rising CPC on flat <a href="/glossary/cpm/">CPM</a> usually means creative fatigue dragging click-through down; a rising CPC on rising CPM means auction competition. In health, a higher Google CPC often still wins on <a href="/glossary/cac/">CAC</a> because the intent converts - never optimize to cheap clicks that never book.',
     related: ['cpm', 'cac'],
   },
   {

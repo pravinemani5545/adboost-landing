@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import '../styles/interior.css';
 import { NAV } from '../lib/site';
+import { breadcrumb } from '../lib/schema';
 
 interface Props {
   title: string;
@@ -10,6 +11,15 @@ interface Props {
 }
 const { title, description, canonicalPath } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+const ogImage = `${site}/og/og-home.png`;
+const pageLabel = title.replace(/ \| AdBoost Health$/, '');
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    breadcrumb(site, [{ label: 'Home', href: '/' }, { label: pageLabel, href: canonicalPath }]),
+    { '@type': 'WebPage', name: title, description, url: `${site}${canonicalPath}`, publisher: { '@type': 'Organization', name: 'AdBoost Health', url: `${site}/` } },
+  ],
+};
 ---
 
 <!doctype html>
@@ -25,9 +35,15 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 <meta property="og:description" content={description} />
 <meta property="og:url" content={`${site}${canonicalPath}`} />
 <meta property="og:site_name" content="AdBoost Health" />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
 <script defer src="https://admin.adboost.health/t.js"></script>
 </head>
 <body>

@@ -1,6 +1,6 @@
 ---
 title: "LegitScript Certification for Telehealth Advertising: The 2026 Guide"
-seoTitle: "LegitScript Certification for Telehealth Ads (2026 Guide) | AdBoost Health"
+seoTitle: "LegitScript Telehealth Certification (2026) | AdBoost Health"
 description: "What LegitScript certification is, why Google, Meta, Bing and TikTok require it for telehealth ads, what it costs, and how long it takes to get certified in 2026."
 pubDate: 2026-05-15
 author: "Amir Salihovic"

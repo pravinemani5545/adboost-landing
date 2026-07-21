@@ -1,6 +1,6 @@
 ---
 title: "Advertising GLP-1 on Meta After the 35-State-AG Action: What Changed in 2026"
-seoTitle: "GLP-1 Meta Ad Policy 2026: What the State-AG Action Means | AdBoost Health"
+seoTitle: "GLP-1 Meta Ad Policy 2026: State-AG Action | AdBoost Health"
 description: "35+ state attorneys general pushed Meta to crack down on GLP-1 ads. Here's what actually changed for advertisers in 2026 - and how compliant brands keep scaling."
 pubDate: 2026-06-19
 author: "Amir Salihovic"

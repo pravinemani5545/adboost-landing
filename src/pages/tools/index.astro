@@ -6,7 +6,7 @@ import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
-const title = 'Free Health-Marketing Calculators (CAC, LTV:CAC, Ad Budget) | AdBoost Health';
+const title = 'CAC, LTV:CAC & Ad Budget Calculators | AdBoost Health';
 const description = 'Free calculators for health and DTC brands: work out your CAC, LTV:CAC ratio and payback, and a compliant-scale ad budget - with built-in health benchmark context.';
 const tools = [
   { href: '/tools/cac-calculator/', name: 'CAC Calculator', desc: 'Work out your true customer acquisition cost and see how it compares to your vertical’s benchmark.' },
@@ -36,6 +36,11 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools'
             <span class="lc-more">Open calculator →</span>
           </a>
         ))}
+      </div>
+
+      <div class="prose" style="max-width:760px;margin-top:40px">
+        <h2>Which calculator should you use?</h2>
+        <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
       </div>
     </div>
   </section>
