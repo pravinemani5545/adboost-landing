@@ -1,6 +1,7 @@
 ---
 // Minimal, distraction-free layout for lead-magnet opt-in pages.
 // No nav/footer chrome (maximizes conversion); always noindex.
+// theme="dark" flips the chrome for high-contrast conversion pages.
 import '../styles/global.css';
 import '../styles/interior.css';
 
@@ -8,13 +9,14 @@ interface Props {
   title: string;
   description: string;
   canonicalPath: string;
+  theme?: 'light' | 'dark';
 }
-const { title, description, canonicalPath } = Astro.props;
+const { title, description, canonicalPath, theme = 'light' } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-lead-theme={theme}>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -26,17 +28,19 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={`${site}/og/og-home.png`} />
+<meta name="theme-color" content={theme === 'dark' ? '#08090c' : '#ffffff'} />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script defer src="https://admin.adboost.health/t.js"></script>
 </head>
-<body>
+<body class="lead-body">
 <header class="lead-top">
   <div class="container">
-    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span></a>
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span class="brand-sub">Health</span></span></a>
+    <span class="lead-top-tag">Peptide &amp; GLP-1 ad compliance</span>
   </div>
 </header>
 <main class="lead-main">
@@ -49,10 +53,24 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 </footer>
 
 <style is:global>
-  .lead-top { padding: 22px 0; border-bottom: 1px solid var(--line, #eceef3); }
-  .lead-main { padding: 40px 0 72px; }
-  .lead-foot { padding: 28px 0; border-top: 1px solid var(--line, #eceef3); color: var(--mute); font-size: 13px; }
+  /* ---- Light (default) ---- */
+  .lead-top { padding: 20px 0; border-bottom: 1px solid var(--line, #eceef3); }
+  .lead-top .container { display: flex; align-items: center; justify-content: space-between; }
+  .lead-top-tag { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
+  .lead-main { padding: 0 0 56px; }
+  .lead-foot { padding: 26px 0; border-top: 1px solid var(--line, #eceef3); color: var(--mute); font-size: 12.5px; }
   .lead-foot a { color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ---- Dark chrome for theme="dark" ---- */
+  html[data-lead-theme="dark"], [data-lead-theme="dark"] .lead-body { background: #08090c; }
+  [data-lead-theme="dark"] .lead-top { border-bottom-color: rgba(255,255,255,.07); }
+  [data-lead-theme="dark"] .brand { color: #f4f6fa; }
+  [data-lead-theme="dark"] .brand-sub { color: rgba(244,246,250,.5); font-weight: 400; }
+  [data-lead-theme="dark"] .lead-top-tag { color: rgba(244,246,250,.42); }
+  [data-lead-theme="dark"] .lead-foot { border-top-color: rgba(255,255,255,.07); color: rgba(244,246,250,.4); }
+  [data-lead-theme="dark"] .lead-foot a { color: rgba(244,246,250,.55); }
+  .lead-top-tag { display: none; }
+  @media (min-width: 720px) { .lead-top-tag { display: inline; } }
 </style>
 </body>
 </html>

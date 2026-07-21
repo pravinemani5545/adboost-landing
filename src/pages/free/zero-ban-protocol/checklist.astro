@@ -1,87 +1,205 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import CtaBand from '../../../components/CtaBand.astro';
 import { siteBase } from '../../../lib/site';
 import { breadcrumb } from '../../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/free/zero-ban-protocol/checklist/';
 const title = 'The Zero-Ban Protocol Checklist | AdBoost Health';
-const description = 'The 4-part compliance framework we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
+const description = 'The compliance protocol we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
 const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call';
+const PDF = '/downloads/zero-ban-protocol.pdf';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} noindex={true}>
-  <section class="phero">
-    <div class="container i-narrow" style="margin-inline:auto">
-      <span class="eyebrow sec-eyebrow" style="display:block"><span class="dot"></span>THE ZERO-BAN PROTOCOL</span>
-      <h1 style="margin-top:12px">The 4-part compliance framework behind $50K/month in peptide &amp; GLP-1 Meta ad spend — with zero bans</h1>
-      <p class="phero-lede">Run this checklist against your own account before your next launch. It's the exact protocol we run on every peptide and GLP-1 account before we spend a dollar. Print it, work top to bottom, and don't skip the foundation.</p>
-    </div>
-  </section>
-
-  <section class="iwrap-sm">
-    <div class="container i-narrow" style="margin-inline:auto">
-      <div class="prose">
-        <div class="answer-box reveal"><span class="al">Why bans happen</span>Bans aren't random. Meta is a social platform, and its whole job is keeping people on it and feeling good while they're there. Every rejection you'll ever get traces back to something that threatened that experience. Get that frame and the rest of this protocol makes sense.</div>
-
-        <h2 id="lane">Foundation — Know your lane</h2>
-        <p>Two completely different compliance lanes exist, and brands constantly run one while set up like the other. Figure out your lane before you build anything; everything below assumes you got this right.</p>
-        <ul class="checks">
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Lane A — research-use-only peptides.</strong> No prescription involved, no LegitScript certification required.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Lane B — prescription / telehealth.</strong> GLP-1, ED, hair loss — anything dispensed against a script. <a href="/glossary/legitscript-certification/">LegitScript certification</a> is required by Meta, full stop. Meta doesn't verify you itself; it defers to the certifier.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Confirm you are <strong>not in the dangerous middle</strong>: advertising pure peptides for human use with no legitimate prescription pathway. That's the highest-risk lane and where most catastrophic bans happen.</li>
-        </ul>
-
-        <h2 id="warm">Part 1 — Warm the account before you sell it anything</h2>
-        <p>Do not launch a cold account, a new card, or a fresh business manager straight into a conversion campaign. You're not buying results in week one — you're buying a clean record.</p>
-        <ul class="checks">
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Run a <strong>preliminary awareness campaign for 3–7 days</strong> at a low daily budget.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Confirm the <strong>card processes</strong> and the account can spend (billing gets genuinely funky on new accounts in this vertical — discover that on a low-budget test, not on a scale push).</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Get <strong>ad approvals on record</strong> — a clean history, baseline data, and rapport with the platform before you ask it for anything expensive.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Only graduate to a conversion campaign once you see <strong>clean approvals, no rejections, no payment flags</strong>.</li>
-        </ul>
-        <div class="callout reveal"><span class="cl-label">Sticky line</span>You're not buying results in week one. You're buying a clean record.</div>
-
-        <h2 id="copy">Part 2 — Write copy that doesn't trip review</h2>
-        <p>The headline and primary text are the most-scanned surface on your ad. Treat them as the most conservative part of the whole campaign.</p>
-        <div class="callout warn"><span class="cl-label">Copy kill-list</span>
-          <ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">
-            <li>No scientific or clinical terminology in headlines and primary text.</li>
-            <li>Don't name the compound. Early on, avoid the word "peptide" in captions entirely.</li>
-            <li>Don't imply human usage or promise physiological outcomes — the line most people cross without realising it.</li>
-            <li>No harsh claims and nothing that makes the reader feel bad about themselves (shaming ads threaten the user experience, so Meta kills them).</li>
-          </ul>
+  <section class="zbc">
+    <div class="zbc-wrap">
+      <header class="zbc-head">
+        <span class="zbc-eyebrow">THE ZERO-BAN PROTOCOL</span>
+        <h1>The compliance protocol behind $50K/month in peptide &amp; GLP-1 Meta ad spend &mdash; with <em>zero bans</em>.</h1>
+        <p class="zbc-lede">Run this against your own account before your next launch. It&rsquo;s the exact protocol we run on every peptide and GLP-1 account before we spend a dollar. Work top to bottom, and don&rsquo;t skip the foundation.</p>
+        <div class="zbc-meta">
+          <span class="zbc-tagm">5 checkpoints</span>
+          <span class="zbc-tagm">Run before launch</span>
+          <span class="zbc-tagm">Peptide · GLP-1</span>
+          <a class="zbc-pdf" href={PDF} download>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Download PDF
+          </a>
         </div>
-        <p><strong>The escalation principle:</strong> start conservative, earn approvals, then get more aggressive. Conservative copy on a cold account isn't being timid — it's how you buy permission to be aggressive later. Lead with brand-level, lifestyle, benefit-adjacent language.</p>
+      </header>
 
-        <h2 id="creative">Part 3 — Creative that passes review</h2>
-        <p>The review system looks at your creative just as hard as your copy — and this is where health brands get banned fastest.</p>
-        <ul class="checks">
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>No before-and-after images. Ever.</strong> The imagery is often near-explicit, and it makes viewers feel bad about their bodies — straight back to the frame.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>GLP-1 specifically: no brand names on product images or vials.</strong> Unbranded product only.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Sell the transformation without showing a transformation.</strong> Show the change with objects, props, and symbolic before-and-afters — nothing about the human body, everything about the idea of change.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Same escalation principle as copy: <strong>conservative creative first, aggressive later</strong>, once the account has approvals behind it.</li>
-        </ul>
-
-        <h2 id="escalate">Part 4 — Earn the right to run aggressive</h2>
-        <p>Everything up to now has been buying permission. This is spending it — but carefully.</p>
-        <ul class="checks">
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Only once the account has <strong>consistent approvals and real spend history</strong>, start testing the more aggressive angles that actually convert.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Test aggressive angles one at a time.</strong> Push five at once and something gets flagged — you've learned nothing and spent your account's credibility.</li>
-          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Remember what the real asset is: <strong>account history, not your creative library.</strong> Every clean approval makes the next aggressive test survivable. A ban doesn't restart you at zero — it restarts you below zero.</li>
-        </ul>
-
-        <div class="aside-card dark" style="margin-top:36px">
-          <h4 style="color:#fff">Want us to just run this for you?</h4>
-          <p>We manage peptide and GLP-1 accounts spending $10K/month and up — compliance, creative, attribution, and scale. Book a free strategy call and we'll pressure-test your account against this exact protocol.</p>
-          <a class="btn btn-primary" href={CAL} target="_blank" rel="noopener">Book a strategy call →</a>
-        </div>
-
-        <p style="color:var(--mute);font-size:13px;margin-top:24px">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta's current advertising standards and your own compliance counsel before launch.</p>
+      <div class="zbc-frame">
+        <span class="zbc-frame-label">Why bans happen</span>
+        <p>Bans aren&rsquo;t random. Meta is a social platform, and its whole job is keeping people on it and feeling good while they&rsquo;re there. Every rejection you&rsquo;ll ever get traces back to something that threatened that experience. Get that frame and the rest of this protocol makes sense.</p>
       </div>
+
+      <ol class="zbc-steps">
+        <li class="zbc-cp" id="lane">
+          <div class="zbc-rail"><span class="zbc-code">00</span></div>
+          <div class="zbc-body">
+            <span class="zbc-cp-tag">Foundation</span>
+            <h2>Know your lane</h2>
+            <p>Two completely different compliance lanes exist, and brands constantly run one while set up like the other. Figure out your lane before you build anything &mdash; everything below assumes you got this right.</p>
+            <ul class="zbc-do">
+              <li><strong>Lane A &mdash; research-use-only peptides.</strong> No prescription involved, no LegitScript certification required.</li>
+              <li><strong>Lane B &mdash; prescription / telehealth.</strong> GLP-1, ED, hair loss &mdash; anything dispensed against a script. <a href="/glossary/legitscript-certification/">LegitScript certification</a> is required by Meta, full stop; it doesn&rsquo;t verify you itself, it defers to the certifier.</li>
+              <li>Confirm you are <strong>not in the dangerous middle</strong>: advertising pure peptides for human use with no legitimate prescription pathway &mdash; the highest-risk lane, where most catastrophic bans happen.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="zbc-cp" id="warm">
+          <div class="zbc-rail"><span class="zbc-code">01</span></div>
+          <div class="zbc-body">
+            <span class="zbc-cp-tag">Setup</span>
+            <h2>Warm the account before you sell it anything</h2>
+            <p>Do not launch a cold account, a new card, or a fresh business manager straight into a conversion campaign. You&rsquo;re not buying results in week one &mdash; you&rsquo;re buying a clean record.</p>
+            <ul class="zbc-do">
+              <li>Run a <strong>preliminary awareness campaign for 3&ndash;7 days</strong> at a low daily budget.</li>
+              <li>Confirm the <strong>card processes</strong> and the account can spend &mdash; billing gets funky on new accounts in this vertical, so discover it on a low-budget test, not a scale push.</li>
+              <li>Get <strong>ad approvals on record</strong>: a clean history, baseline data, and rapport with the platform before you ask it for anything expensive.</li>
+              <li>Only graduate to a conversion campaign once you see <strong>clean approvals, no rejections, no payment flags</strong>.</li>
+            </ul>
+            <p class="zbc-sticky">&ldquo;You&rsquo;re not buying results in week one. You&rsquo;re buying a clean record.&rdquo;</p>
+          </div>
+        </li>
+
+        <li class="zbc-cp" id="copy">
+          <div class="zbc-rail"><span class="zbc-code">02</span></div>
+          <div class="zbc-body">
+            <span class="zbc-cp-tag">Copy</span>
+            <h2>Write copy that doesn&rsquo;t trip review</h2>
+            <p>The headline and primary text are the most-scanned surface on your ad. Treat them as the most conservative part of the whole campaign.</p>
+            <ul class="zbc-dont">
+              <li>No scientific or clinical terminology in headlines and primary text.</li>
+              <li>Don&rsquo;t name the compound &mdash; early on, avoid the word &ldquo;peptide&rdquo; in captions entirely.</li>
+              <li>Don&rsquo;t imply human usage or promise physiological outcomes; the line most people cross without realising it.</li>
+              <li>No harsh claims and nothing that makes the reader feel bad about themselves &mdash; shaming ads threaten the user experience, so Meta kills them.</li>
+            </ul>
+            <p><strong>The escalation principle:</strong> conservative copy on a cold account isn&rsquo;t timid &mdash; it&rsquo;s how you buy permission to be aggressive later. Lead with brand-level, lifestyle, benefit-adjacent language.</p>
+          </div>
+        </li>
+
+        <li class="zbc-cp" id="creative">
+          <div class="zbc-rail"><span class="zbc-code">03</span></div>
+          <div class="zbc-body">
+            <span class="zbc-cp-tag">Creative</span>
+            <h2>Creative that passes review</h2>
+            <p>The review system looks at your creative just as hard as your copy &mdash; and this is where health brands get banned fastest.</p>
+            <ul class="zbc-dont">
+              <li><strong>No before-and-after images. Ever.</strong> The imagery is often near-explicit and makes viewers feel bad about their bodies.</li>
+              <li><strong>GLP-1 specifically: no brand names on product images or vials.</strong> Unbranded product only.</li>
+            </ul>
+            <ul class="zbc-do">
+              <li><strong>Sell the transformation without showing a transformation.</strong> Show the change with objects, props, and symbolic before-and-afters &mdash; nothing about the human body, everything about the idea of change.</li>
+              <li>Same escalation principle as copy: <strong>conservative creative first, aggressive later</strong>, once the account has approvals behind it.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="zbc-cp" id="escalate">
+          <div class="zbc-rail"><span class="zbc-code">04</span></div>
+          <div class="zbc-body">
+            <span class="zbc-cp-tag">Scale</span>
+            <h2>Earn the right to run aggressive</h2>
+            <p>Everything up to now has been buying permission. This is spending it &mdash; but carefully.</p>
+            <ul class="zbc-do">
+              <li>Only once the account has <strong>consistent approvals and real spend history</strong>, start testing the aggressive angles that actually convert.</li>
+              <li><strong>Test aggressive angles one at a time.</strong> Push five at once and something gets flagged &mdash; you&rsquo;ve learned nothing and spent your account&rsquo;s credibility.</li>
+              <li>The real asset is <strong>account history, not your creative library.</strong> Every clean approval makes the next aggressive test survivable. A ban doesn&rsquo;t restart you at zero &mdash; it restarts you below zero.</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+
+      <div class="zbc-cta">
+        <div>
+          <span class="zbc-cta-status">● CLEARED FOR LAUNCH</span>
+          <h3>Want us to just run this for you?</h3>
+          <p>We manage peptide and GLP-1 accounts spending $10K/month and up &mdash; compliance, creative, attribution, and scale. Book a free strategy call and we&rsquo;ll pressure-test your account against this exact protocol.</p>
+        </div>
+        <a class="zbc-cta-btn" href={CAL} target="_blank" rel="noopener">Book a strategy call &rarr;</a>
+      </div>
+
+      <p class="zbc-disclaimer">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta&rsquo;s current advertising standards and your own compliance counsel before launch.</p>
     </div>
   </section>
 
-  <CtaBand heading="Ready to scale without the ban risk?" />
+  <style is:global>
+    /* Strip site chrome from the printed/saved PDF (BaseLayout nav/footer live
+       outside this page's scoped styles, so these rules must be global). */
+    @media print {
+      .nav, nav, footer, .skip-link, .mnav, .mobile-cta, #nav, #mnav { display: none !important; }
+      html, body { background: #fff !important; }
+      main { padding-top: 0 !important; }
+    }
+  </style>
+
+  <style>
+    .zbc { --z-blue:#0057ff; --z-ink:#0a0a0f; --z-ink2:#42474f; --z-mute:#8a9099; --z-line:#e7e9ee; --z-do:#16a34a; --z-dont:#ff6b3d; --z-surface:#f7f8fa;
+      background: #fff; padding: 8px 0 8px; }
+    .zbc-wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
+
+    .zbc-head { padding: 30px 0 26px; }
+    .zbc-eyebrow { font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:.11em; color:var(--z-blue); }
+    .zbc-head h1 { font-size: clamp(28px, 4.2vw, 40px); line-height: 1.1; letter-spacing:-.03em; font-weight:600; color:var(--z-ink); margin:14px 0 16px; }
+    .zbc-head h1 em { font-family:'Instrument Serif',Georgia,serif; font-style:italic; font-weight:400; letter-spacing:0; }
+    .zbc-lede { font-size:16.5px; line-height:1.62; color:var(--z-ink2); margin:0 0 22px; }
+    .zbc-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+    .zbc-tagm { font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--z-mute); background:var(--z-surface); border:1px solid var(--z-line); border-radius:6px; padding:5px 9px; }
+    .zbc-pdf { margin-left:auto; display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:600; color:var(--z-blue); text-decoration:none; border:1px solid rgba(0,87,255,.28); border-radius:9px; padding:8px 14px; transition:background .15s,border-color .15s; }
+    .zbc-pdf:hover { background:rgba(0,87,255,.06); border-color:var(--z-blue); }
+
+    .zbc-frame { background:var(--z-surface); border:1px solid var(--z-line); border-left:3px solid var(--z-ink); border-radius:12px; padding:18px 20px; margin-bottom:8px; }
+    .zbc-frame-label { display:block; font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--z-mute); margin-bottom:8px; }
+    .zbc-frame p { margin:0; font-size:15.5px; line-height:1.62; color:var(--z-ink2); }
+
+    /* protocol spine */
+    .zbc-steps { list-style:none; margin:0; padding:0; }
+    .zbc-cp { display:grid; grid-template-columns:56px 1fr; gap:20px; padding:28px 0; }
+    .zbc-cp + .zbc-cp { border-top:1px solid var(--z-line); }
+    .zbc-rail { position:relative; }
+    .zbc-code { position:sticky; top:26px; display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; background:var(--z-ink); color:#fff; font-family:'Geist Mono',ui-monospace,monospace; font-size:15px; font-weight:500; }
+    .zbc-cp-tag { font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--z-blue); }
+    .zbc-body h2 { font-size:21px; line-height:1.2; letter-spacing:-.02em; font-weight:600; color:var(--z-ink); margin:6px 0 10px; }
+    .zbc-body > p { font-size:15.5px; line-height:1.62; color:var(--z-ink2); margin:0 0 14px; }
+    .zbc-body a { color:var(--z-blue); text-decoration:underline; text-underline-offset:2px; }
+    .zbc-sticky { font-family:'Instrument Serif',Georgia,serif; font-style:italic; font-size:18px; color:var(--z-ink); margin:14px 0 0; }
+
+    .zbc-do, .zbc-dont { list-style:none; margin:0 0 6px; padding:0; display:grid; gap:9px; }
+    .zbc-do li, .zbc-dont li { position:relative; padding-left:28px; font-size:15px; line-height:1.56; color:var(--z-ink2); }
+    .zbc-do li strong, .zbc-dont li strong { color:var(--z-ink); font-weight:600; }
+    .zbc-do li::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:5px; background:rgba(22,163,74,.12);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4.5 4.5L19 7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
+    .zbc-dont { margin-top:4px; }
+    .zbc-dont li::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:5px; background:rgba(255,107,61,.12);
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23ff6b3d' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
+
+    .zbc-cta { display:flex; flex-wrap:wrap; align-items:center; gap:18px; justify-content:space-between; background:var(--z-ink); color:#fff; border-radius:16px; padding:26px 28px; margin:34px 0 20px; }
+    .zbc-cta-status { font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.08em; color:#37c67c; }
+    .zbc-cta h3 { font-size:19px; letter-spacing:-.02em; margin:8px 0 6px; color:#fff; }
+    .zbc-cta p { font-size:14px; line-height:1.55; color:rgba(255,255,255,.62); margin:0; max-width:46ch; }
+    .zbc-cta-btn { flex:none; background:var(--z-blue); color:#fff; text-decoration:none; font-weight:600; font-size:14.5px; border-radius:11px; padding:12px 20px; white-space:nowrap; transition:background .15s; }
+    .zbc-cta-btn:hover { background:#1a6bff; }
+    .zbc-disclaimer { font-size:12.5px; line-height:1.55; color:var(--z-mute); margin:0 0 10px; }
+
+    @media (max-width:560px) {
+      .zbc-cp { grid-template-columns:36px 1fr; gap:14px; }
+      .zbc-code { width:34px; height:34px; border-radius:9px; font-size:13px; top:20px; }
+      .zbc-cta { flex-direction:column; align-items:flex-start; }
+    }
+
+    /* clean print / PDF */
+    @media print {
+      .nav, nav, footer, .zbc-pdf, .zbc-cta-btn { display:none !important; }
+      .zbc { padding:0; }
+      .zbc-wrap { max-width:none; padding:0; }
+      .zbc-cp { break-inside:avoid; page-break-inside:avoid; }
+      .zbc-cta { background:#fff; color:#0a0a0f; border:1px solid #e7e9ee; }
+      .zbc-cta p { color:#42474f; }
+      .zbc-cta-status { color:#16a34a; }
+      a { color:#0057ff !important; text-decoration:none; }
+    }
+  </style>
 </BaseLayout>
