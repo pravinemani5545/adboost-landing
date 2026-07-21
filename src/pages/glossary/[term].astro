@@ -35,6 +35,7 @@ const jsonLd = [
       <div class="doc-grid">
         <div class="doc-main">
           <div class="prose">
+            <h2 style="font-size:20px;margin:0 0 12px">What is {t.term.replace(/\s*\(.*\)/, '')}?</h2>
             <div class="answer-box reveal"><span class="al">Definition</span>{t.definition}</div>
             {t.formula && <div class="callout reveal"><span class="cl-label">Formula</span><code style="font-size:15px">{t.formula}</code></div>}
             {t.body && <p class="reveal" set:html={t.body} />}

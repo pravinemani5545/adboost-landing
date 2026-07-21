@@ -53,7 +53,13 @@ export function serviceNode(base: string, opts: { name: string; description: str
     description: opts.description,
     url: `${base}${opts.path}`,
     serviceType: opts.name,
-    provider: { '@id': ORG_ID(base) },
+    provider: {
+      '@id': ORG_ID(base),
+      '@type': 'Organization',
+      name: 'AdBoost Health',
+      url: `${base}/`,
+      logo: { '@type': 'ImageObject', url: `${base}/logos/adboost-mark.png` },
+    },
     areaServed: opts.area ?? 'US',
     audience: { '@type': 'Audience', audienceType: 'Health, telehealth, supplement and wellness brands' },
   };
