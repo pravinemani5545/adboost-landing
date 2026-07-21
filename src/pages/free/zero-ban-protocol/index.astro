@@ -10,15 +10,30 @@ const steps = [
   { code: '04', name: 'Scale', desc: 'Earning the right to run aggressive angles without torching your account history.' },
 ];
 ---
-<LeadLayout {title} {description} canonicalPath="/free/zero-ban-protocol/" theme="dark">
+<LeadLayout {title} {description} canonicalPath="/free/zero-ban-protocol/">
   <section class="zbp">
     <div class="zbp-glow" aria-hidden="true"></div>
     <div class="container zbp-grid">
       <div class="zbp-left">
-        <span class="zbp-eyebrow">FREE PROTOCOL · PEPTIDE &amp; GLP-1 META ADS</span>
+        <span class="zbp-eyebrow"><span class="zbp-dot"></span>FREE PROTOCOL · PEPTIDE &amp; GLP-1 META ADS</span>
         <h1 class="zbp-h1">The exact compliance protocol behind <span class="zbp-num">$50K/mo</span> in peptide &amp; GLP-1 Meta ads &mdash; with <em>zero bans</em>.</h1>
         <p class="zbp-sub">The <strong>Zero-Ban Protocol</strong> we run on every peptide and GLP-1 account before we spend a dollar. Run it against your own account before your next launch, so you stop learning where Meta&rsquo;s lines are the expensive way &mdash; by crossing them.</p>
 
+        <div class="zbp-inside-label">The 5 checkpoints you run before launch</div>
+        <ol class="zbp-steps">
+          {steps.map((s) => (
+            <li class="zbp-step">
+              <span class="zbp-step-code">{s.code}</span>
+              <div class="zbp-step-body">
+                <span class="zbp-step-name">{s.name}</span>
+                <span class="zbp-step-desc">{s.desc}</span>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="zbp-right">
         <div class="zbp-status" role="img" aria-label="Ad account status moves from restricted to cleared">
           <div class="zst-top"><span class="zst-live"></span>META ADS MANAGER · ACCOUNT STATUS</div>
           <div class="zst-row">
@@ -31,9 +46,7 @@ const steps = [
             <span class="zst-desc">Clean record · cleared to scale</span>
           </div>
         </div>
-      </div>
 
-      <div class="zbp-right">
         <div class="zbp-card">
           <div id="formState">
             <div class="zbp-card-head">Get the protocol</div>
@@ -57,108 +70,80 @@ const steps = [
         </div>
       </div>
     </div>
-
-    <div class="container zbp-inside">
-      <div class="zbp-inside-label">What&rsquo;s inside — the 5 checkpoints you run before launch</div>
-      <ol class="zbp-steps">
-        {steps.map((s) => (
-          <li class="zbp-step">
-            <span class="zbp-step-code">{s.code}</span>
-            <div class="zbp-step-body">
-              <span class="zbp-step-name">{s.name}</span>
-              <span class="zbp-step-desc">{s.desc}</span>
-            </div>
-          </li>
-        ))}
-      </ol>
-    </div>
   </section>
 
   <style>
     .zbp {
-      --z-bg: #08090c; --z-surface: #0e1017; --z-surface-2: #14171f;
-      --z-ink: #f4f6fa; --z-mute: rgba(244,246,250,.58); --z-faint: rgba(244,246,250,.10);
-      --z-line: rgba(244,246,250,.08); --z-blue: #3b74ff; --z-cleared: #37c67c; --z-restricted: #ff7a4d;
-      position: relative; background: var(--z-bg); color: var(--z-ink); overflow: hidden; padding-top: 44px;
+      --z-ink:#0a0a0f; --z-ink2:#42474f; --z-mute:#8a9099; --z-line:#e7e9ee; --z-faint:#eef0f4;
+      --z-surface:#f7f8fa; --z-blue:#0057ff; --z-cleared:#16a34a; --z-restricted:#ff6b3d;
+      position: relative; background: #fff; color: var(--z-ink); overflow: hidden;
+      padding: 100px 0 8px;  /* clears the fixed 68px nav — matches .phero */
     }
     .zbp-glow { position: absolute; inset: 0; pointer-events: none;
-      background:
-        radial-gradient(60% 42% at 22% 8%, rgba(59,116,255,.16), transparent 70%),
-        radial-gradient(46% 40% at 92% 60%, rgba(55,198,124,.08), transparent 72%);
-    }
-    .zbp-grid { position: relative; display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: start; }
+      background: radial-gradient(52% 40% at 20% 2%, rgba(0,87,255,.07), transparent 66%),
+                  radial-gradient(40% 36% at 96% 46%, rgba(22,163,74,.045), transparent 72%); }
+    .zbp-grid { position: relative; display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: start; }
 
-    .zbp-eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11.5px; letter-spacing: .12em; color: var(--z-mute); display: inline-block; }
-    .zbp-h1 { font-size: clamp(32px, 4.9vw, 53px); line-height: 1.04; letter-spacing: -.032em; font-weight: 600; margin: 18px 0 20px; }
-    .zbp-h1 em { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing: 0; }
-    .zbp-num { font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 500; font-size: .82em; letter-spacing: -.01em;
-      background: linear-gradient(180deg, rgba(59,116,255,.18), rgba(59,116,255,.06)); border: 1px solid rgba(59,116,255,.28);
-      border-radius: 8px; padding: .04em .3em; }
-    .zbp-sub { font-size: 16.5px; line-height: 1.62; color: var(--z-mute); max-width: 46ch; margin: 0 0 26px; }
+    .zbp-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family:'Geist Mono',ui-monospace,monospace; font-size: 11.5px; letter-spacing: .1em; color: var(--z-blue); }
+    .zbp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--z-blue); }
+    .zbp-h1 { font-size: clamp(31px, 4.6vw, 50px); line-height: 1.06; letter-spacing: -.032em; font-weight: 600; margin: 16px 0 18px; text-wrap: balance; }
+    .zbp-h1 em { font-family:'Instrument Serif',Georgia,serif; font-style: italic; font-weight: 400; letter-spacing: 0; color: var(--z-blue); }
+    .zbp-num { font-family:'Geist Mono',ui-monospace,monospace; font-weight: 500; font-size: .8em; letter-spacing: -.01em; color: var(--z-blue);
+      background: rgba(0,87,255,.07); border: 1px solid rgba(0,87,255,.2); border-radius: 8px; padding: .04em .3em; }
+    .zbp-sub { font-size: 16.5px; line-height: 1.62; color: var(--z-ink2); max-width: 47ch; margin: 0 0 28px; }
     .zbp-sub strong { color: var(--z-ink); font-weight: 600; }
 
+    .zbp-inside-label { font-family:'Geist Mono',ui-monospace,monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--z-mute); padding-top: 22px; border-top: 1px solid var(--z-line); margin-bottom: 16px; }
+    .zbp-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+    .zbp-step { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: baseline; }
+    .zbp-step-code { font-family:'Geist Mono',ui-monospace,monospace; font-size: 13px; font-weight: 500; color: var(--z-blue); }
+    .zbp-step-name { display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 3px; }
+    .zbp-step-desc { display: block; font-size: 13px; line-height: 1.5; color: var(--z-mute); }
+
     /* signature: account status card */
-    .zbp-status { background: var(--z-surface); border: 1px solid var(--z-line); border-radius: 14px; padding: 16px 18px; max-width: 400px;
-      box-shadow: 0 24px 60px -30px rgba(0,0,0,.8); }
-    .zst-top { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .08em; color: var(--z-mute);
-      display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid var(--z-line); }
-    .zst-live { width: 7px; height: 7px; border-radius: 50%; background: var(--z-cleared); box-shadow: 0 0 0 3px rgba(55,198,124,.16); animation: zpulse 2.4s ease-in-out infinite; }
-    .zst-row { display: flex; align-items: center; gap: 12px; padding: 12px 0 4px; }
-    .zst-pill { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .05em; padding: 5px 10px; border-radius: 7px; white-space: nowrap; }
-    .zst-pill.restricted { color: var(--z-restricted); background: rgba(255,122,77,.12); border: 1px solid rgba(255,122,77,.26); }
-    .zst-pill.cleared { color: var(--z-cleared); background: rgba(55,198,124,.13); border: 1px solid rgba(55,198,124,.30); }
+    .zbp-right { position: sticky; top: 20px; display: grid; gap: 16px; }
+    .zbp-status { background: var(--z-surface); border: 1px solid var(--z-line); border-radius: 14px; padding: 15px 17px; }
+    .zst-top { font-family:'Geist Mono',ui-monospace,monospace; font-size: 10.5px; letter-spacing: .07em; color: var(--z-mute); display: flex; align-items: center; gap: 8px; padding-bottom: 11px; border-bottom: 1px solid var(--z-line); }
+    .zst-live { width: 7px; height: 7px; border-radius: 50%; background: var(--z-cleared); box-shadow: 0 0 0 3px rgba(22,163,74,.14); animation: zpulse 2.4s ease-in-out infinite; }
+    .zst-row { display: flex; align-items: center; gap: 12px; padding: 11px 0 3px; }
+    .zst-pill { font-family:'Geist Mono',ui-monospace,monospace; font-size: 11px; letter-spacing: .04em; padding: 5px 10px; border-radius: 7px; white-space: nowrap; }
+    .zst-pill.restricted { color: var(--z-restricted); background: rgba(255,107,61,.1); border: 1px solid rgba(255,107,61,.24); }
+    .zst-pill.cleared { color: var(--z-cleared); background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.26); }
     .zst-desc { font-size: 13px; color: var(--z-mute); }
     .zst-row.after .zst-desc { color: var(--z-ink); }
-    .zst-connector { position: relative; height: 22px; margin-left: 12px; border-left: 1px dashed var(--z-faint); }
-    .zst-connector span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-family: 'Geist Mono', ui-monospace, monospace; font-size: 9.5px; letter-spacing: .09em; color: rgba(244,246,250,.34); text-transform: uppercase; }
+    .zst-connector { position: relative; height: 20px; margin-left: 12px; border-left: 1px dashed var(--z-faint); }
+    .zst-connector span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-family:'Geist Mono',ui-monospace,monospace; font-size: 9.5px; letter-spacing: .08em; color: var(--z-mute); text-transform: uppercase; }
 
     /* form card */
-    .zbp-right { position: sticky; top: 20px; }
-    .zbp-card { background: var(--z-surface); border: 1px solid var(--z-faint); border-radius: 16px; padding: 26px 26px 22px;
-      box-shadow: 0 40px 90px -40px rgba(0,0,0,.85); }
-    .zbp-card-head { font-size: 20px; font-weight: 600; letter-spacing: -.02em; }
-    .zbp-card-sub { color: var(--z-mute); font-size: 13.5px; line-height: 1.5; margin: 6px 0 18px; }
-    #leadForm label { display: block; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--z-mute); margin: 14px 0 7px; }
-    #leadForm input { width: 100%; padding: 12px 13px; border: 1px solid var(--z-faint); border-radius: 10px; font: inherit; font-size: 15px; color: var(--z-ink); background: var(--z-surface-2); outline: none; transition: border-color .15s, box-shadow .15s; }
-    #leadForm input::placeholder { color: rgba(244,246,250,.32); }
-    #leadForm input:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px rgba(59,116,255,.18); }
-    .zbp-btn { display: flex; width: 100%; justify-content: center; align-items: center; gap: 8px; margin-top: 20px;
+    .zbp-card { background: #fff; border: 1px solid var(--z-line); border-radius: 16px; padding: 24px 24px 20px; box-shadow: 0 30px 70px -46px rgba(10,10,15,.4); }
+    .zbp-card-head { font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
+    .zbp-card-sub { color: var(--z-mute); font-size: 13.5px; line-height: 1.5; margin: 6px 0 16px; }
+    #leadForm label { display: block; font-family:'Geist Mono',ui-monospace,monospace; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--z-mute); margin: 13px 0 6px; }
+    #leadForm input { width: 100%; padding: 12px 13px; border: 1px solid var(--z-line); border-radius: 10px; font: inherit; font-size: 15px; color: var(--z-ink); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s; }
+    #leadForm input::placeholder { color: #b3b8c0; }
+    #leadForm input:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px rgba(0,87,255,.13); }
+    .zbp-btn { display: flex; width: 100%; justify-content: center; align-items: center; gap: 8px; margin-top: 18px;
       background: var(--z-blue); color: #fff; border: 0; border-radius: 11px; padding: 13px 18px; font: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none; transition: transform .12s, box-shadow .2s, background .15s; box-shadow: 0 12px 30px -12px rgba(59,116,255,.7); }
-    .zbp-btn:hover { background: #4d80ff; transform: translateY(-1px); box-shadow: 0 16px 36px -12px rgba(59,116,255,.8); }
+      cursor: pointer; text-decoration: none; transition: transform .12s, box-shadow .2s, background .15s; box-shadow: 0 12px 26px -14px rgba(0,87,255,.6); }
+    .zbp-btn:hover { background: #1a6bff; transform: translateY(-1px); box-shadow: 0 16px 32px -14px rgba(0,87,255,.7); }
     .zbp-btn:active { transform: translateY(0); }
     .zbp-err { color: var(--z-restricted); font-size: 13px; margin: 10px 0 0; }
-    .zbp-trust { color: rgba(244,246,250,.4); font-size: 11.5px; margin: 14px 0 0; text-align: center; line-height: 1.5; }
-    .zbp-check { width: 44px; height: 44px; border-radius: 50%; background: rgba(55,198,124,.14); border: 1px solid rgba(55,198,124,.4); color: var(--z-cleared); font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
-
-    /* what's inside */
-    .zbp-inside { position: relative; margin-top: 54px; padding-top: 30px; border-top: 1px solid var(--z-line); }
-    .zbp-inside-label { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--z-mute); margin-bottom: 22px; }
-    .zbp-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; }
-    .zbp-step { display: flex; flex-direction: column; gap: 10px; padding: 0 20px 0 0; border-right: 1px solid var(--z-line); }
-    .zbp-step:last-child { border-right: 0; padding-right: 0; }
-    .zbp-step-code { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; font-weight: 500; color: var(--z-blue); letter-spacing: .02em; }
-    .zbp-step-name { display: block; font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 5px; }
-    .zbp-step-desc { display: block; font-size: 12.5px; line-height: 1.5; color: var(--z-mute); }
+    .zbp-trust { color: var(--z-mute); font-size: 11.5px; margin: 14px 0 0; text-align: center; line-height: 1.5; }
+    .zbp-check { width: 44px; height: 44px; border-radius: 50%; background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.3); color: var(--z-cleared); font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 
     /* motion */
-    @keyframes zpulse { 0%,100% { box-shadow: 0 0 0 3px rgba(55,198,124,.16); } 50% { box-shadow: 0 0 0 5px rgba(55,198,124,.05); } }
+    @keyframes zpulse { 0%,100% { box-shadow: 0 0 0 3px rgba(22,163,74,.14); } 50% { box-shadow: 0 0 0 5px rgba(22,163,74,.04); } }
     @keyframes zrise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-    .zbp-left > *, .zbp-right, .zbp-inside > * { animation: zrise .6s cubic-bezier(.2,.7,.2,1) both; }
-    .zbp-h1 { animation-delay: .04s; } .zbp-sub { animation-delay: .1s; } .zbp-status { animation-delay: .16s; }
-    .zbp-right { animation-delay: .12s; } .zbp-steps { animation-delay: .06s; }
+    .zbp-left > *, .zbp-right { animation: zrise .55s cubic-bezier(.2,.7,.2,1) both; }
+    .zbp-h1 { animation-delay: .04s; } .zbp-sub { animation-delay: .09s; } .zbp-inside-label, .zbp-steps { animation-delay: .13s; }
+    .zbp-right { animation-delay: .11s; }
 
     @media (max-width: 900px) {
-      .zbp-grid { grid-template-columns: 1fr; gap: 34px; }
+      .zbp { padding-top: 92px; }
+      .zbp-grid { grid-template-columns: 1fr; gap: 30px; }
       .zbp-right { position: static; }
-      .zbp-steps { grid-template-columns: 1fr; gap: 0; }
-      .zbp-step { flex-direction: row; align-items: baseline; gap: 14px; border-right: 0; border-bottom: 1px solid var(--z-line); padding: 14px 0; }
-      .zbp-step:last-child { border-bottom: 0; }
-      .zbp-step-code { width: 22px; flex: none; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .zbp-left > *, .zbp-right, .zbp-inside > *, .zst-live { animation: none; }
-    }
+    @media (prefers-reduced-motion: reduce) { .zbp-left > *, .zbp-right, .zst-live { animation: none; } }
   </style>
 
   <script is:inline>
