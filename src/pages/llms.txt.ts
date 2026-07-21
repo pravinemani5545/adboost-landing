@@ -34,6 +34,8 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 - [CAC calculator](${base}/tools/cac-calculator/): Calculate customer acquisition cost vs vertical benchmarks
 - [LTV:CAC calculator](${base}/tools/ltv-cac-calculator/): Unit economics, ratio, and payback period
 - [Ad budget calculator](${base}/tools/ad-budget-calculator/): Budget needed to hit a customer target
+- [MER calculator](${base}/tools/mer-calculator/): Marketing efficiency ratio, total revenue over total marketing spend
+- [POAS calculator](${base}/tools/poas-calculator/): Profit on ad spend, ROAS after margin
 
 ## Guides & reference
 
