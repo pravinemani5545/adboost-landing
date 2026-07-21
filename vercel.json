@@ -52,12 +52,12 @@
   ],
   "redirects": [
     {
-      "source": "/protocol",
+      "source": "/protocol/",
       "destination": "/free/zero-ban-protocol/",
       "permanent": false
     },
     {
-      "source": "/zero-ban-protocol",
+      "source": "/zero-ban-protocol/",
       "destination": "/free/zero-ban-protocol/",
       "permanent": false
     },
