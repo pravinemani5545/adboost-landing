@@ -1,0 +1,36 @@
+name: IndexNow on deploy
+
+# On every push to main that changes site content, wait for Vercel to deploy,
+# then push the current sitemap URLs to IndexNow (Bing, Yandex, Copilot,
+# DuckDuckGo) for instant re-crawl. Complements the scheduled Friday ping in
+# friday-publish.yml. Uses the same IndexNow key file served at the site root.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'astro.config.mjs'
+  workflow_dispatch:
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel deploy to propagate
+        run: sleep 180
+
+      - name: Submit sitemap URLs to IndexNow
+        run: |
+          KEY=70b8bdc92dc75dde445e7495e95258f2
+          HOST=www.adboost.health
+          URLS=$(curl -sf "https://$HOST/sitemap-0.xml" \
+            | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g' \
+            | jq -R . | jq -sc .)
+          COUNT=$(echo "$URLS" | jq 'length')
+          echo "Submitting $COUNT URLs to IndexNow"
+          BODY=$(jq -nc --arg host "$HOST" --arg key "$KEY" --argjson urls "$URLS" \
+            '{host:$host, key:$key, keyLocation:("https://\($host)/\($key).txt"), urlList:$urls}')
+          curl -sf -X POST 'https://api.indexnow.org/indexnow' \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d "$BODY" -w '\nHTTP %{http_code}\n' || echo "IndexNow ping failed (non-fatal)"
