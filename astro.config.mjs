@@ -40,6 +40,8 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [
     sitemap({
+      // Keep gated lead-magnet opt-in/asset pages out of the sitemap (they're noindex).
+      filter: (page) => !page.includes('/free/'),
       serialize(item) {
         const m = item.url.match(/\/blog\/([^/]+)\/$/);
         if (m && postDates[m[1]]) return { ...item, lastmod: postDates[m[1]] };

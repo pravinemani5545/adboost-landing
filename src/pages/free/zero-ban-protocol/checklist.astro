@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CtaBand from '../../../components/CtaBand.astro';
+import { siteBase } from '../../../lib/site';
+import { breadcrumb } from '../../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const path = '/free/zero-ban-protocol/checklist/';
+const title = 'The Zero-Ban Protocol Checklist | AdBoost Health';
+const description = 'The 4-part compliance framework we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
+const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call';
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} noindex={true}>
+  <section class="phero">
+    <div class="container i-narrow" style="margin-inline:auto">
+      <span class="eyebrow sec-eyebrow" style="display:block"><span class="dot"></span>THE ZERO-BAN PROTOCOL</span>
+      <h1 style="margin-top:12px">The 4-part compliance framework behind $50K/month in peptide &amp; GLP-1 Meta ad spend — with zero bans</h1>
+      <p class="phero-lede">Run this checklist against your own account before your next launch. It's the exact protocol we run on every peptide and GLP-1 account before we spend a dollar. Print it, work top to bottom, and don't skip the foundation.</p>
+    </div>
+  </section>
+
+  <section class="iwrap-sm">
+    <div class="container i-narrow" style="margin-inline:auto">
+      <div class="prose">
+        <div class="answer-box reveal"><span class="al">Why bans happen</span>Bans aren't random. Meta is a social platform, and its whole job is keeping people on it and feeling good while they're there. Every rejection you'll ever get traces back to something that threatened that experience. Get that frame and the rest of this protocol makes sense.</div>
+
+        <h2 id="lane">Foundation — Know your lane</h2>
+        <p>Two completely different compliance lanes exist, and brands constantly run one while set up like the other. Figure out your lane before you build anything; everything below assumes you got this right.</p>
+        <ul class="checks">
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Lane A — research-use-only peptides.</strong> No prescription involved, no LegitScript certification required.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Lane B — prescription / telehealth.</strong> GLP-1, ED, hair loss — anything dispensed against a script. <a href="/glossary/legitscript-certification/">LegitScript certification</a> is required by Meta, full stop. Meta doesn't verify you itself; it defers to the certifier.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Confirm you are <strong>not in the dangerous middle</strong>: advertising pure peptides for human use with no legitimate prescription pathway. That's the highest-risk lane and where most catastrophic bans happen.</li>
+        </ul>
+
+        <h2 id="warm">Part 1 — Warm the account before you sell it anything</h2>
+        <p>Do not launch a cold account, a new card, or a fresh business manager straight into a conversion campaign. You're not buying results in week one — you're buying a clean record.</p>
+        <ul class="checks">
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Run a <strong>preliminary awareness campaign for 3–7 days</strong> at a low daily budget.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Confirm the <strong>card processes</strong> and the account can spend (billing gets genuinely funky on new accounts in this vertical — discover that on a low-budget test, not on a scale push).</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Get <strong>ad approvals on record</strong> — a clean history, baseline data, and rapport with the platform before you ask it for anything expensive.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Only graduate to a conversion campaign once you see <strong>clean approvals, no rejections, no payment flags</strong>.</li>
+        </ul>
+        <div class="callout reveal"><span class="cl-label">Sticky line</span>You're not buying results in week one. You're buying a clean record.</div>
+
+        <h2 id="copy">Part 2 — Write copy that doesn't trip review</h2>
+        <p>The headline and primary text are the most-scanned surface on your ad. Treat them as the most conservative part of the whole campaign.</p>
+        <div class="callout warn"><span class="cl-label">Copy kill-list</span>
+          <ul style="margin:8px 0 0;padding-left:18px;line-height:1.7">
+            <li>No scientific or clinical terminology in headlines and primary text.</li>
+            <li>Don't name the compound. Early on, avoid the word "peptide" in captions entirely.</li>
+            <li>Don't imply human usage or promise physiological outcomes — the line most people cross without realising it.</li>
+            <li>No harsh claims and nothing that makes the reader feel bad about themselves (shaming ads threaten the user experience, so Meta kills them).</li>
+          </ul>
+        </div>
+        <p><strong>The escalation principle:</strong> start conservative, earn approvals, then get more aggressive. Conservative copy on a cold account isn't being timid — it's how you buy permission to be aggressive later. Lead with brand-level, lifestyle, benefit-adjacent language.</p>
+
+        <h2 id="creative">Part 3 — Creative that passes review</h2>
+        <p>The review system looks at your creative just as hard as your copy — and this is where health brands get banned fastest.</p>
+        <ul class="checks">
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>No before-and-after images. Ever.</strong> The imagery is often near-explicit, and it makes viewers feel bad about their bodies — straight back to the frame.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>GLP-1 specifically: no brand names on product images or vials.</strong> Unbranded product only.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Sell the transformation without showing a transformation.</strong> Show the change with objects, props, and symbolic before-and-afters — nothing about the human body, everything about the idea of change.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Same escalation principle as copy: <strong>conservative creative first, aggressive later</strong>, once the account has approvals behind it.</li>
+        </ul>
+
+        <h2 id="escalate">Part 4 — Earn the right to run aggressive</h2>
+        <p>Everything up to now has been buying permission. This is spending it — but carefully.</p>
+        <ul class="checks">
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Only once the account has <strong>consistent approvals and real spend history</strong>, start testing the more aggressive angles that actually convert.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><strong>Test aggressive angles one at a time.</strong> Push five at once and something gets flagged — you've learned nothing and spent your account's credibility.</li>
+          <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Remember what the real asset is: <strong>account history, not your creative library.</strong> Every clean approval makes the next aggressive test survivable. A ban doesn't restart you at zero — it restarts you below zero.</li>
+        </ul>
+
+        <div class="aside-card dark" style="margin-top:36px">
+          <h4 style="color:#fff">Want us to just run this for you?</h4>
+          <p>We manage peptide and GLP-1 accounts spending $10K/month and up — compliance, creative, attribution, and scale. Book a free strategy call and we'll pressure-test your account against this exact protocol.</p>
+          <a class="btn btn-primary" href={CAL} target="_blank" rel="noopener">Book a strategy call →</a>
+        </div>
+
+        <p style="color:var(--mute);font-size:13px;margin-top:24px">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta's current advertising standards and your own compliance counsel before launch.</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Ready to scale without the ban risk?" />
+</BaseLayout>

@@ -52,6 +52,16 @@
   ],
   "redirects": [
     {
+      "source": "/protocol",
+      "destination": "/free/zero-ban-protocol/",
+      "permanent": false
+    },
+    {
+      "source": "/zero-ban-protocol",
+      "destination": "/free/zero-ban-protocol/",
+      "permanent": false
+    },
+    {
       "source": "/case-studies",
       "destination": "/industries/",
       "permanent": false

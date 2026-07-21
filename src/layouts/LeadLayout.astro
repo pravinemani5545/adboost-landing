@@ -1,0 +1,58 @@
+---
+// Minimal, distraction-free layout for lead-magnet opt-in pages.
+// No nav/footer chrome (maximizes conversion); always noindex.
+import '../styles/global.css';
+import '../styles/interior.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath: string;
+}
+const { title, description, canonicalPath } = Astro.props;
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="canonical" href={`${site}${canonicalPath}`} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={`${site}/og/og-home.png`} />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script defer src="https://admin.adboost.health/t.js"></script>
+</head>
+<body>
+<header class="lead-top">
+  <div class="container">
+    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span></a>
+  </div>
+</header>
+<main class="lead-main">
+  <slot />
+</main>
+<footer class="lead-foot">
+  <div class="container">
+    <span>© 2026 AdBoost Health · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+  </div>
+</footer>
+
+<style is:global>
+  .lead-top { padding: 22px 0; border-bottom: 1px solid var(--line, #eceef3); }
+  .lead-main { padding: 40px 0 72px; }
+  .lead-foot { padding: 28px 0; border-top: 1px solid var(--line, #eceef3); color: var(--mute); font-size: 13px; }
+  .lead-foot a { color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
+</style>
+</body>
+</html>

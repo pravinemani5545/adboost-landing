@@ -9,9 +9,10 @@ interface Props {
   canonicalPath: string;      // e.g. "/industries/telehealth/"
   ogImage?: string;           // absolute path from root, e.g. "/og/og-home.png"
   ogType?: string;
+  noindex?: boolean;          // gated/conversion pages (e.g. lead magnets)
   jsonLd?: unknown;           // object or array of schema.org nodes
 }
-const { title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd } = Astro.props;
+const { title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd, noindex = false } = Astro.props;
 const SITE = siteBase(Astro.site);
 const canonical = `${SITE}${canonicalPath}`;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${SITE}${ogImage}`;
@@ -25,6 +26,7 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>{title}</title>
 <meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
 <meta name="theme-color" content="#ffffff" />
 <meta property="og:type" content={ogType} />
 <meta property="og:title" content={title} />
