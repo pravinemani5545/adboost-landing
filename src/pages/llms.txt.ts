@@ -38,7 +38,6 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 ## Guides & reference
 
 - [Health & performance marketing glossary](${base}/glossary/): CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims - with health examples
-- [Case studies](${base}/case-studies/): Real health-brand results, with methodology and metrics
 - [Compare](${base}/compare/): AdBoost Health vs. full-service agencies, in-house teams, and generalist DTC shops
 - [FAQ](${base}/faq/): Answers on pricing, engagement, compliance, and how we work
 - [About](${base}/about/): The health-only growth agency, team, and approach

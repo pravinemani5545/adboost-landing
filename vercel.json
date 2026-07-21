@@ -43,6 +43,16 @@
   ],
   "redirects": [
     {
+      "source": "/case-studies",
+      "destination": "/industries/",
+      "permanent": false
+    },
+    {
+      "source": "/case-studies/:path(.*)",
+      "destination": "/industries/",
+      "permanent": false
+    },
+    {
       "source": "/services/compliance",
       "destination": "/services/",
       "permanent": false

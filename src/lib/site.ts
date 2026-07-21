@@ -43,7 +43,6 @@ export const NAV = [
     children: [
       { label: 'Free tools', href: '/tools/' },
       { label: 'Glossary', href: '/glossary/' },
-      { label: 'Case studies', href: '/case-studies/' },
       { label: 'Compare', href: '/compare/' },
       { label: 'FAQ', href: '/faq/' },
       { label: 'Blog', href: '/blog/' },
