@@ -1,8 +1,8 @@
-# adboost.health — all crawlers welcome
+# adboost.health: all crawlers welcome
 User-agent: *
 Allow: /
 
-# AI / LLM crawlers (GEO) — explicitly allowed
+# AI / LLM crawlers (GEO): explicitly allowed
 User-agent: GPTBot
 Allow: /
 
