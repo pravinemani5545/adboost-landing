@@ -1,13 +1,13 @@
 ---
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { siteBase } from '../../../lib/site';
-import { breadcrumb } from '../../../lib/schema';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
-const path = '/free/zero-ban-protocol/checklist/';
+const path = '/zero-ban-protocol/checklist/';
 const title = 'The Zero-Ban Protocol Checklist | AdBoost Health';
 const description = 'The compliance protocol we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
-const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call';
+const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call?utm_source=lead-magnet&utm_medium=checklist&utm_campaign=zero-ban-protocol';
 const PDF = '/downloads/zero-ban-protocol.pdf';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
@@ -78,6 +78,19 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
               <li>No harsh claims and nothing that makes the reader feel bad about themselves &mdash; shaming ads threaten the user experience, so Meta kills them.</li>
             </ul>
             <p><strong>The escalation principle:</strong> conservative copy on a cold account isn&rsquo;t timid &mdash; it&rsquo;s how you buy permission to be aggressive later. Lead with brand-level, lifestyle, benefit-adjacent language.</p>
+
+            <div class="zbc-teardown reveal">
+              <div class="zbc-td-col rejected">
+                <span class="zbc-td-tag">&#10005; REJECTED</span>
+                <p class="zbc-td-ad">&ldquo;Our clinical-grade semaglutide peptide helps you lose up to 20 lbs in your first month &mdash; no diet, no gym.&rdquo;</p>
+                <p class="zbc-td-why"><strong>Why it died:</strong> names the compound, leans on clinical terminology, and promises a physiological outcome with a number &mdash; three review triggers stacked into one line, on an account with no history to defend it.</p>
+              </div>
+              <div class="zbc-td-col compliant">
+                <span class="zbc-td-tag">&#10003; COMPLIANT</span>
+                <p class="zbc-td-ad">&ldquo;Ready to feel like yourself again? Here&rsquo;s the approach our clients are using to get there &mdash; without the guesswork.&rdquo;</p>
+                <p class="zbc-td-why"><strong>Why it runs:</strong> benefit-adjacent, no compound named, no outcome promised, nothing that shames the reader. It sells the shift, not the substance.</p>
+              </div>
+            </div>
           </div>
         </li>
 
@@ -95,6 +108,19 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
               <li><strong>Sell the transformation without showing a transformation.</strong> Show the change with objects, props, and symbolic before-and-afters &mdash; nothing about the human body, everything about the idea of change.</li>
               <li>Same escalation principle as copy: <strong>conservative creative first, aggressive later</strong>, once the account has approvals behind it.</li>
             </ul>
+
+            <div class="zbc-teardown reveal">
+              <div class="zbc-td-col rejected">
+                <span class="zbc-td-tag">&#10005; REJECTED</span>
+                <p class="zbc-td-ad">Split-screen before-and-after of a woman&rsquo;s midsection, with a vial labelled &ldquo;Semaglutide&rdquo; in the corner.</p>
+                <p class="zbc-td-why"><strong>Why it died:</strong> before-and-after body imagery is the single fastest ban in this vertical &mdash; and the branded compound on the vial is a second trigger on the same asset.</p>
+              </div>
+              <div class="zbc-td-col compliant">
+                <span class="zbc-td-tag">&#10003; COMPLIANT</span>
+                <p class="zbc-td-ad">One clean lifestyle frame &mdash; a pair of jeans that finally button, or an unbranded pen-style applicator on a bright kitchen counter.</p>
+                <p class="zbc-td-why"><strong>Why it runs:</strong> the transformation is implied through objects, not bodies, and the product is unbranded. It passes review and still sells the outcome.</p>
+              </div>
+            </div>
           </div>
         </li>
 
@@ -112,6 +138,18 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
           </div>
         </li>
       </ol>
+
+      <div class="zbc-recap reveal">
+        <span class="zbc-recap-label">The 6 triggers that kill health ads fastest</span>
+        <ol>
+          <li><strong>Before-and-after imagery.</strong> The single fastest ban. <span>Creative</span></li>
+          <li><strong>Naming the compound</strong> &mdash; &ldquo;peptide,&rdquo; &ldquo;semaglutide,&rdquo; or a brand on a vial. <span>Copy &middot; Creative</span></li>
+          <li><strong>Promising a physiological outcome</strong> &mdash; &ldquo;lose X lbs,&rdquo; &ldquo;boost testosterone.&rdquo; <span>Copy</span></li>
+          <li><strong>Clinical or scientific terminology</strong> in headlines and primary text. <span>Copy</span></li>
+          <li><strong>Shaming or insecurity-baiting</strong> &mdash; anything that makes the reader feel bad. <span>Copy &middot; Creative</span></li>
+          <li><strong>Going aggressive on a cold account</strong> with no history to spend. <span>Warm-up &middot; Scale</span></li>
+        </ol>
+      </div>
 
       <div class="zbc-cta">
         <div>
@@ -177,6 +215,26 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
     .zbc-dont li::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:5px; background:rgba(255,107,61,.12);
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23ff6b3d' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
 
+    /* worked teardown: rejected → compliant */
+    .zbc-teardown { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:18px 0 4px; }
+    .zbc-td-col { border:1px solid var(--z-line); border-radius:12px; padding:15px 16px; }
+    .zbc-td-col.rejected { background:rgba(255,107,61,.05); border-color:rgba(255,107,61,.22); }
+    .zbc-td-col.compliant { background:rgba(22,163,74,.05); border-color:rgba(22,163,74,.24); }
+    .zbc-td-tag { display:inline-block; font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.06em; font-weight:500; padding:3px 8px; border-radius:6px; margin-bottom:11px; }
+    .zbc-td-col.rejected .zbc-td-tag { color:var(--z-dont); background:rgba(255,107,61,.12); }
+    .zbc-td-col.compliant .zbc-td-tag { color:var(--z-do); background:rgba(22,163,74,.12); }
+    .zbc-td-ad { font-size:14.5px; line-height:1.5; color:var(--z-ink); font-style:italic; margin:0 0 10px; }
+    .zbc-td-why { font-size:12.5px; line-height:1.55; color:var(--z-ink2); margin:0; }
+    .zbc-td-why strong { color:var(--z-ink); font-weight:600; font-style:normal; }
+
+    /* rejection-trigger recap */
+    .zbc-recap { background:var(--z-surface); border:1px solid var(--z-line); border-radius:14px; padding:20px 22px; margin:32px 0 12px; }
+    .zbc-recap-label { display:block; font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--z-blue); margin-bottom:14px; }
+    .zbc-recap ol { margin:0; padding-left:22px; display:grid; gap:10px; }
+    .zbc-recap li { font-size:14.5px; line-height:1.5; color:var(--z-ink2); }
+    .zbc-recap li strong { color:var(--z-ink); font-weight:600; }
+    .zbc-recap li span { color:var(--z-mute); font-size:11.5px; font-family:'Geist Mono',ui-monospace,monospace; letter-spacing:.03em; }
+
     .zbc-cta { display:flex; flex-wrap:wrap; align-items:center; gap:18px; justify-content:space-between; background:var(--z-ink); color:#fff; border-radius:16px; padding:26px 28px; margin:34px 0 20px; }
     .zbc-cta-status { font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.08em; color:#37c67c; }
     .zbc-cta h3 { font-size:19px; letter-spacing:-.02em; margin:8px 0 6px; color:#fff; }
@@ -189,6 +247,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
       .zbc-cp { grid-template-columns:36px 1fr; gap:14px; }
       .zbc-code { width:34px; height:34px; border-radius:9px; font-size:13px; top:20px; }
       .zbc-cta { flex-direction:column; align-items:flex-start; }
+      .zbc-teardown { grid-template-columns:1fr; }
     }
 
     /* clean print / PDF */
@@ -196,7 +255,10 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
       .nav, nav, footer, .zbc-pdf, .zbc-cta-btn { display:none !important; }
       .zbc { padding:0; }
       .zbc-wrap { max-width:none; padding:0; }
-      .zbc-cp { break-inside:avoid; page-break-inside:avoid; }
+      .zbc-cp, .zbc-teardown, .zbc-recap { break-inside:avoid; page-break-inside:avoid; }
+      /* reveal elements must be visible in the printed/saved PDF */
+      .reveal { opacity:1 !important; transform:none !important; }
+      .zbc-td-col, .zbc-td-tag, .zbc-recap { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
       .zbc-cta { background:#fff; color:#0a0a0f; border:1px solid #e7e9ee; }
       .zbc-cta p { color:#42474f; }
       .zbc-cta-status { color:#16a34a; }
