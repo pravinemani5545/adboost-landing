@@ -87,7 +87,10 @@ const steps = [
       --z-ink:#0a0a0f; --z-ink2:#42474f; --z-mute:#8a9099; --z-line:#e7e9ee; --z-faint:#eef0f4;
       --z-surface:#f7f8fa; --z-blue:#0057ff; --z-cleared:#16a34a; --z-restricted:#ff6b3d;
       position: relative; background: #fff; color: var(--z-ink); overflow: hidden;
-      padding: 100px 0 8px;  /* clears the fixed 68px nav — matches .phero */
+      /* header isn't fixed in LeadLayout; auto margins center the hero so tall
+         monitors fill the viewport instead of floating the footer up */
+      padding: 52px 0;
+      margin-block: auto;
     }
     .zbp-glow { position: absolute; inset: 0; pointer-events: none;
       background: radial-gradient(52% 40% at 20% 2%, rgba(0,87,255,.07), transparent 66%),
@@ -171,7 +174,7 @@ const steps = [
     .zbp-step:nth-child(5) { animation-delay: .40s; }
 
     @media (max-width: 900px) {
-      .zbp { padding-top: 92px; }
+      .zbp { padding: 36px 0; }
       .zbp-grid { grid-template-columns: 1fr; gap: 30px; }
       .zbp-right { position: static; }
     }
