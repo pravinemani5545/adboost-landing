@@ -17,6 +17,15 @@ jobs:
         env:
           DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
 
+      - name: Wait for deploy, then ping IndexNow (Bing/Copilot ecosystem)
+        run: |
+          sleep 180
+          URLS=$(curl -s https://www.adboost.health/sitemap-0.xml | grep -oE 'https://[^<]+' | jq -R . | jq -s .)
+          curl -sf -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d "{\"host\":\"www.adboost.health\",\"key\":\"cb247c6494d120b1c8e28aad20f91e00\",\"keyLocation\":\"https://www.adboost.health/cb247c6494d120b1c8e28aad20f91e00.txt\",\"urlList\":$URLS}" \
+            && echo "IndexNow pinged" || echo "IndexNow ping failed (non-fatal)"
+
       - name: Wait for deploy to propagate
         run: sleep 180
 
