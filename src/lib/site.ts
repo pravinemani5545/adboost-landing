@@ -41,6 +41,7 @@ export const NAV = [
     label: 'Resources',
     href: '/tools/',
     children: [
+      { label: 'Ad compliance', href: '/advertising/' },
       { label: 'Free tools', href: '/tools/' },
       { label: 'Glossary', href: '/glossary/' },
       { label: 'Compare', href: '/compare/' },

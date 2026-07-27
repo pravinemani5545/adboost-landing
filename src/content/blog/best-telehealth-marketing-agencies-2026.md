@@ -26,7 +26,7 @@ The criteria that separate a real telehealth partner from a generalist:
 4. **A retention and cross-sell plan.** Telehealth economics only work because episodic care becomes subscription revenue - refill cadence, condition stacking, multi-condition cross-sell.
 5. **State-by-state awareness.** You can only treat patients where you have a licensed provider; campaigns and eligibility have to be geo-gated to your covered states.
 
-For the underlying numbers, see our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
+For the underlying numbers, see our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/) and the [telehealth growth playbook](/advertising/telehealth-on-google/).
 
 ## Telehealth marketing agencies worth knowing in 2026
 

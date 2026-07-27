@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getPublishedPosts } from '../lib/blog';
 import { GLOSSARY } from '../data/glossary';
+import { AD_POLICIES, STATUS_LABEL } from '../data/adPolicies';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -33,6 +34,19 @@ ${GLOSSARY.map(
 URL: ${base}/glossary/${t.slug}/
 
 ${t.definition}`
+).join('\n\n')}
+
+---
+
+# Ad compliance by platform and vertical
+URL: ${base}/advertising/
+
+${AD_POLICIES.map(
+  (p) => `## ${p.h1}
+URL: ${base}/advertising/${p.slug}/
+Status: ${STATUS_LABEL[p.status]}
+
+${p.answer}`
 ).join('\n\n')}
 `;
 

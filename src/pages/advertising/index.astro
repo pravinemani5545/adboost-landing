@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { AD_POLICIES, STATUS_LABEL } from '../../data/adPolicies';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'Health Ad Compliance by Platform & Vertical (2026) | AdBoost Health';
+const description = 'What’s allowed when advertising GLP-1, supplements, telehealth, TRT and med spa on Meta, Google, and TikTok - certification, prohibited claims, rejection triggers, and how to stay compliant.';
+const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
+// group by vertical for a clean matrix
+const verticals = [...new Map(AD_POLICIES.map((p) => [p.verticalSlug, { name: p.vertical, slug: p.verticalSlug }])).values()];
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }]),
+  { '@type': 'CollectionPage', name: 'Health ad compliance by platform and vertical', url: `${SITE}/advertising/` },
+];
+---
+<BaseLayout {title} {description} canonicalPath="/advertising/" {jsonLd} ogType="article">
+  <section class="phero wide">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>AD COMPLIANCE · 2026</span>
+      <h1>What’s allowed, by <span class="serif">platform</span> and vertical</h1>
+      <p class="phero-lede">Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Verify against live policy before launch.</p>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      {verticals.map((v) => (
+        <div style="margin-bottom:28px" class="reveal">
+          <h2 class="sec-title" style="font-size:20px">{v.name}</h2>
+          <div class="grid-cards three" style="margin-top:14px">
+            {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p) => (
+              <a class="lcard" href={`/advertising/${p.slug}/`}>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <span class="lc-tag">{p.platform.toUpperCase()}</span>
+                  <span class={`badge ${badgeClass(p.status)}`}>{STATUS_LABEL[p.status]}</span>
+                </div>
+                <h3 style="font-size:16px">{p.vertical} on {p.platform}</h3>
+                <p>{p.rejectionReasons[0]}.</p>
+                <span class="lc-more">Read the rules →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+      <div class="callout reveal" style="margin-top:8px">
+        <span class="cl-label">The bigger picture</span>
+        For the FTC/FDA standards underneath these platform rules - structure/function claims, LegitScript, compounded GLP-1, health-data privacy - see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
+      </div>
+    </div>
+  </section>
+
+  <CtaBand heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch - the single biggest thing generalist agencies get wrong in health." />
+</BaseLayout>

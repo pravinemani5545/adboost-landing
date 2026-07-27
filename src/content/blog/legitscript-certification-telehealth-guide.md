@@ -33,7 +33,7 @@ You need it if you advertise, in most markets:
 - **Addiction treatment** (a separate certification track)
 - **Many supplement and health services** on Meta, Google, and Microsoft
 
-You generally **don't** need it for pure education, brand awareness, or services that never touch prescribing - which is the main lever for brands that want to run Meta ads while their certification is in process. See how that plays out in our breakdown of [Meta's GLP-1 and health ad policies](/blog/glp1-meta-ad-policy-state-ag-2026/).
+You generally **don't** need it for pure education, brand awareness, or services that never touch prescribing - which is the main lever for brands that want to run Meta ads while their certification is in process. See how that plays out for [telehealth on Meta](/advertising/telehealth-on-meta/) and [telehealth on Google](/advertising/telehealth-on-google/).
 
 ## What does LegitScript certification cost, and how long does it take?
 
