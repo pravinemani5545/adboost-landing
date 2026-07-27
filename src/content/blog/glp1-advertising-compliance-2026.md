@@ -3,6 +3,7 @@ title: "GLP-1 Advertising in 2026: How to Run Compliant Meta & Google Ads Withou
 seoTitle: "GLP-1 Advertising Compliance in 2026 | AdBoost Health"
 description: "See what Meta and Google actually enforce on GLP-1 ads in 2026 - and the compliant creative system that scales without account bans."
 pubDate: 2026-05-06
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["GLP-1", "compliance", "Meta ads", "Google ads", "telehealth"]

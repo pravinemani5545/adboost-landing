@@ -32,6 +32,7 @@ const toc = [
   { id: 'prohibited', label: 'Prohibited claims' },
   { id: 'requirements', label: 'Disclaimers & requirements' },
   { id: 'rejections', label: 'Top rejection reasons' },
+  { id: 'enforcement', label: 'What enforcement looks like' },
   { id: 'comply', label: 'How to stay compliant' },
   { id: 'faq', label: 'FAQ' },
 ];
@@ -75,6 +76,9 @@ const toc = [
                 <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
               ))}
             </ul>
+
+            <h2 id="enforcement">What enforcement actually looks like</h2>
+            <p>{p.enforcement}</p>
 
             <h2 id="comply">How compliant brands still advertise</h2>
             <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span>{p.howToComply}</div>

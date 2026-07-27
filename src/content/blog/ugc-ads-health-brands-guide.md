@@ -5,6 +5,7 @@ description: "Get compliant UGC that converts: creator sourcing, claims-safe bri
 ctaHeading: "Is your UGC pipeline a risk?"
 ctaText: "Book a free 30-min call - we audit your creative pipeline and send a written plan, work together or not."
 pubDate: 2026-07-24
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["UGC", "creative strategy", "compliance", "health brands", "Meta ads"]

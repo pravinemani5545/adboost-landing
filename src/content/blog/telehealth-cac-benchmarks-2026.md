@@ -3,6 +3,7 @@ title: "Telehealth CAC Benchmarks: What Top Brands Actually Pay Per Patient in 2
 seoTitle: "Telehealth CAC Benchmarks 2026 | AdBoost Health"
 description: "Real telehealth CAC benchmarks by vertical and channel - see what top brands pay per patient in 2026 and the levers that actually cut CAC."
 pubDate: 2026-05-20
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["telehealth", "CAC", "benchmarks", "paid media", "unit economics"]

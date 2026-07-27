@@ -3,6 +3,7 @@ title: "Why Health & Supplement Ad Creative Gets Rejected - and the Creative Sys
 seoTitle: "Why Health Ad Creative Gets Rejected | AdBoost Health"
 description: "See why Meta and TikTok reject health ad creative - and the 20-variant-a-month system that passes review and converts."
 pubDate: 2026-06-03
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["ad creative", "Meta ads", "TikTok ads", "supplements", "creative strategy"]

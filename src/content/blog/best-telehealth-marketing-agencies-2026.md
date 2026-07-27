@@ -3,6 +3,7 @@ title: "The Best Telehealth Marketing Agencies (2026)"
 seoTitle: "Best Telehealth Marketing Agencies 2026 | AdBoost Health"
 description: "How to choose a telehealth marketing agency in 2026 - the criteria that matter, and the agencies doing compliant patient acquisition for DTC telehealth brands."
 pubDate: 2026-03-13
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder & CEO, AdBoost Health"
 tags: ["telehealth", "agency", "patient acquisition", "paid media", "compliance"]

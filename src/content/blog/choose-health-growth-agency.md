@@ -3,6 +3,7 @@ title: "How to Choose a Growth Agency for Your Health Brand: 9 Questions That Ex
 seoTitle: "How to Choose a Health Growth Agency | AdBoost Health"
 description: "Ask these 9 questions before hiring a health marketing agency - and learn what specialist answers sound like vs generic DTC shops."
 pubDate: 2026-07-01
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["agency selection", "health brands", "telehealth", "growth marketing"]

@@ -3,6 +3,7 @@ title: "The Supplement Brand's Playbook for Lowering CAC While Scaling Spend"
 seoTitle: "How Supplement Brands Lower CAC at Scale | AdBoost Health"
 description: "Get the supplement CAC playbook: offer architecture, creative velocity, and the scaling sequence that protects margin as spend grows."
 pubDate: 2026-06-17
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["supplements", "CAC", "scaling", "paid media", "DTC"]

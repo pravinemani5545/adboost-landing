@@ -5,6 +5,7 @@ description: "Fix a disabled Meta ad account: the 48-hour appeal playbook, when 
 ctaHeading: "Account disabled right now?"
 ctaText: "Book a free 30-min call - we audit your ban and policy exposure and send a written recovery plan either way."
 pubDate: 2026-07-10
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["Meta ads", "account bans", "compliance", "health brands", "telehealth"]

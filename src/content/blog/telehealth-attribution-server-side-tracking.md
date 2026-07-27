@@ -5,6 +5,7 @@ description: "See why your telehealth ROAS is wrong and fix it: PHI-safe server-
 ctaHeading: "Suspect your ROAS is lying?"
 ctaText: "Book a free 30-min call - we audit your tracking setup and send you a written measurement plan either way."
 pubDate: 2026-07-17
+updatedDate: 2026-07-28
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["attribution", "telehealth", "server-side tracking", "HIPAA", "measurement"]

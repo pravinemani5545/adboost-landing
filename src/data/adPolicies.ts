@@ -20,6 +20,7 @@ export interface AdPolicy {
   prohibited: string[];         // prohibited claims/content
   requirements: string;         // disclaimers / landing-page requirements
   rejectionReasons: string[];   // top reasons ads get rejected
+  enforcement: string;          // what enforcement actually looks like for this platform×vertical
   howToComply: string;          // how compliant brands still advertise
   faq: { q: string; a: string }[];
   sources: { label: string; url: string }[];
@@ -60,6 +61,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Pixel or landing-page signals that classify you as an uncertified Rx pharmacy',
       'Targeting outside US/CA/NZ or under 18',
     ],
+    enforcement: 'Rejections in this category rarely stay at the ad level. Putting “semaglutide” or “tirzepatide” in primary text is typically what flips review from the standard weight-loss check into the prescription-drug lane, where the reviewer looks for LegitScript certification the account doesn’t hold - and once one ad is rejected on that basis, sibling ads in the account are commonly re-reviewed against the same standard. The practical failure mode is account-level: repeated drug-name rejections escalate from ad disapproval to the account losing the ability to run health creative at all, and that restriction follows the account into new campaigns.',
     howToComply: 'Certified telehealth brands: complete LegitScript, get Meta authorization, geo-restrict to US/CA/NZ, add the consult disclaimer, and gate to 18+. Non-certified brands: sell the program and the outcome - never the molecule. Lead with metabolic-health education and a “GLP-1 companion program” framing, no scales, no before/after, no drug names, and move the clinical intake off-platform.',
     faq: [
       { q: 'Can I run before/after weight-loss ads on Meta?', a: 'No. Before/after and side-by-side transformation imagery is prohibited for weight-loss on Meta and is a top account-restriction trigger. Use single lifestyle shots, testimonials with disclaimers, and outcome-neutral education instead.' },
@@ -96,6 +98,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Compounded pages implying FDA approval/equivalence',
       'Online prescribing without LegitScript + Google certification',
     ],
+    enforcement: 'Enforcement on Google is cumulative rather than dramatic. Each keyword or ad naming an unapproved drug term without certification collects its own disapproval while the rest of the campaign keeps serving, which tempts teams into quietly resubmitting variants. That retry pattern is the trap: an account that keeps re-adding drug-term keywords after disapproval starts to read as deliberate circumvention, and the consequence jumps from keyword-level disapproval to account suspension - undone by an appeal process, not an edit.',
     howToComply: 'Complete LegitScript then Google’s Prescription drug services certification; geo-restrict to US/CA/NZ; advertise the condition and program (“medical weight-loss program”) rather than naming the drug; keep drug names off keywords unless certified; and gate everything behind a genuine licensed consult.',
     faq: [
       { q: 'Can I bid on “Ozempic” or “semaglutide” keywords?', a: 'Only in the US, Canada, and New Zealand and only if you’re certified - keyword-targeting GLP-1 drug terms requires certification. Most compliant brands target condition and program keywords (“medical weight loss”, “GLP-1 program”) instead.' },
@@ -132,6 +135,7 @@ export const AD_POLICIES: AdPolicy[] = [
       '“Easy/guaranteed/no diet” language',
       'Missing local license in the few markets where it’s conditionally allowed',
     ],
+    enforcement: 'Because the category is banned outright in Western markets, there is no reviewer judgment call to argue with: creative containing a weight, fat, appetite, or GLP claim is auto-rejected at moderation, usually before it spends. The failure mode unique to TikTok is the commerce side - a Shop listing with “GLP” in the product name or description isn’t warned, it’s delisted, and relisting the same item puts the Shop account itself at risk. Resubmitting lightly reworded weight-loss creative after rejection is what turns rejected ads into a suspended ad account.',
     howToComply: 'Pivot to a general-wellness or healthy-lifestyle brand angle with zero weight/fat/appetite/GLP claims and no before/after. Handle the clinical conversation off-platform. Most GLP-1 clinics use TikTok purely for top-of-funnel awareness and convert on Google and Meta.',
     faq: [
       { q: 'Can I sell a GLP-1 program through TikTok Shop?', a: 'No - GLP-1/weight-loss products are prohibited in TikTok Shop and paid ads across Western markets, and products with “GLP” in the name aren’t permitted. Use TikTok for brand awareness only.' },
@@ -169,6 +173,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Before/after or body-shaming creative',
       'Personal-attribute health targeting language',
     ],
+    enforcement: 'Meta’s review reads on-screen text, not just your caption, so a disease claim baked into a video overlay or thumbnail (“fights inflammation”, “treats bloating”) gets the ad rejected even when the primary text is clean structure/function language. The compounding trigger is personal-attribute phrasing: an opener like “Struggling with your thyroid?” is rejected for asserting a health condition about the viewer, and accounts that keep tripping health-claim rejections tend to see subsequent ads held in longer review across the board.',
     howToComply: 'Lead with structure/function benefits and ingredient education (“supports gut health”), third-person and lifestyle framing, and substantiation on the landing page. Optimize on Landing Page View, deploy CAPI to recover signal, and warm the account before scaling.',
     faq: [
       { q: 'What claims can I make about a supplement on Meta?', a: 'Structure/function claims about supporting normal body function (“supports immune health”) - never that it treats, cures, or prevents a disease, which reclassifies it as an unapproved drug. Hold competent, reliable scientific substantiation before the claim runs.' },
@@ -205,6 +210,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Unsubstantiated “clinically proven” / miracle claims',
       'Weight-loss or sexual-enhancement claims tripping the unapproved-substances list',
     ],
+    enforcement: 'Google enforces this policy at the destination, not just the ad: automated systems crawl the landing page, and a banned ingredient such as DMAA or an undisclosed active in your ingredient list can draw an unapproved-substances disapproval even when the ad copy is spotless. That is also the escalation path - ad-level disapprovals are recoverable, but a landing page that keeps surfacing prohibited substances can get the site itself suspended from serving, taking down every campaign that points at the domain.',
     howToComply: 'Make structure/function claims with substantiation, avoid disease/equivalence language, confirm no banned ingredients, and keep landing pages claim-consistent and transparent about ingredients.',
     faq: [
       { q: 'Do I need certification to advertise supplements on Google?', a: 'No - compliant dietary supplements don’t require certification. The risk is ingredient- and claim-based: banned ingredients and disease claims get disapproved, so keep to structure/function language with substantiation on file.' },
@@ -241,6 +247,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Before/after imagery',
       'Running in a market where the category is banned',
     ],
+    enforcement: 'TikTok’s pre-authorization step means enforcement often happens before creative is even judged: if a claim in the ad doesn’t match the approved Supplement Facts label you submitted, the ad is rejected at the documentation check, not the content check. The other trap is category conversion - one physique or fat-loss line in an otherwise-approved wellness ad reclassifies it into a prohibited category and voids the approval it was running under, and repeated conversions of that kind put the advertiser account itself under review.',
     howToComply: 'Complete Ads Manager pre-approval with full docs, use general-wellness / structure-function benefit language only, keep sports nutrition to performance-lifestyle framing (not physique change), gate to 18+, and match every claim to the approved label.',
     faq: [
       { q: 'What documents does TikTok need to run supplement ads?', a: 'Pre-authorization via Ads Manager typically requires a cGMP certificate, a Supplement Facts label, and facility registration. Missing or mismatched documentation is a top rejection reason.' },
@@ -277,6 +284,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Missing the consult disclaimer',
       'Landing-page or pixel prescribing signals without licensure',
     ],
+    enforcement: 'The enforcement unit on Meta is often the domain, not the ad. If the landing page names prescription medications or shows an intake flow that reads as prescribing while the ad account holds no authorization, the rejection cites the prescription-drug policy even when the ad itself was scrubbed clean - and once a domain is flagged as an unauthorized pharmacy destination, subsequent ads linking to it inherit the rejection regardless of creative. Recovery means fixing the destination and appealing, not just uploading new ads.',
     howToComply: 'Get LegitScript + Meta authorization, geo-restrict, add the consult disclaimer, gate to 18+. If uncertified, run condition-agnostic educational or brand-awareness creative (no drug names) and keep the Rx flow off the ad.',
     faq: [
       { q: 'Can I run telehealth ads on Meta without LegitScript?', a: 'You can run educational or brand-awareness ads that don’t name a specific medication or promote prescribing. To promote Rx services or name a drug, you need active LegitScript certification plus Meta authorization and US/CA/NZ targeting.' },
@@ -313,6 +321,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Naming/keyword-targeting an Rx without certification',
       'Opioid/controlled-substance promotion or licensing misrepresentation',
     ],
+    enforcement: 'Two distinct enforcement modes apply. The quiet one is certification lapse: if LegitScript accreditation expires, the Google certification tied to it stops being valid and ads simply stop serving at the child-account level until it is renewed - no new violation required. The loud one is the no-prescription path: a review that finds any way to obtain an Rx on your site without a licensed consult is treated as an egregious violation, and egregious violations skip the warning sequence and go straight to account suspension.',
     howToComply: 'Complete LegitScript → Google Prescription drug services certification; restrict geo to approved countries; advertise the service and condition rather than drug names; keep drug names off keywords unless certified; and route every Rx through a real licensed-consult flow.',
     faq: [
       { q: 'What certification do I need to advertise telehealth on Google?', a: 'LegitScript accreditation first, then Google’s Prescription drug services certification at the child-account level. Pharma manufacturers have a separate track. Budget several weeks - you can’t spend until it clears.' },
@@ -349,6 +358,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Running in a market that bans the category',
       'Under-18 targeting or a healthcare-data pixel',
     ],
+    enforcement: 'The characteristic failure here is geographic: creative approved in one market is re-reviewed when targeting expands, and because TikTok’s healthcare rules differ by country (its own documentation conflicts on which markets allow what), the same ad that ran cleanly in one market comes back rejected in the next. The second surface is measurement - a pixel or events setup that collects health-related data from an intake flow is an enforcement target separate from the creative, and can put the advertiser account under review even when no ad names a drug.',
     howToComply: 'Advertise the platform/service and condition awareness, not the drug - brand-level creative (“talk to a licensed provider”), drug named nowhere, clinical flow on the landing page and off-platform. Secure market-specific regulatory approval where OTC/pharmacy is permitted, and configure pixels to avoid collecting health data.',
     faq: [
       { q: 'Can I advertise a telehealth Rx service on TikTok?', a: 'In most markets, no - consumer Rx promotion is prohibited and the market exceptions are narrow and inconsistent across TikTok’s own docs. Use TikTok for brand awareness and condition education, and convert elsewhere.' },
@@ -386,6 +396,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Before/after or quantified outcome claims',
       'Missing disclaimer or non-compliant landing page',
     ],
+    enforcement: 'The costly failure mode is being sorted into the wrong policy bucket. Creative featuring vials, syringes, or “boost your T” framing risks being read as anabolic-steroid or HGH promotion - an unsafe-substances violation, which is prohibited outright - rather than as a restricted prescription-drug ad. The distinction matters at enforcement time: restricted-category rejections invite you to certify and resubmit, while unsafe-substances rejections stack toward ad-account disablement with a far weaker appeal position, because no compliant version of the ad exists to point to.',
     howToComply: 'Run educational “men’s wellness / vitality / energy” angles - no drug names, no numeric promises, no before/after. Send broad wellness creative to a HIPAA-compliant landing page that does the clinical work, and get LegitScript + Meta authorization if you intend to name the treatment. Gate to 18+.',
     faq: [
       { q: 'Can I say “testosterone” or “boost your T” in a Meta ad?', a: 'No. Naming testosterone, promising a prescription, or “boost your T” claims get disapproved, and anything reading as steroid/HGH promotion is prohibited outright. Advertise the symptoms and the evaluation instead.' },
@@ -422,6 +433,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'OTC “test boosters” implying Rx equivalence',
       'Personalized-health targeting',
     ],
+    enforcement: 'The word “testosterone” in a headline or keyword is the trigger: without certification it draws a restricted-drug-terms disapproval, and because Search accounts typically run many RSA variants, one policy hit tends to arrive as a batch of disapprovals at once. The escalation to avoid is the workaround reflex - misspellings, spaced-out letters, or the drug name rendered in image text are read as circumventing systems, a violation class where Google suspends the account rather than the ad, and reinstatement is rare.',
     howToComply: 'LegitScript-certify if prescribing, then Google-certify; geo-target US/CA; advertise “low testosterone treatment”, “bioidentical hormone therapy”, or “men’s health clinic” as brand-agnostic condition education; gate behind a licensed consult + labs; keep drug names off keywords unless certified.',
     faq: [
       { q: 'Can I run Google Search ads for a TRT clinic?', a: 'Yes, but it’s heavily restricted: prescribing needs LegitScript + Google certification, “testosterone” triggers restricted-term rules, and you advertise the condition/evaluation (“low testosterone treatment”, “men’s health clinic”) rather than the drug, gated behind a licensed consult and labs.' },
@@ -430,6 +442,43 @@ export const AD_POLICIES: AdPolicy[] = [
     sources: [
       { label: 'Google - Restricted drug terms', url: 'https://support.google.com/adspolicy/answer/15595717' },
       { label: 'Google - Healthcare and medicines policy', url: 'https://support.google.com/adspolicy/answer/176031' },
+    ],
+  },
+  {
+    slug: 'trt-on-tiktok',
+    published: '2026-07-27',
+    updated: '2026-07-27',
+    vertical: 'TRT & hormone',
+    verticalSlug: 'trt-hormone',
+    platform: 'TikTok',
+    status: 'prohibited',
+    h1: 'Advertising TRT on TikTok: why testosterone ads are blocked in 2026',
+    answer: 'You cannot promote TRT on TikTok: consumer prescription-drug promotion is prohibited in most markets, and testosterone carries extra risk because steroid-adjacent framing falls under prohibited dangerous-products rules, not just healthcare restrictions. No certification unlocks it, the telehealth-service angle is restricted the same way, and 18+ gating doesn’t change the answer. Treat TikTok as a men’s-wellness awareness channel and convert on Google and Meta.',
+    certification: 'None available. TikTok’s narrow pharmaceutical exceptions in a few non-Western markets are aimed at regulator-approved products via rep approval, not direct-to-consumer hormone therapy - and anabolic-steroid-adjacent content is prohibited outright rather than gated. For US/CA/UK/EU brands there is no certification path to run TRT ads.',
+    prohibited: [
+      'Naming testosterone or any hormone Rx in creative, captions, or display name',
+      'Anabolic-steroid, PED, or “boost your T” performance framing (dangerous-products territory)',
+      '“Low T” symptom quizzes or self-assessment funnels implying diagnosis or prescription',
+      'Before/after physique content and muscle-gain transformation claims',
+      'Promising a prescription, hormone dosing, or lab-to-Rx flow from the ad',
+    ],
+    requirements: 'For adjacent men’s-wellness creative that can run: 18+ targeting mandatory, no health-condition claims about the viewer, no drug names anywhere in the ad or in the landing flow reachable from it, and pixels configured so no health data is collected from intake pages.',
+    rejectionReasons: [
+      'Naming testosterone or hormone therapy anywhere in the ad',
+      'Steroid or performance-enhancement framing',
+      '“Low T quiz” or symptom-checker funnels',
+      'Before/after physique or transformation creative',
+      'A landing page offering an Rx pathway from the ad',
+    ],
+    enforcement: 'Enforcement is front-loaded at moderation: any ad naming testosterone or promising hormone treatment is rejected under the prescription-drug prohibition before it spends. The failure mode specific to TRT funnels is the quiz - a “low T symptoms” self-assessment funnel gets rejected as implied diagnosis even when no drug is named, because the ad plus landing flow together read as steering the viewer toward a prescription. Repeatedly resubmitting hormone-adjacent creative moves the problem from rejected ads to a suspended advertiser account.',
+    howToComply: 'Run broad men’s-health, energy, and vitality education with zero hormone names, no symptom quizzes, and no physique transformation - organic-style content that builds the brand. Keep the clinical funnel entirely off TikTok: capture demand on Google Search (certified) and Meta (authorized), where a compliant path to name the treatment exists.',
+    faq: [
+      { q: 'Can a TRT clinic run any ads on TikTok?', a: 'Not for the therapy itself - prescription-drug promotion is prohibited and there’s no certification path. What can run is brand-level men’s-wellness content with no hormone names, no symptom quizzes, and no Rx pathway reachable from the ad.' },
+      { q: 'Does age-gating to 18+ let me advertise testosterone on TikTok?', a: 'No. Age-gating is a requirement for adjacent wellness content, not an unlock for a prohibited category. Testosterone promotion stays banned at any age target, and steroid-adjacent framing makes it a dangerous-products issue rather than a restricted one.' },
+    ],
+    sources: [
+      { label: 'TikTok - Healthcare & Pharmaceuticals ad policy', url: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-healthcare-pharmaceuticals' },
+      { label: 'TikTok - Dangerous Products or Services', url: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-dangerous-products-or-services' },
     ],
   },
   // ───────────────────────── Med spa ─────────────────────────
@@ -458,6 +507,7 @@ export const AD_POLICIES: AdPolicy[] = [
       'Under-18 targeting or creative',
       'Health & Wellness classification killing optimization',
     ],
+    enforcement: 'Med spa rejections cluster in the body-image class: a before/after side-by-side hiding in a single carousel card is enough to reject the whole ad, and second-person insecurity copy (“hate your double chin?”) is flagged as a personal-attributes violation because it asserts a physical flaw about the viewer. The escalation pattern is page-level - repeated body-image rejections push the Page’s future ads into stricter review, so a few careless boosted posts can slow every launch that follows.',
     howToComply: 'Replace before/after with testimonials, single “after” shots, and gradual-improvement carousels/video; use generic descriptors (“wrinkle relaxer”) over brand names; optimize on upper-funnel events (Landing Page View) with broad local audiences (10–25 mi), 18+; and keep booking/PHI off the ad-level pixel.',
     faq: [
       { q: 'Can a med spa run before/after ads on Meta?', a: 'Not side-by-sides for wrinkle/anti-aging or body-contouring treatments - those are prohibited and can get the account flagged. Single “after” shots, testimonials, and gradual-improvement carousels are the compliant alternative.' },
@@ -466,6 +516,80 @@ export const AD_POLICIES: AdPolicy[] = [
     sources: [
       { label: 'Meta - Cosmetic Procedures and Wellness', url: 'https://transparency.meta.com/policies/ad-standards/content-specific-restrictions/cosmetic-procedures-and-wellness' },
       { label: 'Meta - Health & Wellness ad standard', url: 'https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/' },
+    ],
+  },
+  {
+    slug: 'med-spa-on-google',
+    published: '2026-07-27',
+    updated: '2026-07-27',
+    vertical: 'Med spa & aesthetics',
+    verticalSlug: 'med-spa',
+    platform: 'Google',
+    status: 'restricted',
+    h1: 'Advertising a med spa on Google Ads: 2026 keyword, claim & certification rules',
+    answer: 'Med spa services are advertisable on Google as local healthcare, but three tripwires apply: injectable brand names (Botox and branded fillers are prescription drugs) fall under restricted drug terms, and keyword-targeting them requires certification; guaranteed-outcome cosmetic claims and personalized “your [flaw]” copy get disapproved; and adding weight-loss injections to the menu pulls the account into GLP-1 and prescription-drug certification rules.',
+    certification: 'None for cosmetic services themselves (facials, laser, microneedling). Naming or keyword-targeting Rx injectables triggers the restricted-drug-terms regime (US/CA/NZ; keyword-targeting needs certification), and any prescribing or dispensing offer - including weight-loss injections - requires LegitScript plus Google’s Prescription drug services certification.',
+    prohibited: [
+      'Guaranteed or risk-free cosmetic outcome claims (“permanent results”, “guaranteed inches lost”)',
+      'Keyword-targeting Rx injectable brand names (Botox, branded fillers) without certification',
+      'Weight-loss-injection offers without LegitScript + prescription-drug certification',
+      'Personalized-ad copy targeting perceived flaws (“your acne scars”, “your double chin”)',
+      'Before/after imagery presented as proof of guaranteed results',
+    ],
+    requirements: 'Landing pages must match the ad, show the clinic’s real credentials, and offer no prescription pathway unless certified. Keep outcome language qualified (“results vary”), hold substantiation for any clinical claim, and keep Rx injectable names out of keywords unless the certification is in place.',
+    rejectionReasons: [
+      'Rx injectable brand names in keywords or headlines without certification',
+      'Guaranteed-outcome or “permanent results” claims',
+      '“Your [flaw]” personalized-attribute copy',
+      'A weight-loss-injection page pulling the account into pharmacy rules',
+      'Landing pages implying prescribing without certification',
+    ],
+    enforcement: 'The trigger that surprises med spas is the keyword list: bidding on injectable brand names (Botox, branded fillers) without certification draws restricted-drug-term disapprovals across every ad group sharing those keywords, even when the ads themselves only say “wrinkle relaxer”. The larger consequence is site classification - adding a weight-loss-injection service page to the site can lead a recrawl to reclassify the whole account under pharmacy and prescription rules, so a single new service line can halt campaigns that were previously serving cleanly.',
+    howToComply: 'Advertise the service category and the consult (“lip filler consultation”, “laser skin resurfacing”), use generic treatment descriptors over drug brand names in keywords, keep outcome claims qualified with real substantiation, and quarantine any weight-loss-injection offer behind the certified pathway so it doesn’t reclassify the whole clinic’s advertising.',
+    faq: [
+      { q: 'Can I bid on “Botox” as a keyword for my med spa?', a: 'Botox is a prescription drug, so it falls under Google’s restricted drug terms: promotional use is limited to the US, Canada, and New Zealand, and keyword-targeting the name requires certification. Most med spas bid on treatment-category terms (“wrinkle relaxer”, “forehead lines treatment”) instead.' },
+      { q: 'Do med spas need LegitScript to advertise on Google?', a: 'Not for cosmetic services like facials, laser, or microneedling. The requirement appears the moment the offer involves prescribing or dispensing - most commonly weight-loss injections - which needs LegitScript accreditation and then Google’s Prescription drug services certification.' },
+    ],
+    sources: [
+      { label: 'Google - Healthcare and medicines policy', url: 'https://support.google.com/adspolicy/answer/176031' },
+      { label: 'Google - Restricted drug terms', url: 'https://support.google.com/adspolicy/answer/15595717' },
+    ],
+  },
+  {
+    slug: 'med-spa-on-tiktok',
+    published: '2026-07-27',
+    updated: '2026-07-27',
+    vertical: 'Med spa & aesthetics',
+    verticalSlug: 'med-spa',
+    platform: 'TikTok',
+    status: 'restricted',
+    h1: 'Advertising a med spa on TikTok: 2026 cosmetic-procedure ad rules',
+    answer: 'Med spa advertising on TikTok is restricted, not banned: cosmetic-procedure ads face market-by-market limits, before/after imagery is prohibited, and every cosmetic ad must target adults (18+ at minimum, with some markets stricter or closed entirely). The two conversion killers are naming Rx injectables (healthcare prohibition) and framing body contouring as fat loss, which reclassifies the ad into the banned weight-management category.',
+    certification: 'No LegitScript-style certification applies. Cosmetic-procedure ads run under TikTok’s healthcare restrictions with market-specific rules: some markets allow non-surgical aesthetics with clean claims and adult targeting, others prohibit cosmetic-procedure advertising outright. Naming prescription injectables puts the ad into the prohibited pharmaceutical bucket regardless of market.',
+    prohibited: [
+      'Before/after imagery in any format, including split-frames and morph transitions',
+      'Naming Rx injectables (botulinum toxin brands, branded fillers) in creative or captions',
+      'Body-contouring framed as fat loss or slimming (reclassifies into banned weight management)',
+      'Negative-appearance or insecurity-exploiting hooks',
+      'Targeting under-18 users or youth-appealing creative for any cosmetic procedure',
+    ],
+    requirements: '18+ targeting minimum in every market that allows the category (verify the live market list - some set higher floors or ban cosmetic-procedure ads entirely); claims must be qualified and non-guaranteed; creative must avoid graphic procedure footage; landing pages can’t promise outcomes the ad couldn’t.',
+    rejectionReasons: [
+      'Before/after content anywhere in the video',
+      'Rx injectable names in creative, captions, or display name',
+      'Fat-loss or slimming framing on body-contouring offers',
+      'Under-18 targeting or youth-appealing creative',
+      'Running in a market that prohibits cosmetic-procedure ads',
+    ],
+    enforcement: 'Video review is frame-level: a lip-filler or body-contouring before/after appearing even briefly in the opening seconds is enough for an auto-rejection, regardless of what the caption says. The category drift to watch is fat reduction - body-contouring creative framed as fat loss or slimming is reclassified into TikTok’s weight-management category, which is banned outright in Western markets, so a positioning choice rather than a claim converts a restricted-but-runnable ad into a prohibited one.',
+    howToComply: 'Lead with the experience and the consult rather than the transformation: treatment-room content, practitioner credibility, “what a visit looks like”, and generic treatment descriptors (“wrinkle-smoothing treatment”) instead of drug brands. Gate every campaign to 18+, keep body-contouring positioned as sculpting and definition rather than fat loss, and verify the live market list before expanding targeting.',
+    faq: [
+      { q: 'Can I show before/after results in TikTok ads for my med spa?', a: 'No - before/after imagery is prohibited for cosmetic and health-adjacent ads, including split-screens and morph transitions, and it’s caught at video review regardless of the caption. Use treatment-experience content and practitioner-led education instead.' },
+      { q: 'What age targeting do med spa ads need on TikTok?', a: 'Adults only - 18+ at minimum everywhere the category runs, and some markets set higher floors or prohibit cosmetic-procedure ads entirely. Check the live policy for each market in your targeting before launch.' },
+    ],
+    sources: [
+      { label: 'TikTok - Healthcare & Pharmaceuticals ad policy', url: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-healthcare-pharmaceuticals' },
+      { label: 'TikTok - Weight Management ad policy', url: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-weight-management' },
     ],
   },
 ];

@@ -95,7 +95,7 @@ const jsonLd = post
       publisher: { '@type': 'Organization', '@id': `${site}/#org`, name: 'AdBoost Health', url: `${site}/` },
     };
 
-const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const displayTitle = title.replace(/ \| AdBoost Health$/, '');
 const category = post?.tags[0]?.toUpperCase();
 ---
@@ -223,7 +223,7 @@ const category = post?.tags[0]?.toUpperCase();
             <span>{post.authorTitle}</span>
           </div>
           <span class="byline-sep" aria-hidden="true"></span>
-          <span class="byline-date"><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time>{readMinutes && ` · ${readMinutes} min read`}</span>
+          <span class="byline-date"><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time>{readMinutes && ` · ${readMinutes} min read`}{post.updatedDate && post.updatedDate.valueOf() > post.pubDate.valueOf() && ` · Updated ${fmt(post.updatedDate)}`}</span>
         </div>
       </header>
 
