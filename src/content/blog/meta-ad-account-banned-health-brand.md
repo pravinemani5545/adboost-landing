@@ -14,7 +14,7 @@ heroAlt: "Illustration of a locked ad account dashboard with a recovery checklis
 
 You opened Ads Manager and got the message every health founder dreads: *"Your ad account has been disabled."* Campaigns frozen mid-flight, pipeline dark, and a support interface that feels designed to make you give up.
 
-Health, telehealth, and supplement brands live in Meta's most scrutinized policy territory, so this happens to good operators running legitimate businesses - not just to scammers. We've walked partner brands through recoveries and, more importantly, built the systems that keep the other ones from ever needing to. Here's the playbook.
+Health, [telehealth](/industries/telehealth/), and supplement brands live in Meta's most scrutinized policy territory, so this happens to good operators running legitimate businesses - not just to scammers. We've walked partner brands through recoveries and, more importantly, built the systems that keep the other ones from ever needing to. Here's the playbook.
 
 ## Why did Meta actually disable your account?
 
@@ -59,7 +59,7 @@ Then:
 Gather verification, certification, licensing, and substantiation files - review teams approve accounts they can verify. At AdBoost Health we assemble this packet before any appeal goes in:
 
 - **Business verification documents** - legal entity, address, domain ownership, all matching your BM details
-- **LegitScript certification** if you're a telehealth or prescription-adjacent brand (and if you're advertising GLP-1 programs without it, that's likely your root cause - see our [GLP-1 compliance playbook](/blog/glp1-advertising-compliance-2026/))
+- **LegitScript certification** if you're a telehealth or prescription-adjacent brand (and if you're [advertising GLP-1 programs](/advertising/glp-1-on-meta/) without it, that's likely your root cause - see our [GLP-1 compliance playbook](/blog/glp1-advertising-compliance-2026/))
 - **Provider licensing** for any clinicians featured in creative or fulfilling care
 - **Claim substantiation files** - the study, label, or clinical framing behind every stat you've run
 - **Screenshots of the corrected lander** and a one-paragraph remediation summary
@@ -79,7 +79,7 @@ If a rebuild is genuinely warranted, do it in the open: new Business Manager wit
 
 ## How do you make sure this never happens again?
 
-The brands that never get banned don't have better luck - they have a gate. Every creative and every lander passes a compliance review against current [Meta ad standards](https://transparency.meta.com/policies/ad-standards/) and Google and TikTok health policies *before* launch, not after a rejection. Across our partners we produce 20+ creative variants per month per brand through exactly that gate, which is what makes volume and safety coexist.
+The brands that never get banned don't have better luck - they have a gate. Every creative and every lander passes a compliance review against current [Meta ad standards](https://transparency.meta.com/policies/ad-standards/) and Google and TikTok health policies *before* launch, not after a rejection. Across our partners we produce 20+ creative variants per month per brand through exactly that gate, which is what makes volume and safety coexist. That gate is built into our [paid media management](/services/paid-media/) from day one.
 
 Add structural hygiene: verified BM, two trusted admins only, quarterly asset audits for stale users and shared assets, claim substantiation filed before an ad ever runs. Boring, and it's the moat - every competitor who gets banned is a competitor removed from your auction.
 

@@ -14,7 +14,7 @@ heroAlt: "Grid of creator video frames flowing into an ad testing pipeline, illu
 
 UGC is the highest-performing ad format for most health brands we work with - and the highest-risk. The same qualities that make a creator video convert (authenticity, specificity, a real person saying what the product did for them) are exactly what generates non-compliant claims, testimonial violations, and the rejected-ad pileups that get accounts flagged.
 
-Most brands respond by choosing one failure mode: either they let creators freestyle and play policy roulette, or they script every word and produce UGC that feels like a hostage video. The system below is how we get both - creator authenticity and claims discipline - across the 20+ creative variants per month we produce in-house for each partner.
+Most brands respond by choosing one failure mode: either they let creators freestyle and play policy roulette, or they script every word and produce UGC that feels like a hostage video. The system below is how we get both - creator authenticity and claims discipline - across the [20+ creative variants per month we produce in-house](/services/creative/) for each partner.
 
 ## Why does UGC work so well for health brands specifically?
 
@@ -37,7 +37,7 @@ Vet every creator for two things beyond delivery: willingness to do reshoots (co
 
 Give creators a claims allowlist, a banned-phrases list, and a loose story structure - the brief is where compliance actually happens, not in review, where you're just catching what the brief failed to prevent. Ours have three load-bearing parts:
 
-**A claims allowlist, not just guidelines.** Give creators the exact sanctioned phrases: what the product *supports*, what the program *includes*, what results are framed as typical. For supplements, that means structure/function language ("supports restful sleep") and never disease claims ("treats insomnia") - the line that separates a dietary supplement from an unapproved drug in the eyes of regulators.
+**A claims allowlist, not just guidelines.** Give creators the exact sanctioned phrases: what the product *supports*, what the program *includes*, what results are framed as typical. For [supplements](/industries/supplements-dtc/), that means structure/function language ("supports restful sleep") and never disease claims ("treats insomnia") - the line that separates a dietary supplement from an unapproved drug in the eyes of regulators.
 
 **A banned-phrases list with substitutes.** "Cured," "guaranteed," "clinically proven" (unless you can substantiate it), disease names next to product claims, personal-attribute hooks like "if you're overweight…" - each with a compliant alternative so creators aren't left guessing. A few from our standing list:
 
@@ -71,6 +71,6 @@ Practical notes: use genuinely licensed clinicians (their credentials will be ch
 
 **Whitelisting** - running ads through the creator's own handle with their permission - is the multiplier. The same video typically earns cheaper engagement from a person's face and handle than from a brand page, and it unlocks the creator's social proof at your budget. Secure usage *and* whitelisting rights in the initial contract (duration, platforms, paid usage, editing rights); renegotiating after a video wins moves all leverage to the creator.
 
-Then treat winning UGC as raw material, not a finished asset: one strong creator video becomes hook variants, captioned cutdowns, creator-plus-overlay remixes, and clinician-response duets. That's how a single shoot feeds a month of testing - and how you sustain volume without burning creators out.
+Then treat winning UGC as raw material, not a finished asset: one strong creator video becomes hook variants, captioned cutdowns, creator-plus-overlay remixes, and clinician-response duets. That's how a single shoot feeds a month of testing - and how you sustain volume without burning creators out. Judge each variant on [hook rate](/glossary/hook-rate/) first; it's the earliest signal a UGC cut will scale.
 
 UGC is a system: sourcing, briefing, compliance gating, whitelisting, iteration. Brands that treat it as "order three videos and hope" get either bans or mediocrity. If you want your creative pipeline audited - what you're running, what's missing, what's putting the account at risk - [grab a free strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). Thirty minutes, a real account audit, and a written plan whether we end up working together or not.

@@ -19,6 +19,19 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'POAS Calculator', href: path }]),
   faqPage(faq),
   {
+    '@type': 'SoftwareApplication',
+    name: 'POAS Calculator',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: `${SITE}${path}`,
+    featureList: [
+      'Calculate profit on ad spend from revenue, margin, and spend',
+      'Side-by-side ROAS comparison to show the margin gap',
+      'Runs entirely in the browser, no signup',
+    ],
+  },
+  {
     '@type': 'HowTo',
     name: 'How to calculate POAS (profit on ad spend)',
     description: 'Multiply revenue by gross margin to get gross profit, then divide by ad spend.',

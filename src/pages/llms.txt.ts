@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { getPublishedPosts } from '../lib/blog';
 import { AD_POLICIES } from '../data/adPolicies';
+import { GLOSSARY } from '../data/glossary';
+import { COMPARES } from '../data/compare';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -46,7 +48,9 @@ ${AD_POLICIES.map((p) => `- [${p.vertical} on ${p.platform}](${base}/advertising
 ## Guides & reference
 
 - [Health & performance marketing glossary](${base}/glossary/): CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims - with health examples
+${GLOSSARY.map((t) => `- [${t.term}](${base}/glossary/${t.slug}/): ${t.short}`).join('\n')}
 - [Compare](${base}/compare/): AdBoost Health vs. full-service agencies, in-house teams, and generalist DTC shops
+${COMPARES.map((c) => `- [${c.h1}](${base}/compare/${c.slug}/): ${c.intent}`).join('\n')}
 - [FAQ](${base}/faq/): Answers on pricing, engagement, compliance, and how we work
 - [About](${base}/about/): The health-only growth agency, team, and approach
 

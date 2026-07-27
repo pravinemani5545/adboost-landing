@@ -12,7 +12,7 @@ ctaHeading: "Get certified and live without the false starts."
 ctaText: "Free 30-minute call - we'll map your certification path and account setup. You keep the plan either way."
 ---
 
-If you've ever launched a telehealth ad account and watched it get suspended on day one, this is almost always why: you weren't LegitScript-certified. It's the single most common reason telehealth and online-pharmacy brands can't spend a dollar on the major platforms - and it's completely avoidable if you plan for it.
+If you've ever launched a telehealth ad account and watched it get suspended on day one, this is almost always why: you weren't [LegitScript-certified](/glossary/legitscript-certification/). It's the single most common reason telehealth and online-pharmacy brands can't spend a dollar on the major platforms - and it's completely avoidable if you plan for it.
 
 Here's what LegitScript certification is, who needs it, what it costs, and how to sequence it so it doesn't cost you a launch window.
 
@@ -69,7 +69,7 @@ Done this way, certification runs in the background instead of blocking your lau
 
 LegitScript certification is table stakes for advertising telehealth, and the map keeps changing - 2026 saw eligibility extended to new markets, and platform rules shift constantly. Budget ~$975 + ~$2,150/year per site and 4–8 weeks, start it before anything else, and run compliant education ads in the meantime so you're never sitting idle. For the full picture of what's allowed on each platform, see our [health ad compliance guide](/blog/glp1-advertising-compliance-2026/) and [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
 
-At AdBoost Health, we map the certification path and account structure before launch, so telehealth partners go live on schedule instead of watching a suspended account on day one.
+At AdBoost Health, we map the certification path and account structure before launch, so [telehealth partners](/industries/telehealth/) go live on schedule instead of watching a suspended account on day one.
 
 ---
 

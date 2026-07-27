@@ -12,7 +12,7 @@ ctaHeading: "Scale GLP-1 ads without the bans."
 ctaText: "Free 30-minute call with a compliance-first account audit - you keep the written plan either way."
 ---
 
-If you market a GLP-1 or weight-loss telehealth brand, you're advertising in the single most scrutinized category on paid social. One flagged creative can cascade into a disabled ad account, and a disabled account at $200K/month spend is not a creative problem - it's a company problem.
+If you market a [GLP-1 or weight-loss telehealth brand](/industries/glp-1-weight-loss/), you're advertising in the single most scrutinized category on paid social. One flagged creative can cascade into a disabled ad account, and a disabled account at $200K/month spend is not a creative problem - it's a company problem.
 
 AdBoost Health is a Toronto-based agency that manages paid media exclusively for health, telehealth, and supplement brands, and compliance review is the first gate every creative passes through before a dollar of spend touches it. Here's the playbook we run in 2026.
 
@@ -40,14 +40,14 @@ Here's the same list as a working reference - what trips the classifier, and wha
 
 ## What does Meta actually require for GLP-1 ads in 2026?
 
-Meta requires telehealth brands offering prescription products to hold [LegitScript certification](https://www.legitscript.com/) and apply for written permission before running prescription drug ads - without both, you're limited to advertising the *service* (medical consultations, provider access), not the medication. That's the load-bearing sentence in Meta's health and pharmacy framework, and it sits inside the broader [ad standards](https://transparency.meta.com/policies/ad-standards/) that govern personal attributes, sensational content, and claims.
+Meta requires telehealth brands offering prescription products to hold [LegitScript certification](https://www.legitscript.com/) and apply for written permission before running prescription drug ads - without both, you're limited to advertising the *service* (medical consultations, provider access), not the medication. That's the load-bearing sentence in Meta's health and pharmacy framework, and it sits inside the broader [ad standards](https://transparency.meta.com/policies/ad-standards/) that govern personal attributes, sensational content, and claims. We keep a current breakdown of the policy line in our [GLP-1 on Meta guide](/advertising/glp-1-on-meta/).
 
 The service-versus-medication distinction is the entire game:
 
 - **Compliant:** "Talk to a licensed provider about medical weight-loss options."
 - **Non-compliant:** "Get semaglutide delivered to your door for $199/month."
 
-Google runs a parallel system through its [healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031): pharmacies and telehealth providers need certification before drug-adjacent keywords and copy will serve, and unapproved drug terms trip disapprovals that accumulate into account-level trust damage. The enforcement styles differ - Google tends to disapprove ad by ad while Meta escalates to account-level action faster - but the direction is identical: certify first, or stay strictly on the service side of the line.
+Google runs a parallel system through its [healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031): pharmacies and telehealth providers need certification before drug-adjacent keywords and copy will serve, and unapproved drug terms trip disapprovals that accumulate into account-level trust damage. The enforcement styles differ - Google tends to disapprove ad by ad while Meta escalates to account-level action faster - but the direction is identical: certify first, or stay strictly on the service side of the line. The certification path is mapped step by step in our [GLP-1 on Google guide](/advertising/glp-1-on-google/).
 
 ## How do you write GLP-1 ad creative that converts *and* passes review?
 

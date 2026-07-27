@@ -1,6 +1,6 @@
 ---
 created: 2026-07-24
-updated: 2026-07-24
+updated: 2026-07-27
 ---
 
 # AdBoost Health: Landing + Blog (Astro 5, static, Vercel)
@@ -49,4 +49,28 @@ Palette from `src/styles/global.css`: blue `#0057ff` (primary), ink `#0a0a0f`, s
 
 ## Search Console
 
-Property: `adboost.health` (domain property). Sitemap submitted: `https://www.adboost.health/sitemap-index.xml`.
+Property: `sc-domain:adboost.health` (domain property). Sitemap submitted: `https://www.adboost.health/sitemap-index.xml`.
+
+### Programmatic GSC access (already set up , use it from any session)
+
+Access is via a **service account (`gsc-bot@adboost-503106.iam.gserviceaccount.com`, siteOwner) impersonated with your machine's Application Default Credentials** , no key file. The ADC lives at `~/.config/gcloud/application_default_credentials.json` (machine-global, works from any dir). If a call fails with `Reauthentication`/`invalid_grant`, re-run once: `gcloud auth application-default login` (then `gcloud auth application-default set-quota-project adboost-503106`).
+
+**Always run Python via `uv`** (system Python is broken). Ready-to-run:
+
+```bash
+uv run --python 3.12 --with google-api-python-client --with google-auth python - <<'PY'
+from google.auth import default, impersonated_credentials
+from googleapiclient.discovery import build
+src,_=default()
+creds=impersonated_credentials.Credentials(source_credentials=src,
+  target_principal="gsc-bot@adboost-503106.iam.gserviceaccount.com",
+  target_scopes=["https://www.googleapis.com/auth/webmasters"])
+g=build("searchconsole","v1",credentials=creds)
+print(g.sites().list().execute())                 # confirm access (siteOwner)
+# g.searchanalytics().query(siteUrl="sc-domain:adboost.health", body={...})
+# g.sitemaps().submit(siteUrl="sc-domain:adboost.health", feedpath="https://www.adboost.health/sitemap-index.xml")
+# g.urlInspection().index().inspect(body={"inspectionUrl":"https://www.adboost.health/","siteUrl":"sc-domain:adboost.health"})
+PY
+```
+
+Capabilities: Search Analytics, URL Inspection, Sitemaps (submit/get , owner-level). Request-Indexing is UI-only (not in the API).

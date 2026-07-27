@@ -40,7 +40,7 @@ Look for a concrete number produced in-house - AdBoost Health's standard is 20+ 
 
 ## 5. "What happens in the first 30 days?"
 
-The passing answer is a template specific enough to hold the agency to - measurement rebuilt first, compliance audit, creative pipeline live in week one - because specialists have run it dozens of times. Generic agencies say "learning phase," which too often means your budget funds their education. AdBoost Health's version is public on the site: set up in 5 days, directional movement inside two weeks, compounding results by day 31. Whatever the agency's version is, it should name what happens in which week.
+The passing answer is a template specific enough to hold the agency to - measurement rebuilt first, compliance audit, creative pipeline live in week one - because specialists have run it dozens of times. Generic agencies say "learning phase," which too often means your budget funds their education. AdBoost Health's version is [public on the site](/services/): set up in 5 days, directional movement inside two weeks, compounding results by day 31. Whatever the agency's version is, it should name what happens in which week.
 
 ## 6. "Show me a full-funnel result, not a ROAS screenshot."
 
@@ -62,7 +62,7 @@ The passing answer is a demanding list: claim substantiation docs, provider avai
 
 ## 9. "Why shouldn't we hire you?"
 
-Any agency worth hiring names a real disqualifier, because specialists have edges - and edges have shapes. AdBoost Health's, stated plainly: we're a Toronto-based team that works only in health, telehealth, and supplements, so if you're a fashion brand we're the wrong call; and we build systems that take ~31 days to compound, so if you need a miracle by Friday, we'll say so on the call.
+Any agency worth hiring names a real disqualifier, because specialists have edges - and edges have shapes. AdBoost Health's, stated plainly: we're a Toronto-based team that works only in [health, telehealth, and supplements](/industries/), so if you're a fashion brand we're the wrong call; and we build systems that take ~31 days to compound, so if you need a miracle by Friday, we'll say so on the call.
 
 ## The nine questions at a glance
 
@@ -80,6 +80,6 @@ Any agency worth hiring names a real disqualifier, because specialists have edge
 
 ## The pattern behind all nine
 
-Every question is measuring the same thing: **does this agency have category-specific systems, or category-agnostic promises?** Health is a regulated, claim-constrained, trust-driven vertical. The playbooks that scale a streetwear brand will get a telehealth account banned.
+Every question is measuring the same thing: **does this agency have category-specific systems, or category-agnostic promises?** Health is a regulated, claim-constrained, trust-driven vertical. The playbooks that scale a streetwear brand will get a telehealth account banned. If you're weighing that exact choice, we've written up the [specialist vs. generalist DTC agency comparison](/compare/generalist-dtc-agency-alternative/) in full.
 
 The fastest way to evaluate us against this list is to run it on us live. [Book the free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) - account audit included, and you leave with a written plan whether we work together or not. 71+ health founders have taken that call; the average partner rating is 4.9/5.

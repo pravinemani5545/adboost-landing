@@ -14,7 +14,7 @@ ctaText: "Free 30-minute call with a creative + compliance audit - the written p
 
 Every health brand founder has lived this loop: the team ships a batch of creative, half gets rejected, the surviving ads fatigue in ten days, and the account plateaus while the agency asks for "more UGC." Rejections aren't random, and fatigue isn't fate. Both are system problems.
 
-AdBoost Health produces ad creative in-house from Toronto for health, telehealth, and supplement brands - thousands of compliant creatives shipped - and the pattern behind rejections is remarkably consistent.
+AdBoost Health [produces ad creative in-house](/services/creative/) from Toronto for health, telehealth, and supplement brands - thousands of compliant creatives shipped - and the pattern behind rejections is remarkably consistent.
 
 ## Why does health ad creative actually get rejected?
 
@@ -22,7 +22,7 @@ Health creative gets rejected for five reasons: personal-attributes framing, bef
 
 1. **Personal attributes framing.** Any copy or visual implying the viewer's condition - "your acne," "your low energy," second-person body references. This violates [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) on personal attributes, it's the #1 rejection cause in health, and most teams don't know the policy exists.
 2. **Before/after structure.** Not just photos: split screens, "day 1 vs day 30" text overlays, even audio narration implying transformation gets machine-flagged in weight loss and skin verticals.
-3. **Claims without hedging.** "Fixes gut health" fails where "supports digestive health" passes. Supplement brands live and die on structure/function language - the [FTC's health products compliance guidance](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) and the platforms both read it, and both expect substantiation behind every claim.
+3. **Claims without hedging.** "Fixes gut health" fails where "supports digestive health" passes. Supplement brands live and die on structure/function language - the [FTC's health products compliance guidance](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) and the platforms both read it, and both expect substantiation behind every claim. (The platform-specific rules are in our [supplements on Meta guide](/advertising/supplements-on-meta/).)
 4. **Sensitive visual triggers.** Needles, pills in hands, body close-ups, scale shots. The classifier sees the frame before a human reads your caption - a fully compliant script can still die on a two-second B-roll shot of an injection pen.
 5. **Lander contradiction.** The ad is clean but the landing page makes the claim the ad avoided. The rejection posts against the ad, so teams keep "fixing" the wrong asset.
 
@@ -64,7 +64,7 @@ Five components: an angle map, pre-production compliance review, modular product
 2. **Compliance review before production**, not after. A 15-minute policy check on the brief saves the entire production cost of a dead ad. Every creative we ship is reviewed against Meta, TikTok, and [Google's healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031) first.
 3. **Modular production.** Shoot/record raw components - hooks, demos, testimonials, mechanism explainers - and edit variants from the library instead of producing each ad from scratch. One half-day clinician shoot, planned against the angle map, yields raw material for a month of variants.
 4. **Naming and tagging discipline.** Angle, format, hook, and claim in every ad name. Without it, you can't learn; with it, every dollar of spend is R&D.
-5. **Weekly kill/scale cadence.** Fatigue in health shows up in CPM and hook rate before ROAS. Reallocate on leading indicators.
+5. **Weekly kill/scale cadence.** [Creative fatigue](/glossary/creative-fatigue/) in health shows up in CPM and hook rate before ROAS. Reallocate on leading indicators.
 
 ## What does this look like in results?
 

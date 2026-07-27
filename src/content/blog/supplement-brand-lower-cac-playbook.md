@@ -14,7 +14,7 @@ ctaText: "Free 30-minute call - offer, creative, and funnel audit with a written
 
 Supplement paid media has a brutal shape: CAC looks great at $300/day, then you push spend and watch efficiency melt. Most founders conclude "we've saturated our audience." Almost none have. What they've saturated is their *offer-creative combination* - and that's fixable.
 
-Here's the playbook we run when a supplement brand needs spend to scale and CAC to hold, drawn from the supplement and wellness accounts inside our $153M+ of tracked partner revenue.
+Here's the playbook we run when a supplement brand needs spend to scale and CAC to hold, drawn from the [supplement and wellness accounts](/industries/supplements-dtc/) inside our $153M+ of tracked partner revenue.
 
 ## Why does supplement CAC explode when you scale spend?
 
@@ -36,13 +36,13 @@ Subscription-first framing, bundle laddering, and a genuine risk reversal - that
 - **A real risk reversal.** In a category built on skepticism, "empty-bottle guarantee" class offers routinely beat 10% discounts on conversion - at lower real cost, because refund take rates on satisfied supplement customers run far below the discount you'd have given everyone.
 - **Quiz funnels where personalization is plausible.** A good quiz warms cold traffic, collects zero-party data for email/SMS, and lifts lander conversion. A gimmick quiz just adds a step. Be honest about which one yours is.
 
-The math is worth making explicit. A $49 one-time bottle at 65% margin allows roughly $32 in acquisition cost before you're underwater. The identical product sold subscription-first, averaging four billing cycles, can justify a CAC north of $90 on the same margin structure. Nothing about the ad changed - the offer tripled what you're allowed to pay, and in a bid auction, the brand allowed to pay the most eventually wins the impression. Check your own margin math in the [POAS calculator](/tools/poas-calculator/).
+The math is worth making explicit. A $49 one-time bottle at 65% margin allows roughly $32 in acquisition cost before you're underwater. The identical product sold subscription-first, averaging four billing cycles, can justify a CAC north of $90 on the same margin structure. Nothing about the ad changed - the offer tripled what you're allowed to pay, and in a bid auction, the brand allowed to pay the most eventually wins the impression. Check your own margin math in the [POAS calculator](/tools/poas-calculator/) - and if the metric is new to you, [POAS](/glossary/poas/) is the margin-true version of ROAS.
 
 ## How should you structure creative testing at scale?
 
 Sustain 20+ net-new variants a month once spend passes roughly $50K/month - 10–12 below that - organized as angle families, not one-off ads. The full system is in the [creative engine playbook](/blog/health-ad-creative-rejected-fix/); the supplement-specific essentials:
 
-- **Structure/function language throughout.** "Supports," "promotes," "maintains" - never treatment or cure claims. The [FTC's health products compliance guidance](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) requires competent and reliable scientific evidence behind every express and implied claim, and [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) run automated classifiers against your creative and lander long before a human ever reviews them. Claims discipline is a scaling asset because it keeps the account's trust score clean - a flagged account pays a hidden CPM tax on every subsequent ad.
+- **Structure/function language throughout.** "Supports," "promotes," "maintains" - never treatment or cure claims. The [FTC's health products compliance guidance](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) requires competent and reliable scientific evidence behind every express and implied claim, and [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) run automated classifiers against your creative and lander long before a human ever reviews them. Claims discipline is a scaling asset because it keeps the account's trust score clean - a flagged account pays a hidden CPM tax on every subsequent ad. The full policy map is in our [supplements on Meta guide](/advertising/supplements-on-meta/).
 - **Ingredient receipts as an angle category.** COAs, third-party testing, sourcing stories. Supplements are a trust purchase; proof formats fatigue slower than lifestyle formats.
 - **An angle taxonomy, not a swipe file.** Problem-aware, mechanism ("how magnesium glycinate differs"), ingredient proof, social proof, and comparison angles each address a different buyer state. Testing five hooks on one angle is one test, not five.
 

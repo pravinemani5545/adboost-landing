@@ -9,7 +9,19 @@ import { breadcrumb } from '../../lib/schema';
 const SITE = siteBase(Astro.site);
 const title = 'AdBoost Health vs. Agencies, In-House & DTC Shops';
 const description = 'How a health-specialist paid-acquisition partner compares to a full-service healthcare agency, an in-house team, or a generalist DTC agency - an honest breakdown.';
-const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }])];
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }]),
+  {
+    '@type': 'CollectionPage',
+    name: 'AdBoost Health compared to the alternatives',
+    url: `${SITE}/compare/`,
+    hasPart: COMPARES.map((c) => ({ '@type': 'WebPage', name: c.h1, url: `${SITE}/compare/${c.slug}/` })),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: COMPARES.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.h1, url: `${SITE}/compare/${c.slug}/` })),
+    },
+  },
+];
 ---
 <BaseLayout {title} {description} canonicalPath="/compare/" {jsonLd}>
   <section class="phero wide">

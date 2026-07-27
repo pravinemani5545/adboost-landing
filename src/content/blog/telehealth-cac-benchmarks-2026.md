@@ -12,9 +12,9 @@ ctaHeading: "Benchmark your CAC against your vertical."
 ctaText: "Free 30-minute call - we audit your account against vertical benchmarks and hand you the written plan."
 ---
 
-"Is our CAC good?" is the most common question founders ask on our strategy calls - usually because their agency reports CAC in a vacuum, with no category context. A $250 CAC can be excellent or existential depending on your vertical, AOV, and retention curve.
+"Is our CAC good?" is the most common question founders ask on our strategy calls - usually because their agency reports [CAC](/glossary/cac/) in a vacuum, with no category context. A $250 CAC can be excellent or existential depending on your vertical, AOV, and retention curve.
 
-Across the health and telehealth accounts AdBoost Health manages from Toronto (part of $153M+ in tracked revenue), here's what acquisition actually costs in 2026, and what separates the brands at the top of the range from the ones at the bottom.
+Across the health and [telehealth accounts](/industries/telehealth/) AdBoost Health manages from Toronto (part of $153M+ in tracked revenue), here's what acquisition actually costs in 2026, and what separates the brands at the top of the range from the ones at the bottom.
 
 ## What is a good CAC for a telehealth brand in 2026?
 
@@ -67,7 +67,7 @@ Fix intake friction first - it's the cheapest CAC win in telehealth - then creat
 3. **Fix the measurement layer** before scaling anything. Scaling on bad attribution just buys the same patients twice. Server-side events plus a post-purchase survey is usually enough to expose where last-click reporting has been lying.
 4. **Then, and only then, scale spend** - into lookalike expansion and new channels, watching marginal (not average) CAC. Average CAC flatters a scaling account; marginal CAC tells you when the next dollar stops working.
 
-Most partners see directional CAC movement within 2 weeks of this sequence; the compounding effect lands around day 31, when the tested creative library, optimized funnel, and clean attribution are working in lockstep.
+Most partners see directional CAC movement within 2 weeks of this sequence; the compounding effect lands around day 31, when the tested creative library, optimized funnel, and clean attribution are working in lockstep. It's the same sequence our [paid media service](/services/paid-media/) runs on every new account.
 
 ## What should you benchmark besides CAC?
 

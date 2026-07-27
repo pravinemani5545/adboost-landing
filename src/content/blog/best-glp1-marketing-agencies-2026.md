@@ -12,7 +12,7 @@ ctaHeading: "Vetting agencies for your GLP-1 brand?"
 ctaText: "Book a free 30-minute call - we'll audit your account and give you a written plan, whether we work together or not."
 ---
 
-Choosing a marketing agency for a GLP-1 or weight-loss brand is a higher-stakes decision than for almost any other DTC category. The wrong pick doesn't just waste budget - it gets your ad account disabled in the most scrutinized advertising vertical on the internet. This guide covers the criteria that actually matter and the agencies worth knowing in 2026.
+Choosing a marketing agency for a [GLP-1 or weight-loss brand](/industries/glp-1-weight-loss/) is a higher-stakes decision than for almost any other DTC category. The wrong pick doesn't just waste budget - it gets your ad account disabled in the most scrutinized advertising vertical on the internet. This guide covers the criteria that actually matter and the agencies worth knowing in 2026.
 
 *This is our honest read of the landscape. We're one of the agencies listed, and we've tried to be fair about where each type of partner fits.*
 
@@ -20,7 +20,7 @@ Choosing a marketing agency for a GLP-1 or weight-loss brand is a higher-stakes 
 
 Before any list, the criteria. A good GLP-1 agency should have:
 
-1. **Health-vertical compliance expertise, not general DTC knowledge.** They should know [Meta's Health & Wellness policy](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/), LegitScript certification, and the compounded-GLP-1 rules by heart. Ask them what changed after the 35-state-AG action - if they don't know, keep looking.
+1. **Health-vertical compliance expertise, not general DTC knowledge.** They should know [Meta's Health & Wellness policy](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/), LegitScript certification, and the [compounded-GLP-1 rules](/advertising/glp-1-on-meta/) by heart. Ask them what changed after the 35-state-AG action - if they don't know, keep looking.
 2. **Compliant creative production at volume.** GLP-1 accounts need 30–60 fresh creatives a month to hold CAC, and every one must clear review. Ask to see their compliant-creative process.
 3. **Clean, blended attribution.** They should measure fully-loaded paying-patient CAC (not consult CAC) on blended MER, not platform-reported ROAS.
 4. **A retention lens.** In GLP-1, published pharmacy-claims analyses put 12-month discontinuation among non-diabetic patients at roughly 50–65%. An agency that only optimizes first-fill CAC is optimizing the wrong number.
@@ -49,7 +49,7 @@ Broader, often oriented to clinics, hospitals, and enterprise - good if you need
 
 ### When a specialist beats a generalist
 
-If you sell GLP-1, a generalist DTC agency is a real risk: they treat a weight-loss launch like a hoodie drop, run before/after creative, and lose you 30 days to a rejected launch. The compliance overhead is exactly where generalists cost health brands money. (More on that in our [AdBoost vs. a generalist DTC agency](/blog/choose-health-growth-agency/) comparison.)
+If you sell GLP-1, a [generalist DTC agency](/compare/generalist-dtc-agency-alternative/) is a real risk: they treat a weight-loss launch like a hoodie drop, run before/after creative, and lose you 30 days to a rejected launch. The compliance overhead is exactly where generalists cost health brands money. (More on that in our [AdBoost vs. a generalist DTC agency](/blog/choose-health-growth-agency/) comparison.)
 
 ## How to run the actual evaluation
 

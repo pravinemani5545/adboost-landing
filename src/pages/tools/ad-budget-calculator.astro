@@ -19,6 +19,19 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator', href: path }]),
   faqPage(faq),
   {
+    '@type': 'SoftwareApplication',
+    name: 'Ad Budget Calculator',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    url: `${SITE}${path}`,
+    featureList: [
+      'Reverse-engineer monthly ad budget from a new-customer target and target CAC',
+      'Project expected revenue and blended ROAS for that budget',
+      'Runs entirely in the browser, no signup',
+    ],
+  },
+  {
     '@type': 'HowTo',
     name: 'How to calculate your monthly ad budget',
     description: 'Work backwards from a new-customer target and your target CAC to the monthly ad budget you need.',
@@ -80,7 +93,7 @@ const jsonLd = [
         <li style="margin-bottom:8px"><strong>Enter your target CAC.</strong> Use your current customer acquisition cost, or a <a href="/tools/cac-calculator/" style="color:var(--blue)">benchmark CAC</a> for your vertical.</li>
         <li style="margin-bottom:8px"><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</li>
       </ol>
-      <p style="color:var(--ink-2);line-height:1.72">One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC calculator</a>.</p>
+      <p style="color:var(--ink-2);line-height:1.72">One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/" style="color:var(--blue)">blended CAC</a>, not one platform's claimed number.</p>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
       <div style="margin-top:16px"><Faq items={faq} idPrefix="budget" /></div>

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/interior.css';
 import { versioned } from '../lib/assets';
 import { NAV } from '../lib/site';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
 const CAL_NAMESPACE = 'strategy-call';
@@ -209,6 +210,7 @@ const category = post?.tags[0]?.toUpperCase();
   {post ? (
     <article class="blog-article">
       <header class="post-head container">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog/' }, { label: displayTitle }]} />
         <div class="post-meta-top">
           <a class="all-link" href="/blog/">← All articles</a>
           {category && <span class="cat-chip">{category}</span>}
@@ -314,6 +316,7 @@ const category = post?.tags[0]?.toUpperCase();
 
   /* --- centered post header (reference format) --- */
   .post-head { max-width: 760px; text-align: center; }
+  .post-head .crumbs { justify-content: center; margin-bottom: 14px; }
   .post-meta-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
   .all-link { font-size: 13px; color: var(--mute); transition: color .15s; }
   .all-link:hover { color: var(--blue); }

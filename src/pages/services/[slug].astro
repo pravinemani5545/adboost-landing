@@ -22,6 +22,24 @@ const jsonLd = [
   faqPage(s.faq),
 ];
 const otherServices = SERVICES.filter((x) => x.slug !== s.slug);
+const RELATED_RESOURCES: Record<string, { href: string; label: string }[]> = {
+  'paid-media': [
+    { href: '/glossary/cpc/', label: 'CPC: what a fair cost per click looks like' },
+    { href: '/glossary/cpm/', label: 'CPM: what drives it up in health auctions' },
+    { href: '/tools/ad-budget-calculator/', label: 'Ad budget calculator' },
+  ],
+  'cro': [
+    { href: '/glossary/landing-page-conversion-rate/', label: 'Landing page conversion rate benchmarks' },
+    { href: '/glossary/quiz-funnel/', label: 'Quiz funnels: when they beat a standard lander' },
+    { href: '/tools/poas-calculator/', label: 'POAS calculator' },
+  ],
+  'creative': [
+    { href: '/glossary/hook-rate/', label: 'Hook rate: the first metric we check' },
+    { href: '/glossary/creative-fatigue/', label: 'Creative fatigue and how to spot it early' },
+    { href: '/glossary/creative-testing/', label: 'How structured creative testing works' },
+  ],
+};
+const relatedResources = RELATED_RESOURCES[s.slug] ?? [];
 const toc = [
   { id: 'outcomes', label: 'What you get' },
   { id: 'process', label: 'How it works' },
@@ -88,6 +106,14 @@ const toc = [
               <a href="/industries/">Industries we serve</a>
             </div>
           </div>
+          {relatedResources.length > 0 && (
+            <div class="aside-card">
+              <h4>Definitions & tools</h4>
+              <div class="link-list">
+                {relatedResources.map((r) => <a href={r.href}>{r.label}</a>)}
+              </div>
+            </div>
+          )}
           <div class="aside-card dark">
             <h4 style="color:#fff">See it on your account</h4>
             <p>Free audit with a senior strategist - a written plan you keep either way.</p>

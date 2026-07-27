@@ -12,7 +12,7 @@ ctaHeading: "Keep your GLP-1 ads live through the crackdown."
 ctaText: "Free 30-minute call with a compliance-first account audit - you keep the written plan either way."
 ---
 
-If you run paid social for a GLP-1 or weight-loss brand, the ground moved under you at the end of 2025. In December, a bipartisan coalition of **35+ state attorneys general** publicly pressured Meta to crack down on misleading, AI-generated weight-loss drug ads (per the coalition's December 2025 letter to Meta), and the FDA issued warning letters to telehealth companies over compounded GLP-1 marketing (per the FDA's published warning-letter database). The enforcement environment is now the tightest it has ever been - and the brands still scaling are the ones that treated compliance as the strategy, not the afterthought.
+If you run paid social for a [GLP-1 or weight-loss brand](/industries/glp-1-weight-loss/), the ground moved under you at the end of 2025. In December, a bipartisan coalition of **35+ state attorneys general** publicly pressured Meta to crack down on misleading, AI-generated weight-loss drug ads (per the coalition's December 2025 letter to Meta), and the FDA issued warning letters to telehealth companies over compounded GLP-1 marketing (per the FDA's published warning-letter database). The enforcement environment is now the tightest it has ever been - and the brands still scaling are the ones that treated compliance as the strategy, not the afterthought.
 
 Here's what actually changed, what didn't, and the exact way compliant GLP-1 brands keep their Meta accounts live in 2026.
 

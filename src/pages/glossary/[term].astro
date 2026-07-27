@@ -16,6 +16,106 @@ const path = `/glossary/${t.slug}/`;
 const title = `${t.term}: Definition | AdBoost`;
 const description = t.definition.slice(0, 155);
 const related = (t.related ?? []).map((r) => getTerm(r)).filter(Boolean);
+
+// Topic-aware related resources per term (fallback = default trio below).
+type Resource = { href: string; label: string };
+const DEFAULT_RESOURCES: Resource[] = [
+  { href: '/tools/cac-calculator/', label: 'CAC calculator' },
+  { href: '/tools/ltv-cac-calculator/', label: 'LTV:CAC calculator' },
+  { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+];
+const RESOURCES: Record<string, Resource[]> = {
+  mer: [
+    { href: '/tools/mer-calculator/', label: 'MER calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  roas: [
+    { href: '/tools/mer-calculator/', label: 'MER calculator (the blended alternative)' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  poas: [
+    { href: '/tools/poas-calculator/', label: 'POAS calculator' },
+    { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement CAC playbook' },
+  ],
+  cac: [
+    { href: '/tools/cac-calculator/', label: 'CAC calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'blended-cac': [
+    { href: '/tools/cac-calculator/', label: 'CAC calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'paid-cac': [
+    { href: '/tools/cac-calculator/', label: 'CAC calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  ltv: [
+    { href: '/tools/ltv-cac-calculator/', label: 'LTV:CAC calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'ltv-cac-ratio': [
+    { href: '/tools/ltv-cac-calculator/', label: 'LTV:CAC calculator' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'cac-payback-period': [
+    { href: '/tools/ad-budget-calculator/', label: 'Ad budget calculator' },
+    { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement CAC playbook' },
+  ],
+  'payback-period': [
+    { href: '/tools/ad-budget-calculator/', label: 'Ad budget calculator' },
+    { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement CAC playbook' },
+  ],
+  'hipaa-compliant-marketing': [
+    { href: '/blog/legitscript-certification-telehealth-guide/', label: 'LegitScript certification guide' },
+    { href: '/services/paid-media/', label: 'Compliant paid media for health brands' },
+  ],
+  'legitscript-certification': [
+    { href: '/blog/legitscript-certification-telehealth-guide/', label: 'LegitScript certification guide' },
+    { href: '/services/paid-media/', label: 'Compliant paid media for health brands' },
+  ],
+  'quiz-funnel': [
+    { href: '/services/cro/', label: 'CRO & quiz funnels' },
+    { href: '/blog/choose-health-growth-agency/', label: 'How to choose a health growth agency' },
+  ],
+  'landing-page-conversion-rate': [
+    { href: '/services/cro/', label: 'CRO & landing page optimization' },
+    { href: '/blog/choose-health-growth-agency/', label: 'How to choose a health growth agency' },
+  ],
+  'creative-fatigue': [
+    { href: '/blog/health-ad-creative-rejected-fix/', label: 'Fixing rejected health ad creative' },
+    { href: '/services/creative/', label: 'Compliant creative production' },
+  ],
+  'hook-rate': [
+    { href: '/blog/health-ad-creative-rejected-fix/', label: 'Fixing rejected health ad creative' },
+    { href: '/services/creative/', label: 'Compliant creative production' },
+  ],
+  'creative-testing': [
+    { href: '/blog/health-ad-creative-rejected-fix/', label: 'Fixing rejected health ad creative' },
+    { href: '/services/creative/', label: 'Compliant creative production' },
+  ],
+  'structure-function-claim': [
+    { href: '/blog/glp1-meta-ad-policy-state-ag-2026/', label: 'Meta GLP-1 policy & state-AG crackdown' },
+    { href: '/advertising/supplements-on-meta/', label: 'Advertising supplements on Meta' },
+  ],
+  'server-side-tracking': [
+    { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
+    { href: '/services/paid-media/', label: 'Paid media with clean attribution' },
+  ],
+  capi: [
+    { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
+    { href: '/services/paid-media/', label: 'Paid media with clean attribution' },
+  ],
+  'ios-att': [
+    { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
+    { href: '/services/paid-media/', label: 'Paid media with clean attribution' },
+  ],
+  incrementality: [
+    { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
+    { href: '/services/paid-media/', label: 'Paid media with clean attribution' },
+  ],
+};
+const resources = RESOURCES[t.slug] ?? DEFAULT_RESOURCES;
+
 const jsonLd = [
   definedTerm(SITE, { term: t.term, description: t.definition, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term, href: path }]),
@@ -55,9 +155,7 @@ const jsonLd = [
             <h4>Put the numbers to work</h4>
             <p>Benchmark your own metrics against your vertical in seconds.</p>
             <div class="link-list">
-              <a href="/tools/cac-calculator/">CAC calculator</a>
-              <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
+              {resources.map((r) => <a href={r.href}>{r.label}</a>)}
               <a href="/glossary/">Back to glossary</a>
             </div>
           </div>

@@ -19,6 +19,12 @@ const description = c.answer.slice(0, 155);
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor, href: path }]),
   faqPage(c.faq),
+  {
+    '@type': 'ItemList',
+    name: `${c.h1}: comparison dimensions`,
+    url: `${SITE}${path}`,
+    itemListElement: c.rows.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.dimension })),
+  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">

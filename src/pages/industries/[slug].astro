@@ -5,6 +5,7 @@ import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook } from '../../data/vertical-playbooks';
+import { AD_POLICIES } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
 
@@ -25,6 +26,19 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short, href: path }]),
   faqPage(faqAll),
 ];
+const platformGuides = AD_POLICIES.filter((p) => p.verticalSlug === v.slug);
+const VERTICAL_BLOG: Record<string, { href: string; label: string }> = {
+  'glp-1-weight-loss': { href: '/blog/glp1-advertising-compliance-2026/', label: 'How to run compliant GLP-1 ads without getting banned →' },
+  'telehealth': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'supplements-dtc': { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'The supplement playbook for lowering CAC while scaling →' },
+  'trt-hormone': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'med-spa': { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ads get rejected, and how to fix it →' },
+  'mental-health': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'longevity': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'peptides': { href: '/blog/glp1-meta-ad-policy-state-ag-2026/', label: 'GLP-1 on Meta after the 35-state-AG action: what changed →' },
+  'fertility-ivf': { href: '/blog/best-telehealth-marketing-agencies-2026/', label: 'The best telehealth marketing agencies, ranked →' },
+};
+const verticalBlog = VERTICAL_BLOG[v.slug] ?? { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ads get rejected, and how to fix it →' };
 const services = [
   { t: 'Compliant paid media', d: 'Meta, Google & TikTok, structured for this vertical’s auction.', href: '/services/paid-media/' },
   { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/' },
@@ -76,7 +90,7 @@ const toc = [
             </div>
 
             <h2 id="landmine">Compliance landmines</h2>
-            <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href="/blog/health-ad-creative-rejected-fix/">Why health ads get rejected, and how to fix it →</a></div>
+            <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
 
             <h2 id="mistakes">Common mistakes in {v.short.toLowerCase()}</h2>
             <ul class="xlist">
@@ -120,6 +134,14 @@ const toc = [
               <a href="/tools/ltv-cac-calculator/">Check your LTV:CAC</a>
             </div>
           </div>
+          {platformGuides.length > 0 && (
+            <div class="aside-card">
+              <h4>Platform compliance guides</h4>
+              <div class="link-list">
+                {platformGuides.map((p) => <a href={`/advertising/${p.slug}/`}>{p.vertical} ads on {p.platform}: what is allowed</a>)}
+              </div>
+            </div>
+          )}
           <div class="aside-card dark">
             <h4 style="color:#fff">Lower CAC on your {v.short.toLowerCase()} brand</h4>
             <p>Free audit with a senior strategist - a written plan you keep either way.</p>

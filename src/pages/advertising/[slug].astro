@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
+import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
 
@@ -19,6 +20,7 @@ const description = p.answer.slice(0, 155);
 const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
+const industry = getVertical(p.verticalSlug);
 const jsonLd = [
   articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: p.updated, image: '/og/og-home.png' }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
@@ -76,6 +78,10 @@ const toc = [
 
             <h2 id="comply">How compliant brands still advertise</h2>
             <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span>{p.howToComply}</div>
+
+            {industry && (
+              <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure, and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
+            )}
 
             <h2 id="faq">FAQ</h2>
             <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
