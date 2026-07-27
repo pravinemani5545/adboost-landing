@@ -36,7 +36,7 @@ Subscription-first framing, bundle laddering, and a genuine risk reversal - that
 - **A real risk reversal.** In a category built on skepticism, "empty-bottle guarantee" class offers routinely beat 10% discounts on conversion - at lower real cost, because refund take rates on satisfied supplement customers run far below the discount you'd have given everyone.
 - **Quiz funnels where personalization is plausible.** A good quiz warms cold traffic, collects zero-party data for email/SMS, and lifts lander conversion. A gimmick quiz just adds a step. Be honest about which one yours is.
 
-The math is worth making explicit. A $49 one-time bottle at 65% margin allows roughly $32 in acquisition cost before you're underwater. The identical product sold subscription-first, averaging four billing cycles, can justify a CAC north of $90 on the same margin structure. Nothing about the ad changed - the offer tripled what you're allowed to pay, and in a bid auction, the brand allowed to pay the most eventually wins the impression.
+The math is worth making explicit. A $49 one-time bottle at 65% margin allows roughly $32 in acquisition cost before you're underwater. The identical product sold subscription-first, averaging four billing cycles, can justify a CAC north of $90 on the same margin structure. Nothing about the ad changed - the offer tripled what you're allowed to pay, and in a bid auction, the brand allowed to pay the most eventually wins the impression. Check your own margin math in the [POAS calculator](/tools/poas-calculator/).
 
 ## How should you structure creative testing at scale?
 

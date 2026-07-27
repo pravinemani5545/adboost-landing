@@ -32,7 +32,7 @@ A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology
 
 Two caveats that matter more than the table:
 
-1. **CAC only means something against LTV.** A $350 CAC on a GLP-1 program retaining patients 8+ months at $200/month is a printing press. The same CAC on a 2.5-month retention curve is a slow bankruptcy.
+1. **CAC only means something against LTV.** A $350 CAC on a GLP-1 program retaining patients 8+ months at $200/month is a printing press. The same CAC on a 2.5-month retention curve is a slow bankruptcy. (Run your own ratio in the [LTV:CAC calculator](/tools/ltv-cac-calculator/), or work backwards from margin with the [CAC calculator](/tools/cac-calculator/).)
 2. **Blended vs. paid CAC.** Brands with real organic and referral engines report blended CAC 30–50% below their paid CAC. If your agency only reports platform CAC, you're not seeing the business.
 
 If you're on the supplements row, the levers behave differently than in prescription telehealth - we broke down how subscription brands hold the bottom of that range in the [supplement brand CAC playbook](/blog/supplement-brand-lower-cac-playbook/).

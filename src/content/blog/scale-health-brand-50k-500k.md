@@ -28,7 +28,7 @@ What we see across partner accounts as spend steps up a tier on a single channel
 | $100–250K | Single-channel marginal CAC turns ugly | Second channel live, offer/funnel depth, incrementality checks |
 | $250–500K | Measurement and cash flow, not ads | MMM-lite/holdout testing, financing structure, dedicated team |
 
-The founders who scale cleanly watch marginal CAC weekly and treat a widening gap between marginal and blended as the signal to change *structure* - not to simply push budget harder into the same shape.
+The founders who scale cleanly watch marginal CAC weekly and treat a widening gap between marginal and blended as the signal to change *structure* - not to simply push budget harder into the same shape. The [ad budget calculator](/tools/ad-budget-calculator/) makes the tier math concrete for your own numbers.
 
 ## When do you add a second (and third) channel?
 

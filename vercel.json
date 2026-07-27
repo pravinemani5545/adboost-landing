@@ -54,7 +54,7 @@
     {
       "source": "/protocol/",
       "destination": "/zero-ban-protocol/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/free/zero-ban-protocol/",
