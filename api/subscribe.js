@@ -88,6 +88,8 @@ export default async function handler(req, res) {
     const source = (body.source || 'unknown').toString().slice(0, 60);
     const phoneRaw = (body.phone || '').toString().trim().slice(0, 32);
     const country = (body.country || '').toString().trim().slice(0, 4);
+    const utm = body.utm && typeof body.utm === 'object' ? body.utm : {};
+    const cleanUtm = (v) => (v || '').toString().trim().slice(0, 80).replace(/[<>]/g, '');
     // Keep only digits, +, spaces, dashes, parens; drop anything else.
     const phone = phoneRaw.replace(/[^0-9+\-() ]/g, '').slice(0, 24);
 
@@ -117,11 +119,14 @@ export default async function handler(req, res) {
     const phoneLine = phone
       ? `<p>Phone: ${country ? country + ' ' : ''}${phone}</p>`
       : '';
+    const utmLine = (utm.utm_source || utm.utm_campaign)
+      ? `<p>Campaign: ${cleanUtm(utm.utm_source) || '(none)'} / ${cleanUtm(utm.utm_medium) || '(none)'} / ${cleanUtm(utm.utm_campaign) || '(none)'} / ${cleanUtm(utm.utm_content) || '(none)'}</p>`
+      : '';
     resend('/emails', {
       from: FROM,
       to: [NOTIFY],
       subject: `New lead: ${name || email} (${source})`,
-      html: `<p><strong>${name || '(no name)'}</strong> &lt;${email}&gt;</p>${phoneLine}<p>Source: ${source}</p><p>Requested: Zero-Ban Protocol</p>`,
+      html: `<p><strong>${name || '(no name)'}</strong> &lt;${email}&gt;</p>${phoneLine}<p>Source: ${source}</p>${utmLine}<p>Requested: Zero-Ban Protocol</p>`,
     }).catch(() => {});
 
     if (!sent.ok) {

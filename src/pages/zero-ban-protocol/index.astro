@@ -202,12 +202,16 @@ const steps = [
           err.textContent = 'Please enter your name and a valid email.'; err.hidden = false; return;
         }
         btn.disabled = true; btn.style.opacity = '.7'; btn.textContent = 'Sending…';
+        const qp = function (k) { try { return new URLSearchParams(location.search).get(k) || ''; } catch (e) { return ''; } };
+        const utm = { utm_source: qp('utm_source'), utm_medium: qp('utm_medium'), utm_campaign: qp('utm_campaign'), utm_content: qp('utm_content') };
         try {
           const r = await fetch('/api/subscribe/', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, email: email, phone: phone, country: country, source: 'zero-ban-protocol' })
+            body: JSON.stringify({ name: name, email: email, phone: phone, country: country, source: 'zero-ban-protocol', utm: utm })
           });
           if (!r.ok) throw new Error('bad status');
+          // Report the conversion to the admin portal, carries utm + visitor via t.js.
+          try { if (window.abTrack) window.abTrack('lead_captured', { cta_location: 'lead-form' }); } catch (e) {}
           document.getElementById('sentTo').textContent = email;
           formState.hidden = true; successState.hidden = false;
           window.scrollTo({ top: 0, behavior: 'smooth' });
