@@ -129,6 +129,33 @@ export default async function handler(req, res) {
       html: `<p><strong>${name || '(no name)'}</strong> &lt;${email}&gt;</p>${phoneLine}<p>Source: ${source}</p>${utmLine}<p>Requested: Zero-Ban Protocol</p>`,
     }).catch(() => {});
 
+    // 4. Persist the lead to our own DB for the admin Leads table. Fire-and-forget
+    // via the Supabase REST API (no dependency); never blocks or fails the signup.
+    if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      const visitorId = (body.visitor_id || '').toString().trim().slice(0, 64);
+      fetch(`${process.env.SUPABASE_URL}/rest/v1/leads`, {
+        method: 'POST',
+        headers: {
+          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal',
+        },
+        body: JSON.stringify({
+          name: name || null,
+          email,
+          phone: phone || null,
+          country: country || null,
+          source,
+          utm_source: cleanUtm(utm.utm_source) || null,
+          utm_medium: cleanUtm(utm.utm_medium) || null,
+          utm_campaign: cleanUtm(utm.utm_campaign) || null,
+          utm_content: cleanUtm(utm.utm_content) || null,
+          visitor_id: visitorId || null,
+        }),
+      }).catch(() => {});
+    }
+
     if (!sent.ok) {
       const detail = await sent.text().catch(() => '');
       // The contact was still captured; report a soft error so the UI can decide.
