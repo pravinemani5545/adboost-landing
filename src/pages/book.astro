@@ -1,0 +1,58 @@
+---
+// /book - attribution bridge for off-site (YouTube) booking links.
+// Loads the tracker so it records an attributed visit + click carrying the
+// incoming utm, ensures a visitor id, then redirects to cal.com with
+// metadata[visitor]=<id>. The cal-webhook reads that visitor and enriches the
+// scheduled-call event from this visit, so direct YouTube -> cal bookings get
+// attributed to the exact video. Not indexed; it exists only to redirect.
+const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call';
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Redirecting to booking</title>
+<script defer src="https://admin.adboost.health/t.js"></script>
+<style>
+  body { margin: 0; font-family: Geist, -apple-system, system-ui, sans-serif; background: #f6f7f9; color: #0a0a0f; display: flex; min-height: 100vh; align-items: center; justify-content: center; }
+  .b { text-align: center; padding: 24px; }
+  .b p { color: #6b6f7a; font-size: 15px; margin: 6px 0; }
+  .b a { color: #0057ff; }
+  .spin { width: 26px; height: 26px; border: 3px solid #d8dce4; border-top-color: #0057ff; border-radius: 50%; margin: 0 auto 16px; animation: s .8s linear infinite; }
+  @keyframes s { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+  <div class="b">
+    <div class="spin"></div>
+    <p>Taking you to the booking page...</p>
+    <p><a id="fallback" href={CAL}>Continue to booking</a></p>
+  </div>
+  <script is:inline>
+    (function () {
+      var CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call';
+      var vid;
+      try { vid = localStorage.getItem('ab_vid'); } catch (e) {}
+      if (!vid) {
+        try {
+          vid = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : 'v-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+          localStorage.setItem('ab_vid', vid);
+        } catch (e) { vid = ''; }
+      }
+      var qs = location.search || '';
+      var target = CAL + qs + (qs ? '&' : '?') + 'metadata[visitor]=' + encodeURIComponent(vid || '');
+      try { document.getElementById('fallback').href = target; } catch (e) {}
+      // Give t.js a beat to fire the attributed pageview, log an attributed
+      // book_call_click, then redirect (sendBeacon survives the navigation).
+      setTimeout(function () {
+        try { if (window.abTrack) window.abTrack('book_call_click', { cta_location: 'book-redirect' }); } catch (e) {}
+        setTimeout(function () { location.replace(target); }, 300);
+      }, 900);
+    })();
+  </script>
+</body>
+</html>
