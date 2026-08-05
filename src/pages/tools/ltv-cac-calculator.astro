@@ -18,20 +18,6 @@ const faq = [
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'LTV:CAC Calculator', href: path }]),
   faqPage(faq),
-  {
-    '@type': 'SoftwareApplication',
-    name: 'LTV:CAC Ratio & Payback Calculator',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    url: `${SITE}${path}`,
-    featureList: [
-      'Calculate gross-profit lifetime value (LTV)',
-      'Calculate the LTV:CAC ratio against the 3:1 benchmark',
-      'Calculate CAC payback period in months',
-      'Runs entirely in the browser, no signup',
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

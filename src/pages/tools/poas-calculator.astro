@@ -18,19 +18,6 @@ const faq = [
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'POAS Calculator', href: path }]),
   faqPage(faq),
-  {
-    '@type': 'SoftwareApplication',
-    name: 'POAS Calculator',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    url: `${SITE}${path}`,
-    featureList: [
-      'Calculate profit on ad spend from revenue, margin, and spend',
-      'Side-by-side ROAS comparison to show the margin gap',
-      'Runs entirely in the browser, no signup',
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

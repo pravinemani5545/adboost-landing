@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { transformSync } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -39,6 +40,43 @@ const pruneQueuedAssets = {
   },
 };
 
+// Astro emits is:inline scripts verbatim (unminified). Minify inline JS and
+// JSON-LD in the built HTML. Whitespace + syntax only (no identifier mangling)
+// so global hooks like window.abTrack and cross-script references stay intact.
+const minifyInlineScripts = {
+  name: 'minify-inline-scripts',
+  hooks: {
+    'astro:build:done': ({ dir }) => {
+      const distPath = new URL(dir).pathname;
+      const walk = (d) =>
+        fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => {
+          const p = path.join(d, e.name);
+          return e.isDirectory() ? walk(p) : e.name.endsWith('.html') ? [p] : [];
+        });
+      const scriptRe = /<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi;
+      for (const file of walk(distPath)) {
+        const html = fs.readFileSync(file, 'utf8');
+        const out = html.replace(scriptRe, (full, attrs, body) => {
+          if (!body.trim()) return full;
+          if (/application\/(ld\+json|json)/i.test(attrs)) {
+            try { return `<script${attrs}>${JSON.stringify(JSON.parse(body))}</script>`; } catch { return full; }
+          }
+          const tm = /type\s*=\s*["']([^"']+)["']/i.exec(attrs);
+          if (tm && !/javascript|module/i.test(tm[1])) return full;
+          try {
+            const code = transformSync(body, {
+              loader: 'js', minifyWhitespace: true, minifySyntax: true,
+              minifyIdentifiers: false, legalComments: 'none',
+            }).code.trim();
+            return `<script${attrs}>${code}</script>`;
+          } catch { return full; }
+        });
+        if (out !== html) fs.writeFileSync(file, out);
+      }
+    },
+  },
+};
+
 export default defineConfig({
   site: 'https://www.adboost.health',
   devToolbar: { enabled: false },
@@ -58,5 +96,6 @@ export default defineConfig({
       },
     }),
     pruneQueuedAssets,
+    minifyInlineScripts,
   ],
 });

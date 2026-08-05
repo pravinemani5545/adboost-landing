@@ -6,6 +6,7 @@ export interface Compare {
   slug: string;
   competitor: string;
   h1: string;
+  metaTitle: string;          // title tag, kept distinct from h1 and <= 60 chars
   intent: string;             // who's searching
   answer: string;             // answer-first
   theirFocus: string;
@@ -20,6 +21,7 @@ export const COMPARES: Compare[] = [
     slug: 'full-service-healthcare-agency-alternative',
     competitor: 'a full-service healthcare agency',
     h1: 'AdBoost Health vs. a full-service healthcare agency',
+    metaTitle: 'Full-Service Healthcare Agency Alternative | AdBoost',
     intent: 'Health founders deciding between a broad, full-service healthcare/medical agency and a specialist paid-acquisition partner.',
     answer: 'Full-service healthcare agencies cover brand, web, PR, and patient marketing broadly - often for clinics, hospitals, and pharma. AdBoost Health is the opposite: a focused, paid-performance-first partner for regulated health, telehealth, and supplement DTC brands, built to lower CAC and scale spend compliantly rather than manage a whole marketing department.',
     theirFocus: 'Broad, multi-discipline marketing (brand, creative, web, PR, patient acquisition) across the healthcare industry, frequently oriented toward practices, hospitals, and enterprise pharma.',
@@ -40,6 +42,7 @@ export const COMPARES: Compare[] = [
     slug: 'in-house-growth-team-alternative',
     competitor: 'building an in-house growth team',
     h1: 'AdBoost Health vs. hiring an in-house growth team',
+    metaTitle: 'In-House Growth Team Alternative | AdBoost Health',
     intent: 'Founders weighing whether to hire a growth lead + media buyer + creative in-house or partner with a specialist agency.',
     answer: 'Building in-house gives you dedicated headcount but takes months to hire, costs $300K+ fully loaded, and rarely comes with health-specific compliance expertise on day one. AdBoost Health gives you a senior health-growth team, an in-house creative studio, and compliance review immediately - for less than a single senior hire.',
     theirFocus: 'A dedicated internal team (growth lead, media buyer, creative, analyst) that owns acquisition full-time and builds institutional knowledge.',
@@ -60,6 +63,7 @@ export const COMPARES: Compare[] = [
     slug: 'generalist-dtc-agency-alternative',
     competitor: 'a generalist DTC agency',
     h1: 'AdBoost Health vs. a generalist DTC agency',
+    metaTitle: 'Generalist DTC Agency Alternative | AdBoost Health',
     intent: 'Health founders who’ve worked with (or are considering) a general ecommerce/DTC agency that doesn’t specialize in health.',
     answer: 'Generalist DTC agencies are strong on ecommerce mechanics but routinely lose health brands 30 days to rejected launches and disabled accounts because they don’t know health-vertical ad policy. AdBoost Health brings the same performance discipline plus compliance expertise purpose-built for GLP-1, telehealth, and supplement advertising.',
     theirFocus: 'Broad DTC/ecommerce growth across apparel, beauty, food, and consumer goods - good at the general paid-social and email playbook.',

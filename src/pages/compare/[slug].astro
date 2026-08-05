@@ -14,7 +14,7 @@ const { slug } = Astro.params;
 const c = getCompare(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/compare/${c.slug}/`;
-const title = c.h1.includes('AdBoost') ? c.h1 : `${c.h1} | AdBoost Health`;
+const title = c.metaTitle;
 const description = c.answer.slice(0, 155);
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor, href: path }]),

@@ -87,7 +87,7 @@ const toc = [
             <h2 id="depth">Why it’s different in health</h2>
             {s.deepPoints.map((d) => (<><h3>{d.h}</h3><p>{d.p}</p></>))}
 
-            <div class="callout"><span class="cl-label">By the numbers</span>{s.stat.text} <a href={s.stat.url} target="_blank" rel="noopener nofollow">({s.stat.source})</a></div>
+            <div class="callout"><span class="cl-label">By the numbers</span>{s.stat.text} <a href={s.stat.url} target="_blank" rel="noopener">({s.stat.source})</a></div>
 
             <h2 id="faq">FAQ</h2>
             <Faq items={s.faq} idPrefix={`svc-${s.slug}`} />

@@ -18,19 +18,6 @@ const faq = [
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator', href: path }]),
   faqPage(faq),
-  {
-    '@type': 'SoftwareApplication',
-    name: 'CAC Calculator',
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    url: `${SITE}${path}`,
-    featureList: [
-      'Calculate fully-loaded customer acquisition cost',
-      'Compare CAC against 2026 health-vertical benchmark ranges',
-      'Runs entirely in the browser, no signup',
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

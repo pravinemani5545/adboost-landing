@@ -15,7 +15,16 @@ const { slug } = Astro.params;
 const p = getAdPolicy(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/advertising/${p.slug}/`;
-const title = `${p.vertical} on ${p.platform}: 2026 Ad Compliance Rules | AdBoost Health`;
+// Short vertical labels keep the title tag under Google's ~60-char limit.
+const V_SHORT = {
+  'Med spa & aesthetics': 'Med spa',
+  'GLP-1 & weight loss': 'GLP-1',
+  'Supplements & DTC': 'Supplements',
+  'Telehealth & Rx': 'Telehealth',
+  'TRT & hormone': 'TRT',
+};
+const shortVertical = V_SHORT[p.vertical] ?? p.vertical;
+const title = `${shortVertical} on ${p.platform}: 2026 ad compliance | AdBoost Health`;
 const description = p.answer.slice(0, 155);
 const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
@@ -93,7 +102,7 @@ const toc = [
             <h3>Sources</h3>
             <p style="font-size:13px;color:var(--mute)">Ad policies change frequently and enforcement is tightening - treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
             <ul style="font-size:14px">
-              {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener nofollow">{s.label}</a></li>)}
+              {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
             </ul>
           </div>
         </div>
