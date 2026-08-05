@@ -31,16 +31,6 @@ const jsonLd = [
       'Runs entirely in the browser, no signup',
     ],
   },
-  {
-    '@type': 'HowTo',
-    name: 'How to calculate customer acquisition cost (CAC)',
-    description: 'Divide fully-loaded acquisition spend by the new customers acquired in the same period.',
-    step: [
-      { '@type': 'HowToStep', position: 1, name: 'Total your acquisition spend', text: 'Add up media, creative production, and acquisition-attributable agency or team fees for one period.' },
-      { '@type': 'HowToStep', position: 2, name: 'Count new customers', text: 'Count the new customers or patients acquired in that same period.' },
-      { '@type': 'HowToStep', position: 3, name: 'Divide spend by customers', text: 'CAC equals total acquisition spend divided by new customers. $50,000 across 220 customers is about $227.' },
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

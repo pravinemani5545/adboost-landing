@@ -19,6 +19,10 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cal.com https://admin.adboost.health; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://admin.adboost.health https://app.cal.com https://cal.com; frame-src https://app.cal.com https://cal.com; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self' https://app.cal.com; frame-ancestors 'self'"
         }
       ]
     },
@@ -52,6 +56,12 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "adboost-landing.vercel.app" }],
+      "destination": "https://www.adboost.health/:path*",
+      "permanent": true
+    },
+    {
       "source": "/protocol/",
       "destination": "/zero-ban-protocol/",
       "permanent": true
@@ -69,42 +79,77 @@
     {
       "source": "/case-studies",
       "destination": "/industries/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/case-studies/:path(.*)",
       "destination": "/industries/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/services/compliance",
       "destination": "/services/",
-      "permanent": false
+      "permanent": true
     },
     {
       "source": "/services/compliance/:path(.*)",
       "destination": "/services/",
-      "permanent": false
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/telehealth",
+      "destination": "/industries/telehealth/",
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/med-spa",
+      "destination": "/industries/med-spa/",
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/glp-1-weight-loss",
+      "destination": "/industries/glp-1-weight-loss/",
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/supplements-dtc",
+      "destination": "/industries/supplements-dtc/",
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/fertility-ivf",
+      "destination": "/industries/fertility-ivf/",
+      "permanent": true
+    },
+    {
+      "source": "/benchmarks/peptides",
+      "destination": "/industries/peptides/",
+      "permanent": true
     },
     {
       "source": "/benchmarks",
-      "destination": "/blog/telehealth-cac-benchmarks-2026/",
-      "permanent": false
+      "destination": "/industries/",
+      "permanent": true
     },
     {
       "source": "/benchmarks/:path(.*)",
-      "destination": "/blog/telehealth-cac-benchmarks-2026/",
-      "permanent": false
+      "destination": "/industries/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/health-ad-compliance",
+      "destination": "/blog/glp1-advertising-compliance-2026/",
+      "permanent": true
     },
     {
       "source": "/guides",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
+      "destination": "/advertising/",
+      "permanent": true
     },
     {
       "source": "/guides/:path(.*)",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": false
+      "destination": "/advertising/",
+      "permanent": true
     }
   ]
 }

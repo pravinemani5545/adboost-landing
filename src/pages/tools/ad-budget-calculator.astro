@@ -31,16 +31,6 @@ const jsonLd = [
       'Runs entirely in the browser, no signup',
     ],
   },
-  {
-    '@type': 'HowTo',
-    name: 'How to calculate your monthly ad budget',
-    description: 'Work backwards from a new-customer target and your target CAC to the monthly ad budget you need.',
-    step: [
-      { '@type': 'HowToStep', position: 1, name: 'Set your monthly customer target', text: 'Decide how many new customers or patients you want to acquire this month.' },
-      { '@type': 'HowToStep', position: 2, name: 'Enter your target CAC', text: 'Use your current customer acquisition cost, or a benchmark CAC for your vertical.' },
-      { '@type': 'HowToStep', position: 3, name: 'Multiply target by CAC', text: 'Ad budget equals target new customers multiplied by CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.' },
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

@@ -9,7 +9,7 @@ export function organizationNode(base: string) {
     '@id': ORG_ID(base),
     name: 'AdBoost Health',
     url: `${base}/`,
-    logo: { '@type': 'ImageObject', url: `${base}/logos/adboost-mark.png` },
+    logo: { '@type': 'ImageObject', url: `${base}/logos/adboost-mark.png`, width: 332, height: 379 },
     email: 'hello@adboost.health',
     description: 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.',
     address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
@@ -58,7 +58,7 @@ export function serviceNode(base: string, opts: { name: string; description: str
       '@type': 'Organization',
       name: 'AdBoost Health',
       url: `${base}/`,
-      logo: { '@type': 'ImageObject', url: `${base}/logos/adboost-mark.png` },
+      logo: { '@type': 'ImageObject', url: `${base}/logos/adboost-mark.png`, width: 332, height: 379 },
     },
     areaServed: opts.area ?? 'US',
     audience: { '@type': 'Audience', audienceType: 'Health, telehealth, supplement and wellness brands' },
@@ -98,19 +98,6 @@ export function articleNode(base: string, opts: {
     },
     publisher: { '@id': ORG_ID(base) },
     ...(opts.image ? { image: opts.image.startsWith('http') ? opts.image : `${base}${opts.image}` } : {}),
-  };
-}
-
-export function datasetNode(base: string, opts: { name: string; description: string; path: string; dateModified: string }) {
-  return {
-    '@type': 'Dataset',
-    name: opts.name,
-    description: opts.description,
-    url: `${base}${opts.path}`,
-    creator: { '@id': ORG_ID(base) },
-    dateModified: opts.dateModified,
-    license: `${base}/`,
-    isAccessibleForFree: true,
   };
 }
 

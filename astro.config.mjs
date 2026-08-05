@@ -18,6 +18,10 @@ for (const f of fs.readdirSync(BLOG_DIR)) {
   if (pub && new Date(pub[1]).valueOf() > Date.now()) futureSlugs.push(slug);
 }
 
+// Fallback lastmod for non-blog routes (data-module pages carry no per-page
+// date): the build date, so every sitemap URL has a freshness signal.
+const BUILD_DATE = new Date().toISOString().slice(0, 10);
+
 // Queued posts have no route until their Friday rebuild, but their hero/og
 // images live in public/ (the publish pipeline needs them ready). Strip those
 // static assets from dist so future slugs/artwork aren't pre-exposed.
@@ -40,12 +44,17 @@ export default defineConfig({
   devToolbar: { enabled: false },
   integrations: [
     sitemap({
-      // Keep gated lead-magnet opt-in/asset pages out of the sitemap (they're noindex).
-      filter: (page) => !page.includes('/free/') && !page.includes('/zero-ban-protocol'),
+      // Keep gated/noindex pages out of the sitemap: lead-magnet opt-in + asset
+      // pages, and the /book Cal.com redirect bridge (noindex, was leaking in).
+      filter: (page) =>
+        !page.includes('/free/') &&
+        !page.includes('/zero-ban-protocol') &&
+        !page.includes('/book'),
       serialize(item) {
         const m = item.url.match(/\/blog\/([^/]+)\/$/);
         if (m && postDates[m[1]]) return { ...item, lastmod: postDates[m[1]] };
-        return item;
+        // Every other URL gets the build date so it carries a lastmod signal.
+        return { ...item, lastmod: BUILD_DATE };
       },
     }),
     pruneQueuedAssets,

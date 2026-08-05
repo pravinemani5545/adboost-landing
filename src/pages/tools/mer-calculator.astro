@@ -31,16 +31,6 @@ const jsonLd = [
       'Runs entirely in the browser, no signup',
     ],
   },
-  {
-    '@type': 'HowTo',
-    name: 'How to calculate MER (marketing efficiency ratio)',
-    description: 'Divide total revenue by total marketing spend across all channels for the same period.',
-    step: [
-      { '@type': 'HowToStep', position: 1, name: 'Total your revenue', text: 'Take total revenue for the period, across all channels, not just ad-attributed revenue.' },
-      { '@type': 'HowToStep', position: 2, name: 'Total your marketing spend', text: 'Add up all marketing and ad spend for that same period.' },
-      { '@type': 'HowToStep', position: 3, name: 'Divide revenue by spend', text: 'MER equals total revenue divided by total marketing spend. $300,000 revenue on $75,000 spend is a MER of 4.0.' },
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>

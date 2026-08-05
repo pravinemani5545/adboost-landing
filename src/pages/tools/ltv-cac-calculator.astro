@@ -32,16 +32,6 @@ const jsonLd = [
       'Runs entirely in the browser, no signup',
     ],
   },
-  {
-    '@type': 'HowTo',
-    name: 'How to calculate LTV:CAC ratio and payback period',
-    description: 'Estimate gross-profit lifetime value, divide by CAC for the ratio, and divide CAC by monthly gross profit for payback.',
-    step: [
-      { '@type': 'HowToStep', position: 1, name: 'Estimate lifetime value', text: 'LTV equals monthly revenue times gross margin times average months retained.' },
-      { '@type': 'HowToStep', position: 2, name: 'Divide LTV by CAC', text: 'The LTV:CAC ratio is lifetime value divided by customer acquisition cost. Aim for at least 3:1.' },
-      { '@type': 'HowToStep', position: 3, name: 'Calculate payback', text: 'Payback in months equals CAC divided by monthly gross profit per customer.' },
-    ],
-  },
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
