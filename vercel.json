@@ -56,9 +56,9 @@
   ],
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [{ "type": "host", "value": "adboost-landing.vercel.app" }],
-      "destination": "https://www.adboost.health/:path*",
+      "destination": "https://www.adboost.health/:path",
       "permanent": true
     },
     {
@@ -97,38 +97,33 @@
       "permanent": true
     },
     {
-      "source": "/benchmarks/telehealth",
+      "source": "/benchmarks/telehealth/",
       "destination": "/industries/telehealth/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/med-spa",
+      "source": "/benchmarks/med-spa/",
       "destination": "/industries/med-spa/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/glp-1-weight-loss",
+      "source": "/benchmarks/glp-1-weight-loss/",
       "destination": "/industries/glp-1-weight-loss/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/supplements-dtc",
+      "source": "/benchmarks/supplements-dtc/",
       "destination": "/industries/supplements-dtc/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/fertility-ivf",
+      "source": "/benchmarks/fertility-ivf/",
       "destination": "/industries/fertility-ivf/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/peptides",
+      "source": "/benchmarks/peptides/",
       "destination": "/industries/peptides/",
-      "permanent": true
-    },
-    {
-      "source": "/benchmarks",
-      "destination": "/industries/",
       "permanent": true
     },
     {
@@ -137,13 +132,8 @@
       "permanent": true
     },
     {
-      "source": "/guides/health-ad-compliance",
+      "source": "/guides/health-ad-compliance/",
       "destination": "/blog/glp1-advertising-compliance-2026/",
-      "permanent": true
-    },
-    {
-      "source": "/guides",
-      "destination": "/advertising/",
       "permanent": true
     },
     {
