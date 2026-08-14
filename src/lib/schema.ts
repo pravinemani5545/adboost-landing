@@ -23,6 +23,7 @@ export function organizationNode(base: string) {
       'https://www.linkedin.com/company/adboosthealth/',
       'https://share.google/jcPw0NY1bzWFdGCqV',
       'https://clutch.co/profile/adboost-health',
+      'https://www.instagram.com/adboost.health/',
     ],
   };
 }
