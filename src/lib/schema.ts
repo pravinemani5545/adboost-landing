@@ -19,7 +19,10 @@ export function organizationNode(base: string) {
       { '@type': 'Person', name: 'Pira Ahilan', sameAs: ['https://www.linkedin.com/in/piraahilan/'] },
     ],
     knowsAbout: ['health marketing', 'telehealth advertising', 'GLP-1 advertising compliance', 'paid media', 'CAC optimization'],
-    sameAs: ['https://www.linkedin.com/company/adboosthealth/'],
+    sameAs: [
+      'https://www.linkedin.com/company/adboosthealth/',
+      'https://share.google/jcPw0NY1bzWFdGCqV',
+    ],
   };
 }
 
