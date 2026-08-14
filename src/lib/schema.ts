@@ -16,12 +16,13 @@ export function organizationNode(base: string) {
     areaServed: 'US',
     founder: [
       { '@type': 'Person', name: 'Amir Salihovic', sameAs: ['https://www.linkedin.com/in/amir-salihovic-7b2844157/'] },
-      { '@type': 'Person', name: 'Pira Ahilan', sameAs: ['https://www.linkedin.com/in/piraahilan/'] },
+      { '@type': 'Person', name: 'Pira Ahilan', sameAs: ['https://www.linkedin.com/in/piraahilan/', 'https://www.youtube.com/@piraahilan'] },
     ],
     knowsAbout: ['health marketing', 'telehealth advertising', 'GLP-1 advertising compliance', 'paid media', 'CAC optimization'],
     sameAs: [
       'https://www.linkedin.com/company/adboosthealth/',
       'https://share.google/jcPw0NY1bzWFdGCqV',
+      'https://clutch.co/profile/adboost-health',
     ],
   };
 }
