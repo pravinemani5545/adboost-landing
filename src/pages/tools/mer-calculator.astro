@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
-import { breadcrumb, faqPage } from '../../lib/schema';
+import { breadcrumb, faqPage, calculatorNode } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/mer-calculator/';
@@ -16,6 +16,7 @@ const faq = [
   { q: 'MER vs ROAS - which should I use?', a: 'Use MER to judge whole-business efficiency (what the bank account shows) and platform ROAS only as an in-channel optimization signal. When platform ROAS looks great but MER is flat, platforms are over-claiming shared conversions.' },
 ];
 const jsonLd = [
+  calculatorNode(SITE, { name: 'MER Calculator', description, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'MER Calculator', href: path }]),
   faqPage(faq),
 ];

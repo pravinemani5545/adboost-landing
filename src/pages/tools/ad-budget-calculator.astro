@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
-import { breadcrumb, faqPage } from '../../lib/schema';
+import { breadcrumb, faqPage, calculatorNode } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/ad-budget-calculator/';
@@ -16,6 +16,7 @@ const faq = [
   { q: 'How much creative does that budget need?', a: 'In health, holding benchmark CAC takes 30–60 fresh creatives a month; running 5–10 typically pushes CAC 40–80% over. Budget for creative volume, not just media.' },
 ];
 const jsonLd = [
+  calculatorNode(SITE, { name: 'Ad Budget Calculator', description, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator', href: path }]),
   faqPage(faq),
 ];

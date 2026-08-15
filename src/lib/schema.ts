@@ -5,7 +5,9 @@ const ORG_ID = (base: string) => `${base}/#org`;
 
 export function organizationNode(base: string) {
   return {
-    '@type': 'Organization',
+    // Also a ProfessionalService (a LocalBusiness subtype) so the Toronto NAP
+    // anchors a local/knowledge-panel entity, not just a generic Organization.
+    '@type': ['Organization', 'ProfessionalService'],
     '@id': ORG_ID(base),
     name: 'AdBoost Health',
     url: `${base}/`,
@@ -25,6 +27,22 @@ export function organizationNode(base: string) {
       'https://clutch.co/profile/adboost-health',
       'https://www.instagram.com/adboost.health/',
     ],
+  };
+}
+
+// A free calculator, marked up as a web app so it is eligible for rich results
+// and gets cited by AI engines as a tool.
+export function calculatorNode(base: string, opts: { name: string; description: string; path: string }) {
+  return {
+    '@type': ['SoftwareApplication', 'WebApplication'],
+    name: opts.name,
+    description: opts.description,
+    url: `${base}${opts.path}`,
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'Web',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    provider: { '@id': ORG_ID(base) },
   };
 }
 

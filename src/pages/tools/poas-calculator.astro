@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
-import { breadcrumb, faqPage } from '../../lib/schema';
+import { breadcrumb, faqPage, calculatorNode } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/poas-calculator/';
@@ -16,6 +16,7 @@ const faq = [
   { q: 'POAS vs ROAS - what is the difference?', a: 'ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with identical ROAS can have very different POAS if their margins differ, so POAS keeps spend pointed at what is actually profitable.' },
 ];
 const jsonLd = [
+  calculatorNode(SITE, { name: 'POAS Calculator', description, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'POAS Calculator', href: path }]),
   faqPage(faq),
 ];
