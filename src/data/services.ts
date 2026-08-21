@@ -1,4 +1,5 @@
 export interface Service {
+  seoTitle?: string;   // overrides the derived `${h1} | AdBoost Health` title
   slug: string;
   name: string;
   navLabel: string;
@@ -113,10 +114,11 @@ export const SERVICES: Service[] = [
     slug: 'cro',
     name: 'CRO & funnels',
     navLabel: 'CRO & funnels',
-    h1: 'Landing pages & funnels that convert',
+    h1: 'Conversion rate optimization for health funnels',
+    seoTitle: 'Conversion Rate Optimization for Health Brands | AdBoost',
     lede: 'We A/B test landers and rewrite hooks weekly so every dollar of traffic lands somewhere it converts - not on a page that leaks.',
     answer: 'AdBoost Health optimizes the full post-click funnel - landing pages, quizzes, offers, and lifecycle - for health and telehealth brands. We A/B test landers and rewrite hooks weekly so traffic finds its highest-converting offer, lifting conversion against baseline without spending a dollar more on media.',
-    desc: 'Landing page and funnel conversion-rate optimization for health, telehealth, and DTC brands.',
+    desc: 'Landing page and funnel conversion rate optimization for health, telehealth, and DTC brands.',
     outcomes: [
       'Weekly A/B tests on landers, offers, and hooks',
       'Message-match from ad to page so quality traffic converts',

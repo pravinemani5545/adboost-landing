@@ -19,7 +19,7 @@ Across the health and [telehealth accounts](/industries/telehealth/) AdBoost Hea
 
 ## What is a good CAC for a telehealth brand in 2026?
 
-A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology, $120–$280 for mental health, $150–$350 for weight loss and GLP-1, $200–$450 for hormone and longevity, and $40–$110 for subscription supplements. The full ranges, from first ad dollar to converted patient:
+A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology, $120–$280 for mental health, $150–$350 for weight loss and GLP-1, $200–$450 for hormone and longevity, and $40–$110 for subscription supplements. The full ranges, from first ad dollar to converted patient (and how to calculate [patient acquisition cost](/blog/patient-acquisition-cost/) for your own account):
 
 | Vertical | Typical blended CAC | Strong | Concerning |
 |---|---|---|---|
@@ -34,7 +34,7 @@ A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology
 Two caveats that matter more than the table:
 
 1. **CAC only means something against LTV.** A $350 CAC on a GLP-1 program retaining patients 8+ months at $200/month is a printing press. The same CAC on a 2.5-month retention curve is a slow bankruptcy. (Run your own ratio in the [LTV:CAC calculator](/tools/ltv-cac-calculator/), or work backwards from margin with the [CAC calculator](/tools/cac-calculator/).)
-2. **Blended vs. paid CAC.** Brands with real organic and referral engines report blended CAC 30–50% below their paid CAC. If your agency only reports platform CAC, you're not seeing the business.
+2. **Blended vs. paid CAC.** Brands with real organic and referral engines report blended CAC 30–50% below their paid CAC. If your agency only reports platform CAC, you're not seeing the business. We put the shortlisting criteria in [the telehealth marketing agency guide](/blog/best-telehealth-marketing-agencies-2026/).
 
 If you're on the supplements row, the levers behave differently than in prescription telehealth - we broke down how subscription brands hold the bottom of that range in the [supplement brand CAC playbook](/blog/supplement-brand-lower-cac-playbook/).
 
@@ -66,7 +66,7 @@ Fix intake friction first - it's the cheapest CAC win in telehealth - then creat
 1. **Kill the intake friction.** Health funnels routinely lose 40–60% of motivated clickers in the eligibility/intake flow. Shortening intake and moving qualification later is the cheapest CAC win in telehealth - we regularly see intake completion move 15–25 points just by cutting field count roughly in half and deferring anything the provider can collect at the consult.
 2. **Rebuild the creative mix around proven angle categories** - clinician authority, patient story, mechanism education, price transparency - and let performance reallocate. The goal isn't one hero ad; it's a library where winners are indexed and iterated instead of rediscovered.
 3. **Fix the measurement layer** before scaling anything. Scaling on bad attribution just buys the same patients twice. Server-side events plus a post-purchase survey is usually enough to expose where last-click reporting has been lying.
-4. **Then, and only then, scale spend** - into lookalike expansion and new channels, watching marginal (not average) CAC. Average CAC flatters a scaling account; marginal CAC tells you when the next dollar stops working.
+4. **Then, and only then, scale spend** - into lookalike expansion and new channels, watching marginal (not average) CAC. Average CAC flatters a scaling account; marginal CAC tells you when the next dollar stops working. The [$50K to $500K scaling playbook](/blog/scale-health-brand-50k-500k/) covers the tiering in full.
 
 Most partners see directional CAC movement within 2 weeks of this sequence; the compounding effect lands around day 31, when the tested creative library, optimized funnel, and clean attribution are working in lockstep. It's the same sequence our [paid media service](/services/paid-media/) runs on every new account.
 

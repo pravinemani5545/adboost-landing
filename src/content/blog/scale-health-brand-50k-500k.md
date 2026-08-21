@@ -38,7 +38,7 @@ Sequencing that works for most health brands:
 
 1. **Meta first** - still the deepest well of health-buyer intent data.
 2. **Google Search/Shopping second** - harvests the demand your Meta spend is already creating; branded and category search CAC is usually your cheapest incremental customer. If branded search volume is climbing while you scale Meta, this channel is already paid for.
-3. **TikTok third**, as a discovery layer feeding retargeting and email capture rather than a last-click closer.
+3. **TikTok third**, as a discovery layer feeding retargeting and email capture rather than a last-click closer. What passes TikTok's health review is its own discipline - see the [TikTok health ads guide](/blog/tiktok-ads-health-brands/).
 4. **YouTube/CTV last** - real reach, but it demands creative production and measurement patience that only make sense once the first three are running.
 
 Two mistakes dominate here. Adding a channel too early splits a creative team that could barely feed one platform. Adding it too late means grinding out $180 marginal customers on Meta while $90 search customers go unharvested. And at every step, verify incrementality - as spend grows, platforms get better at claiming credit for customers you would have gotten anyway. Vertical-level CAC baselines for sanity-checking each channel are in our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/).
@@ -53,9 +53,9 @@ Budget for this. Creative production at scale is a real line item, and treating 
 
 ## What team structure does each tier need?
 
-- **$50–100K:** One accountable operator - a strong agency or one senior in-house buyer - plus a genuine creative pipeline. The killer at this tier is fragmentation: a freelancer buying media, a separate UGC vendor, no one owning the number.
+- **$50–100K:** One accountable operator - a strong agency or one senior in-house buyer - plus a genuine creative pipeline. The killer at this tier is fragmentation: a freelancer buying media, a separate [UGC vendor](/blog/ugc-ads-health-brands-guide/), no one owning the number.
 - **$100–250K:** Specialization begins. Media buying and creative strategy become separate jobs; someone owns lifecycle/retention because at this spend a leaky funnel is a five-figure monthly leak. In-house vs agency matters less than whether the team has *seen this tier before* - the questions that expose that are in our [agency selection guide](/blog/choose-health-growth-agency/).
-- **$250–500K:** Growth becomes cross-functional. Finance is in the weekly meeting (see below), measurement is a named responsibility (holdouts, geo-tests, post-purchase surveys - not just platform attribution), and creative operates as a standing production system, not a request queue.
+- **$250–500K:** Growth becomes cross-functional. Finance is in the weekly meeting (see below), measurement is a named responsibility (holdouts, geo-tests, post-purchase surveys - not just [platform attribution](/blog/healthcare-marketing-attribution/)), and creative operates as a standing production system, not a request queue.
 
 The consistent failure mode: teams built for a tier below the one they're spending at. The symptom is always the same - reporting lags, creative queues, and a CAC chart nobody can explain.
 

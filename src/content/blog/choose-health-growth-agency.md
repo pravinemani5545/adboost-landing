@@ -55,7 +55,7 @@ The second story can be interrogated. The first can only be admired. Any result 
 
 ## 7. "Which metrics will you report, and which will you be accountable to?"
 
-Strong agencies report business metrics - blended CAC, marginal CAC at the current spend tier, cohort payback, intake/checkout conversion - while weak ones report platform metrics like ROAS and CPA by campaign. If reporting doesn't include the funnel and attribution layer, the agency is only accountable for the part of the system easiest to make look good.
+Strong agencies report business metrics - blended CAC, [marginal CAC at the current spend tier](/blog/scale-health-brand-50k-500k/), cohort payback, intake/checkout conversion - while weak ones report platform metrics like ROAS and CPA by campaign. If reporting doesn't include the funnel and attribution layer, the agency is only accountable for the part of the system easiest to make look good.
 
 ## 8. "What do you need from us to succeed?"
 
@@ -81,6 +81,6 @@ Any agency worth hiring names a real disqualifier, because specialists have edge
 
 ## The pattern behind all nine
 
-Every question is measuring the same thing: **does this agency have category-specific systems, or category-agnostic promises?** Health is a regulated, claim-constrained, trust-driven vertical. The playbooks that scale a streetwear brand will get a telehealth account banned. If you're weighing that exact choice, we've written up the [specialist vs. generalist DTC agency comparison](/compare/generalist-dtc-agency-alternative/) in full.
+Every question is measuring the same thing: **does this agency have category-specific systems, or category-agnostic promises?** For category-specific shortlists, see the [GLP-1](/blog/best-glp1-marketing-agencies-2026/) and [telehealth](/blog/best-telehealth-marketing-agencies-2026/) agency reviews. Health is a regulated, claim-constrained, trust-driven vertical - and increasingly one where buyers start in [AI search rather than Google](/blog/ai-search-visibility-health-brands/). The playbooks that scale a streetwear brand will get a telehealth account banned. If you're weighing that exact choice, we've written up the [specialist vs. generalist DTC agency comparison](/compare/generalist-dtc-agency-alternative/) in full.
 
 The fastest way to evaluate us against this list is to run it on us live. [Book the free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) - account audit included, and you leave with a written plan whether we work together or not. 71+ health founders have taken that call; the average partner rating is 4.9/5.

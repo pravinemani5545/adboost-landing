@@ -13,7 +13,7 @@ ctaHeading: "Get a creative engine that passes review."
 ctaText: "Free 30-minute call with a creative + compliance audit - the written plan is yours either way."
 ---
 
-Every health brand founder has lived this loop: the team ships a batch of creative, half gets rejected, the surviving ads fatigue in ten days, and the account plateaus while the agency asks for "more UGC." Rejections aren't random, and fatigue isn't fate. Both are system problems.
+Every health brand founder has lived this loop: the team ships a batch of creative, half gets rejected, the surviving ads fatigue in ten days, and the account plateaus while the agency asks for "more [UGC](/blog/ugc-ads-health-brands-guide/)." Rejections aren't random, and fatigue isn't fate. Both are system problems.
 
 AdBoost Health [produces ad creative in-house](/services/creative/) from Toronto for health, telehealth, and supplement brands - thousands of compliant creatives shipped - and the pattern behind rejections is remarkably consistent.
 
@@ -51,7 +51,7 @@ What each looks like in practice:
 
 ## How much creative volume do you actually need?
 
-20+ new variants per month - that's the standard AdBoost Health holds every partner account to, structured as 4–6 genuinely new concepts and the rest iterations on proven winners. In constrained categories, everyone fishes from the same small pond of compliant angles, which means fatigue hits faster than in general DTC. The accounts that scale don't have *better* single ads; they have a higher sustainable testing rate.
+20+ new variants per month - that's the standard AdBoost Health holds every partner account to, structured as 4–6 genuinely new concepts and the rest iterations on proven winners. In constrained categories, everyone fishes from the same small pond of compliant angles, which means fatigue hits faster than in general DTC. The accounts that scale don't have *better* single ads; they have a higher sustainable testing rate. Our [creative testing framework](/blog/creative-testing-framework-health-ads/) sets out the spend-per-variant and kill criteria we run.
 
 Iteration is where the volume actually comes from. One mechanism-education winner becomes eight variants without a new shoot: three new hooks on the same body, two new openers, a cut-down for Reels, a text-overlay version, a version fronted by a different clinician. Every variant is indexed against the angle library, so the account learns - wins compound instead of evaporating when a media buyer leaves.
 

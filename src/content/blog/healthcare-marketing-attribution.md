@@ -10,7 +10,7 @@ ctaHeading: "Not sure which channels are actually driving patients?"
 ctaText: "Book a free 30-minute call - we map where your attribution is lying to you and send you a written measurement plan either way."
 ---
 
-Ask a telehealth founder or clinic owner which channel drives their patients and you usually get three answers: what Meta claims, what Google claims, and what the front desk swears is true. The three rarely agree, and budget decisions made on the wrong one are how good channels get killed and bad ones get fed.
+Ask a telehealth founder or clinic owner which channel drives their patients and you usually get three answers: what Meta claims, what Google claims, and what the front desk swears is true. A fourth surface is now in play too: [AI search engines that cite brands directly](/blog/ai-search-visibility-health-brands/), which show up in almost no attribution report. The three rarely agree, and budget decisions made on the wrong one are how good channels get killed and bad ones get fed.
 
 Healthcare marketing attribution is the discipline that resolves that argument. Done properly, it tells you which channels are actually producing booked consults and treatment starts, not just which platform was closest to the conversion when it happened. This post is the strategic layer: what attribution means for a health brand, why it is uniquely hard in this vertical, how the standard models work in plain language, and how to actually use the answers. For the implementation stack (PHI-safe server-side tracking, survey mechanics, incrementality testing), see our deep dive on [telehealth attribution in the privacy era](/blog/telehealth-attribution-server-side-tracking/).
 

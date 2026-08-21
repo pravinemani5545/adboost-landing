@@ -70,7 +70,7 @@ Practical notes: use genuinely licensed clinicians (their credentials will be ch
 
 ## How do you scale the winners once you find them?
 
-**Whitelisting** - running ads through the creator's own handle with their permission - is the multiplier. The same video typically earns cheaper engagement from a person's face and handle than from a brand page, and it unlocks the creator's social proof at your budget. Secure usage *and* whitelisting rights in the initial contract (duration, platforms, paid usage, editing rights); renegotiating after a video wins moves all leverage to the creator.
+**Whitelisting** - running ads through the creator's own handle with their permission - is the multiplier. The same video typically earns cheaper engagement from a person's face and handle than from a brand page, and it unlocks the creator's social proof at your budget. Secure usage *and* whitelisting rights in the initial contract (duration, platforms, paid usage, editing rights); renegotiating after a video wins moves all leverage to the creator. Feed the winners into a structured [creative testing framework](/blog/creative-testing-framework-health-ads/) so scaling decisions stay evidence-led.
 
 Then treat winning UGC as raw material, not a finished asset: one strong creator video becomes hook variants, captioned cutdowns, creator-plus-overlay remixes, and clinician-response duets. That's how a single shoot feeds a month of testing - and how you sustain volume without burning creators out. Judge each variant on [hook rate](/glossary/hook-rate/) first; it's the earliest signal a UGC cut will scale.
 

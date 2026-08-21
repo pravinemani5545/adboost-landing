@@ -15,13 +15,13 @@ ctaText: "Free 30-minute call with a compliance-first account audit - you keep t
 
 If you market a [GLP-1 or weight-loss telehealth brand](/industries/glp-1-weight-loss/), you're advertising in the single most scrutinized category on paid social. One flagged creative can cascade into a disabled ad account, and a disabled account at $200K/month spend is not a creative problem - it's a company problem.
 
-AdBoost Health is a Toronto-based agency that manages paid media exclusively for health, telehealth, and supplement brands, and compliance review is the first gate every creative passes through before a dollar of spend touches it. Here's the playbook we run in 2026.
+AdBoost Health is a Toronto-based agency that manages paid media exclusively for health, telehealth, and supplement brands, and compliance review is the first gate every creative passes through before a dollar of spend touches it. Here's the playbook we run in 2026. If you are comparing outside help first, we also reviewed the [GLP-1 marketing agencies worth shortlisting](/blog/best-glp1-marketing-agencies-2026/).
 
 *Platform ad policies change frequently - verify current requirements directly with Meta and Google before launch. This is practitioner guidance, not legal advice.*
 
 ## Why do GLP-1 ad accounts get banned?
 
-Five triggers account for almost every GLP-1 account shutdown we've audited: drug-name copy, before/after imagery, personal-attributes violations, unsubstantiated outcome claims, and landing page mismatch.
+Five triggers account for almost every GLP-1 account shutdown we've audited: drug-name copy, before/after imagery, personal-attributes violations, unsubstantiated outcome claims, and landing page mismatch. The [state-AG pressure that reshaped Meta's GLP-1 rules](/blog/glp1-meta-ad-policy-state-ag-2026/) explains why enforcement tightened when it did.
 
 1. **Drug-name targeting in ad copy.** Naming semaglutide or tirzepatide in an ad promoting your compounded or branded program reads as prescription drug promotion. Meta requires certification for that, and uncertified accounts get flagged fast.
 2. **Before/after imagery.** Both Meta and Google treat weight-loss transformations as sensitive. Even "subtle" split-frame creative gets machine-flagged.
@@ -74,7 +74,7 @@ We've seen accounts survive review sweeps purely because their landers were audi
 
 ## What do you do if your account is already banned?
 
-Run a five-step recovery process: diagnose, fix, document, appeal - and only if the account is unrecoverable, rebuild with certification first. This is the sequence AdBoost Health runs when a partner arrives with a disabled account:
+Run a five-step recovery process: diagnose, fix, document, appeal - and only if the account is unrecoverable, rebuild with certification first. This is the sequence AdBoost Health runs when a partner arrives with a disabled account (the [48-hour Meta appeal playbook](/blog/meta-ad-account-banned-health-brand/) goes deeper):
 
 1. **Diagnose the actual violation.** Pull every rejection notice and policy citation from the account, then review the last 90 days of creative and the landing pages against the trigger table above. Most teams appeal blind; you can't fix what you haven't named.
 2. **Fix everything before appealing.** Scrub drug names from live and paused ads, kill before/after assets, rewrite lander claims, add missing disclaimers. Appealing an un-fixed violation burns your credibility with review teams and makes every subsequent appeal slower.

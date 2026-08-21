@@ -43,7 +43,7 @@ The common thread: the *person* carries the persuasion and the *product* stays c
 
 ## Should you use Spark Ads and the creator marketplace?
 
-Yes - Spark Ads should be the default, not the exception. Boosting a post from a creator's own handle instead of running the same video from your brand account changes two things:
+Yes - Spark Ads should be the default, not the exception. Boosting a post from a creator's own handle instead of running the same video from your brand account changes two things (the [UGC guide](/blog/ugc-ads-health-brands-guide/) covers sourcing and claims-safe briefs):
 
 1. **Social proof travels with the ad.** The creator's handle, follower count, and existing comments come along. For health products, where trust is the entire purchase barrier, that context is worth real CVR.
 2. **Whitelisted creator content often reviews more smoothly than repackaged brand cuts** of the same footage, in our experience - the native format reads less like an ad to both the classifier and the viewer.

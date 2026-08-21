@@ -18,7 +18,7 @@ This is the least glamorous truth in health growth: **your allowable CAC is set 
 
 ## Why does retention set your acquisition ceiling?
 
-The math is short. Allowable CAC is a function of contribution margin per customer over the payback window you can finance. Raise LTV and you raise the ceiling on what you can pay for a customer - which means access to broader audiences, more aggressive scaling, and headroom to survive CPM spikes that kill thinner competitors.
+The math is short. Allowable CAC is a function of contribution margin per customer over the payback window you can finance. Raise LTV and you raise the ceiling on what you can pay for a customer - which means access to broader audiences, more aggressive scaling, and headroom to survive CPM spikes that kill thinner competitors. If you have not pinned the number down yet, start with [patient acquisition cost](/blog/patient-acquisition-cost/).
 
 Across partner accounts, health brands with a working retention system typically support an allowable CAC 1.5–2.5x higher than functionally identical brands selling one-and-done. That gap *is* the competitive moat, because in a Meta auction, the brand that can pay the most for a customer sets the price everyone else has to beat. The vertical-by-vertical numbers are in our [CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/), but the pattern holds everywhere: the ceiling belongs to whoever monetizes the customer longest.
 

@@ -14,7 +14,7 @@ const { slug } = Astro.params;
 const s = getService(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/services/${s.slug}/`;
-const title = `${s.h1} | AdBoost Health`;
+const title = s.seoTitle ?? `${s.h1} | AdBoost Health`;
 const description = s.lede;
 const jsonLd = [
   serviceNode(SITE, { name: s.name, description: s.desc, path }),

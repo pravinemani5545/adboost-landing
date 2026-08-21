@@ -21,7 +21,7 @@ Here's the playbook we run when a supplement brand needs spend to scale and CAC 
 
 Supplement CAC explodes at scale for four mechanical reasons - auction depth, creative fatigue, single-offer fragility, and funnel ceilings - and none of them mean the audience is tapped:
 
-1. **Auction depth.** At higher budgets Meta buys deeper into the audience where intent is thinner. Marginal CAC always exceeds average CAC - if you don't measure marginal, scaling decisions are blind.
+1. **Auction depth.** At higher budgets Meta buys deeper into the audience where intent is thinner. Marginal CAC always exceeds average CAC - if you don't measure marginal, scaling decisions are blind. The [$50K to $500K scaling playbook](/blog/scale-health-brand-50k-500k/) works through those tiers.
 2. **Creative fatigue accelerates with spend.** Doubling budget roughly doubles impression frequency on your best audiences. The ad that lasted three weeks at $300/day lasts nine days at $1,000/day.
 3. **Single-offer fragility.** One hero SKU, one price point, one angle - the auction exhausts the population for whom that exact combination clears the purchase threshold.
 4. **Funnel ceilings.** A lander converting at 2.8% doesn't fail at scale, but every point of friction gets multiplied by a bigger number.
@@ -56,7 +56,7 @@ Measurement first, allowable CAC second, budget last - in that order. It's the s
 1. **Fix measurement first.** Server-side conversion tracking plus post-purchase survey. Scaling on last-click platform data means paying twice for the same customers and killing ads that were quietly working.
 2. **Raise allowable CAC** (offer architecture, AOV, subscription take rate) before raising budget. The brand with the highest allowable CAC wins the auction long-term - it's structural, not tactical.
 3. **Scale in 20–30% steps, not doublings**, holding each step ~5–7 days. Watch marginal CAC by budget tier, not blended account CAC.
-4. **Expand horizontally before vertically.** New angle-audience combinations and a second channel beat pushing one campaign past its efficient frontier. For supplements the second channel is usually TikTok or Google Search - but read [Google's healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031) before porting Meta angles, because claim formats that clear Meta review can be restricted outright on Search.
+4. **Expand horizontally before vertically.** New angle-audience combinations and a second channel beat pushing one campaign past its efficient frontier. For supplements the second channel is usually [TikTok](/blog/tiktok-ads-health-brands/) or Google Search - but read [Google's healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031) before porting Meta angles, because claim formats that clear Meta review can be restricted outright on Search.
 5. **Protect retention economics while you scale.** A rising share of discount-driven first orders can silently degrade cohort LTV - which lowers your allowable CAC right when you're raising spend. Watch 60/90-day net revenue by cohort as a scaling gate, not just CAC. (Benchmarks by vertical are in our [CAC benchmarks post](/blog/telehealth-cac-benchmarks-2026/).)
 
 Each spend tier has prerequisites. Scaling past a stage without them is how "we saturated our audience" stories get written:

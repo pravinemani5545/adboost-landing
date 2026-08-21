@@ -63,7 +63,7 @@ You don't need a data science team to start:
 - **Platform lift tests.** Meta and Google both offer conversion-lift tooling at sufficient spend; use them when eligible.
 - **Spend-step analysis.** When you change budgets sharply, watch blended CAC and total conversions - not platform ROAS - over the following weeks.
 
-Incrementality is a quarterly discipline, not a dashboard. Two or three clean tests a year will reprice your channels more accurately than any attribution model.
+Incrementality is a quarterly discipline, not a dashboard. Two or three clean tests a year will reprice your channels more accurately than any attribution model. For the wider picture, see [healthcare marketing attribution](/blog/healthcare-marketing-attribution/).
 
 ## What should your measurement stack look like?
 

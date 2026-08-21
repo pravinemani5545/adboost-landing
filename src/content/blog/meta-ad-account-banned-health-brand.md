@@ -15,7 +15,7 @@ heroAlt: "Illustration of a locked ad account dashboard with a recovery checklis
 
 You opened Ads Manager and got the message every health founder dreads: *"Your ad account has been disabled."* Campaigns frozen mid-flight, pipeline dark, and a support interface that feels designed to make you give up.
 
-Health, [telehealth](/industries/telehealth/), and supplement brands live in Meta's most scrutinized policy territory, so this happens to good operators running legitimate businesses - not just to scammers. We've walked partner brands through recoveries and, more importantly, built the systems that keep the other ones from ever needing to. Here's the playbook.
+Health, [telehealth](/industries/telehealth/), and supplement brands live in Meta's most scrutinized policy territory, so this happens to good operators running legitimate businesses - not just to scammers. The [state-AG crackdown on GLP-1 ads](/blog/glp1-meta-ad-policy-state-ag-2026/) is a large part of why enforcement got sharper in 2026. We've walked partner brands through recoveries and, more importantly, built the systems that keep the other ones from ever needing to. Here's the playbook.
 
 ## Why did Meta actually disable your account?
 
