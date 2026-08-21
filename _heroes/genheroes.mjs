@@ -52,6 +52,12 @@ const POSTS = [
     l1: 'What a patient', accent: 'really costs you', sub: 'Calculate patient acquisition cost, and lower it.', card: 'metric' },
   { slug: 'healthcare-marketing-attribution', eyebrow: 'ATTRIBUTION · HEALTHCARE',
     l1: 'Which channels', accent: 'drive patients?', sub: 'Attribution models and channel truth for health brands.', card: 'funnel' },
+  { slug: 'choosing-paid-media-agency-2026', eyebrow: 'AGENCIES · PAID MEDIA',
+    l1: 'Choose the right', accent: 'paid media agency', sub: 'What to look for, avoid, and ask in 2026.', card: 'agency' },
+  { slug: 'b2b-reviews-buying-decisions', eyebrow: 'B2B · TRUST',
+    l1: 'Reviews decide', accent: 'B2B deals', sub: 'How third-party reviews shape buying decisions.', card: 'review' },
+  { slug: 'ecommerce-advertising-budget', eyebrow: 'BUDGETS · PAID MEDIA',
+    l1: 'How much to spend', accent: 'on paid ads', sub: 'Set your ad budget from unit economics.', card: 'budget' },
 ];
 
 const cardHtml = (type) => {
@@ -81,6 +87,25 @@ const cardHtml = (type) => {
         <div class="hrow"><span class="dot"></span>Variant A<span class="tag win">WINNER</span></div>
         <div class="hrow"><span class="dot"></span>Variant B<span class="tag">HOLD</span></div>
         <div class="hrow"><span class="dot"></span>Variant C<span class="tag kill">KILL</span></div>
+      </div>`;
+    case 'agency': return `
+      <div class="hcard">
+        <div class="hc-lab" style="margin-bottom:16px">SHORTLIST</div>
+        <div class="hrow"><span class="dot"></span>Creative in-house<span class="chk">✓</span></div>
+        <div class="hrow"><span class="dot"></span>Knows your margins<span class="chk">✓</span></div>
+        <div class="hrow"><span class="dot"></span>No lock-in contract<span class="chk">✓</span></div>
+      </div>`;
+    case 'review': return `
+      <div class="hcard">
+        <div class="hc-top"><span class="hc-lab">THIRD-PARTY REVIEW</span><span class="metric">VERIFIED</span></div>
+        <div class="hfield">"They report the numbers <span class="hl">we actually make money on</span>."</div>
+        <div class="hmeta"><span class="pilltiny">★★★★★</span><span class="pilltiny">B2B buyer</span></div>
+      </div>`;
+    case 'budget': return `
+      <div class="hcard">
+        <div class="hc-top"><span class="hc-lab">MONTHLY AD BUDGET</span><span class="metric">PACED</span></div>
+        <div class="hc-big">$30K<span class="hc-unit">/month</span></div>
+        <div class="hc-bars"><i style="height:44%"></i><i style="height:52%"></i><i style="height:64%"></i><i style="height:58%"></i><i style="height:76%"></i><i style="height:90%"></i></div>
       </div>`;
     case 'ugc': return `
       <div class="hcard">
