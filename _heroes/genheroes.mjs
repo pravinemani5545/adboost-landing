@@ -52,6 +52,8 @@ const POSTS = [
     l1: 'What a patient', accent: 'really costs you', sub: 'Calculate patient acquisition cost, and lower it.', card: 'metric' },
   { slug: 'healthcare-marketing-attribution', eyebrow: 'ATTRIBUTION · HEALTHCARE',
     l1: 'Which channels', accent: 'drive patients?', sub: 'Attribution models and channel truth for health brands.', card: 'funnel' },
+  { slug: 'choose-telehealth-platform-2026', eyebrow: 'PLATFORMS · TELEHEALTH',
+    l1: 'Choose the right', accent: 'telehealth platform', sub: 'White-label vs practice management, evaluated properly.', card: 'platform' },
 ];
 
 const cardHtml = (type) => {
@@ -81,6 +83,13 @@ const cardHtml = (type) => {
         <div class="hrow"><span class="dot"></span>Variant A<span class="tag win">WINNER</span></div>
         <div class="hrow"><span class="dot"></span>Variant B<span class="tag">HOLD</span></div>
         <div class="hrow"><span class="dot"></span>Variant C<span class="tag kill">KILL</span></div>
+      </div>`;
+    case 'platform': return `
+      <div class="hcard">
+        <div class="hc-lab" style="margin-bottom:16px">PLATFORM CHECKLIST</div>
+        <div class="hrow"><span class="dot"></span>E-prescribing<span class="chk">✓</span></div>
+        <div class="hrow"><span class="dot"></span>Pharmacy fulfillment<span class="chk">✓</span></div>
+        <div class="hrow"><span class="dot"></span>White-label + BAA<span class="chk">✓</span></div>
       </div>`;
     case 'ugc': return `
       <div class="hcard">
