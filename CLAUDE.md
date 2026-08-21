@@ -1,6 +1,6 @@
 ---
 created: 2026-07-24
-updated: 2026-07-27
+updated: 2026-08-21
 ---
 
 # AdBoost Health: Landing + Blog (Astro 5, static, Vercel)
@@ -30,13 +30,24 @@ Any page or content change must keep these true:
 
 - Posts: `src/content/blog/<slug>.md`, schema in `src/content.config.ts`. Author: Amir Salihovic (photo `public/people/amir.webp`).
 - **Friday auto-publish**: GH Actions `friday-publish.yml` (Fri 12:00 UTC) hits a Vercel deploy hook (repo secret `VERCEL_DEPLOY_HOOK_URL`) → rebuild picks up posts whose `pubDate` has arrived. Queue currently runs through 2026-09-11. Top it up with new Friday-dated posts before it dries out.
-- New post checklist: markdown file with full frontmatter (incl. `heroImage`/`heroAlt`) → hero webp + og jpg generated → build check.
+- New post checklist: markdown file with full frontmatter (incl. `heroImage`/`heroAlt`) → hero webp + og jpg generated via the skill-based hero system below (`_heroes/`) → build check.
 
-## Hero image system (Higgsfield): "operator-premium" v3
+## Hero image system: brand graphics via the social skills (since 2026-08-21)
 
-Stripe/Linear-class light dimensional style: airy white→pale-blue (`#eef2fa`) gradient with faint blue glow, floating 2.5D glassmorphic dashboard cards with vivid `#0057ff` charts, ALL card text greeked (gray bars, never characters), one narrative focal object per post staged in front (shield, funnel, padlock, magnifier…), one coral `#ff6b3d` + one green `#16a34a` micro-dot, soft cinematic lighting, generous negative space. **No readable text/letters/numbers/logos ever.**
+Heroes are on-brand HTML brand graphics reproducing the `adboost-health-social` skill's design system (Geist 800 headline, ONE Instrument Serif `#0057ff` italic accent, mono eyebrow, white product-UI proof card, wordmark + blue pill footer). The old AI-generated Higgsfield "operator-premium" heroes are retired; do not generate heroes with Higgsfield/GPT Image.
 
-Generate with GPT Image 2, 16:9, 2k, passing `public/blog/og/glp1-advertising-compliance-2026.jpg` (the anchor) as `--image` style reference so new heroes match the set. Then: `cwebp -q 82 -resize 1600 0` → `public/blog/<slug>.webp`, 1200w JPEG → `public/blog/og/<slug>.jpg`. Higgsfield gotchas: ≤7 concurrent jobs, retry 502/504 with backoff.
+Workflow (all 19 existing heroes were made this way):
+
+1. `_heroes/genheroes.mjs`: add a POSTS entry per new post: `slug`, `eyebrow` (CATEGORY · TOPIC), headline `l1` + `accent` (the one serif-italic phrase), short `sub`, and a proof-card variant (`metric | ltv | list | test | ugc | cite | funnel | rejected | compliance`). Run `node genheroes.mjs`.
+2. `_heroes/render-heroes.sh`: renders each `hero-<slug>.html` at 1600x900 @2x via headless Chrome.
+3. Convert (Pillow via uv): 3200x1800 PNG → resize 1600x900 webp q84 → `public/blog/<slug>.webp`; resize 1200x675 jpg q86 → `public/blog/og/<slug>.jpg`.
+
+Rules:
+- **Hero HTML is self-contained. NEVER link the skill's `adboost.css`** into it: its class names (`.hero`, `.metric`, `.pill`, `.eyebrow`) collide and mangle the text (this bug shipped once).
+- Keep heroes exactly 16:9: the blog index cards, related cards, and post hero all display 16:9 (`height: auto; aspect-ratio: 16/9`).
+- **Cache-busting**: hero URLs carry `?v=N` in `src/pages/blog/index.astro` and `src/layouts/BlogLayout.astro` (cards, post hero, og:image). `/blog/*` images ship `max-age=604800`, so bump N whenever images are replaced under the same filenames (currently `?v=2`).
+- Same no-em-dash rule applies to hero copy.
+- For adboost.media blog posts (when that blog exists), use the same pattern with the `adboost-media-social` skill's cyan system instead.
 
 ## Design tokens
 
