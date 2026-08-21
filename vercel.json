@@ -57,7 +57,12 @@
   "redirects": [
     {
       "source": "/:path(.*)",
-      "has": [{ "type": "host", "value": "adboost-landing.vercel.app" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "adboost-landing.vercel.app"
+        }
+      ],
       "destination": "https://www.adboost.health/:path",
       "permanent": true
     },
@@ -139,6 +144,21 @@
     {
       "source": "/guides/:path(.*)",
       "destination": "/advertising/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/choosing-paid-media-agency-2026/",
+      "destination": "https://www.adboost.media/blog/choosing-paid-media-agency-2026/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/b2b-reviews-buying-decisions/",
+      "destination": "https://www.adboost.media/blog/b2b-reviews-buying-decisions/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/ecommerce-advertising-budget/",
+      "destination": "https://www.adboost.media/blog/ecommerce-advertising-budget/",
       "permanent": true
     }
   ]
