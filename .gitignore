@@ -15,3 +15,7 @@ node_modules/
 *.log
 .vercel
 .netlify
+
+# blog hero render artifacts (source scripts are tracked)
+_heroes/out/
+_heroes/hero-*.html
