@@ -4,7 +4,7 @@ seoTitle: "Retention & LTV Systems for Health Brands | AdBoost Health"
 description: "Raise allowable CAC 1.5-2.5x with retention: cohort math, the 5 email and SMS flows that move LTV, and compliant lifecycle messaging for health brands."
 ctaHeading: "What's your real allowable CAC?"
 ctaText: "Book a free 30-min call - we run the cohort math on your account and send a written plan either way."
-pubDate: 2026-08-21
+pubDate: 2026-08-18
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["retention", "email marketing", "SMS", "LTV", "subscriptions", "lifecycle"]
