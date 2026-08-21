@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
-import { breadcrumb, faqPage, calculatorNode } from '../../lib/schema';
+import { breadcrumb, faqPage } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/mer-calculator/';
@@ -16,7 +16,6 @@ const faq = [
   { q: 'MER vs ROAS - which should I use?', a: 'Use MER to judge whole-business efficiency (what the bank account shows) and platform ROAS only as an in-channel optimization signal. When platform ROAS looks great but MER is flat, platforms are over-claiming shared conversions.' },
 ];
 const jsonLd = [
-  calculatorNode(SITE, { name: 'MER Calculator', description, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'MER Calculator', href: path }]),
   faqPage(faq),
 ];
@@ -65,7 +64,7 @@ const jsonLd = [
       </ol>
 
       <h2 class="sec-title" style="margin-top:36px">Why MER beats platform ROAS</h2>
-      <p style="color:var(--ink-2);line-height:1.72">When a patient sees a Meta ad, a Google ad, and an email before subscribing, each platform can claim the same conversion, so summed platform ROAS over-counts revenue by 30-100%. MER can't be double-counted. Use it as your north star and platform ROAS only for in-channel optimization. See <a href="/glossary/mer/" style="color:var(--blue)">MER</a> and <a href="/glossary/roas/" style="color:var(--blue)">ROAS</a> in the glossary, or add margin with the <a href="/tools/poas-calculator/" style="color:var(--blue)">POAS calculator</a>.</p>
+      <p style="color:var(--ink-2);line-height:1.72">When a patient sees a Meta ad, a Google ad, and an email before subscribing, each platform can claim the same conversion, so summed platform ROAS over-counts revenue by 30-100%. MER can't be double-counted. Use it as your north star and platform ROAS only for in-channel optimization. See <a href="/glossary/mer/" style="color:var(--blue)">marketing efficiency ratio (MER)</a> and <a href="/glossary/roas/" style="color:var(--blue)">ROAS</a> in the glossary, or add margin with the <a href="/tools/poas-calculator/" style="color:var(--blue)">POAS calculator</a>.</p>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
       <div style="margin-top:16px"><Faq items={faq} idPrefix="mer" /></div>

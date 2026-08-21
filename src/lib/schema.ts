@@ -30,22 +30,6 @@ export function organizationNode(base: string) {
   };
 }
 
-// A free calculator, marked up as a web app so it is eligible for rich results
-// and gets cited by AI engines as a tool.
-export function calculatorNode(base: string, opts: { name: string; description: string; path: string }) {
-  return {
-    '@type': ['SoftwareApplication', 'WebApplication'],
-    name: opts.name,
-    description: opts.description,
-    url: `${base}${opts.path}`,
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web',
-    isAccessibleForFree: true,
-    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-    provider: { '@id': ORG_ID(base) },
-  };
-}
-
 export function breadcrumb(base: string, items: { label: string; href?: string }[]) {
   return {
     '@type': 'BreadcrumbList',

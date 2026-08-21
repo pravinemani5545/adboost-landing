@@ -4,7 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
-import { breadcrumb, faqPage, calculatorNode } from '../../lib/schema';
+import { breadcrumb, faqPage } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/cac-calculator/';
@@ -16,7 +16,6 @@ const faq = [
   { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV - aim for an LTV:CAC of at least 3:1.' },
 ];
 const jsonLd = [
-  calculatorNode(SITE, { name: 'CAC Calculator', description, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator', href: path }]),
   faqPage(faq),
 ];
