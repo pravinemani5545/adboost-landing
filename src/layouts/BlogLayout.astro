@@ -45,7 +45,7 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 
 // Social scrapers (Facebook especially) don't render WebP - og images are JPEG copies.
 const ogImage = post?.heroImage
-  ? `${site}${post.heroImage.replace('/blog/', '/blog/og/').replace('.webp', '.jpg')}`
+  ? `${site}${post.heroImage.replace('/blog/', '/blog/og/').replace('.webp', '.jpg')}?v=2`
   : `${site}/og/og-home.png`;
 
 const displayTitleEarly = title.replace(/ \| AdBoost Health$/, '');
@@ -230,7 +230,7 @@ const category = post?.tags[0]?.toUpperCase();
 
       {post.heroImage && (
         <div class="hero-figure container">
-          <img src={post.heroImage} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" />
+          <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" />
         </div>
       )}
 
@@ -257,7 +257,7 @@ const category = post?.tags[0]?.toUpperCase();
           <div class="related-grid">
             {related.map((r) => (
               <a class="related-card" href={r.href}>
-                {r.heroImage && <img src={r.heroImage} alt={r.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
+                {r.heroImage && <img src={`${r.heroImage}?v=2`} alt={r.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
                 <div class="related-body">
                   <h3>{r.title}</h3>
                   <p>{r.description}</p>
