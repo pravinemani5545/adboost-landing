@@ -48,6 +48,10 @@ const POSTS = [
     l1: 'Pass TikTok review,', accent: 'then convert', sub: 'Spark Ads, creator briefs, and TikTok in a health funnel.', card: 'compliance' },
   { slug: 'ugc-ads-health-brands-guide', eyebrow: 'UGC · HEALTH',
     l1: 'UGC that converts,', accent: 'and stays compliant', sub: 'Creator sourcing, claims-safe briefs, and FTC rules.', card: 'ugc' },
+  { slug: 'patient-acquisition-cost', eyebrow: 'CAC · HEALTHCARE',
+    l1: 'What a patient', accent: 'really costs you', sub: 'Calculate patient acquisition cost, and lower it.', card: 'metric' },
+  { slug: 'healthcare-marketing-attribution', eyebrow: 'ATTRIBUTION · HEALTHCARE',
+    l1: 'Which channels', accent: 'drive patients?', sub: 'Attribution models and channel truth for health brands.', card: 'funnel' },
 ];
 
 const cardHtml = (type) => {
