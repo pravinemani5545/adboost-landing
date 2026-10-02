@@ -1,7 +1,7 @@
 ---
 title: "The Search Ceiling: What Happens When Healthcare Paid Search Stops Scaling?"
 seoTitle: "When Healthcare Paid Search Stops Scaling | AdBoost Health"
-description: "Paid search can't scale forever. Learn what causes healthcare search campaigns to plateau and how to find your next source of patient growth."
+description: "Healthcare paid search can't scale forever. Learn what causes search campaigns to plateau and how to find your next source of patient growth."
 pubDate: 2026-11-19
 tags: ["Google ads", "search", "scaling"]
 heroImage: "/blog/healthcare-paid-search-scaling.webp"

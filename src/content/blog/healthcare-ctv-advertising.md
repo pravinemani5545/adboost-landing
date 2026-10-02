@@ -1,7 +1,7 @@
 ---
 title: "Beyond Search and Social: Where CTV Fits in Healthcare Patient Acquisition"
-seoTitle: "Healthcare CTV & Programmatic Advertising | AdBoost Health"
-description: "Explore where CTV and programmatic fit in healthcare media plans, how they complement search and social, and what to consider when measuring performance."
+seoTitle: "Healthcare CTV Advertising & Programmatic | AdBoost Health"
+description: "Explore where healthcare CTV advertising and programmatic fit in media plans, how they complement search and social, and how to measure performance."
 pubDate: 2026-12-31
 tags: ["paid media", "ctv", "measurement"]
 heroImage: "/blog/healthcare-ctv-advertising.webp"

@@ -1,7 +1,7 @@
 ---
 title: "Should Healthcare Brands Bid on Their Own Name?"
-seoTitle: "Healthcare Brand Bidding in Google Ads | AdBoost Health"
-description: "Should healthcare brands pay for clicks on their own name? Learn when branded search ads protect demand, add value and when they may simply claim credit."
+seoTitle: "Healthcare Branded Search Ads: Worth It? | AdBoost Health"
+description: "Should healthcare brands pay for clicks on their own name? Learn when healthcare branded search ads protect demand and when they just claim credit."
 pubDate: 2027-01-28
 tags: ["Google ads", "search", "incrementality"]
 heroImage: "/blog/healthcare-brand-bidding.webp"

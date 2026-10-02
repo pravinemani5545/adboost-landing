@@ -1,7 +1,7 @@
 ---
 title: "Opening a New Location? Your Healthcare Marketing Should Start Before the Doors Do"
 seoTitle: "De Novo Healthcare Marketing Playbook | AdBoost Health"
-description: "Plan marketing for a new healthcare location before opening day, from demand building and budget timing to bookings, local awareness and launch measurement."
+description: "De novo healthcare marketing starts before opening day: demand building, budget timing, bookings, local awareness and launch measurement."
 pubDate: 2027-01-14
 tags: ["growth strategy", "paid media", "patient acquisition"]
 heroImage: "/blog/de-novo-healthcare-marketing.webp"

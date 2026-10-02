@@ -1,7 +1,7 @@
 ---
 title: "Healthcare Marketing Forecasting: How Much Spend Will It Take to Hit Your Patient Goal?"
 seoTitle: "Healthcare Marketing Forecasting | AdBoost Health"
-description: "Learn how to forecast healthcare marketing spend around patient targets, CAC, conversion rates and the capacity your business can actually support."
+description: "Healthcare marketing forecasting, explained: plan spend around patient targets, CAC, conversion rates and the capacity your business can support."
 pubDate: 2026-12-10
 tags: ["paid media", "cac", "analytics"]
 heroImage: "/blog/healthcare-marketing-forecasting.webp"

@@ -1,7 +1,7 @@
 ---
 title: "Healthcare Incrementality: Are Your Ads Actually Creating New Patients?"
 seoTitle: "Healthcare Incrementality | AdBoost Health"
-description: "Find out how incrementality can help healthcare marketers understand whether advertising is actually generating new patients or claiming existing demand."
+description: "Find out how healthcare incrementality testing shows whether advertising is actually generating new patients or claiming existing demand."
 pubDate: 2026-11-12
 tags: ["incrementality", "measurement", "paid media"]
 heroImage: "/blog/healthcare-incrementality.webp"

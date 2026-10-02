@@ -1,7 +1,7 @@
 ---
 title: "Selling a Medical Device Takes More Than a Good Product: Here's What Marketing Needs to Do"
 seoTitle: "Medical Device Marketing Guide | AdBoost Health"
-description: "How medical device brands can approach paid acquisition, creative, targeting, conversion and measurement to drive sustainable growth."
+description: "A medical device marketing guide: how brands can approach paid acquisition, creative, targeting, conversion and measurement to drive sustainable growth."
 pubDate: 2026-10-29
 tags: ["medical devices", "paid media", "growth strategy"]
 heroImage: "/blog/medical-device-marketing.webp"

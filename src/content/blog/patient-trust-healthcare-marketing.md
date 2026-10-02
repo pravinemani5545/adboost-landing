@@ -1,7 +1,7 @@
 ---
 title: "Patient Trust Is a Performance Metric"
 seoTitle: "Patient Trust in Healthcare Marketing | AdBoost Health"
-description: "How patient trust affects healthcare marketing performance, from ad engagement and conversion rates to bookings, CAC and patient acquisition."
+description: "How patient trust in healthcare affects marketing performance, from ad engagement and conversion rates to bookings, CAC and patient acquisition."
 pubDate: 2026-11-05
 tags: ["patient trust", "conversion", "cac"]
 heroImage: "/blog/patient-trust-healthcare-marketing.webp"

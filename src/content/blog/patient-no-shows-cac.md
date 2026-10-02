@@ -1,7 +1,7 @@
 ---
 title: "Patient No-Shows Are a Marketing Problem Too: What They Really Do to CAC"
-seoTitle: "Patient No-Shows & Healthcare CAC | AdBoost Health"
-description: "Patient no-shows affect more than your schedule. See how missed appointments impact CAC, marketing efficiency and the true cost of patient acquisition."
+seoTitle: "Patient No-Show Rate & Healthcare CAC | AdBoost Health"
+description: "Your patient no-show rate affects more than your schedule. See how missed appointments raise CAC and the true cost of patient acquisition."
 pubDate: 2026-12-03
 tags: ["cac", "patient acquisition", "measurement"]
 heroImage: "/blog/patient-no-shows-cac.webp"
