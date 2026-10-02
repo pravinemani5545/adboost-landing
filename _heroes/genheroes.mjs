@@ -54,9 +54,95 @@ const POSTS = [
     l1: 'Which channels', accent: 'drive patients?', sub: 'Attribution models and channel truth for health brands.', card: 'funnel' },
   { slug: 'choose-telehealth-platform-2026', eyebrow: 'PLATFORMS · TELEHEALTH',
     l1: 'Choose the right', accent: 'telehealth platform', sub: 'White-label vs practice management, evaluated properly.', card: 'platform' },
+  { slug: "healthcare-cro", eyebrow: "CRO · PATIENT FUNNEL",
+    l1: "Turn more visitors", accent: "into patients", sub: "Find the step where your funnel loses patients.",
+    card: {"kind": "funnel", "lab": "PATIENT FUNNEL", "bars": [{"label": "Visits", "pct": 100}, {"label": "Started", "pct": 58}, {"label": "Booked", "pct": 34, "warn": true}]} },
+  { slug: "healthcare-marketing-kpis", eyebrow: "ANALYTICS · KPIS",
+    l1: "Healthcare KPIs", accent: "beyond CAC", sub: "The numbers that decide if marketing works.",
+    card: {"kind": "rows", "lab": "KPI SCORECARD", "rows": [{"text": "Blended CAC", "tag": "chk"}, {"text": "LTV:CAC ratio", "tag": "chk"}, {"text": "Show rate", "tag": "WATCH"}]} },
+  { slug: "healthcare-lead-generation", eyebrow: "PAID MEDIA · LEAD GEN",
+    l1: "From click to", accent: "new patient", sub: "Where healthcare leads stall after the form fill.",
+    card: {"kind": "funnel", "lab": "LEAD TO PATIENT", "bars": [{"label": "Inquiries", "pct": 100}, {"label": "Qualified", "pct": 75}, {"label": "Booked", "pct": 38, "warn": true}, {"label": "Showed", "pct": 30}]} },
+  { slug: "medical-device-marketing", eyebrow: "GROWTH · MEDICAL DEVICES",
+    l1: "Great devices still", accent: "need a growth system.", sub: "Buyers, claims, channels and measurement, built to fit.",
+    card: {"kind": "rows", "lab": "DEVICE GO-TO-MARKET", "rows": [{"text": "Funnel per buyer type", "tag": "chk"}, {"text": "Claims mapped to proof", "tag": "chk"}, {"text": "Health-safe tracking", "tag": "chk"}]} },
+  { slug: "patient-trust-healthcare-marketing", eyebrow: "PATIENT TRUST · CAC",
+    l1: "Patient trust is", accent: "a performance metric", sub: "Where trust leaks show up in CTR, intake and CAC.",
+    card: {"kind": "funnel", "lab": "TRUST LEAKS", "bars": [{"label": "Click", "pct": 100}, {"label": "Intake", "pct": 58, "warn": true}, {"label": "Booked", "pct": 41}, {"label": "Showed", "pct": 30, "warn": true}]} },
+  { slug: "healthcare-incrementality", eyebrow: "MEASUREMENT · LIFT TESTS",
+    l1: "Did your ads create", accent: "new patients?", sub: "Separate patients you caused from ones you claimed.",
+    card: {"kind": "rows", "lab": "LIFT TEST RESULTS", "rows": [{"text": "Prospecting video", "tag": "win"}, {"text": "Non-brand search", "tag": "hold"}, {"text": "Branded search", "tag": "TRIM"}]} },
+  { slug: "healthcare-paid-search-scaling", eyebrow: "PAID SEARCH · SCALING",
+    l1: "Search hit its", accent: "ceiling. Now what?", sub: "Why search plateaus and where patient growth comes next.",
+    card: {"kind": "metric", "lab": "MARGINAL CPA", "badge": "↑ 2x", "tone": "neg", "big": "$500", "unit": "per patient", "bars": [30, 34, 40, 52, 70, 92]} },
+  { slug: "healthcare-ad-creative-strategy", eyebrow: "AD CREATIVE · STRATEGY",
+    l1: "Stop, trust,", accent: "then convert.", sub: "What health ads must say to earn the booked consult.",
+    card: {"kind": "rows", "lab": "CREATIVE CHECKLIST", "rows": [{"text": "Hook names a situation", "tag": "chk"}, {"text": "Clinician on screen", "tag": "chk"}, {"text": "One clear next step", "tag": "chk"}]} },
+  { slug: "patient-no-shows-cac", eyebrow: "CAC · NO-SHOWS",
+    l1: "Booked isn't", accent: "acquired.", sub: "What missed first visits really do to your CAC.",
+    card: {"kind": "funnel", "lab": "FIRST-VISIT FUNNEL", "bars": [{"label": "Booked", "pct": 100}, {"label": "Attended", "pct": 72}, {"label": "Started", "pct": 38, "warn": true}]} },
+  { slug: "healthcare-marketing-forecasting", eyebrow: "FORECASTING · BUDGET",
+    l1: "Forecast spend", accent: "from the patient goal", sub: "Work backwards from patients to the budget it takes.",
+    card: {"kind": "funnel", "lab": "PATIENT FUNNEL", "bars": [{"label": "Leads", "pct": 100}, {"label": "Booked", "pct": 40}, {"label": "Attended", "pct": 32}, {"label": "Started", "pct": 19, "warn": true}]} },
+  { slug: "multi-location-healthcare-marketing", eyebrow: "PAID MEDIA · LOCATIONS",
+    l1: "Scale every clinic", accent: "without the waste", sub: "Budget, target and measure by location.",
+    card: {"kind": "rows", "lab": "COST PER PATIENT", "rows": [{"text": "Clinic A · $200", "tag": "hold"}, {"text": "Clinic D · $222", "tag": "win"}, {"text": "Clinic C · $400", "tag": "FIX"}]} },
+  { slug: "healthcare-ctv-advertising", eyebrow: "PAID MEDIA · CTV",
+    l1: "Where CTV fits", accent: "beyond search & social", sub: "Add TV-screen reach only once capture is efficient.",
+    card: {"kind": "rows", "lab": "CTV READINESS", "rows": [{"text": "Brand search covered", "tag": "chk"}, {"text": "Patients by market", "tag": "chk"}, {"text": "Geo holdout planned", "tag": "TEST"}]} },
+  { slug: "capacity-based-healthcare-marketing", eyebrow: "PAID MEDIA · CAPACITY",
+    l1: "Spend where", accent: "the slots are open.", sub: "Match ad budget to real appointment capacity.",
+    card: {"kind": "rows", "lab": "LOCATION CAPACITY", "rows": [{"text": "Location A: 60 slots", "tag": "OPEN"}, {"text": "Location B: 15 slots", "tag": "TIGHT"}, {"text": "Location C: 5 slots", "tag": "FULL"}]} },
+  { slug: "de-novo-healthcare-marketing", eyebrow: "GROWTH · NEW LOCATIONS",
+    l1: "Market the clinic", accent: "before the doors open", sub: "Build demand months ahead, open with a booked schedule.",
+    card: {"kind": "rows", "lab": "LAUNCH TIMELINE", "rows": [{"text": "Location page + GBP", "tag": "T-90"}, {"text": "Local search + waitlist", "tag": "T-60"}, {"text": "Open advance bookings", "tag": "T-30"}]} },
+  { slug: "healthcare-service-line-marketing", eyebrow: "BUDGET · SERVICE LINES",
+    l1: "Fund service lines", accent: "by what they're worth", sub: "Split spend by patient value, demand and capacity.",
+    card: {"kind": "rows", "lab": "SERVICE LINE BUDGET", "rows": [{"text": "Orthopedic consults", "tag": "GROW"}, {"text": "Weight management", "tag": "FIX"}, {"text": "Cosmetic derm", "tag": "hold"}]} },
+  { slug: "healthcare-brand-bidding", eyebrow: "PAID SEARCH · BRAND",
+    l1: "Should you bid on", accent: "your own name?", sub: "When brand ads protect patients and when they claim them.",
+    card: {"kind": "rows", "lab": "BRAND SEARCH AUDIT", "rows": [{"text": "Brand split from PMax", "tag": "chk"}, {"text": "Competitors on brand", "tag": "HIGH"}, {"text": "Geo holdout test", "tag": "TEST"}]} },
+  { slug: "ai-search-healthcare-providers", eyebrow: "AI SEARCH · PATIENT CHOICE",
+    l1: "Patients ask AI", accent: "before they book", sub: "How AI answers shape which provider gets the call.",
+    card: {"kind": "field", "lab": "AI ANSWER", "badge": "CITED", "tone": "pos", "text": "Well-reviewed <hl>PT clinic</hl> near you, takes your insurance.", "pills": ["AI Mode", "ChatGPT", "Perplexity"]} },
 ];
 
+// Data-driven card: { kind: 'metric'|'rows'|'field'|'funnel', ... } so a new post
+// can carry its own labels and values instead of reusing a preset card's copy.
+const TAGS = { win: 'WINNER', hold: 'HOLD', kill: 'KILL' };
+const specCard = (c) => {
+  const badge = c.badge ? `<span class="metric${c.tone && c.tone !== 'pos' ? ' ' + c.tone : ''}">${c.badge}</span>` : '';
+  switch (c.kind) {
+    case 'metric': return `
+      <div class="hcard">
+        <div class="hc-top"><span class="hc-lab">${c.lab}</span>${badge}</div>
+        <div class="hc-big">${c.big}<span class="hc-unit">${c.unit}</span></div>
+        <div class="hc-bars">${c.bars.map((h) => `<i style="height:${h}%"></i>`).join('')}</div>
+      </div>`;
+    case 'rows': return `
+      <div class="hcard">
+        <div class="hc-lab" style="margin-bottom:16px">${c.lab}</div>
+        ${c.rows.map((r) => `<div class="hrow"><span class="dot"></span>${r.text}${r.tag === 'chk'
+          ? '<span class="chk">✓</span>'
+          : `<span class="tag ${r.tag in TAGS ? r.tag : ''}">${TAGS[r.tag] || r.tag}</span>`}</div>`).join('\n        ')}
+      </div>`;
+    case 'field': return `
+      <div class="hcard">
+        <div class="hc-top"><span class="hc-lab">${c.lab}</span>${badge}</div>
+        <div class="hfield">${c.text.replace(/<hl>/g, '<span class="hl">').replace(/<\/hl>/g, '</span>')}</div>
+        <div class="hmeta">${(c.pills || []).map((p) => `<span class="pilltiny">${p}</span>`).join('')}</div>
+      </div>`;
+    case 'funnel': return `
+      <div class="hcard">
+        <div class="hc-lab" style="margin-bottom:20px">${c.lab}</div>
+        ${c.bars.map((b) => `<div class="fbar${b.warn ? ' warn' : ''}"><span>${b.label}</span><div class="track"><i style="width:${b.pct}%"></i></div><b>${b.pct}%</b></div>`).join('\n        ')}
+      </div>`;
+  }
+  throw new Error('unknown card kind ' + c.kind);
+};
+
 const cardHtml = (type) => {
+  if (typeof type === 'object') return specCard(type);
   switch (type) {
     case 'metric': return `
       <div class="hcard">
