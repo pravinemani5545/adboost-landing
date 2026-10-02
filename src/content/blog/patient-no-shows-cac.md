@@ -10,7 +10,7 @@ ctaHeading: "Find out what no-shows are really costing your acquisition."
 ctaText: "Free 30-minute call. We rebuild your CAC on attended patients instead of bookings, rank the leaks by source, and send you a written plan either way."
 ---
 
-Most practices treat a patient no-show as an operations problem. The front desk owns it, the reminder software owns it, and marketing reports a "booked appointment" as a win the moment the calendar slot fills. Then the patient doesn't show, nobody tells the ad account, and the campaign that produced that booking keeps getting credit for a patient who never existed.
+Most practices treat their patient no-show rate as an operations problem. The front desk owns it, the reminder software owns it, and marketing reports a "booked appointment" as a win the moment the calendar slot fills. Then the patient doesn't show, nobody tells the ad account, and the campaign that produced that booking keeps getting credit for a patient who never existed.
 
 That gap is expensive. Every first-appointment no-show is acquisition spend that bought nothing, and if your reporting stops at "booked," your patient acquisition cost is wrong in the most flattering direction. Below: how to calculate the no-show rate, what the research says about typical rates, how no-shows inflate CAC (with a worked example), how they distort what your ad platforms optimize on, and which marketing decisions push them up or down.
 
@@ -115,6 +115,28 @@ Report the full funnel, and make cost per attended patient the number that decid
 Show rate is the bridge between marketing and operations metrics, which is why it belongs in the marketing report, not just the front-desk report. If you're building out the broader scorecard, our post on [healthcare marketing KPIs beyond CAC](/blog/healthcare-marketing-kpis/) covers what else belongs on it.
 
 The diagnostic rule: if cost per booking is flat and cost per attended patient is rising, look at no-shows before you touch bids, budgets, or creative. The ad account may be doing exactly what you asked. You asked for the wrong thing.
+
+## FAQ
+
+### How do you calculate patient no-show rate?
+
+Divide no-shows by scheduled appointments in the period and multiply by 100. For marketing, calculate it on new-patient first appointments separately from established-patient visits, and track late cancellations next to it, because a missed first appointment is the acquisition failure that feeds directly into CAC.
+
+### What is the average patient no-show rate?
+
+There is no single benchmark. A systematic review of 105 studies found an average on the order of 23%, and a study of Veterans Affairs clinics found a mean of 18.8%, with wide ranges by specialty and region. Most published rates mix new and established patients, so benchmark your own new-patient rate by channel.
+
+### How do patient no-shows affect patient acquisition cost?
+
+They raise it. Patient acquisition cost is spend divided by patients acquired, and a booking that never shows is not an acquired patient. Cost per booked consult stays flat while cost per attended consult climbs, which is why CAC calculated on bookings looks better than reality.
+
+### Do late healthcare appointment cancellations count as no-shows?
+
+Not in the formula, but they cost almost as much. A patient who cancels two hours before the visit leaves the same empty slot as one who never appears. Track late cancellations separately, report them side by side with no-shows, and decide in advance what counts as late.
+
+### How can marketing help reduce patient no-shows?
+
+Qualify before the calendar, keep the ad, landing page, confirmation, and reminders describing the same appointment, match ad radius to how far patients will actually travel, and pace spend to clinical capacity so lead times stay short. Then judge the results on cost per attended patient, not bookings.
 
 ## No-shows are acquisition spend that didn't land
 

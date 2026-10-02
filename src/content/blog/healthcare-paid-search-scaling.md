@@ -18,7 +18,7 @@ If you're still building the account itself (certification, keyword tiers, negat
 
 ## Why does healthcare paid search stop scaling?
 
-Because search captures demand, it doesn't create it. The number of people searching for your service in your eligible geography is finite, and once you show for most of those searches, more budget only buys pricier clicks on the same people or clicks on weaker queries.
+Because paid search in healthcare captures demand, it doesn't create it. The number of people searching for your service in your eligible geography is finite, and once you show for most of those searches, more budget only buys pricier clicks on the same people or clicks on weaker queries.
 
 Every healthcare PPC account runs into some version of three limits.
 
@@ -62,11 +62,11 @@ If all five check out and impression share on core terms is high, you're looking
 
 ## What is still worth trying inside search?
 
-There are usually three or four expansion moves left before you need a new channel. Treat each as a test with a marginal cost target, not a permanent budget increase.
+There are usually three or four expansion moves left in healthcare paid search before you need a new channel. Treat each as a test with a marginal cost target, not a permanent budget increase.
 
 ### Expand the query set, with guardrails
 
-[AI Max for Search campaigns](https://support.google.com/google-ads/answer/15910187?hl=en) expands matching beyond your keyword list using broad match and keywordless technology, and can route traffic to the landing page on your domain it predicts will perform best. Google is also [upgrading Dynamic Search Ads to AI Max](https://blog.google/products/ads-commerce/dsa-upgrade-to-ai-max-2026/), with automatic upgrades scheduled to begin in February 2027, so most healthcare search accounts will be working with it whether they opt in early or not.
+[AI Max for Search campaigns](https://support.google.com/google-ads/answer/15910187?hl=en) expands matching beyond your keyword list using broad match and keywordless technology, and can route traffic to the landing page on your domain it predicts will perform best. Google is also [upgrading Dynamic Search Ads to AI Max](https://blog.google/products/ads-commerce/dsa-upgrade-to-ai-max-2026/), with automatic upgrades scheduled to begin in February 2027, so most healthcare Google Ads accounts will be working with it whether they opt in early or not.
 
 In healthcare this is real extra reach, and it needs a leash:
 
@@ -76,7 +76,7 @@ In healthcare this is real extra reach, and it needs a leash:
 
 ### Add the search inventory you're not on
 
-Many health brands run Google only. Microsoft Advertising is a separate auction with its own [pharmacy and healthcare policies](https://about.ads.microsoft.com/en-us/policies/restricted-categories/pharmacy-and-healthcare-products-and-services), including certification requirements for some categories, so check eligibility before importing a Google account wholesale. It's rarely huge, but it's incremental demand.
+Many health brands run their healthcare search advertising on Google only. Microsoft Advertising is a separate auction with its own [pharmacy and healthcare policies](https://about.ads.microsoft.com/en-us/policies/restricted-categories/pharmacy-and-healthcare-products-and-services), including certification requirements for some categories, so check eligibility before importing a Google account wholesale. It's rarely huge, but it's incremental demand.
 
 ### Widen the eligible pool
 
@@ -141,6 +141,30 @@ When healthcare paid search stops scaling, work through it in this sequence:
 4. **Cap search at its efficient level.** Stop adding budget where marginal cost passes your allowable CAC, even if the average still looks fine.
 5. **Move the next dollars upstream.** Demand Gen, YouTube, paid social, content. Give them a measurement plan and a longer evaluation window than search gets.
 6. **Measure the system, not the channel.** Blended CAC, branded search trends, and incrementality tests decide where the following quarter's budget goes.
+
+## FAQ
+
+### Why does healthcare paid search stop scaling?
+
+Search captures demand rather than creating it. Only so many people search for your service in your eligible geography, and licensing, payer contracts, and clinical exclusions shrink that pool further. Once you show for most of those searches, extra budget buys pricier clicks on the same people or clicks on weaker, less qualified queries.
+
+### How can you tell if your search campaigns have hit a ceiling?
+
+Check impression share on core non-brand campaigns. If impression share is high and both lost IS (budget) and lost IS (rank) are low, you're likely at the ceiling. Supporting signs include marginal cost per patient climbing much faster than the average, new spend leaking into worse queries, and Performance Planner forecasts flattening as spend rises.
+
+### When does PPC for healthcare stop being profitable?
+
+When the cost of the marginal patient passes your allowable cost per patient, which is set by contribution margin and lifetime value. The average cost per patient can still look acceptable while the last chunk of budget loses money on every patient it buys, so judge each budget increase on the extra patients it produces.
+
+### What should you fix before adding a new channel?
+
+Fix bottlenecks first, because they are the cheapest patients you'll find. Look at Ad Rank losses, self-imposed limits like ad schedules and old geo radiuses, conversion signal quality, funnel leakage after the click, and intake capacity. Then test guarded expansion inside search, such as AI Max with exclusions, Microsoft Advertising, or new geographies and service lines.
+
+### Where does patient growth come from after healthcare paid search plateaus?
+
+From channels that create demand, so more people search in the first place: Demand Gen and YouTube, paid social on Meta and TikTok, and organic and AI search content. Retention, referral, and reactivation add volume too. Measure the new mix on blended CAC, branded search trends, and incrementality tests rather than platform attribution.
+
+## The bottom line on the search ceiling
 
 The brands that grow past the search ceiling accept that search is a capture channel, run it at its efficient size, and build the demand it captures somewhere else. Our [paid media team](/services/paid-media/) runs search and demand creation as one system for exactly that reason.
 

@@ -30,11 +30,11 @@ Several things simply take calendar time:
 - **Organic search.** A location page published the week of opening has no chance of ranking that week. Published months earlier, it has time to get crawled, indexed, and linked from your other pages.
 - **Referral relationships.** Referring physicians, local employers, and community groups don't send patients to a location they've never heard of. Those relationships take months.
 
-There is an operational reason too. A pre-opening waitlist forces intake, scheduling, and front desk workflows to be live early, which is far cheaper than discovering a broken intake flow with real patients on the phone.
+De novo healthcare marketing also has an operational reason to start early. A pre-opening waitlist forces intake, scheduling, and front desk workflows to be live early, which is far cheaper than discovering a broken intake flow with real patients on the phone.
 
 ## When should marketing for a new clinic start?
 
-As soon as the lease is signed and the opening date is reasonably firm, usually four to six months out. The work then moves through four phases, each with a different job.
+New clinic marketing should start as soon as the lease is signed and the opening date is reasonably firm, usually four to six months out. The work then moves through four phases, each with a different job.
 
 | Phase | Timing | Job | Key actions |
 |---|---|---|---|
@@ -69,7 +69,7 @@ Fill schedule gaps and build the proof a new location lacks: reviews and a local
 
 ## How should you time and budget a new location launch?
 
-Budget a launch as a curve, not a flat monthly number. Spend should start before opening, peak around the opening window, and settle toward a steady-state level as reviews, organic visibility, and referrals start doing part of the work.
+Budget a healthcare location launch as a curve, not a flat monthly number. Spend should start before opening, peak around the opening window, and settle toward a steady-state level as reviews, organic visibility, and referrals start doing part of the work.
 
 Expect launch-period acquisition cost to run higher than a mature location's: no reviews, no organic traffic to blend CAC down, and campaigns still finding their footing. Judging a launch against a mature location's [blended CAC](/glossary/blended-cac/) will make a healthy launch look like a failure.
 
@@ -110,7 +110,7 @@ Two rules apply. Google's [Maps contribution policy](https://support.google.com/
 
 ## How should multi-location groups run de novo launches?
 
-Treat each launch as a repeatable playbook: standardize the timeline, location page template, listings, campaign structure, and launch reporting, then adjust per market. Existing locations shorten the cold start with brand recognition, a patient list, and mature ad accounts. They're also a risk: a new site near an existing one can pull patients from it instead of creating new ones, so check radius overlap and watch the older location's bookings during the launch. Our guide to [multi-location healthcare marketing](/blog/multi-location-healthcare-marketing/) covers how to structure budgets and measurement across a portfolio.
+When de novo sites drive multi-location healthcare growth, treat each launch as a repeatable playbook: standardize the timeline, location page template, listings, campaign structure, and launch reporting, then adjust per market. Existing locations shorten the cold start with brand recognition, a patient list, and mature ad accounts. They're also a risk: a new site near an existing one can pull patients from it instead of creating new ones, so check radius overlap and watch the older location's bookings during the launch. Our guide to [multi-location healthcare marketing](/blog/multi-location-healthcare-marketing/) covers how to structure budgets and measurement across a portfolio.
 
 ## How do you measure a new location launch?
 
@@ -141,6 +141,28 @@ Add a "how did you hear about us?" question at booking to catch what pixels miss
 - **Flat budgets.** They underfund the opening window and overfund the quiet months before it.
 - **Over-promising.** Unconfirmed providers, services, or insurance create bad first visits and early negative reviews.
 - **Ignoring cannibalization.** Counting every new-location patient as growth without checking where they used to go.
+
+## FAQ
+
+### When should new medical practice marketing start?
+
+As soon as the lease is signed and the opening date is reasonably firm, usually four to six months before opening. That leaves time for the slow pieces: a location page that can get indexed, a Google Business Profile that appears 90 days ahead of the opening date, referral relationships, and tracking that works before any traffic arrives.
+
+### How much should you budget for medical office opening marketing?
+
+Budget it as a curve rather than a flat monthly number. Spend starts modestly before opening to build the waitlist and awareness, peaks in the opening window, then tapers toward a steady-state level as reviews, organic visibility, and referrals start doing part of the work. Size opening-month spend to the appointments your providers can actually offer.
+
+### How do you get patients booked before a new clinic opens?
+
+Use a waitlist first, then advance scheduling. While the opening date is still moving, collect interest and follow up with progress updates and provider introductions. Once the date and staffing are firm, open bookings to the waitlist first, and protect those appointments with confirmations, reminders, and easy rescheduling.
+
+### How should you measure de novo healthcare marketing?
+
+Track leading indicators before opening, such as waitlist signups, location page conversion rate, and Google Business Profile views and calls. After opening, track booked and attended appointments, show rate, new patients against the ramp plan, and location-level CAC. Compare the new location to its own plan, not to mature locations.
+
+### What is the biggest de novo healthcare marketing mistake?
+
+Starting at opening. When marketing begins the day the doors open, the foundation work happens during the period when an empty schedule costs the most. Close behind are flat budgets that underfund the opening window and judging the launch against mature locations, which can lead to cutting spend just as the ramp should be building.
 
 ## Start the launch before the opening
 

@@ -18,7 +18,7 @@ This post covers multi-location healthcare marketing from the paid media side: h
 
 Multi-location healthcare marketing is running patient acquisition for a practice, group, or network with more than one physical site, so that each location gets the right volume of new patients at an acceptable cost while the brand stays consistent. The unit of planning shifts from "the practice" to "each location," while the brand, the tracking, and the account structure stay centralized.
 
-Dental groups, physical therapy chains, med spa networks, and behavioral health groups all hit the same tension: patients choose a location, but marketing is usually planned, bought, and reported as one brand.
+Dental groups, physical therapy chains, med spa networks, and behavioral health groups all hit the same tension, and so does any multi-location medical marketing program: patients choose a location, but marketing is usually planned, bought, and reported as one brand.
 
 ## Why does marketing break when a practice adds locations?
 
@@ -53,13 +53,13 @@ Campaign per location gives the most budget control, at the cost of thinner conv
 - **Location assets.** Linking your Google Business Profile lets ads show the address, distance, a call button, and map details. Google notes that [location assets](https://support.google.com/google-ads/answer/2404182?hl=en) can appear on Search and alongside results on Google Maps, which is where a lot of "near me" healthcare decisions happen.
 - **Location groups and label filters.** When all your profiles sync into one account, each campaign can show every clinic's address. Google's [location groups and Business Profile filters](https://support.google.com/google-ads/answer/9288588?hl=en) let you restrict which locations sync, including by labels you assign in Business Profile, so a campaign for one clinic shows that clinic's address.
 
-Once each location's search account is built, it will eventually hit its own volume limit. A small-town clinic hits it far sooner than a metro one. We covered how to recognize that point in [what happens when healthcare paid search stops scaling](/blog/healthcare-paid-search-scaling/).
+Once each location's healthcare PPC campaigns are built, they will eventually hit their own volume limit. A small-town clinic hits it far sooner than a metro one. We covered how to recognize that point in [what happens when healthcare paid search stops scaling](/blog/healthcare-paid-search-scaling/).
 
 ### Paid social across locations
 
 On Meta and TikTok, use radius or city targeting around each clinic, split by location when budgets need separate control. The harder part is creative: ads that name the neighborhood or show the actual clinic and clinicians feel more relevant than generic brand ads, and they filter out people who live too far away to book.
 
-Health advertisers also have less targeting to work with than most categories. Google's [health in personalized advertising policy](https://support.google.com/adspolicy/answer/16701855?hl=en) bars customer match, your data segments, lookalikes, and audience expansion for ads promoting personal health content, while location targeting and predefined Google audiences remain available. When geography is one of the few reliable levers you have, getting location targeting right matters more, not less.
+Health advertisers also have less targeting to work with than most categories. Google's [health in personalized advertising policy](https://support.google.com/adspolicy/answer/16701855?hl=en) bars customer match, your data segments, lookalikes, and audience expansion for ads promoting personal health content, while location targeting and predefined Google audiences remain available. When geography is one of the few reliable levers you have in multi-location healthcare advertising, getting location targeting right matters more, not less.
 
 ## How do you set marketing budgets by location?
 
@@ -99,7 +99,7 @@ Give every location an exclusive geography and give brand search a single owner.
 
 ## What local presence does each location need?
 
-Each location needs its own verified Google Business Profile, its own landing page, and consistent name, address, and phone details everywhere it appears. Paid media sits on top of local presence; it doesn't replace it.
+Each location needs its own verified Google Business Profile, its own landing page, and consistent name, address, and phone details everywhere it appears. In healthcare location marketing, paid media sits on top of local presence; it doesn't replace it.
 
 - **A verified Business Profile per location.** Google lets businesses with [10 or more locations](https://support.google.com/business/answer/3217744?hl=en) add, verify, and manage them in bulk through a business group and a spreadsheet upload. Smaller groups verify each location individually. Either way, location assets in Google Ads depend on these profiles being accurate.
 - **A real location page.** Not a template with the city name swapped in. Address, hours, the services offered at that site, the clinicians who practice there, parking or transit details, insurance accepted, and a booking path that goes straight to that clinic's schedule.
@@ -133,6 +133,28 @@ Centralize anything that benefits from scale or consistency; keep local anything
 - **Keep local:** clinician bios and photos, clinic details, review requests and responses, referral relationships, and input on capacity, staffing changes, and service availability.
 
 The capacity input is the one most practices skip. If marketing doesn't know a clinic just lost a provider, it keeps buying patients that clinic can't see.
+
+## FAQ
+
+### What is the best campaign structure for multi-location healthcare marketing?
+
+It depends on how many locations you have and how different their services are. A campaign per location gives the most budget control and suits a few clinics with different service mixes or uneven capacity. Past a handful of locations, campaigns organized by service line and segmented by location are usually more practical, because each campaign keeps more conversion data for automated bidding.
+
+### How should a multi-location practice split its ad budget?
+
+By each location's capacity and marginal cost per patient, not an even split or last year's numbers. Locations with full schedules should hold steady or come down. Growth locations with open capacity and an acceptable cost per patient should get incremental budget. New locations need a launch budget with a longer ramp and a set review date.
+
+### How do you stop location campaigns from competing with each other?
+
+Give each location an exclusive geography and give brand search a single owner. Replace overlapping radii with ZIP codes, cities, or neighborhoods assigned to one clinic, run one brand campaign for the practice name, and exclude brand terms from location-level non-brand campaigns. After any targeting change, check the search terms report for duplicated queries.
+
+### How is multi-location marketing different from single-site medical practice marketing?
+
+A single site has one problem: enough new patients at a cost that works. With several sites, locations start interfering with each other through overlapping targeting, shared brand search, and blended reporting that hides which clinics are full and which are empty. Planning, budgets, and measurement all have to shift to the individual location.
+
+### What should you track for each location?
+
+Track attended new patients rather than leads, fully loaded cost per patient, speed to answer and booking rate, and open capacity, such as the next-available appointment date. Report these by location from your CRM or practice management system, since ad platforms report campaigns, not clinics.
 
 ## Scale by location, report by location
 

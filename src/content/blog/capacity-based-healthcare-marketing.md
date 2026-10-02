@@ -18,9 +18,9 @@ The ads did their job. The problem is that the budget had no idea what the sched
 
 Capacity-based healthcare marketing is the practice of allocating and pacing media spend according to how many new patients each provider, location, and service line can actually see, and how soon. Spend goes up where there are open slots, comes down where the schedule is full, and shifts as availability changes week to week.
 
-It's the operational sibling of forecasting. In our guide to [healthcare marketing forecasting](/blog/healthcare-marketing-forecasting/), capacity shows up as a ceiling you check once when you set the annual or quarterly budget. Capacity-based marketing is the weekly version: the budget is set, but where and when each dollar goes depends on the current state of the schedule.
+It's the operational sibling of forecasting. In our guide to [healthcare marketing forecasting](/blog/healthcare-marketing-forecasting/), capacity shows up as a ceiling you check once when you set the annual or quarterly budget. Capacity-based healthcare marketing is the weekly version: the budget is set, but where and when each dollar goes depends on the current state of the schedule.
 
-The core idea is simple. A healthcare business doesn't sell an unlimited product. It sells provider time, and provider time is perishable. An empty new-patient slot next Tuesday can't be sold next month, and a patient who can't get a slot this month is often a patient you paid for and lost.
+The core idea behind operational marketing in healthcare is simple. A healthcare business doesn't sell an unlimited product. It sells provider time, and provider time is perishable. An empty new-patient slot next Tuesday can't be sold next month, and a patient who can't get a slot this month is often a patient you paid for and lost.
 
 ## Why does marketing past capacity waste money?
 
@@ -50,7 +50,7 @@ None of these require patient-level data. They're aggregate counts and averages 
 
 ## How do you turn capacity into spend rules?
 
-Give every location and service line a capacity status based on the signals above, and attach a spend action to each status. Decide the rules in advance, with operations, so the weekly adjustment is mechanical instead of a debate.
+Give every location and service line a capacity status based on the signals above, and attach a spend action to each status. Decide the rules in advance, with operations, so healthcare media allocation each week is mechanical instead of a debate.
 
 A simple three-tier model works for most practices:
 
@@ -72,7 +72,7 @@ If the practice wants to grow total patients rather than redistribute them, the 
 
 ## What should you do when a location is full?
 
-Redirect demand before you cut it. Turning spend off at a full location is the blunt option, and it hands high-intent searchers to competitors. Usually there's a better use of that demand somewhere in your own system.
+Redirect demand before you cut it. Turning spend off at a full location is the blunt option, and it hands high-intent searchers to competitors. Usually there's a better use of that demand somewhere in your own system, and steering it there is the core of patient demand management.
 
 The options, roughly in order of preference:
 
@@ -102,7 +102,7 @@ The agenda is three questions. Which statuses changed since last week? What spen
 
 Two practical rules keep the loop from thrashing. First, don't swing budgets on a single week's data. Require a status to hold for two consecutive reviews before making a large cut or increase, unless the schedule change is known and certain. Second, change spend in steps, not on and off. Ad platforms' automated bidding learns from consistent conversion data, and repeated large swings tend to make performance less stable after each change.
 
-## What are the common mistakes with capacity-based marketing?
+## What are the common mistakes with capacity-based healthcare marketing?
 
 - **Using total appointments instead of new-patient slots.** A schedule packed with follow-ups can still have new-patient openings, and vice versa. Measure the slots your ads actually feed.
 - **Measuring capacity at the wrong level.** A practice-wide utilization number can hide one overbooked location next to an empty one. Capacity exists per provider, per location, per service line, so measure it there.
@@ -111,10 +111,32 @@ Two practical rules keep the loop from thrashing. First, don't swing budgets on 
 - **Ignoring intake capacity.** Provider slots are only half of it. If intake can't respond to inquiries quickly, adding leads lowers conversion even with open appointments.
 - **Treating it as only a cost-cutting tool.** The biggest wins often come from the other direction: spotting open capacity early and pushing spend into it before those slots go unused.
 
+## FAQ
+
+### How does capacity-based healthcare marketing reduce wasted ad spend?
+
+It stops paying for demand the schedule cannot absorb. When inquiries outrun available appointments, leads leak to competitors with earlier openings, long lead times raise no-show rates, and intake falls behind. Pacing spend to open new-patient slots puts marginal dollars where a patient can actually be seen, so the same budget produces more attended patients.
+
+### What capacity metrics should a practice track for marketing?
+
+Track forward-looking availability per location and service line, refreshed at least weekly: open new-patient slots in the next 14 to 21 days, third next available appointment, new-patient lead time, inquiry response time, and known provider schedule changes. These are aggregate counts from your scheduling system, so no patient-level data is needed.
+
+### Should you turn off ads when a location is fully booked?
+
+Not as a first move. Redirect demand before you cut it: steer patients to a nearby location with open capacity, an approved provider type or format, or a service line with room. If none of those apply, reduce non-brand prospecting for that area but keep brand search running, since brand searchers are your cheapest, highest-intent demand.
+
+### How often should you adjust healthcare media allocation by capacity?
+
+Review it weekly in a standing 20-minute meeting between whoever owns media and whoever owns scheduling. Require a capacity status to hold for two consecutive reviews before a large cut or increase, unless the schedule change is known and certain, and move spend in steps rather than switching campaigns on and off.
+
+### Does capacity data get shared with ad platforms?
+
+No. Capacity signals are aggregate counts and averages from your scheduling or practice management system, and none of them should flow to an ad platform. They inform budget decisions inside your own team rather than becoming a targeting signal, which keeps the approach HIPAA-aware by design.
+
 ## Where capacity-based marketing fits in the bigger plan
 
-Capacity-based marketing doesn't replace a growth plan, it protects one. The forecast sets the patient goal and the budget. Capacity status decides where and when that budget lands each week. Your [blended CAC](/glossary/blended-cac/) by location, measured on attended patients, tells you whether the system is working.
+Capacity-based healthcare marketing doesn't replace a growth plan, it protects one. The forecast sets the patient goal and the budget. Capacity status decides where and when that budget lands each week. Your [blended CAC](/glossary/blended-cac/) by location, measured on attended patients, tells you whether the system is working.
 
-When capacity becomes the constraint everywhere at once, that's a different signal: marketing is producing more demand than the business can serve, and the next growth lever is operational (hiring, hours, scheduling templates), not media. That's also the point where pushing harder on paid channels hits diminishing returns fastest, which we covered in [why healthcare paid search stops scaling](/blog/healthcare-paid-search-scaling/).
+When capacity becomes the constraint everywhere at once, that's a different signal: marketing is producing more demand than the business can serve, and the next growth lever is healthcare capacity planning (hiring, hours, scheduling templates), not media. That's also the point where pushing harder on paid channels hits diminishing returns fastest, which we covered in [why healthcare paid search stops scaling](/blog/healthcare-paid-search-scaling/).
 
 The short version: don't buy demand you can't serve, and don't leave open slots unsold. If you'd like help connecting your media plan to your actual schedule, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll map your spend against capacity by location and service line, show you where budget is landing on full schedules, and send you the written plan either way.

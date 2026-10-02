@@ -32,7 +32,7 @@ Because it answers the wrong question. A percentage-of-revenue rule tells you wh
 
 Percentage rules also ignore the variables that actually drive cost per patient. Two practices with identical revenue can need very different budgets for the same growth target if one books 50% of its inquiries and the other books 25%. A flat percentage treats them the same. A patient acquisition forecast treats them as what they are: two different funnels with two different costs.
 
-Use revenue-based guardrails as a sanity check on the result (can the business fund this spend out of cash flow?), but build the number itself from the funnel.
+Use revenue-based guardrails as a sanity check on the result (can the business fund this spend out of cash flow?), but build the number itself from the funnel. That is the core of patient acquisition forecasting.
 
 ## How do you forecast marketing spend from a patient goal?
 
@@ -92,7 +92,7 @@ Two rules keep this HIPAA-aware and honest. First, the forecast only needs aggre
 
 Because every channel has a finite pool of high-intent people, and the cheapest ones get reached first. Each additional dollar reaches people who are slightly less ready, slightly less qualified, or slightly more expensive to win at auction. So the cost of your next patient (marginal CAC) rises faster than your average CAC shows.
 
-This is the single most common forecasting error in paid media: assuming that if $40,000 buys 120 patients, $80,000 will buy 240. It almost never does.
+This is the single most common error in paid media forecasting: assuming that if $40,000 buys 120 patients, $80,000 will buy 240. It almost never does.
 
 ### Forecast in spend tiers, not one average
 
@@ -121,7 +121,7 @@ Search tends to hit its ceiling first, because demand for a condition or service
 
 Capacity sets a hard ceiling that spend can't push through. If your providers can only see a certain number of new patients per month, spending past that point doesn't add patients. It adds waitlists, longer time-to-appointment, and lower show rates, which raises CAC on the patients you do get.
 
-So a healthcare media plan should check bookings against slots, not just patients against goals. In the illustrative practice, hitting 120 new patients requires 250 booked consults. If four providers each have ten new-patient consult slots a week, that's roughly 170 slots a month. The marketing forecast is achievable on paper and impossible in the schedule.
+So healthcare media planning should check bookings against slots, not just patients against goals. In the illustrative practice, hitting 120 new patients requires 250 booked consults. If four providers each have ten new-patient consult slots a week, that's roughly 170 slots a month. The marketing forecast is achievable on paper and impossible in the schedule.
 
 Three ways to handle a capacity gap, in order of preference:
 
@@ -149,7 +149,7 @@ Give a range, not a point. A single number implies precision the inputs don't ha
 
 Then attach decision rules. For example: if cost per lead stays inside the base range for four weeks, unlock the next spend tier; if show rate falls below the conservative assumption, pause scaling and fix scheduling first. This turns the forecast into an operating plan rather than a prediction someone gets blamed for.
 
-Finally, run a monthly forecast-versus-actual review that isolates which input missed. If patients came in short, was it fewer leads, a lower booking rate, more no-shows, or a lower start rate? Each points to a different owner and a different fix. Over a few cycles, your inputs get sharper and the forecast stops being a guess. If you want to test whether the patients a channel "produced" would have come anyway, layer in [incrementality testing](/blog/healthcare-incrementality/) before scaling it.
+Finally, run a monthly forecast-versus-actual review that isolates which input missed. If patients came in short, was it fewer leads, a lower booking rate, more no-shows, or a lower start rate? Each points to a different owner and a different fix. Over a few cycles, your inputs get sharper and healthcare marketing forecasting stops being a guess. If you want to test whether the patients a channel "produced" would have come anyway, layer in [incrementality testing](/blog/healthcare-incrementality/) before scaling it.
 
 ## What are the most common healthcare forecasting mistakes?
 
@@ -159,6 +159,28 @@ Finally, run a monthly forecast-versus-actual review that isolates which input m
 - **Ignoring capacity.** Spend past the schedule's limit buys waitlists, not patients.
 - **Ignoring fixed costs.** A media-only CAC forecast understates the real cost per patient and can make an unprofitable plan look fine.
 - **Never re-forecasting.** A forecast built once in January is a wish by April.
+
+## FAQ
+
+### How do you build a healthcare marketing forecast?
+
+Start with the new patients the business needs and can actually serve, then divide backwards through your consult-to-start rate, show rate, and lead-to-booked rate to find the leads required. Multiply by cost per lead for the media budget, then add fixed acquisition costs like agency, tooling, and intake labor for the fully loaded spend.
+
+### How should you set a healthcare advertising budget?
+
+Build it from the funnel, not from a percentage of revenue. A percentage rule tells you what you can afford, not what it takes to hit a patient goal. Work backwards from the patient target to the spend it requires, then use revenue-based guardrails only as a sanity check on whether cash flow can fund it.
+
+### Why does paid media forecasting break when you increase spend?
+
+Because CAC rises as spend grows. Every channel has a finite pool of high-intent people, and the cheapest are reached first, so each additional dollar wins slightly less ready or more expensive patients. Doubling spend rarely doubles patients. Forecast in spend tiers, each with its own cost per lead, instead of one average.
+
+### What data do you need for healthcare marketing forecasting?
+
+Your own system data, ideally 90 days or more: lead-to-booked rate from your CRM or scheduling system, show rate and consult-to-start rate from your practice management system or EHR, cost per lead using CRM-counted leads, and fixed costs from finance. Only aggregate counts and rates are needed, so no patient-level health information has to leave your systems.
+
+### How does provider capacity affect healthcare media planning?
+
+Capacity sets a hard ceiling that spend can't push through. Past the number of new patients your providers can see, extra spend buys waitlists, longer time-to-appointment, and lower show rates, which raises CAC. Check booked consults against available slots, and forecast at the service line or location level where capacity actually exists.
 
 ## The forecast is a model of your funnel
 

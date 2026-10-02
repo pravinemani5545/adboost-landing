@@ -12,9 +12,9 @@ ctaText: "Book a free 30-minute call. We review your channel mix, pick the first
 
 Every health brand has a campaign that looks too good to question. Branded search at a 9x return. Retargeting that "drives" a third of all bookings. A Meta campaign whose attributed patients climb every time you raise the budget. The uncomfortable question none of those dashboards can answer is the simplest one: how many of those patients would have booked anyway?
 
-That question is incrementality. Attribution tells you which touchpoint gets credit for a patient. Incrementality tells you whether the ad caused the patient at all. In healthcare, where a large share of demand already exists before any ad runs (referrals, insurance directories, word of mouth, people searching a clinic they already know), the gap between the two can decide whether a channel deserves more budget or none.
+That question is healthcare incrementality. Attribution tells you which touchpoint gets credit for a patient. Incrementality tells you whether the ad caused the patient at all. In healthcare, where a large share of demand already exists before any ad runs (referrals, insurance directories, word of mouth, people searching a clinic they already know), the gap between the two can decide whether a channel deserves more budget or none.
 
-This post is the practical guide: what healthcare incrementality means, why health brands are especially exposed to "claimed" demand, how to design a test that a clinic or telehealth brand can actually run, how to read the result, and how to turn it into budget decisions. If you want the broader measurement picture first, start with our guide to [healthcare marketing attribution](/blog/healthcare-marketing-attribution/).
+This post is the practical guide: what healthcare incrementality means, why health brands are especially exposed to "claimed" demand, how to design a test that a clinic or telehealth brand can actually run, how to read the result, and how to turn it into budget decisions. If you want the broader healthcare marketing measurement picture first, start with our guide to [healthcare marketing attribution](/blog/healthcare-marketing-attribution/).
 
 ## What is incrementality in healthcare marketing?
 
@@ -39,7 +39,7 @@ A few patterns make health brands especially exposed:
 - **Seasonal and news-driven demand.** Open enrollment, the start of the year, or a wave of coverage about a new treatment can lift bookings on their own. Ads running during the spike absorb the credit for it.
 - **Offline conversions.** A large share of healthcare conversions happen on the phone. When a platform models a conversion it cannot see, it tends to credit itself.
 
-None of this means paid media does not work in healthcare. It means platform numbers mix patients the ad created with patients it merely touched, and only the first kind should set your budget.
+None of this means paid media does not work in healthcare. It means platform numbers mix patients the ad created with patients it merely touched, and only the first kind, incremental patient acquisition, should set your budget.
 
 ## How is incrementality different from attribution and MMM?
 
@@ -53,11 +53,11 @@ Attribution splits credit among touchpoints, incrementality testing measures cau
 
 MMM has become far more accessible. Google made [Meridian, its open-source marketing mix model](https://blog.google/products/ads-commerce/meridian-marketing-mix-model-open-to-everyone/), available to all marketers in January 2025, and Meta maintains its own open-source MMM package, [Robyn](https://facebookexperimental.github.io/Robyn/). Both work from aggregated data rather than user-level tracking, which suits health brands that should not be sending sensitive data to ad platforms in the first place. The catch is that an MMM is only as trustworthy as the experiments used to calibrate it, which brings us back to running real tests.
 
-For the tracking side of the stack (PHI-safe server-side events, call tracking, and post-booking surveys), see our [telehealth attribution and server-side tracking guide](/blog/telehealth-attribution-server-side-tracking/).
+For the tracking side of healthcare advertising measurement (PHI-safe server-side events, call tracking, and post-booking surveys), see our [telehealth attribution and server-side tracking guide](/blog/telehealth-attribution-server-side-tracking/).
 
 ## What incrementality tests can a health brand actually run?
 
-There are three practical designs: geo holdouts you run yourself, platform conversion lift studies, and budget on/off or spend-step tests. Pick based on spend level, how local your business is, and how much you trust the platform to grade its own work.
+There are three practical designs for incrementality testing in healthcare: geo holdouts you run yourself, platform conversion lift studies, and budget on/off or spend-step tests. Pick based on spend level, how local your business is, and how much you trust the platform to grade its own work.
 
 ### Geo holdout tests
 
@@ -115,7 +115,7 @@ The reverse happens too: upper-funnel video or social can look weak in the platf
 
 Reprice channels on incremental CAC, move budget toward the spend that creates patients, and retest on a schedule, because incrementality changes as budgets, competition, and seasons change.
 
-Practical steps after a clean read:
+Practical steps after a clean healthcare incrementality read:
 
 - **Apply a correction factor.** If a test shows a campaign's true contribution is a fraction of what the platform claims, keep using the platform for day-to-day optimization but discount its reported results by that factor when making budget decisions.
 - **Shift budget at the margin.** Move dollars gradually from low-lift spend to channels that showed real lift, and watch blended CAC and total new patients, not platform ROAS, as you do.
@@ -130,6 +130,28 @@ Most failed tests fail on design, not math. Beyond testing at full capacity and 
 - **Contaminated holdouts.** Running a launch, a promotion, or a press push in only one group during the test.
 - **Too short a window.** Ending before the typical patient has had time to decide understates lift for anything above the bottom of the funnel.
 - **Holding out the wrong things.** Pausing promotional spend is fine. Withholding information patients need for care, such as service availability or safety messaging, is not a test you should run.
+
+## FAQ
+
+### What is healthcare incrementality?
+
+Healthcare incrementality is the number of new patients your advertising caused, measured against what would have happened without it. You find it by comparing a group exposed to your ads with a comparable group that was not. Attribution tells you which touchpoint gets credit for a patient; incrementality tells you whether the ad caused the patient at all.
+
+### How do you run incrementality testing in healthcare?
+
+There are three practical designs: geo holdouts you run yourself, platform conversion lift studies, and budget on/off or spend-step tests. Geo holdouts fit healthcare best because clinics, multi-location groups, and telehealth brands are already geographic. Whichever design you use, count new patients in your own EHR, practice-management system, or CRM, not in the ad platform.
+
+### How do you calculate incremental CAC?
+
+Divide spend by incremental patients, rather than by every patient the platform claimed. In the illustrative example above, $20,000 of branded search spend produced 400 claimed patients but only 80 caused ones, so a $50 reported CAC became a $250 incremental CAC. Incremental CAC is always equal to or higher than reported CAC.
+
+### Which healthcare campaigns should you test for incrementality first?
+
+Start with the highest-stakes, most-suspect spend. Branded search and retargeting are the usual starting points, because they mostly reach people already close to booking, such as referred patients searching your name or site visitors already on their way to booking. A large prospecting campaign that dominates the budget is the next candidate.
+
+### How often should a health brand retest incrementality?
+
+Retest on a cadence, because incrementality changes as budgets, competition, and seasons change. A result from last spring does not describe this winter. For most health brands, a small number of clean tests a year, rotating through the largest channels, is enough to keep budget decisions grounded in incremental CAC.
 
 ## The bottom line on healthcare incrementality
 

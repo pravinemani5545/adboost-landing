@@ -29,7 +29,7 @@ When an outcome KPI moves, you walk down the layers to find the cause.
 
 ## Why isn't CAC enough on its own?
 
-CAC is a cost, and a cost is only meaningful next to a value and a time frame. A $400 patient can be a bargain or a disaster depending on what the patient is worth and how fast they pay it back, and CAC alone can't tell you which.
+Healthcare CAC is a cost, and a cost is only meaningful next to a value and a time frame. A $400 patient can be a bargain or a disaster depending on what the patient is worth and how fast they pay it back, and CAC alone can't tell you which.
 
 We covered how to calculate a fully loaded number in our [patient acquisition cost guide](/blog/patient-acquisition-cost/). Even done perfectly, CAC has three blind spots:
 
@@ -131,6 +131,28 @@ Keep it to one page, organized by review cadence, with a named owner for each li
 A purely illustrative example of how the layers work together, with round invented numbers: a telehealth program sees blended CAC rise from $250 to $310 in a month. The monthly review shows landing page conversion and lead-to-booked unchanged, but show rate down from 70% to 58%. The weekly numbers show speed to lead roughly doubled after an intake coordinator left. It's a staffing and reminder problem, not a media problem, and cutting ad spend would have made it worse.
 
 To know whether your outcome numbers are reasonable for your category, compare them against vertical ranges, like the ones in our [telehealth CAC benchmarks](/blog/telehealth-cac-benchmarks-2026/), rather than general ecommerce figures.
+
+## FAQ
+
+### What are the most important healthcare marketing KPIs?
+
+Start with five outcome KPIs: blended CAC, patient LTV, the LTV:CAC ratio, CAC payback period, and marketing efficiency (MER). Together they show whether marketing is producing patients profitably. Below them sit funnel KPIs that explain why CAC moves, retention KPIs that set your allowable CAC, and leading indicators that warn you before outcome numbers change.
+
+### Why isn't healthcare CAC enough on its own?
+
+CAC tells you what a patient cost, not whether that patient was worth it. It ignores value, it's backward-looking, and it hides where the cost comes from. CAC can rise because media got expensive, because the funnel converts fewer visitors, or because fewer booked patients show up, and each of those needs a different fix.
+
+### How do you calculate patient LTV?
+
+Patient LTV is the contribution margin a patient generates over their relationship with you, not the revenue. A $200 monthly subscription with $140 of medication, clinician, and fulfillment cost is a $60 patient-month. For new programs without much history, use a conservative 6- or 12-month LTV and recompute it from actual cohorts every quarter.
+
+### How do you calculate healthcare marketing ROI?
+
+Take the contribution margin from new patients acquired in a period, subtract the marketing cost of acquiring them, and divide by that cost. Use margin rather than revenue, or ROI will look healthiest in exactly the programs with the thinnest margins. MER, total revenue divided by total marketing spend, is the cruder companion check.
+
+### How often should you review healthcare marketing metrics?
+
+Review them on three cadences. Weekly, media and intake leads watch CPM, frequency, hook rate, creative win rate, cost per qualified lead, and speed to lead. Monthly, the head of growth reviews blended CAC, funnel conversion, show and start rate, and MER. Quarterly, the founder or P&L owner reviews patient LTV, LTV:CAC, CAC payback, retention, and ROI.
 
 ## Fewer numbers, clearer decisions
 

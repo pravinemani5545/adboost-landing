@@ -30,7 +30,7 @@ In practice, a working strategy answers five questions:
 
 ## Why does healthcare creative have to work harder than other categories?
 
-Because healthcare advertisers have fewer levers outside the ad itself. Targeting is restricted, claims are regulated, and the patient is more skeptical than a shopper buying sneakers. The creative has to do the targeting, the persuasion, and the trust-building on its own.
+Because healthcare advertisers have fewer levers outside the ad itself. Targeting is restricted, claims are regulated, and the patient is more skeptical than a shopper buying sneakers. Healthcare ad creative has to do the targeting, the persuasion, and the trust-building on its own.
 
 Three structural constraints shape everything:
 
@@ -139,5 +139,27 @@ The others we see repeatedly:
 - **Judging creative on platform-reported results only.** A health ad's real job is a booked consult or started treatment. Read creative performance against those outcomes, not just platform clicks.
 
 A healthcare creative strategy doesn't guarantee a particular cost per patient; nothing honestly can. What it does is make every ad a deliberate attempt at one of three jobs, so your account learns which messages earn attention, trust, and action for your patients specifically.
+
+## FAQ
+
+### What makes healthcare ad creative effective?
+
+It does three jobs in sequence: stop, trust, convert. It opens with a situation or question the patient recognizes without diagnosing them, backs the message with real proof such as a credentialed clinician or process transparency, and names one clear next step that the landing page continues.
+
+### How do you write a compliant hook for healthcare ad creative?
+
+Describe the situation, not the person. Meta prohibits ads that assert or imply personal attributes, including medical conditions, so "Do you have low T?" is out. Hooks built on a common patient question, a myth or misconception, or a process reveal can feel personally relevant while staying impersonal in their wording.
+
+### Which formats work best for healthcare Meta ads?
+
+No single format wins. Short clinician videos and long-form explainers are strongest at trust, myth-busting statics and carousels at the stop, process walkthroughs at trust and convert, and price or offer statics at converting warm audiences. A healthy Meta account runs a mix across all three jobs rather than leaning on one format.
+
+### How do you measure whether healthcare ad creative is working?
+
+Measure the stop with hook rate, three-second views over impressions, and judge it against your own account median rather than an industry number. Then read creative performance against booked consults and started treatments, not just platform clicks, because a health ad's real job is a patient outcome.
+
+### What should a healthcare creative strategy document include?
+
+A practical document covers three to five patient situations, an angle matrix, a proof inventory, a claim library with a "never say" list, format assignments for the stop, trust, and convert jobs, and a learning log. The learning log is what lets the strategy update from evidence instead of opinion.
 
 If you want an outside read on where your current creative is breaking in that sequence, we'll review your live ads and landing pages on a [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) and send you a written creative plan whether we work together or not.

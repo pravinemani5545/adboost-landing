@@ -65,7 +65,7 @@ Five barriers account for most lost patients: unclear fit, missing trust, hidden
 
 ### 1. Unclear fit
 
-A patient's first question is "is this for me?" Pages that open with a brand slogan instead of the condition, service, location, and who is eligible make visitors do work they won't do. Message match matters especially for paid traffic: the page headline should continue the exact promise of the ad or search query that brought them. Location pages need the location, hours, and services up front, not three scrolls down.
+A patient's first question is "is this for me?" Pages that open with a brand slogan instead of the condition, service, location, and who is eligible make visitors do work they won't do. Message match is where healthcare landing page optimization starts for paid traffic: the page headline should continue the exact promise of the ad or search query that brought them. Location pages need the location, hours, and services up front, not three scrolls down.
 
 ### 2. Missing or weak trust signals
 
@@ -132,5 +132,27 @@ Measure first, then fix the biggest leak, then test. In practice, a first 90 day
 | Ongoing | Follow-up operations | Speed-to-lead and answer-rate targets |
 
 The order matters because each step multiplies the next. Funnel fixes compound on every visitor you are already paying for, so a recovered point of patient conversion lowers acquisition cost without a single extra ad dollar. That is why we treat [CRO and funnels](/services/cro/) as part of paid media, not an afterthought to it.
+
+## FAQ
+
+### What is healthcare CRO?
+
+It is the systematic process of increasing the share of website visitors who become patients: booking a consult, completing an intake, calling the practice, or starting treatment. Unlike ecommerce CRO, it optimizes for patients rather than leads, works within clinical and regulatory constraints, and has to cope with limited traffic.
+
+### How do you calculate patient conversion rate?
+
+Track it as a chain of step rates, from landing visit to engaged action, completed action, booked, and showed. In an illustrative example, 10,000 visits produce 480 form submissions and 192 new patients. Analytics would report a 4.8% conversion rate, while the patient conversion rate is 1.9%. Only the second connects to acquisition cost.
+
+### What is a good healthcare website conversion rate?
+
+There is no reliable universal number. Published averages mix hospitals, dentists, telehealth, and supplement stores, and rarely define what counts as a conversion. Benchmark internally instead: your own step rates over time by source and device, your best page against the rest, and the conversion rate that makes acquisition cost work against patient value.
+
+### How much traffic do you need to A/B test a healthcare website?
+
+More than most practices have. In an illustrative example with a 3% baseline, detecting a 20% relative lift takes roughly 14,000 visitors per variant, while a 50% lift takes roughly 2,500. Low-traffic sites should start with qualitative research, fix obvious problems without testing, and reserve tests for large swings judged on booked or showed patients.
+
+### How do you keep healthcare conversion rate optimization HIPAA safe?
+
+Treat every CRO tool as a potential data flow. Mask form inputs in session recordings and heatmaps, never pass conditions or treatment names in event names, URLs, or parameters, use vendors that will sign a BAA where they touch protected health information, and send clean conversion signals server-side. Confirm specifics with counsel.
 
 If you want a second set of eyes on where your visitors stop becoming patients, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we will walk your funnel step by step, rank the leaks, and send you a written plan whether we work together or not.

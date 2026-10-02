@@ -12,11 +12,11 @@ ctaText: "Free 30-minute call. We trace where prospective patients hesitate, fro
 
 Most health marketing teams file patient trust under brand: a soft thing that lives in the logo, the tone of voice, and a reviews widget near the footer. Then they go back to arguing about CPMs.
 
-That split is a mistake. Trust is not separate from performance in healthcare, it is one of the biggest inputs to it. A prospective patient who doesn't trust you scrolls past the ad, bounces off the landing page, abandons intake at the medical history step, or books and doesn't show. Every one of those is a number you already track. You just don't usually label the cause.
+That split is a mistake. Patient trust in healthcare is not separate from performance, it is one of the biggest inputs to it. A prospective patient who doesn't trust you scrolls past the ad, bounces off the landing page, abandons intake at the medical history step, or books and doesn't show. Every one of those is a number you already track. You just don't usually label the cause.
 
 This post treats patient trust the way you'd treat any other performance lever: where it shows up in the funnel, how to measure it without inventing a score, which trust signals actually move conversion, what destroys it fastest, and what it does to your patient acquisition cost.
 
-## Why is patient trust a performance metric?
+## Why is patient trust in healthcare a performance metric?
 
 Patient trust is a performance metric because a trust deficit shows up as measurable conversion loss at every stage of the funnel, and those losses compound into a higher cost per patient. You can't put trust in a single cell of a spreadsheet, but you can see its fingerprints in click-through rate, landing page conversion, intake completion, show rate, and retention.
 
@@ -32,7 +32,7 @@ On the institutional side, a 50-state survey published in [JAMA Network Open](ht
 
 On the personal side, an [Annenberg Public Policy Center survey](https://www.annenbergpublicpolicycenter.org/public-confidence-in-ones-own-healthcare-provider-remains-high/) fielded in August 2026 found 87% of U.S. adults confident that their own doctor or nurse provides trustworthy health information, essentially unchanged from 2024, while confidence in federal health agencies dropped.
 
-Read those together and the marketing implication is clear:
+Read those together and the marketing implication for patient trust in healthcare is clear:
 
 - **Patients trust people they know, not institutions they don't.** A new telehealth brand or clinic starts every ad impression as an unfamiliar institution, the low-trust side of that gap.
 - **Suspicion of money motives is the default.** The most cited reason for distrust is exactly the thing a hard-sell ad confirms: urgency timers, hidden pricing, and pushy offers read as proof the business cares about revenue first.
@@ -123,6 +123,28 @@ Same ad account, same budget, same creative. Roughly 27% lower media cost per pa
 
 This is also why fully loaded CAC is the right lens. A brand that only watches cost per lead never sees the trust leak, because the loss happens after the lead is counted. We break down the full calculation in [patient acquisition cost explained](/blog/patient-acquisition-cost/).
 
+## FAQ
+
+### Why does patient trust in healthcare affect marketing performance?
+
+Because a trust deficit shows up as measurable conversion loss at every stage of the funnel. Patients who don't trust you scroll past the ad, bounce off the landing page, abandon intake at sensitive steps, or book and don't show. Those losses compound into a higher cost per patient, even when nobody labels trust as the cause.
+
+### How do you measure patient trust?
+
+Through proxies you already collect rather than a made-up trust index. Track drop-off at sensitive intake steps, show rate and same-week cancellations, branded search and direct traffic, review volume and recency, early churn and refund requests, and a one-question intake survey asking what almost stopped the patient from booking. Then track those against your changes.
+
+### What patient trust signals increase conversions?
+
+Specific, verifiable signals placed at the moment of hesitation. The ones that matter most are named clinicians with credentials, transparent pricing before intake, plain-language privacy lines beside sensitive questions, real and recent reviews, specifics instead of adjectives, saying who the service isn't for, and fast responses after booking. A badge in the footer does little.
+
+### What damages trust in healthcare marketing the fastest?
+
+Fake or manipulated reviews, careless handling of health data, and overclaiming. Each one also carries regulatory risk. The FTC's final rule bans fake and paid reviews, health information should never flow to ad platforms, and an ad that promises results the care can't deliver turns into early churn, refund requests, and damaging reviews.
+
+### How does patient trust lower patient acquisition cost?
+
+By getting more patients from the same media spend. Trust losses multiply stage by stage, so small fixes late in the funnel compound. In the illustrative example above, better intake completion and show rate cut media cost per patient by roughly 27% with the same budget and creative. Results depend on your vertical, offer, and where your funnel leaks.
+
 ## Where should you start?
 
 Start with the stage where the drop-off is biggest relative to what the patient is being asked to do. For most health brands that's intake or show rate, not the ad.
@@ -133,4 +155,4 @@ Start with the stage where the drop-off is biggest relative to what the patient 
 4. **Measure the proxy that should move**, and keep only the changes that move it.
 5. **Audit for trust-breakers**: any purchased or filtered reviews, any health data reaching ad platforms, any claim the care can't back up. Fix those before scaling spend.
 
-Patient trust is not a brand line item you fund when there's budget left over. It's a conversion rate at every stage, and in a category where patients are skeptical by default, it's often the cheapest CAC reduction available. If you want a second set of eyes on where your funnel loses patients' confidence, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we'll map the trust leaks from ad to show-up and send you a written plan either way.
+Patient trust in healthcare is not a brand line item you fund when there's budget left over. It's a conversion rate at every stage, and in a category where patients are skeptical by default, it's often the cheapest CAC reduction available. If you want a second set of eyes on where your funnel loses patients' confidence, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we'll map the trust leaks from ad to show-up and send you a written plan either way.

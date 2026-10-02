@@ -26,7 +26,7 @@ For a telehealth brand, a multi-location clinic, or a specialty practice, patien
 - **Capture**: the landing pages, forms, calls, and chat that turn attention into a known inquiry.
 - **Conversion**: the qualification, follow-up, booking, and reminder process that turns an inquiry into a patient.
 
-Most brands invest heavily in the first part, moderately in the second, and almost nothing in the third. That imbalance is why [patient acquisition cost](/blog/patient-acquisition-cost/) keeps climbing even when the ad account looks healthy.
+Most brands build their patient acquisition strategy around the first part, invest moderately in the second, and put almost nothing into the third. That imbalance is why [patient acquisition cost](/blog/patient-acquisition-cost/) keeps climbing even when the ad account looks healthy.
 
 ## What counts as a qualified healthcare lead?
 
@@ -44,7 +44,7 @@ Write down the criteria for stage two before you run another campaign. Qualifica
 
 ## Where do healthcare leads actually come from?
 
-Healthcare leads come from two kinds of channels: demand capture, which reaches people already searching for care, and demand creation, which reaches people who have the need but have not started looking. A healthy lead generation strategy uses both, and judges them differently.
+Healthcare leads come from two kinds of channels: demand capture, which reaches people already searching for care, and demand creation, which reaches people who have the need but have not started looking. A healthy medical lead generation strategy uses both, and judges them differently.
 
 - **Paid search** is the core demand capture channel. Someone typing a condition, treatment, or "near me" query has intent you cannot manufacture elsewhere. It is also the most policy-constrained: Google's [healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031) restricts what you can promote and where, and prescription-adjacent categories need certification before the highest-intent inventory will serve.
 - **Paid social** is demand creation. Meta, TikTok, and YouTube reach people earlier, with creative that names the problem and makes the next step feel safe. Leads from social typically need more qualification and more follow-up, because the person was not actively shopping when they saw the ad.
@@ -94,7 +94,7 @@ Here is how the handoffs compound, with deliberately round, illustrative numbers
 | Booked | 50% of qualified | 30 |
 | Showed | 80% of booked | 24 |
 
-Now improve only the follow-up: faster response and a real multi-touch sequence lift booking from 50% to 65% of qualified leads. Booked becomes 39, and showed becomes about 31. That is roughly 30% more new patients from the same media budget and the same lead count, without touching a single ad. This is why lead generation problems that look like media problems are so often operations problems.
+Now improve only the follow-up: faster response and a real multi-touch sequence lift booking from 50% to 65% of qualified leads. Booked becomes 39, and showed becomes about 31. That is roughly 30% more new patients from the same media budget and the same lead count, without touching a single ad. This is why lead generation problems that look like healthcare paid advertising problems are so often operations problems.
 
 ## How do you keep healthcare lead generation HIPAA-aware?
 
@@ -131,6 +131,28 @@ The same few patterns show up in almost every lead generation audit:
 - **Marketing and operations using different definitions.** Marketing reports 300 leads, operations says 40 were real, and nobody wrote down what "real" means.
 - **Scaling spend before fixing conversion.** More budget into a funnel that loses most qualified leads at follow-up just buys the same losses at a larger size.
 - **Tracking that leaks health data.** Rushing to get conversion data into ad platforms by passing form answers or condition-specific event names, which creates compliance exposure and, increasingly, gets restricted by the platforms anyway.
+
+## FAQ
+
+### What is healthcare lead generation?
+
+Healthcare lead generation is the process of attracting prospective patients, capturing their contact details, and moving them to a booked, attended first appointment or a started treatment. The goal is patients, not leads. A lead is simply the first point where someone raises their hand, and the work that follows the click decides whether they ever become a patient.
+
+### What makes a healthcare lead qualified?
+
+A qualified healthcare lead is someone who is eligible for your service, reachable, and has shown real intent to book. In practice that means the right location or licensed state, a service you actually offer, any age or eligibility criteria met, and a working phone number or email. Write these criteria down so marketing and operations use the same definition.
+
+### How fast should you follow up with patient leads?
+
+Within minutes during business hours, not hours. A widely cited Harvard Business Review study found that firms contacting leads within an hour were nearly seven times as likely to qualify them. Pair a fast first response with an instant automated confirmation and a follow-up sequence of several calls and messages across a few days.
+
+### Should you buy healthcare leads or generate your own?
+
+For most growing health brands, generating your own leads is the better long-term asset. Purchased leads can look cheaper per lead, but they are often shared with competitors, the consent trail is not yours, and you learn nothing about which messages produce patients. If you buy leads at all, treat them as a tested, tightly measured supplement.
+
+### How do you measure healthcare lead generation?
+
+Judge channels on cost per new patient, not cost per lead. Track cost per inquiry, cost per qualified lead, lead-to-booked rate, booked-to-showed rate, and speed-to-lead by channel and campaign. Then push qualified, booked, and showed outcomes from your CRM into reporting, because ad platforms see less of the healthcare funnel than they do in other industries.
 
 ## Lead generation is a patient system, not a campaign
 

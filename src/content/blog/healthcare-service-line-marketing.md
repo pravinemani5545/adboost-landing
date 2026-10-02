@@ -10,7 +10,7 @@ ctaHeading: "Find out which service lines are earning their budget."
 ctaText: "Free 30-minute call: we score your service lines on patient value, demand and capacity, then send you a written budget split you can take to finance."
 ---
 
-Ask most practices or health systems how their marketing budget is split across service lines and you'll hear one of three answers. It's split evenly. It follows whichever department head pushed hardest last quarter. Or nobody knows, because everything runs through one big campaign and the platform decides. None of these is a strategy. Each one quietly sends money to the service lines that are easiest to advertise instead of the ones that are worth the most to the business.
+Ask most practices or health systems how their marketing budget is split across service lines and you'll hear one of three answers. It's split evenly. It follows whichever department head pushed hardest last quarter. Or nobody knows, because everything runs through one big campaign and the platform decides. None of these is a service line marketing strategy. Each one quietly sends money to the service lines that are easiest to advertise instead of the ones that are worth the most to the business.
 
 Healthcare service line marketing fixes that by treating each service line as its own investment. Below: the four inputs that should set each line's budget, a scoring method, a worked example, how to structure ad accounts so the money lands where you planned, and how to measure patient acquisition by service line.
 
@@ -18,7 +18,7 @@ Healthcare service line marketing fixes that by treating each service line as it
 
 Healthcare service line marketing is planning, funding, and measuring marketing separately for each clinical service a provider offers (orthopedics, physical therapy, weight management, dermatology, behavioral health, and so on) instead of marketing the organization as one undifferentiated brand. Each service line gets its own goals, budget, channel mix, and cost-per-patient target.
 
-Service lines are not interchangeable. They differ in patient value, local demand, capacity, and how hard they are to advertise. A single blended budget averages all of that away.
+Service lines are not interchangeable. They differ in patient value, local demand, capacity, and how hard they are to advertise. A single blended budget averages all of that away. The same applies to hospital service line marketing and to a smaller practice with only a few lines.
 
 ## Why do equal service line budgets fail?
 
@@ -40,7 +40,7 @@ Four inputs: patient value, local demand, capacity, and strategic priority. Acqu
 
 Use expected [contribution margin](/glossary/contribution-margin/) per new patient: revenue from the patient's episode of care (or their expected lifetime with you, for recurring programs) minus the direct cost of delivering it. Revenue alone misleads, because a high-revenue service with high delivery costs or poor reimbursement can be worth less per patient than a modest one.
 
-Include downstream value where it's real and measurable. An orthopedic consult that leads to surgery in a meaningful share of cases is worth that expected surgical contribution, not just the consult fee. Get these numbers from finance, not from estimates. Marketing teams rarely have service line margin data on hand, and that gap is the root cause of most misallocated healthcare budgets.
+Include downstream value where it's real and measurable. An orthopedic consult that leads to surgery in a meaningful share of cases is worth that expected surgical contribution, not just the consult fee. Get these numbers from finance, not from estimates. Marketing teams rarely have service line margin data on hand, and that gap is the root cause of most poor healthcare budget allocation.
 
 From patient value you get an **allowable [patient acquisition cost](/blog/patient-acquisition-cost/)** for each line: the most you can pay per new patient and still hit your margin and payback targets. That number will differ enormously across service lines, which is the whole point.
 
@@ -102,7 +102,7 @@ Estimated monthly contribution from the new patients actually served: roughly $1
 
 Estimated monthly contribution: roughly $194,000, on $36,200 of spend. Same total budget, same ad accounts, very different business outcome, purely from where the money went.
 
-The caveat matters. In a real account, filling the last ten orthopedic slots costs more than filling the first ten, because cost per patient rises as you spend deeper into a finite pool of demand. Price each line's budget in spend tiers, as we laid out in [healthcare marketing forecasting](/blog/healthcare-marketing-forecasting/), and stop each line where its marginal cost per patient reaches the allowable CAC.
+The caveat matters. In a real account, filling the last ten orthopedic slots costs more than filling the first ten, because cost per patient rises as you spend deeper into a finite pool of demand. In healthcare media planning, price each line's budget in spend tiers, as we laid out in [healthcare marketing forecasting](/blog/healthcare-marketing-forecasting/), and stop each line where its marginal cost per patient reaches the allowable CAC.
 
 ## How should the channel mix differ by service line?
 
@@ -148,6 +148,28 @@ Write the monthly guardrails as rules, agreed in advance with operations and fin
 - When a new provider starts, move that line's budget up on the date capacity actually goes live, not the date it was announced.
 
 Two more habits keep the split honest. Judge long-cycle lines (elective surgery, fertility, weight management) on windows long enough for them to convert, not 30 days. And keep strategic bets on their own budget line so they don't distort every other line's numbers. Rules like these stop the budget drifting back to whoever argues loudest, which is how most organizations ended up with equal splits in the first place.
+
+## FAQ
+
+### What is healthcare service line marketing?
+
+Healthcare service line marketing means planning, funding, and measuring marketing separately for each clinical service, such as orthopedics, physical therapy, or weight management. Each line gets its own goals, budget, channel mix, and cost-per-patient target, instead of one blended budget that averages away the differences in patient value, demand, and capacity.
+
+### How should a healthcare marketing budget be split across service lines?
+
+Split it by four inputs: patient value, local demand, capacity, and strategic priority. Score each line, sort the lines into tiers (grow, sustain, fix first, maintain, invest), and fund each tier by its role. Then check that each line's cost per patient stays under the allowable acquisition cost set from its contribution margin.
+
+### Why is an equal budget split across service lines a mistake?
+
+An equal split assumes every service line has the same patient value, local demand, and open capacity, which is almost never true. The result is that some lines are overfunded while others are starved. Full lines keep buying demand they can't serve, and high-value lines with higher cost per lead get cut.
+
+### How do you measure patient acquisition by service line?
+
+Track spend, leads, booked and attended appointments, patients who started care, cost per started patient against the allowable CAC, open capacity, and estimated contribution from finance, per line and per month. Use CRM and practice management data rather than platform-reported conversions, which double count across channels and miss phone bookings.
+
+### How often should service line budgets be rebalanced?
+
+Re-score the service line tiers quarterly and run monthly guardrails in between. Quarterly gives longer-cycle lines time to show results while still reacting to changes in capacity and demand. The monthly rules, agreed with operations and finance, cut, freeze, or release budget when a line crosses its cost, wait-time, or capacity thresholds.
 
 ## Budget is a portfolio decision
 

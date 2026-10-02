@@ -18,7 +18,7 @@ This post covers where CTV and programmatic actually fit in a healthcare media p
 
 ## What is healthcare CTV advertising?
 
-Healthcare CTV advertising is video advertising for health brands that runs on internet-connected TV screens: smart TVs, streaming sticks, and game consoles, inside streaming apps and services. It looks like a TV commercial to the viewer but is bought, targeted, and reported like digital media.
+Healthcare CTV advertising is healthcare video advertising that runs on internet-connected TV screens: smart TVs, streaming sticks, and game consoles, inside streaming apps and services. It looks like a TV commercial to the viewer but is bought, targeted, and reported like digital media.
 
 A few terms get used interchangeably, so it helps to separate them:
 
@@ -43,7 +43,7 @@ For health brands, that combination matters for three reasons:
 
 ## Where does CTV fit in a healthcare media plan?
 
-CTV is a demand-creation channel that sits above search and social, not a replacement for either. Its job is to build awareness and consideration in defined markets so that search captures more branded demand and social retargeting converts a warmer audience.
+Healthcare CTV advertising is a demand-creation channel that sits above search and social, not a replacement for either. Its job is to build awareness and consideration in defined markets so that search captures more branded demand and social retargeting converts a warmer audience.
 
 Think of a healthcare media strategy in three layers:
 
@@ -138,6 +138,28 @@ Answer yes to most of these before spending a dollar:
 6. **Search and social are hitting diminishing returns.** If marginal CAC is still flat, the cheapest growth is still there.
 
 If you are missing two or more, fix those first. CTV amplifies whatever system it sits on top of, including its problems.
+
+## FAQ
+
+### What is healthcare CTV advertising?
+
+It is video advertising for health brands that runs on internet-connected TV screens, inside streaming apps and services. It looks like a TV commercial to the viewer, but it is bought, targeted, and reported like digital media, usually through programmatic platforms, Google Ads, or streaming publishers directly.
+
+### What is the difference between CTV, OTT, and programmatic advertising in healthcare?
+
+CTV describes the screen, a television connected to the internet. OTT describes the delivery, video streamed over the internet, which can play on a TV, phone, or laptop. Programmatic describes the buying method, software-based buying through a demand-side platform. Healthcare programmatic advertising also covers display, online video, audio, and digital out-of-home.
+
+### Can health brands target patients by condition on connected TV?
+
+Generally, no. Targeting people based on health conditions is restricted on major platforms and legally risky everywhere. Google bars health advertisers from advertiser-curated audiences, HIPAA blocks sharing patient data with ad tech vendors, and some states restrict location tactics. Most health brands should target by geography, demographics, and context, and let the creative qualify the viewer.
+
+### How do you measure healthcare CTV advertising?
+
+Measure it by what happens to branded search, direct traffic, survey responses, and blended CAC in the markets where it runs, not by the CTV platform's own reporting. Geo holdouts give the clearest verdict: run CTV in test markets, hold it out in comparable control markets, and compare new patients from your own CRM or EHR.
+
+### When is a health brand ready for CTV?
+
+A health brand is ready when search is efficient and includes a brand campaign, the landing page and intake flow convert, new patients can be counted by market, there is capacity in the target markets, and compliant horizontal creative exists. Search and social should also be hitting diminishing returns. Missing two or more of these means fix them first.
 
 ## The bottom line on healthcare CTV advertising
 

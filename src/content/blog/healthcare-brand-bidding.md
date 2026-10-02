@@ -12,15 +12,15 @@ ctaText: "Free 30-minute call. We read your auction insights and brand search te
 
 Open almost any healthcare Google Ads account and the best-looking campaign is the brand campaign. Cheap clicks, a conversion rate that dwarfs everything else, a cost per patient that makes the rest of the account look broken. It is also the campaign people are most suspicious of, because the obvious question is hard to shake: these patients already typed your name. Would they not have clicked the free listing right underneath?
 
-The honest answer is "sometimes," and the difference is worth real money. This post covers what healthcare branded search ads actually do, what the research says, when paying for your own name protects patients and when it mostly claims credit, how to test which one you are in, and how to set up and report a brand campaign so it can't distort the rest of your paid search strategy.
+The honest answer is "sometimes," and the difference is worth real money. This post covers what healthcare branded search ads actually do, what the research says, when paying for your own name protects patients and when it mostly claims credit, how to test which one you are in, and how to set up and report a brand campaign so it can't distort the rest of your healthcare paid search strategy.
 
 ## Should healthcare brands bid on their own name?
 
 Most healthcare brands should run a branded search campaign, but on a short leash: separated from non-brand, capped in cost, and tested for incrementality rather than trusted on its reported numbers. Whether it is worth what you pay depends on who else is showing up when patients search your name.
 
-Brand bidding is really two decisions: a default (usually yes) and a measurement question (how much is it really worth?) that most accounts never ask, even though reported brand returns are almost always inflated.
+Brand bidding in Google Ads is really two decisions: a default (usually yes) and a measurement question (how much is it really worth?) that most accounts never ask, even though reported brand returns are almost always inflated.
 
-## What does a branded search ad actually do?
+## What do healthcare branded search ads actually do?
 
 A branded search ad buys you control of the top of the results page for people who already know your name. Whether that control is worth paying for depends on what would sit there if you left.
 
@@ -44,7 +44,7 @@ The useful takeaway is the mechanism, not a number: brand ads are most increment
 
 ## When does brand bidding protect demand for healthcare brands?
 
-Brand bidding protects real patients when something else would take the top of the page if you stepped away. In healthcare, that happens more often than in most categories, because patients searching a provider's name are often still comparing.
+Healthcare branded search ads protect real patients when something else would take the top of the page if you stepped away. In healthcare, that happens more often than in most categories, because patients searching a provider's name are often still comparing.
 
 Where a brand campaign usually earns its spend:
 
@@ -54,7 +54,7 @@ Where a brand campaign usually earns its spend:
 - **Patients search brand plus intent.** Queries like "[clinic] new patient appointment," "[brand] cost," or "[brand] insurance" are high intent and specific. An ad that answers the exact question, with a sitelink to the right page, is worth more than a generic organic snippet.
 - **You run multiple locations or service lines.** "[Brand] near me" and "[brand] + city" searches benefit from an ad that routes to the right location page, which the organic result may not do.
 
-The quickest way to see whether any of this applies is Google's [auction insights report](https://support.google.com/google-ads/answer/2579754?hl=en), which shows which other advertisers appear in your brand auctions, how often they overlap with you, and how often they show above you. If the report is empty or nearly empty, the protection argument is weak. If several competitors show up regularly, it is strong.
+The quickest way to see whether any of this applies is Google's [auction insights report](https://support.google.com/google-ads/answer/2579754?hl=en), which shows which other advertisers appear in the auctions for your Google Ads brand keywords, how often they overlap with you, and how often they show above you. If the report is empty or nearly empty, the protection argument is weak. If several competitors show up regularly, it is strong.
 
 ## When does a brand campaign just claim credit?
 
@@ -93,7 +93,7 @@ The setup that keeps brand honest:
 
 - **Separate brand from non-brand.** Brand, non-brand, and competitor terms each get their own campaign. We lay out the full tiering in our [Google Ads playbook for telehealth](/blog/google-ads-telehealth-strategy/).
 - **Use brand settings in both directions.** Google's [brand settings](https://support.google.com/google-ads/answer/13721847?hl=en) let you apply brand inclusions to a Search campaign so it serves only on your brand, and brand exclusions to Search and Performance Max campaigns so they stay off it. Google also notes that brand settings limit traffic by design, so apply them deliberately. Without exclusions, automated campaigns tend to pick up brand queries and report them as their own performance.
-- **Control cost.** Brand clicks are usually cheap until a competitor shows up. A target impression share goal with a sensible maximum CPC limit, or a manual bid cap, stops a bidding war from quietly turning your cheapest campaign into an expensive one.
+- **Control cost.** Branded PPC in healthcare is usually cheap until a competitor shows up. A target impression share goal with a sensible maximum CPC limit, or a manual bid cap, stops a bidding war from quietly turning your cheapest campaign into an expensive one.
 - **Write ads for patients who already chose you.** Lead with what they need next: booking, accepted insurance, locations, hours, telehealth availability. Use sitelinks to route, not to decorate.
 - **Remember policy applies to every ad.** Google's [healthcare and medicines policy](https://support.google.com/adspolicy/answer/176031?hl=en), including certification requirements for categories like prescription drugs, telemedicine, and addiction services, applies to your brand ads exactly as it does to non-brand. A brand campaign is not a policy loophole.
 - **Keep conversion tracking HIPAA-aware.** Brand-plus-service queries can reveal what a patient is looking for. Conversion events sent back to ad platforms should describe actions, such as a booked or attended appointment, never conditions or treatment details.
@@ -104,7 +104,7 @@ Bidding on competitor names is allowed and can work, but it is usually expensive
 
 Google's [trademark policy](https://support.google.com/adspolicy/answer/6118?hl=en) does not restrict trademarks as keywords, so a competitor can legally bid on your name in Google Ads and you can bid on theirs. Trademarks in ad text are a different matter: a trademark owner can file a complaint, and Google restricts ads from direct competitors that use the trademark in the ad copy, or that use it in a confusing or misleading way.
 
-For healthcare specifically, three cautions apply:
+For competitor bidding in healthcare specifically, three cautions apply:
 
 - **Patient trust is fragile.** A patient searching for their own physician who lands on a competitor's page can feel misled. Ads should clearly identify who you are.
 - **Relevance works against you.** Your ad and page are less relevant to someone else's name, which tends to raise click costs and lower conversion rates.
@@ -112,7 +112,7 @@ For healthcare specifically, three cautions apply:
 
 ## How should you report branded search?
 
-Report brand search as its own line, never blended into non-brand search or channel ROAS. Brand performance tells you how much existing demand you are capturing, not how well your advertising is creating new patients.
+Report healthcare branded search ads as their own line, never blended into non-brand search or channel ROAS. Brand performance tells you how much existing demand you are capturing, not how well your advertising is creating new patients.
 
 A simple reporting structure:
 
@@ -121,6 +121,28 @@ A simple reporting structure:
 - **[Blended CAC](/glossary/blended-cac/) as the headline business metric**, so that shifting budget away from brand and toward demand creation shows up in the number that matters.
 - **Branded search volume tracked as a demand signal.** Rising brand impressions after launching video or social is one of the better signs that upstream channels are working.
 - **A retest on a cadence**, because competitive pressure on your name changes.
+
+## FAQ
+
+### Should healthcare brands bid on their own name in Google Ads?
+
+Usually yes, but on a short leash. Run brand in its own campaign, separated from non-brand, capped in cost, and tested for incrementality rather than trusted on its reported numbers. Whether it is worth the spend depends mostly on who else appears when patients search your name, which the auction insights report shows.
+
+### Are healthcare branded search ads incremental?
+
+Sometimes. Brand ads are most incremental when your organic listing is weak or contested, and least incremental when you rank first organically and nobody else bids on your name. That is why the research points in both directions, and why the only reliable answer comes from a pause or holdout test in your own patient data.
+
+### How do you test whether a brand campaign is incremental?
+
+Pause or reduce brand spend in a controlled way: a geo holdout for multi-location practices and telehealth brands, or a time-based on/off test for a single location. Run it for two to four weeks, count new patients in your scheduling system or EHR, and divide brand spend by the patients actually lost to get incremental cost per patient.
+
+### Can competitors bid on your brand name in Google Ads?
+
+Yes. Google's trademark policy does not restrict trademarks as keywords, so a competitor can bid on your name and you can bid on theirs. Using a trademark in ad text is different: the owner can file a complaint, and Google restricts ads from direct competitors that use it in the copy or in a confusing or misleading way.
+
+### How should healthcare brands report branded search?
+
+As its own line, never blended into non-brand search or channel ROAS. Report brand, non-brand, and competitor campaigns separately with spend, new patients, and cost per patient. Show brand's incremental cost per patient from your latest test beside its reported number, and use blended CAC as the headline business metric.
 
 ## The bottom line on healthcare brand bidding
 

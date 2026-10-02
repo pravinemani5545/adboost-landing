@@ -92,7 +92,7 @@ You turn clicks into sales by building a different conversion path for each buyi
 - **Clinician-in-the-loop devices** need a path that prepares the patient for the clinician: a "talk to your doctor" kit, a provider locator if you have one, and a way to capture the lead so you can follow up when the appointment happens.
 - **Capital and facility devices** need a demo or evaluation request flow with just enough qualification fields to route the lead correctly, plus gated clinical and economic content that sales can use.
 
-We cover the page-level work in our guide to [healthcare CRO](/blog/healthcare-cro/), and the lead-capture and follow-up side in [healthcare lead generation](/blog/healthcare-lead-generation/). In the clinician and B2B models, slow follow-up is where inquiries go cold.
+We cover the page-level work in our guide to [healthcare CRO](/blog/healthcare-cro/), and the lead-capture and follow-up side in [healthcare lead generation](/blog/healthcare-lead-generation/). In the clinician and B2B models, medical device lead generation depends on speed: slow follow-up is where inquiries go cold.
 
 ## How should medical device brands measure marketing?
 
@@ -125,7 +125,29 @@ For clinician-in-the-loop and capital devices, the same logic applies at the pip
 
 ## Where does medical device marketing usually go wrong?
 
-Most failures happen before a single ad runs: one funnel for every buyer, claims reviewed after the creative is made instead of before, too few ads for a restricted-targeting category, budget chasing platform-reported conversions, condition-labelled tracking that breaks platform terms, and patient demand lost at the clinician. Fix them in order: buyer model, claims library, conversion paths, measurement, then creative volume and spend.
+Most medical device digital marketing failures happen before a single ad runs: one funnel for every buyer, claims reviewed after the creative is made instead of before, too few ads for a restricted-targeting category, budget chasing platform-reported conversions, condition-labelled tracking that breaks platform terms, and patient demand lost at the clinician. Fix them in order: buyer model, claims library, conversion paths, measurement, then creative volume and spend.
+
+## FAQ
+
+### What is medical device marketing?
+
+It is the work of creating and capturing demand for a regulated medical product, within its cleared or approved indications. What sets it apart is the buyer chain: a device brand often has to persuade a patient, a clinician who recommends or prescribes, and sometimes a facility or payer, each needing different proof before the sale closes.
+
+### What should a medical device marketing strategy include?
+
+Start with the buying model (direct consumer, clinician in the loop, or facility), then a claims library mapping every approved claim to its evidence. From there, the strategy needs a conversion path per buyer, measurement built on your own order or CRM data, and enough creative volume to keep pace with restricted targeting.
+
+### What rules apply to medical device advertising?
+
+In the US, the FDA oversees advertising for restricted devices and the FTC oversees advertising for devices that are not restricted. In practice, claims must stay inside the cleared indication, health claims need competent and reliable scientific evidence before the ad runs, and risk information has to travel with benefits. Every ad should go through regulatory review.
+
+### Which paid media channels work for medical devices?
+
+Give each channel one job. Search captures people already looking for a solution through problem and category queries. Social and video create demand by demonstrating the device to people who have the problem but have not started searching. Professional networks, specialty publications, and conferences reach clinicians and buying committees for longer-cycle sales.
+
+### How do you measure medical device marketing without sharing health data?
+
+Use neutral event names (purchase, lead, demo request) and clean URLs with no condition or symptom labels. Send conversions server-side so you control and scrub what leaves. Treat your order system or CRM as the source of truth, and add a "How did you first hear about us?" survey to catch channels platform attribution misses.
 
 ## Good devices still need a growth system
 
