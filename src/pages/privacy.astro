@@ -22,7 +22,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   <ul>
     <li><strong>What is recorded:</strong> pages viewed, the referring site, campaign (UTM) parameters, the marketing channel we classify the visit into, a device category (desktop, mobile, or tablet, derived from the browser's user agent), country, and a salted one-way hash of the IP address. The raw IP address is not stored.</li>
     <li><strong>Identifiers:</strong> instead of cookies, we store a random identifier in your browser's localStorage to recognize return visits. It contains no personal information, expires after 12 months, and is never shared with anyone. A separate session identifier expires after 30 minutes of inactivity.</li>
-    <li><strong>Bookings:</strong> if you book a strategy call, this random identifier is attached to your booking so we know which marketing channel referred you.</li>
+    <li><strong>Bookings:</strong> when a strategy call is booked, our analytics records only that a booking happened, its time, and its length, and links it to the most recent visit that opened the booking page so we know which marketing channel referred it. Your name, email address, and booking answers are never stored in analytics.</li>
     <li><strong>Opting out:</strong> clearing this site's data in your browser (or blocking site storage) removes the identifier. You can also email us to have your analytics data deleted.</li>
   </ul>
 
