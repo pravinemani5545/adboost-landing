@@ -4,7 +4,7 @@
 // Every booking CTA links to the first-party /book/ page, which embeds the Google
 // Calendar appointment schedule (Pira's calendar; each booking gets a Google Meet link).
 export const BOOK_PATH = '/book/';
-export const BOOKING_EMBED_URL = 'https://calendar.google.com/calendar/appointments/schedules/PENDING_SCHEDULE_ID?gv=true';
+export const BOOKING_EMBED_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3zojIwc77IB2k7y11etonn4j7oKffkeWbm-ErHiwITTBBInv12Tu8XUYsVJHJLUeUWng2BFkEs?gv=true';
 export const EMAIL = 'hello@adboost.health';
 
 export function siteBase(site: URL | undefined): string {
