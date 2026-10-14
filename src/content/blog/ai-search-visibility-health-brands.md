@@ -70,4 +70,4 @@ Most of these are things a good health brand builds anyway - GEO just raises the
 
 ## Where does GEO fit next to paid media?
 
-It doesn't replace it - it compounds it. Paid media creates the demand and the branded searches; GEO determines what the machines say when that demand goes looking. A buyer who sees your ad and then asks Perplexity about you is now the *normal* path, and the brands winning in 2026 control both touches. If you want to know what AI engines currently say about your brand - and the written plan to change it - book a [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call); we'll run the audit either way.
+It doesn't replace it - it compounds it. Paid media creates the demand and the branded searches; GEO determines what the machines say when that demand goes looking. A buyer who sees your ad and then asks Perplexity about you is now the *normal* path, and the brands winning in 2026 control both touches. If you want to know what AI engines currently say about your brand - and the written plan to change it - book a [free 30-minute strategy call](/book/); we'll run the audit either way.

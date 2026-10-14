@@ -76,4 +76,4 @@ In audit order: message match above the fold, contact-info timing in intake, ear
 | 4 | Pricing visibility | Real numbers within one click? |
 | 5 | Crawlable compliance | Disclaimers in text, not images? |
 
-This is also the fastest money in paid health marketing: creative takes weeks to test, but a funnel fix compounds on every click you're already buying. If you want a second set of eyes on yours, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) - we'll tear down your funnel and ad account live and send you the written plan even if we never speak again.
+This is also the fastest money in paid health marketing: creative takes weeks to test, but a funnel fix compounds on every click you're already buying. If you want a second set of eyes on yours, [book a free 30-minute strategy call](/book/) - we'll tear down your funnel and ad account live and send you the written plan even if we never speak again.

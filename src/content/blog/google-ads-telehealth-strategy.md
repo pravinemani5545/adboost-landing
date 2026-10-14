@@ -70,4 +70,4 @@ The channels compound: Meta creates the demand, and thirty seconds later that sa
 
 Run them as one system: social creative volume feeding demand, search structured to catch it, negatives protecting the budget, certification keeping the whole thing alive. Setup for that system takes us about 5 days on a new partner account, and it's the pattern behind most of the $153M+ in tracked revenue across the 71+ founders we've worked with.
 
-If your Google account is either dormant or quietly burning budget on the wrong queries, [book a free strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) - 30 minutes, we audit the account live, and you get a written plan whether or not we ever work together.
+If your Google account is either dormant or quietly burning budget on the wrong queries, [book a free strategy call](/book/) - 30 minutes, we audit the account live, and you get a written plan whether or not we ever work together.

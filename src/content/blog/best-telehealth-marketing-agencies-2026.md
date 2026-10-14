@@ -66,4 +66,4 @@ Put your shortlist through the same test:
 
 The best telehealth marketing agency for your brand is the one that's fluent in certification, builds condition-specific funnels, measures true paying-patient CAC, and has a retention plan. For most DTC telehealth brands, that's a [health-specialist performance partner](/services/).
 
-At AdBoost Health, telehealth is one of the categories we work in every day. Book a [free strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) and we'll audit your account and hand you a written plan either way.
+At AdBoost Health, telehealth is one of the categories we work in every day. Book a [free strategy call](/book/) and we'll audit your account and hand you a written plan either way.

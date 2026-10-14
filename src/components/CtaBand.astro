@@ -1,5 +1,5 @@
 ---
-import { CAL_LINK, CAL_NAMESPACE, CAL_URL } from '../lib/site';
+import { BOOK_PATH } from '../lib/site';
 interface Props { heading?: string; text?: string; }
 const {
   heading = 'Ready to lower CAC and scale spend profitably?',
@@ -12,7 +12,7 @@ const {
       <div class="inner">
         <h2 set:html={heading} />
         <p>{text}</p>
-        <a class="btn btn-primary btn-lg" href={CAL_URL} target="_blank" rel="noopener" data-cal-namespace={CAL_NAMESPACE} data-cal-link={CAL_LINK} data-cal-config='{"layout":"month_view"}'>
+        <a class="btn btn-primary btn-lg" href={BOOK_PATH}>
           Book a free strategy call
           <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         </a>

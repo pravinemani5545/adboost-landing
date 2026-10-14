@@ -60,7 +60,7 @@ ${posts.map((p) => `- [${p.data.title}](${base}/blog/${p.id}/): ${p.data.descrip
 
 ## Contact
 
-- Book a strategy call: https://cal.com/pira-ahilan-ef2dl8/strategy-call
+- Book a strategy call: https://www.adboost.health/book/
 - Email: hello@adboost.health
 `;
 

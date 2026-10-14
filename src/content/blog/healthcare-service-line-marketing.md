@@ -175,4 +175,4 @@ Re-score the service line tiers quarterly and run monthly guardrails in between.
 
 Healthcare service line marketing comes down to one shift: stop asking "how much should marketing get?" and start asking "how much should each service line get, given what its patients are worth, how many people are looking, and how many we can actually see?" Score the lines, assign roles, structure the accounts so spend follows the plan, and measure each line on cost per started patient against its own allowable CAC.
 
-If you want help building that split from your own numbers, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll score your service lines with you, flag where budget is leaking, and send you the written allocation either way.
+If you want help building that split from your own numbers, [book a free 30-minute strategy call](/book/). We'll score your service lines with you, flag where budget is leaking, and send you the written allocation either way.

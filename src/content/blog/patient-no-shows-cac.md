@@ -142,4 +142,4 @@ Qualify before the calendar, keep the ad, landing page, confirmation, and remind
 
 A missed first appointment isn't a scheduling inconvenience that happens after marketing's job is done. It's the last step of the acquisition funnel failing, and it shows up in your CAC whether or not your dashboard admits it. Measure show rate by source, optimize toward attended patients instead of bookings, and treat lead time, offer design, and message match as marketing levers, because they are.
 
-If you want to see what no-shows are really doing to your acquisition math, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we'll rebuild your CAC on attended patients, rank the leaks by source, and send you a written plan either way.
+If you want to see what no-shows are really doing to your acquisition math, [book a free 30-minute strategy call](/book/): we'll rebuild your CAC on attended patients, rank the leaks by source, and send you a written plan either way.

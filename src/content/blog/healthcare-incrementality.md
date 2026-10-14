@@ -157,4 +157,4 @@ Retest on a cadence, because incrementality changes as budgets, competition, and
 
 Attribution tells you who touched the patient. Incrementality tells you who created the patient. For health brands with strong referral, directory, and brand demand, those two answers can be very far apart, and the budget follows whichever one you trust. A handful of well-designed tests a year, measured in your own patient records and read as incremental CAC, will tell you more about where to spend than any dashboard.
 
-If you want help deciding which test to run first and how to set it up without compromising patient privacy, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we will review your channel mix and send you a written test plan whether we work together or not.
+If you want help deciding which test to run first and how to set it up without compromising patient privacy, [book a free 30-minute strategy call](/book/): we will review your channel mix and send you a written test plan whether we work together or not.

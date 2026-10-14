@@ -65,4 +65,4 @@ Once you have a shortlist, put each agency through the same test:
 
 The best GLP-1 marketing agency for your brand is the one that treats compliance as the strategy, ships compliant creative at volume, and measures true blended CAC with a retention lens. For most early-to-growth GLP-1 brands, that means a health-specialist performance partner over a generalist or a broad full-service shop.
 
-At AdBoost Health, GLP-1 is one of the categories we work in every day - book a [free strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) and we'll audit your account and hand you a written plan, whether we end up working together or not.
+At AdBoost Health, GLP-1 is one of the categories we work in every day - book a [free strategy call](/book/) and we'll audit your account and hand you a written plan, whether we end up working together or not.

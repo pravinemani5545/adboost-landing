@@ -165,4 +165,4 @@ A health brand is ready when search is efficient and includes a brand campaign, 
 
 CTV and programmatic can be a legitimate growth layer for health brands once search and social are efficient, the funnel converts, and you can measure patients by market. It is a demand-creation channel, so judge it by what it does to branded search, survey responses, and blended CAC in test markets, not by its own dashboard. Target by geography, demographics, and context, let creative qualify the viewer, and keep patient data out of the ad stack entirely.
 
-If you are weighing a first CTV test and want a second opinion on whether the rest of your [paid media](/services/paid-media/) is ready to support it, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we will review your channel mix and measurement setup and send you a written plan either way.
+If you are weighing a first CTV test and want a second opinion on whether the rest of your [paid media](/services/paid-media/) is ready to support it, [book a free 30-minute strategy call](/book/): we will review your channel mix and measurement setup and send you a written plan either way.

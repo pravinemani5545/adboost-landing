@@ -158,4 +158,4 @@ Review them on three cadences. Weekly, media and intake leads watch CPM, frequen
 
 The point of healthcare marketing KPIs isn't more reporting, it's fewer arguments: outcome numbers everyone agrees on, a funnel layer that explains them, retention metrics that set the ceiling, and leading indicators that buy you warning. CAC is in there, but it no longer carries the scorecard alone.
 
-If you'd like a second opinion on which numbers should be running your marketing, that's what our [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) covers: we rebuild your scorecard from your actual data, flag the metrics that are misleading you, and send a written plan whether we work together or not.
+If you'd like a second opinion on which numbers should be running your marketing, that's what our [free 30-minute strategy call](/book/) covers: we rebuild your scorecard from your actual data, flag the metrics that are misleading you, and send a written plan whether we work together or not.

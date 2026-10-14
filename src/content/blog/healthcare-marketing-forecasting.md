@@ -186,4 +186,4 @@ Capacity sets a hard ceiling that spend can't push through. Past the number of n
 
 Healthcare marketing forecasting isn't about predicting the future perfectly. It's about making your assumptions explicit, so you know what the budget depends on and which number to fix when reality disagrees. Start from the patient goal, divide back through your real conversion rates, price each spend tier separately, and check the result against the capacity you actually have.
 
-If you'd like help building that model from your own data, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll turn your patient goal into a tiered spend plan with the capacity check included, and send you the written version either way.
+If you'd like help building that model from your own data, [book a free 30-minute strategy call](/book/). We'll turn your patient goal into a tiered spend plan with the capacity check included, and send you the written version either way.

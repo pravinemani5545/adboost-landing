@@ -108,4 +108,4 @@ In this order. The sequence matters because each step multiplies the next.
 
 Do these in reverse order and you get the usual failure mode: scaling spend into a leaky funnel on misattributed data, which is just buying the same expensive patients twice.
 
-If you want a second set of eyes on your acquisition math, that's what the free audit on our [30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) covers: your fully loaded CAC rebuilt honestly, the drivers ranked, and a written plan whether we work together or not.
+If you want a second set of eyes on your acquisition math, that's what the free audit on our [30-minute strategy call](/book/) covers: your fully loaded CAC rebuilt honestly, the drivers ranked, and a written plan whether we work together or not.

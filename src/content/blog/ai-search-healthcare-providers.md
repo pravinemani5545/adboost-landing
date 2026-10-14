@@ -133,4 +133,4 @@ Start with the monthly answer check, because it tells you where you actually sta
 
 AI search in healthcare hasn't changed what patients want from a provider. They still want someone qualified, nearby or available virtually, covered by their insurance, and trusted by other patients. What has changed is who does the first round of comparison. Increasingly it is a machine reading your public information, and it can only recommend what it can find, read, and trust.
 
-If you want to see what AI engines currently tell patients about your practice, book a [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll run the answer check with you, show you where the gaps are, and send a written plan whether we work together or not.
+If you want to see what AI engines currently tell patients about your practice, book a [free 30-minute strategy call](/book/). We'll run the answer check with you, show you where the gaps are, and send a written plan whether we work together or not.

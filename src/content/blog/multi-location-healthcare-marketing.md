@@ -160,4 +160,4 @@ Track attended new patients rather than leads, fully loaded cost per patient, sp
 
 Multi-location healthcare marketing works when the practice plans, spends, and measures at the level patients actually choose: the location. Give each clinic its own geography and budget logic, centralize the brand, tracking, and creative, and move money toward open capacity and acceptable marginal cost instead of splitting it evenly. Our [paid media team](/services/paid-media/) runs multi-location accounts on exactly that model.
 
-If you want to see where your budget is going clinic by clinic, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll break your spend and new patients out by location, flag where you're overspending or starving a clinic, and send you a written plan whether or not we work together.
+If you want to see where your budget is going clinic by clinic, [book a free 30-minute strategy call](/book/). We'll break your spend and new patients out by location, flag where you're overspending or starving a clinic, and send you a written plan whether or not we work together.

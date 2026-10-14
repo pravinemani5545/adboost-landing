@@ -148,4 +148,4 @@ As its own line, never blended into non-brand search or channel ROAS. Report bra
 
 Healthcare brands should usually bid on their own name, but they should pay for protection, not for credit. Run brand in its own campaign, fence everything else away from it, watch who shows up in your auctions, and test what it really adds before letting its numbers justify anything else. Our [paid media team](/services/paid-media/) runs that split, and the tests behind it, as a standard part of every search account.
 
-If you want to know whether your brand campaign is defending real patients or just claiming them, book a [30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll read your auction insights and brand search terms live and send you a written test plan, whether or not we end up working together.
+If you want to know whether your brand campaign is defending real patients or just claiming them, book a [30-minute strategy call](/book/). We'll read your auction insights and brand search terms live and send you a written test plan, whether or not we end up working together.

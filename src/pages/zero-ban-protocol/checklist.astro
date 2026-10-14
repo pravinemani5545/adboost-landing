@@ -7,7 +7,7 @@ const SITE = siteBase(Astro.site);
 const path = '/zero-ban-protocol/checklist/';
 const title = 'The Zero-Ban Protocol Checklist | AdBoost Health';
 const description = 'The compliance protocol we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
-const CAL = 'https://cal.com/pira-ahilan-ef2dl8/strategy-call?utm_source=lead-magnet&utm_medium=checklist&utm_campaign=zero-ban-protocol';
+const BOOK = '/book/?utm_source=lead-magnet&utm_medium=checklist&utm_campaign=zero-ban-protocol';
 const PDF = '/downloads/zero-ban-protocol.pdf';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
@@ -157,7 +157,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
           <h3>Want us to just run this for you?</h3>
           <p>We manage peptide and GLP-1 accounts spending $10K/month and up: compliance, creative, attribution, and scale. Book a free strategy call and we&rsquo;ll pressure-test your account against this exact protocol.</p>
         </div>
-        <a class="zbc-cta-btn" href={CAL} target="_blank" rel="noopener">Book a strategy call &rarr;</a>
+        <a class="zbc-cta-btn" href={BOOK}>Book a strategy call &rarr;</a>
       </div>
 
       <p class="zbc-disclaimer">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta&rsquo;s current advertising standards and your own compliance counsel before launch.</p>

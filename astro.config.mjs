@@ -83,7 +83,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Keep gated/noindex pages out of the sitemap: lead-magnet opt-in + asset
-      // pages, and the /book Cal.com redirect bridge (noindex, was leaking in).
+      // pages, and the /book booking page (noindex, was leaking in).
       filter: (page) =>
         !page.includes('/free/') &&
         !page.includes('/zero-ban-protocol') &&

@@ -84,4 +84,4 @@ Run a five-step recovery process: diagnose, fix, document, appeal - and only if 
 
 The better answer is to never be here. Compliance isn't a tax on growth in this category; it's the moat. Every brand that gets banned is a competitor removed from the auction, and the brands that build compliant creative systems inherit their traffic.
 
-If you're scaling a GLP-1 or weight-loss brand and want your account structure, creative, and landers audited against current policy - that's literally the first thing we do on every [strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). It's free, takes 30 minutes, and you leave with a written plan either way.
+If you're scaling a GLP-1 or weight-loss brand and want your account structure, creative, and landers audited against current policy - that's literally the first thing we do on every [strategy call](/book/). It's free, takes 30 minutes, and you leave with a written plan either way.

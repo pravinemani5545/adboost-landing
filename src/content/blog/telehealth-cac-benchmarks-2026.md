@@ -82,4 +82,4 @@ Five upstream metrics: CPM by audience, outbound CTR above ~1.2% on cold traffic
 
 If any of those are a mystery in your reporting, that's the audit finding.
 
-Want your numbers benchmarked against accounts in your exact vertical? That's what the free account audit on our [30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) covers - you get a written plan whether we work together or not.
+Want your numbers benchmarked against accounts in your exact vertical? That's what the free account audit on our [30-minute strategy call](/book/) covers - you get a written plan whether we work together or not.

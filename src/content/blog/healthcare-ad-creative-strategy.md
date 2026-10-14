@@ -162,4 +162,4 @@ Measure the stop with hook rate, three-second views over impressions, and judge 
 
 A practical document covers three to five patient situations, an angle matrix, a proof inventory, a claim library with a "never say" list, format assignments for the stop, trust, and convert jobs, and a learning log. The learning log is what lets the strategy update from evidence instead of opinion.
 
-If you want an outside read on where your current creative is breaking in that sequence, we'll review your live ads and landing pages on a [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) and send you a written creative plan whether we work together or not.
+If you want an outside read on where your current creative is breaking in that sequence, we'll review your live ads and landing pages on a [free 30-minute strategy call](/book/) and send you a written creative plan whether we work together or not.

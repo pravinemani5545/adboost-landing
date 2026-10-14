@@ -5,7 +5,7 @@ updated: 2026-08-21
 
 # AdBoost Health: Landing + Blog (Astro 5, static, Vercel)
 
-Marketing site for a health/telehealth growth agency. Conversion goal: booked strategy calls via Cal.com (`pira-ahilan-ef2dl8/strategy-call`).
+Marketing site for a health/telehealth growth agency. Conversion goal: booked strategy calls. Every CTA links to `/book/` (`BOOK_PATH` in `src/lib/site.ts`), which embeds Pira's Google Calendar appointment schedule (`BOOKING_EMBED_URL`; bookings get a Google Meet link). Bookings are recorded by `adboost-admin` `/api/booking-webhook` (see its TRACKING.md).
 
 **Canonical domain: `https://www.adboost.health`** (apex 308-redirects to www). It is set once in `astro.config.mjs` `site` and everything derives from it. Never hardcode the apex domain in canonicals, schema, or sitemap references.
 

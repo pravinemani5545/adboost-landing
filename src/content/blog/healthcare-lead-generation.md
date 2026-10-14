@@ -158,4 +158,4 @@ Judge channels on cost per new patient, not cost per lead. Track cost per inquir
 
 Good healthcare lead generation is less about finding a magic channel and more about making every handoff after the click work: a page that keeps the promise, a capture flow that fits the patient, qualification everyone agrees on, follow-up measured in minutes, and a booking process that protects the show rate. Fix those, and every [paid media](/services/paid-media/) dollar you spend upstream produces more patients.
 
-If your leads look healthy and your new-patient count does not, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we will trace your leads from click to first visit, show you where they stall, and send you a written plan whether we work together or not.
+If your leads look healthy and your new-patient count does not, [book a free 30-minute strategy call](/book/): we will trace your leads from click to first visit, show you where they stall, and send you a written plan whether we work together or not.

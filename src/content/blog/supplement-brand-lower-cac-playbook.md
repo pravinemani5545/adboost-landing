@@ -74,4 +74,4 @@ CAC should rise deliberately whenever marginal CAC stays under allowable CAC and
 
 That model - allowable CAC by cohort, marginal CAC by spend tier, payback windows - is exactly what we build in the first weeks with a new partner. Setup takes 5 days; most partners see directional movement inside two weeks.
 
-If you want your account's scaling ceiling diagnosed properly - auction, creative, offer, or funnel - bring the numbers to a [free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). Account audit included, written plan yours to keep.
+If you want your account's scaling ceiling diagnosed properly - auction, creative, offer, or funnel - bring the numbers to a [free 30-minute strategy call](/book/). Account audit included, written plan yours to keep.

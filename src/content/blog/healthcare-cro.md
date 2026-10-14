@@ -155,4 +155,4 @@ More than most practices have. In an illustrative example with a 3% baseline, de
 
 Treat every CRO tool as a potential data flow. Mask form inputs in session recordings and heatmaps, never pass conditions or treatment names in event names, URLs, or parameters, use vendors that will sign a BAA where they touch protected health information, and send clean conversion signals server-side. Confirm specifics with counsel.
 
-If you want a second set of eyes on where your visitors stop becoming patients, [book a free 30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call): we will walk your funnel step by step, rank the leaks, and send you a written plan whether we work together or not.
+If you want a second set of eyes on where your visitors stop becoming patients, [book a free 30-minute strategy call](/book/): we will walk your funnel step by step, rank the leaks, and send you a written plan whether we work together or not.

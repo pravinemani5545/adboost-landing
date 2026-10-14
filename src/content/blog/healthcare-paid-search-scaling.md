@@ -168,4 +168,4 @@ From channels that create demand, so more people search in the first place: Dema
 
 The brands that grow past the search ceiling accept that search is a capture channel, run it at its efficient size, and build the demand it captures somewhere else. Our [paid media team](/services/paid-media/) runs search and demand creation as one system for exactly that reason.
 
-If you want to know whether your account has hit a real ceiling or a fixable bottleneck, book a [30-minute strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call). We'll read your impression share and marginal cost per patient live and send you a written plan, whether or not we end up working together.
+If you want to know whether your account has hit a real ceiling or a fixable bottleneck, book a [30-minute strategy call](/book/). We'll read your impression share and marginal cost per patient live and send you a written plan, whether or not we end up working together.

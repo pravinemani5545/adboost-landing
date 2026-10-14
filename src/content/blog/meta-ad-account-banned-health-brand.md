@@ -84,4 +84,4 @@ The brands that never get banned don't have better luck - they have a gate. Ever
 
 Add structural hygiene: verified BM, two trusted admins only, quarterly asset audits for stale users and shared assets, claim substantiation filed before an ad ever runs. Boring, and it's the moat - every competitor who gets banned is a competitor removed from your auction.
 
-If your account is disabled right now, or you want your account structure audited before it becomes a problem, [book a free strategy call](https://cal.com/pira-ahilan-ef2dl8/strategy-call) - 30 minutes, we audit your account and policy exposure, and you leave with a written plan whether or not we work together.
+If your account is disabled right now, or you want your account structure audited before it becomes a problem, [book a free strategy call](/book/) - 30 minutes, we audit your account and policy exposure, and you leave with a written plan whether or not we work together.

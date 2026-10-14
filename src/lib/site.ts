@@ -1,9 +1,10 @@
 // Shared site constants + navigation. Single source of truth for booking + nav.
 // Canonical domain is derived from Astro.site (astro.config.mjs) - never hardcode apex here.
 
-export const CAL_LINK = 'pira-ahilan-ef2dl8/strategy-call';
-export const CAL_NAMESPACE = 'strategy-call';
-export const CAL_URL = `https://cal.com/${CAL_LINK}`;
+// Every booking CTA links to the first-party /book/ page, which embeds the Google
+// Calendar appointment schedule (Pira's calendar; each booking gets a Google Meet link).
+export const BOOK_PATH = '/book/';
+export const BOOKING_EMBED_URL = 'https://calendar.google.com/calendar/appointments/schedules/PENDING_SCHEDULE_ID?gv=true';
 export const EMAIL = 'hello@adboost.health';
 
 export function siteBase(site: URL | undefined): string {
