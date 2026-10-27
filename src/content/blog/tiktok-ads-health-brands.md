@@ -25,6 +25,8 @@ TikTok is the hardest platform because it inherits Meta's framing rules and stac
 - **The comment section is part of your ad.** TikTok reviews the whole surface. Users writing "this cured my anxiety" under your compliant ad creates a claim problem the platform attributes to you. Moderate comments or turn them off on claims-sensitive creative.
 - **Repeat rejections escalate faster.** TikTok moves from rejected ad to restricted account more aggressively than Meta. Three sloppy submissions in a week is a real risk, not a rounding error.
 
+Each vertical layers its own rules on top of these. For aesthetics treatments, our [med spa TikTok ad compliance guide](/advertising/med-spa-on-tiktok/) covers what that category can and cannot show.
+
 The practical implication: your compliance review has to happen at the brief, not after the edit. Every mechanism of rejection we covered in [why health creative gets rejected](/blog/health-ad-creative-rejected-fix/) applies here with a lower tolerance threshold.
 
 ## What health creative actually converts on TikTok?

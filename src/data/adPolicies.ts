@@ -514,7 +514,6 @@ export const AD_POLICIES: AdPolicy[] = [
       { q: 'Why did my med spa ad account lose conversion optimization?', a: 'Booking/Lead pixel events on a health page trigger Meta’s Health & Wellness classification, which removes lower-funnel optimization. Keep booking and PHI off the ad-level pixel and optimize on upper-funnel events like Landing Page View.' },
     ],
     sources: [
-      { label: 'Meta - Cosmetic Procedures and Wellness', url: 'https://transparency.meta.com/policies/ad-standards/content-specific-restrictions/cosmetic-procedures-and-wellness' },
       { label: 'Meta - Health & Wellness ad standard', url: 'https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/' },
     ],
   },

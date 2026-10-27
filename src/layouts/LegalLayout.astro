@@ -1,4 +1,5 @@
 ---
+import Fonts from '../components/Fonts.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { NAV } from '../lib/site';
@@ -42,7 +43,7 @@ const jsonLd = {
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 <meta name="twitter:image:alt" content={title} />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" />
+<Fonts preloadSerif={false} />
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />

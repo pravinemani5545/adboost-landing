@@ -19,9 +19,9 @@ const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month:
     <p>What we learn managing paid media for 71+ health, telehealth, and supplement founders - written down.</p>
   </div>
   <div class="post-list">
-    {posts.map((post) => (
+    {posts.map((post, i) => (
       <a class="post-card" href={`/blog/${post.id}/`}>
-        {post.data.heroImage && <img src={`${post.data.heroImage}?v=2`} alt={post.data.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
+        {post.data.heroImage && <img src={`${post.data.heroImage}?v=2`} alt={post.data.heroAlt ?? ''} loading={i < 3 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} width="640" height="360" />}
         <div class="post-card-body">
           <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
           <h2>{post.data.title}</h2>

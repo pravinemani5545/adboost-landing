@@ -41,7 +41,7 @@ The math is worth making explicit. A $49 one-time bottle at 65% margin allows ro
 
 ## How should you structure creative testing at scale?
 
-Sustain 20+ net-new variants a month once spend passes roughly $50K/month - 10–12 below that - organized as angle families, not one-off ads. The full system is in the [creative engine playbook](/blog/health-ad-creative-rejected-fix/); the supplement-specific essentials:
+Sustain 20+ net-new variants a month once spend passes roughly $50K/month - 10–12 below that - organized as angle families, not one-off ads, and run through a [structured creative testing framework](/blog/creative-testing-framework-health-ads/). The full system is in the [creative engine playbook](/blog/health-ad-creative-rejected-fix/); the supplement-specific essentials:
 
 - **Structure/function language throughout.** "Supports," "promotes," "maintains" - never treatment or cure claims. The [FTC's health products compliance guidance](https://www.ftc.gov/business-guidance/resources/health-products-compliance-guidance) requires competent and reliable scientific evidence behind every express and implied claim, and [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) run automated classifiers against your creative and lander long before a human ever reviews them. Claims discipline is a scaling asset because it keeps the account's trust score clean - a flagged account pays a hidden CPM tax on every subsequent ad. The full policy map is in our [supplements on Meta guide](/advertising/supplements-on-meta/).
 - **Ingredient receipts as an angle category.** COAs, third-party testing, sourcing stories. Supplements are a trust purchase; proof formats fatigue slower than lifestyle formats.

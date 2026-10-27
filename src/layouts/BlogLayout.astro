@@ -1,4 +1,5 @@
 ---
+import Fonts from '../components/Fonts.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { versioned } from '../lib/assets';
@@ -122,12 +123,8 @@ const category = post?.tags[0]?.toUpperCase();
 <meta name="twitter:image:alt" content={post?.heroAlt ?? title} />
 <link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${site}/rss.xml`} />
 <link rel="sitemap" href="/sitemap-index.xml" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<Fonts />
 <link rel="preconnect" href="https://admin.adboost.health" />
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'" />
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" /></noscript>
 <link rel="icon" type="image/png" href="/favicon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
