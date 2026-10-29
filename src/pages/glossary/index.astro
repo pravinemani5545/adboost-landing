@@ -9,7 +9,7 @@ import { breadcrumb } from '../../lib/schema';
 const SITE = siteBase(Astro.site);
 const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
 const title = 'Health & Performance Marketing Glossary | AdBoost Health';
-const description = 'Plain-English definitions of the health-marketing and paid-media metrics that matter - CAC, LTV:CAC, ROAS, payback, LegitScript, structure/function claims - with health-specific examples.';
+const description = 'Plain-English definitions of the health-marketing and paid-media metrics that matter: CAC, LTV:CAC, ROAS, payback, LegitScript, with health-specific examples.';
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }]),
   {

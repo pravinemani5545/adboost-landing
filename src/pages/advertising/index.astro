@@ -7,8 +7,8 @@ import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
-const title = 'Health Ad Compliance by Platform (2026) | AdBoost Health';
-const description = 'What’s allowed when advertising GLP-1, supplements, telehealth, TRT and med spa on Meta, Google, and TikTok - certification, prohibited claims, rejection triggers, and how to stay compliant.';
+const title = 'Health Ad Compliance Review by Platform (2026) | AdBoost';
+const description = 'Pre-launch compliance review for GLP-1, supplement, telehealth, TRT and med spa ads on Meta, Google and TikTok: certification, prohibited claims, rejections.';
 const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
 // group by vertical for a clean matrix
 const verticals = [...new Map(AD_POLICIES.map((p) => [p.verticalSlug, { name: p.vertical, slug: p.verticalSlug }])).values()];
@@ -23,7 +23,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>AD COMPLIANCE · 2026</span>
       <h1>What’s allowed, by <span class="serif">platform</span> and vertical</h1>
-      <p class="phero-lede">Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Verify against live policy before launch.</p>
+      <p class="phero-lede">Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch.</p>
     </div>
   </section>
 

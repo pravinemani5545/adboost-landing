@@ -23,7 +23,7 @@ export const SERVICES: Service[] = [
     name: 'Paid media',
     navLabel: 'Paid media',
     h1: 'Paid media for health & telehealth brands',
-    lede: 'Meta, Google, and TikTok acquisition run by senior strategists who only work in health - so spend scales without tripping a policy landmine.',
+    lede: 'Paid media across Meta, Google, and TikTok, run by senior strategists who only work in health, so spend scales without tripping a policy landmine.',
     answer: 'AdBoost Health manages paid media across Meta, Google, and TikTok exclusively for health, telehealth, GLP-1, supplement, and wellness brands. Every account is structured for compliant scale - clean server-side attribution, tested creative, and spend bands that expand only as CAC holds - with partners averaging 24% lower CAC in the first 30 days.',
     desc: 'Full-funnel paid media management (Meta, Google, TikTok) for health, telehealth, GLP-1, and supplement brands.',
     outcomes: [
@@ -35,7 +35,7 @@ export const SERVICES: Service[] = [
     process: [
       { phase: 'Account & tracking audit · wk 1–2', detail: 'Audit ad accounts, LegitScript status, Conversions API coverage, event match quality, and the blended-vs-platform ROAS gap before touching spend. Map real CAC by condition - not the consultation CAC.' },
       { phase: 'Structure & measurement build · wk 2–3', detail: 'Consolidate campaigns for Advantage+/broad targeting, deploy CAPI with deduplication, set the attribution window, and stand up a blended-MER dashboard as the true-north metric.' },
-      { phase: 'Controlled scaling · wk 3–8', detail: 'Scale winning audiences and creative while holding cold-audience frequency under 3.0; expand from Meta into branded/non-branded Search and retargeting only where CAC holds at or below vertical benchmark.' },
+      { phase: 'Controlled scaling · wk 3–8', detail: 'Scale winning audiences and creative while holding cold-audience frequency under 3.0; expand from Meta into Google Ads for healthcare (branded and non-branded Search) and retargeting only where CAC holds at or below vertical benchmark.' },
       { phase: 'Incrementality & efficiency · ongoing', detail: 'Run geo-holdout and conversion-lift tests to separate incremental spend from spend claiming credit for organic demand, then reallocate budget to what actually causes revenue.' },
     ],
     deliverables: [
@@ -59,7 +59,7 @@ export const SERVICES: Service[] = [
       { h: 'Channel strategy that survives a policy update', p: 'For restricted categories like TRT and peptides, a single-channel paid play is one enforcement action from zero. We diversify across paid, search, and referral so no one policy change can take the funnel down.' },
     ],
     faq: [
-      { q: 'Which ad platforms do you run?', a: 'Meta (Facebook/Instagram), Google (Search, PMax, YouTube), and TikTok - the three channels that carry the vast majority of health-brand acquisition. We weight the mix by vertical and compliance reality.' },
+      { q: 'Which ad platforms do you run?', a: 'Meta (Facebook/Instagram), Google (Search, PMax, YouTube), and TikTok - the three channels that carry the vast majority of health-brand acquisition. We weight the mix by vertical and compliance reality, because paid social media in healthcare is policed far more tightly than unregulated DTC.' },
       { q: 'How fast do you launch?', a: 'Setup takes 5 days. Most partners see directional CAC or ROAS movement within 2 weeks, and the full system compounds by day 31.' },
       { q: 'What does "true CAC" mean?', a: 'The fully-loaded cost per paying customer measured on blended MER (total revenue ÷ total spend), not the platform-reported number - which over-counts because multiple platforms claim the same conversion.' },
     ],
@@ -69,7 +69,8 @@ export const SERVICES: Service[] = [
     name: 'Creative production',
     navLabel: 'Creative production',
     h1: 'Compliant ad creative, produced in-house',
-    lede: 'Static, motion, and UGC built for the scroll and pre-cleared against every health platform’s rules - 20+ new variants a month, per partner.',
+    seoTitle: 'Compliant In-House Creative Production | AdBoost Health',
+    lede: 'In-house creative production: static, motion, and UGC pre-cleared against every health platform’s rules. 20+ new variants a month, per partner.',
     answer: 'AdBoost Health produces compliant static, motion, and UGC ad creative in-house - 20+ new variants per partner per month - every asset reviewed against Meta, Google, and TikTok health-vertical policies before it launches. We’ve shipped over 8,400 creatives at a 38% win rate.',
     desc: 'In-house compliant ad creative production (static, motion, UGC) for health and wellness brands.',
     outcomes: [
@@ -94,7 +95,7 @@ export const SERVICES: Service[] = [
     ],
     howMeasured: ['Hook rate (3-sec views ÷ impressions) and hold rate', 'Cost per result / CAC of net-new winning creatives', 'Creative win rate and time-to-fatigue'],
     deepPoints: [
-      { h: 'Volume is a CAC lever, not a vanity metric', p: 'The average user sees the same creative ~4.2 times, and at four exposures conversion likelihood drops ~45%; top ads lose ~38% of effectiveness after five weeks. Sustained volume keeps frequency low and CAC flat - and in health every new asset must clear claims review, so a compliant production engine is the moat.' },
+      { h: 'Volume is a CAC lever, not a vanity metric', p: 'The average user sees the same creative ~4.2 times, and at four exposures conversion likelihood drops ~45%; top ads lose ~38% of effectiveness after five weeks. Sustained volume keeps frequency low and CAC flat - and in health every new asset must clear claims review, so compliant in-house creative production is the moat.' },
       { h: 'Hook rate is the algorithm’s relevance vote', p: 'On Meta, >25% hook rate is table stakes, >30% good, >40% elite - the point where the algorithm rewards the creative with lower CPMs and broader delivery. In restricted health auctions where CPMs are already elevated, winning the first three seconds is disproportionately valuable.' },
       { h: 'The claim tier is a creative decision, not a legal afterthought', p: 'The difference between "supports healthy testosterone" (defensible) and "boosts low T / treats ED" (a disease claim needing drug-level substantiation and FTC risk) is made in the script and on-screen text. Compliance has to live inside the creative brief, not get bolted on at review.' },
     ],
@@ -115,8 +116,8 @@ export const SERVICES: Service[] = [
     name: 'CRO & funnels',
     navLabel: 'CRO & funnels',
     h1: 'Conversion rate optimization for health funnels',
-    seoTitle: 'Conversion Rate Optimization for Health Brands | AdBoost',
-    lede: 'We A/B test landers and rewrite hooks weekly so every dollar of traffic lands somewhere it converts - not on a page that leaks.',
+    seoTitle: 'Healthcare Conversion Rate Optimization (CRO) | AdBoost',
+    lede: 'CRO and landing page optimization for health brands. We A/B test landers and rewrite hooks weekly so traffic lands somewhere it converts, not a page that leaks.',
     answer: 'AdBoost Health optimizes the full post-click funnel - landing pages, quizzes, offers, and lifecycle - for health and telehealth brands. We A/B test landers and rewrite hooks weekly so traffic finds its highest-converting offer, lifting conversion against baseline without spending a dollar more on media.',
     desc: 'Landing page and funnel conversion rate optimization for health, telehealth, and DTC brands.',
     outcomes: [
@@ -152,7 +153,7 @@ export const SERVICES: Service[] = [
       { h: 'Optimize for LTV, not the first click', p: 'In subscription health, the first order isn’t the win - retention is. We architect offers and post-purchase flows around payback and LTV:CAC, not vanity conversion rate.' },
     ],
     faq: [
-      { q: 'Do you build the landing pages?', a: 'We design, write, and test them, and integrate with your stack. You keep full ownership of everything we build.' },
+      { q: 'Do you build the landing pages?', a: 'We design, write, and test them, and integrate with your stack. We start from landing page best practices for health (message match, fast mobile load, visible trust signals), then let A/B tests decide what stays. You keep full ownership of everything we build.' },
       { q: 'How do you measure CRO impact?', a: 'On blended CAC and payback, not just raw conversion rate - a higher conversion rate that hurts retention isn’t a win in subscription health.' },
       { q: 'Why a quiz funnel?', a: 'In fit-driven health categories a quiz doubles conversion versus a static page and doubles as compliant qualification - as long as price is revealed after the quiz, not before.' },
     ],

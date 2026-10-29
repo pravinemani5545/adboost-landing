@@ -305,7 +305,7 @@ export const AD_POLICIES: AdPolicy[] = [
     status: 'cert',
     h1: 'Advertising telehealth on Google Ads: 2026 Prescription drug services certification',
     answer: 'Telehealth prescribing on Google is restricted and requires certification: LegitScript accreditation first, then Google’s Prescription drug services certification at the child-account level. Offering Rx drugs without a prescription is an “egregious” violation. Certification covers ~30+ countries, but promotional drug-term use is limited to the US, Canada, and New Zealand.',
-    certification: 'Two-step: (1) third-party accreditation - LegitScript (NABP in some cases); (2) apply for Google’s certification at the child-account level. Pharmaceutical manufacturers use a separate certification track. Don’t conflate the two.',
+    certification: 'Google Ads policy (Healthcare and medicines) sets a two-step path: (1) third-party accreditation - LegitScript (NABP in some cases); (2) apply for Google’s certification at the child-account level. Pharmaceutical manufacturers use a separate certification track. Don’t conflate the two.',
     prohibited: [
       'Offering Rx drugs without a prescription (egregious violation)',
       'Opioid promotion (narrow exceptions only)',
