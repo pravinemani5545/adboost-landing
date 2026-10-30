@@ -1,0 +1,29 @@
+/* AdBoost Health: the brand's colour roles. This is the only file in src/styles/system that carries
+   a hex; every other system file reads these names, so a second site swaps this file and nothing
+   else. BaseLayout also reads --brand-key, --theme-light and --theme-dark from it at build time
+   (src/lib/brand.ts) for the stored-scheme key and <meta name="theme-color">. */
+
+:root {
+  /* "<key>:theme" is the localStorage key for the scheme toggle */
+  --brand-key: "health";
+
+  --frame: #0b1b3f;        /* FRAME: the deep ground that frames the page */
+  --paper-color: #f5f3ee;  /* PAPER: the reading surface (--paper is the scheme-aware surface built on it) */
+  --accent-color: #0057ff; /* ACCENT: primary button fill on FRAME (--accent is each tone's marker colour) */
+  --accent-fg: #f5f3ee;    /* text on an ACCENT button (PAPER here, 4.97:1) */
+  --accent-frame: #3b7bff; /* markers, focus, underlines on FRAME and in the dark scheme (4.4:1) */
+  --accent-paper: #0057ff; /* markers, focus, underlines on PAPER in the light scheme (4.97:1) */
+  --mist: #8a97b4;         /* MIST: hairlines and quiet dots on FRAME */
+  --ink: #070d1c;          /* INK: the dark scheme's reading surface */
+  --ink-2: #0f1729;        /* INK lifted one step, for panels in the dark scheme */
+  --frame-lift: #487cbf;   /* a luminous lift of FRAME: the gradient card's second bloom */
+
+  /* the gradient card's fall, luminous FRAME down to near-black FRAME (light scheme) */
+  --gc-0: #1d4888; --gc-1: #142e60; --gc-2: #0b1b3f; --gc-3: #020a24; --gc-4: #010417;
+  /* one notch lighter each in the dark scheme, so the card still stands off INK */
+  --gc-dark-0: #28559d; --gc-dark-1: #153b74; --gc-dark-2: #102551; --gc-dark-3: #081738; --gc-dark-4: #050f2b;
+
+  /* <meta name="theme-color">: FRAME by day, INK by night */
+  --theme-light: #0b1b3f;
+  --theme-dark: #070d1c;
+}

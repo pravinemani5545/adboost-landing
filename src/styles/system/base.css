@@ -1,0 +1,394 @@
+/* The system: colour roles, tones and schemes, type, layout, springs, buttons, arrivals, cards and
+   reduced motion. Brand-agnostic: every colour here is a role from brand.css (or a mix of one), so
+   the dark scheme swaps only the --paper tokens (the PAPER reading surface becomes INK) and no
+   component carries a colour of its own. */
+
+:root {
+  /* The paper: what .tone-paper, the nav in its paper state and the dotted ground read. Light = PAPER. */
+  --paper: var(--paper-color);
+  --panel: var(--paper-color);
+  --paper-fg: var(--frame);
+  --paper-fg-2: color-mix(in srgb, var(--frame) 80%, transparent);
+  --paper-line: color-mix(in srgb, var(--frame) 22%, transparent);
+  --paper-accent: var(--accent-paper);
+  --paper-mark: var(--accent-paper);
+  --paper-btn-bg: var(--frame);
+  --paper-btn-fg: var(--paper-color);
+  --paper-ring: color-mix(in srgb, var(--frame) 10%, transparent);
+  --paper-rim: color-mix(in srgb, var(--frame) 35%, transparent);
+  --paper-glow: rgb(255 255 255 / 0.6);
+  --paper-dot: color-mix(in srgb, var(--frame) 12%, transparent);
+  --paper-dot-spot: color-mix(in srgb, var(--frame) 50%, transparent);
+  --paper-focus: var(--accent-paper);
+  /* the gradient card's lit top edge and its shade (its fall, --gc-0..4, is in brand.css) */
+  --gc-edge: color-mix(in srgb, var(--paper-color) 10%, transparent);
+  --gc-edge-sm: color-mix(in srgb, var(--paper-color) 8%, transparent);
+  --gc-ring: 0 0 0 0 transparent;
+  --gc-shade: rgb(0 0 0 / 0.45);
+  /* the scheme toggle: a FRAME ring on PAPER here, a PAPER ring on FRAME in the dark */
+  --toggle-bg: var(--paper-color);
+  --toggle-fg: var(--frame);
+  --dark: 0;
+
+  --serif: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
+  --sans: 'Geist', 'Geist Fallback', system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, monospace;
+
+  --pad: clamp(20px, 5vw, 72px);
+  --max: 1440px;
+  --nav-h: 76px;
+  --section: clamp(72px, 8.2vw, 128px);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Springs. Each curve is a real damped spring sampled into linear(), so the overshoot is baked
+     into the curve: a property passes its target and settles. A curve and its duration belong
+     together (shortening the time re-shapes the spring), so always use the pair.
+       soft    k200/c20  4.3% overshoot  entrances with travel >= 24px
+       snap    k400/c30  2.8%            FAQ open, chevrons, hover shifts
+       settle  k300/c35  none            opacity, and anything that must not bounce
+       bounce  k250/c16  15.8%           tiny travel only (label roll, number nudge, press release)
+       air     k120/c16  3.5%            big headlines, line by line
+     Bezier stand-ins below; the real curves follow under @supports. */
+  --spring-soft: cubic-bezier(0.22, 1.2, 0.36, 1);
+  --spring-snap: cubic-bezier(0.2, 1.1, 0.3, 1);
+  --spring-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --spring-air: cubic-bezier(0.2, 1.15, 0.35, 1);
+  --t-soft: 0.7s; --t-snap: 0.4s; --t-settle: 0.53s; --t-bounce: 0.8s; --t-air: 0.72s;
+
+  /* Corners: panels and inset cards, and framed media. Pills stay 999px; full-bleed media stays square. */
+  --r-panel: 20px;
+  --r-media: 14px;
+
+  --nav-fg: var(--paper-color);
+  --nav-bg: transparent;
+  color-scheme: light dark;
+}
+/* The dark scheme. The system preference is the default; a choice made with the toggle is kept on
+   <html data-theme> (BaseLayout sets it before first paint from localStorage "<brand>:theme"). The
+   two blocks are the same values: one for the explicit choice, one for the preference. */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: var(--ink); --panel: var(--ink-2);
+  --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent);
+  --paper-line: color-mix(in srgb, var(--paper-color) 14%, transparent);
+  --paper-accent: var(--accent-frame); --paper-mark: var(--accent-frame);
+  --paper-btn-bg: var(--accent-color); --paper-btn-fg: var(--accent-fg);
+  --paper-ring: color-mix(in srgb, var(--accent-frame) 14%, transparent); --paper-rim: color-mix(in srgb, var(--accent-frame) 60%, transparent);
+  --paper-glow: color-mix(in srgb, var(--paper-color) 6%, transparent);
+  --paper-dot: color-mix(in srgb, var(--paper-color) 10%, transparent); --paper-dot-spot: color-mix(in srgb, var(--paper-color) 55%, transparent);
+  --paper-focus: var(--accent-frame);
+  --gc-0: var(--gc-dark-0); --gc-1: var(--gc-dark-1); --gc-2: var(--gc-dark-2); --gc-3: var(--gc-dark-3); --gc-4: var(--gc-dark-4);
+  --gc-edge: color-mix(in srgb, var(--paper-color) 18%, transparent); --gc-edge-sm: color-mix(in srgb, var(--paper-color) 14%, transparent);
+  --gc-ring: 0 0 0 1px color-mix(in srgb, var(--paper-color) 7%, transparent); --gc-shade: rgb(0 0 0 / 0.7);
+  --toggle-bg: var(--frame); --toggle-fg: var(--paper-color);
+  --dark: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: var(--ink); --panel: var(--ink-2);
+    --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent);
+    --paper-line: color-mix(in srgb, var(--paper-color) 14%, transparent);
+    --paper-accent: var(--accent-frame); --paper-mark: var(--accent-frame);
+    --paper-btn-bg: var(--accent-color); --paper-btn-fg: var(--accent-fg);
+    --paper-ring: color-mix(in srgb, var(--accent-frame) 14%, transparent); --paper-rim: color-mix(in srgb, var(--accent-frame) 60%, transparent);
+    --paper-glow: color-mix(in srgb, var(--paper-color) 6%, transparent);
+    --paper-dot: color-mix(in srgb, var(--paper-color) 10%, transparent); --paper-dot-spot: color-mix(in srgb, var(--paper-color) 55%, transparent);
+    --paper-focus: var(--accent-frame);
+    --gc-0: var(--gc-dark-0); --gc-1: var(--gc-dark-1); --gc-2: var(--gc-dark-2); --gc-3: var(--gc-dark-3); --gc-4: var(--gc-dark-4);
+    --gc-edge: color-mix(in srgb, var(--paper-color) 18%, transparent); --gc-edge-sm: color-mix(in srgb, var(--paper-color) 14%, transparent);
+    --gc-ring: 0 0 0 1px color-mix(in srgb, var(--paper-color) 7%, transparent); --gc-shade: rgb(0 0 0 / 0.7);
+    --toggle-bg: var(--frame); --toggle-fg: var(--paper-color);
+    --dark: 1;
+  }
+}
+/* the switch itself: colours cross-fade for a beat (theme.ts adds the class on toggle only, never on first paint) */
+html.theming, html.theming *, html.theming *::before, html.theming *::after {
+  transition: background-color 0.35s var(--spring-settle), color 0.35s var(--spring-settle), border-color 0.35s var(--spring-settle);
+}
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --spring-soft: linear(0, 0.034 2.9%, 0.1186 5.7%, 0.2319 8.6%, 0.3573 11.4%, 0.4828 14.3%, 0.6005 17.1%, 0.7053 20%, 0.7948 22.9%, 0.8682 25.7%, 0.9261 28.6%, 0.9698 31.4%, 1.001 34.3%, 1.022 37.1%, 1.043 45%, 1.04 50%, 1.032 55%, 1.022 60%, 1.014 65%, 1.007 70%, 1.003 75%, 0.9999 80%, 0.9986 85%, 0.9981 90%, 0.9982 95%, 1);
+    --spring-snap: linear(0, 0.0233 2.9%, 0.0828 5.7%, 0.1655 8.6%, 0.2609 11.4%, 0.3611 14.3%, 0.4604 17.1%, 0.5547 20%, 0.6412 22.9%, 0.7184 25.7%, 0.7855 28.6%, 0.8427 31.4%, 0.8901 34.3%, 0.9287 37.1%, 0.9962 45%, 1.017 50%, 1.026 55%, 1.028 60%, 1.026 65%, 1.022 70%, 1.017 75%, 1.012 80%, 1.008 85%, 1.005 90%, 1.003 95%, 1);
+    --spring-settle: linear(0, 0.0289 2.9%, 0.0975 5.7%, 0.1857 8.6%, 0.2809 11.4%, 0.3751 14.3%, 0.4638 17.1%, 0.5444 20%, 0.616 22.9%, 0.6786 25.7%, 0.7325 28.6%, 0.7784 31.4%, 0.8172 34.3%, 0.8498 37.1%, 0.9137 45%, 0.9399 50%, 0.9583 55%, 0.9713 60%, 0.9803 65%, 0.9865 70%, 0.9908 75%, 0.9937 80%, 0.9957 85%, 0.9971 90%, 0.998 95%, 1);
+    --spring-bounce: linear(0, 0.0574 2.9%, 0.1992 5.7%, 0.3843 8.6%, 0.5793 11.4%, 0.76 14.3%, 0.9114 17.1%, 1.026 20%, 1.103 22.9%, 1.145 25.7%, 1.158 28.6%, 1.151 31.4%, 1.129 34.3%, 1.1 37.1%, 1.021 45%, 0.99 50%, 0.9764 55%, 0.976 60%, 0.9826 65%, 0.9911 70%, 0.9981 75%, 1.002 80%, 1.004 85%, 1.004 90%, 1.002 95%, 1);
+    --spring-air: linear(0, 0.0221 2.9%, 0.0792 5.7%, 0.1591 8.6%, 0.2522 11.4%, 0.3509 14.3%, 0.4495 17.1%, 0.5439 20%, 0.6312 22.9%, 0.7099 25.7%, 0.7789 28.6%, 0.8381 31.4%, 0.8877 34.3%, 0.9282 37.1%, 1 45%, 1.023 50%, 1.033 55%, 1.035 60%, 1.032 65%, 1.027 70%, 1.021 75%, 1.015 80%, 1.01 85%, 1.006 90%, 1.003 95%, 1);
+  }
+}
+@media (max-width: 640px) {
+  :root { --r-panel: 16px; --r-media: 10px; }
+}
+
+/* Tones: FRAME frames the page, PAPER carries the reading. Hairlines are quiet: punctuation, not grid. */
+.tone-frame {
+  --bg: var(--frame);
+  --fg: var(--paper-color);
+  --fg-2: color-mix(in srgb, var(--paper-color) 78%, transparent);
+  --line: color-mix(in srgb, var(--mist) 30%, transparent);
+  --accent: var(--accent-frame);
+  --btn-bg: var(--accent-color);
+  --btn-fg: var(--accent-fg);
+  background: var(--bg);
+  color: var(--fg);
+}
+.tone-paper {
+  --bg: var(--paper);
+  --fg: var(--paper-fg);
+  --fg-2: var(--paper-fg-2);
+  --line: var(--paper-line);
+  --accent: var(--paper-accent);
+  --btn-bg: var(--paper-btn-bg);
+  --btn-fg: var(--paper-btn-fg);
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+/* the serif ships one weight (300): a bolder request keeps the face rather than smearing a fake bold */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; font-synthesis-weight: none; }
+body {
+  margin: 0;
+  background: var(--frame);
+  color: var(--paper-color);
+  font: 400 clamp(16px, 0.25vw + 15px, 18px) / 1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+}
+img, video, canvas, svg { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+p, h1, h2, h3, h4, figure, blockquote, ol, ul, dl, dd { margin: 0; }
+ol, ul { padding: 0; list-style: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; }
+::selection { background: var(--accent-color); color: var(--accent-fg); }
+
+:focus-visible { outline: 2px solid var(--accent-frame); outline-offset: 3px; border-radius: 4px; }
+.tone-paper :focus-visible { outline-color: var(--paper-focus); }
+
+.skip {
+  position: fixed; left: 16px; top: 12px; z-index: 200; padding: 12px 18px; border-radius: 999px;
+  background: var(--accent-color); color: var(--accent-fg); font-weight: 500; transform: translateY(-160%);
+  transition: transform 0.2s var(--ease);
+}
+.skip:focus-visible { transform: none; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- layout ---------- */
+.wrap { width: 100%; max-width: var(--max); margin-inline: auto; padding-inline: var(--pad); }
+.section { padding-block: var(--section); }
+.section-tight { padding-block: calc(var(--section) * 0.62); }
+.rule { border: 0; border-top: 1px solid var(--line); margin: 0; }
+
+/* ---------- type ---------- */
+.display, h1, h2, h3, .serif {
+  font-family: var(--serif);
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  font-optical-sizing: auto;
+}
+.display { font-size: clamp(50px, 8.6vw, 136px); line-height: 0.96; letter-spacing: -0.025em; }
+h1, .h1 { font-size: clamp(44px, 6.4vw, 100px); line-height: 1; letter-spacing: -0.022em; }
+h2, .h2 { font-size: clamp(36px, 4.9vw, 74px); line-height: 1.04; }
+h3, .h3 { font-size: clamp(22px, 1.75vw, 28px); line-height: 1.2; letter-spacing: -0.008em; }
+.statement { font-family: var(--serif); font-weight: 300; font-size: clamp(28px, 3.5vw, 52px); line-height: 1.2; letter-spacing: -0.015em; }
+.support { font-family: var(--serif); font-weight: 300; font-size: clamp(19px, 1.7vw, 25px); line-height: 1.35; }
+.lede { font-size: clamp(18px, 1.35vw, 21px); line-height: 1.55; color: var(--fg-2); max-width: 44ch; }
+.body-l { font-size: clamp(18px, 1.4vw, 21px); line-height: 1.6; }
+.small { font-size: 15px; line-height: 1.55; color: var(--fg-2); }
+.muted { color: var(--fg-2); }
+.label {
+  --mark: var(--accent-frame);
+  font: 500 12.5px/1.3 var(--sans);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.tone-paper .label { --mark: var(--paper-mark); }
+/* the section marker: a 6px square before the label, in the tone's accent. Inline, so the label
+   keeps whatever display its place gave it; .hang pulls it into the margin so the text stays on the column */
+.label::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; vertical-align: 0.1em;
+  background: var(--mark); transform-origin: center;
+}
+@media (min-width: 1100px) { .label.hang { margin-left: -14px; } }
+/* it ticks in with the section it belongs to */
+.js.motion [data-reveal] .label::before, .js.motion .label[data-reveal]::before { transform: scale(0); transition: transform 0.6s var(--spring-soft) 80ms; }
+.js.motion [data-reveal].in .label::before, .js.motion .label[data-reveal].in::before { transform: none; }
+/* labels that are controls, captions, tags or form furniture stay plain */
+.nav-menu-btn::before, .mobile-cta-label::before, .tile-num::before, .plate-top::before, .label.plain::before, dt.label::before { content: none; }
+.num { font-variant-numeric: tabular-nums; letter-spacing: 0.14em; }
+.measure { max-width: 62ch; }
+/* phones: headings break into even lines rather than leaving one word behind, paragraphs avoid a lone
+   last word, and nothing reads smaller than 16px */
+@media (max-width: 640px) {
+  h1, h2, h3, .display, .statement, .support { text-wrap: balance; }
+  p, li, blockquote, figcaption { text-wrap: pretty; }
+  .small { font-size: 16px; }
+}
+
+/* ---------- buttons and links ---------- */
+/* A pill with its fill on ::before and a cursor-lit rim on ::after beneath it (pointer.ts sets --bx/--by).
+   At rest a faint 3px ring; on hover the ring widens and the rim light comes up under the pill. */
+.btn {
+  --mx: 0px; --my: 0px;
+  --ring: color-mix(in srgb, var(--accent-frame) 14%, transparent); --rim: color-mix(in srgb, var(--accent-frame) 60%, transparent);
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 52px; padding: 0 26px; border-radius: 999px;
+  font: 500 15px/1 var(--sans); letter-spacing: 0.005em; white-space: nowrap;
+  color: var(--btn-fg, var(--accent-fg));
+  box-shadow: 0 0 0 3px var(--ring);
+  transform: translate(var(--mx), var(--my));
+  scale: 1;
+  transition: transform 0.28s var(--spring-settle), scale var(--t-bounce) var(--spring-bounce), color 0.2s, box-shadow 0.4s var(--spring-snap);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: var(--btn-bg, var(--accent-color)); transition: background-color 0.2s;
+}
+.btn::after {
+  content: ""; position: absolute; inset: -4px; z-index: -2; border-radius: inherit; pointer-events: none; opacity: 0;
+  background: radial-gradient(42% 95% at var(--bx, 55%) var(--by, 96%), var(--rim), transparent 72%);
+  filter: blur(6px); transition: opacity 0.3s var(--ease);
+}
+.tone-paper .btn { --ring: var(--paper-ring); --rim: var(--paper-rim); }
+.tone-frame .btn, .on-media .btn { --ring: color-mix(in srgb, var(--accent-frame) 14%, transparent); --rim: color-mix(in srgb, var(--accent-frame) 60%, transparent); }
+.tone-frame .btn-sig, .on-media .btn-sig { --btn-bg: var(--accent-color); --btn-fg: var(--accent-fg); }
+.btn-ghost { color: inherit; box-shadow: inset 0 0 0 1px currentColor, 0 0 0 3px transparent; }
+.btn-ghost::before { background: transparent; }
+@media (hover: hover) {
+  .btn:hover { box-shadow: 0 0 0 6px var(--ring); }
+  .btn-ghost:hover { box-shadow: inset 0 0 0 1px currentColor, 0 0 0 6px var(--ring); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover::after { opacity: 1; }
+}
+/* the cursor leaves: pointer.ts adds .release for a moment so the button floats back on the long tail */
+.btn.release { transition: transform var(--t-soft) var(--spring-soft), scale var(--t-bounce) var(--spring-bounce), color 0.2s, box-shadow 0.4s var(--spring-snap); }
+/* press in quickly, spring back out */
+.btn:active { scale: 0.965; transition: scale 0.15s var(--spring-settle); }
+
+/* label roll: the line slides up and its twin springs in after it */
+.roll { position: relative; display: inline-block; overflow: hidden; line-height: 1.25; padding-block: 0.06em; }
+.roll > span { display: block; transition: transform 0.3s var(--spring-settle), opacity 0.2s; }
+.roll > span + span { position: absolute; inset: 0.06em 0 auto; transform: translateY(105%); opacity: 0; }
+@media (hover: hover) {
+  .btn:hover .roll > span:first-child, a:hover > .roll > span:first-child { transform: translateY(-105%); opacity: 0; }
+  .btn:hover .roll > span + span, a:hover > .roll > span + span { transform: none; opacity: 1; transition: transform 0.5s var(--spring-snap), opacity 0.25s; }
+}
+
+.link {
+  font-weight: 500;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.3s var(--ease-out);
+}
+.tone-frame .link, .on-media .link { background-image: linear-gradient(var(--accent-frame), var(--accent-frame)); }
+.link:hover { background-size: 0% 1px; background-position: 100% 100%; }
+
+/* ---------- arrivals: things land on a spring and settle, rather than fade into place ----------
+   Opacity always rides the settle curve (it must never pass 1); only the movement overshoots. */
+.js.motion [data-reveal] { opacity: 0; transform: translate(0, 28px); }
+.js.motion [data-reveal].in {
+  opacity: 1; transform: none;
+  transition: opacity 0.45s var(--spring-settle), transform var(--t-soft) var(--spring-soft);
+  transition-delay: calc(var(--i, 0) * 60ms + var(--d, 0ms));
+}
+/* side reveals come in from the right (FAQ rows) or the left (service tiles); reveal.ts sets --d so a batch fans in */
+.js.motion [data-reveal="side"] { transform: translate(min(300px, 36vw), 0); }
+.js.motion [data-reveal="left"] { transform: translate(max(-300px, -36vw), 0); }
+.ln { display: block; }
+.js.motion [data-lines]:not([data-split]) { opacity: 0; }
+.js.motion [data-lines] .ln > span { display: inline-block; opacity: 0; transform: translate(0, 0.55em); }
+.js.motion [data-lines].in .ln > span {
+  opacity: 1; transform: none;
+  transition: opacity 0.5s var(--spring-settle), transform var(--t-air) var(--spring-air);
+  transition-delay: calc(var(--l, 0) * 45ms + var(--d, 0ms));
+}
+/* first-screen headings arrive on load without hiding them from paint timing */
+.js.motion .arrive { animation: arrive 1s var(--spring-settle) both; animation-delay: var(--d, 0ms); }
+.js.motion.pre .arrive { animation-play-state: paused; }
+@keyframes arrive { from { opacity: 0.01; transform: translate(0, 44px); } }
+
+/* scroll-lit lines: brightest at the middle of the screen. In CSS where the browser can drive it
+   from the scroll position (off the main thread); reveal.ts does it otherwise. */
+@supports (animation-timeline: view()) {
+  .js.motion [data-lit] { animation: lit linear both; animation-timeline: view(); }
+  @keyframes lit { 0%, 6% { opacity: 0.22; } 42%, 58% { opacity: 1; } 94%, 100% { opacity: 0.22; } }
+}
+
+/* ---------- soft film grain over imagery ---------- */
+.grain { position: relative; isolation: isolate; }
+.grain::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: url("/brand/grain.webp") 0 0 / 112px 112px repeat;
+  opacity: 0.3;
+}
+
+/* ---------- media ---------- */
+.media-fill { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.media-fill img { width: 100%; height: 100%; object-fit: cover; }
+video.media-fill { opacity: 0; transition: opacity 0.8s var(--ease); }
+video.media-fill.ready { opacity: 1; }
+/* rounded media: the clip keeps scaled media inside the corners in Safari, where radius alone leaks */
+.framed { border-radius: var(--r-media); clip-path: inset(0 round var(--r-media)); overflow: clip; }
+
+/* ---------- cards: a soft light follows the cursor ---------- */
+.card { position: relative; overflow: clip; isolation: isolate; }
+.card::before {
+  content: ""; position: absolute; z-index: -1; left: 0; top: 0; width: 460px; height: 460px;
+  border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(closest-side, var(--glow, var(--paper-glow)), transparent);
+  transform: translate(calc(var(--lx, 0px) - 230px), calc(var(--ly, 0px) - 230px));
+  transition: opacity 0.35s var(--ease);
+}
+.tone-frame .card, .card.on-dark { --glow: color-mix(in srgb, var(--paper-color) 7.5%, transparent); }
+/* on the paper a plain card is a panel: the same PAPER by day, a lifted INK by night (a gradient card paints its own) */
+.tone-paper .card:not(.gcard) { --bg: var(--panel); background-color: var(--bg); }
+.card.lit::before { opacity: 1; }
+/* a card lands a touch small and settles to size; on hover its contents lift, the card itself stays
+   put so grid seams hold (a .card-solo with no neighbours may lift as a whole) */
+.js.motion .card[data-reveal] { scale: 0.985; }
+.js.motion .card[data-reveal].in {
+  scale: 1;
+  transition: opacity 0.45s var(--spring-settle), transform var(--t-soft) var(--spring-soft), scale var(--t-soft) var(--spring-soft);
+  transition-delay: calc(var(--i, 0) * 60ms + var(--d, 0ms));
+}
+.card > :not(.btn) { transition: transform 0.45s var(--spring-snap); }
+.card > .idx { transition: transform var(--t-bounce) var(--spring-bounce), color 0.3s; }
+@media (hover: hover) {
+  .card:hover > :not(.btn) { transform: translate(0, -3px); }
+  .card:hover > .idx { transform: translate(4px, -3px); color: var(--fg); }
+  .card-solo { transition: transform 0.5s var(--spring-snap); }
+  .card-solo:hover { transform: translate(0, -4px); }
+}
+
+/* ---------- section numbers (01, 02 ...) ---------- */
+.idx { font: 500 13px/1 var(--sans); letter-spacing: 0.16em; color: var(--fg-2); font-variant-numeric: tabular-nums; }
+
+/* ---------- native scrolling ---------- */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+html.scroll-locked { overflow: hidden; }
+[id] { scroll-margin-top: calc(var(--nav-h) + 20px); }
+
+/* ---------- page transitions: a quick, soft fade ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.18s; animation-timing-function: var(--ease); }
+
+/* ---------- reduced motion: everything still, all text at full brightness ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  [data-lit] { opacity: 1 !important; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+}

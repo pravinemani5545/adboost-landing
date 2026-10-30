@@ -1,0 +1,106 @@
+/* Surfaces: the dot-grid ground with its cursor spotlight, the gradient card, and statements that
+   brighten word by word as they are read. Sections opt in with data-dots; cards with .gcard;
+   statements with data-words. dots.ts and words.ts drive the two that need a hand. */
+
+/* ---------- dot grid + spotlight ---------- */
+/* A quiet 30px lattice over the section; on a mouse, an 800px disc of brighter dots follows the
+   cursor (dots.ts writes --dx/--dy and the .lit class). overflow: clip rather than hidden, so the
+   section never becomes a scroll container and a sticky child inside it keeps sticking. */
+[data-dots] { position: relative; isolation: isolate; overflow: clip; }
+.tone-frame[data-dots] { --dot: color-mix(in srgb, var(--mist) 26%, transparent); --dot-spot: var(--accent-frame); }
+.tone-paper[data-dots] { --dot: var(--paper-dot); --dot-spot: var(--paper-dot-spot); }
+.dots {
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  --dx: -1000px; --dy: -1000px;
+  background-image: radial-gradient(circle, var(--dot) 0.7px, transparent 1.5px);
+  background-size: 30px 30px; background-position: 50% 50%;
+}
+/* the lit dots: a solid disc seen through the same lattice, so they stay registered with the base */
+.dots-clip {
+  position: absolute; inset: 0;
+  -webkit-mask-image: radial-gradient(circle, #000 0.7px, transparent 1.5px); mask-image: radial-gradient(circle, #000 0.7px, transparent 1.5px);
+  -webkit-mask-size: 30px 30px; mask-size: 30px 30px;
+  -webkit-mask-position: 50% 50%; mask-position: 50% 50%;
+}
+.dots-spot {
+  position: absolute; left: 0; top: 0; width: 800px; height: 800px;
+  background: var(--dot-spot); opacity: 0;
+  transform: translate3d(calc(var(--dx) - 400px), calc(var(--dy) - 400px), 0);
+  transition: opacity 0.4s var(--ease);
+  --disc: radial-gradient(closest-side, #000 0%, rgb(0 0 0 / 0.979) 7.14%, rgb(0 0 0 / 0.909) 14.29%, rgb(0 0 0 / 0.787) 21.43%, rgb(0 0 0 / 0.636) 28.57%, rgb(0 0 0 / 0.486) 35.71%, rgb(0 0 0 / 0.358) 42.86%, rgb(0 0 0 / 0.255) 50%, rgb(0 0 0 / 0.174) 57.14%, rgb(0 0 0 / 0.113) 64.29%, rgb(0 0 0 / 0.068) 71.43%, rgb(0 0 0 / 0.036) 78.57%, rgb(0 0 0 / 0.015) 85.71%, rgb(0 0 0 / 0.004) 92.86%, transparent 100%);
+  -webkit-mask-image: var(--disc); mask-image: var(--disc);
+}
+[data-dots].lit .dots-spot { opacity: 1; }
+/* touch screens and reduced motion keep the still lattice only */
+@media (hover: none), (prefers-reduced-motion: reduce) { .dots-clip { display: none; } }
+
+/* ---------- gradient card ---------- */
+/* A rounded panel lit from the top: a luminous lift of FRAME falling to near-black FRAME, an ACCENT
+   bloom in the top-right corner and a softer lifted-FRAME one top-left. It carries its own tone
+   variables, so it reads the same on a FRAME or a PAPER section; the fall (--gc-*) lifts a step in
+   the dark scheme so the card still stands off the ink. overflow: clip (not hidden) so a word-reveal
+   timeline declared inside it still follows the page scroll. */
+.gcard {
+  position: relative; isolation: isolate; overflow: clip;
+  border-radius: var(--r-panel, 20px);
+  padding: clamp(30px, 3.8vw, 52px);
+  color: var(--paper-color);
+  --fg: var(--paper-color); --fg-2: color-mix(in srgb, var(--paper-color) 76%, transparent);
+  --line: color-mix(in srgb, var(--paper-color) 18%, transparent); --accent: var(--accent-frame);
+  --btn-bg: var(--accent-color); --btn-fg: var(--accent-fg);
+  --glow: color-mix(in srgb, var(--paper-color) 9%, transparent);
+  --bloom: color-mix(in srgb, var(--accent-color) 42%, transparent); --bloom-2: color-mix(in srgb, var(--frame-lift) 38%, transparent);
+  background:
+    radial-gradient(72% 58% at 88% -6%, var(--bloom), transparent 62%),
+    radial-gradient(58% 46% at 8% -4%, var(--bloom-2), transparent 66%),
+    linear-gradient(174deg, var(--gc-0) 0%, var(--gc-1) 30%, var(--gc-2) 56%, var(--gc-3) 82%, var(--gc-4) 100%);
+  box-shadow: inset 0 1px 0 var(--gc-edge), var(--gc-ring), 0 30px 60px -30px var(--gc-shade);
+}
+/* interpolating the fall in oklch keeps the dark half from banding */
+@supports (background: linear-gradient(in oklch, red, blue)) {
+  .gcard {
+    background:
+      radial-gradient(72% 58% at 88% -6%, var(--bloom), transparent 62%),
+      radial-gradient(58% 46% at 8% -4%, var(--bloom-2), transparent 66%),
+      linear-gradient(in oklch 174deg, var(--gc-0) 0%, var(--gc-1) 30%, var(--gc-2) 56%, var(--gc-3) 82%, var(--gc-4) 100%);
+  }
+}
+.gcard-mist { --bloom: color-mix(in srgb, var(--mist) 60%, transparent); }
+.gcard-sm {
+  border-radius: 16px; padding: clamp(22px, 2vw, 32px);
+  --bloom: color-mix(in srgb, var(--accent-color) 26%, transparent); --bloom-2: color-mix(in srgb, var(--frame-lift) 26%, transparent);
+  box-shadow: inset 0 1px 0 var(--gc-edge-sm), var(--gc-ring);
+}
+
+/* ---------- word reveal ---------- */
+/* Statements read as they are scrolled: every word sits at 0.3 until the page carries it through
+   its slot of the statement's travel, then stays lit. words.ts splits the text into .wd spans
+   (--i on each, --n on the statement) in idle time. The travel runs from --r0 to --r1 of the
+   statement's own passage across the screen, or of a wrapping data-words-scope card, so a heading
+   and its body read as one sequence. --r0/--r1 are either a share of that passage (%) or a
+   distance the card has risen into the screen (vh: 30vh = its top is 70% of the way down), which
+   reads the same on every screen whatever the card's height. --ww is how many slots each word's
+   ramp spans: wider is a softer, slower sweep. */
+[data-words] { --r0: 8%; --r1: 56%; --ww: 1.8; }
+.wd { display: inline-block; }
+.js.motion [data-words][data-split] .wd { opacity: 0.3; }
+@supports (animation-timeline: view()) {
+  [data-words]:not([data-words-scope] *) { view-timeline: --words block; }
+  [data-words-scope] { view-timeline: --words block; }
+  .js.motion [data-words][data-split] .wd {
+    animation: word-lit linear both;
+    animation-timeline: --words;
+    /* each word ramps over --ww slots, so neighbours overlap into a soft sweep */
+    animation-range:
+      cover calc(var(--r0) + var(--i) / var(--n) * (var(--r1) - var(--r0)))
+      cover calc(var(--r0) + (var(--i) + var(--ww)) / var(--n) * (var(--r1) - var(--r0)));
+  }
+  @keyframes word-lit { from { opacity: 0.3; } to { opacity: 1; } }
+}
+@supports not (animation-timeline: view()) {
+  /* words.ts writes --p on the statement: 0 before it is reached, 1 at --r1 (and on past it, so the
+     last words finish their ramp) */
+  .js.motion [data-words][data-split] .wd { opacity: clamp(0.3, 0.3 + (var(--p, 0) * var(--n) - var(--i)) * 1.26 / var(--ww), 1); }
+}
+/* statements run taller on a phone, so the read finishes a little sooner */
+@media (max-width: 640px) { [data-words] { --r0: 6%; --r1: 50%; } }
