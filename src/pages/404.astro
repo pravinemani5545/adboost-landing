@@ -1,4 +1,5 @@
 ---
+// Not found: noindex, out of the sitemap, and no canonical of its own (a 404 has no URL to point at).
 import Shell from '../layouts/Shell.astro';
 import PageHead from '../components/PageHead.astro';
 import Btn from '../components/Btn.astro';
@@ -8,6 +9,15 @@ import Btn from '../components/Btn.astro';
   <Fragment slot="head">
     <title>Page not found | AdBoost Health</title>
     <meta name="robots" content="noindex" />
+    <meta name="description" content="The page you were looking for doesn't exist or has moved." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AdBoost Health" />
+    <meta property="og:title" content="Page not found | AdBoost Health" />
+    <meta property="og:description" content="The page you were looking for doesn't exist or has moved." />
+    <meta property="og:image" content="https://www.adboost.health/og/og-home.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Page not found | AdBoost Health" />
+    <meta name="twitter:image" content="https://www.adboost.health/og/og-home.png" />
   </Fragment>
   <PageHead label="404" title="That page doesn't exist." lede="The link may be old, or the page has moved. Here's where to go instead." dots ghost="404">
     <div class="nf-links arrive" style="--d:240ms">

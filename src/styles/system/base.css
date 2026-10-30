@@ -9,6 +9,7 @@
   --panel: var(--paper-color);
   --paper-fg: var(--frame);
   --paper-fg-2: color-mix(in srgb, var(--frame) 80%, transparent);
+  --paper-wd-lo: 0.64; /* dim word floor: FRAME at 0.64 on PAPER is 4.5:1 */
   --paper-line: color-mix(in srgb, var(--frame) 22%, transparent);
   --paper-accent: var(--accent-paper);
   --paper-mark: var(--accent-paper);
@@ -72,7 +73,7 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
   --paper: var(--ink); --panel: var(--ink-2);
-  --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent);
+  --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent); --paper-wd-lo: 0.5;
   --paper-line: color-mix(in srgb, var(--paper-color) 14%, transparent);
   --paper-accent: var(--accent-frame); --paper-mark: var(--accent-frame);
   --paper-btn-bg: var(--accent-color); --paper-btn-fg: var(--accent-fg);
@@ -90,7 +91,7 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --paper: var(--ink); --panel: var(--ink-2);
-    --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent);
+    --paper-fg: var(--paper-color); --paper-fg-2: color-mix(in srgb, var(--paper-color) 68%, transparent); --paper-wd-lo: 0.5;
     --paper-line: color-mix(in srgb, var(--paper-color) 14%, transparent);
     --paper-accent: var(--accent-frame); --paper-mark: var(--accent-frame);
     --paper-btn-bg: var(--accent-color); --paper-btn-fg: var(--accent-fg);
@@ -129,6 +130,7 @@ html.theming, html.theming *, html.theming *::before, html.theming *::after {
   --fg-2: color-mix(in srgb, var(--paper-color) 78%, transparent);
   --line: color-mix(in srgb, var(--mist) 30%, transparent);
   --accent: var(--accent-frame);
+  --wd-lo: 0.5;
   --btn-bg: var(--accent-color);
   --btn-fg: var(--accent-fg);
   background: var(--bg);
@@ -139,6 +141,7 @@ html.theming, html.theming *, html.theming *::before, html.theming *::after {
   --fg: var(--paper-fg);
   --fg-2: var(--paper-fg-2);
   --line: var(--paper-line);
+  --wd-lo: var(--paper-wd-lo);
   --accent: var(--paper-accent);
   --btn-bg: var(--paper-btn-bg);
   --btn-fg: var(--paper-btn-fg);

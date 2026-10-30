@@ -48,6 +48,7 @@
   --fg: var(--paper-color); --fg-2: color-mix(in srgb, var(--paper-color) 76%, transparent);
   --line: color-mix(in srgb, var(--paper-color) 18%, transparent); --accent: var(--accent-frame);
   --btn-bg: var(--accent-color); --btn-fg: var(--accent-fg);
+  --wd-lo: 0.7; /* the luminous top of the fall needs a brighter dim word */
   --glow: color-mix(in srgb, var(--paper-color) 9%, transparent);
   --bloom: color-mix(in srgb, var(--accent-color) 42%, transparent); --bloom-2: color-mix(in srgb, var(--frame-lift) 38%, transparent);
   background:
@@ -73,7 +74,7 @@
 }
 
 /* ---------- word reveal ---------- */
-/* Statements read as they are scrolled: every word sits at 0.3 until the page carries it through
+/* Statements read as they are scrolled: every word sits dim (--wd-lo, set per tone so even a dim word passes AA) until the page carries it through
    its slot of the statement's travel, then stays lit. words.ts splits the text into .wd spans
    (--i on each, --n on the statement) in idle time. The travel runs from --r0 to --r1 of the
    statement's own passage across the screen, or of a wrapping data-words-scope card, so a heading
@@ -83,7 +84,7 @@
    ramp spans: wider is a softer, slower sweep. */
 [data-words] { --r0: 8%; --r1: 56%; --ww: 1.8; }
 .wd { display: inline-block; }
-.js.motion [data-words][data-split] .wd { opacity: 0.3; }
+.js.motion [data-words][data-split] .wd { opacity: var(--wd-lo, 0.5); }
 @supports (animation-timeline: view()) {
   [data-words]:not([data-words-scope] *) { view-timeline: --words block; }
   [data-words-scope] { view-timeline: --words block; }
@@ -95,12 +96,12 @@
       cover calc(var(--r0) + var(--i) / var(--n) * (var(--r1) - var(--r0)))
       cover calc(var(--r0) + (var(--i) + var(--ww)) / var(--n) * (var(--r1) - var(--r0)));
   }
-  @keyframes word-lit { from { opacity: 0.3; } to { opacity: 1; } }
+  @keyframes word-lit { from { opacity: var(--wd-lo, 0.5); } to { opacity: 1; } }
 }
 @supports not (animation-timeline: view()) {
   /* words.ts writes --p on the statement: 0 before it is reached, 1 at --r1 (and on past it, so the
      last words finish their ramp) */
-  .js.motion [data-words][data-split] .wd { opacity: clamp(0.3, 0.3 + (var(--p, 0) * var(--n) - var(--i)) * 1.26 / var(--ww), 1); }
+  .js.motion [data-words][data-split] .wd { opacity: clamp(var(--wd-lo, 0.5), var(--wd-lo, 0.5) + (var(--p, 0) * var(--n) - var(--i)) * (1 - var(--wd-lo, 0.5)) * 1.8 / var(--ww), 1); }
 }
 /* statements run taller on a phone, so the read finishes a little sooner */
 @media (max-width: 640px) { [data-words] { --r0: 6%; --r1: 50%; } }
