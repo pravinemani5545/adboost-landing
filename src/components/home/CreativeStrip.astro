@@ -1,0 +1,96 @@
+---
+// Real ads we have shipped, set in phone frames on a FRAME stage: a heading and its note, then a row
+// of phones that glides slowly sideways (paused on hover, off screen and with reduced motion, when it
+// becomes a row you can swipe). The twin row that closes the loop is hidden from assistive tech.
+interface Props { label: string; heading: string; note: string; ads: string[] }
+const { label, heading, note, ads } = Astro.props;
+const headingHtml = heading.replace(/\*(.+?)\*/, '<em>$1</em>');
+---
+
+<section class="cs tone-frame section" data-nav="frame" aria-labelledby="cs-h" data-cs>
+  <div class="wrap cs-head">
+    <div class="cs-title">
+      <p class="label muted" data-reveal>{label}</p>
+      <h2 id="cs-h" data-reveal set:html={headingHtml} />
+    </div>
+    <p class="cs-note" data-reveal style="--i:1" set:html={note} />
+  </div>
+  <div class="cs-rail" data-reveal style="--i:2">
+    <p class="sr-only">A row of {ads.length} static ads we produced for health brands, shown on phone screens.</p>
+    <div class="cs-track" aria-hidden="true">
+      {['cs-row', 'cs-row cs-twin'].map((cls) => (
+        <ul class={cls}>
+          {ads.map((src) => (
+            <li class="cs-ph"><span class="cs-scr"><img src={src} alt="" width="634" height="1136" loading="lazy" decoding="async" /></span></li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cs { overflow: clip; }
+  .cs-head {
+    display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); align-items: end; gap: 28px clamp(40px, 6vw, 120px);
+    margin-bottom: clamp(36px, 4.4vw, 64px);
+  }
+  .cs-title { display: grid; gap: 20px; }
+  .cs-title h2 { max-width: 18ch; }
+  .cs-title h2 :global(em) { font-style: italic; }
+  .cs-note { color: var(--fg-2); max-width: 44ch; padding-top: 18px; border-top: 1px solid var(--line); }
+  .cs-note :global(a) { color: var(--fg); background: linear-gradient(var(--accent), var(--accent)) 0 100% / 100% 1px no-repeat; padding-bottom: 2px; transition: background-size 0.3s var(--ease-out); }
+  .cs-note :global(a:hover) { background-size: 0% 1px; background-position: 100% 100%; }
+
+  /* the row: phones at a fixed width with a hairline bezel, gliding as one band */
+  .cs-rail { --w: clamp(150px, 15vw, 210px); --gap: clamp(14px, 1.6vw, 24px); }
+  .cs-track { display: flex; width: max-content; gap: var(--gap); animation: cs-glide 70s linear infinite; animation-play-state: var(--run, running); }
+  .cs-row { display: flex; gap: var(--gap); flex: none; }
+  .cs-rail:hover .cs-track { animation-play-state: paused; }
+  @keyframes cs-glide { to { transform: translate(calc(-50% - var(--gap) / 2), 0); } }
+  .cs-ph { flex: none; width: var(--w); }
+  .cs-scr {
+    position: relative; display: block; overflow: hidden;
+    border-radius: calc(var(--w) * 0.16); padding: calc(var(--w) * 0.035);
+    background: color-mix(in srgb, var(--paper-color) 6%, var(--frame));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper-color) 22%, transparent), 0 30px 60px -32px rgb(0 0 0 / 0.6);
+  }
+  /* the screen keeps the ads' own 9:16 so nothing on them is cropped */
+  .cs-scr img { width: 100%; height: auto; aspect-ratio: 634 / 1136; object-fit: cover; border-radius: calc(var(--w) * 0.125); }
+  /* the earpiece notch, drawn in the bezel's own colour */
+  .cs-scr::before {
+    content: ""; position: absolute; z-index: 1; left: 50%; top: calc(var(--w) * 0.06); width: 30%; height: calc(var(--w) * 0.055);
+    translate: -50% 0; border-radius: 999px; background: color-mix(in srgb, var(--paper-color) 6%, var(--frame));
+  }
+  /* a phone rises a little under the cursor */
+  @media (hover: hover) and (pointer: fine) {
+    .cs-ph { transition: transform var(--t-soft) var(--spring-soft); }
+    .cs-ph:hover { transform: translate(0, -8px); }
+  }
+
+  @media (max-width: 899px) {
+    .cs-head { grid-template-columns: 1fr; align-items: start; }
+  }
+  @media (max-width: 640px) {
+    .cs-rail { --w: 148px; --gap: 12px; }
+    .cs-note { font-size: 16px; }
+  }
+  /* no glide: one row the reader can swipe through, the twin left out */
+  @media (prefers-reduced-motion: reduce) {
+    .cs-rail { overflow-x: auto; scrollbar-width: none; padding-inline: var(--pad); }
+    .cs-track { animation: none; }
+    .cs-twin { display: none; }
+  }
+</style>
+
+<script>
+  import { reduceMotion } from '../../scripts/env';
+  const rail = document.querySelector<HTMLElement>('[data-cs] .cs-rail');
+  // pause the glide while it is off screen or the tab is hidden
+  if (rail && !reduceMotion) {
+    let seen = false;
+    const set = () => rail.style.setProperty('--run', seen && !document.hidden ? 'running' : 'paused');
+    new IntersectionObserver(([e]) => { seen = e.isIntersecting; set(); }).observe(rail);
+    document.addEventListener('visibilitychange', set);
+  }
+</script>

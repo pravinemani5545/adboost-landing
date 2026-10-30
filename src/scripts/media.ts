@@ -4,12 +4,13 @@ import { reduceMotion } from './env';
 
 const probe = document.createElement('video');
 const av1 = probe.canPlayType('video/mp4; codecs="av01.0.08M.08"') === 'probably';
-/** A clip's file: AV1 where the browser can decode it, H.264 otherwise. */
-export const clipUrl = (base: string) => `${base}${av1 ? '.av1' : ''}.mp4`;
+/** A clip's file: AV1 where the browser can decode it and the clip has an AV1 twin, H.264 otherwise. */
+export const clipUrl = (base: string, hasAv1 = true) => `${base}${av1 && hasAv1 ? '.av1' : ''}.mp4`;
 
+// data-av1="0" (or data-portrait-av1="0") marks a clip that ships in H.264 only
 function sourceFor(v: HTMLVideoElement) {
   const portrait = v.dataset.portrait && matchMedia('(max-aspect-ratio: 4/5)').matches;
-  return clipUrl(portrait ? v.dataset.portrait! : v.dataset.src!);
+  return portrait ? clipUrl(v.dataset.portrait!, v.dataset.portraitAv1 !== '0') : clipUrl(v.dataset.src!, v.dataset.av1 !== '0');
 }
 
 if (!reduceMotion) {

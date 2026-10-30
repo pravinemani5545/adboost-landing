@@ -1,7 +1,7 @@
 ---
-// The inner-page layout: the system shell with this site's SEO head. Pages still written against the
-// pre-redesign components render inside the .legacy wrapper (legacy.css maps them onto the roles);
-// run 2 moves them onto the system components.
+// The page layout: the system shell with this site's SEO head. The page brings its own sections
+// (each a tone and a data-nav); the shell brings the chrome. Pages put any extra head tags (the
+// home page's verification tags) in the "head" slot.
 import Shell from './Shell.astro';
 import '../styles/legacy.css';
 import { siteBase } from '../lib/site';
@@ -12,16 +12,30 @@ interface Props {
   canonicalPath: string;      // e.g. "/industries/telehealth/"
   ogImage?: string;           // absolute path from root, e.g. "/og/og-home.png"
   ogType?: string;
+  /** social titles and descriptions where they differ from the page's own (the home page) */
+  ogTitle?: string;
+  ogDescription?: string;
+  twitterDescription?: string;
+  ogImageAlt?: string;
   noindex?: boolean;          // gated/conversion pages (e.g. lead magnets)
   jsonLd?: unknown;           // object or array of schema.org nodes
   /** what sits under the nav at the top of the page */
   nav?: 'frame' | 'paper' | 'media';
+  /** TEMP (run 2): the page is already built from system sections */
+  system?: boolean;
 }
-const { title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd, noindex = false, nav = 'paper' } = Astro.props;
+const {
+  title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd, noindex = false, nav = 'paper', system = false,
+  ogTitle = title, ogDescription = description, twitterDescription = ogDescription, ogImageAlt = title,
+} = Astro.props;
 const SITE = siteBase(Astro.site);
 const canonical = `${SITE}${canonicalPath}`;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${SITE}${ogImage}`;
 const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+// a lone node still needs its @context (the schema helpers return bare nodes for a @graph)
+const schema = schemaNodes && (schemaNodes.length === 1
+  ? { '@context': 'https://schema.org', ...(schemaNodes[0] as object) }
+  : { '@context': 'https://schema.org', '@graph': schemaNodes });
 ---
 
 <Shell nav={nav}>
@@ -29,24 +43,23 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
     <title>{title}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <slot name="head" />
     <meta property="og:type" content={ogType} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:site_name" content="AdBoost Health" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:alt" content={title} />
+    <meta property="og:image:alt" content={ogImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={twitterDescription} />
     <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content={title} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${SITE}/rss.xml`} />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    {schemaNodes && <script type="application/ld+json" set:html={JSON.stringify(schemaNodes.length === 1 ? schemaNodes[0] : { '@context': 'https://schema.org', '@graph': schemaNodes })} />}
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
   </Fragment>
-  <div class="legacy tone-paper" data-nav="paper">
-    <slot />
-  </div>
+  {system ? <slot /> : <div class="legacy tone-paper" data-nav="paper"><slot /></div>}
 </Shell>

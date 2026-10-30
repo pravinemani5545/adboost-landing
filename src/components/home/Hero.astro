@@ -1,0 +1,167 @@
+---
+// The first screen: a full-bleed still with its loop over it, under a FRAME veil, and the headline.
+// The still (or the loop's first frame) is the largest paint, so it loads at once; the loop follows
+// through media.ts. Without the still yet, the frame's own FRAME gradient stands in.
+import Pic from '../Pic.astro';
+import Btn from '../Btn.astro';
+import { CTA } from '../../lib/site';
+import { clip, poster } from '../../lib/media';
+
+interface Props {
+  /** the headline as two lines; the second opens on an italic word */
+  lines: [string, string];
+  sub: string;
+  support?: string;
+  secondary?: { label: string; href: string };
+  cta?: { label: string; href: string };
+}
+const { lines, sub, support, secondary, cta = CTA } = Astro.props;
+const [first, second] = lines;
+// the second line opens on an italic word (the copy itself stays plain text)
+const secondHtml = second.replace(/^(\S+)/, '<em>$1</em>');
+const still = poster('hero');
+const tall = poster('hero-portrait');
+const loop = clip('hero');
+const loopTall = clip('hero-portrait');
+---
+
+<section class="hero" data-nav="media" data-hero>
+  <div class="hero-frame grain on-media">
+    <div class="hero-media" data-hero-media>
+      {still && <Pic class="media-fill" src={still} portrait={tall} alt="" sizes="100vw" eager />}
+      {
+        loop && (
+          <video
+            class="media-fill"
+            muted
+            loop
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            data-src={loop.src}
+            data-av1={loop.av1 ? undefined : '0'}
+            data-portrait={loopTall?.src}
+            data-portrait-av1={loopTall && !loopTall.av1 ? '0' : undefined}
+          />
+        )
+      }
+    </div>
+    <div class="hero-shade"></div>
+    <div class="hero-copy wrap" data-hero-copy>
+      <h1 class="hero-h" data-hero-h>{first}<br /><Fragment set:html={secondHtml} /></h1>
+      <p class="hero-sub">{sub}</p>
+      {support && <p class="support hero-support" data-hero-support>{support}</p>}
+      <div class="hero-ctas">
+        <Btn href={cta.href}>{cta.label}</Btn>
+        {secondary && <Btn href={secondary.href} variant="ghost">{secondary.label}</Btn>}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* A full-screen frame that scrolls like any other section: nothing pins, nothing holds. */
+  .hero { position: relative; height: 100svh; min-height: 560px; background: var(--frame); color: var(--paper-color); view-timeline: --hero block; }
+  .hero-frame {
+    position: relative; height: 100%; overflow: hidden;
+    /* stands in for the still until it exists: the luminous lift of FRAME falling to near-black */
+    background:
+      radial-gradient(70% 60% at 82% 8%, color-mix(in srgb, var(--accent-color) 30%, transparent), transparent 64%),
+      linear-gradient(174deg, var(--gc-0), var(--gc-2) 55%, var(--gc-4));
+  }
+  .hero-media { position: absolute; inset: 0; }
+  /* a FRAME veil, heavier where the words sit, light across the top so the picture keeps its colour */
+  .hero-shade {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top,
+      color-mix(in srgb, var(--frame) 60%, transparent) 0%,
+      color-mix(in srgb, var(--frame) 28%, transparent) 42%,
+      color-mix(in srgb, var(--frame) 12%, transparent) 100%);
+  }
+  .hero-copy { position: absolute; z-index: 3; left: 0; right: 0; bottom: clamp(40px, 12svh, 130px); }
+  /* the headline runs longer than a two-word display line, so it takes the h1 size and sets as two lines */
+  .hero-h { font-size: clamp(44px, 6.4vw, 100px); line-height: 1.04; text-shadow: 0 0 40px color-mix(in srgb, var(--frame) 35%, transparent); }
+  /* the italic face is preloaded with the roman, so the word is italic from the first paint */
+  .hero-h :global(em) { font-style: italic; letter-spacing: -0.02em; }
+  .hero-sub { margin-top: clamp(18px, 2.4vw, 30px); max-width: 58ch; font-size: clamp(16px, 1.3vw, 19px); color: color-mix(in srgb, var(--paper-color) 85%, transparent); }
+  .hero-support { margin-top: 8px; }
+  .hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(24px, 3vw, 36px); }
+
+  /* the subheading and buttons arrive once the frame is mostly in view */
+  :global(.js.motion) .hero-sub, :global(.js.motion) .hero-ctas { opacity: 0; transform: translate(0, 14px); transition: opacity 0.45s var(--ease-out), transform 0.6s var(--ease-out); }
+  :global(.js.motion) .hero.settled .hero-sub { opacity: 1; transform: none; }
+  :global(.js.motion) .hero.settled .hero-ctas { opacity: 1; transform: none; transition-delay: 0.1s; }
+
+  /* Driven by the scroll position, on the compositor: the headline brightens and the picture settles
+     as it rises; the words leave just before they would pass under the nav. */
+  @supports (animation-timeline: view()) {
+    :global(.js.motion) .hero-h { animation: hero-lit ease-in-out both; animation-timeline: --hero; animation-range: entry 30% entry 100%; }
+    :global(.js.motion) .hero-support { animation: hero-lit-soft ease-in-out both; animation-timeline: --hero; animation-range: entry 62% entry 100%; }
+    :global(.js.motion) .hero-media { animation: hero-settle linear both; animation-timeline: --hero; animation-range: entry 0% entry 100%; }
+    :global(.js.motion) .hero-copy { animation: hero-leave linear both; animation-timeline: --hero; animation-range: exit 12% exit 38%; }
+  }
+  @keyframes hero-lit { from { opacity: 0.14; } to { opacity: 1; } }
+  @keyframes hero-lit-soft { from { opacity: 0.22; } to { opacity: 1; } }
+  @keyframes hero-settle { from { transform: scale(1.08); } to { transform: none; } }
+  @keyframes hero-leave { from { opacity: 1; transform: none; } to { opacity: 0; transform: translate(0, -18px); } }
+
+  /* Phones: the headline is sized to the screen so its first line sets whole ("Growth marketing for"
+     runs about 9.9 times its type size) and the second balances over two, the veil deepens under the
+     words, and the two buttons stack full width at thumb height. */
+  @media (max-width: 640px) {
+    .hero-shade {
+      background: linear-gradient(to top,
+        color-mix(in srgb, var(--frame) 80%, transparent) 0%,
+        color-mix(in srgb, var(--frame) 52%, transparent) 40%,
+        color-mix(in srgb, var(--frame) 16%, transparent) 72%,
+        color-mix(in srgb, var(--frame) 8%, transparent) 100%);
+    }
+    .hero-copy { bottom: calc(clamp(28px, 6svh, 56px) + env(safe-area-inset-bottom)); }
+    .hero-h { max-width: none; font-size: min(54px, calc((100vw - 2 * var(--pad)) / 9.9)); line-height: 1.04; }
+    .hero-sub { margin-top: 18px; font-size: 16px; line-height: 1.5; max-width: 40ch; }
+    .hero-support { margin-top: 6px; font-size: 19px; }
+    .hero-ctas { flex-direction: column; gap: 10px; margin-top: 24px; }
+    .hero-ctas :global(.btn) { width: 100%; height: 54px; }
+  }
+</style>
+
+<script>
+  import { reduceMotion } from '../../scripts/env';
+  import { SDA, clamp, onMeasure, onScroll, pageTop, smooth, view } from '../../scripts/scroll';
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero) {
+    if (reduceMotion) hero.classList.add('settled');
+    else {
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          hero.classList.add('settled');
+          io.disconnect();
+        },
+        { threshold: 0.6 },
+      );
+      io.observe(hero);
+    }
+
+    // the same scroll effects in script, for browsers without scroll-driven CSS
+    if (!reduceMotion && !SDA) {
+      const h1 = hero.querySelector<HTMLElement>('[data-hero-h]')!;
+      const support = hero.querySelector<HTMLElement>('[data-hero-support]');
+      const media = hero.querySelector<HTMLElement>('[data-hero-media]')!;
+      const copy = hero.querySelector<HTMLElement>('[data-hero-copy]')!;
+      let top = 0;
+      onMeasure(() => { top = pageTop(hero); });
+      onScroll((y) => {
+        if (y > top + view.h * 1.5 || y < top - view.h * 1.5) return;
+        const rise = clamp(1 - (top - y) / view.h);
+        const leave = clamp((y - top - view.h * 0.12) / (view.h * 0.26));
+        h1.style.opacity = (0.14 + 0.86 * smooth(clamp((rise - 0.3) / 0.7))).toFixed(3);
+        if (support) support.style.opacity = (0.22 + 0.78 * smooth(clamp((rise - 0.62) / 0.38))).toFixed(3);
+        media.style.transform = `scale(${(1.08 - 0.08 * smooth(rise)).toFixed(4)})`;
+        copy.style.opacity = (1 - leave).toFixed(3);
+        copy.style.transform = `translate(0, ${(-leave * 18).toFixed(1)}px)`;
+      });
+    }
+  }
+</script>

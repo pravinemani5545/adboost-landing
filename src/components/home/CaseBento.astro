@@ -1,0 +1,106 @@
+---
+// Three results as a bento of gradient tiles: one tall tile and two wide ones in a 2fr 3fr grid, the
+// shape of the reference's video bento. Each carries a number and its category, the partner, a serif
+// title, a rule and one line, then the figures. On hover the tile's light lifts and the rule draws
+// in the accent.
+interface Case {
+  brand: string;
+  category: string;
+  title: string;
+  body: string;
+  stats: { label: string; value: string }[];
+}
+interface Props { label: string; heading: string; note: string; cases: Case[] }
+const { label, heading, note, cases } = Astro.props;
+const headingHtml = heading.replace(/\*(.+?)\*/, '<em>$1</em>');
+---
+
+<section class="tone-paper section cases" data-nav="paper" aria-labelledby="cases-h" id="results">
+  <div class="wrap">
+    <header class="cases-head">
+      <div class="cases-title">
+        <p class="label muted" data-reveal>{label}</p>
+        <h2 id="cases-h" data-reveal set:html={headingHtml} />
+      </div>
+      <p class="small cases-note" data-reveal style="--i:1">{note}</p>
+    </header>
+    <div class="bento">
+      {
+        cases.map((c, i) => (
+          <article class:list={['tile gcard gcard-sm card', i === 0 ? 'tile-tall' : 'tile-wide']} data-reveal style={`--i:${i}`}>
+            <p class="tile-num label plain">
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <span>{c.category}</span>
+            </p>
+            <div class="tile-text">
+              <p class="tile-brand">{c.brand}</p>
+              <h3 class="tile-title">{c.title}</h3>
+              <span class="tile-rule" aria-hidden="true" />
+              <p class="tile-desc">{c.body}</p>
+              <dl class="tile-stats">
+                {c.stats.map((s) => (
+                  <div>
+                    <dt class="label plain">{s.label}</dt>
+                    <dd>{s.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .cases-head {
+    display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap;
+    gap: 16px 48px; margin-bottom: clamp(28px, 3.4vw, 48px);
+  }
+  .cases-title { display: grid; gap: 20px; }
+  .cases-title h2 :global(em) { font-style: italic; }
+  .cases-note { max-width: 40ch; }
+
+  /* the tall tile's 3:4 sets the grid height; the two wide tiles share it between the fr rows */
+  .bento {
+    display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 12px;
+  }
+  .tile { display: grid; align-content: space-between; gap: 28px; min-height: 0; }
+  .tile-tall { grid-row: 1 / span 2; aspect-ratio: 3 / 4; }
+  .tile-num { display: flex; gap: 14px; color: var(--fg-2); }
+  .tile-text { display: grid; gap: 12px; max-width: 52ch; }
+  .tile-brand { font: 500 15px/1.3 var(--sans); color: var(--fg-2); }
+  .tile-title { font-family: var(--serif); font-weight: 300; font-size: clamp(24px, 2.1vw, 34px); line-height: 1.12; letter-spacing: -0.012em; }
+  .tile-tall .tile-title { font-size: clamp(30px, 2.8vw, 44px); }
+  .tile-rule { position: relative; height: 1px; background: var(--line); }
+  .tile-rule::after {
+    content: ""; position: absolute; inset: 0; background: var(--accent);
+    opacity: 0; transform: scaleX(0); transform-origin: left;
+    transition: transform 0.55s var(--ease-out), opacity 0.2s;
+  }
+  .tile-desc { font-size: 15.5px; line-height: 1.5; color: var(--fg-2); }
+  .tile-stats { display: flex; flex-wrap: wrap; gap: 14px 32px; margin-top: 8px; }
+  .tile-stats div { display: grid; gap: 6px; }
+  .tile-stats dt { color: var(--fg-2); }
+  .tile-stats dd { margin: 0; font: 300 clamp(26px, 2.2vw, 34px) / 1 var(--serif); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+
+  /* hover, fine pointers only: the cursor light comes up (card) and the rule draws in the accent */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .tile:hover .tile-rule::after {
+      opacity: 1; transform: none;
+      transition: transform var(--t-snap) var(--spring-snap), opacity 0.2s;
+    }
+  }
+
+  @media (max-width: 899px) {
+    .bento { grid-template-columns: 1fr; grid-template-rows: none; }
+    .tile-tall { grid-row: auto; aspect-ratio: auto; }
+  }
+  @media (max-width: 640px) {
+    .bento { gap: 10px; }
+    .tile { gap: 22px; }
+    .tile-desc { font-size: 16px; }
+  }
+</style>

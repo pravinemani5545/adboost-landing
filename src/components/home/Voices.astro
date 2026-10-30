@@ -1,0 +1,80 @@
+---
+// In their words, on FRAME: one founder in a spotlight (portrait, the quote set large, the figure it
+// names), then the shorter quotes in open columns. Every quote is one a partner gave us.
+interface Quote { quote: string; name: string; role: string }
+interface Props {
+  label: string;
+  spotlight: Quote & { photo: string; figure?: { label: string; value: string } };
+  quotes: Quote[];
+}
+const { label, spotlight: s, quotes } = Astro.props;
+---
+
+<section class="tone-frame section voices" data-nav="frame" aria-labelledby="voices-h">
+  <div class="wrap">
+    <h2 id="voices-h" class="label muted" data-reveal>{label}</h2>
+    <figure class="spot">
+      <div class="spot-pic framed grain" data-reveal>
+        <img src={s.photo} alt={`${s.name}, ${s.role}`} width="500" height="600" loading="lazy" decoding="async" />
+        {s.figure && (
+          <p class="spot-fig">
+            <span class="label plain">{s.figure.label}</span>
+            <span class="spot-fig-v">{s.figure.value}</span>
+          </p>
+        )}
+      </div>
+      <div class="spot-copy">
+        <blockquote class="statement spot-q" data-words style="--r0:10%;--r1:52%">“{s.quote}”</blockquote>
+        <figcaption class="spot-who" data-reveal>
+          <span class="spot-name">{s.name}</span>
+          <span class="small">{s.role}</span>
+        </figcaption>
+      </div>
+    </figure>
+
+    <div class="quotes">
+      {quotes.map((q, i) => (
+        <figure class="quote" data-reveal style={`--i:${i % 2}`}>
+          <blockquote class="support">“{q.quote}”</blockquote>
+          <figcaption class="small"><span class="quote-name">{q.name}</span>, {q.role}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .voices > .wrap > .label { margin-bottom: clamp(28px, 3.4vw, 48px); }
+  .spot { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 5vw, 96px); align-items: center; }
+  .spot-pic { position: relative; aspect-ratio: 5 / 6; background: linear-gradient(174deg, var(--gc-0), var(--gc-3)); }
+  .spot-pic img { width: 100%; height: 100%; object-fit: cover; }
+  /* the figure the quote names, set on a FRAME scrim at the foot of the portrait */
+  .spot-fig {
+    position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: grid; gap: 6px;
+    padding: 48px clamp(18px, 2vw, 26px) clamp(18px, 2vw, 24px);
+    background: linear-gradient(to top, color-mix(in srgb, var(--frame) 86%, transparent), transparent);
+  }
+  .spot-fig .label { color: color-mix(in srgb, var(--paper-color) 80%, transparent); }
+  .spot-fig-v { font: 300 clamp(40px, 4vw, 60px) / 1 var(--serif); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .spot-copy { display: grid; gap: clamp(22px, 2.6vw, 36px); }
+  .spot-q { font-size: clamp(28px, 3vw, 46px); line-height: 1.18; max-width: 26ch; }
+  .spot-who { display: grid; gap: 4px; padding-top: 18px; border-top: 1px solid var(--line); max-width: 26ch; }
+  .spot-name { font-weight: 500; }
+
+  .quotes {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(36px, 4vw, 64px) clamp(36px, 5vw, 96px);
+    margin-top: clamp(64px, 8vw, 120px); padding-top: clamp(36px, 4vw, 56px); border-top: 1px solid var(--line);
+  }
+  .quote { display: grid; gap: 16px; align-content: start; }
+  .quote blockquote { max-width: 34ch; }
+  .quote-name { color: var(--fg); font-weight: 500; }
+
+  @media (max-width: 899px) {
+    .spot { grid-template-columns: 1fr; }
+    .spot-pic { max-width: 420px; }
+    .quotes { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .spot-q { font-size: clamp(26px, 7.4vw, 32px); }
+  }
+</style>

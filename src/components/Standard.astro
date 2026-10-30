@@ -1,0 +1,56 @@
+---
+// The commitment card: one gradient card holding the statement (read word by word as it scrolls),
+// three numbered commitments as open columns, and a closing line. On the home page and About.
+interface Props {
+  label: string;
+  body: string;
+  items: { title: string; body: string }[];
+  support?: string;
+}
+const { label, body, items, support } = Astro.props;
+---
+
+<div class="std gcard" data-reveal>
+  <h2 class="label std-label">{label}</h2>
+  <p class="statement std-body" data-words style="--r0:15%;--r1:60%">{body}</p>
+  <ol class="std-items">
+    {
+      items.map((it, i) => (
+        <li class="std-item">
+          <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{it.title}</h3>
+          <p class="muted">{it.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+  {support && <p class="support std-routine">{support}</p>}
+</div>
+
+<style>
+  .std { display: grid; gap: clamp(28px, 3vw, 40px); overflow: clip; }
+  .std-label { color: var(--fg-2); }
+  .std-body { max-width: 24ch; font-size: clamp(32px, 4.2vw, 64px); line-height: 1.12; }
+  /* three open columns, a short rule standing between them */
+  .std-items { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.4vw, 36px); margin-top: clamp(24px, 4vw, 56px); }
+  .std-item { position: relative; display: grid; gap: 12px; align-content: start; }
+  .std-item + .std-item { padding-left: clamp(20px, 2.4vw, 36px); }
+  .std-item + .std-item::before { content: ""; position: absolute; left: 0; top: 2px; width: 1px; height: 52px; background: var(--line); }
+  .std-routine { justify-self: end; color: var(--fg-2); }
+
+  @media (max-width: 899px) {
+    .std-items { grid-template-columns: 1fr; gap: 0; }
+    .std-item { padding: 22px 0 26px; border-bottom: 1px solid var(--line); }
+    .std-item:first-child { border-top: 1px solid var(--line); }
+    .std-item + .std-item { padding-left: 0; }
+    .std-item + .std-item::before { display: none; }
+    .std-routine { justify-self: start; }
+  }
+  /* phones: the card gives the statement more of the width, and the commitments sit closer */
+  @media (max-width: 640px) {
+    .std { gap: 24px; padding: 28px 22px 26px; }
+    .std-body { font-size: clamp(29px, 8.2vw, 34px); line-height: 1.14; }
+    .std-items { margin-top: 6px; }
+    .std-item { gap: 8px; padding: 18px 0 20px; }
+  }
+</style>

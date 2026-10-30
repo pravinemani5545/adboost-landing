@@ -1,0 +1,413 @@
+---
+// What we do and who we do it for, as a bento of living tiles in two groups: the three services,
+// then the nine health verticals. The first tile of each group takes a double cell; the rest are 4:5
+// tiles, and the services group closes on a wide note with the call to book. Rows fan in from the
+// sides. One tile is lit at a time: the one under the cursor on a mouse or trackpad, otherwise the
+// one nearest the middle of the screen as the page scrolls. The lit tile plays its short clip
+// (fetched only then, and only once the page has loaded), its scrim deepens and its line rises; the
+// others pause where they are. Where the browser can drive animation from the scroll position, each
+// tile's picture also drifts a little as it passes. A still or clip that does not exist yet leaves
+// the tile on its FRAME gradient.
+import type { ImageMetadata } from 'astro';
+import Pic from './Pic.astro';
+import { SERVICES } from '../data/services';
+import { VERTICALS } from '../data/verticals';
+import { NAV, CTA } from '../lib/site';
+import { clip, poster } from '../lib/media';
+
+interface Props {
+  /** the short note in the services group */
+  more: { label: string; line: string; cta: string };
+}
+const { more } = Astro.props;
+
+type Tile = { href: string; label: string; line: string; no: string; image?: ImageMetadata; video?: { src: string; av1: boolean } };
+const count = (n: number) => String(n).padStart(2, '0');
+const blurb = (label: string) => NAV.find((n) => n.label === label)?.blurb ?? '';
+const groups: { id: 'services' | 'industries'; label: string; line: string; items: Tile[] }[] = [
+  {
+    id: 'services',
+    label: 'Services',
+    line: blurb('Services'),
+    items: SERVICES.map((s, i) => ({
+      href: `/services/${s.slug}/`, label: s.name, line: s.desc, no: count(i + 1),
+      image: poster(`svc-${s.slug}`), video: clip(`svc-${s.slug}`),
+    })),
+  },
+  {
+    id: 'industries',
+    label: 'Industries',
+    line: blurb('Industries'),
+    items: VERTICALS.map((v, i) => ({
+      href: `/industries/${v.slug}/`, label: v.short, line: `Typical CAC ${v.cacDisplay}. ${v.painPoint.split(/(?<=\.)\s/)[0]}`, no: count(i + 1),
+      image: poster(`ind-${v.slug}`), video: clip(`ind-${v.slug}`),
+    })),
+  },
+];
+
+// where the k-th cell of a group lands in the four-column grid: the featured tile takes the first
+// two columns of the first two rows, the next four stack beside it two to a row, and everything
+// after flows four to a row. Cells in the left half arrive from the left and cells in the right
+// half from the right, each row closing toward the middle (--i4 fans outer to inner). At two
+// columns the featured cell spans both and the rest alternate, so the side comes from k's parity.
+const col = (k: number) => (k === 0 ? 0 : k <= 4 ? 2 + ((k - 1) % 2) : (k - 5) % 4);
+const side4 = (k: number) => (col(k) < 2 ? 'l' : 'r');
+const fan4 = (k: number) => (col(k) < 2 ? col(k) : 3 - col(k));
+const side2 = (k: number) => (k === 0 || k % 2 === 1 ? 'l' : 'r');
+const arrow =
+  '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>';
+---
+
+<div class="sg" data-sg>
+  {groups.map((g) => (
+    <div class="sg-grp">
+      <header class="sg-head" data-reveal>
+        <p class="label muted">{g.label}</p>
+        <p class="sg-head-line">{g.line}</p>
+        <span class="idx">{count(g.items.length)}</span>
+      </header>
+      <div class="sg-grid">
+        {g.items.map((s, k) => {
+          const feat = k === 0;
+          return (
+            <div class:list={['sg-cell', { 'sg-feat': feat }]} data-reveal="left" data-from4={side4(k)} data-from2={side2(k)} style={`--i4:${fan4(k)}`}>
+              <a class="sg-tile grain" href={s.href}>
+                <div class="sg-drift" aria-hidden="true">
+                  {s.image && (
+                    <Pic
+                      class="media-fill"
+                      src={s.image}
+                      alt=""
+                      sizes={feat ? '(max-width: 1099px) 100vw, 50vw' : '(max-width: 1099px) 50vw, 25vw'}
+                      widths={[360, 480, 720, 960, 1200]}
+                    />
+                  )}
+                  {s.video && <video class="media-fill" muted loop playsinline preload="none" data-clip={s.video.src} data-av1={s.video.av1 ? undefined : '0'} />}
+                </div>
+                <div class="sg-scrim" aria-hidden="true" />
+                <span class="sg-cap">
+                  <span class="sg-no idx">{s.no}</span>
+                  <span class="sg-arrow" set:html={arrow} />
+                  <span class="sg-name">{s.label}</span>
+                  <span class="sg-line">{s.line}</span>
+                </span>
+              </a>
+            </div>
+          );
+        })}
+        {g.id === 'services' && (
+          <div class="sg-cell sg-note" data-reveal="left" data-from4="r" data-from2="l" style="--i4:0">
+            <div class="sg-more gcard gcard-sm">
+              <p class="label">{more.label}</p>
+              <p class="sg-more-line">{more.line}</p>
+              <a class="sg-more-link" href={CTA.href}>
+                <span>{more.cta}</span>
+                <span class="sg-arrow" set:html={arrow} />
+              </a>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  /* ---------- the groups ---------- */
+  .sg { display: grid; gap: clamp(44px, 4.4vw, 68px); }
+  /* each group opens with a heading row: the label with its marker, a short serif line beside it,
+     the count at the far end, a hairline beneath */
+  .sg-head {
+    display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: baseline; gap: 8px 24px;
+    padding-bottom: 14px; margin-bottom: clamp(18px, 2vw, 26px); border-bottom: 1px solid var(--line);
+  }
+  .sg-head-line { font: 300 clamp(18px, 1.45vw, 22px) / 1.3 var(--serif); letter-spacing: -0.01em; color: var(--fg-2); }
+  .sg-head .idx { color: var(--fg); }
+  /* on a phone the line takes its own row under the label and the count */
+  @media (max-width: 759px) {
+    .sg-head { grid-template-columns: minmax(0, 1fr) auto; }
+    .sg-head .label { grid-area: 1 / 1; }
+    .sg-head .idx { grid-area: 1 / 2; }
+    .sg-head-line { grid-area: 2 / 1 / 3 / 3; }
+  }
+
+  /* ---------- the grid ---------- */
+  /* two columns; four from 1100px (no three-column tier, so the double cell always sits square to
+     the rest). Every cell is 4:5, which also holds the page still while the stills load */
+  .sg-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .sg-cell { position: relative; aspect-ratio: 4 / 5; min-width: 0; --i: 0; }
+  /* arrivals close toward the middle: the right half of each row starts off the right edge (the
+     data-reveal="left" rule in base.css starts everything off the left) and, at four columns,
+     fans outer to inner */
+  :global(.js.motion) .sg-cell[data-from2="r"]:not(.in) { transform: translate(min(300px, 36vw), 0); }
+  @media (min-width: 1100px) {
+    .sg-cell { --i: var(--i4, 0); }
+    :global(.js.motion) .sg-cell[data-from2="r"]:not(.in) { transform: translate(max(-300px, -36vw), 0); }
+    :global(.js.motion) .sg-cell[data-from4="r"]:not(.in) { transform: translate(min(300px, 36vw), 0); }
+  }
+  .sg-feat { grid-column: span 2; grid-row: span 2; }
+  /* the services group has three tiles, so its note takes the two cells left under the small pair:
+     a wide card the height of a row at four columns (two 4:5 cells and a gap side by side run about
+     8:5), a full-width band at two */
+  .sg-note { grid-column: span 2; aspect-ratio: 8 / 5; }
+  @media (min-width: 1100px) {
+    .sg-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    /* beside two rows of small tiles, the double cell takes their exact height so the grid lines
+       meet (its own 4:5 would run a quarter of a gap longer); alone across two columns below
+       1100px it keeps the ratio */
+    .sg-feat { aspect-ratio: auto; align-self: stretch; }
+  }
+  @media (min-width: 1440px) { .sg-grid { gap: 16px; } }
+
+  /* ---------- a tile ---------- */
+  /* the whole tile is the link. The picture and clip sit in a drift wrapper, the grain over them
+     (z 2, from .grain), then the scrim, then the caption; the clip-path keeps the scaled media
+     inside the corners in Safari. Until its still exists the tile shows a FRAME gradient. */
+  .sg-cell > .sg-tile {
+    position: absolute; inset: 0; display: block; overflow: clip; color: var(--paper-color);
+    background: linear-gradient(174deg, var(--gc-0), var(--gc-2) 60%, var(--gc-4));
+    border-radius: var(--r-media); clip-path: inset(0 round var(--r-media));
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* the focus ring is drawn above the media layers (an outline would paint beneath them) */
+  .sg-tile:focus-visible { outline: none; }
+  .sg-tile:focus-visible::after {
+    content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+    border-radius: var(--r-media); box-shadow: inset 0 0 0 2px var(--accent-frame);
+  }
+  .sg-drift { position: absolute; inset: 0; }
+  /* FRAME scrim from the foot; the ::after layer is the deepening when lit (opacity only). The
+     stills are bright rooms, so the scrim climbs a little higher than over darker pictures. */
+  .sg-scrim {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background: linear-gradient(to top, color-mix(in srgb, var(--frame) 84%, transparent) 0%, color-mix(in srgb, var(--frame) 30%, transparent) 40%, transparent 62%);
+  }
+  .sg-scrim::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(to top, color-mix(in srgb, var(--frame) 40%, transparent) 0%, transparent 58%);
+  }
+  .sg-feat .sg-scrim { background: linear-gradient(to top, color-mix(in srgb, var(--frame) 86%, transparent) 0%, color-mix(in srgb, var(--frame) 34%, transparent) 32%, transparent 62%); }
+  .sg-feat .sg-scrim::after { background: linear-gradient(to top, color-mix(in srgb, var(--frame) 38%, transparent) 0%, transparent 60%); }
+
+  /* the caption: number and arrow on one row, then the name, then the line */
+  .sg-cap {
+    position: absolute; z-index: 4; left: 0; right: 0; bottom: 0;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 12px;
+    padding: clamp(14px, 1.5vw, 22px);
+  }
+  .sg-feat .sg-cap { gap: 12px; padding: clamp(18px, 2.2vw, 32px); }
+  .sg-cap .sg-no { color: color-mix(in srgb, var(--paper-color) 76%, transparent); }
+  .sg-arrow { display: inline-flex; justify-self: end; color: var(--paper-color); }
+  .sg-arrow :global(svg) { display: block; }
+  .sg-name, .sg-line { grid-column: 1 / -1; }
+  .sg-name {
+    font: 300 clamp(20px, 1.6vw, 28px) / 1.08 var(--serif); letter-spacing: -0.014em;
+    text-shadow: 0 1px 12px var(--frame);
+  }
+  .sg-feat .sg-name { font-size: clamp(30px, 2.8vw, 46px); line-height: 1.02; max-width: 16ch; }
+  .sg-line { font-size: 15.5px; line-height: 1.45; color: color-mix(in srgb, var(--paper-color) 86%, transparent); max-width: 44ch; }
+  .sg-feat .sg-line { font-size: 16px; }
+  @media (max-width: 1099px) {
+    .sg-cell:not(.sg-feat) .sg-name { font-size: clamp(17px, 4.2vw, 22px); }
+    .sg-cell:not(.sg-feat) .sg-line { font-size: 14px; }
+  }
+
+  /* ---------- the note ---------- */
+  .sg-cell > .sg-more {
+    position: absolute; inset: 0; display: grid; align-content: end; gap: 14px;
+    border-radius: var(--r-media); padding: clamp(18px, 2vw, 32px);
+  }
+  .sg-cell .sg-more .label { color: color-mix(in srgb, var(--paper-color) 82%, transparent); }
+  .sg-more-line { font: 300 clamp(22px, 2vw, 32px) / 1.18 var(--serif); letter-spacing: -0.012em; max-width: 24ch; }
+  .sg-more-link {
+    display: inline-flex; align-items: center; gap: 8px; width: fit-content; min-height: 44px; margin-top: 2px;
+    font: 500 15px/1 var(--sans); letter-spacing: 0.005em; color: var(--paper-color);
+  }
+  .sg-more-link > span:first-child {
+    background: linear-gradient(var(--accent-frame), var(--accent-frame)) 0 100% / 100% 1px no-repeat; padding-bottom: 3px;
+    transition: background-size 0.3s var(--ease-out);
+  }
+  .sg-more-link:hover > span:first-child { background-size: 0% 1px; background-position: 100% 100%; }
+  @media (max-width: 759px) {
+    /* a full-width band on a phone: it sizes to its words rather than a ratio */
+    .sg-note { aspect-ratio: auto; }
+    .sg-cell > .sg-more { position: relative; gap: 10px; padding: 22px 20px; }
+    .sg-more-line { font-size: 22px; }
+    /* a half-width tile has no room for the line under the name; the scrim climbs higher so the
+       name and number sit on FRAME over bright stills */
+    .sg-cell:not(.sg-feat) .sg-line { display: none; }
+    .sg-cell:not(.sg-feat) .sg-scrim { background: linear-gradient(to top, color-mix(in srgb, var(--frame) 86%, transparent) 0%, color-mix(in srgb, var(--frame) 36%, transparent) 45%, transparent 78%); }
+  }
+  /* phones: over the brightest stills the scrim holds a little more FRAME under the words, and the
+     number reads at full PAPER */
+  @media (max-width: 640px) {
+    .sg { gap: 40px; }
+    .sg-grid { gap: 10px; }
+    .sg-cell:not(.sg-feat) .sg-scrim { background: linear-gradient(to top, color-mix(in srgb, var(--frame) 92%, transparent) 0%, color-mix(in srgb, var(--frame) 64%, transparent) 30%, color-mix(in srgb, var(--frame) 20%, transparent) 58%, transparent 80%); }
+    .sg-feat .sg-scrim { background: linear-gradient(to top, color-mix(in srgb, var(--frame) 92%, transparent) 0%, color-mix(in srgb, var(--frame) 46%, transparent) 34%, transparent 62%); }
+    .sg-cap { padding: 14px 14px 13px; gap: 6px 10px; }
+    .sg-cap .sg-no { color: color-mix(in srgb, var(--paper-color) 90%, transparent); }
+    .sg-name { text-shadow: 0 1px 14px color-mix(in srgb, var(--frame) 70%, transparent); }
+    .sg-cell:not(.sg-feat) .sg-name { font-size: clamp(17px, 4.6vw, 20px); line-height: 1.1; }
+    .sg-feat .sg-name { font-size: clamp(30px, 8.4vw, 36px); }
+    .sg-feat .sg-line { font-size: 16px; }
+  }
+
+  /* ---------- motion ---------- */
+  /* at rest a small tile keeps its line below the edge: the caption sits lower by the line's height
+     (--rise, measured by the script) and the line is out. Lit, the tile lifts on the snap spring, the
+     scrim's second layer comes in, the caption rises and the line follows a beat later; the arrow
+     nudges and the number takes the accent. Everything settles back on the settle curve. Without
+     motion (reduced motion, or no script) every tile shows as lit and nothing moves */
+  :global(.js.motion) .sg-cell > .sg-tile { transition: transform var(--t-settle) var(--spring-settle); }
+  :global(.js.motion) .sg-tile.on { transform: translate(0, -4px); transition: transform var(--t-snap) var(--spring-snap); }
+  :global(.js.motion) .sg-scrim::after { opacity: 0; transition: opacity 0.5s var(--ease); }
+  :global(.js.motion) .sg-tile.on .sg-scrim::after { opacity: 1; }
+  :global(.js.motion) .sg-cell:not(.sg-feat) .sg-cap {
+    transform: translate(0, var(--rise, 52px)); transition: transform var(--t-settle) var(--spring-settle);
+  }
+  :global(.js.motion) .sg-cell:not(.sg-feat) .sg-line {
+    opacity: 0; transform: translate(0, 8px);
+    transition: opacity 0.22s var(--ease), transform var(--t-settle) var(--spring-settle);
+  }
+  :global(.js.motion) .sg-cell:not(.sg-feat) .on .sg-cap { transform: none; transition: transform var(--t-snap) var(--spring-snap); }
+  :global(.js.motion) .sg-cell:not(.sg-feat) .on .sg-line {
+    opacity: 1; transform: none;
+    transition: opacity 0.35s var(--ease) 70ms, transform var(--t-snap) var(--spring-snap) 50ms;
+  }
+  :global(.js.motion) .sg-arrow { transition: transform var(--t-settle) var(--spring-settle); }
+  :global(.js.motion) .sg-tile.on .sg-arrow, :global(.js.motion) .sg-more-link:hover .sg-arrow {
+    transform: translate(4px, 0); transition: transform var(--t-snap) var(--spring-snap);
+  }
+  :global(.js.motion) .sg-cap .sg-no { transition: color 0.3s, transform var(--t-bounce) var(--spring-bounce); }
+  :global(.js.motion) .sg-tile.on .sg-no { color: var(--accent-frame); transform: translate(3px, 0); }
+
+  /* the drift: as a tile crosses the screen its picture slides from 3% low to 3% high, scaled so the
+     edges never show. On the inner wrapper, so it never fights the tile's lift; only where the
+     browser runs it from the scroll position (no fallback: without it the picture simply holds) */
+  @supports (animation-timeline: view()) {
+    :global(.js.motion) .sg-drift { animation: sg-drift linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+    @keyframes sg-drift {
+      from { transform: scale(1.1) translate(0, 3%); }
+      to { transform: scale(1.1) translate(0, -3%); }
+    }
+  }
+</style>
+
+<script>
+  import { finePointer, lowPower, reduceMotion } from '../scripts/env';
+  import { clipUrl } from '../scripts/media';
+  import { onMeasure, onScroll, pageTop, view } from '../scripts/scroll';
+
+  const loaded = new Promise<void>((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-sg]')) {
+    const tiles = [...root.querySelectorAll<HTMLAnchorElement>('.sg-tile')];
+
+    // with reduced motion the tiles show lit and still, and nothing below is needed
+    if (reduceMotion) continue;
+    const tileOf = (e: Event) => (e.target as HTMLElement).closest<HTMLAnchorElement>('.sg-tile');
+    let active: HTMLAnchorElement | null = null;
+
+    // a small tile's caption sits lower by its line's height while the tile is at rest; the heights
+    // are read whenever layout may have changed (never per frame), all reads before any write
+    const small = tiles.filter((t) => !t.closest('.sg-feat'));
+    onMeasure(() => {
+      const h = small.map((t) => t.querySelector<HTMLElement>('.sg-line')?.offsetHeight ?? 0);
+      small.forEach((t, k) => t.style.setProperty('--rise', `${h[k] ? h[k] + 8 : 0}px`));
+    });
+
+    // the clips: only the lit tile's, only while it is on screen, and nothing is fetched before the
+    // page has loaded so a clip never competes with the first screen. The others pause where they
+    // are. Stills alone on data saver or low-power devices
+    const motion = !lowPower;
+    const onScreen = new Set<Element>();
+    const play = () => {
+      if (!motion) return;
+      for (const t of tiles) {
+        const v = t.querySelector<HTMLVideoElement>('video[data-clip]');
+        if (!v) continue;
+        if (t === active && onScreen.has(t) && !document.hidden) {
+          if (!v.src) {
+            if (!v.dataset.wait) {
+              v.dataset.wait = '1';
+              v.addEventListener('playing', () => v.classList.add('ready'), { once: true });
+              loaded.then(() => { v.src = clipUrl(v.dataset.clip!, v.dataset.av1 !== '0'); play(); });
+            }
+            continue;
+          }
+          v.play().catch(() => {});
+        } else if (!v.paused) v.pause();
+      }
+    };
+    const seen = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) e.isIntersecting ? onScreen.add(e.target) : onScreen.delete(e.target);
+        read(view.y);
+        play();
+      },
+      { threshold: 0.15 },
+    );
+    tiles.forEach((t) => seen.observe(t));
+    document.addEventListener('visibilitychange', play);
+
+    // exactly one tile is lit at a time
+    const light = (t: HTMLAnchorElement | null) => {
+      if (t === active) return;
+      active?.classList.remove('on');
+      active = t;
+      t?.classList.add('on');
+      play();
+    };
+
+    // the reading position: of the tiles crossing the middle of the screen (between the nav and the
+    // phone bar), the one whose centre is nearest it. Where each tile sits is read when layout may
+    // have changed; while scrolling this is arithmetic only, once a frame at most, and only while
+    // any tile is on screen. A tile under the cursor or holding focus takes over until the pointer
+    // or the focus leaves the grid
+    let reading: HTMLAnchorElement | null = null, held = false, mid = 0;
+    let spots: { t: HTMLAnchorElement; top: number; mid: number; bottom: number }[] = [];
+    const read = (y: number) => {
+      if (!onScreen.size) return;
+      const line = y + mid;
+      let best: HTMLAnchorElement | null = null, near = Infinity;
+      for (const s of spots) {
+        if (s.top > line || s.bottom < line) continue;
+        const d = Math.abs(s.mid - line);
+        if (d < near) { near = d; best = s.t; }
+      }
+      // between two rows nothing crosses the line; the last one keeps
+      if (best) reading = best;
+      if (reading && !held) light(reading);
+    };
+    onMeasure(() => {
+      const nav = document.querySelector<HTMLElement>('.site-nav')?.offsetHeight ?? 76;
+      const bar = document.querySelector<HTMLElement>('.mobile-bar')?.offsetHeight ?? 0;
+      mid = Math.round(nav + (view.h - bar - nav) / 2);
+      spots = tiles.map((t) => { const top = pageTop(t), h = t.offsetHeight; return { t, top, mid: top + h / 2, bottom: top + h }; });
+      read(view.y);
+    });
+    onScroll(read);
+
+    const release = () => { held = false; if (reading) light(reading); };
+    // a mouse or trackpad: the tile under the cursor
+    if (finePointer) {
+      root.addEventListener('pointerover', (e) => { const t = tileOf(e); if (t) { held = true; light(t); } });
+      root.addEventListener('pointerleave', release);
+    }
+    // the keyboard: the focused tile (focusing scrolls the page, so it must hold against the reading position)
+    root.addEventListener('focusin', (e) => { const t = tileOf(e); if (t) { held = true; light(t); } });
+    root.addEventListener('focusout', (e) => { if (!root.contains((e as FocusEvent).relatedTarget as Node | null)) release(); });
+    // touch: the first tap lights a tile; a tap on the lit tile opens its page. The tap focuses the
+    // link before the click arrives (and focusing lights it), so the test is which tile was lit
+    // when the finger landed, not at click time
+    if (!finePointer) {
+      let litAtTouch: HTMLElement | null = null;
+      root.addEventListener('pointerdown', () => { litAtTouch = active; }, { passive: true });
+      root.addEventListener('click', (e) => {
+        const t = tileOf(e);
+        if (t && t !== litAtTouch) { e.preventDefault(); light(t); }
+      });
+    }
+  }
+</script>

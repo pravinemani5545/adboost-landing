@@ -1,12 +1,46 @@
 ---
-import Fonts from '../components/Fonts.astro';
-import '../styles/global.css';
-import '../styles/interior.css';
-import { BOOK_PATH, NAV, SISTER } from '../lib/site';
+// The home page. It alternates FRAME, PAPER and full-bleed media every screen or so; no paper run
+// longer than one list. Every line here is the site's existing copy, re-set.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import TrustStrip from '../components/home/TrustStrip.astro';
+import Numbers from '../components/home/Numbers.astro';
+import ServicesIndex from '../components/ServicesIndex.astro';
+import CreativeStrip from '../components/home/CreativeStrip.astro';
+import Standard from '../components/Standard.astro';
+import Steps from '../components/Steps.astro';
+import CaseBento from '../components/home/CaseBento.astro';
+import Voices from '../components/home/Voices.astro';
+import Faq from '../components/Faq.astro';
+import Closing from '../components/Closing.astro';
+import Btn from '../components/Btn.astro';
+import { CTA } from '../lib/site';
 import { organizationNode } from '../lib/schema';
 
-
 const SITE = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+
+// The FAQ is written once: the rows show it (answers may link), the FAQPage schema reads the same
+// words with the links taken out, so the two can never drift apart.
+const faq = [
+  {
+    q: 'How is AdBoost different from other agencies?',
+    a: 'We’re a digital performance marketing agency that only works with health, <a href="/industries/telehealth/">telehealth</a>, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.',
+  },
+  {
+    q: 'Do you have experience with compliant health advertising?',
+    a: 'Yes. Every account is reviewed against <a href="/blog/glp1-advertising-compliance-2026/">Meta, Google, and TikTok health-vertical policies</a> before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.',
+  },
+  {
+    q: 'Do you create ad creatives too?',
+    a: 'Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get <a href="/blog/health-ad-creative-rejected-fix/">20+ new creative variants per month</a>, indexed against winning angles in our library.',
+  },
+  {
+    q: 'When can I expect results?',
+    a: 'Most partners see <a href="/blog/telehealth-cac-benchmarks-2026/">directional movement on CAC or ROAS</a> within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.',
+  },
+];
+const plain = (html: string) => html.replace(/<[^>]+>/g, '');
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -22,948 +56,208 @@ const jsonLd = {
     },
     {
       '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'How is AdBoost different from other agencies?',
-          acceptedAnswer: { '@type': 'Answer', text: 'We’re a digital performance marketing agency that only works with health, telehealth, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.' },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you have experience with compliant health advertising?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Yes. Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.' },
-        },
-        {
-          '@type': 'Question',
-          name: 'Do you create ad creatives too?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get 20+ new creative variants per month, indexed against winning angles in our library.' },
-        },
-        {
-          '@type': 'Question',
-          name: 'When can I expect results?',
-          acceptedAnswer: { '@type': 'Answer', text: 'Most partners see directional movement on CAC or ROAS within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.' },
-        },
-      ],
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: plain(f.a) } })),
     },
   ],
 };
+
+const logos = [
+  { src: '/logos/adidas.webp', name: 'adidas', w: 136, h: 100 },
+  { src: '/logos/jnj.webp', name: 'Johnson & Johnson', w: 307, h: 80 },
+  { src: '/logos/alveos.webp', name: 'alveos', w: 290, h: 70 },
+  { src: '/logos/liv.webp', name: 'Liv', w: 75, h: 90, tile: true },
+  { src: '/logos/fitbiomics.webp', name: 'FITBIOMICS', w: 430, h: 70 },
+  { src: '/logos/nectar.webp', name: 'Nectar', w: 180, h: 90 },
+  { src: '/logos/undefined-health.webp', name: 'Undefined Health', w: 337, h: 70 },
+];
+const ads = ['ozempic', 'alveos', 'nectar', 'vnella', 'limitless', 'mentaid', 'sweating', 'cabo'].map((n) => `/ads/${n}.webp`);
 ---
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Healthcare Marketing Agency for GLP-1 & Telehealth | AdBoost</title>
-<meta name="description" content="Performance marketing agency built only for GLP-1, telehealth, and supplement brands. Lower CAC and scale spend profitably, without compliance landmines." />
-<meta name="theme-color" content="#ffffff" />
-<meta name="msvalidate.01" content="3FBFCB25924FCFDB29CB3D608918D577" />
-<meta name="msvalidate.01" content="B5351106503BCB2A44F89DA49D24780C" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="AdBoost Health, Growth Marketing for Health Brands" />
-<meta property="og:description" content="Lower CAC, improve LTV, and scale paid, without compliance landmines. 71+ founders served. $153M+ tracked." />
-<meta property="og:site_name" content="AdBoost Health" />
-<meta property="og:image" content={`${SITE}/og/og-home.png`} />
-<meta property="og:image:alt" content="AdBoost Health, performance marketing for health brands" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content={`${SITE}/og/og-home.png`} />
-<meta name="twitter:title" content="AdBoost Health, Growth Marketing for Health Brands" />
-<meta name="twitter:description" content="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked." />
-<link rel="canonical" href={`${SITE}/`} />
-<meta property="og:url" content={`${SITE}/`} />
-<link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${SITE}/rss.xml`} />
-<link rel="sitemap" href="/sitemap-index.xml" />
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-<Fonts legacy />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script defer src="https://admin.adboost.health/t.js"></script>
+<BaseLayout
+  title="Healthcare Marketing Agency for GLP-1 & Telehealth | AdBoost"
+  description="Performance marketing agency built only for GLP-1, telehealth, and supplement brands. Lower CAC and scale spend profitably, without compliance landmines."
+  canonicalPath="/"
+  ogTitle="AdBoost Health, Growth Marketing for Health Brands"
+  ogDescription="Lower CAC, improve LTV, and scale paid, without compliance landmines. 71+ founders served. $153M+ tracked."
+  twitterDescription="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked."
+  ogImageAlt="AdBoost Health, performance marketing for health brands"
+  jsonLd={jsonLd}
+  nav="media"
+  system
+>
+  <Fragment slot="head">
+    <meta name="msvalidate.01" content="3FBFCB25924FCFDB29CB3D608918D577" />
+    <meta name="msvalidate.01" content="B5351106503BCB2A44F89DA49D24780C" />
+  </Fragment>
+
+  <Hero
+    lines={['Growth marketing for', 'fast-growing health brands.']}
+    sub="A healthcare marketing agency for health and wellness brands. We help you acquire more customers profitably and increase retention through high-converting ads, funnels, and creative strategy, without the compliance landmines."
+    support="Set up in 5 days. Results in 31."
+    cta={{ label: 'Book a free strategy call', href: CTA.href }}
+    secondary={{ label: 'See how our 5-day process works', href: '#process' }}
+  />
+
+  <TrustStrip fact="Trusted by 71+ health founders" logos={logos} />
+
+  <Numbers
+    label="AdBoost Health in numbers"
+    items={[
+      { value: 71, suffix: '+', read: 'More than 71 founders served.', title: 'Founders served', body: 'Health, telehealth, GLP-1, supplement and wellness brands.' },
+      { value: 153, prefix: '$', suffix: 'M+', read: 'More than 153 million dollars in tracked revenue.', title: 'Tracked revenue', body: 'Across the health and wellness brands and apps we have helped grow.' },
+      { value: 24, suffix: '%', read: '24 percent lower CAC, on average, in the first 30 days.', title: 'Lower CAC', body: 'What our partners average in the first 30 days.' },
+    ]}
+  />
+
+  <section class="tone-paper section svc" data-nav="paper" data-dots id="services" aria-labelledby="services-h">
+    <div class="dots" aria-hidden="true"><div class="dots-clip"><div class="dots-spot"></div></div></div>
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="label muted" data-reveal>What we do</p>
+        <h2 id="services-h" data-lines>One compliant acquisition system, built for health.</h2>
+      </header>
+      <div class="duet">
+        <p data-reveal>Instead of disconnected tactics, we offer a unified performance system. By bringing together paid media, creative strategy, and CRO, we help health-adjacent brands acquire customers more efficiently and drive a higher ROAS.</p>
+        <p data-reveal style="--i:1">We only grow health brands. Every vertical has its own economics, ad-policy landmines, and definition of a good CAC.</p>
+      </div>
+      <ServicesIndex more={{ label: 'Free strategy call', line: 'Meet a senior strategist. Free live audit. A plan you keep either way.', cta: 'Book a free strategy call' }} />
+    </div>
+  </section>
+
+  <CreativeStrip
+    label="Creative"
+    heading="Creative built for the *scroll*, and the rules of every health platform."
+    note={'2,400+ <a href="/services/creative/">static & motion creatives</a> shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.'}
+    ads={ads}
+  />
+
+  <section class="tone-paper section" data-nav="paper" aria-label="Built for health brands">
+    <div class="wrap">
+      <Standard
+        label="Why partners love us"
+        body="The only categories we work in are the ones we’ve already scaled."
+        items={[
+          { title: 'Compliance-first creative.', body: 'Pre-approved against health-vertical policies, so launches don’t get yanked.' },
+          { title: 'A senior growth partner, not a junior pod.', body: 'Paired with strategists who have scaled health brands past $20M.' },
+          { title: '20+ new creatives shipped every month.', body: 'Static, motion, and UGC, produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.' },
+        ]}
+        support="Built for health brands. Designed to scale."
+      />
+    </div>
+  </section>
+
+  <section class="tone-frame section how" data-nav="frame" id="process" aria-labelledby="process-h">
+    <div class="wrap how-grid">
+      <header class="how-head">
+        <p class="label muted" data-reveal>How it works</p>
+        <h2 id="process-h" data-reveal>Set up in 5 days. <em>Results</em> in 31.</h2>
+        <p class="lede" data-reveal style="--i:1">No 90-day onboarding. No “strategy decks.” Health brands can’t afford to lose a quarter to a slow agency, neither can we.</p>
+        <div data-reveal style="--i:2"><Btn href={CTA.href}>Book a free strategy call</Btn></div>
+      </header>
+      <Steps
+        class="how-steps"
+        items={[
+          { title: 'Book a free strategy call', meta: 'Day 0–1', body: 'We pull your account, audit your spend, and walk you through where the real growth lives, before you pay a dollar.' },
+          { title: 'Fast audit & onboarding', meta: 'Day 2–5', body: 'We map your channels, creative library, and offer architecture in 5 days. You leave with a punch list of fixes, ranked by lift.' },
+          { title: 'Build the winning system', meta: 'Day 6–31', body: 'Clean creative testing framework, <a href="/services/paid-media/">scalable spend bands</a>, weekly iteration. The system compounds, every week beats the last.' },
+        ]}
+      />
+    </div>
+  </section>
+
+  <CaseBento
+    label="Real results"
+    heading="Numbers from *real* partners."
+    note="Snapshots from the last 12 months. Brand names anonymized, happy to walk through the underlying account on a call."
+    cases={[
+      {
+        brand: 'NutriCore', category: 'GLP-1 support',
+        title: 'Scaled paid social 6× while halving CAC.',
+        body: 'From a single-channel test to a multi-platform system shipping 25+ creatives a week.',
+        stats: [{ label: 'ROAS', value: '0.8× → 3.5×' }, { label: 'CAC', value: '−64%' }, { label: 'Time', value: '60 days' }],
+      },
+      {
+        brand: 'Vitaly', category: 'Daily supps',
+        title: '40% CAC reduction inside 14 days.',
+        body: 'UGC creative refactor + LP redesign + offer test on day 3. Held the new floor for 6 months.',
+        stats: [{ label: 'ROAS', value: '1.2× → 2.8×' }, { label: 'CAC', value: '−40%' }, { label: 'Time', value: '14 days' }],
+      },
+      {
+        brand: 'Pulse Rx', category: 'Health app',
+        title: '$0 → $1.6M in 90 days.',
+        body: 'Built the full acquisition engine from a cold start: positioning, creative system, paid social, lifecycle.',
+        stats: [{ label: 'Revenue', value: '$1.6M' }, { label: 'LTV', value: '+32%' }, { label: 'CAC · 90d', value: '−80%' }],
+      },
+    ]}
+  />
+
+  <Voices
+    label="Real stories, real results"
+    spotlight={{
+      quote: 'AdBoost helped us launch, scale, and expand into the right channels, driving stronger acquisition and retention as we grew. We went from 0.8 ROAS to 3.5 ROAS within 60 days, and it’s never gone back.',
+      name: 'Edis Zhubi',
+      role: 'CEO @ Pontem',
+      photo: '/people/edis.webp',
+      figure: { label: 'CAC · last 90d', value: '−64%' },
+    }}
+    quotes={[
+      { quote: 'Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome.', name: 'Vincent Siva', role: 'Co-founder @ V/X' },
+      { quote: 'They reduced CAC by 40% in the first two weeks. The team is specialized for our industry in a way no one else is.', name: 'Abi J', role: 'Growth @ Boost' },
+      { quote: 'Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy.', name: 'Oliver Obolgogiani', role: 'Co-founder @ Alveos' },
+      { quote: 'They know their stuff. Keyword strategy, ad copy, optimization, every move backed by data, every week.', name: 'Claire May Von Doelln', role: 'Director @ Rainfactory' },
+    ]}
+  />
+
+  <section class="tone-paper section faq-sec" data-nav="paper" id="faq" aria-labelledby="faq-h">
+    <div class="wrap faq-grid">
+      <header class="faq-head">
+        <p class="label muted" data-reveal>FAQ</p>
+        <h2 id="faq-h" data-reveal>Answers to popular <em>questions</em>.</h2>
+        <p class="faq-intro" data-reveal style="--i:1">If you’re <a href="/compare/">vetting agencies</a> right now, these are the questions we hear before every kickoff.</p>
+      </header>
+      <Faq items={faq} />
+    </div>
+  </section>
+
+  <Closing />
+</BaseLayout>
+
 <style>
-  .tlink, .ans-inner a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
-  .tlink:hover, .ans-inner a:hover { color: #0040c2; }
+  /* the tiles carry their own weight, so this band needs less air than a full section */
+  .svc { padding-block: calc(var(--section) * 0.75) calc(var(--section) * 0.62); }
+  .sec-head { display: grid; gap: 20px; max-width: 760px; }
+  /* the two short paragraphs under the heading, set in uneven columns beneath one hairline */
+  .duet {
+    display: grid; grid-template-columns: minmax(0, 600px) minmax(0, 460px); justify-content: space-between;
+    gap: 24px clamp(40px, 8vw, 180px); margin: clamp(40px, 5vw, 72px) 0 56px;
+    padding-top: clamp(28px, 3vw, 44px); border-top: 1px solid var(--line); color: var(--fg-2);
+  }
+  .duet p { font-size: clamp(16.5px, 1.2vw, 18px); line-height: 1.55; }
+  @media (max-width: 760px) { .duet { grid-template-columns: 1fr; margin: 40px 0 44px; padding-top: 28px; } }
+  @media (max-width: 640px) {
+    .sec-head { gap: 14px; }
+    .duet { gap: 14px; margin: 28px 0 36px; padding-top: 22px; }
+    .duet p { font-size: 16.5px; }
+  }
+
+  /* how it works: the promise and its button on the left, the three steps on their rule beside it */
+  .how-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 6vw, 120px); align-items: start; }
+  .how-head { display: grid; gap: 22px; justify-items: start; position: sticky; top: calc(var(--nav-h) + 32px); }
+  .how-head h2 { max-width: 12ch; }
+  .how-head h2 em, .faq-head h2 em { font-style: italic; }
+  .how-steps { --size: clamp(24px, 2.2vw, 32px); padding-top: 8px; }
+  @media (max-width: 899px) {
+    .how-grid { grid-template-columns: 1fr; }
+    .how-head { position: static; }
+  }
+
+  /* FAQ: the heading holds its place on the left while the rows run beside it */
+  .faq-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(36px, 6vw, 120px); align-items: start; }
+  .faq-head { display: grid; gap: 20px; position: sticky; top: calc(var(--nav-h) + 32px); }
+  .faq-intro { color: var(--fg-2); max-width: 36ch; }
+  .faq-intro a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  @media (max-width: 899px) {
+    .faq-grid { grid-template-columns: 1fr; }
+    .faq-head { position: static; }
+  }
 </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav class="nav" id="nav">
-  <div class="container nav-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
-    </a>
-    <div class="nav-links" id="navLinks">
-      {NAV.map((item) => (
-        item.children ? (
-          <div class="nav-group">
-            <a href={item.href} class="nav-top">{item.label}
-              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <div class="nav-menu">
-              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
-            </div>
-          </div>
-        ) : (
-          <a href={item.href} class={item.external ? 'nav-top nav-ext' : 'nav-top'} {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && <Fragment set:html={`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:4px;opacity:.55;vertical-align:-1px"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />}</a>
-        )
-      ))}
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <a class="btn btn-primary" href={BOOK_PATH}>
-        Book a call
-        <span class="chev">
-          <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
-      <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-  </div>
-</nav>
-<div class="mnav" id="mnav">
-  {NAV.map((item) => (
-    <>
-      <a href={item.href} class="mnav-top" {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && ' ↗'}</a>
-      {item.children && <div class="mnav-sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
-    </>
-  ))}
-</div>
-
-<!-- HERO -->
-<header class="hero">
-  <span class="grid-bg"></span>
-  <div class="container hero-grid">
-    <div>
-      <div class="reveal">
-        <span class="pill">
-          <span class="pdot">
-            <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </span>
-          <span>Set up in <b>5 days</b> · Results in <b>31</b></span>
-        </span>
-      </div>
-      <h1>
-        Growth marketing<br />
-        for <span class="serif">fast-growing</span><br />
-        <span class="underline">health</span> brands.
-      </h1>
-      <p class="lede">A healthcare marketing agency for health and wellness brands. We help you acquire more customers profitably and increase retention through high-converting ads, funnels, and creative strategy, without the compliance landmines.</p>
-      <div class="ctas reveal d3">
-        <a class="btn btn-primary btn-lg" href={BOOK_PATH}>
-          Book a free strategy call
-          <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
-        <a class="btn btn-ghost btn-lg" href="#process">See how our 5-day process works</a>
-      </div>
-      <div class="hero-perks reveal d3">
-        <span>Meet a senior strategist</span>
-        <span>Free live audit</span>
-        <span>Plan you keep either way</span>
-      </div>
-      <div class="meta reveal d3">
-        <div class="avatars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-        <span>Trusted by <b style="color:var(--ink)">71+ founders</b> · 4.9 / 5 average rating · <b style="color:var(--ink)">limited onboarding</b> each month</span>
-      </div>
-    </div>
-
-    <div class="reveal d2">
-      <div class="ops" id="ops">
-        <div class="ops-head">
-          <div class="title">
-            <span class="live-dot"></span>
-            <span>Performance overview · <span class="mono" style="color:var(--mute);font-size:12px">live</span></span>
-          </div>
-          <span class="time" id="opsTime">10:47:21 AM</span>
-        </div>
-        <div class="ops-colheads">
-          <div></div>
-          <div><b>CAC</b><small>vs. prior 30 days</small></div>
-          <div><b>ROAS</b><small>vs. prior 30 days</small></div>
-          <div class="ch-trend">90 DAY TREND</div>
-        </div>
-
-        <div class="ops-row">
-          <div class="opclient">
-            <div class="av a1" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 3.5l6 6-11 11-6-6 11-11z M5 13l6 6"/></svg>
-            </div>
-            <div><div class="nm">GLP-1 Brand</div><div class="cat">Subscription</div></div>
-          </div>
-          <div class="met">$86.90 <span class="delta down">↓ 22%</span></div>
-          <div class="met">2.1× <span class="delta up">↑ 18%</span></div>
-          <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,17 L4,15 L8,19 L12,16 L16,18 L20,15 L24,17 L28,19 L32,16 L36,18 L40,15 L44,17 L48,14 L52,17 L56,13 L60,15 L64,12 L68,14 L72,11 L76,13 L80,10 L84,12 L88,8 L92,11 L96,7 L100,9 L104,6 L108,8 L112,5 L116,7 L120,5" stroke="#8b5cf6" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div class="ops-row">
-          <div class="opclient">
-            <div class="av a2" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            </div>
-            <div><div class="nm">Telehealth Brand</div><div class="cat">Patient Acquisition</div></div>
-          </div>
-          <div class="met">$32.10 <span class="delta down">↓ 21%</span></div>
-          <div class="met">1.7× <span class="delta up">↑ 17%</span></div>
-          <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,22 L4,24 L8,21 L12,23 L16,20 L20,18 L24,22 L28,19 L32,21 L36,17 L40,15 L44,18 L48,13 L52,15 L56,11 L60,13 L64,16 L68,12 L72,9 L76,11 L80,14 L84,10 L88,7 L92,9 L96,12 L100,8 L104,5 L108,7 L112,9 L116,5 L120,7" stroke="#16a34a" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div class="ops-row">
-          <div class="opclient">
-            <div class="av a3" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="#fff"><path d="M12 3.5C9 8 6.5 11.5 6.5 14.5a5.5 5.5 0 0011 0c0-3-2.5-6.5-5.5-11z"/></svg>
-            </div>
-            <div><div class="nm">Supplement Brand</div><div class="cat">DTC</div></div>
-          </div>
-          <div class="met">$18.90 <span class="delta down">↓ 28%</span></div>
-          <div class="met">2.3× <span class="delta up">↑ 31%</span></div>
-          <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,18 L4,16 L8,18 L12,14 L16,16 L20,13 L24,15 L28,17 L32,19 L36,21 L40,20 L44,22 L48,19 L52,17 L56,14 L60,16 L64,12 L68,10 L72,12 L76,8 L80,10 L84,6 L88,8 L92,5 L96,7 L100,4 L104,6 L108,3 L112,5 L116,3 L120,3" stroke="#f59e0b" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div class="ops-row">
-          <div class="opclient">
-            <div class="av a4" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="7" y="3" width="10" height="18" rx="2"/><circle cx="12" cy="18.2" r=".9" fill="#fff" stroke="none"/></svg>
-            </div>
-            <div><div class="nm">Health App</div><div class="cat">Mobile</div></div>
-          </div>
-          <div class="met">$1.85 <span class="delta down">↓ 34%</span></div>
-          <div class="met">5.3× <span class="delta up">↑ 42%</span></div>
-          <div class="spark">
-            <svg viewBox="0 0 120 36" preserveAspectRatio="none"><path class="drawline" d="M0,28 L4,30 L8,27 L12,29 L16,28 L20,30 L24,27 L28,29 L32,26 L36,28 L40,25 L44,27 L48,24 L52,22 L56,19 L60,16 L64,12 L68,15 L72,9 L76,7 L80,10 L84,5 L88,7 L92,3 L96,5 L100,2 L104,4 L108,2 L112,3 L116,1 L120,2" stroke="#0057ff" stroke-width="1.6" fill="none" stroke-linejoin="round"/></svg>
-          </div>
-        </div>
-
-        <div class="ops-stats">
-          <div class="ops-stat">
-            <span class="ico" style="background:rgba(0,87,255,.1);color:#0057ff">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M5 21a7 7 0 0114 0M12 12a4 4 0 100-8 4 4 0 000 8z"/></svg>
-            </span>
-            <div class="kv"><span class="v">71+</span><span class="l">Founders served</span></div>
-          </div>
-          <div class="ops-stat">
-            <span class="ico" style="background:rgba(22,163,74,.12);color:#16a34a">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v18M16 7H10a3 3 0 100 6h4a3 3 0 110 6H8"/></svg>
-            </span>
-            <div class="kv"><span class="v">$<span id="opsRev">12.4M+</span></span><span class="l">Tracked revenue this quarter</span></div>
-          </div>
-          <div class="ops-stat">
-            <span class="ico" style="background:rgba(139,92,246,.12);color:#8b5cf6">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21a7 7 0 0114 0M12 12a4 4 0 100-8 4 4 0 000 8zM18 4l3 3-3 3M21 7h-6"/></svg>
-            </span>
-            <div class="kv"><span class="v">22%</span><span class="l">Avg. increase in returning customer rate</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
-
-<!-- TRUST -->
-<section class="trust reveal">
-  <div class="container trust-inner">
-    <div class="trust-label">
-      <div class="big">Trusted by <b>71+ health founders</b></div>
-      <div class="sub">FROM PRE-SEED TO PRE-BACKED</div>
-    </div>
-    <div class="marquee-wrap">
-      <div class="marquee" id="marquee">
-        <span class="logo" data-tall><img src="/logos/adidas.webp" alt="adidas" width="136" height="100" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/jnj.webp" alt="Johnson &amp; Johnson" width="307" height="80" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/alveos.webp" alt="alveos" width="290" height="70" loading="lazy" decoding="async" /></span>
-        <span class="logo logo-tile"><img src="/logos/liv.webp" alt="Liv" width="75" height="90" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/fitbiomics.webp" alt="FITBIOMICS" width="430" height="70" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/nectar.webp" alt="Nectar" width="180" height="90" loading="lazy" decoding="async" /></span>
-        <span class="logo"><img src="/logos/undefined-health.webp" alt="Undefined Health" width="337" height="70" loading="lazy" decoding="async" /></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CREATIVE STRIP -->
-<section class="creative-strip">
-  <div class="container">
-    <div class="strip-head reveal">
-      <h2>Creative built for the <span class="serif" style="color:var(--blue)">scroll</span>, and the rules of every health platform.</h2>
-      <div class="right">2,400+ <a class="tlink" href="/services/creative/">static & motion creatives</a> shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.</div>
-    </div>
-    <div class="phone-rail-wrap reveal d1">
-    <div class="phone-rail" id="phoneRail">
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/ozempic.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/alveos.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/nectar.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/vnella.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/limitless.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/mentaid.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/sweating.webp')"></div></div></div>
-      <div class="ph"><div class="scr"><span class="notch"></span><div class="ad" style="background-image:url('/ads/cabo.webp')"></div></div></div>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- BENTO -->
-<section id="why" class="bento">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow"><span class="dot"></span>WHY PARTNERS LOVE US</span>
-      <h2>Built for health brands. <span class="serif">Designed to scale.</span></h2>
-      <p>Five things every founder gets from our healthcare marketing services on day one, and the reason our partners average <b style="color:var(--ink)">24% lower CAC</b> in the first 30 days.</p>
-    </div>
-
-    <div class="bento-grid">
-      <!-- B1 specialized -->
-      <div class="bcard b1 reveal">
-        <span class="tag">01 · SPECIALIZED</span>
-        <div class="vis">
-          <a class="cat" href="/industries/glp-1-weight-loss/" style="animation-delay:.0s"><span class="ico" style="background:linear-gradient(135deg,#3b7bff,#0040c2)">G</span>GLP-1 & weight care<span class="meta">12 brands</span></a>
-          <span class="cat" style="animation-delay:.1s"><span class="ico" style="background:linear-gradient(135deg,#16a34a,#0a6b34)">S</span>Supplements & DTC<span class="meta">22 brands</span></span>
-          <span class="cat" style="animation-delay:.2s"><span class="ico" style="background:linear-gradient(135deg,#f59e0b,#c47200)">A</span>Health apps<span class="meta">8 brands</span></span>
-          <span class="cat" style="animation-delay:.3s"><span class="ico" style="background:linear-gradient(135deg,#8b5cf6,#5b21b6)">M</span>Mental health<span class="meta">6 brands</span></span>
-          <span class="cat" style="animation-delay:.4s"><span class="ico" style="background:linear-gradient(135deg,#06b6d4,#0e7490)">F</span>Fitness & recovery<span class="meta">9 brands</span></span>
-          <span class="cat cat-more" style="animation-delay:.5s"><span class="ico" aria-hidden="true">+</span>And 6 more<span class="meta">verticals</span></span>
-        </div>
-        <div class="body">
-          <h3>The only categories we work in are the ones we've already scaled.</h3>
-          <p>We’re a health and wellness marketing agency, and we don’t work outside health: telehealth marketing, GLP-1 and supplements are all we do. That’s why we know every Meta health policy by heart, and why we ship faster than a generalist agency ever could.</p>
-        </div>
-      </div>
-
-      <!-- B2 senior partner -->
-      <div class="bcard b2 reveal d1">
-        <span class="tag">02 · YOUR TEAM</span>
-        <div class="vis">
-          <div class="partner">
-            <div class="top">
-              <div class="pv">PA</div>
-              <div><div class="who">Pira Ahilan</div><div class="role">CO-FOUNDER</div></div>
-            </div>
-            <div class="msg">New angle live tonight, should pull CAC under $38 by Friday ✦</div>
-            <div class="status"><span class="pulse"></span>Replies in 12m on avg.</div>
-          </div>
-        </div>
-        <div class="body">
-          <h3>A senior growth partner, not a junior pod.</h3>
-          <p>Paired with strategists who have scaled health brands past $20M.</p>
-        </div>
-      </div>
-
-      <!-- B3 compliance -->
-      <div class="bcard b3 reveal d2">
-        <span class="tag">03 · COMPLIANT</span>
-        <div class="vis">
-          <div class="shield-wrap">
-            <div class="ch-rules left">
-              <span class="r">GLP-1 claims</span>
-              <span class="r">Before/after</span>
-              <span class="r">Rx language</span>
-            </div>
-            <div class="shield">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
-            <div class="ch-rules right">
-              <span class="r">HIPAA-aware</span>
-              <span class="r">FDA-safe copy</span>
-              <span class="r">FTC review</span>
-            </div>
-          </div>
-        </div>
-        <div class="body">
-          <h3>Compliance-first creative.</h3>
-          <p>Pre-approved against health-vertical policies, so launches don’t get yanked.</p>
-        </div>
-      </div>
-
-      <!-- B4 creative engine -->
-      <div class="bcard b4 reveal d1">
-        <div class="body">
-          <span class="tag">04 · CREATIVE ENGINE</span>
-          <h3>20+ new creatives shipped every month.</h3>
-          <p>Static, motion, and UGC, produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.</p>
-          <div style="display:flex;gap:24px;margin-top:18px;flex-wrap:wrap">
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">CREATIVES SHIPPED · ALL-TIME</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">8,416</div></div>
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">WIN RATE</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">38%</div></div>
-            <div><div class="mono" style="font-size:11px;color:#9aa0ac;letter-spacing:.06em">UGC CREATORS</div><div style="font-size:22px;font-weight:500;letter-spacing:-.02em;margin-top:2px">140+</div></div>
-          </div>
-        </div>
-        <div class="vis">
-          <div class="tile" style="background-image:url('/ads/ozempic.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/alveos.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/nectar.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/vnella.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/limitless.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/mentaid.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/sweating.webp')"></div>
-          <div class="tile" style="background-image:url('/ads/cabo.webp')"></div>
-        </div>
-      </div>
-
-      <!-- B5 compounding system -->
-      <div class="bcard b5 reveal">
-        <span class="tag">05 · COMPOUNDING</span>
-        <div class="vis">
-          <svg viewBox="0 0 600 220" preserveAspectRatio="xMidYMid slice">
-            <defs>
-              <linearGradient id="g5" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0%" stop-color="#0057ff" stop-opacity=".24"/>
-                <stop offset="100%" stop-color="#0057ff" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <g stroke="#e5e7ee" stroke-width=".7">
-              <line x1="0" x2="600" y1="50" y2="50"/>
-              <line x1="0" x2="600" y1="100" y2="100"/>
-              <line x1="0" x2="600" y1="150" y2="150"/>
-            </g>
-            <path id="b5Line" class="drawline" d="M0,178 C60,170 120,166 180,158 S300,128 375,102 480,52 600,22" fill="none" stroke="#0057ff" stroke-width="2.2" stroke-linecap="round"/>
-            <path d="M0,178 C60,170 120,166 180,158 S300,128 375,102 480,52 600,22 L600,220 L0,220 Z" fill="url(#g5)"/>
-            <circle cx="375" cy="102" r="4.5" fill="#0057ff" stroke="#fff" stroke-width="2.5"/>
-            <g transform="translate(388 78)">
-              <rect width="120" height="30" rx="8" fill="#fff" stroke="#e5e7ee" filter="url(#b5shadow)"/>
-              <text x="12" y="13" font-family="Geist Mono" font-size="9" fill="#6b6f7a" letter-spacing="0.5">DAY 31</text>
-              <text x="12" y="25" font-family="Geist" font-size="13" font-weight="600" fill="#0a0a0f">$182k tracked</text>
-            </g>
-            <defs>
-              <filter id="b5shadow" x="-10%" y="-30%" width="120%" height="170%">
-                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0a0a0f" flood-opacity="0.08"/>
-              </filter>
-            </defs>
-          </svg>
-        </div>
-        <div class="body">
-          <h3>A system that compounds while you sleep.</h3>
-          <p>Tested creative library, optimized landers, and clean attribution, all working in lockstep, week after week.</p>
-        </div>
-      </div>
-
-      <!-- B6 conversion lift -->
-      <div class="bcard b6 reveal d1">
-        <span class="tag">06 · CONVERSION</span>
-        <div class="vis">
-          <div class="meter">
-            <svg viewBox="0 0 240 240" width="200" height="200">
-              <circle cx="120" cy="120" r="100" stroke="#eef0f4" stroke-width="14" fill="none"/>
-              <circle id="meterRing" cx="120" cy="120" r="100" stroke="#0057ff" stroke-width="14" fill="none" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100"/>
-            </svg>
-            <div class="num"><div>
-              <strong id="meterNum">0%</strong>
-              <span>AVG LANDER LIFT<br />vs. baseline</span>
-            </div></div>
-          </div>
-        </div>
-        <div class="body">
-          <h3>Every dollar lands somewhere it converts.</h3>
-          <p>We A/B test landers and rewrite hooks weekly so traffic always finds its highest-converting offer.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CASE STUDIES -->
-<section id="results" class="cases">
-  <div class="container">
-    <div class="cases-head reveal">
-      <div>
-        <span class="eyebrow"><span class="dot"></span>REAL RESULTS</span>
-        <h2>Numbers from <span class="serif">real</span> partners.</h2>
-      </div>
-      <div class="r">Snapshots from the last 12 months. Brand names anonymized, happy to walk through the underlying account on a call.</div>
-    </div>
-    <div class="case-grid">
-
-      <div class="ccard reveal">
-        <div class="vis v1">
-          <span class="brandlogo">NutriCore</span>
-          <span class="cat">GLP-1 SUPPORT</span>
-          <div class="chartmini">
-            <svg viewBox="0 0 400 90" preserveAspectRatio="none">
-              <defs><linearGradient id="cg1" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
-              <path d="M0,70 C40,68 80,60 130,55 S200,40 250,30 330,12 400,4 L400,90 L0,90Z" fill="url(#cg1)"/>
-              <path class="drawline" d="M0,70 C40,68 80,60 130,55 S200,40 250,30 330,12 400,4" stroke="#fff" stroke-width="1.6" fill="none"/>
-            </svg>
-          </div>
-        </div>
-        <div class="body">
-          <h3>Scaled paid social 6× while halving CAC.</h3>
-          <p>From a single-channel test to a multi-platform system shipping 25+ creatives a week.</p>
-        </div>
-        <div class="stats">
-          <div class="s"><div class="l">ROAS</div><div class="v">0.8× → <span class="blue">3.5×</span></div></div>
-          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−64%</span></div></div>
-          <div class="s"><div class="l">TIME</div><div class="v">60 days</div></div>
-        </div>
-      </div>
-
-      <div class="ccard reveal d1">
-        <div class="vis v2">
-          <span class="brandlogo">Vitaly</span>
-          <span class="cat">DAILY SUPPS</span>
-          <div class="chartmini">
-            <svg viewBox="0 0 400 90" preserveAspectRatio="none">
-              <defs><linearGradient id="cg2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
-              <path d="M0,75 C40,70 80,72 120,60 S200,42 250,35 320,18 400,8 L400,90 L0,90Z" fill="url(#cg2)"/>
-              <path class="drawline" d="M0,75 C40,70 80,72 120,60 S200,42 250,35 320,18 400,8" stroke="#fff" stroke-width="1.6" fill="none"/>
-            </svg>
-          </div>
-        </div>
-        <div class="body">
-          <h3>40% CAC reduction inside 14 days.</h3>
-          <p>UGC creative refactor + LP redesign + offer test on day 3. Held the new floor for 6 months.</p>
-        </div>
-        <div class="stats">
-          <div class="s"><div class="l">ROAS</div><div class="v">1.2× → <span class="blue">2.8×</span></div></div>
-          <div class="s"><div class="l">CAC</div><div class="v"><span class="green">−40%</span></div></div>
-          <div class="s"><div class="l">TIME</div><div class="v">14 days</div></div>
-        </div>
-      </div>
-
-      <div class="ccard reveal d2">
-        <div class="vis v3">
-          <span class="brandlogo">Pulse Rx</span>
-          <span class="cat">HEALTH APP</span>
-          <div class="chartmini">
-            <svg viewBox="0 0 400 90" preserveAspectRatio="none">
-              <defs><linearGradient id="cg3" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
-              <path d="M0,72 C40,70 80,55 130,52 S200,32 260,24 330,10 400,2 L400,90 L0,90Z" fill="url(#cg3)"/>
-              <path class="drawline" d="M0,72 C40,70 80,55 130,52 S200,32 260,24 330,10 400,2" stroke="#fff" stroke-width="1.6" fill="none"/>
-            </svg>
-          </div>
-        </div>
-        <div class="body">
-          <h3>$0 → $1.6M in 90 days.</h3>
-          <p>Built the full acquisition engine from a cold start: positioning, creative system, paid social, lifecycle.</p>
-        </div>
-        <div class="stats">
-          <div class="s"><div class="l">REVENUE</div><div class="v"><span class="blue">$1.6M</span></div></div>
-          <div class="s"><div class="l">LTV</div><div class="v">+<span class="blue">32%</span></div></div>
-          <div class="s"><div class="l">CAC · 90d</div><div class="v"><span class="green">−80%</span></div></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section id="process" class="process">
-  <div class="container">
-    <div class="process-grid">
-      <div class="process-left reveal">
-        <span class="eyebrow"><span class="dot"></span>HOW IT WORKS</span>
-        <h2>Set up in 5 days.<span class="serif">Results in 31.</span></h2>
-        <p>No 90-day onboarding. No “strategy decks.” Health brands can’t afford to lose a quarter to a slow agency, neither can we.</p>
-        <div class="stamps">
-          <span class="stamp">5-DAY SETUP</span>
-          <span class="stamp">DAILY SLACK</span>
-          <span class="stamp">WEEKLY SHIPS</span>
-          <span class="stamp">NO POD</span>
-        </div>
-        <div style="margin-top:28px;display:flex;gap:10px">
-          <a class="btn btn-dark" href="#cta">Start now <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-        </div>
-      </div>
-
-      <div class="steps">
-        <div class="step reveal">
-          <span class="num">01 / 03</span>
-          <div class="top">
-            <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h14v16l-7-3.5L5 20V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
-            <div><h3>Book a free strategy call</h3><p>We pull your account, audit your spend, and walk you through where the real growth lives, before you pay a dollar.</p>
-              <span class="duration">DAY 0–1</span>
-            </div>
-          </div>
-          <div class="demo">
-            <svg viewBox="0 0 380 180" preserveAspectRatio="xMidYMid meet" style="position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px)">
-              <g transform="translate(190 140)" id="gaugeTicks"></g>
-              <text x="190" y="170" text-anchor="middle" font-family="Geist Mono" font-size="10" fill="#6b6f7a" letter-spacing="0.6">GROWTH LEVERS · 7 OF 10 ACTIVE</text>
-            </svg>
-          </div>
-        </div>
-
-        <div class="step reveal">
-          <span class="num">02 / 03</span>
-          <div class="top">
-            <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 13l4 4 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><h3>Fast audit & onboarding</h3><p>We map your channels, creative library, and offer architecture in 5 days. You leave with a punch list of fixes, ranked by lift.</p>
-              <span class="duration">DAY 2–5</span>
-            </div>
-          </div>
-          <div class="demo">
-            <svg viewBox="0 0 600 142" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px)">
-              <defs><linearGradient id="gp2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0057ff" stop-opacity=".2"/><stop offset="1" stop-color="#0057ff" stop-opacity="0"/></linearGradient></defs>
-              <g stroke="#e5e7ee" stroke-width=".6"><line x1="0" x2="600" y1="35" y2="35"/><line x1="0" x2="600" y1="70" y2="70"/><line x1="0" x2="600" y1="105" y2="105"/></g>
-              <path class="fill" d="M0,108 C50,84 100,90 150,68 S250,40 300,50 367,76 433,34 533,84 600,26 L600,142 L0,142Z" fill="url(#gp2)"/>
-              <path class="drawline" d="M0,108 C50,84 100,90 150,68 S250,40 300,50 367,76 433,34 533,84 600,26" stroke="#0057ff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="300" cy="50" r="3.5" fill="#0057ff" stroke="#fff" stroke-width="2"/>
-            </svg>
-            <span class="demo-chip" style="left:50%;top:16px;transform:translateX(-50%)">$4,880 · spike day</span>
-          </div>
-        </div>
-
-        <div class="step reveal">
-          <span class="num">03 / 03</span>
-          <div class="top">
-            <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 19l5-5 4 4 7-9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <div><h3>Build the winning system</h3><p>Clean creative testing framework, <a class="tlink" href="/services/paid-media/">scalable spend bands</a>, weekly iteration. The system compounds, every week beats the last.</p>
-              <span class="duration">DAY 6–31</span>
-            </div>
-          </div>
-          <div class="demo">
-            <svg viewBox="0 0 600 142" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:14px;width:calc(100% - 28px);height:calc(100% - 28px)">
-              <defs><linearGradient id="gp3" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0057ff" stop-opacity=".2"/><stop offset="1" stop-color="#0057ff" stop-opacity="0"/></linearGradient></defs>
-              <g stroke="#e5e7ee" stroke-width=".6"><line x1="0" x2="600" y1="35" y2="35"/><line x1="0" x2="600" y1="70" y2="70"/><line x1="0" x2="600" y1="105" y2="105"/></g>
-              <path class="fill" d="M0,112 C67,108 133,98 217,93 S333,75 383,66 483,25 600,15 L600,142 L0,142Z" fill="url(#gp3)"/>
-              <path class="drawline" d="M0,112 C67,108 133,98 217,93 S333,75 383,66 483,25 600,15" stroke="#0057ff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="383" y1="0" x2="383" y2="142" stroke="#0057ff" stroke-dasharray="3 3" stroke-width=".8" opacity=".45"/>
-              <circle cx="383" cy="66" r="3.5" fill="#0057ff" stroke="#fff" stroke-width="2"/>
-            </svg>
-            <span class="demo-chip" style="left:54%;top:12px">DAY 31</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SPOTLIGHT -->
-<section class="spotlight">
-  <div class="container">
-    <div class="spot-grid">
-      <div class="spot-pic reveal">
-        <span class="label"><span class="ldot"></span>FOUNDER · PONTEM</span>
-        <span class="silhouette"></span>
-        <div class="metric"><span class="ml">CAC · LAST 90D</span><span class="mv"><span style="color:#9bbcff">−64%</span></span></div>
-        <div class="person-card">
-          <div class="name">Edis Zhubi</div>
-          <div class="role">CEO @ PONTEM</div>
-        </div>
-      </div>
-      <div class="spot-quote reveal d1">
-        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
-        <blockquote>
-          “AdBoost helped us launch, scale, and expand into the right channels, driving stronger acquisition and retention as we grew. We went from <b>0.8 ROAS to 3.5 ROAS within 60 days</b>, and it’s <span class="serif">never gone back</span>.”
-        </blockquote>
-        <div class="who">
-          <div class="whoav">EZ</div>
-          <div><div class="nm">Edis Zhubi</div><div class="rl">CEO @ PONTEM</div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <div class="container">
-    <div class="section-head reveal" style="margin-bottom:42px">
-      <span class="eyebrow"><span class="dot"></span>REAL STORIES, REAL RESULTS</span>
-      <h2>Founders who stopped <span class="serif">guessing</span>.</h2>
-    </div>
-    <div class="t-grid">
-      <div class="tcard reveal">
-        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
-        <blockquote>“Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome.”</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f5a623,#ec6b1c)">VS</div><div><div class="who">Vincent Siva</div><div class="where">CO-FOUNDER @ V/X</div></div></div>
-      </div>
-      <div class="tcard reveal d1">
-        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
-        <blockquote>“They reduced CAC by <b>40% in the first two weeks</b>. The team is specialized for our industry in a way no one else is.”</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#76d39a,#22a559)">AJ</div><div><div class="who">Abi J</div><div class="where">GROWTH @ BOOST</div></div></div>
-      </div>
-      <div class="tcard reveal d2">
-        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
-        <blockquote>“Genuinely customer-first throughout. They went beyond what was strictly necessary, from email to creative to performance strategy.”</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#a8b5ff,#5b7cff)">OO</div><div><div class="who">Oliver Obolgogiani</div><div class="where">CO-FOUNDER @ ALVEOS</div></div></div>
-      </div>
-      <div class="tcard reveal d3">
-        <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
-        <blockquote>“They know their stuff. Keyword strategy, ad copy, optimization, every move <b>backed by data</b>, every week.”</blockquote>
-        <div class="person"><div class="pav" style="background:linear-gradient(135deg,#f6b6c3,#e26b8c)">CD</div><div><div class="who">Claire May Von Doelln</div><div class="where">DIRECTOR @ RAINFACTORY</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq" class="faq">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow"><span class="dot"></span>FAQ</span>
-      <h2>Answers to <span class="serif">popular questions.</span></h2>
-      <p>If you’re <a class="tlink" href="/compare/">vetting agencies</a> right now, these are the questions we hear before every kickoff.</p>
-    </div>
-    <div class="faq-list reveal d1" id="faqList">
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a1">How is AdBoost different from other agencies?<span class="plus"></span></button></h3><div class="ans" id="faq-a1"><div class="ans-inner">We’re a digital performance marketing agency that only works with health, <a href="/industries/telehealth/">telehealth</a>, and supplement brands, so every playbook, creative angle, and compliance check is purpose-built for your category. No generic “DTC agency” mistakes that cost you 30 days.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a2">Do you have experience with compliant health advertising?<span class="plus"></span></button></h3><div class="ans" id="faq-a2"><div class="ans-inner">Yes. Every account is reviewed against <a href="/blog/glp1-advertising-compliance-2026/">Meta, Google, and TikTok health-vertical policies</a> before launch. We’ve shipped thousands of compliant creatives across GLP-1, supplement, and Rx-adjacent brands.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a3">Do you create ad creatives too?<span class="plus"></span></button></h3><div class="ans" id="faq-a3"><div class="ans-inner">Absolutely. Static, motion, and UGC scripts are produced in-house weekly. Most partners get <a href="/blog/health-ad-creative-rejected-fix/">20+ new creative variants per month</a>, indexed against winning angles in our library.</div></div></div>
-      <div class="qa"><h3><button aria-expanded="false" aria-controls="faq-a4">When can I expect results?<span class="plus"></span></button></h3><div class="ans" id="faq-a4"><div class="ans-inner">Most partners see <a href="/blog/telehealth-cac-benchmarks-2026/">directional movement on CAC or ROAS</a> within 2 weeks. The 31-day mark is when our system compounds: tested creative library, optimized landers, and clean attribution all working in lockstep.</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- BIG CTA -->
-<section id="cta" class="bigcta">
-  <div class="container inner">
-    <div class="reveal"><span class="pill"><span class="pdot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M2 4.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Booking <b>4 founders</b> this month</span></span></div>
-    <h2 class="reveal d1">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
-    <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
-    <div class="ctas reveal d3">
-      <a class="btn btn-primary btn-lg" href={BOOK_PATH}><span>Book a free strategy call</span><span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
-    </div>
-    <div class="perks reveal d3">
-      <span>30 minutes</span>
-      <span>Free account audit</span>
-      <span>Written plan, even if we don’t work together</span>
-    </div>
-  </div>
-</section>
-
-<!-- MOBILE STICKY CTA -->
-<a class="mobile-cta" href={BOOK_PATH} aria-label="Book a free strategy call">
-  <span>Book a free strategy call</span>
-  <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-</a>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="foot foot-expanded">
-      <div class="foot-brand">
-        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
-        <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands.</p>
-        <div class="foot-meta">
-          <span class="foot-chip"><span class="ldot"></span>71+ founders · $153M+ tracked · 4.9/5</span>
-        </div>
-      </div>
-      <div class="foot-col">
-        <p class="foot-label">SERVICES</p>
-        <ul>
-          <li><a href="/services/paid-media/">Paid media</a></li>
-          <li><a href="/services/creative/">Creative production</a></li>
-          <li><a href="/services/cro/">CRO & funnels</a></li>
-          <li><a href="/services/">All services</a></li>
-          <li><a href="/advertising/">Compliance review</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <p class="foot-label">INDUSTRIES</p>
-        <ul>
-          <li><a href="/industries/glp-1-weight-loss/">GLP-1 & weight loss</a></li>
-          <li><a href="/industries/telehealth/">Telehealth</a></li>
-          <li><a href="/industries/supplements-dtc/">Supplements & DTC</a></li>
-          <li><a href="/industries/">All industries</a></li>
-          <li><a href="/advertising/telehealth-on-google/">Telehealth</a></li>
-          <li><a href="/advertising/">All verticals</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <p class="foot-label">RESOURCES</p>
-        <ul>
-          <li><a href="/advertising/">Ad compliance</a></li>
-          <li><a href="/tools/">Free tools</a></li>
-          <li><a href="/glossary/">Glossary</a></li>
-          <li><a href="/compare/">Compare</a></li>
-          <li><a href="/faq/">FAQ</a></li>
-          <li><a href="/blog/">Blog</a></li>
-        </ul>
-      </div>
-      <div class="foot-col">
-        <p class="foot-label">GET IN TOUCH</p>
-        <ul>
-          <li><a href={BOOK_PATH}>Book a strategy call</a></li>
-          <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
-          <li><a href={SISTER.href} target="_blank" rel="noopener">AdBoost Media ↗</a></li>
-          <li><span class="foot-loc">Toronto · Remote-first</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="legal">
-      <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
-    </div>
-  </div>
-</footer>
-
-<script is:inline>
-  // ---- sticky nav
-  const nav = document.getElementById('nav');
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 6);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  // ---- mobile menu
-  const burger = document.getElementById('burger');
-  const mnav = document.getElementById('mnav');
-  if (burger && mnav) {
-    burger.addEventListener('click', () => {
-      const open = mnav.classList.toggle('open');
-      burger.setAttribute('aria-expanded', String(open));
-    });
-    mnav.addEventListener('click', (e) => { if (e.target.tagName === 'A') mnav.classList.remove('open'); });
-  }
-
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ---- duplicate marquee for seamless loop (clones hidden from assistive tech)
-  const m = document.getElementById('marquee');
-  if (m) {
-    Array.from(m.children).forEach(el => {
-      const clone = el.cloneNode(true);
-      clone.setAttribute('aria-hidden', 'true');
-      m.appendChild(clone);
-    });
-  }
-
-  // ---- ops clock
-  const opsTime = document.getElementById('opsTime');
-  function tickClock() {
-    if (!opsTime) return;
-    const d = new Date();
-    const h = d.getHours() % 12 || 12;
-    const m = String(d.getMinutes()).padStart(2, '0');
-    const s = String(d.getSeconds()).padStart(2, '0');
-    const am = d.getHours() < 12 ? 'AM' : 'PM';
-    opsTime.textContent = `${String(h).padStart(2, '0')}:${m}:${s} ${am}`;
-  }
-  tickClock();
-  setInterval(tickClock, 1000);
-
-  // ---- gauge (clean two-state ticks; needle + lit ticks agree with "7 of 10 active")
-  (function () {
-    const tickG = document.querySelector('#gaugeTicks');
-    if (!tickG) return;
-    const total = 32, active = 0.7;
-    let html = '';
-    for (let i = 0; i < total; i++) {
-      const t = i / (total - 1);
-      const a = -Math.PI + t * Math.PI;
-      const r1 = 88, r2 = 100;
-      const x1 = (Math.cos(a) * r1).toFixed(1), y1 = (Math.sin(a) * r1).toFixed(1);
-      const x2 = (Math.cos(a) * r2).toFixed(1), y2 = (Math.sin(a) * r2).toFixed(1);
-      const color = t < active ? '#0057ff' : '#e5e7ee';
-      html += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2.6" stroke-linecap="round"/>`;
-    }
-    const needleA = -Math.PI + active * Math.PI;
-    const nx = (Math.cos(needleA) * 82).toFixed(1), ny = (Math.sin(needleA) * 82).toFixed(1);
-    html += `<line x1="0" y1="0" x2="${nx}" y2="${ny}" stroke="#0a0a0f" stroke-width="2.2" stroke-linecap="round"/>`;
-    html += `<circle cx="0" cy="0" r="6" fill="#0a0a0f"/><circle cx="0" cy="0" r="2.5" fill="#fff"/>`;
-    tickG.innerHTML = html;
-  })();
-
-  // ---- reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-  // ---- meter (bento)
-  const meterIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const ring = document.getElementById('meterRing');
-      const num = document.getElementById('meterNum');
-      if (!ring || !num) return;
-      const target = 47;
-      if (reduceMotion) {
-        ring.setAttribute('stroke-dasharray', `${target} 100`);
-        num.textContent = target + '%';
-        meterIO.unobserve(e.target);
-        return;
-      }
-      const dur = 1100;
-      const t0 = performance.now();
-      const tick = (t) => {
-        const k = Math.min(1, (t - t0) / dur);
-        const eased = 1 - Math.pow(1 - k, 3);
-        const v = target * eased;
-        ring.setAttribute('stroke-dasharray', `${v.toFixed(2)} 100`);
-        num.textContent = Math.round(v) + '%';
-        if (k < 1) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-      meterIO.unobserve(e.target);
-    });
-  }, { threshold: .4 });
-  const mw = document.querySelector('.b6');
-  if (mw) meterIO.observe(mw);
-
-  // ---- generic scroll-driven SVG line draw
-  const drawIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      try {
-        const len = el.getTotalLength ? el.getTotalLength() : 800;
-        el.style.setProperty('--len', len.toFixed(1));
-        el.getBoundingClientRect();
-      } catch (_) { /* noop */ }
-      el.classList.add('in');
-      el.closest('.demo')?.classList.add('drawn');
-      drawIO.unobserve(el);
-    });
-  }, { threshold: .25, rootMargin: '0px 0px -20px 0px' });
-  document.querySelectorAll('.drawline').forEach(el => drawIO.observe(el));
-
-  // ---- FAQ accordion
-  document.querySelectorAll('#faqList .qa').forEach(qa => {
-    const btn = qa.querySelector('button');
-    btn.addEventListener('click', () => {
-      const open = qa.classList.toggle('open');
-      btn.setAttribute('aria-expanded', String(open));
-    });
-  });
-
-  // ---- mobile sticky CTA: appear once the hero CTAs scroll away, hide over the big CTA section
-  const mcta = document.querySelector('.mobile-cta');
-  const heroCtas = document.querySelector('.hero .ctas');
-  const bigCta = document.getElementById('cta');
-  if (mcta && heroCtas && bigCta) {
-    let pastHero = false, overBigCta = false;
-    const update = () => mcta.classList.toggle('show', pastHero && !overBigCta);
-    new IntersectionObserver(([e]) => {
-      pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
-      update();
-    }, { threshold: 0 }).observe(heroCtas);
-    new IntersectionObserver(([e]) => {
-      overBigCta = e.isIntersecting;
-      update();
-    }, { threshold: .2 }).observe(bigCta);
-  }
-
-  // ---- subtle ops parallax on mouse (translate only, rAF-batched, disabled off-screen)
-  const ops = document.getElementById('ops');
-  if (ops && !reduceMotion && window.matchMedia('(pointer: fine)').matches) {
-    let mx = 0, my = 0, ticking = false, active = false;
-    const apply = () => { ticking = false; ops.style.transform = `translate3d(${mx * -8}px, ${my * -6}px, 0)`; };
-    const onMove = (e) => {
-      mx = e.clientX / window.innerWidth - .5;
-      my = e.clientY / window.innerHeight - .5;
-      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
-    };
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !active) { active = true; document.addEventListener('mousemove', onMove, { passive: true }); }
-      else if (!e.isIntersecting && active) { active = false; document.removeEventListener('mousemove', onMove); ops.style.transform = ''; }
-    }, { threshold: 0 }).observe(ops);
-  }
-</script>
-
-</body>
-</html>
