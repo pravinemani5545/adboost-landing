@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
+import Brief from '../../components/doc/Brief.astro';
 import Closing from '../../components/Closing.astro';
 import { COMPARES } from '../../data/compare';
 import { siteBase } from '../../lib/site';
@@ -22,43 +23,43 @@ const jsonLd = [
     },
   },
 ];
+const arrow = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath="/compare/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compare' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>COMPARE</span>
-      <h1>Weighing your <span class="serif">options?</span></h1>
-      <p class="phero-lede">An honest look at how a health-specialist acquisition partner compares to the alternatives - including when the alternative is the better call.</p>
-    </div>
-  </section>
+  <PageHead
+    label="Compare"
+    title="Weighing your *options?*"
+    lede="An honest look at how a health-specialist acquisition partner compares to the alternatives, including when the alternative is the better call."
+    dots
+  />
 
-  <section class="iwrap-sm">
-    <div class="container">
-      <div class="doc-main" style="max-width:760px;margin-inline:auto">
-        <div class="answer-box reveal"><span class="al">In short</span>A health-specialist paid-acquisition partner like AdBoost Health is usually the better fit than a full-service healthcare agency, an in-house team, or a generalist DTC shop when growth is bottlenecked by ad-platform compliance and CAC, because it pairs health-vertical policy expertise with performance media in one team. A full-service agency wins when you need brand, PR, and web under one roof; an in-house team wins at large, stable spend where dedicated headcount pays for itself; a generalist DTC agency can be cheaper when your category carries no compliance risk. The three breakdowns below go dimension by dimension.</div>
-      </div>
-    </div>
-  </section>
+  <section class="tone-paper page-body" data-nav="paper" aria-label="The comparisons">
+    <div class="wrap cmp">
+      <Brief>A health-specialist paid-acquisition partner like AdBoost Health is usually the better fit than a full-service healthcare agency, an in-house team, or a generalist DTC shop when growth is bottlenecked by ad-platform compliance and CAC, because it pairs health-vertical policy expertise with performance media in one team. A full-service agency wins when you need brand, PR, and web under one roof; an in-house team wins at large, stable spend where dedicated headcount pays for itself; a generalist DTC agency can be cheaper when your category carries no compliance risk. The three breakdowns below go dimension by dimension.</Brief>
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="grid-cards">
-        {COMPARES.map((c) => (
-          <a class="lcard reveal" href={`/compare/${c.slug}/`}>
-            <h3>{c.h1}</h3>
-            <p>{c.intent}</p>
-            <span class="lc-more">See the comparison →</span>
+      <div class="rows">
+        {COMPARES.map((c, i) => (
+          <a class="row" href={`/compare/${c.slug}/`} data-reveal="side">
+            <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="row-name">{c.h1}</span>
+            <span class="row-arrow row-meta" set:html={arrow} />
+            <span class="row-text small">{c.intent}</span>
           </a>
         ))}
       </div>
 
-      <div class="prose" style="max-width:760px;margin:40px auto 0">
+      <div class="doc-sec">
         <h2>How to read these comparisons</h2>
-        <p>Each breakdown is written at the category level and kept honest: it names where the alternative is genuinely the better choice, not just where we win. The deciding factors are almost always the same three. First, compliance risk: regulated health, telehealth, GLP-1, and supplement brands live or die by ad-platform policy, which is where a <a href="/advertising/">health-specialist</a> earns its keep. Second, stage and spend: a dedicated in-house team pays off at large, stable budgets, while an agency de-risks the ramp. Third, scope: if you need brand, PR, and a website rebuild alongside media, a full-service shop consolidates that, whereas if the bottleneck is <a href="/glossary/cac/">CAC</a> and rejected ads, that is the specialist lane. See real outcomes by <a href="/industries/telehealth/">vertical</a>, or start with the <a href="/services/">services</a> that drive them.</p>
+        <div class="prose">
+          <p>Each breakdown is written at the category level and kept honest: it names where the alternative is genuinely the better choice, not just where we win. The deciding factors are almost always the same three. First, compliance risk: regulated health, telehealth, GLP-1, and supplement brands live or die by ad-platform policy, which is where a <a href="/advertising/">health-specialist</a> earns its keep. Second, stage and spend: a dedicated in-house team pays off at large, stable budgets, while an agency de-risks the ramp. Third, scope: if you need brand, PR, and a website rebuild alongside media, a full-service shop consolidates that, whereas if the bottleneck is <a href="/glossary/cac/">CAC</a> and rejected ads, that is the specialist lane. See real outcomes by <a href="/industries/telehealth/">vertical</a>, or start with the <a href="/services/">services</a> that drive them.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <Closing />
 </BaseLayout>
+
+<style>
+  .cmp { display: grid; gap: clamp(40px, 5vw, 72px); }
+</style>

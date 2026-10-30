@@ -1,0 +1,10 @@
+---
+// A labelled list of links in a document's aside, under a hairline.
+interface Props { label: string; links: { href: string; label: string }[]; text?: string }
+const { label, links, text } = Astro.props;
+---
+<nav class="aside-block" aria-label={label}>
+  <p class="label plain">{label}</p>
+  {text && <p>{text}</p>}
+  <ul class="links">{links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+</nav>

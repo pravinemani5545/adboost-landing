@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHead from '../components/PageHead.astro';
+import Toc from '../components/doc/Toc.astro';
+import AsideCta from '../components/doc/AsideCta.astro';
 import Closing from '../components/Closing.astro';
 import Faq from '../components/Faq.astro';
 import { siteBase } from '../lib/site';
@@ -16,42 +18,38 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'FAQ', href: '/faq/' }]),
   faqPage(all),
 ];
+const idOf = (t: string) => t.toLowerCase().replace(/\W+/g, '-');
+const offsets = groups.map((_, i) => groups.slice(0, i).reduce((n, g) => n + g.items.length, 0));
 ---
 <BaseLayout {title} {description} canonicalPath="/faq/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FAQ</span>
-      <h1>Answers to <span class="serif">popular questions</span></h1>
-      <p class="phero-lede">The questions we hear before every kickoff - how we work, how we handle compliance, and how fast you can expect results.</p>
-    </div>
-  </section>
+  <PageHead
+    label="FAQ"
+    title="Answers to popular *questions*"
+    lede="The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results."
+    dots
+  />
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          {groups.map((g) => (
-            <div id={g.title.toLowerCase().replace(/\W+/g, '-')} style="margin-bottom:32px;scroll-margin-top:90px">
-              <h2 class="sec-title" style="font-size:22px">{g.title}</h2>
-              <div style="margin-top:12px"><Faq items={g.items} /></div>
-            </div>
-          ))}
-        </div>
-        <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">Jump to</div>
-            <ul>{groups.map((g) => <li><a href={`#${g.title.toLowerCase().replace(/\W+/g, '-')}`}>{g.title}</a></li>)}</ul>
+  <section class="tone-paper page-body" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main faq-groups">
+        {groups.map((g, i) => (
+          <div class="doc-sec" id={idOf(g.title)}>
+            <h2 class="faq-g">{g.title}</h2>
+            <Faq items={g.items} start={offsets[i]} />
           </div>
-          <div class="aside-card dark">
-            <h4 style="color:#fff">Still have a question?</h4>
-            <p>Ask a senior strategist on a free 30-minute call.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+        ))}
       </div>
+      <aside class="doc-aside">
+        <AsideCta heading="Still have a question?" text="Ask a senior strategist on a free 30-minute call." />
+        <Toc label="Jump to" items={groups.map((g) => ({ id: idOf(g.title), label: g.title }))} />
+      </aside>
     </div>
   </section>
 
   <Closing />
 </BaseLayout>
+
+<style>
+  .faq-groups { gap: clamp(48px, 5vw, 80px); }
+  .faq-g { font-size: clamp(26px, 2.4vw, 34px); }
+</style>

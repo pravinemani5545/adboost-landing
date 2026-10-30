@@ -1,6 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
+import Brief from '../../components/doc/Brief.astro';
+import Toc from '../../components/doc/Toc.astro';
+import AsideLinks from '../../components/doc/AsideLinks.astro';
+import AsideCta from '../../components/doc/AsideCta.astro';
 import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
@@ -27,7 +31,6 @@ const shortVertical = V_SHORT[p.vertical] ?? p.vertical;
 const title = `${shortVertical} on ${p.platform}: 2026 ad compliance | AdBoost Health`;
 const description = p.answer.slice(0, 155);
 const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const industry = getVertical(p.verticalSlug);
 const jsonLd = [
@@ -47,88 +50,85 @@ const toc = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{p.platform.toUpperCase()} · {p.vertical.toUpperCase()}</span>
-      <h1>{p.h1}</h1>
-      <div class="metabar" style="margin-top:14px">
-        <span class={`badge ${badgeClass}`}>{STATUS_LABEL[p.status]}</span>
-        <span class="dot"></span><span>Updated {updatedLabel}</span>
-        <span class="dot"></span><span>Verify against live policy</span>
-      </div>
-    </div>
-  </section>
+  <PageHead label="Ad compliance" labelHref="/advertising/" title={p.h1} dots>
+    <ul class="phead-facts arrive" style="--d:160ms">
+      <li class="phead-status"><span class={`status ${p.status}`}>{STATUS_LABEL[p.status]}</span></li>
+      <li>{p.platform} · {p.vertical}</li>
+      <li>Updated {updatedLabel}</li>
+      <li>Verify against live policy</li>
+    </ul>
+  </PageHead>
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="answer-box reveal"><span class="al">The short answer</span>{p.answer}</div>
-          <div class="prose">
-            <h2 id="cert">Certification & authorization</h2>
-            <p>{p.certification}</p>
+  <section class="tone-paper page-body" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main">
+        <div id="status"><Brief label="The short answer">{p.answer}</Brief></div>
 
-            <h2 id="prohibited">What’s prohibited</h2>
-            <ul class="xlist">
-              {p.prohibited.map((x) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
-              ))}
-            </ul>
-
-            <h2 id="requirements">Disclaimers & landing-page requirements</h2>
-            <div class="callout"><span class="cl-label">Requirements</span>{p.requirements}</div>
-
-            <h2 id="rejections">Top reasons ads get rejected</h2>
-            <ul class="xlist">
-              {p.rejectionReasons.map((x) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
-              ))}
-            </ul>
-
-            <h2 id="enforcement">What enforcement actually looks like</h2>
-            <p>{p.enforcement}</p>
-
-            <h2 id="comply">How compliant brands still advertise</h2>
-            <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span>{p.howToComply}</div>
-
-            {industry && (
-              <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure, and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
-            )}
-
-            <h2 id="faq">FAQ</h2>
-            <Faq items={p.faq}`} />
-
-            <h3>Sources</h3>
-            <p style="font-size:13px;color:var(--mute)">Ad policies change frequently and enforcement is tightening - treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
-            <ul style="font-size:14px">
-              {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
-            </ul>
-          </div>
+        <div class="doc-sec" id="cert">
+          <h2>Certification & authorization</h2>
+          <p>{p.certification}</p>
         </div>
 
-        <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-          </div>
-          <div class="aside-card">
-            <h4>{p.vertical} on other platforms</h4>
-            <div class="link-list">
-              {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
-              <a href="/blog/glp1-advertising-compliance-2026/">Compliance guide (GLP-1)</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
-            </div>
-          </div>
-          <div class="aside-card dark">
-            <h4 style="color:#fff">We clear this before you launch</h4>
-            <p>Every account and asset reviewed against live {p.platform} policy - so launches don’t get yanked.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+        <div class="doc-sec" id="prohibited">
+          <h2>What’s prohibited</h2>
+          <ul class="crosses">{p.prohibited.map((x) => <li>{x}</li>)}</ul>
+        </div>
+
+        <div class="doc-sec" id="requirements">
+          <h2>Disclaimers & landing-page requirements</h2>
+          <div class="note"><p class="label">Requirements</p><p>{p.requirements}</p></div>
+        </div>
+
+        <div class="doc-sec" id="rejections">
+          <h2>Top reasons ads get rejected</h2>
+          <ul class="crosses">{p.rejectionReasons.map((x) => <li>{x}</li>)}</ul>
+        </div>
+
+        <div class="doc-sec" id="enforcement">
+          <h2>What enforcement actually looks like</h2>
+          <p>{p.enforcement}</p>
+        </div>
+
+        <div class="doc-sec" id="comply">
+          <h2>How compliant brands still advertise</h2>
+          <div class="note ok"><p class="label">The compliant path</p><p>{p.howToComply}</p></div>
+          {industry && (
+            <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure, and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
+          )}
+        </div>
+
+        <div class="doc-sec" id="faq">
+          <h2>FAQ</h2>
+          <Faq items={p.faq} />
+        </div>
+
+        <div class="doc-sec">
+          <h3>Sources</h3>
+          <p class="small">Ad policies change frequently and enforcement is tightening: treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+          <ul class="links sources">{p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}</ul>
+        </div>
       </div>
+
+      <aside class="doc-aside">
+        <AsideLinks
+          label={`${p.vertical} on other platforms`}
+          links={[
+            ...related.map((r) => ({ href: `/advertising/${r.slug}/`, label: `${p.vertical} on ${r.platform}` })),
+            { href: '/blog/glp1-advertising-compliance-2026/', label: 'Compliance guide (GLP-1)' },
+            { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+          ]}
+        />
+        <AsideCta heading="We clear this before you launch" text={`Every account and asset reviewed against live ${p.platform} policy, so launches don’t get yanked.`} />
+        <Toc items={toc} />
+      </aside>
     </div>
   </section>
 
   <Closing heading={`Launching ${p.vertical.toLowerCase()} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
 </BaseLayout>
+
+<style>
+  .phead-status .status { font-size: 12.5px; }
+  .phead-facts li.phead-status::before { content: none; }
+  .sources a { font-size: 15.5px; }
+</style>

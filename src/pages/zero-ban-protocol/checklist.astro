@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import LeadLayout from '../../layouts/LeadLayout.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
 
@@ -11,7 +11,7 @@ const BOOK = '/book/?utm_source=lead-magnet&utm_medium=checklist&utm_campaign=ze
 const PDF = '/downloads/zero-ban-protocol.pdf';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd} noindex={true}>
+<LeadLayout {title} {description} canonicalPath={path} {jsonLd} tag="The Zero-Ban Protocol">
   <section class="zbc">
     <div class="zbc-wrap">
       <header class="zbc-head">
@@ -79,7 +79,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
             </ul>
             <p><strong>The escalation principle:</strong> conservative copy on a cold account isn&rsquo;t timid. It&rsquo;s how you buy permission to be aggressive later. Lead with brand-level, lifestyle, benefit-adjacent language.</p>
 
-            <div class="zbc-teardown reveal">
+            <div class="zbc-teardown" data-reveal>
               <div class="zbc-td-col rejected">
                 <span class="zbc-td-tag">&#10005; REJECTED</span>
                 <p class="zbc-td-ad">&ldquo;Our clinical-grade semaglutide peptide helps you lose up to 20 lbs in your first month, no diet, no gym.&rdquo;</p>
@@ -109,7 +109,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
               <li>Same escalation principle as copy: <strong>conservative creative first, aggressive later</strong>, once the account has approvals behind it.</li>
             </ul>
 
-            <div class="zbc-teardown reveal">
+            <div class="zbc-teardown" data-reveal>
               <div class="zbc-td-col rejected">
                 <span class="zbc-td-tag">&#10005; REJECTED</span>
                 <p class="zbc-td-ad">Split-screen before-and-after of a woman&rsquo;s midsection, with a vial labelled &ldquo;Semaglutide&rdquo; in the corner.</p>
@@ -139,7 +139,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
         </li>
       </ol>
 
-      <div class="zbc-recap reveal">
+      <div class="zbc-recap" data-reveal>
         <span class="zbc-recap-label">The 6 triggers that kill health ads fastest</span>
         <ol>
           <li><strong>Before-and-after imagery.</strong> The single fastest ban. <span>Creative</span></li>
@@ -151,7 +151,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
         </ol>
       </div>
 
-      <div class="zbc-cta">
+      <div class="zbc-cta gcard">
         <div>
           <span class="zbc-cta-status">● CLEARED FOR LAUNCH</span>
           <h3>Want us to just run this for you?</h3>
@@ -164,105 +164,114 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
     </div>
   </section>
 
-  <style is:global>
-    /* Strip site chrome from the printed/saved PDF (BaseLayout nav/footer live
-       outside this page's scoped styles, so these rules must be global). */
-    @media print {
-      .nav, nav, footer, .skip-link, .mnav, .mobile-cta, #nav, #mnav { display: none !important; }
-      html, body { background: #fff !important; }
-      main { padding-top: 0 !important; }
-    }
-  </style>
-
   <style>
-    .zbc { --z-blue:#0057ff; --z-ink:#0a0a0f; --z-ink2:#42474f; --z-mute:#8a9099; --z-line:#e7e9ee; --z-do:#16a34a; --z-dont:#ff6b3d; --z-surface:#f7f8fa;
-      /* clears the fixed 68px BaseLayout nav, matches .phero's ~120px top offset */
-      background: #fff; padding: 100px 0 10px; }
-    .zbc-wrap { max-width: 760px; margin: 0 auto; padding: 0 22px; }
+    /* the page's own names, mapped onto the system's roles so it reads in both schemes and prints clean */
+    .zbc {
+      --z-blue: var(--accent); --z-ink: var(--fg); --z-ink2: var(--fg-2); --z-mute: color-mix(in srgb, var(--fg) 62%, transparent);
+      --z-line: var(--line); --z-do: var(--st-ok); --z-dont: var(--st-warn); --z-surface: color-mix(in srgb, var(--fg) 4%, var(--bg));
+      padding: clamp(40px, 6vw, 72px) 0 10px;
+    }
+    .zbc-wrap { max-width: calc(760px + 2 * var(--pad)); margin: 0 auto; padding: 0 var(--pad); }
 
-    .zbc-head { padding: 16px 0 26px; }
-    .zbc-eyebrow { font-family:'Geist Mono',ui-monospace,monospace; font-size:11.5px; letter-spacing:.11em; color:var(--z-blue); }
-    .zbc-head h1 { font-size: clamp(28px, 4.2vw, 40px); line-height: 1.1; letter-spacing:-.03em; font-weight:600; color:var(--z-ink); margin:14px 0 16px; }
-    .zbc-head h1 em { font-family:var(--serif); font-style: italic; font-weight: 300; letter-spacing:0; }
-    .zbc-lede { font-size:16.5px; line-height:1.62; color:var(--z-ink2); margin:0 0 22px; }
-    .zbc-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
-    .zbc-tagm { font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.04em; text-transform:uppercase; color:var(--z-mute); background:var(--z-surface); border:1px solid var(--z-line); border-radius:6px; padding:5px 9px; }
-    .zbc-pdf { margin-left:auto; display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:600; color:var(--z-blue); text-decoration:none; border:1px solid rgba(0,87,255,.28); border-radius:9px; padding:8px 14px; transition:background .15s,border-color .15s; }
-    .zbc-pdf:hover { background:rgba(0,87,255,.06); border-color:var(--z-blue); }
+    .zbc-head { padding: 0 0 28px; }
+    .zbc-eyebrow { font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; color: var(--z-ink2); }
+    .zbc-eyebrow::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 8px; vertical-align: .1em; background: var(--z-blue); }
+    .zbc-head h1 { font-size: clamp(34px, 4.6vw, 56px); line-height: 1.08; letter-spacing: -.022em; margin: 16px 0 18px; text-wrap: balance; }
+    .zbc-head h1 em { font-style: italic; }
+    .zbc-lede { font-size: clamp(17px, 1.3vw, 19px); line-height: 1.62; color: var(--z-ink2); margin: 0 0 24px; }
+    .zbc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .zbc-tagm { font-size: 14px; color: var(--z-ink2); border-radius: 999px; padding: 6px 13px; box-shadow: inset 0 0 0 1px var(--z-line); }
+    .zbc-pdf { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-size: 15px; font-weight: 500; color: var(--z-ink); border-radius: 999px; padding: 0 18px; box-shadow: inset 0 0 0 1px var(--z-ink); transition: box-shadow .3s var(--spring-snap); }
+    .zbc-pdf:hover { box-shadow: inset 0 0 0 1px var(--z-ink), 0 0 0 5px color-mix(in srgb, var(--z-blue) 14%, transparent); }
 
-    .zbc-frame { background:var(--z-surface); border:1px solid var(--z-line); border-left:3px solid var(--z-ink); border-radius:12px; padding:18px 20px; margin-bottom:8px; }
-    .zbc-frame-label { display:block; font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--z-mute); margin-bottom:8px; }
-    .zbc-frame p { margin:0; font-size:15.5px; line-height:1.62; color:var(--z-ink2); }
+    .zbc-frame { border-left: 2px solid var(--z-blue); padding: 4px 0 4px 22px; margin: 6px 0 12px; }
+    .zbc-frame-label { display: block; font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--z-ink2); margin-bottom: 10px; }
+    .zbc-frame p { margin: 0; font: 300 clamp(19px, 1.6vw, 23px) / 1.4 var(--serif); color: var(--z-ink); }
 
-    /* protocol spine */
-    .zbc-steps { list-style:none; margin:0; padding:0; }
-    .zbc-cp { display:grid; grid-template-columns:56px 1fr; gap:20px; padding:28px 0; }
-    .zbc-cp + .zbc-cp { border-top:1px solid var(--z-line); }
-    .zbc-rail { position:relative; }
-    .zbc-code { position:sticky; top:26px; display:flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:12px; background:var(--z-ink); color:#fff; font-family:'Geist Mono',ui-monospace,monospace; font-size:15px; font-weight:500; }
-    .zbc-cp-tag { font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--z-blue); }
-    .zbc-body h2 { font-size:21px; line-height:1.2; letter-spacing:-.02em; font-weight:600; color:var(--z-ink); margin:6px 0 10px; }
-    .zbc-body > p { font-size:15.5px; line-height:1.62; color:var(--z-ink2); margin:0 0 14px; }
-    .zbc-body a { color:var(--z-blue); text-decoration:underline; text-underline-offset:2px; }
-    .zbc-sticky { font-family:var(--serif); font-style:italic; font-weight:300; font-size:18px; color:var(--z-ink); margin:14px 0 0; }
+    /* the protocol's spine */
+    .zbc-steps { margin: 0; padding: 0; }
+    .zbc-cp { display: grid; grid-template-columns: 56px 1fr; gap: 20px; padding: 32px 0; }
+    .zbc-cp + .zbc-cp { border-top: 1px solid var(--z-line); }
+    .zbc-rail { position: relative; }
+    .zbc-code { position: sticky; top: 26px; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--z-blue); color: var(--z-ink); font: 500 13px/1 var(--sans); letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+    .zbc-cp-tag { font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--z-ink2); }
+    .zbc-body h2 { font-size: clamp(26px, 2.4vw, 34px); line-height: 1.15; margin: 8px 0 12px; }
+    .zbc-body > p { font-size: 17px; line-height: 1.62; color: var(--z-ink2); margin: 0 0 14px; }
+    .zbc-body > p strong { color: var(--z-ink); font-weight: 500; }
+    .zbc-body a { color: var(--z-ink); text-decoration: underline; text-decoration-color: var(--z-blue); text-underline-offset: 3px; }
+    .zbc-sticky { font: italic 300 21px/1.4 var(--serif) !important; color: var(--z-ink) !important; margin: 16px 0 0 !important; }
 
-    .zbc-do, .zbc-dont { list-style:none; margin:0 0 6px; padding:0; display:grid; gap:9px; }
-    .zbc-do li, .zbc-dont li { position:relative; padding-left:28px; font-size:15px; line-height:1.56; color:var(--z-ink2); }
-    .zbc-do li strong, .zbc-dont li strong { color:var(--z-ink); font-weight:600; }
-    .zbc-do li::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:5px; background:rgba(22,163,74,.12);
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l4.5 4.5L19 7'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
-    .zbc-dont { margin-top:4px; }
-    .zbc-dont li::before { content:""; position:absolute; left:0; top:2px; width:18px; height:18px; border-radius:5px; background:rgba(255,107,61,.12);
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23ff6b3d' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:center; }
-
-    /* worked teardown: rejected → compliant */
-    .zbc-teardown { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:18px 0 4px; }
-    .zbc-td-col { border:1px solid var(--z-line); border-radius:12px; padding:15px 16px; }
-    .zbc-td-col.rejected { background:rgba(255,107,61,.05); border-color:rgba(255,107,61,.22); }
-    .zbc-td-col.compliant { background:rgba(22,163,74,.05); border-color:rgba(22,163,74,.24); }
-    .zbc-td-tag { display:inline-block; font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.06em; font-weight:500; padding:3px 8px; border-radius:6px; margin-bottom:11px; }
-    .zbc-td-col.rejected .zbc-td-tag { color:var(--z-dont); background:rgba(255,107,61,.12); }
-    .zbc-td-col.compliant .zbc-td-tag { color:var(--z-do); background:rgba(22,163,74,.12); }
-    .zbc-td-ad { font-size:14.5px; line-height:1.5; color:var(--z-ink); font-style:italic; margin:0 0 10px; }
-    .zbc-td-why { font-size:12.5px; line-height:1.55; color:var(--z-ink2); margin:0; }
-    .zbc-td-why strong { color:var(--z-ink); font-weight:600; font-style:normal; }
-
-    /* rejection-trigger recap */
-    .zbc-recap { background:var(--z-surface); border:1px solid var(--z-line); border-radius:14px; padding:20px 22px; margin:32px 0 12px; }
-    .zbc-recap-label { display:block; font-family:'Geist Mono',ui-monospace,monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--z-blue); margin-bottom:14px; }
-    .zbc-recap ol { margin:0; padding-left:22px; display:grid; gap:10px; }
-    .zbc-recap li { font-size:14.5px; line-height:1.5; color:var(--z-ink2); }
-    .zbc-recap li strong { color:var(--z-ink); font-weight:600; }
-    .zbc-recap li span { color:var(--z-mute); font-size:11.5px; font-family:'Geist Mono',ui-monospace,monospace; letter-spacing:.03em; }
-
-    .zbc-cta { display:flex; flex-wrap:wrap; align-items:center; gap:18px; justify-content:space-between; background:var(--z-ink); color:#fff; border-radius:16px; padding:26px 28px; margin:34px 0 20px; }
-    .zbc-cta-status { font-family:'Geist Mono',ui-monospace,monospace; font-size:10.5px; letter-spacing:.08em; color:#37c67c; }
-    .zbc-cta h3 { font-size:19px; letter-spacing:-.02em; margin:8px 0 6px; color:#fff; }
-    .zbc-cta p { font-size:14px; line-height:1.55; color:rgba(255,255,255,.62); margin:0; max-width:46ch; }
-    .zbc-cta-btn { flex:none; background:var(--z-blue); color:#fff; text-decoration:none; font-weight:600; font-size:14.5px; border-radius:11px; padding:12px 20px; white-space:nowrap; transition:background .15s; }
-    .zbc-cta-btn:hover { background:#1a6bff; }
-    .zbc-disclaimer { font-size:12.5px; line-height:1.55; color:var(--z-mute); margin:0 0 10px; }
-
-    @media (max-width:560px) {
-      .zbc-cp { grid-template-columns:36px 1fr; gap:14px; }
-      .zbc-code { width:34px; height:34px; border-radius:9px; font-size:13px; top:20px; }
-      .zbc-cta { flex-direction:column; align-items:flex-start; }
-      .zbc-teardown { grid-template-columns:1fr; }
+    /* do and don't: a tick or a cross in a tinted square, drawn in CSS so they follow the scheme */
+    .zbc-do, .zbc-dont { margin: 0 0 8px; padding: 0; display: grid; gap: 11px; }
+    .zbc-do li, .zbc-dont li { position: relative; padding-left: 32px; font-size: 16.5px; line-height: 1.56; color: var(--z-ink2); }
+    .zbc-do li strong, .zbc-dont li strong { color: var(--z-ink); font-weight: 500; }
+    .zbc-do li::before, .zbc-dont li::before { content: ""; position: absolute; left: 0; top: 3px; width: 20px; height: 20px; border-radius: 6px; }
+    .zbc-do li::before { background: color-mix(in srgb, var(--z-do) 14%, transparent); }
+    .zbc-do li::after { content: ""; position: absolute; left: 6px; top: 8px; width: 8px; height: 5px; border-left: 2px solid var(--z-do); border-bottom: 2px solid var(--z-do); rotate: -45deg; }
+    .zbc-dont { margin-top: 4px; }
+    .zbc-dont li::before {
+      background:
+        linear-gradient(45deg, transparent calc(50% - 1px), var(--z-dont) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)) center / 9px 9px no-repeat,
+        linear-gradient(-45deg, transparent calc(50% - 1px), var(--z-dont) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)) center / 9px 9px no-repeat,
+        color-mix(in srgb, var(--z-dont) 13%, transparent);
     }
 
-    /* clean print / PDF */
+    /* worked teardown: rejected, then compliant */
+    .zbc-teardown { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0 4px; }
+    .zbc-td-col { border-radius: var(--r-media); padding: 18px 18px 16px; box-shadow: inset 0 0 0 1px var(--z-line); }
+    .zbc-td-col.rejected { background: color-mix(in srgb, var(--z-dont) 6%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-dont) 26%, transparent); }
+    .zbc-td-col.compliant { background: color-mix(in srgb, var(--z-do) 6%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--z-do) 28%, transparent); }
+    .zbc-td-tag { display: inline-block; font: 500 12.5px/1.3 var(--sans); letter-spacing: .16em; margin-bottom: 12px; }
+    .zbc-td-col.rejected .zbc-td-tag { color: var(--z-dont); }
+    .zbc-td-col.compliant .zbc-td-tag { color: var(--z-do); }
+    .zbc-td-ad { font: italic 300 18px/1.45 var(--serif); color: var(--z-ink); margin: 0 0 10px; }
+    .zbc-td-why { font-size: 15px; line-height: 1.55; color: var(--z-ink2); margin: 0; }
+    .zbc-td-why strong { color: var(--z-ink); font-weight: 500; }
+
+    /* the trigger recap */
+    .zbc-recap { border-radius: var(--r-panel); padding: clamp(20px, 2.4vw, 30px); margin: 32px 0 12px; box-shadow: inset 0 0 0 1px var(--z-line); }
+    .zbc-recap-label { display: block; font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--z-ink2); margin-bottom: 16px; }
+    .zbc-recap ol { margin: 0; padding-left: 22px; display: grid; gap: 10px; list-style: decimal; }
+    .zbc-recap li { font-size: 16.5px; line-height: 1.5; color: var(--z-ink2); }
+    .zbc-recap li::marker { color: var(--z-blue); }
+    .zbc-recap li strong { color: var(--z-ink); font-weight: 500; }
+    .zbc-recap li span { color: var(--z-mute); font-size: 14px; }
+
+    /* the closing call to action: a gradient card */
+    .zbc-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; justify-content: space-between; margin: 34px 0 20px; }
+    .zbc-cta-status { font: 500 12.5px/1.3 var(--sans); letter-spacing: .16em; color: var(--st-ok); }
+    .zbc-cta h3 { font-size: clamp(24px, 2.2vw, 30px); margin: 10px 0 8px; }
+    .zbc-cta p { font-size: 16px; line-height: 1.55; color: var(--fg-2); margin: 0; max-width: 46ch; }
+    .zbc-cta-btn { flex: none; display: inline-flex; align-items: center; min-height: 52px; padding: 0 26px; border-radius: 999px; background: var(--accent-color); color: var(--accent-fg); font-weight: 500; font-size: 15px; white-space: nowrap; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-frame) 14%, transparent); transition: box-shadow .4s var(--spring-snap); }
+    .zbc-cta-btn:hover { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-frame) 18%, transparent); }
+    .zbc-disclaimer { font-size: 15px; line-height: 1.55; color: var(--z-mute); margin: 0 0 10px; }
+
+    @media (max-width: 560px) {
+      .zbc-cp { grid-template-columns: 38px 1fr; gap: 14px; }
+      .zbc-code { width: 36px; height: 36px; font-size: 12.5px; top: 20px; }
+      .zbc-cta { flex-direction: column; align-items: flex-start; }
+      .zbc-cta-btn { width: 100%; justify-content: center; }
+      .zbc-teardown { grid-template-columns: 1fr; }
+      .zbc-pdf { margin-left: 0; }
+    }
+
+    /* clean print / PDF: the light scheme's roles on white, whatever the reader's scheme, everything
+       arrived, nothing interactive */
     @media print {
-      .nav, nav, footer, .zbc-pdf, .zbc-cta-btn { display:none !important; }
-      .zbc { padding:0; }
-      .zbc-wrap { max-width:none; padding:0; }
-      .zbc-cp, .zbc-teardown, .zbc-recap { break-inside:avoid; page-break-inside:avoid; }
-      /* reveal elements must be visible in the printed/saved PDF */
-      .reveal { opacity:1 !important; transform:none !important; }
-      .zbc-td-col, .zbc-td-tag, .zbc-recap { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-      .zbc-cta { background:#fff; color:#0a0a0f; border:1px solid #e7e9ee; }
-      .zbc-cta p { color:#42474f; }
-      .zbc-cta-status { color:#16a34a; }
-      a { color:#0057ff !important; text-decoration:none; }
+      .zbc {
+        --fg: var(--frame); --fg-2: color-mix(in srgb, var(--frame) 80%, transparent); --bg: transparent;
+        --line: color-mix(in srgb, var(--frame) 18%, transparent); --accent: var(--accent-paper);
+        --st-ok: var(--ok); --st-warn: var(--warn); color: var(--frame); padding: 0;
+      }
+      .zbc-pdf, .zbc-cta-btn { display: none !important; }
+      .zbc-wrap { max-width: none; padding: 0; }
+      .zbc-code { position: static; }
+      .zbc-cp, .zbc-teardown, .zbc-recap, .zbc-cta { break-inside: avoid; page-break-inside: avoid; }
+      [data-reveal] { opacity: 1 !important; transform: none !important; }
+      .zbc-td-col, .zbc-recap, .zbc-do li::before, .zbc-dont li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .zbc-cta { background: none; box-shadow: inset 0 0 0 1px var(--line); color: var(--frame); --fg: var(--frame); --fg-2: color-mix(in srgb, var(--frame) 80%, transparent); }
+      .zbc-cta-status { color: var(--ok); }
+      a { color: var(--accent-paper) !important; text-decoration: none; }
     }
   </style>
-</BaseLayout>
+</LeadLayout>

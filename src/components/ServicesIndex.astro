@@ -17,9 +17,11 @@ import { clip, poster } from '../lib/media';
 
 interface Props {
   /** the short note in the services group */
-  more: { label: string; line: string; cta: string };
+  more?: { label: string; line: string; cta: string };
+  /** one group only (the hub pages) */
+  only?: 'services' | 'industries';
 }
-const { more } = Astro.props;
+const { more, only } = Astro.props;
 
 type Tile = { href: string; label: string; line: string; no: string; image?: ImageMetadata; video?: { src: string; av1: boolean } };
 const count = (n: number) => String(n).padStart(2, '0');
@@ -43,7 +45,7 @@ const groups: { id: 'services' | 'industries'; label: string; line: string; item
       image: poster(`ind-${v.slug}`), video: clip(`ind-${v.slug}`),
     })),
   },
-];
+].filter((g) => !only || g.id === only);
 
 // where the k-th cell of a group lands in the four-column grid: the featured tile takes the first
 // two columns of the first two rows, the next four stack beside it two to a row, and everything
@@ -95,7 +97,7 @@ const arrow =
             </div>
           );
         })}
-        {g.id === 'services' && (
+        {g.id === 'services' && more && (
           <div class="sg-cell sg-note" data-reveal="left" data-from4="r" data-from2="l" style="--i4:0">
             <div class="sg-more gcard gcard-sm">
               <p class="label">{more.label}</p>

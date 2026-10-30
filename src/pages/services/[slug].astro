@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
 import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
+import Steps from '../../components/Steps.astro';
+import Brief from '../../components/doc/Brief.astro';
+import Toc from '../../components/doc/Toc.astro';
+import AsideLinks from '../../components/doc/AsideLinks.astro';
+import AsideCta from '../../components/doc/AsideCta.astro';
 import { SERVICES, getService } from '../../data/services';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
@@ -49,78 +54,53 @@ const toc = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{s.navLabel.toUpperCase()}</span>
-      <h1>{s.h1}</h1>
-      <p class="phero-lede">{s.lede}</p>
-    </div>
-  </section>
+  <PageHead label="Services" labelHref="/services/" title={s.h1} lede={s.lede} dots />
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="answer-box reveal"><span class="al">In short</span>{s.answer}</div>
-          <div class="prose">
-            <h2 id="outcomes">What you get</h2>
-            <ul class="checks">
-              {s.outcomes.map((o) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{o}</li>
-              ))}
-            </ul>
+  <section class="tone-paper page-body" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main">
+        <Brief>{s.answer}</Brief>
 
-            <h2 id="process">How it works</h2>
-            <div class="playbook">
-              {s.process.map((p) => (<div class="pb"><h3>{p.phase}</h3><p>{p.detail}</p></div>))}
-            </div>
+        <div class="doc-sec" id="outcomes">
+          <h2>What you get</h2>
+          <ul class="ticks">{s.outcomes.map((o) => <li>{o}</li>)}</ul>
+        </div>
 
-            <h2 id="deliverables">What you receive</h2>
-            <ul class="checks">
-              {s.deliverables.map((d) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{d}</li>
-              ))}
-            </ul>
-            <p style="font-size:14px;color:var(--mute)"><strong>Measured on:</strong> {s.howMeasured.join(' · ')}</p>
+        <div class="doc-sec" id="process">
+          <h2>How it works</h2>
+          <Steps items={s.process.map((p) => ({ title: p.phase.split(' · ')[0], meta: p.phase.split(' · ')[1], body: p.detail }))} />
+        </div>
 
-            <h2 id="depth">Why it’s different in health</h2>
-            {s.deepPoints.map((d) => (<><h3>{d.h}</h3><p>{d.p}</p></>))}
+        <div class="doc-sec" id="deliverables">
+          <h2>What you receive</h2>
+          <ul class="ticks">{s.deliverables.map((d) => <li>{d}</li>)}</ul>
+          <p class="small"><strong>Measured on:</strong> {s.howMeasured.join(' · ')}</p>
+        </div>
 
-            <div class="callout"><span class="cl-label">By the numbers</span>{s.stat.text} <a href={s.stat.url} target="_blank" rel="noopener">({s.stat.source})</a></div>
-
-            <h2 id="faq">FAQ</h2>
-            <Faq items={s.faq}`} />
+        <div class="doc-sec" id="depth">
+          <h2>Why it’s different in health</h2>
+          {s.deepPoints.map((d) => (<><h3>{d.h}</h3><p>{d.p}</p></>))}
+          <div class="note">
+            <p class="label">By the numbers</p>
+            <p>{s.stat.text} <a href={s.stat.url} target="_blank" rel="noopener">({s.stat.source})</a></p>
           </div>
         </div>
 
-        <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-          </div>
-          <div class="aside-card">
-            <h4>The rest of the system</h4>
-            <div class="link-list">
-              {otherServices.map((o) => <a href={`/services/${o.slug}/`}>{o.name}</a>)}
-              <a href="/industries/">Industries we serve</a>
-            </div>
-          </div>
-          {relatedResources.length > 0 && (
-            <div class="aside-card">
-              <h4>Definitions & tools</h4>
-              <div class="link-list">
-                {relatedResources.map((r) => <a href={r.href}>{r.label}</a>)}
-              </div>
-            </div>
-          )}
-          <div class="aside-card dark">
-            <h4 style="color:#fff">See it on your account</h4>
-            <p>Free audit with a senior strategist - a written plan you keep either way.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+        <div class="doc-sec" id="faq">
+          <h2>FAQ</h2>
+          <Faq items={s.faq} />
+        </div>
       </div>
+
+      <aside class="doc-aside">
+        <AsideLinks
+          label="The rest of the system"
+          links={[...otherServices.map((o) => ({ href: `/services/${o.slug}/`, label: o.name })), { href: '/industries/', label: 'Industries we serve' }]}
+        />
+        {relatedResources.length > 0 && <AsideLinks label="Definitions & tools" links={relatedResources} />}
+        <AsideCta heading="See it on your account" text="Free audit with a senior strategist, a written plan you keep either way." />
+        <Toc items={toc} />
+      </aside>
     </div>
   </section>
 

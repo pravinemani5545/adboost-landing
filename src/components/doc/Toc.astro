@@ -1,0 +1,9 @@
+---
+// The page index in a document's aside; toc.ts marks the section being read.
+interface Props { items: { id: string; label: string }[]; label?: string }
+const { items, label = 'On this page' } = Astro.props;
+---
+<nav class="aside-block toc" aria-label={label} data-toc>
+  <p class="label plain">{label}</p>
+  <ul>{items.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+</nav>

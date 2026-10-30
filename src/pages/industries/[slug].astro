@@ -1,8 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
 import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
+import Steps from '../../components/Steps.astro';
+import Brief from '../../components/doc/Brief.astro';
+import Toc from '../../components/doc/Toc.astro';
+import AsideLinks from '../../components/doc/AsideLinks.astro';
+import AsideCta from '../../components/doc/AsideCta.astro';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook } from '../../data/vertical-playbooks';
 import { AD_POLICIES } from '../../data/adPolicies';
@@ -53,104 +58,89 @@ const toc = [
   { id: 'services', label: 'What we do' },
   { id: 'faq', label: 'FAQ' },
 ];
+const arrow = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{v.category}</span>
-      <h1>{v.h1}</h1>
-      <p class="phero-lede">{v.lede}</p>
-      <div class="phero-meta">
-        <span>Typical CAC {v.cacDisplay}</span>
-        <span>Compliance-first</span>
-        <span>Setup in 5 days</span>
-      </div>
-    </div>
-  </section>
+  <PageHead label="Industries" labelHref="/industries/" title={v.h1} lede={v.lede} dots>
+    <ul class="phead-facts arrive" style="--d:240ms">
+      <li>Typical CAC {v.cacDisplay}</li><li>Compliance-first</li><li>Setup in 5 days</li>
+    </ul>
+  </PageHead>
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="answer-box reveal">
-            <span class="al">The short answer</span>
-            {v.proofLine} We only work in health, so the playbook, creative, and compliance are purpose-built for {v.short.toLowerCase()} - not adapted from a generic DTC template.
-          </div>
-          <div class="prose">
-            <h2 id="market">Market context</h2>
-            <p>{pb.marketContext}</p>
+  <section class="tone-paper page-body" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main">
+        <Brief label="The short answer">{v.proofLine} We only work in health, so the playbook, creative, and compliance are purpose-built for {v.short.toLowerCase()}, not adapted from a generic DTC template.</Brief>
 
-            <h2 id="playbook">The {v.short.toLowerCase()} growth playbook</h2>
-            <p>{v.painPoint}</p>
-            <div class="playbook">
-              {pb.growthPlaybook.map((s) => (
-                <div class="pb"><h3>{s.h}</h3><p>{s.p}</p></div>
-              ))}
-            </div>
+        <div class="doc-sec" id="market">
+          <h2>Market context</h2>
+          <p>{pb.marketContext}</p>
+        </div>
 
-            <h2 id="landmine">Compliance landmines</h2>
-            <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
+        <div class="doc-sec" id="playbook">
+          <h2>The {v.short.toLowerCase()} growth playbook</h2>
+          <p>{v.painPoint}</p>
+          <Steps items={pb.growthPlaybook.map((s) => ({ title: s.h, body: s.p }))} />
+        </div>
 
-            <h2 id="mistakes">Common mistakes in {v.short.toLowerCase()}</h2>
-            <ul class="xlist">
-              {pb.commonMistakes.map((m) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{m}</li>
-              ))}
-            </ul>
-
-            <h2 id="good">What good looks like</h2>
-            <ul class="checks">
-              {pb.whatGoodLooksLike.map((k) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{k}</li>
-              ))}
-            </ul>
-
-            <h3>Segments we work in</h3>
-            <div class="chips">{pb.subSegments.map((s) => <span class="chip">{s}</span>)}</div>
-
-            <h2 id="services">What we do for {v.short.toLowerCase()} brands</h2>
-            <div class="related-grid">
-              {services.map((s) => (
-                <a class="lcard" href={s.href}><h3 style="font-size:16px">{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
-              ))}
-            </div>
-
-            <h2 id="faq">{v.short} marketing FAQ</h2>
-            <Faq items={faqAll}`} />
+        <div class="doc-sec" id="landmine">
+          <h2>Compliance landmines</h2>
+          <div class="note warn">
+            <p class="label">Watch for this</p>
+            <p>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></p>
           </div>
         </div>
 
-        <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+        <div class="doc-sec" id="mistakes">
+          <h2>Common mistakes in {v.short.toLowerCase()}</h2>
+          <ul class="crosses">{pb.commonMistakes.map((m) => <li>{m}</li>)}</ul>
+        </div>
+
+        <div class="doc-sec" id="good">
+          <h2>What good looks like</h2>
+          <ul class="ticks">{pb.whatGoodLooksLike.map((k) => <li>{k}</li>)}</ul>
+          <h3>Segments we work in</h3>
+          <div class="tags">{pb.subSegments.map((s) => <span class="tag">{s}</span>)}</div>
+        </div>
+
+        <div class="doc-sec" id="services">
+          <h2>What we do for {v.short.toLowerCase()} brands</h2>
+          <div class="cards" style="--cols:3">
+            {services.map((s, i) => (
+              <a class="icard card" href={s.href} data-reveal style={`--i:${i}`}>
+                <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+                <h3>{s.t}</h3>
+                <p>{s.d}</p>
+                <span class="more">Learn more <Fragment set:html={arrow} /></span>
+              </a>
+            ))}
           </div>
-          <div class="aside-card">
-            <h4>{v.short} at a glance</h4>
-            <div class="link-list">
-              <a href="/glossary/cac/">Typical CAC {v.cacDisplay} →</a>
-              <a href="/tools/cac-calculator/">Benchmark your CAC</a>
-              <a href="/tools/ltv-cac-calculator/">Check your LTV:CAC</a>
-            </div>
-          </div>
-          {platformGuides.length > 0 && (
-            <div class="aside-card">
-              <h4>Platform compliance guides</h4>
-              <div class="link-list">
-                {platformGuides.map((p) => <a href={`/advertising/${p.slug}/`}>{p.vertical} ads on {p.platform}: what is allowed</a>)}
-              </div>
-            </div>
-          )}
-          <div class="aside-card dark">
-            <h4 style="color:#fff">Lower CAC on your {v.short.toLowerCase()} brand</h4>
-            <p>Free audit with a senior strategist - a written plan you keep either way.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+        </div>
+
+        <div class="doc-sec" id="faq">
+          <h2>{v.short} marketing FAQ</h2>
+          <Faq items={faqAll} />
+        </div>
       </div>
+
+      <aside class="doc-aside">
+        <AsideLinks
+          label={`${v.short} at a glance`}
+          links={[
+            { href: '/glossary/cac/', label: `Typical CAC ${v.cacDisplay}` },
+            { href: '/tools/cac-calculator/', label: 'Benchmark your CAC' },
+            { href: '/tools/ltv-cac-calculator/', label: 'Check your LTV:CAC' },
+          ]}
+        />
+        {platformGuides.length > 0 && (
+          <AsideLinks label="Platform compliance guides" links={platformGuides.map((p) => ({ href: `/advertising/${p.slug}/`, label: `${p.vertical} ads on ${p.platform}: what is allowed` }))} />
+        )}
+        <AsideCta heading={`Lower CAC on your ${v.short.toLowerCase()} brand`} text="Free audit with a senior strategist, a written plan you keep either way." />
+        <Toc items={toc} />
+      </aside>
     </div>
   </section>
 
   <Closing heading={`Ready to lower CAC on your ${v.short.toLowerCase()} brand?`} />
 </BaseLayout>
+

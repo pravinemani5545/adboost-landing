@@ -2,6 +2,7 @@
 // The blog: the index and every post, on the system shell. Posts: a page head with the byline, the
 // hero, one reading column, related reads and the closing band (the post's own CTA copy when it has one).
 import Shell from './Shell.astro';
+import '../styles/content.css';
 import Closing from '../components/Closing.astro';
 import { versioned } from '../lib/assets';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
@@ -202,28 +203,8 @@ const category = post?.tags[0]?.toUpperCase();
   .hero-figure { margin-block: clamp(36px, 4vw, 56px); }
   .hero-figure img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; }
 
-  /* --- the reading column --- */
-  .prose { max-width: var(--col); margin-inline: auto; font-size: clamp(17px, 0.3vw + 16px, 19px); line-height: 1.7; color: var(--fg-2); }
-  .prose > * + * { margin-top: 1.1em; }
-  .prose h2 { font-size: clamp(28px, 2.8vw, 40px); line-height: 1.12; color: var(--fg); margin-top: 2em; }
-  .prose h3 { font: 500 1.12em/1.35 var(--sans); color: var(--fg); margin-top: 1.8em; }
-  .prose h2 + *, .prose h3 + * { margin-top: 0.7em; }
-  .prose strong { color: var(--fg); font-weight: 500; }
-  .prose ul, .prose ol { padding-left: 1.3em; }
-  .prose ul { list-style: disc; }
-  .prose ol { list-style: decimal; }
-  .prose li + li { margin-top: 0.5em; }
-  .prose li::marker { color: var(--accent); }
-  .prose a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
-  .prose a:hover { text-decoration-color: currentColor; }
-  .prose blockquote { padding-left: 1.2em; border-left: 2px solid var(--accent); font: 300 1.25em/1.4 var(--serif); color: var(--fg); }
-  .prose blockquote p + p { margin-top: 0.6em; }
-  .prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.4em; }
-  .prose img { border-radius: var(--r-media); }
-  .prose code { font-family: var(--mono); font-size: 0.88em; padding: 2px 6px; border-radius: 6px; background: color-mix(in srgb, var(--fg) 7%, transparent); }
-  .prose table { width: 100%; border-collapse: collapse; font-size: 0.88em; font-variant-numeric: tabular-nums; }
-  .prose th, .prose td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  .prose th { font-weight: 500; color: var(--fg); border-bottom-color: var(--fg-2); }
+  /* --- the reading column (the prose itself is in content.css, shared with the inner pages) --- */
+  .post .prose { margin-inline: auto; }
 
   /* --- related reads --- */
   .related { margin-top: var(--section); }
@@ -236,12 +217,6 @@ const category = post?.tags[0]?.toUpperCase();
 
   @media (max-width: 900px) {
     .related-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 760px) {
-    /* markdown tables scroll inside their own box instead of crushing */
-    .prose table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .prose th, .prose td { min-width: 138px; }
-    .prose th:first-child, .prose td:first-child { min-width: 42px; }
   }
   @media (max-width: 640px) {
     .byline-date { width: 100%; padding-left: 0; border-left: 0; }

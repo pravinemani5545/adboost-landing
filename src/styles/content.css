@@ -1,0 +1,266 @@
+/* The reading pieces of the inner pages, built on the system's roles: the document layout with its
+   sticky aside, prose, the short answer, notes, tick and cross lists, figure rows, tables, row
+   lists, cards, tags, people and the calculators. Site-level (src/styles/system stays generic);
+   every colour is a role or a status token from brand.css. Pages set these inside a .tone-paper
+   (or .tone-frame) section, so --fg, --fg-2, --line and --accent follow the tone and the scheme. */
+
+/* ---------- status colours, resolved per tone and scheme ---------- */
+.tone-paper { --st-ok: var(--ok); --st-caution: var(--caution); --st-warn: var(--warn); }
+.tone-frame, .gcard { --st-ok: var(--ok-on-frame); --st-caution: var(--caution-on-frame); --st-warn: var(--warn-on-frame); }
+:root[data-theme="dark"] .tone-paper { --st-ok: var(--ok-on-frame); --st-caution: var(--caution-on-frame); --st-warn: var(--warn-on-frame); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tone-paper { --st-ok: var(--ok-on-frame); --st-caution: var(--caution-on-frame); --st-warn: var(--warn-on-frame); }
+}
+
+/* ---------- sections ---------- */
+/* the body under a page head: it starts close to the head (which carries its own air) */
+.page-body { padding: clamp(8px, 2vw, 24px) 0 var(--section); }
+.page-band { padding-block: calc(var(--section) * 0.75); }
+.sec-h { font-size: clamp(30px, 3.4vw, 48px); line-height: 1.08; max-width: 22ch; }
+.sec-h em, .phead-h em { font-style: italic; }
+.sec-lede { color: var(--fg-2); max-width: 62ch; margin-top: 16px; }
+.sec-top { display: grid; gap: 18px; margin-bottom: clamp(28px, 3.4vw, 48px); }
+
+/* ---------- the document: a reading column and a sticky aside ---------- */
+.doc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 320px); gap: clamp(40px, 6vw, 112px); align-items: start; }
+.doc-main { min-width: 0; display: grid; gap: clamp(28px, 3vw, 40px); }
+.doc-main > * { min-width: 0; }
+.doc-aside { align-self: stretch; display: grid; gap: 28px; align-content: start; }
+/* the page index comes last in the aside and holds under the nav once the blocks above it have
+   scrolled away (the whole aside is often taller than the screen, so it never sticks as a whole) */
+.doc-aside .toc { position: sticky; top: calc(var(--nav-h) + 28px); }
+.doc-main h2[id], .doc-main section[id], .doc-main div[id] { scroll-margin-top: calc(var(--nav-h) + 24px); }
+@media (max-width: 959px) {
+  .doc { grid-template-columns: 1fr; }
+  /* the page index is for long screens: on a phone the headings are a thumb away */
+  .doc-aside .toc { display: none; }
+}
+
+/* aside blocks: a label over a list of links, a hairline above */
+.aside-block { display: grid; gap: 14px; padding-top: 16px; border-top: 1px solid var(--line); }
+.aside-block > .label { color: var(--fg-2); }
+.aside-block p { font-size: 15px; color: var(--fg-2); }
+.links { display: grid; }
+.links a {
+  display: flex; align-items: center; min-height: 40px; padding: 6px 0; font-size: 15.5px; line-height: 1.35;
+  border-bottom: 1px solid var(--line); transition: color 0.15s, transform 0.4s var(--spring-snap);
+}
+.links li:last-child a, .links a:last-child { border-bottom: 0; }
+.links a:hover { color: var(--accent); transform: translateX(4px); }
+/* the page index: the section being read is marked (toc.ts) */
+.toc ul { display: grid; }
+.toc a {
+  display: block; padding: 7px 0 7px 14px; margin-left: -14px; font-size: 15px; color: var(--fg-2);
+  border-left: 1px solid var(--line); transition: color 0.15s, border-color 0.15s;
+}
+.toc a:hover { color: var(--fg); }
+.toc a.active { color: var(--fg); border-left-color: var(--accent); }
+/* the aside's call to action: a small gradient card */
+.aside-cta { display: grid; gap: 14px; justify-items: start; }
+.aside-cta h3 { font-size: clamp(22px, 1.7vw, 26px); }
+.aside-cta p { font-size: 15px; color: var(--fg-2); }
+.aside-cta .btn { margin-top: 4px; }
+
+/* ---------- prose: the reading column (posts, policies and the inner pages) ---------- */
+.prose { max-width: var(--col, 68ch); font-size: clamp(17px, 0.3vw + 16px, 19px); line-height: 1.7; color: var(--fg-2); }
+.prose > * + * { margin-top: 1.1em; }
+.prose h2 { font-size: clamp(28px, 2.8vw, 40px); line-height: 1.12; color: var(--fg); margin-top: 2em; }
+.prose h3 { font: 500 1.12em/1.35 var(--sans); color: var(--fg); margin-top: 1.8em; }
+.prose > h2:first-child, .prose > h3:first-child { margin-top: 0; }
+.prose h2 + *, .prose h3 + * { margin-top: 0.7em; }
+.prose strong { color: var(--fg); font-weight: 500; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose ul { list-style: disc; }
+.prose ol { list-style: decimal; }
+.prose li + li { margin-top: 0.5em; }
+.prose li::marker { color: var(--accent); }
+.prose a, .doc-main p a, .brief a, .note a {
+  color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 1px;
+  text-underline-offset: 3px; transition: text-decoration-color 0.2s;
+}
+.prose a:hover, .doc-main p a:hover, .brief a:hover, .note a:hover { text-decoration-color: currentColor; }
+.prose blockquote { padding-left: 1.2em; border-left: 2px solid var(--accent); font: 300 1.25em/1.4 var(--serif); color: var(--fg); }
+.prose blockquote p + p { margin-top: 0.6em; }
+.prose hr { border: 0; border-top: 1px solid var(--line); margin-block: 2.4em; }
+.prose img { border-radius: var(--r-media); }
+.prose code, .note code { font-family: var(--mono); font-size: 0.88em; padding: 2px 6px; border-radius: 6px; background: color-mix(in srgb, var(--fg) 7%, transparent); }
+.prose table { width: 100%; border-collapse: collapse; font-size: 0.88em; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prose th { font-weight: 500; color: var(--fg); border-bottom-color: var(--fg-2); }
+@media (max-width: 760px) {
+  /* markdown tables scroll inside their own box instead of crushing */
+  .prose table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .prose th, .prose td { min-width: 138px; }
+  .prose th:first-child, .prose td:first-child { min-width: 42px; }
+}
+/* a block of a page's own sections set as prose, headings in the serif */
+.doc-sec { display: grid; gap: 18px; }
+.doc-sec > h2 { font-size: clamp(28px, 2.8vw, 40px); line-height: 1.12; }
+.doc-sec > p, .doc-sec > .prose { color: var(--fg-2); max-width: 68ch; }
+.doc-sec h3 { font: 500 19px/1.35 var(--sans); color: var(--fg); margin-top: 8px; }
+.doc-sec .small { max-width: 68ch; }
+
+/* ---------- the short answer: what the page says, before it says it at length ---------- */
+.brief { display: grid; gap: 12px; padding: 4px 0 4px clamp(18px, 2vw, 26px); border-left: 2px solid var(--accent); max-width: 68ch; }
+.brief > .label { color: var(--fg-2); }
+.brief p { font-size: clamp(18px, 1.35vw, 21px); line-height: 1.55; color: var(--fg); text-wrap: pretty; }
+
+/* ---------- notes: a framed aside in the flow ---------- */
+.note { display: grid; gap: 10px; padding: clamp(18px, 2vw, 26px); border: 1px solid var(--line); border-radius: var(--r-media); max-width: 68ch; }
+.note > .label { color: var(--fg-2); }
+.note.warn > .label { --mark: var(--st-warn); }
+.note.ok > .label { --mark: var(--st-ok); }
+.note p, .note > span { color: var(--fg-2); }
+
+/* ---------- tick and cross lists ---------- */
+.ticks, .crosses { display: grid; gap: 12px; max-width: 68ch; }
+.ticks li, .crosses li { position: relative; padding-left: 28px; color: var(--fg-2); line-height: 1.55; }
+.ticks li::before {
+  content: ""; position: absolute; left: 2px; top: 0.42em; width: 12px; height: 7px;
+  border-left: 1.5px solid var(--accent); border-bottom: 1.5px solid var(--accent); rotate: -45deg;
+}
+.crosses li::before, .crosses li::after {
+  content: ""; position: absolute; left: 1px; top: 0.78em; width: 13px; height: 1.5px; background: var(--fg-2); rotate: 45deg;
+}
+.crosses li::after { rotate: -45deg; }
+.ticks strong, .crosses strong { color: var(--fg); font-weight: 500; }
+
+/* ---------- tags ---------- */
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 999px;
+  font-size: 14px; color: var(--fg-2); box-shadow: inset 0 0 0 1px var(--line);
+  transition: color 0.15s, box-shadow 0.2s;
+}
+a.tag { min-height: 44px; }
+a.tag:hover { color: var(--fg); box-shadow: inset 0 0 0 1px var(--accent); }
+/* a status: allowed, restricted, prohibited */
+.status { display: inline-flex; align-items: center; gap: 8px; font: 500 12.5px/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; }
+.status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--status, var(--fg-2)); }
+.status.allowed { --status: var(--st-ok); }
+.status.restricted, .status.cert { --status: var(--st-caution); }
+.status.prohibited { --status: var(--st-warn); }
+
+/* ---------- figures: large serif numbers between short rules ---------- */
+.figs { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: clamp(24px, 4vw, 64px); }
+.fig { position: relative; display: grid; gap: 10px; align-content: start; }
+.fig + .fig::before { content: ""; position: absolute; left: calc(clamp(24px, 4vw, 64px) / -2); top: 8px; width: 1px; height: 64px; background: var(--line); }
+.fig-v { font: 300 clamp(48px, 5.4vw, 84px) / 1 var(--serif); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.fig-l { color: var(--fg-2); font-size: 15px; }
+@media (max-width: 760px) {
+  .figs { grid-template-columns: 1fr 1fr; row-gap: 32px; }
+  .fig + .fig::before { content: none; }
+}
+
+/* ---------- a row list: number, serif name, a line (the hub pages) ---------- */
+.rows { border-top: 1px solid var(--line); }
+/* rows arrive from the side; the list clips that travel so the page never grows a sideways scroll */
+.rows { overflow-x: clip; }
+.rows-head { display: flex; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--line); color: var(--fg-2); }
+/* the marker is a flex item too, so the words push the count to the far end */
+.rows-head > span:first-of-type { margin-right: auto; }
+.row {
+  display: grid; grid-template-columns: clamp(40px, 4vw, 64px) minmax(0, 1fr) auto; column-gap: clamp(14px, 2vw, 28px); align-items: baseline;
+  padding: clamp(18px, 2vw, 26px) 0; border-bottom: 1px solid var(--line);
+}
+.row .idx { grid-row: span 2; }
+.row-name { font: 300 clamp(22px, 2vw, 30px) / 1.15 var(--serif); letter-spacing: -0.012em; }
+.row-text { grid-column: 2; margin-top: 6px; max-width: 64ch; }
+.row-meta { grid-row: 1; grid-column: 3; color: var(--fg-2); text-align: right; }
+.row-arrow { display: inline-flex; color: var(--fg-2); }
+.js.motion .row-name, .js.motion .row-arrow { transition: transform var(--t-settle) var(--spring-settle), color 0.2s; }
+@media (hover: hover) {
+  a.row:hover .row-name { transform: translate(8px, 0); transition: transform var(--t-snap) var(--spring-snap); }
+  a.row:hover .row-arrow { color: var(--accent); transform: translate(4px, 0); transition: transform var(--t-snap) var(--spring-snap); }
+}
+@media (max-width: 640px) {
+  .row { grid-template-columns: 34px minmax(0, 1fr); }
+  .row-meta { grid-row: auto; grid-column: 2; text-align: left; margin-top: 8px; }
+  .row-arrow { display: none; }
+}
+
+/* ---------- cards: a hairline panel with the cursor light (system .card) ---------- */
+.cards { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 12px; }
+.icard {
+  display: grid; align-content: start; gap: 12px; padding: clamp(20px, 2vw, 28px); border-radius: var(--r-panel);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.icard h3 { font-size: clamp(21px, 1.6vw, 25px); }
+.icard p { font-size: 15.5px; color: var(--fg-2); }
+.icard .more { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-size: 15px; font-weight: 500; color: var(--fg); }
+.icard .more svg { color: var(--accent); transition: transform var(--t-settle) var(--spring-settle); }
+@media (hover: hover) { a.icard:hover .more svg { transform: translate(4px, 0); transition-timing-function: var(--spring-snap); } }
+@media (max-width: 900px) { .cards { grid-template-columns: repeat(min(var(--cols, 3), 2), minmax(0, 1fr)); } }
+@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+/* beside the aside the reading column is narrow: cards stack until there is room for a row */
+.doc-main .cards { grid-template-columns: 1fr; }
+@media (min-width: 1280px) { .doc-main .cards { grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); } }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 16px; font-variant-numeric: tabular-nums; }
+.table th, .table td { text-align: left; vertical-align: top; padding: 16px 18px 16px 0; border-bottom: 1px solid var(--line); }
+.table thead th { font: 500 12.5px/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-2); border-bottom-color: var(--fg-2); }
+.table thead th.us { color: var(--fg); }
+.table td { color: var(--fg-2); }
+.table td.us { color: var(--fg); }
+.table .row-h { font: 300 19px/1.3 var(--serif); color: var(--fg); min-width: 150px; }
+
+/* ---------- people ---------- */
+.people { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(28px, 3vw, 48px); }
+.person { display: grid; gap: 14px; align-content: start; }
+.person-pic { aspect-ratio: 1 / 1; background: linear-gradient(174deg, var(--gc-0), var(--gc-3)); display: grid; place-items: center; color: var(--paper-color); font: 300 48px/1 var(--serif); }
+.person-pic img { width: 100%; height: 100%; object-fit: cover; }
+.person h3 { margin-top: 6px; }
+.person .label { color: var(--fg-2); }
+.person p { font-size: 15.5px; color: var(--fg-2); }
+@media (max-width: 899px) { .people { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .people { grid-template-columns: 1fr; } .person-pic { max-width: 360px; } }
+
+/* ---------- calculators: the fields, and the answer on a gradient card ---------- */
+.calc { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.calc-fields { display: grid; gap: 18px; align-content: start; padding: clamp(20px, 2.4vw, 32px); border-radius: var(--r-panel); box-shadow: inset 0 0 0 1px var(--line); }
+.calc-field label { display: block; font-size: 15px; font-weight: 500; color: var(--fg); margin-bottom: 8px; }
+.calc-field .hint { font-weight: 400; color: var(--fg-2); }
+.calc-input {
+  display: flex; align-items: center; min-height: 52px; border-radius: 12px; overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow 0.2s;
+}
+.calc-input:focus-within { box-shadow: inset 0 0 0 1.5px var(--accent); }
+.calc-input .pfx { padding: 0 2px 0 16px; color: var(--fg-2); }
+.calc-input .sfx { padding: 0 16px; color: var(--fg-2); font-size: 15px; }
+.calc-input input, .calc-input select {
+  flex: 1; min-width: 0; border: 0; background: transparent; padding: 14px 16px 14px 4px; font: inherit; font-size: 17px;
+  color: var(--fg); outline: none; font-variant-numeric: tabular-nums;
+}
+.calc-input input:first-child, .calc-input select:first-child { padding-left: 16px; }
+.calc-result { display: grid; align-content: center; gap: 22px; }
+.calc-result .cr-label, .calc-result .cr-sub .k { font: 500 12.5px/1.3 var(--sans); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-2); }
+.calc-result .cr-value { margin-top: 10px; font: 300 clamp(56px, 6vw, 92px) / 1 var(--serif); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.calc-result .cr-value.good { color: var(--st-ok); }
+.calc-result .cr-value.bad { color: var(--st-warn); }
+.calc-result .cr-sub { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.calc-result .cr-sub .v { margin-top: 6px; font: 300 clamp(26px, 2.2vw, 34px) / 1.1 var(--serif); font-variant-numeric: tabular-nums; }
+.calc-result .cr-note { padding-top: 16px; border-top: 1px solid var(--line); font-size: 15.5px; color: var(--fg-2); }
+.calc-foot { font-size: 15px; color: var(--fg-2); max-width: 68ch; }
+@media (max-width: 760px) { .calc { grid-template-columns: 1fr; } }
+
+/* ---------- arrivals for a whole list at once ---------- */
+@media (max-width: 640px) {
+  .aside-block p, .links a, .toc a, .icard p, .person p, .calc-foot, .calc-result .cr-note, .table, .tag { font-size: 16px; }
+}
+
+/* two FRAME bands in a row (a frame section before the closing band) part on a hairline */
+.tone-frame + .closing { border-top: 1px solid var(--line); }
+
+/* a page head's short facts, each after an accent square */
+.phead-facts { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--fg-2); font-size: 15px; }
+.phead-facts li { display: inline-flex; align-items: center; gap: 10px; }
+.phead-facts li::before { content: ""; width: 6px; height: 6px; background: var(--accent); }
+@media (max-width: 640px) { .phead-facts { font-size: 16px; } }
+
+/* tables written into the data's own HTML (glossary entries): the wrapper scrolls on a phone, the
+   first column reads as the row's heading */
+.prose .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.prose .dtable { min-width: 480px; }
+.prose .dtable .row-h { font-family: var(--serif); font-weight: 300; font-size: 1.08em; color: var(--fg); }

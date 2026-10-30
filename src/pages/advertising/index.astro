@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
 import Closing from '../../components/Closing.astro';
 import { AD_POLICIES, STATUS_LABEL } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
@@ -9,50 +9,59 @@ import { breadcrumb } from '../../lib/schema';
 const SITE = siteBase(Astro.site);
 const title = 'Health Ad Compliance Review by Platform (2026) | AdBoost';
 const description = 'Pre-launch compliance review for GLP-1, supplement, telehealth, TRT and med spa ads on Meta, Google and TikTok: certification, prohibited claims, rejections.';
-const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
 // group by vertical for a clean matrix
 const verticals = [...new Map(AD_POLICIES.map((p) => [p.verticalSlug, { name: p.vertical, slug: p.verticalSlug }])).values()];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }]),
   { '@type': 'CollectionPage', name: 'Health ad compliance by platform and vertical', url: `${SITE}/advertising/` },
 ];
+const arrow = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath="/advertising/" {jsonLd} ogType="article">
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>AD COMPLIANCE · 2026</span>
-      <h1>What’s allowed, by <span class="serif">platform</span> and vertical</h1>
-      <p class="phero-lede">Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch.</p>
-    </div>
-  </section>
+  <PageHead
+    label="Ad compliance · 2026"
+    title="What’s allowed, by *platform* and vertical"
+    lede="Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch."
+    dots
+  />
 
-  <section class="iwrap">
-    <div class="container">
-      {verticals.map((v) => (
-        <div style="margin-bottom:28px" class="reveal">
-          <h2 class="sec-title" style="font-size:20px">{v.name}</h2>
-          <div class="grid-cards three" style="margin-top:14px">
-            {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p) => (
-              <a class="lcard" href={`/advertising/${p.slug}/`}>
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-                  <span class="lc-tag">{p.platform.toUpperCase()}</span>
-                  <span class={`badge ${badgeClass(p.status)}`}>{STATUS_LABEL[p.status]}</span>
-                </div>
-                <h3 style="font-size:16px">{p.vertical} on {p.platform}</h3>
-                <p>{p.rejectionReasons[0]}.</p>
-                <span class="lc-more">Read the rules →</span>
-              </a>
-            ))}
+  <section class="tone-paper page-body" data-nav="paper" aria-label="Guides by vertical and platform">
+    <div class="wrap matrix">
+      {verticals.map((v) => {
+        const rows = AD_POLICIES.filter((p) => p.verticalSlug === v.slug);
+        return (
+          <div class="matrix-grp">
+            <p class="rows-head label" data-reveal><span>{v.name}</span><span class="idx">{String(rows.length).padStart(2, '0')}</span></p>
+            <div class="cards" style="--cols:3">
+              {rows.map((p, i) => (
+                <a class="icard card" href={`/advertising/${p.slug}/`} data-reveal style={`--i:${i}`}>
+                  <span class="icard-top">
+                    <span class="label plain">{p.platform}</span>
+                    <span class={`status ${p.status}`}>{STATUS_LABEL[p.status]}</span>
+                  </span>
+                  <h3>{p.vertical} on {p.platform}</h3>
+                  <p>{p.rejectionReasons[0]}.</p>
+                  <span class="more">Read the rules <Fragment set:html={arrow} /></span>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      <div class="callout reveal" style="margin-top:8px">
-        <span class="cl-label">The bigger picture</span>
-        For the FTC/FDA standards underneath these platform rules - structure/function claims, LegitScript, compounded GLP-1, health-data privacy - see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
+        );
+      })}
+      <div class="note" data-reveal>
+        <p class="label">The bigger picture</p>
+        <p>For the FTC/FDA standards underneath these platform rules (structure/function claims, LegitScript, compounded GLP-1, health-data privacy), see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.</p>
       </div>
     </div>
   </section>
 
-  <Closing heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch - the single biggest thing generalist agencies get wrong in health." />
+  <Closing heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch, the single biggest thing generalist agencies get wrong in health." />
 </BaseLayout>
+
+<style>
+  .matrix { display: grid; gap: clamp(40px, 4.4vw, 64px); }
+  .matrix-grp { display: grid; gap: 18px; }
+  .rows-head .idx { color: var(--fg); }
+  .icard-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .icard-top .label { color: var(--fg-2); }
+</style>

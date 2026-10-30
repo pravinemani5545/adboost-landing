@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
 import Closing from '../../components/Closing.astro';
 import { GLOSSARY } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
@@ -19,35 +19,62 @@ const jsonLd = [
     hasDefinedTerm: sorted.map((t) => ({ '@type': 'DefinedTerm', name: t.term, url: `${SITE}/glossary/${t.slug}/` })),
   },
 ];
+// the terms by first letter, for the index
+const letters = [...new Set(sorted.map((t) => t.term[0].toUpperCase()))];
 ---
 <BaseLayout {title} {description} canonicalPath="/glossary/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
-      <h1>Health & performance marketing <span class="serif">glossary</span></h1>
-      <p class="phero-lede">The metrics and rules that decide whether a health brand scales profitably - defined in plain English, every example drawn from real health verticals.</p>
+  <PageHead
+    label="Glossary"
+    title="Health & performance marketing *glossary*"
+    lede="The metrics and rules that decide whether a health brand scales profitably, defined in plain English, every example drawn from real health verticals."
+    dots
+  />
+
+  <section class="tone-paper page-body" data-nav="paper" aria-label="Terms A to Z">
+    <div class="wrap gl">
+      {letters.map((l) => (
+        <div class="gl-grp">
+          <p class="gl-letter" aria-hidden="true">{l}</p>
+          <ul class="gl-list">
+            {sorted.filter((t) => t.term[0].toUpperCase() === l).map((t) => (
+              <li data-reveal>
+                <a class="gl-item" href={`/glossary/${t.slug}/`}>
+                  <span class="gl-term">{t.term}</span>
+                  <span class="gl-short small">{t.short}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
     </div>
   </section>
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="glossary-grid">
-        {sorted.map((t) => (
-          <a class="gl-card reveal" href={`/glossary/${t.slug}/`}>
-            <h3>{t.term}</h3>
-            <p>{t.short}</p>
-          </a>
-        ))}
-      </div>
-
-      <div class="prose" style="max-width:760px;margin-top:40px">
-        <h2>How to use this glossary</h2>
-        <p>Every definition here is written for one reader: a health or telehealth operator deciding where the next dollar of ad spend goes. The entries fall into two families. The first is unit economics and paid media: CAC, LTV:CAC, MER, POAS, payback period, and the creative and funnel metrics (hook rate, creative fatigue, landing page conversion rate) that move them. The second is health-specific compliance and measurement: LegitScript certification, structure/function claims, HIPAA-compliant marketing, and the tracking layer (iOS ATT, CAPI, server-side tracking) that decides what you can measure and what you may legally send to an ad platform.</p>
-        <p>The metric entries pair with our free calculators: read the definition, then run your own numbers in the <a href="/tools/cac-calculator/">CAC calculator</a>, <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, <a href="/tools/mer-calculator/">MER calculator</a>, or <a href="/tools/poas-calculator/">POAS calculator</a>, each pre-loaded with health benchmark context. The compliance entries pair with our <a href="/advertising/">advertising policy guides</a>, which apply the same rules platform by platform: what GLP-1, TRT, telehealth, supplement, and med spa brands can and cannot say on Meta, Google, and TikTok. If a term you need is missing, it is likely covered in depth in a guide or on the <a href="/blog/">blog</a>.</p>
+  <section class="tone-frame section" data-nav="frame" aria-labelledby="use-h">
+    <div class="wrap">
+      <div class="doc-sec">
+        <p class="label muted" data-reveal>How to use it</p>
+        <h2 id="use-h" data-reveal>How to use this glossary</h2>
+        <div class="prose" data-reveal>
+          <p>Every definition here is written for one reader: a health or telehealth operator deciding where the next dollar of ad spend goes. The entries fall into two families. The first is unit economics and paid media: CAC, LTV:CAC, MER, POAS, payback period, and the creative and funnel metrics (hook rate, creative fatigue, landing page conversion rate) that move them. The second is health-specific compliance and measurement: LegitScript certification, structure/function claims, HIPAA-compliant marketing, and the tracking layer (iOS ATT, CAPI, server-side tracking) that decides what you can measure and what you may legally send to an ad platform.</p>
+          <p>The metric entries pair with our free calculators: read the definition, then run your own numbers in the <a href="/tools/cac-calculator/">CAC calculator</a>, <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, <a href="/tools/mer-calculator/">MER calculator</a>, or <a href="/tools/poas-calculator/">POAS calculator</a>, each pre-loaded with health benchmark context. The compliance entries pair with our <a href="/advertising/">advertising policy guides</a>, which apply the same rules platform by platform: what GLP-1, TRT, telehealth, supplement, and med spa brands can and cannot say on Meta, Google, and TikTok. If a term you need is missing, it is likely covered in depth in a guide or on the <a href="/blog/">blog</a>.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <Closing />
 </BaseLayout>
+
+<style>
+  .gl { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  /* each letter heads its own band: the letter large in the serif on the left, its terms beside it */
+  .gl-grp { display: grid; grid-template-columns: clamp(56px, 8vw, 140px) minmax(0, 1fr); gap: clamp(16px, 3vw, 48px); padding: clamp(18px, 2vw, 28px) 0; border-bottom: 1px solid var(--line); }
+  .gl-letter { font: italic 300 clamp(40px, 4.4vw, 64px) / 1 var(--serif); color: var(--fg-2); }
+  .gl-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px clamp(24px, 3vw, 48px); }
+  .gl-item { display: grid; gap: 4px; padding: 10px 0 12px; }
+  .gl-term { font: 300 clamp(21px, 1.7vw, 26px) / 1.2 var(--serif); letter-spacing: -0.01em; transition: color 0.2s, transform var(--t-settle) var(--spring-settle); }
+  @media (hover: hover) { .gl-item:hover .gl-term { color: var(--accent); transform: translate(6px, 0); transition-timing-function: var(--spring-snap); } }
+  @media (max-width: 760px) { .gl-list { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .gl-grp { grid-template-columns: 44px minmax(0, 1fr); } }
+</style>

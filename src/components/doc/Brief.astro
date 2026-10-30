@@ -1,0 +1,9 @@
+---
+// The short answer at the top of a document: what the page says before it says it at length.
+interface Props { label?: string }
+const { label = 'In short' } = Astro.props;
+---
+<div class="brief" data-reveal>
+  <p class="label">{label}</p>
+  <p><slot /></p>
+</div>

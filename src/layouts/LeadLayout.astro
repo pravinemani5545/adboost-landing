@@ -1,10 +1,10 @@
 ---
-// Minimal, distraction-free layout for lead-magnet opt-in pages: no nav or footer chrome (it
-// maximizes conversion); always noindex. It still wears the system's tokens, fonts and scheme, and the
-// old page body sits in the .legacy wrapper (legacy.css) until run 2 reskins it.
+// Lead-magnet pages: no nav, no footer curtain, nothing between the reader and the one action (it
+// maximizes conversion); always noindex. They still wear the system: its tokens, type, scheme (so
+// the dark scheme reads) and arrivals, on one PAPER ground with a quiet top and foot.
 import '../styles/system/brand.css';
 import '../styles/system/base.css';
-import '../styles/legacy.css';
+import '../styles/content.css';
 import SystemHead from '../components/SystemHead.astro';
 import { BRAND } from '../lib/site';
 import { brand } from '../lib/brand';
@@ -13,16 +13,23 @@ interface Props {
   title: string;
   description: string;
   canonicalPath: string;
+  jsonLd?: unknown;
+  /** the small tag in the top bar */
+  tag?: string;
 }
-const { title, description, canonicalPath } = Astro.props;
+const { title, description, canonicalPath, jsonLd, tag = 'Peptide & GLP-1 ad compliance' } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+const ogImage = `${site}/og/og-home.png`;
+const ogAlt = 'AdBoost Health, performance marketing for health brands';
+const nodes = jsonLd == null ? [] : Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const schema = nodes.length === 0 ? null : nodes.length === 1 ? { '@context': 'https://schema.org', ...(nodes[0] as object) } : { '@context': 'https://schema.org', '@graph': nodes };
 ---
 
 <!doctype html>
-<html lang="en" data-brand={brand.key} data-tc-light={brand.themeLight} data-tc-dark={brand.themeDark}>
+<html lang="en" data-nav="paper" data-brand={brand.key} data-tc-light={brand.themeLight} data-tc-dark={brand.themeDark}>
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>{title}</title>
 <meta name="description" content={description} />
 <meta name="robots" content="noindex, nofollow" />
@@ -30,38 +37,59 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 <meta property="og:type" content="website" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
-<meta property="og:image" content={`${site}/og/og-home.png`} />
-<meta property="og:image:alt" content="AdBoost Health, performance marketing for health brands" />
+<meta property="og:url" content={`${site}${canonicalPath}`} />
+<meta property="og:site_name" content="AdBoost Health" />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={ogAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogAlt} />
+{schema && <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')} />}
 <SystemHead />
 </head>
 <body class="lead-body tone-paper">
+<a class="skip" href="#main">Skip to content</a>
 <header class="lead-top">
-  <div class="container">
-    <a class="lead-brand" href="/" aria-label={`${BRAND.full}, home`}><span class="lead-mark" aria-hidden="true"></span><span>{BRAND.name} <span>{BRAND.sub}</span></span></a>
-    <span class="lead-top-tag label">Peptide &amp; GLP-1 ad compliance</span>
+  <div class="wrap lead-top-in">
+    <a class="lead-brand" href="/" aria-label={`${BRAND.full}, home`}><span class="lead-mark" aria-hidden="true"></span><span class="lead-wm" aria-hidden="true">{BRAND.name} <span>{BRAND.sub}</span></span></a>
+    <span class="lead-tag label plain">{tag}</span>
   </div>
 </header>
-<main class="lead-main legacy">
+<main class="lead-main" id="main">
   <slot />
 </main>
 <footer class="lead-foot">
-  <div class="container">
+  <div class="wrap">
     <span>© {new Date().getFullYear()} {BRAND.full} · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
   </div>
 </footer>
+<script>
+  import '../scripts/reveal';
+  import '../scripts/theme';
+</script>
 
 <style is:global>
-  .lead-body { min-height: 100vh; display: flex; flex-direction: column; }
-  .lead-top { padding: 18px 0; border-bottom: 1px solid var(--line); }
-  .lead-top .container { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-  .lead-brand { display: flex; align-items: center; gap: 12px; min-height: 44px; font: 300 22px/1 var(--serif); letter-spacing: -0.02em; }
-  .lead-brand > span > span { opacity: 0.62; }
+  /* one PAPER ground (INK in the dark scheme) from edge to edge, overscroll included */
+  html:has(.lead-body) { background: var(--paper); }
+  .lead-body { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
+  .lead-top { border-bottom: 1px solid var(--line); }
+  .lead-top-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 72px; }
+  .lead-brand { display: flex; align-items: center; gap: 12px; min-height: 44px; }
   .lead-mark { width: 24px; aspect-ratio: 112 / 128; background: var(--paper-mark); -webkit-mask: url("/logos/adboost-mark.webp") center / contain no-repeat; mask: url("/logos/adboost-mark.webp") center / contain no-repeat; }
-  .lead-top-tag { display: none; color: var(--fg-2); }
-  @media (min-width: 720px) { .lead-top-tag { display: inline; } }
-  .lead-main { padding: 0 0 56px; flex: 1 0 auto; display: flex; flex-direction: column; }
+  .lead-wm { font: 300 22px/1 var(--serif); letter-spacing: -0.02em; }
+  .lead-wm span { opacity: 0.62; }
+  .lead-tag { display: none; color: var(--fg-2); }
+  @media (min-width: 720px) { .lead-tag { display: inline; } }
+  .lead-main { flex: 1 0 auto; display: flex; flex-direction: column; }
   .lead-foot { padding: 26px 0; border-top: 1px solid var(--line); color: var(--fg-2); font-size: 15px; }
-  .lead-foot a { color: var(--fg-2); text-decoration: underline; text-underline-offset: 3px; }
+  .lead-foot a { color: var(--fg-2); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: 44px; align-items: center; }
+  @media (max-width: 640px) { .lead-foot { font-size: 16px; } }
+  @media print {
+    .lead-top, .lead-foot, .skip { display: none !important; }
+    html, body { background: none !important; }
+  }
 </style>
 </body>
 </html>

@@ -1,7 +1,8 @@
 ---
 import fs from 'node:fs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
+import AsideLinks from '../../components/doc/AsideLinks.astro';
 import Closing from '../../components/Closing.astro';
 import { siteBase } from '../../lib/site';
 import { versioned } from '../../lib/assets';
@@ -20,7 +21,7 @@ const team = [
     initials: 'AS',
     photo: '/people/amir.webp',
     linkedin: 'https://www.linkedin.com/in/amir-salihovic-7b2844157/',
-    bio: 'Amir leads performance marketing for AdBoost Health’s partners and runs the Meta side of the house - creative-led acquisition that finds the right person mid-scroll. He’s scaled health and wellness brands to 7–8 figures and writes the agency’s benchmark and compliance guides.',
+    bio: 'Amir leads performance marketing for AdBoost Health’s partners and runs the Meta side of the house: creative-led acquisition that finds the right person mid-scroll. He’s scaled health and wellness brands to 7–8 figures and writes the agency’s benchmark and compliance guides.',
   },
   {
     name: 'Pira Ahilan',
@@ -28,7 +29,7 @@ const team = [
     initials: 'PA',
     photo: '/people/pira.webp',
     linkedin: 'https://www.linkedin.com/in/piraahilan/',
-    bio: 'Pira owns the Google side (Google Ads for healthcare and telehealth) and the full funnel - the account strategy, offer architecture for health DTC, and upsell/retention systems that take a health brand from a 1.5 ROAS to 6+. A Schulich School of Business (York) grad, he’s helped generate $150M+ in tracked revenue across health and wellness brands and apps.',
+    bio: 'Pira owns the Google side (Google Ads for healthcare and telehealth) and the full funnel: the account strategy, offer architecture for health DTC, and upsell/retention systems that take a health brand from a 1.5 ROAS to 6+. A Schulich School of Business (York) grad, he’s helped generate $150M+ in tracked revenue across health and wellness brands and apps.',
   },
   {
     name: 'Pravine Manivannan',
@@ -47,68 +48,73 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>ABOUT</span>
-      <h1>The growth agency that only works in <span class="serif">health</span>.</h1>
-      <p class="phero-lede">AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one.</p>
+  <PageHead
+    label="About"
+    title="The growth agency that only works in *health*."
+    lede="AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one."
+    dots
+  />
+
+  <section class="tone-frame section-tight" data-nav="frame" aria-label="AdBoost Health in numbers">
+    <div class="wrap">
+      <ul class="figs" style="--n:3">
+        <li class="fig" data-reveal><span class="fig-v">71+</span><span class="fig-l">Founders served</span></li>
+        <li class="fig" data-reveal style="--i:1"><span class="fig-v">$153M+</span><span class="fig-l">Tracked revenue</span></li>
+        <li class="fig" data-reveal style="--i:2"><span class="fig-v">8,400+</span><span class="fig-l">Creatives shipped</span></li>
+      </ul>
     </div>
   </section>
 
-  <section class="iwrap-sm">
-    <div class="container">
-      <div class="stat-row reveal">
-        <div class="stat"><div class="sv">71+</div><div class="sl">Founders served</div></div>
-        <div class="stat"><div class="sv">$153M+</div><div class="sl">Tracked revenue</div></div>
-        <div class="stat"><div class="sv">4.9<span style="font-size:18px;color:var(--mute)"> / 5</span></div><div class="sl">Average partner rating</div></div>
-        <div class="stat"><div class="sv">8,400+</div><div class="sl">Creatives shipped</div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="iwrap-sm">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="prose">
-            <h2>Why health-only</h2>
-            <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them - every Meta health policy, every LegitScript requirement, every rejection trigger - because health is the only thing we do.</p>
-            <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution - the full acquisition system, built for the one category we specialize in.</p>
-            <h2>Two founders, two platforms - and the engine underneath</h2>
-            <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
-            <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>
-          </div>
+  <section class="tone-paper section" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main">
+        <div class="prose">
+          <h2>Why health-only</h2>
+          <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them (every Meta health policy, every LegitScript requirement, every rejection trigger) because health is the only thing we do.</p>
+          <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution: the full acquisition system, built for the one category we specialize in.</p>
+          <h2>Two founders, two platforms, and the engine underneath</h2>
+          <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow, and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
+          <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>
         </div>
-        <aside class="doc-aside">
-          <div class="aside-card">
-            <h4>Where we work</h4>
-            <p>Toronto-based and remote-first, serving health and telehealth brands across the US and Canada. Whether you want a digital marketing agency in Toronto or a fully remote marketing agency, you work with the same senior team.</p>
-            <div class="link-list">
-              <a href="mailto:hello@adboost.health">hello@adboost.health</a>
-              <a href="/advertising/">Ad compliance by vertical</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks</a>
-            </div>
-          </div>
-        </aside>
       </div>
+      <aside class="doc-aside">
+        <AsideLinks
+          label="Where we work"
+          text="Toronto-based and remote-first, serving health and telehealth brands across the US and Canada. Whether you want a digital marketing agency in Toronto or a fully remote marketing agency, you work with the same senior team."
+          links={[
+            { href: 'mailto:hello@adboost.health', label: 'hello@adboost.health' },
+            { href: '/advertising/', label: 'Ad compliance by vertical' },
+            { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks' },
+          ]}
+        />
+      </aside>
+    </div>
 
-      <h2 class="sec-title" style="margin-top:48px">Meet the team</h2>
-      <div class="team-grid" style="margin-top:20px">
-        {teamR.map((t) => (
-          <div class="bio reveal">
-            <div class="avatar">{t.hasPhoto ? <img src={t.photo} width="56" height="56" alt={`${t.name}, ${t.role}`} loading="lazy" /> : t.initials}</div>
-            <h3>{t.name}</h3>
-            <div class="role">{t.role.toUpperCase()}</div>
-            <p>{t.bio}</p>
-            <div class="bio-links">
-              <a href={t.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
-            </div>
-          </div>
-        ))}
+    <div class="wrap team">
+      <div class="sec-top">
+        <p class="label muted" data-reveal>The team</p>
+        <h2 class="sec-h" data-reveal>Meet the team</h2>
       </div>
+      <ul class="people">
+        {teamR.map((t, i) => (
+          <li class="person" data-reveal style={`--i:${i}`}>
+            <div class="person-pic framed grain">
+              {t.hasPhoto ? <img src={t.photo} width="400" height="400" alt={`${t.name}, ${t.role}`} loading="lazy" decoding="async" /> : <span aria-hidden="true">{t.initials}</span>}
+            </div>
+            <h3>{t.name}</h3>
+            <p class="label plain">{t.role}</p>
+            <p>{t.bio}</p>
+            <a class="link person-link" href={t.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
 
   <Closing />
 </BaseLayout>
+
+<style>
+  .team { margin-top: var(--section); }
+  .person-link { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; padding-bottom: 0; background-position: 0 calc(100% - 10px); font-size: 15px; }
+</style>

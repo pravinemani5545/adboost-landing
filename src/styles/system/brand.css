@@ -23,6 +23,10 @@
   /* one notch lighter each in the dark scheme, so the card still stands off INK */
   --gc-dark-0: #28559d; --gc-dark-1: #153b74; --gc-dark-2: #102551; --gc-dark-3: #081738; --gc-dark-4: #050f2b;
 
+  /* status: allowed / cleared, restricted, prohibited / rejected (on PAPER, then lifted for FRAME and INK) */
+  --ok: #16794a; --caution: #9a6412; --warn: #c2410c;
+  --ok-on-frame: #7ee2a8; --caution-on-frame: #f5c26b; --warn-on-frame: #ff8a6b;
+
   /* <meta name="theme-color">: FRAME by day, INK by night */
   --theme-light: #0b1b3f;
   --theme-dark: #070d1c;

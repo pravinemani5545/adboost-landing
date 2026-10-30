@@ -1,7 +1,11 @@
 ---
 import LeadLayout from '../../layouts/LeadLayout.astro';
+import { siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
 const title = 'Zero-Ban Protocol: Free Compliance Checklist | AdBoost';
 const description = 'Get the exact compliance protocol behind $50K/month in peptide & GLP-1 Meta ad spend, with zero bans. Free checklist for health-brand advertisers.';
+const SITE = siteBase(Astro.site);
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: '/zero-ban-protocol/' }])];
 const steps = [
   { code: '00', name: 'Lane', desc: 'Which of the two compliance lanes you’re in, and when LegitScript is non-negotiable.' },
   { code: '01', name: 'Warm-up', desc: 'The account warm-up that buys a clean record before your first conversion campaign.' },
@@ -10,10 +14,10 @@ const steps = [
   { code: '04', name: 'Scale', desc: 'Earning the right to run aggressive angles without torching your account history.' },
 ];
 ---
-<LeadLayout {title} {description} canonicalPath="/zero-ban-protocol/">
+<LeadLayout {title} {description} canonicalPath="/zero-ban-protocol/" {jsonLd}>
   <section class="zbp">
     <div class="zbp-glow" aria-hidden="true"></div>
-    <div class="container zbp-grid">
+    <div class="wrap zbp-grid">
       <div class="zbp-left">
         <span class="zbp-eyebrow"><span class="zbp-dot"></span>FREE PROTOCOL · PEPTIDE &amp; GLP-1 META ADS</span>
         <h1 class="zbp-h1">The exact compliance protocol behind <span class="zbp-num" data-count="50" data-prefix="$" data-suffix="K/mo">$50K/mo</span> in peptide &amp; GLP-1 Meta ads, with <em>zero bans</em>.</h1>
@@ -84,74 +88,75 @@ const steps = [
 
   <style>
     .zbp {
-      --z-ink:#0a0a0f; --z-ink2:#42474f; --z-mute:#8a9099; --z-line:#e7e9ee; --z-faint:#eef0f4;
-      --z-surface:#f7f8fa; --z-blue:#0057ff; --z-cleared:#16a34a; --z-restricted:#ff6b3d;
-      position: relative; background: #fff; color: var(--z-ink); overflow: hidden;
+      /* the page's own names, mapped onto the system's roles so the dark scheme reads */
+      --z-ink: var(--fg); --z-ink2: var(--fg-2); --z-mute: color-mix(in srgb, var(--fg) 62%, transparent); --z-line: var(--line); --z-faint: var(--line);
+      --z-surface: color-mix(in srgb, var(--fg) 4%, var(--bg)); --z-blue: var(--accent); --z-cleared: var(--st-ok); --z-restricted: var(--st-warn);
+      --z-hint: color-mix(in srgb, var(--fg) 42%, transparent);
+      position: relative; color: var(--z-ink); overflow: clip;
       /* header isn't fixed in LeadLayout; auto margins center the hero so tall
          monitors fill the viewport instead of floating the footer up */
       padding: 52px 0;
       margin-block: auto;
     }
     .zbp-glow { position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(52% 40% at 20% 2%, rgba(0,87,255,.07), transparent 66%),
-                  radial-gradient(40% 36% at 96% 46%, rgba(22,163,74,.045), transparent 72%); }
+      background: radial-gradient(52% 40% at 20% 2%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 66%),
+                  radial-gradient(40% 36% at 96% 46%, color-mix(in srgb, var(--z-cleared) 5%, transparent), transparent 72%); }
     .zbp-grid { position: relative; display: grid; grid-template-columns: 1.08fr .92fr; gap: 56px; align-items: start; }
 
-    .zbp-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family:'Geist Mono',ui-monospace,monospace; font-size: 11.5px; letter-spacing: .1em; color: var(--z-blue); }
-    .zbp-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--z-blue); }
-    .zbp-h1 { font-size: clamp(31px, 4.6vw, 50px); line-height: 1.06; letter-spacing: -.032em; font-weight: 600; margin: 16px 0 18px; text-wrap: balance; }
-    .zbp-h1 em { font-family:var(--serif); font-style: italic; font-weight: 300; letter-spacing: 0; color: var(--z-blue); }
-    .zbp-num { font-family:'Geist Mono',ui-monospace,monospace; font-weight: 500; font-size: .8em; letter-spacing: -.01em; color: var(--z-blue);
-      background: rgba(0,87,255,.07); border: 1px solid rgba(0,87,255,.2); border-radius: 8px; padding: .04em .3em; }
+    .zbp-eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; color: var(--fg-2); }
+    .zbp-dot { width: 6px; height: 6px; background: var(--z-blue); }
+    .zbp-h1 { font-size: clamp(34px, 4.6vw, 60px); line-height: 1.06; letter-spacing: -.022em; margin: 18px 0 20px; text-wrap: balance; }
+    .zbp-h1 em { font-style: italic; }
+    .zbp-num { font-variant-numeric: tabular-nums; }
     .zbp-sub { font-size: 16.5px; line-height: 1.62; color: var(--z-ink2); max-width: 47ch; margin: 0 0 28px; }
-    .zbp-sub strong { color: var(--z-ink); font-weight: 600; }
+    .zbp-sub strong { color: var(--z-ink); font-weight: 500; }
 
-    .zbp-inside-label { font-family:'Geist Mono',ui-monospace,monospace; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--z-mute); padding-top: 22px; border-top: 1px solid var(--z-line); margin-bottom: 16px; }
+    .zbp-inside-label { font: 500 12.5px/1.3 var(--sans); letter-spacing: .22em; text-transform: uppercase; color: var(--z-mute); padding-top: 22px; border-top: 1px solid var(--z-line); margin-bottom: 16px; }
     .zbp-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
     .zbp-step { display: grid; grid-template-columns: 30px 1fr; gap: 14px; align-items: baseline; }
-    .zbp-step-code { font-family:'Geist Mono',ui-monospace,monospace; font-size: 13px; font-weight: 500; color: var(--z-blue); }
-    .zbp-step-name { display: block; font-size: 15px; font-weight: 600; letter-spacing: -.01em; margin-bottom: 3px; }
-    .zbp-step-desc { display: block; font-size: 13px; line-height: 1.5; color: var(--z-mute); }
+    .zbp-step-code { font: 500 13px/1 var(--sans); letter-spacing: .16em; font-variant-numeric: tabular-nums; color: var(--z-blue); }
+    .zbp-step-name { display: block; font: 300 22px/1.2 var(--serif); letter-spacing: -.01em; margin-bottom: 4px; }
+    .zbp-step-desc { display: block; font-size: 15px; line-height: 1.5; color: var(--z-ink2); }
 
     /* signature: account status card */
     .zbp-right { position: sticky; top: 20px; display: grid; gap: 16px; }
-    .zbp-status { background: var(--z-surface); border: 1px solid var(--z-line); border-radius: 14px; padding: 15px 17px; }
-    .zst-top { font-family:'Geist Mono',ui-monospace,monospace; font-size: 10.5px; letter-spacing: .07em; color: var(--z-mute); display: flex; align-items: center; gap: 8px; padding-bottom: 11px; border-bottom: 1px solid var(--z-line); }
-    .zst-live { width: 7px; height: 7px; border-radius: 50%; background: var(--z-cleared); box-shadow: 0 0 0 3px rgba(22,163,74,.14); animation: zpulse 2.4s ease-in-out infinite; }
+    .zbp-status { background: var(--z-surface); border: 1px solid var(--z-line); border-radius: var(--r-media); padding: 15px 17px; }
+    .zst-top { font-family:'Geist Mono',ui-monospace,monospace; font-size: 12px; letter-spacing: .07em; color: var(--z-mute); display: flex; align-items: center; gap: 8px; padding-bottom: 11px; border-bottom: 1px solid var(--z-line); }
+    .zst-live { width: 7px; height: 7px; border-radius: 50%; background: var(--z-cleared); box-shadow: 0 0 0 3px color-mix(in srgb, var(--z-cleared) 14%, transparent); animation: zpulse 2.4s ease-in-out infinite; }
     .zst-row { display: flex; align-items: center; gap: 12px; padding: 11px 0 3px; }
     .zst-pill { font-family:'Geist Mono',ui-monospace,monospace; font-size: 11px; letter-spacing: .04em; padding: 5px 10px; border-radius: 7px; white-space: nowrap; }
-    .zst-pill.restricted { color: var(--z-restricted); background: rgba(255,107,61,.1); border: 1px solid rgba(255,107,61,.24); }
-    .zst-pill.cleared { color: var(--z-cleared); background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.26); }
-    .zst-desc { font-size: 13px; color: var(--z-mute); }
+    .zst-pill.restricted { color: var(--z-restricted); background: color-mix(in srgb, var(--z-restricted) 10%, transparent); border: 1px solid color-mix(in srgb, var(--z-restricted) 26%, transparent); }
+    .zst-pill.cleared { color: var(--z-cleared); background: color-mix(in srgb, var(--z-cleared) 10%, transparent); border: 1px solid color-mix(in srgb, var(--z-cleared) 28%, transparent); }
+    .zst-desc { font-size: 14px; color: var(--z-mute); }
     .zst-row.after .zst-desc { color: var(--z-ink); }
     .zst-connector { position: relative; height: 20px; margin-left: 12px; }
     .zst-connector::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; border-left: 1px dashed var(--z-faint); transform-origin: top; }
-    .zst-connector span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-family:'Geist Mono',ui-monospace,monospace; font-size: 9.5px; letter-spacing: .08em; color: var(--z-mute); text-transform: uppercase; }
+    .zst-connector span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-family:'Geist Mono',ui-monospace,monospace; font-size: 11px; letter-spacing: .08em; color: var(--z-mute); text-transform: uppercase; }
 
     /* form card */
-    .zbp-card { background: #fff; border: 1px solid var(--z-line); border-radius: 16px; padding: 24px 24px 20px; box-shadow: 0 30px 70px -46px rgba(10,10,15,.4); }
-    .zbp-card-head { font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
-    .zbp-card-sub { color: var(--z-mute); font-size: 13.5px; line-height: 1.5; margin: 6px 0 16px; }
-    #leadForm label { display: block; font-family:'Geist Mono',ui-monospace,monospace; font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--z-mute); margin: 13px 0 6px; }
-    #leadForm input { width: 100%; padding: 12px 13px; border: 1px solid var(--z-line); border-radius: 10px; font: inherit; font-size: 15px; color: var(--z-ink); background: #fff; outline: none; transition: border-color .15s, box-shadow .15s; }
-    #leadForm input::placeholder { color: #b3b8c0; }
-    #leadForm input:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px rgba(0,87,255,.13); }
-    .zbp-opt { font-family:'Geist',sans-serif; text-transform: none; letter-spacing: 0; font-size: 10.5px; color: #b3b8c0; font-weight: 400; }
+    .zbp-card { background: var(--bg); border: 1px solid var(--z-line); border-radius: var(--r-panel); padding: 26px 26px 22px; box-shadow: 0 30px 70px -46px rgb(0 0 0 / .4); }
+    .zbp-card-head { font: 300 26px/1.15 var(--serif); letter-spacing: -.012em; }
+    .zbp-card-sub { color: var(--z-ink2); font-size: 15px; line-height: 1.5; margin: 6px 0 16px; }
+    #leadForm label { display: block; font-size: 15px; font-weight: 500; color: var(--z-ink); margin: 14px 0 7px; }
+    #leadForm input { width: 100%; padding: 13px 14px; border: 1px solid var(--z-line); border-radius: 12px; font: inherit; font-size: 16px; color: var(--z-ink); background: var(--bg); outline: none; transition: border-color .15s, box-shadow .15s; }
+    #leadForm input::placeholder { color: var(--z-hint); }
+    #leadForm input:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--z-blue) 14%, transparent); }
+    .zbp-opt { font-size: 14px; color: var(--z-mute); font-weight: 400; }
     .zbp-phone { display: flex; gap: 8px; }
-    .zbp-phone select { flex: 0 0 auto; padding: 12px 10px; border: 1px solid var(--z-line); border-radius: 10px; font: inherit; font-size: 15px; color: var(--z-ink); background: #fff; outline: none; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
-    .zbp-phone select:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px rgba(0,87,255,.13); }
+    .zbp-phone select { flex: 0 0 auto; padding: 13px 10px; border: 1px solid var(--z-line); border-radius: 12px; font: inherit; font-size: 16px; color: var(--z-ink); background: var(--bg); outline: none; cursor: pointer; transition: border-color .15s, box-shadow .15s; }
+    .zbp-phone select:focus { border-color: var(--z-blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--z-blue) 14%, transparent); }
     .zbp-phone input { flex: 1 1 auto; min-width: 0; }
     .zbp-btn { display: flex; width: 100%; justify-content: center; align-items: center; gap: 8px; margin-top: 18px;
-      background: var(--z-blue); color: #fff; border: 0; border-radius: 11px; padding: 13px 18px; font: inherit; font-size: 15px; font-weight: 600;
-      cursor: pointer; text-decoration: none; transition: transform .12s, box-shadow .2s, background .15s; box-shadow: 0 12px 26px -14px rgba(0,87,255,.6); }
-    .zbp-btn:hover { background: #1a6bff; transform: translateY(-1px); box-shadow: 0 16px 32px -14px rgba(0,87,255,.7); }
-    .zbp-btn:active { transform: translateY(0); }
-    .zbp-err { color: var(--z-restricted); font-size: 13px; margin: 10px 0 0; }
-    .zbp-trust { color: var(--z-mute); font-size: 11.5px; margin: 14px 0 0; text-align: center; line-height: 1.5; }
-    .zbp-check { width: 44px; height: 44px; border-radius: 50%; background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.3); color: var(--z-cleared); font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+      background: var(--accent-color); color: var(--accent-fg); border: 0; border-radius: 999px; min-height: 52px; padding: 13px 22px; font: inherit; font-size: 15px; font-weight: 500;
+      cursor: pointer; text-decoration: none; transition: transform .12s, box-shadow .2s, background .15s; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-frame) 14%, transparent); }
+    .zbp-btn:hover { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-frame) 14%, transparent); }
+    .zbp-btn:active { transform: scale(.965); }
+    .zbp-err { color: var(--z-restricted); font-size: 15px; margin: 10px 0 0; }
+    .zbp-trust { color: var(--z-mute); font-size: 14px; margin: 14px 0 0; text-align: center; line-height: 1.5; }
+    .zbp-check { width: 44px; height: 44px; border-radius: 50%; background: color-mix(in srgb, var(--z-cleared) 10%, transparent); border: 1px solid color-mix(in srgb, var(--z-cleared) 30%, transparent); color: var(--z-cleared); font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 
     /* motion */
-    @keyframes zpulse { 0%,100% { box-shadow: 0 0 0 3px rgba(22,163,74,.14); } 50% { box-shadow: 0 0 0 5px rgba(22,163,74,.04); } }
+    @keyframes zpulse { 0%,100% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--z-cleared) 14%, transparent); } 50% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--z-cleared) 4%, transparent); } }
     @keyframes zrise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
     .zbp-left > *, .zbp-right { animation: zrise .55s cubic-bezier(.2,.7,.2,1) both; }
     .zbp-h1 { animation-delay: .04s; } .zbp-sub { animation-delay: .09s; } .zbp-inside-label, .zbp-steps { animation-delay: .13s; }
@@ -159,7 +164,7 @@ const steps = [
 
     /* signature: the account status resolves from RESTRICTED → CLEARED on load */
     @keyframes zdraw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-    @keyframes zsettle { 0% { box-shadow: 0 0 0 0 rgba(22,163,74,.42); } 100% { box-shadow: 0 0 0 9px rgba(22,163,74,0); } }
+    @keyframes zsettle { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--z-cleared) 42%, transparent); } 100% { box-shadow: 0 0 0 9px transparent; } }
     .zst-connector::before { animation: zdraw .5s cubic-bezier(.2,.7,.2,1) .5s both; }
     .zst-connector span { animation: zrise .4s ease .78s both; }
     .zst-row.after { animation: zrise .5s cubic-bezier(.2,.7,.2,1) .62s both; }

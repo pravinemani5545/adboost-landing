@@ -6,12 +6,18 @@
 // Not indexed.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHead from '../components/PageHead.astro';
-import { BOOKING_EMBED_URL } from '../lib/site';
+import { BOOKING_EMBED_URL, siteBase } from '../lib/site';
+import { breadcrumb } from '../lib/schema';
 
 const title = 'Book a Free Strategy Call | AdBoost Health';
 const description = 'Pick a time for a free 30-minute strategy call with a senior AdBoost Health strategist. Free account audit included.';
+const SITE = siteBase(Astro.site);
+const jsonLd = [
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Book a call', href: '/book/' }]),
+  { '@type': 'WebPage', name: title, description, url: `${SITE}/book/` },
+];
 ---
-<BaseLayout {title} {description} canonicalPath="/book/" noindex>
+<BaseLayout {title} {description} canonicalPath="/book/" {jsonLd} noindex>
   <PageHead
     label="Strategy call"
     title="Book your free strategy call"

@@ -1,0 +1,12 @@
+---
+// The aside's call to action: a small gradient card with a heading, one line and the primary button.
+import Btn from '../Btn.astro';
+import { CTA } from '../../lib/site';
+interface Props { heading: string; text: string; label?: string }
+const { heading, text, label = CTA.label } = Astro.props;
+---
+<div class="aside-cta gcard gcard-sm card">
+  <h3>{heading}</h3>
+  <p>{text}</p>
+  <Btn href={CTA.href}>{label}</Btn>
+</div>

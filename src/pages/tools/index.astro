@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
 import Closing from '../../components/Closing.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
@@ -16,34 +16,40 @@ const tools = [
   { href: '/tools/poas-calculator/', name: 'POAS Calculator', desc: 'Profit on ad spend: ROAS after margin, so you scale what’s actually profitable, not just efficient.' },
 ];
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }])];
+const arrow = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 7h10M8 3l4 4-4 4"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath="/tools/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOLS</span>
-      <h1>Free <span class="serif">health-marketing</span> calculators</h1>
-      <p class="phero-lede">Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good.</p>
-    </div>
-  </section>
+  <PageHead
+    label="Free tools"
+    title="Free *health-marketing* calculators"
+    lede="Run your own numbers in seconds. Each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good."
+    dots
+  />
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="grid-cards three">
-        {tools.map((t) => (
-          <a class="lcard reveal" href={t.href}>
-            <span class="lc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2zM9 7h6M9 11h6M9 15h3"/></svg></span>
-            <h3>{t.name}</h3>
-            <p>{t.desc}</p>
-            <span class="lc-more">Open calculator →</span>
+  <section class="tone-paper page-body" data-nav="paper" aria-label="The calculators">
+    <div class="wrap">
+      <div class="rows">
+        {tools.map((t, i) => (
+          <a class="row" href={t.href} data-reveal="side">
+            <span class="idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="row-name">{t.name}</span>
+            <span class="row-arrow row-meta" set:html={arrow} />
+            <span class="row-text small">{t.desc}</span>
           </a>
         ))}
       </div>
+    </div>
+  </section>
 
-      <div class="prose" style="max-width:760px;margin-top:40px">
-        <h2>Which calculator should you use?</h2>
-        <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
-        <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/server-side-tracking/">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
+  <section class="tone-frame section" data-nav="frame" aria-labelledby="which-h">
+    <div class="wrap">
+      <div class="doc-sec">
+        <p class="label muted" data-reveal>Where to start</p>
+        <h2 id="which-h" data-reveal>Which calculator should you use?</h2>
+        <div class="prose" data-reveal>
+          <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
+          <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/server-side-tracking/">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
+        </div>
       </div>
     </div>
   </section>

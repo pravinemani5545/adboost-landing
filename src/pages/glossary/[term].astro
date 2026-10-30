@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHead from '../../components/PageHead.astro';
+import AsideLinks from '../../components/doc/AsideLinks.astro';
+import AsideCta from '../../components/doc/AsideCta.astro';
 import Closing from '../../components/Closing.astro';
 import { GLOSSARY, getTerm } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
@@ -122,52 +124,36 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
-      <h1 style="margin-top:12px">{t.term}</h1>
-    </div>
-  </section>
+  <PageHead label="Glossary" labelHref="/glossary/" title={t.term} dots />
 
-  <section class="iwrap-sm">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="prose">
-            <h2 style="font-size:20px;margin:0 0 12px">What is {t.term.replace(/\s*\(.*\)/, '')}?</h2>
-            <div class="answer-box reveal"><span class="al">Definition</span>{t.definition}</div>
-            {t.formula && <div class="callout reveal"><span class="cl-label">Formula</span><code style="font-size:15px">{t.formula}</code></div>}
-            {t.body && <p class="reveal" set:html={t.body} />}
-
-            {related.length > 0 && (
-              <>
-                <h2 style="font-size:20px">Related terms</h2>
-                <div class="chips" style="margin-top:12px">
-                  {related.map((r) => <a class="chip" href={`/glossary/${r!.slug}/`}>{r!.term}</a>)}
-                </div>
-              </>
-            )}
-          </div>
+  <section class="tone-paper page-body" data-nav="paper">
+    <div class="wrap doc">
+      <div class="doc-main">
+        <div class="doc-sec">
+          <h2 class="term-q">What is {t.term.replace(/\s*\(.*\)/, '')}?</h2>
+          <div class="brief" data-reveal><p class="label">Definition</p><p>{t.definition}</p></div>
         </div>
-        <aside class="doc-aside">
-          <div class="aside-card">
-            <h4>Put the numbers to work</h4>
-            <p>Benchmark your own metrics against your vertical in seconds.</p>
-            <div class="link-list">
-              {resources.map((r) => <a href={r.href}>{r.label}</a>)}
-              <a href="/glossary/">Back to glossary</a>
-            </div>
+        {t.formula && <div class="note" data-reveal><p class="label">Formula</p><p><code>{t.formula}</code></p></div>}
+        {t.body && <div class="prose" data-reveal><p set:html={t.body} /></div>}
+
+        {related.length > 0 && (
+          <div class="doc-sec">
+            <h3>Related terms</h3>
+            <div class="tags">{related.map((r) => <a class="tag" href={`/glossary/${r!.slug}/`}>{r!.term}</a>)}</div>
           </div>
-          <div class="aside-card dark">
-            <h4 style="color:#fff">Want these working in your favor?</h4>
-            <p>We benchmark your account and map the fastest levers to move it.</p>
-            <a class="btn btn-primary" href="/book/">Book a free audit →</a>
-          </div>
-        </aside>
+        )}
       </div>
+      <aside class="doc-aside">
+        <AsideLinks label="Put the numbers to work" text="Benchmark your own metrics against your vertical in seconds." links={[...resources, { href: '/glossary/', label: 'Back to glossary' }]} />
+        <AsideCta heading="Want these working in your favor?" text="We benchmark your account and map the fastest levers to move it." label="Book a free audit" />
+      </aside>
     </div>
   </section>
 
   <Closing />
 </BaseLayout>
+
+<style>
+  .term-q { font-size: clamp(24px, 2vw, 30px); }
+  .note code { font-size: 16px; }
+</style>
