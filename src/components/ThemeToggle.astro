@@ -1,0 +1,66 @@
+---
+// The scheme toggle: a round button fixed bottom right, a sun that becomes a moon. Its colours are the
+// --toggle tokens and its icon state is --dark (base.css), so it reads right before any script runs;
+// theme.ts owns the click, the stored choice and the aria state.
+const toDark = 'Switch to dark mode';
+const toLight = 'Switch to light mode';
+---
+
+<button
+  class="theme-toggle"
+  type="button"
+  data-theme-toggle
+  aria-pressed="false"
+  aria-label={toDark}
+  data-to-dark={toDark}
+  data-to-light={toLight}
+>
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <g class="tt-sun">
+      <circle cx="12" cy="12" r="3.6" />
+      <path class="tt-rays" d="M12 2.6v2M12 19.4v2M2.6 12h2M19.4 12h2M5.35 5.35l1.42 1.42M17.23 17.23l1.42 1.42M5.35 18.65l1.42-1.42M17.23 6.77l1.42-1.42" />
+    </g>
+    <path class="tt-moon" d="M12.5 3.2a7.6 7.6 0 1 0 8.3 8.3 6 6 0 0 1-8.3-8.3Z" />
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    position: fixed; z-index: 44;
+    right: min(24px, calc(var(--pad) * 0.6)); bottom: 20px;
+    display: grid; place-items: center;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--toggle-bg); color: var(--toggle-fg);
+    --hair: color-mix(in srgb, var(--toggle-fg) 55%, transparent);
+    --halo: color-mix(in srgb, var(--toggle-fg) 12%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hair), 0 0 0 3px transparent, 0 12px 28px -12px rgb(0 0 0 / 0.5);
+    translate: 0 0; scale: 1;
+    transition: translate 0.4s var(--spring-snap), scale var(--t-bounce) var(--spring-bounce), box-shadow 0.4s var(--spring-snap),
+      background-color 0.25s var(--ease), color 0.25s var(--ease), opacity 0.3s var(--spring-settle), visibility 0s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  @media (hover: hover) {
+    .theme-toggle:hover { translate: 0 -2px; box-shadow: inset 0 0 0 1px var(--hair), 0 0 0 6px var(--halo), 0 16px 32px -12px rgb(0 0 0 / 0.55); }
+  }
+  .theme-toggle:active { scale: 0.94; transition: scale 0.15s var(--spring-settle); }
+  /* the site's focus ring, on a halo of the button's own colour so it reads over any section */
+  .theme-toggle:focus-visible { outline: 2px solid var(--paper-focus); outline-offset: 3px; box-shadow: inset 0 0 0 1px var(--hair), 0 0 0 3px var(--toggle-bg), 0 12px 28px -12px rgb(0 0 0 / 0.5); }
+
+  /* the morph: the sun's disc and rays turn in as the moon turns out, on the snap spring */
+  .tt-sun, .tt-moon { transform-origin: 12px 12px; transition: opacity 0.3s var(--spring-settle), rotate var(--t-snap) var(--spring-snap), scale var(--t-snap) var(--spring-snap); }
+  .tt-rays { transform-origin: 12px 12px; transition: scale var(--t-snap) var(--spring-snap); }
+  .tt-sun { opacity: var(--dark); rotate: calc((1 - var(--dark)) * -90deg); scale: calc(0.55 + 0.45 * var(--dark)); }
+  .tt-rays { scale: calc(0.4 + 0.6 * var(--dark)); }
+  .tt-moon { opacity: calc(1 - var(--dark)); rotate: calc(var(--dark) * 90deg); scale: calc(1 - 0.35 * var(--dark)); }
+
+  /* phones: above the call bar */
+  @media (max-width: 959px) {
+    .theme-toggle { bottom: calc(var(--bar-h) + 14px + env(safe-area-inset-bottom)); }
+  }
+  /* it steps out of the way of the footer plate (theme.ts watches the plate's spacer) */
+  :global(html.plate-on) .theme-toggle {
+    opacity: 0; visibility: hidden; translate: 0 10px; pointer-events: none;
+    transition: opacity 0.25s var(--ease), translate 0.25s var(--ease), visibility 0s linear 0.25s;
+  }
+</style>

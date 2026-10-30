@@ -1,0 +1,42 @@
+---
+// The system's page: <html> with the brand's data, the shared head, the chrome (nav, phone sheet and
+// bar, footer curtain, scheme toggle) and the one script entry. Layouts put their SEO tags in the
+// "head" slot and the page in the default slot.
+import '../styles/system/brand.css';
+import '../styles/system/base.css';
+import '../styles/system/surfaces.css';
+import '../styles/system/chrome.css';
+import SystemHead from '../components/SystemHead.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import { brand } from '../lib/brand';
+
+interface Props {
+  /** what sits under the nav at the top of the page: frame, paper, or media */
+  nav?: 'frame' | 'paper' | 'media';
+}
+const { nav = 'paper' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-nav={nav} data-brand={brand.key} data-tc-light={brand.themeLight} data-tc-dark={brand.themeDark}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <slot name="head" />
+    <SystemHead />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <ThemeToggle />
+    <script>
+      import '../scripts/app';
+    </script>
+  </body>
+</html>

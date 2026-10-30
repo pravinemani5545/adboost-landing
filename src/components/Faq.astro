@@ -1,13 +1,71 @@
 ---
-// Visual FAQ accordion. Pair with faqPage() schema at the page level for AEO/GEO.
-interface Props { items: { q: string; a: string }[]; idPrefix?: string; }
-const { items, idPrefix = 'faq' } = Astro.props;
+// Questions with expandable answers. Native <details>, so it works by keyboard and screen reader
+// with no script. Rows slide in from the right on a spring (reveal.ts staggers a batch); a row
+// opens on a lighter spring with a chevron turning to match, and the answer settles in beneath.
+// Answers may carry inline HTML (links); pair the list with faqPage() schema on the page.
+interface Props {
+  items: { q: string; a: string }[];
+  numbered?: boolean;
+  /** where the numbering starts, for a list split into groups (the FAQ page) */
+  start?: number;
+}
+const { items, numbered = true, start = 0 } = Astro.props;
 ---
-<div class="faq-list faq-block reveal">
-  {items.map((it, i) => (
-    <div class="qa">
-      <h3><button aria-expanded="false" aria-controls={`${idPrefix}-${i}`}>{it.q}<span class="plus"></span></button></h3>
-      <div class="ans" id={`${idPrefix}-${i}`}><div class="ans-inner" set:html={it.a} /></div>
-    </div>
-  ))}
+
+<div class="faq-rows">
+  {
+    items.map((it, i) => (
+      <details data-reveal="side">
+        <summary>
+          {numbered && <span class="idx qa-no">{String(start + i + 1).padStart(2, '0')}</span>}
+          <span class="qa-q">{it.q}</span>
+          <span class="qa-chev" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7" /></svg>
+          </span>
+        </summary>
+        <div class="qa-a"><p set:html={it.a} /></div>
+      </details>
+    ))
+  }
 </div>
+
+<style>
+  /* rows arrive from 300px right and settle a few px past their place; the list clips that sideways
+     travel 20px outside its own edges (inside the page gutter), so the page never grows a scrollbar
+     and the small overshoot to the left is not cut off */
+  .faq-rows { margin-inline: -20px; padding-inline: 20px; overflow-x: clip; }
+  details { border-bottom: 1px solid var(--line); transition: border-color 0.3s var(--spring-settle); }
+  details[open] { border-bottom-color: var(--accent); }
+  summary {
+    display: grid; grid-template-columns: 37px minmax(0, 1fr) 24px; align-items: start; gap: 0 20px;
+    padding: clamp(22px, 2.1vw, 30px) 0; cursor: pointer; list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .qa-no { padding-top: 0.5em; color: var(--accent); font-size: 13px; }
+  .qa-q { font: 300 clamp(20px, 1.7vw, 24px) / 1.2 var(--serif); letter-spacing: -0.01em; transition: transform 0.45s var(--spring-snap); }
+  .qa-chev {
+    display: grid; place-items: center; width: 24px; height: 24px; margin-top: 2px; color: var(--fg-2);
+    rotate: 0deg; transition: rotate 0.45s var(--spring-snap), translate var(--t-bounce) var(--spring-bounce), color 0.2s;
+  }
+  details[open] .qa-chev { rotate: 90deg; color: var(--fg); }
+  @media (hover: hover) {
+    summary:hover .qa-q { transform: translateX(6px); }
+    summary:hover .qa-chev { translate: 3px 0; }
+  }
+  .qa-a { padding: 0 0 clamp(22px, 2vw, 30px) 57px; }
+  .qa-a p { max-width: 62ch; color: var(--fg-2); }
+  .qa-a p :global(a) { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent); }
+  /* the answer settles in a beat after the row starts to open (in every browser) */
+  :global(.js.motion) details[open] .qa-a p { animation: qa-in 0.45s var(--spring-settle) 60ms both; }
+  @keyframes qa-in { from { opacity: 0; transform: translate(0, -10px); } }
+  @supports (interpolate-size: allow-keywords) {
+    .faq-rows { interpolate-size: allow-keywords; }
+    details::details-content { height: 0; overflow: clip; transition: height 0.45s var(--spring-snap), content-visibility 0.45s allow-discrete; }
+    details[open]::details-content { height: auto; transition-duration: 0.5s; }
+  }
+  @media (max-width: 640px) {
+    summary { grid-template-columns: minmax(0, 1fr) 24px; gap: 0 14px; }
+    .qa-no { display: none; }
+    .qa-a { padding-left: 0; }
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+// Responsive AVIF/WebP with an optional portrait crop for phones (art direction), and a JPEG
+// fallback. Srcsets never upscale. The first-screen picture is eager with high priority; the rest lazy.
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  /** a separate vertical crop, used on tall screens */
+  portrait?: ImageMetadata;
+  alt: string;
+  sizes: string;
+  widths?: number[];
+  portraitWidths?: number[];
+  eager?: boolean;
+  class?: string;
+  quality?: number;
+}
+const {
+  src, portrait, alt, sizes, eager = false, class: cls, quality = 72,
+  widths = [480, 720, 960, 1280, 1600, 2000, 2400],
+  portraitWidths = [390, 600, 780, 1000],
+} = Astro.props;
+
+async function srcset(img: ImageMetadata, ws: number[], format: 'avif' | 'webp') {
+  const fit = [...new Set(ws.filter((w) => w < img.width).concat(img.width))];
+  const out = await Promise.all(
+    fit.map(async (w) => `${(await getImage({ src: img, width: w, format, quality: format === 'avif' ? quality - 14 : quality })).src} ${w}w`),
+  );
+  return out.join(', ');
+}
+const [avif, webp] = await Promise.all([srcset(src, widths, 'avif'), srcset(src, widths, 'webp')]);
+const [pAvif, pWebp] = portrait
+  ? await Promise.all([srcset(portrait, portraitWidths, 'avif'), srcset(portrait, portraitWidths, 'webp')])
+  : [null, null];
+const fallback = await getImage({ src, width: Math.min(1280, src.width), format: 'jpg', quality: 76 });
+const tall = '(max-aspect-ratio: 4/5)';
+---
+
+<picture class={cls}>
+  {pAvif && <source media={tall} type="image/avif" srcset={pAvif} sizes={sizes} />}
+  {pWebp && <source media={tall} type="image/webp" srcset={pWebp} sizes={sizes} />}
+  <source type="image/avif" srcset={avif} sizes={sizes} />
+  <source type="image/webp" srcset={webp} sizes={sizes} />
+  <img
+    src={fallback.src}
+    alt={alt}
+    width={src.width}
+    height={src.height}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding={eager ? 'sync' : 'async'}
+    fetchpriority={eager ? 'high' : undefined}
+  />
+</picture>

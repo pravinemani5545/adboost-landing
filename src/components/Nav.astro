@@ -1,0 +1,81 @@
+---
+// The fixed nav (with a mega menu per NAV group), the phone sheet and the sticky phone bar.
+import { BRAND, CTA, EMAIL, NAV } from '../lib/site';
+import Btn from './Btn.astro';
+
+const path = Astro.url.pathname;
+const current = (href: string) => (path === href || (href !== '/' && path.startsWith(href)) ? 'page' : undefined);
+const groups = NAV.filter((n) => n.children);
+const ext = `<svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+---
+
+<header class="site-nav">
+  <a class="nav-logo" href="/" aria-label={`${BRAND.full}, home`}>
+    <span class="lg-m" aria-hidden="true"></span>
+    <span class="lg-div" aria-hidden="true"></span>
+    <span class="lg-wm" aria-hidden="true">{BRAND.name} <span>{BRAND.sub}</span></span>
+  </a>
+
+  <nav class="nav-links" aria-label="Main">
+    {NAV.map((item, n) =>
+      item.children ? (
+        <div class="nav-item has-menu">
+          <button type="button" class="nav-link" aria-expanded="false" aria-controls={`mega-${n}`}>
+            {item.label}
+            <svg class="nav-caret" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>
+          <div class="mega tone-frame" id={`mega-${n}`}>
+            <div class="mega-inner wrap">
+              <div class="mega-intro">
+                <p class="label">{item.label}</p>
+                {item.blurb && <p class="mega-line">{item.blurb}</p>}
+                <a class="link" href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.all ?? item.label}</a>
+              </div>
+              <ul style={`--cols:${Math.ceil(item.children.length / 5)}`}>
+                {item.children.map((c) => <li><a href={c.href} aria-current={current(c.href)}>{c.label}</a></li>)}
+              </ul>
+            </div>
+          </div>
+        </div>
+      ) : item.external ? (
+        <a class="nav-link nav-ext" href={item.href} target="_blank" rel="noopener">{item.label}<Fragment set:html={ext} /></a>
+      ) : (
+        <a class="nav-link" href={item.href} aria-current={current(item.href)}>{item.label}</a>
+      ),
+    )}
+    <Btn class="nav-cta" href={CTA.href}>{CTA.label}</Btn>
+  </nav>
+
+  <button class="nav-menu-btn label" type="button" aria-expanded="false" aria-controls="mobile-menu">
+    <span class="when-closed">Menu</span><span class="when-open" hidden>Close</span>
+  </button>
+</header>
+
+<nav class="sheet tone-frame" id="mobile-menu" aria-label="Menu">
+  <div class="sheet-inner">
+    {groups.map((item) => (
+      <details class="sheet-group">
+        <summary class="sheet-link">{item.label}</summary>
+        <div class="sheet-sub">
+          <ul>{item.children!.map((c) => <li><a href={c.href}>{c.label}</a></li>)}</ul>
+          <a class="link" href={item.href}>{item.all ?? item.label}</a>
+        </div>
+      </details>
+    ))}
+    {NAV.filter((n) => !n.children).map((item) =>
+      item.external ? (
+        <a class="sheet-link" href={item.href} target="_blank" rel="noopener">{item.label}</a>
+      ) : (
+        <a class="sheet-link" href={item.href}>{item.label}</a>
+      ),
+    )}
+    <div class="sheet-foot">
+      <Btn href={CTA.href}>{CTA.label}</Btn>
+      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-bar">
+  <Btn class="mobile-cta" href={CTA.href}>{CTA.label}</Btn>
+</div>

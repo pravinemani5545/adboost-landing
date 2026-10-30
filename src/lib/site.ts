@@ -13,12 +13,14 @@ export function siteBase(site: URL | undefined): string {
   return site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 }
 
-// Primary nav. Items with `children` render as hover dropdowns in the header
-// (and as grouped sub-links in the mobile menu); `external` opens in a new tab.
+// Primary nav. Items with `children` render as mega menus in the header (and as groups in the
+// phone sheet), with `blurb` as the menu's line and `all` linking the hub; `external` opens in a new tab.
 export const NAV = [
   {
     label: 'Services',
     href: '/services/',
+    all: 'All services',
+    blurb: 'A unified performance system: paid media, creative strategy and CRO.',
     children: [
       { label: 'Paid media', href: '/services/paid-media/' },
       { label: 'Creative production', href: '/services/creative/' },
@@ -28,6 +30,8 @@ export const NAV = [
   {
     label: 'Industries',
     href: '/industries/',
+    all: 'All industries',
+    blurb: 'Every vertical has its own economics, ad-policy landmines, and definition of a good CAC.',
     children: [
       { label: 'GLP-1 & weight loss', href: '/industries/glp-1-weight-loss/' },
       { label: 'Telehealth', href: '/industries/telehealth/' },
@@ -43,6 +47,8 @@ export const NAV = [
   {
     label: 'Resources',
     href: '/tools/',
+    all: 'All free tools',
+    blurb: 'Run your own numbers in seconds, with 2026 health benchmark context.',
     children: [
       { label: 'Ad compliance', href: '/advertising/' },
       { label: 'Free tools', href: '/tools/' },
@@ -55,3 +61,11 @@ export const NAV = [
   { label: 'About', href: '/about/' },
   { label: SISTER.label, href: SISTER.href, external: true },
 ];
+
+// The brand as the chrome sets it: the name in the nav, the footer and the plate. The second word is
+// set lighter. NAV groups carry a short line (from the hub pages' own copy) for their mega menu.
+export const BRAND = { name: 'AdBoost', sub: 'Health', full: 'AdBoost Health' };
+export const CTA = { label: 'Book a call', href: BOOK_PATH };
+export const LOCATION = 'Toronto';
+export const TIMEZONE = 'America/Toronto';
+export const ABOUT_LINE = 'Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.';

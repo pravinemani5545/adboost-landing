@@ -1,0 +1,31 @@
+---
+// The closing band before the footer: one heading read word by word as it rises, a line, and the
+// primary call to action.
+import { CTA } from '../lib/site';
+import Btn from './Btn.astro';
+
+interface Props { heading?: string; text?: string }
+const {
+  heading = 'Ready to lower CAC and scale spend profitably?',
+  text = 'A 30-minute call with a senior strategist. Free account audit included. No pitch deck: a written plan you can keep, whether you work with us or not.',
+} = Astro.props;
+---
+
+<section class="closing cta-band tone-frame section" data-nav="frame" aria-labelledby="closing-h">
+  <div class="wrap closing-inner">
+    <h2 id="closing-h" class="closing-h" data-words style="--r0:8%;--r1:50%">{heading}</h2>
+    <p class="body-l muted" data-reveal>{text}</p>
+    <div data-reveal style="--i:1"><Btn href={CTA.href}>{CTA.label}</Btn></div>
+  </div>
+</section>
+
+<style>
+  .closing-inner { display: grid; justify-items: center; text-align: center; gap: 26px; }
+  .closing-h { font-size: clamp(46px, 7.4vw, 112px); line-height: 1; letter-spacing: -0.025em; max-width: 18ch; }
+  .closing p { max-width: 36ch; }
+  @media (max-width: 640px) {
+    .closing-inner { gap: 22px; }
+    .closing-h { font-size: clamp(42px, 12vw, 52px); }
+    .closing p { font-size: 17.5px; }
+  }
+</style>

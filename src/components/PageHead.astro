@@ -1,0 +1,111 @@
+---
+// The top of every inner page: a small trail label, the H1, and the line beneath it. On load the
+// title rises on the air spring and opens from the top down, a line at a time (a clip on the heading
+// itself: it stays one text node, so it is still the single block that counts as the first screen's
+// largest paint; split into word spans, each word would be judged on its own). Optional: the dotted
+// ground, a ghost word, and a `media` slot that makes the head a split
+// (copy left, media right, stacked on phones).
+interface Props {
+  label?: string;
+  labelHref?: string;
+  title: string;
+  lede?: string;
+  tone?: 'paper' | 'frame';
+  /** the dotted ground with its cursor spotlight */
+  dots?: boolean;
+  /** a large italic word behind the head, which settles in on load and drifts as the page scrolls */
+  ghost?: string;
+}
+const { label, labelHref, title, lede, tone = 'paper', dots = false, ghost } = Astro.props;
+const split = Astro.slots.has('media');
+---
+
+<section
+  class:list={['phead', `tone-${tone}`, { 'phead-split': split, 'phead-ghosted': ghost }]}
+  data-nav={tone}
+  data-dots={dots ? '' : undefined}
+>
+  {dots && <div class="dots" aria-hidden="true"><div class="dots-clip"><div class="dots-spot"></div></div></div>}
+  {ghost && <p class="phead-ghost" aria-hidden="true"><span class="wrap phead-ghost-wrap"><span class="phead-ghost-in">{ghost}</span></span></p>}
+  <div class="wrap phead-inner">
+    {
+      split ? (
+        <>
+          <div class="phead-copy">
+            {label && (labelHref ? <a class="label muted phead-label arrive" href={labelHref}>{label}</a> : <p class="label muted phead-label arrive">{label}</p>)}
+            <h1 class="phead-h">{title}</h1>
+            {lede && <p class="lede phead-lede arrive" style="--d:160ms">{lede}</p>}
+            <slot />
+          </div>
+          <div class="phead-media"><slot name="media" /></div>
+        </>
+      ) : (
+        <>
+          {label && (labelHref ? <a class="label muted phead-label arrive" href={labelHref}>{label}</a> : <p class="label muted phead-label arrive">{label}</p>)}
+          <h1 class="phead-h">{title}</h1>
+          {lede && <p class="lede phead-lede arrive" style="--d:160ms">{lede}</p>}
+          <slot />
+        </>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .phead { position: relative; padding: calc(var(--nav-h) + clamp(48px, 7vw, 104px)) 0 clamp(40px, 5vw, 80px); }
+  .phead-inner { position: relative; display: grid; gap: clamp(18px, 2vw, 26px); }
+  .phead-label { justify-self: start; }
+  a.phead-label:hover { color: var(--fg); }
+  .phead-h { max-width: 16ch; text-wrap: balance; }
+  .phead-lede { max-width: 50ch; font-size: clamp(18px, 1.5vw, 22px); }
+
+  /* the title: it rises on the air spring and opens from the top down, a line at a time */
+  :global(.js.motion) .phead-h {
+    animation: phead-open 1.15s var(--spring-settle) 60ms both, phead-rise 0.95s var(--spring-air) 60ms both;
+  }
+  :global(.js.motion.pre) .phead-h { animation-play-state: paused; }
+  @keyframes phead-open { from { clip-path: inset(0 -0.2em 100% -0.2em); } to { clip-path: inset(-0.3em -0.2em -0.4em -0.2em); } }
+  @keyframes phead-rise { from { transform: translate(0, 0.4em); } }
+
+  /* ---------- the split: copy and media side by side, the media framed and arriving on load ---------- */
+  .phead-split { padding: calc(var(--nav-h) + clamp(28px, 4.2vw, 72px)) 0 clamp(36px, 4.4vw, 72px); }
+  .phead-split .phead-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(36px, 5vw, 96px);
+  }
+  .phead-copy { display: grid; gap: clamp(18px, 2vw, 26px); justify-items: start; align-content: center; }
+  .phead-split .phead-h { max-width: 12ch; }
+  .phead-media { min-width: 0; }
+  :global(.js.motion) .phead-media { animation: phead-media 1.1s var(--spring-settle) 140ms both; }
+  :global(.js.motion.pre) .phead-media { animation-play-state: paused; }
+  @keyframes phead-media { from { opacity: 0.01; transform: translate(0, 48px); } }
+  @media (max-width: 899px) {
+    .phead-split .phead-inner { grid-template-columns: 1fr; }
+    .phead-split .phead-h { max-width: 14ch; }
+  }
+
+  /* ---------- the ghost word ---------- */
+  /* Fraunces italic, very large, low in the head and cut by its lower edge: on the empty right of a
+     plain head, under the copy of a split one (never behind the media, nor once a split stacks). It
+     settles in on load; where the browser can drive it from the scroll position,
+     it then sinks back more slowly than the page and fades as the head leaves. */
+  .phead-ghosted { overflow: clip; }
+  .phead-ghost {
+    position: absolute; left: 0; right: 0; bottom: -0.2em; z-index: 0;
+    font: italic 300 clamp(96px, 17vw, 260px) / 0.9 var(--serif); letter-spacing: -0.03em;
+    white-space: nowrap; pointer-events: none; user-select: none;
+    color: var(--fg); view-timeline: --phead-ghost block;
+  }
+  .phead-ghost-wrap { display: block; text-align: right; }
+  .phead-split .phead-ghost-wrap { text-align: left; }
+  .phead-ghost-in { display: inline-block; opacity: 0.12; }
+  .phead-ghosted .phead-inner { z-index: 1; }
+  :global(.js.motion) .phead-ghost { animation: phead-ghost-in 1.4s var(--spring-settle) 260ms both; }
+  :global(.js.motion.pre) .phead-ghost { animation-play-state: paused; }
+  @keyframes phead-ghost-in { from { opacity: 0; transform: translate(0, 40px); } }
+  @supports (animation-timeline: view()) {
+    :global(.js.motion) .phead-ghost-in { animation: phead-ghost-drift linear both; animation-timeline: --phead-ghost; animation-range: exit 0% exit 100%; }
+  }
+  @keyframes phead-ghost-drift { to { opacity: 0; transform: translate(0, 30%); } }
+  /* stacked, a split head ends on its media, which would hide all but a sliver of the word */
+  @media (max-width: 899px) { .phead-split .phead-ghost { display: none; } }
+</style>

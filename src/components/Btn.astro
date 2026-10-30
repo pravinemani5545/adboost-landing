@@ -1,0 +1,15 @@
+---
+// A pill button whose label rolls on hover. `ghost` is the hairline variant.
+interface Props {
+  href: string;
+  variant?: 'sig' | 'ghost';
+  class?: string;
+  [attr: string]: unknown;
+}
+const { href, variant = 'sig', class: cls, ...rest } = Astro.props;
+const label = (await Astro.slots.render('default')).trim();
+---
+
+<a class:list={['btn', `btn-${variant}`, cls]} href={href} {...rest}
+  ><span class="roll"><span set:html={label} /><span aria-hidden="true" set:html={label} /></span></a
+>

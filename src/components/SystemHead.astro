@@ -1,0 +1,51 @@
+---
+// What every page that wears the system needs in its <head>, before anything paints: the browser
+// colour, the scheme and motion classes, the fonts, the icons and the first-party tracker.
+// The brand key and colours come from brand.css (src/lib/brand.ts); <html> carries them for theme.ts.
+import Fonts from './Fonts.astro';
+import { brand } from '../lib/brand';
+---
+<meta name="theme-color" content={brand.themeLight} />
+<script is:inline>
+  (function () {
+    var d = document.documentElement;
+    d.classList.add('js');
+    // the colour scheme chosen with the toggle, before anything paints (absent: the system's)
+    try {
+      var t = localStorage.getItem(d.dataset.brand + ':theme');
+      if (t === 'dark' || t === 'light') d.dataset.theme = t;
+      if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches)) document.querySelector('meta[name="theme-color"]').content = d.dataset.tcDark;
+    } catch (e) {}
+    // after load: the pieces that are never on the first screen (the footer plate's mark)
+    addEventListener('load', function () { d.classList.add('loaded'); });
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+    // a page prepared ahead of a click holds its arrival until it is actually opened
+    if (document.prerendering) {
+      d.classList.add('pre');
+      document.addEventListener('prerenderingchange', function () { d.classList.remove('pre'); }, { once: true });
+    }
+    // Next pages are fetched ahead: on a mouse, Astro's hover prefetch does it; on touch, Chromium
+    // fetches as the finger lands. Prefetch, not prerender: a prerendered page would run t.js and log a
+    // pageview for a page that may never be opened. The home page is heavier and is left alone.
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+      var rules = document.createElement('script');
+      rules.type = 'speculationrules';
+      rules.textContent = JSON.stringify({
+        prefetch: [{
+          where: { and: [
+            { href_matches: '/*' },
+            { not: { href_matches: ['/', '/*.pdf', '/downloads/*'] } },
+            { not: { selector_matches: '[download], [target]' } }
+          ] },
+          eagerness: 'conservative'
+        }]
+      });
+      document.head.appendChild(rules);
+    }
+  })();
+</script>
+<Fonts />
+<link rel="preconnect" href="https://admin.adboost.health" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<script defer src="https://admin.adboost.health/t.js"></script>

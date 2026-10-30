@@ -1,0 +1,313 @@
+/* Navigation, mega menus, phone menu, sticky phone bar, footer and the footer plate. */
+
+/* ---------- nav: PAPER over FRAME, video and photos; FRAME over PAPER ---------- */
+html[data-nav="frame"] { --nav-fg: var(--paper-color); --nav-bg: var(--frame); --nav-mark: var(--accent-frame); }
+html[data-nav="paper"] { --nav-fg: var(--paper-fg); --nav-bg: var(--paper); --nav-mark: var(--paper-mark); }
+html[data-nav="media"] { --nav-fg: var(--paper-color); --nav-bg: transparent; --nav-mark: var(--paper-color); }
+
+.site-nav {
+  position: fixed; inset: 0 0 auto; z-index: 50;
+  height: var(--nav-h);
+  display: flex; align-items: center; gap: clamp(20px, 2.6vw, 40px);
+  padding-inline: var(--pad);
+  color: var(--nav-fg);
+  background: var(--nav-bg);
+  transition: color 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+html.mega-open .site-nav { --nav-fg: var(--paper-color); --nav-bg: var(--frame); --nav-mark: var(--accent-frame); }
+/* Over imagery the nav brings its own shade: a soft fall of deep FRAME-black behind the bar that
+   fades out below it, so the PAPER links read over a bright photo without a visible bar. It eases
+   in and out with the nav's state. */
+.site-nav::before {
+  --shade: color-mix(in oklab, var(--frame) 35%, black);
+  content: ""; position: absolute; inset: 0 0 auto; height: calc(100% + 64px); z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 46% 130% at 72% 0%, color-mix(in srgb, var(--shade) 42%, transparent), color-mix(in srgb, var(--shade) 18%, transparent) 55%, transparent 100%),
+    linear-gradient(to bottom,
+      color-mix(in srgb, var(--shade) 62%, transparent) 0%, color-mix(in srgb, var(--shade) 52%, transparent) 30%, color-mix(in srgb, var(--shade) 34%, transparent) 55%,
+      color-mix(in srgb, var(--shade) 15%, transparent) 78%, transparent 100%);
+  opacity: 0; transition: opacity 0.35s var(--ease);
+}
+html[data-nav="media"]:not(.mega-open):not(.sheet-open) .site-nav::before { opacity: 1; }
+html[data-nav="media"] .nav-link, html[data-nav="media"] .nav-menu-btn, html[data-nav="media"] .lg-wm { text-shadow: 0 1px 10px rgb(0 0 0 / 0.4); }
+
+/* The mark (the brand's own silhouette as a mask, so it takes the nav's colour) and the name set in the serif */
+.nav-logo { display: flex; align-items: center; height: 48px; gap: 0; margin-right: auto; flex: none; transition: opacity 0.3s; }
+.lg-m { display: block; flex: none; height: 30px; aspect-ratio: 112 / 128; background: var(--nav-mark, currentColor); transition: background-color 0.25s var(--ease); -webkit-mask: url("/logos/adboost-mark.webp") center / contain no-repeat; mask: url("/logos/adboost-mark.webp") center / contain no-repeat; }
+.lg-div { display: block; flex: none; width: 1px; height: 30px; margin-inline: 12px 12px; background: currentColor; opacity: 0.35; }
+.lg-wm { display: block; flex: none; font: 300 24px/1 var(--serif); letter-spacing: -0.02em; white-space: nowrap; }
+.lg-wm span { opacity: 0.62; }
+
+.nav-links { display: flex; align-items: center; gap: clamp(18px, 2.2vw, 34px); font-size: 16px; }
+.nav-link { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 10px 0; font: inherit; color: inherit; transition: opacity 0.35s var(--spring-settle); }
+/* hovering one link lets the others fall back */
+@media (hover: hover) {
+  .nav-links:hover .nav-link:not(:hover) { opacity: 0.6; transition-duration: 0.5s; }
+}
+.nav-link::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 4px; height: 1px; background: var(--nav-mark, var(--accent-frame));
+  transform: scaleX(0); transform-origin: right; transition: transform 0.4s var(--spring-snap);
+}
+.nav-link:hover::after, .nav-link[aria-current="page"]::after, .nav-link[aria-expanded="true"]::after { transform: scaleX(1); transform-origin: left; }
+.nav-caret { width: 9px; height: 9px; opacity: 0.6; transition: rotate 0.4s var(--spring-snap); }
+.nav-link[aria-expanded="true"] .nav-caret { rotate: 180deg; }
+.nav-ext svg { width: 10px; height: 10px; opacity: 0.6; }
+/* the sister site steps out of the row before the row runs out of room; it stays in the sheet and the footer */
+@media (max-width: 1179px) { .nav-links .nav-ext { display: none; } }
+
+.nav-cta { height: 46px; padding: 0 22px; font-size: 14.5px; margin-left: clamp(0px, 0.8vw, 12px); }
+html[data-nav="paper"]:not(.mega-open) .nav-cta { --btn-bg: var(--paper-btn-bg); --btn-fg: var(--paper-btn-fg); --ring: var(--paper-ring); --rim: var(--paper-rim); }
+html[data-nav="frame"] .nav-cta, html[data-nav="media"] .nav-cta, html.mega-open .nav-cta { --btn-bg: var(--accent-color); --btn-fg: var(--accent-fg); }
+
+/* mega menus: one full-width panel per group */
+.nav-item { position: relative; }
+.mega {
+  position: fixed; left: 0; right: 0; top: var(--nav-h);
+  padding: 34px 0 44px;
+  border-bottom: 1px solid var(--line);
+  visibility: hidden; opacity: 0; transform: translate(0, -6px);
+  transition: opacity 0.2s var(--ease), transform 0.4s var(--spring-snap), visibility 0s linear 0.2s;
+}
+.nav-item.open .mega { visibility: visible; opacity: 1; transform: none; transition-delay: 0s; }
+.mega-inner { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: clamp(28px, 4vw, 72px); }
+.mega .label { color: var(--fg-2); margin-bottom: 16px; }
+.mega-line { font: 300 clamp(20px, 1.7vw, 26px) / 1.3 var(--serif); letter-spacing: -0.01em; margin-bottom: 18px; max-width: 24ch; }
+.mega ul { columns: var(--cols, 1); column-gap: clamp(24px, 3vw, 56px); }
+.mega li { break-inside: avoid; padding-bottom: 2px; }
+.mega ul a { display: inline-block; padding: 6px 0; font-size: 16px; opacity: 0.86; transition: opacity 0.15s, transform 0.4s var(--spring-snap), color 0.15s; }
+.mega ul a:hover, .mega ul a[aria-current="page"] { opacity: 1; transform: translateX(6px); color: var(--accent-frame); }
+
+.nav-menu-btn { display: none; height: 44px; padding: 0 4px; color: inherit; letter-spacing: 0.2em; }
+
+/* ---------- phone menu ---------- */
+.sheet {
+  position: fixed; inset: 0; z-index: 45; overflow-y: auto; overscroll-behavior: contain;
+  padding: calc(var(--nav-h) + 20px) var(--pad) 120px;
+  visibility: hidden; opacity: 0;
+  transition: opacity 0.25s var(--ease), visibility 0s linear 0.25s;
+}
+html.sheet-open .sheet { visibility: visible; opacity: 1; transition-delay: 0s; }
+html.sheet-open { --nav-fg: var(--paper-color); --nav-bg: var(--frame); --nav-mark: var(--accent-frame); }
+.sheet-inner { display: grid; gap: 4px; }
+.sheet-link {
+  display: block; padding: 10px 0; font: 300 clamp(34px, 9vw, 46px) / 1.1 var(--serif); letter-spacing: -0.02em;
+  cursor: pointer; list-style: none;
+}
+.sheet-link::-webkit-details-marker { display: none; }
+.sheet-group[open] .sheet-link { color: var(--accent-frame); }
+.sheet-sub { display: grid; gap: 6px; padding: 8px 0 22px; }
+.sheet-sub ul { display: grid; }
+.sheet-sub ul a { display: block; padding: 7px 0; font-size: 17px; }
+.sheet-foot { display: grid; gap: 6px; margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--fg-2); }
+html.js.motion .sheet-inner > * { opacity: 0; transform: translate(0, 20px); transition: opacity 0.35s var(--spring-settle), transform var(--t-soft) var(--spring-soft); }
+html.js.motion.sheet-open .sheet-inner > * { opacity: 1; transform: none; }
+html.js.motion.sheet-open .sheet-inner > *:nth-child(2) { transition-delay: 40ms; }
+html.js.motion.sheet-open .sheet-inner > *:nth-child(3) { transition-delay: 80ms; }
+html.js.motion.sheet-open .sheet-inner > *:nth-child(4) { transition-delay: 120ms; }
+html.js.motion.sheet-open .sheet-inner > *:nth-child(5) { transition-delay: 160ms; }
+html.js.motion.sheet-open .sheet-inner > *:nth-child(n + 6) { transition-delay: 200ms; }
+
+/* ---------- sticky phone bar: the primary call to action ---------- */
+/* its height (10px + the 50px button + 10px) before the safe area, for what has to clear it */
+:root { --bar-h: 70px; }
+.mobile-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  display: none; align-items: center; gap: 12px;
+  padding: 10px var(--pad) calc(10px + env(safe-area-inset-bottom));
+  background: var(--frame); color: var(--paper-color);
+  border-top: 1px solid color-mix(in srgb, var(--mist) 35%, transparent);
+  transition: transform 0.45s var(--spring-snap);
+}
+.mobile-bar .btn { flex: 1; height: 50px; }
+html.cta-in-view .mobile-bar, html.sheet-open .mobile-bar { transform: translate(0, 110%); }
+
+@media (max-width: 959px) {
+  .nav-links, .nav-cta { display: none; }
+  .nav-menu-btn { display: block; }
+  .mobile-bar { display: flex; }
+}
+@media (max-width: 480px) {
+  .lg-wm { font-size: 21px; }
+  .lg-m { height: 26px; }
+  .lg-div { height: 26px; margin-inline: 9px; }
+}
+
+/* ---------- phones and small tablets: the bar's two controls and the menu sheet ---------- */
+/* The menu button is a hairline pill, and the scheme toggle leaves the bottom corner (where it sat over
+   text and buttons) for the nav row beside it, taking the nav's colour as sections pass beneath. */
+@media (max-width: 899px) {
+  .nav-menu-btn {
+    display: grid; place-items: center; width: 92px; padding: 0; border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 38%, transparent);
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  html .theme-toggle[data-theme-toggle] {
+    z-index: 51; top: calc((var(--nav-h) - 44px) / 2); bottom: auto; right: calc(var(--pad) + 92px + 8px);
+    background: transparent; color: var(--nav-fg);
+    --hair: color-mix(in srgb, var(--nav-fg) 38%, transparent);
+    box-shadow: inset 0 0 0 1px var(--hair);
+  }
+  /* up in the nav it never meets the footer plate, so it stays */
+  :root.plate-on .theme-toggle[data-theme-toggle] { opacity: 1; visibility: visible; translate: 0 0; pointer-events: auto; }
+
+  /* the sheet: rows a thumb can find, groups marked as something that opens */
+  .sheet { padding-bottom: 56px; }
+  .sheet-inner { gap: 0; }
+  .sheet-link { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding-block: 8px; }
+  .sheet-group > .sheet-link::after {
+    content: ""; flex: none; width: 14px; height: 14px; margin-right: 6px;
+    background: linear-gradient(currentColor, currentColor) center / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) center / 1.5px 100% no-repeat;
+    transition: rotate 0.4s var(--spring-snap);
+  }
+  .sheet-group[open] > .sheet-link::after { rotate: 45deg; }
+  .sheet-sub { gap: 2px; padding: 4px 0 20px; }
+  .sheet-sub ul a { display: flex; align-items: center; min-height: 44px; padding: 0; }
+  .sheet-sub > .link { justify-self: start; margin-top: 8px; padding: 10px 0 13px; background-position: 0 calc(100% - 10px); }
+  /* the call to action and the email as two full-width pills */
+  .sheet-foot { gap: 10px; margin-top: 28px; padding-top: 24px; }
+  .sheet-foot a:not(.btn) {
+    display: grid; place-items: center; height: 52px; border-radius: 999px;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--paper-color) 35%, transparent); color: var(--paper-color); font-weight: 500;
+  }
+  .sheet-foot .btn { width: 100%; }
+}
+@media (max-width: 359px) {
+  .lg-wm { font-size: 19px; }
+  .lg-div { margin-inline: 8px 9px; }
+  .nav-menu-btn { width: 80px; }
+  html .theme-toggle[data-theme-toggle] { right: calc(var(--pad) + 80px + 6px); }
+}
+
+/* ---------- footer: the page lifts off a fixed plate at the end; the mark pops in as it is uncovered ---------- */
+:root { --plate-h: clamp(460px, 68svh, 640px); }
+/* phones: never taller than the screen under the nav, so the plate can always be fully uncovered */
+@media (max-width: 959px) { :root { --plate-h: min(calc(100svh - var(--nav-h)), 600px); } }
+/* The curtain is never see-through, and overscroll past the end stays FRAME. The canvas colour has to
+   come from html, not body: a body background would paint above the plate (negative z-index layers
+   sit between the root background and in-flow boxes). */
+html { background: var(--frame); }
+body { background: transparent; }
+main { background: var(--frame); }
+/* the body box paints above the plate too (in-flow boxes sit over negative z-index layers), so it lets
+   clicks through to it; everything in the body takes them as usual */
+body { pointer-events: none; }
+body > * { pointer-events: auto; }
+
+.site-footer { position: relative; padding-top: clamp(56px, 7vw, 100px); }
+.fcols { display: grid; grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(0, 1fr)); gap: clamp(28px, 4vw, 64px); padding-bottom: clamp(36px, 4vw, 52px); }
+.fabout { display: grid; gap: 22px; align-content: start; }
+.fabout .support { max-width: 22ch; }
+.fcol .label { color: var(--fg-2); margin-bottom: 14px; }
+.fcol ul { display: grid; gap: 2px; }
+.fcol a { display: inline-block; padding: 5px 0; opacity: 0.8; transition: opacity 0.15s, color 0.15s; }
+.fcol a:hover { opacity: 1; color: var(--accent); }
+.fmeta { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; padding: clamp(28px, 3vw, 40px) 0 clamp(28px, 3vw, 44px); border-top: 1px solid var(--line); font-size: 16px; }
+.fcontact { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 0; color: var(--fg-2); }
+.fcontact a { color: var(--fg); }
+.fcontact .sep { margin-inline: 10px; opacity: 0.5; }
+.flinks { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px 24px; align-content: start; }
+.flinks a { opacity: 0.8; transition: opacity 0.15s; }
+.flinks a:hover { opacity: 1; color: var(--accent); }
+/* the curtain's edge casts a soft shadow onto the plate, so the lift reads where FRAME meets FRAME */
+.site-footer::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 100%; height: clamp(56px, 9vh, 96px);
+  background: linear-gradient(to bottom, color-mix(in srgb, color-mix(in oklab, var(--frame) 55%, black) 55%, transparent), transparent);
+  pointer-events: none;
+}
+
+/* the spacer reserves exactly one plate-height of scroll and carries the reveal timeline; it lets
+   clicks through to the plate beneath it, so the links in the foot row work */
+.plate-space { height: var(--plate-h); view-timeline: --plate block; pointer-events: none; }
+.plate {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: -1;
+  height: var(--plate-h); overflow: hidden;
+  display: grid; align-items: end;
+  padding-block: clamp(36px, 5vh, 64px) clamp(22px, 3vh, 32px);
+  pointer-events: auto;
+  /* a shade deeper than the page, so the two planes separate */
+  background: color-mix(in oklab, var(--frame) 86%, black);
+  box-shadow: inset 0 1px 0 var(--line);
+}
+.plate-in { display: grid; gap: clamp(28px, 4vh, 48px); }
+
+/* The lockup: the mark and the name in one row on wide screens, stacked on phones. --u is the
+   name's type size; the row is about 6.55u wide, so /6.6 fills the wrap edge to edge. */
+.plate-lockup {
+  --u: min(calc((min(100vw, var(--max)) - 2 * var(--pad)) / 6.6), calc(var(--plate-h) * 0.32), 200px);
+  display: flex; align-items: center; gap: calc(var(--u) * 0.3); width: 100%;
+}
+.plate-m { display: block; flex: none; height: calc(var(--u) * 1.05); aspect-ratio: 332 / 379; background: var(--accent-frame); visibility: hidden; }
+.plate-wm { display: block; flex: none; font: 300 var(--u) / 0.9 var(--serif); letter-spacing: -0.035em; white-space: nowrap; color: var(--paper-color); }
+.plate-wm span { opacity: 0.55; }
+/* the mask is fetched after load (the plate is never on the first screen), so it never competes with
+   the page's own first paint; until then the mark is simply not drawn */
+html.loaded .plate-m { visibility: visible; -webkit-mask: url("/logos/adboost-mark.png") center / contain no-repeat; mask: url("/logos/adboost-mark.png") center / contain no-repeat; }
+
+/* the foot: the local time, the legal line, and the way back up */
+.plate-foot {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px;
+  padding-top: 18px; border-top: 1px solid var(--line);
+  font-size: 13px; color: var(--fg-2);
+}
+.plate-clock { white-space: nowrap; }
+.plate-clock .sep { margin-inline: 8px; opacity: 0.5; }
+.plate-clock time { color: var(--paper-color); font-variant-numeric: tabular-nums; }
+.plate-legal { flex: 1; text-align: center; }
+.plate-legal a { color: var(--fg); }
+.plate-legal .nowrap { white-space: nowrap; }
+.plate-top { color: var(--fg-2); transition: color 0.15s; }
+.plate-top:hover, .plate-top:focus-visible { color: var(--accent-frame); }
+
+/* The pop: scroll-linked, so it never lags the finger; the overshoot lives in the keyframes and lands
+   before the last 15% of the reveal, while the foot row is still arriving. */
+@supports (animation-timeline: view()) {
+  .js.motion .plate-lockup {
+    animation: plate-pop linear both; animation-timeline: --plate; animation-range: entry 0% entry 85%;
+    transform-origin: 50% 85%;
+  }
+  .js.motion .plate-foot { animation: plate-rise linear both; animation-timeline: --plate; animation-range: entry 40% entry 100%; }
+  @keyframes plate-pop {
+    0% { opacity: 0.18; transform: translate3d(0, 14%, 0) scale(0.9); }
+    72% { opacity: 1; transform: translate3d(0, -1.2%, 0) scale(1.018); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes plate-rise {
+    from { opacity: 0; transform: translate(0, 16px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@media (max-width: 959px) {
+  /* clears the sticky phone bar */
+  .plate { padding-bottom: calc(var(--bar-h) + 14px + env(safe-area-inset-bottom)); }
+  .plate-legal { flex-basis: 100%; order: 1; text-align: left; }
+  .fcols { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fabout { grid-column: 1 / -1; }
+}
+@media (max-width: 799px) {
+  .fmeta { grid-template-columns: 1fr; }
+  .flinks { justify-content: flex-start; }
+}
+/* touch screens: every footer link a full-height row */
+@media (max-width: 899px) {
+  .fcontact { display: grid; justify-items: start; }
+  .fcontact .sep { display: none; }
+  .fcontact a, .fcontact span { display: flex; align-items: center; min-height: 44px; }
+  .fcol a { display: flex; align-items: center; min-height: 44px; padding: 0; }
+  .flinks { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .flinks a { display: flex; align-items: center; min-height: 44px; }
+  .plate-top, .plate-legal a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+@media (max-width: 639px) {
+  .fcols { grid-template-columns: 1fr 1fr; gap: 28px 20px; }
+  .fmeta { gap: 18px; padding: 26px 0; }
+  .plate-foot { font-size: 14px; }
+  .plate-lockup { --u: min(calc((100vw - 2 * var(--pad)) / 6.4), 64px); display: grid; justify-items: center; gap: 22px; }
+  .plate-m { height: auto; width: 34%; }
+}
+
+/* ---------- print: the chrome never prints ---------- */
+@media print {
+  .site-nav, .sheet, .mobile-bar, .theme-toggle, .plate-space, .skip { display: none !important; }
+  html, body, main { background: none !important; }
+}

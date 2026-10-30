@@ -1,0 +1,112 @@
+---
+import { ABOUT_LINE, BRAND, CTA, EMAIL, LOCATION, NAV, SISTER, TIMEZONE } from '../lib/site';
+
+const groups = NAV.filter((n) => n.children);
+const links = [
+  ['About', '/about/'],
+  ['FAQ', '/faq/'],
+  ['Blog', '/blog/'],
+  ['Privacy', '/privacy/'],
+  ['Terms', '/terms/'],
+];
+// The plate's clock: the time where the team is, read at build time as the placeholder so the live
+// time replaces it in place with nothing shifting.
+const clock = new Intl.DateTimeFormat('en-CA', { hour: 'numeric', minute: '2-digit', timeZone: TIMEZONE });
+const built = new Date();
+const year = built.getFullYear();
+---
+
+<footer class="site-footer tone-frame" data-nav="frame">
+  <div class="wrap">
+    <div class="fcols">
+      <div class="fabout" data-reveal>
+        <p class="support">{ABOUT_LINE}</p>
+        <p><a class="link" href={CTA.href}>Book a strategy call</a></p>
+      </div>
+      {groups.map((g, i) => (
+        <nav class="fcol" aria-label={g.label} data-reveal style={`--i:${i + 1}`}>
+          <p class="label">{g.label}</p>
+          <ul>
+            {g.children!.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+            <li><a href={g.href}>{g.all ?? g.label}</a></li>
+          </ul>
+        </nav>
+      ))}
+    </div>
+    <div class="fmeta">
+      <div class="fcontact">
+        <span>{LOCATION} · Remote-first</span><span class="sep" aria-hidden="true">|</span><a href={`mailto:${EMAIL}`}>{EMAIL}</a><span class="sep" aria-hidden="true">|</span><a href={SISTER.href} target="_blank" rel="noopener">{SISTER.label} ↗</a>
+      </div>
+      <nav aria-label="Footer">
+        <ul class="flinks">{links.map(([t, h]) => <li><a href={h}>{t}</a></li>)}</ul>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<!-- The page is a curtain that lifts off a fixed plate at the very end. The spacer reserves exactly one
+     plate-height of scroll (and carries the reveal timeline); the plate sits behind everything, parked
+     at the bottom of the screen, and the lockup pops in as it is uncovered. -->
+<div class="plate-space" data-plate-space>
+  <div class="plate tone-frame">
+    <div class="wrap plate-in">
+      <div class="plate-lockup" role="img" aria-label={BRAND.full}>
+        <span class="plate-m"></span><span class="plate-wm" aria-hidden="true">{BRAND.name} <span>{BRAND.sub}</span></span>
+      </div>
+      <div class="plate-foot">
+        <p class="plate-clock" data-tz={TIMEZONE}>
+          {LOCATION}<span class="sep" aria-hidden="true">/</span><time data-clock datetime={built.toISOString()}>{clock.format(built)}</time>
+        </p>
+        <p class="plate-legal">© {year} {BRAND.full}. All rights reserved. <span class="nowrap"><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span></p>
+        <a class="plate-top label" href="#main">Back to top</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // The plate pop for browsers without scroll-driven CSS (Firefox); elsewhere chrome.css does this.
+  import { reduceMotion } from '../scripts/env';
+  import { SDA, clamp, onMeasure, onScroll, pageTop, smooth, view } from '../scripts/scroll';
+
+  const space = document.querySelector<HTMLElement>('[data-plate-space]');
+  const lockup = space?.querySelector<HTMLElement>('.plate-lockup');
+  const foot = space?.querySelector<HTMLElement>('.plate-foot');
+  if (space && lockup && foot && !reduceMotion && !SDA) {
+    let top = 0, h = 1, last = -1;
+    // the spacer is in flow, so its page position is stable; the fixed plate's own rect never moves
+    onMeasure(() => { top = pageTop(space); h = space.offsetHeight || 1; last = -1; });
+    onScroll((y) => {
+      const p = clamp((y + view.h - top) / h); // 0 = the reveal starts, 1 = fully uncovered
+      if (Math.abs(p - last) < 0.002) return;
+      last = p;
+      const e = smooth(clamp(p / 0.85)); // the pop lands at 85% of the reveal
+      const over = Math.sin(Math.PI * e) * 0.018; // the small overshoot
+      lockup.style.opacity = (0.18 + 0.82 * e).toFixed(3);
+      lockup.style.transform = `translate3d(0, ${((1 - e) * 14 - over * 60).toFixed(2)}%, 0) scale(${(0.9 + 0.1 * e + over).toFixed(4)})`;
+      const f = smooth(clamp((p - 0.4) / 0.6));
+      foot.style.opacity = f.toFixed(3);
+      foot.style.transform = `translate(0, ${((1 - f) * 16).toFixed(1)}px)`;
+    });
+  }
+
+  // The local time, kept current only while the plate is on screen. The fixed plate is always inside
+  // the viewport, covered or not, so the in-flow spacer is what tells us it is showing.
+  const t = space?.querySelector<HTMLElement>('[data-clock]');
+  if (space && t) {
+    const fmt = new Intl.DateTimeFormat('en-CA', { hour: 'numeric', minute: '2-digit', timeZone: t.closest<HTMLElement>('[data-tz]')?.dataset.tz });
+    const tick = () => {
+      const d = new Date();
+      t.textContent = fmt.format(d);
+      t.setAttribute('datetime', d.toISOString());
+    };
+    let id = 0;
+    new IntersectionObserver(([e]) => {
+      clearInterval(id);
+      if (e.isIntersecting) {
+        tick();
+        id = window.setInterval(tick, 30000);
+      }
+    }).observe(space);
+  }
+</script>
