@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import { GLOSSARY } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
@@ -34,7 +34,7 @@ const jsonLd = [
     <div class="container">
       <div class="glossary-grid">
         {sorted.map((t) => (
-          <a class="gcard reveal" href={`/glossary/${t.slug}/`}>
+          <a class="gl-card reveal" href={`/glossary/${t.slug}/`}>
             <h3>{t.term}</h3>
             <p>{t.short}</p>
           </a>
@@ -49,5 +49,5 @@ const jsonLd = [
     </div>
   </section>
 
-  <CtaBand />
+  <Closing />
 </BaseLayout>

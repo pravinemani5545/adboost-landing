@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import { AD_POLICIES, STATUS_LABEL } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
@@ -54,5 +54,5 @@ const jsonLd = [
     </div>
   </section>
 
-  <CtaBand heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch - the single biggest thing generalist agencies get wrong in health." />
+  <Closing heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch - the single biggest thing generalist agencies get wrong in health." />
 </BaseLayout>

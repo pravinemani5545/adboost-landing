@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import { siteBase } from '../../lib/site';
 import { versioned } from '../../lib/assets';
 import { breadcrumb, organizationNode, personNode } from '../../lib/schema';
@@ -110,5 +110,5 @@ const jsonLd = [
     </div>
   </section>
 
-  <CtaBand />
+  <Closing />
 </BaseLayout>

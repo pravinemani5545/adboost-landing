@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
 import { COMPARES, getCompare } from '../../data/compare';
 import { siteBase } from '../../lib/site';
@@ -54,8 +54,8 @@ const jsonLd = [
       </div>
 
       <h2 class="sec-title" style="margin-top:36px">Where each one focuses</h2>
-      <p style="color:var(--ink-2);line-height:1.7"><strong>Them:</strong> {c.theirFocus}</p>
-      <p style="color:var(--ink-2);line-height:1.7"><strong>Us:</strong> {c.ourDifference}</p>
+      <p style="color:var(--l-ink-2);line-height:1.7"><strong>Them:</strong> {c.theirFocus}</p>
+      <p style="color:var(--l-ink-2);line-height:1.7"><strong>Us:</strong> {c.ourDifference}</p>
 
       <div class="callout reveal">
         <span class="cl-label">When the other option is the better fit</span>
@@ -63,7 +63,7 @@ const jsonLd = [
       </div>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
-      <div style="margin-top:16px"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
+      <div style="margin-top:16px"><Faq items={c.faq}`} /></div>
       </div>
       <aside class="doc-aside">
         <div class="aside-card">
@@ -83,5 +83,5 @@ const jsonLd = [
     </div>
   </section>
 
-  <CtaBand />
+  <Closing />
 </BaseLayout>

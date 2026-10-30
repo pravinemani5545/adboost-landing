@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
 import { getVertical } from '../../data/verticals';
@@ -97,7 +97,7 @@ const toc = [
             )}
 
             <h2 id="faq">FAQ</h2>
-            <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
+            <Faq items={p.faq}`} />
 
             <h3>Sources</h3>
             <p style="font-size:13px;color:var(--mute)">Ad policies change frequently and enforcement is tightening - treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
@@ -130,5 +130,5 @@ const toc = [
     </div>
   </section>
 
-  <CtaBand heading={`Launching ${p.vertical.toLowerCase()} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
+  <Closing heading={`Launching ${p.vertical.toLowerCase()} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
 </BaseLayout>

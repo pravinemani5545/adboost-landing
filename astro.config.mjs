@@ -80,6 +80,14 @@ const minifyInlineScripts = {
 export default defineConfig({
   site: 'https://www.adboost.health',
   devToolbar: { enabled: false },
+  // URLs stay as indexed: directory output with trailing-slash canonicals (Astro's defaults).
+  build: {
+    inlineStylesheets: 'always',    // no render-blocking CSS request on first paint
+  },
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  // esbuild keeps `animation-timeline` as its own declaration; Lightning CSS folds it into the
+  // `animation` shorthand, which browsers reject, and the scroll-driven animations silently drop.
+  vite: { build: { cssMinify: 'esbuild' } },
   integrations: [
     sitemap({
       // Keep gated/noindex pages out of the sitemap: lead-magnet opt-in + asset

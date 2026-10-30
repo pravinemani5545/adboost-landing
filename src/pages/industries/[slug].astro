@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import Closing from '../../components/Closing.astro';
 import Faq from '../../components/Faq.astro';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook } from '../../data/vertical-playbooks';
@@ -117,7 +117,7 @@ const toc = [
             </div>
 
             <h2 id="faq">{v.short} marketing FAQ</h2>
-            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} />
+            <Faq items={faqAll}`} />
           </div>
         </div>
 
@@ -152,5 +152,5 @@ const toc = [
     </div>
   </section>
 
-  <CtaBand heading={`Ready to lower CAC on your ${v.short.toLowerCase()} brand?`} />
+  <Closing heading={`Ready to lower CAC on your ${v.short.toLowerCase()} brand?`} />
 </BaseLayout>

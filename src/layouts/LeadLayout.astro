@@ -1,9 +1,13 @@
 ---
-import Fonts from '../components/Fonts.astro';
-// Minimal, distraction-free layout for lead-magnet opt-in pages.
-// No nav/footer chrome (maximizes conversion); always noindex.
-import '../styles/global.css';
-import '../styles/interior.css';
+// Minimal, distraction-free layout for lead-magnet opt-in pages: no nav or footer chrome (it
+// maximizes conversion); always noindex. It still wears the system's tokens, fonts and scheme, and the
+// old page body sits in the .legacy wrapper (legacy.css) until run 2 reskins it.
+import '../styles/system/brand.css';
+import '../styles/system/base.css';
+import '../styles/legacy.css';
+import SystemHead from '../components/SystemHead.astro';
+import { BRAND } from '../lib/site';
+import { brand } from '../lib/brand';
 
 interface Props {
   title: string;
@@ -15,7 +19,7 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-brand={brand.key} data-tc-light={brand.themeLight} data-tc-dark={brand.themeDark}>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -28,38 +32,36 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
 <meta property="og:description" content={description} />
 <meta property="og:image" content={`${site}/og/og-home.png`} />
 <meta property="og:image:alt" content="AdBoost Health, performance marketing for health brands" />
-<meta name="theme-color" content="#ffffff" />
-<Fonts />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script defer src="https://admin.adboost.health/t.js"></script>
+<SystemHead />
 </head>
-<body class="lead-body">
+<body class="lead-body tone-paper">
 <header class="lead-top">
   <div class="container">
-    <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span></a>
-    <span class="lead-top-tag">Peptide &amp; GLP-1 ad compliance</span>
+    <a class="lead-brand" href="/" aria-label={`${BRAND.full}, home`}><span class="lead-mark" aria-hidden="true"></span><span>{BRAND.name} <span>{BRAND.sub}</span></span></a>
+    <span class="lead-top-tag label">Peptide &amp; GLP-1 ad compliance</span>
   </div>
 </header>
-<main class="lead-main">
+<main class="lead-main legacy">
   <slot />
 </main>
 <footer class="lead-foot">
   <div class="container">
-    <span>© 2026 AdBoost Health · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    <span>© {new Date().getFullYear()} {BRAND.full} · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
   </div>
 </footer>
 
 <style is:global>
-  .lead-top { padding: 20px 0; border-bottom: 1px solid var(--line, #eceef3); }
-  .lead-top .container { display: flex; align-items: center; justify-content: space-between; }
-  .lead-top-tag { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--mute); }
   .lead-body { min-height: 100vh; display: flex; flex-direction: column; }
-  .lead-main { padding: 0 0 56px; flex: 1 0 auto; display: flex; flex-direction: column; }
-  .lead-foot { padding: 26px 0; border-top: 1px solid var(--line, #eceef3); color: var(--mute); font-size: 12.5px; }
-  .lead-foot a { color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
-  .lead-top-tag { display: none; }
+  .lead-top { padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .lead-top .container { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .lead-brand { display: flex; align-items: center; gap: 12px; min-height: 44px; font: 300 22px/1 var(--serif); letter-spacing: -0.02em; }
+  .lead-brand > span > span { opacity: 0.62; }
+  .lead-mark { width: 24px; aspect-ratio: 112 / 128; background: var(--paper-mark); -webkit-mask: url("/logos/adboost-mark.webp") center / contain no-repeat; mask: url("/logos/adboost-mark.webp") center / contain no-repeat; }
+  .lead-top-tag { display: none; color: var(--fg-2); }
   @media (min-width: 720px) { .lead-top-tag { display: inline; } }
+  .lead-main { padding: 0 0 56px; flex: 1 0 auto; display: flex; flex-direction: column; }
+  .lead-foot { padding: 26px 0; border-top: 1px solid var(--line); color: var(--fg-2); font-size: 15px; }
+  .lead-foot a { color: var(--fg-2); text-decoration: underline; text-underline-offset: 3px; }
 </style>
 </body>
 </html>

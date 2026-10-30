@@ -1,16 +1,19 @@
 ---
-import Fonts from '../components/Fonts.astro';
-import '../styles/global.css';
-import '../styles/interior.css';
-import { NAV } from '../lib/site';
+// Privacy and terms: the system page head, then the policy as one long, quiet column.
+import Shell from './Shell.astro';
+import PageHead from '../components/PageHead.astro';
 import { breadcrumb } from '../lib/schema';
 
 interface Props {
   title: string;
   description: string;
   canonicalPath: string;
+  /** the page's H1 */
+  heading: string;
+  /** "Last updated" date, as written */
+  updated: string;
 }
-const { title, description, canonicalPath } = Astro.props;
+const { title, description, canonicalPath, heading, updated } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 const ogImage = `${site}/og/og-home.png`;
 const pageLabel = title.replace(/ \| AdBoost Health$/, '');
@@ -23,85 +26,43 @@ const jsonLd = {
 };
 ---
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{title}</title>
-<meta name="description" content={description} />
-<link rel="canonical" href={`${site}${canonicalPath}`} />
-<meta property="og:type" content="website" />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={`${site}${canonicalPath}`} />
-<meta property="og:site_name" content="AdBoost Health" />
-<meta property="og:image" content={ogImage} />
-<meta property="og:image:alt" content={title} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-<meta name="twitter:image:alt" content={title} />
-<Fonts preloadSerif={false} />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
-<script defer src="https://admin.adboost.health/t.js"></script>
-</head>
-<body>
-
-<nav class="nav scrolled">
-  <div class="container nav-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
-    </a>
-    <div class="nav-links">
-      {NAV.map((item) => (
-        item.children ? (
-          <div class="nav-group">
-            <a href={item.href} class="nav-top">{item.label}
-              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <div class="nav-menu">
-              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
-            </div>
-          </div>
-        ) : (
-          <a href={item.href} class={item.external ? 'nav-top nav-ext' : 'nav-top'} {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && <Fragment set:html={`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:4px;opacity:.55;vertical-align:-1px"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />}</a>
-        )
-      ))}
+<Shell nav="paper">
+  <Fragment slot="head">
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={`${site}${canonicalPath}`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={`${site}${canonicalPath}`} />
+    <meta property="og:site_name" content="AdBoost Health" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={title} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  </Fragment>
+  <PageHead label="Legal" title={heading} lede={`Last updated: ${updated}`} dots />
+  <section class="legal-body tone-paper" data-nav="paper">
+    <div class="wrap">
+      <div class="legal-prose">
+        <slot />
+      </div>
     </div>
-    <a class="btn btn-primary" href="/book/">Book a call</a>
-  </div>
-</nav>
-
-<main class="legal-main container">
-  <div class="legal-prose">
-    <slot />
-  </div>
-</main>
-
-<footer>
-  <div class="container">
-    <div class="legal">
-      <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
-    </div>
-  </div>
-</footer>
+  </section>
+</Shell>
 
 <style is:global>
-  .legal-main { padding: 120px 0 80px; }
-  .legal-prose { max-width: 720px; font-size: 15.5px; line-height: 1.7; color: var(--ink-2); }
-  .legal-prose h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.03em; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
-  .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--ink); margin: 32px 0 10px; }
-  .legal-prose p { margin: 0 0 14px; }
-  .legal-prose ul { margin: 0 0 14px; padding-left: 22px; }
-  .legal-prose li { margin-bottom: 8px; }
-  .legal-prose a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+  .legal-body { padding: clamp(8px, 2vw, 24px) 0 var(--section); }
+  .legal-prose { max-width: 68ch; color: var(--fg-2); }
+  .legal-prose h2 { font-size: clamp(26px, 2.4vw, 34px); line-height: 1.15; color: var(--fg); margin: 2.2em 0 0.6em; }
+  .legal-prose p, .legal-prose ul { margin: 0 0 1em; }
+  .legal-prose ul { padding-left: 1.2em; list-style: disc; }
+  .legal-prose li { margin-bottom: 0.6em; }
+  .legal-prose li::marker { color: var(--accent); }
+  .legal-prose strong { color: var(--fg); font-weight: 500; }
+  .legal-prose a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
 </style>
-
-</body>
-</html>
