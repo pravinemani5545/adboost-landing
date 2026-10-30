@@ -6,13 +6,15 @@
 export const BOOK_PATH = '/book/';
 export const BOOKING_EMBED_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3zojIwc77IB2k7y11etonn4j7oKffkeWbm-ErHiwITTBBInv12Tu8XUYsVJHJLUeUWng2BFkEs?gv=true';
 export const EMAIL = 'hello@adboost.health';
+// Sister agency for ecommerce / DTC brands (mirrors adboost.media's link back to this site).
+export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media/' };
 
 export function siteBase(site: URL | undefined): string {
   return site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 }
 
 // Primary nav. Items with `children` render as hover dropdowns in the header
-// (and as grouped sub-links in the mobile menu).
+// (and as grouped sub-links in the mobile menu); `external` opens in a new tab.
 export const NAV = [
   {
     label: 'Services',
@@ -51,4 +53,5 @@ export const NAV = [
     ],
   },
   { label: 'About', href: '/about/' },
+  { label: SISTER.label, href: SISTER.href, external: true },
 ];

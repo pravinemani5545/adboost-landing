@@ -62,6 +62,7 @@ ${posts.map((p) => `- [${p.data.title}](${base}/blog/${p.id}/): ${p.data.descrip
 
 - Book a strategy call: https://www.adboost.health/book/
 - Email: hello@adboost.health
+- Sister agency (ecommerce and DTC brands): https://www.adboost.media/
 `;
 
   return new Response(body, {

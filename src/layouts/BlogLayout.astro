@@ -3,7 +3,7 @@ import Fonts from '../components/Fonts.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { versioned } from '../lib/assets';
-import { BOOK_PATH, NAV } from '../lib/site';
+import { BOOK_PATH, NAV, SISTER } from '../lib/site';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 
@@ -150,7 +150,7 @@ const category = post?.tags[0]?.toUpperCase();
             </div>
           </div>
         ) : (
-          <a href={item.href} class="nav-top">{item.label}</a>
+          <a href={item.href} class={item.external ? 'nav-top nav-ext' : 'nav-top'} {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && <Fragment set:html={`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:4px;opacity:.55;vertical-align:-1px"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />}</a>
         )
       ))}
     </div>
@@ -170,7 +170,7 @@ const category = post?.tags[0]?.toUpperCase();
 <div class="mnav" id="mnav">
   {NAV.map((item) => (
     <>
-      <a href={item.href} class="mnav-top">{item.label}</a>
+      <a href={item.href} class="mnav-top" {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && ' ↗'}</a>
       {item.children && <div class="mnav-sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
     </>
   ))}
@@ -270,6 +270,7 @@ const category = post?.tags[0]?.toUpperCase();
         <ul>
           <li><a href={BOOK_PATH}>Book a strategy call</a></li>
           <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
+          <li><a href={SISTER.href} target="_blank" rel="noopener">AdBoost Media ↗</a></li>
           <li><span class="foot-loc">Toronto · Remote-first</span></li>
         </ul>
       </div>
