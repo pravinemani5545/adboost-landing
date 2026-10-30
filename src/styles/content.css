@@ -14,7 +14,8 @@
 
 /* ---------- sections ---------- */
 /* the body under a page head: it starts close to the head (which carries its own air) */
-.page-body { padding: clamp(8px, 2vw, 24px) 0 var(--section); }
+/* clip, not hidden: side arrivals never widen the page, and a sticky child inside still sticks */
+.page-body { padding: clamp(8px, 2vw, 24px) 0 var(--section); overflow-x: clip; }
 .page-band { padding-block: calc(var(--section) * 0.75); }
 .sec-h { font-size: clamp(30px, 3.4vw, 48px); line-height: 1.08; max-width: 22ch; }
 .sec-h em, .phead-h em { font-style: italic; }
