@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { GLOSSARY, getTerm } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
+import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, definedTerm } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -13,8 +14,8 @@ const { term } = Astro.params;
 const t = getTerm(term!)!;
 const SITE = siteBase(Astro.site);
 const path = `/glossary/${t.slug}/`;
-const title = `${t.term}: Definition | AdBoost`;
-const description = t.definition.slice(0, 155);
+const title = seoTitle(path, `${t.term}: Definition | AdBoost`);
+const description = metaDescription(path, t.metaDescription);
 const related = (t.related ?? []).map((r) => getTerm(r)).filter(Boolean);
 
 // Topic-aware related resources per term (fallback = default trio below).

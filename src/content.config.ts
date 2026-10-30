@@ -11,6 +11,8 @@ const blog = defineCollection({
     ctaHeading: z.string().optional(),
     ctaText: z.string().optional(),
     pubDate: z.coerce.date(),
+    // draft: true holds a post out of every surface even after its pubDate.
+    draft: z.boolean().optional(),
     updatedDate: z.coerce.date().optional(),
     author: z.string().default('Amir Salihovic'),
     authorTitle: z.string().default('Co-Founder, AdBoost Health'),

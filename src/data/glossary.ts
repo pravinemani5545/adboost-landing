@@ -1,14 +1,17 @@
+import { isLive } from '../lib/live';
+
 export interface Term {
   slug: string;
   term: string;
   short: string;              // one-line for cards
+  metaDescription?: string;   // REQUIRED, hand-written, 140-160 chars (src/lib/seo.ts)
   definition: string;        // answer-first
   body?: string;             // extra explanation (health-specific example)
   formula?: string;
   related?: string[];        // slugs
 }
 
-export const GLOSSARY: Term[] = [
+const ALL_TERMS: Term[] = [
   {
     slug: 'cac',
     term: 'CAC (Customer Acquisition Cost)',
@@ -262,5 +265,8 @@ export const GLOSSARY: Term[] = [
     related: ['roas', 'contribution-margin', 'mer'],
   },
 ];
+
+// Only pages released in this build (src/data/pages.json gates).
+export const GLOSSARY = ALL_TERMS.filter((t) => isLive(`/glossary/${t.slug}/`));
 
 export const getTerm = (slug: string) => GLOSSARY.find((t) => t.slug === slug);

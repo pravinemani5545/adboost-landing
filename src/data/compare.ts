@@ -2,11 +2,14 @@
 // agencies, currently rank. Framing is honest and category-level (positioning
 // differences), not disparaging. Verify competitor descriptions before deploy.
 
+import { isLive } from '../lib/live';
+
 export interface Compare {
   slug: string;
   competitor: string;
   h1: string;
   metaTitle: string;          // title tag, kept distinct from h1 and <= 60 chars
+  metaDescription?: string;   // REQUIRED, hand-written, 140-160 chars (src/lib/seo.ts)
   intent: string;             // who's searching
   answer: string;             // answer-first
   theirFocus: string;
@@ -16,7 +19,7 @@ export interface Compare {
   faq: { q: string; a: string }[];
 }
 
-export const COMPARES: Compare[] = [
+const ALL_COMPARES: Compare[] = [
   {
     slug: 'full-service-healthcare-agency-alternative',
     competitor: 'a full-service healthcare agency',
@@ -81,5 +84,8 @@ export const COMPARES: Compare[] = [
     ],
   },
 ];
+
+// Only pages released in this build (src/data/pages.json gates).
+export const COMPARES = ALL_COMPARES.filter((c) => isLive(`/compare/${c.slug}/`));
 
 export const getCompare = (slug: string) => COMPARES.find((c) => c.slug === slug);

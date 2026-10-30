@@ -4,6 +4,8 @@
 // et al.). Ranges reflect fully-loaded CAC (cost per PAYING customer/patient),
 // not cost-per-lead/consult (which runs ~40–60% lower). Verify before publishing.
 
+import { isLive } from '../lib/live';
+
 export interface BenchmarkRow {
   label: string;
   value: string;
@@ -16,6 +18,8 @@ export interface Vertical {
   short: string;             // nav / chip label
   category: string;          // mono eyebrow tag
   // industry landing
+  seoTitle?: string;         // title tag; defaults to the template in [slug].astro
+  metaDescription?: string;  // REQUIRED, hand-written, 140-160 chars (src/lib/seo.ts)
   h1: string;
   lede: string;
   painPoint: string;
@@ -34,7 +38,7 @@ export interface Vertical {
   sources: { label: string; url: string }[];
 }
 
-export const VERTICALS: Vertical[] = [
+const ALL_VERTICALS: Vertical[] = [
   {
     slug: 'glp-1-weight-loss',
     name: 'GLP-1 & weight-loss brands',
@@ -334,5 +338,8 @@ export const VERTICALS: Vertical[] = [
     ],
   },
 ];
+
+// Only pages released in this build (src/data/pages.json gates).
+export const VERTICALS = ALL_VERTICALS.filter((v) => isLive(`/industries/${v.slug}/`));
 
 export const getVertical = (slug: string) => VERTICALS.find((v) => v.slug === slug);

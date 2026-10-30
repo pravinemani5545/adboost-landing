@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
-import { getPublishedPosts } from '../lib/blog';
+import { getPublishedPosts, getUnpublishedPostPaths } from '../lib/blog';
+import { gatedPaths } from '../lib/live';
+import { PLATFORM_HUBS } from '../data/platformHubs';
 import { GLOSSARY } from '../data/glossary';
 import { AD_POLICIES, STATUS_LABEL } from '../data/adPolicies';
 import { VERTICALS } from '../data/verticals';
@@ -11,6 +13,13 @@ import { FAQ_GROUPS } from '../data/faq';
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
   const posts = await getPublishedPosts();
+  // Post bodies are raw markdown: a link to a post or page this build does not
+  // publish is reduced to its text, as astro.config.mjs does for the HTML.
+  const unbuilt = new Set([...gatedPaths(), ...(await getUnpublishedPostPaths())]);
+  const unwrap = (md: string) =>
+    md.replace(/\[([^\]]+)\]\((?:https:\/\/www\.adboost\.health)?(\/[^)\s#?]*)[^)\s]*\)/g, (link, text, path) =>
+      unbuilt.has(path) ? text : link);
+  const plain = (html: string) => html.replace(/<[^>]+>/g, '');
 
   const body = `# AdBoost Health - Full Content
 
@@ -25,7 +34,7 @@ URL: ${base}/blog/${p.id}/
 Author: ${p.data.author}, ${p.data.authorTitle}
 Published: ${p.data.pubDate.toISOString().slice(0, 10)}
 
-${p.body ?? ''}`
+${unwrap(p.body ?? '')}`
   )
   .join('\n\n')}
 
@@ -46,7 +55,19 @@ ${t.definition}`
 # Ad compliance by platform and vertical
 URL: ${base}/advertising/
 
-${AD_POLICIES.map(
+${PLATFORM_HUBS.map(
+  (h) => `## ${h.h1}
+URL: ${base}/advertising/${h.slug}/
+Rules checked against ${h.platform}'s live policy on ${h.checkedOn}
+
+${h.answer}
+
+${h.sections.map((s) => `### ${s.question}\n\n${plain(s.html)}`).join('\n\n')}
+
+${h.faq.map((f) => `Q: ${f.q}\nA: ${plain(f.a)}`).join('\n\n')}
+
+`
+).join('')}${AD_POLICIES.map(
   (p) => `## ${p.h1}
 URL: ${base}/advertising/${p.slug}/
 Status: ${STATUS_LABEL[p.status]}

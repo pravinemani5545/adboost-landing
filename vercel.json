@@ -147,12 +147,37 @@
     },
     {
       "source": "/guides/health-ad-compliance/",
-      "destination": "/blog/glp1-advertising-compliance-2026/",
+      "destination": "/advertising/",
       "permanent": true
     },
     {
       "source": "/guides/:path(.*)",
       "destination": "/advertising/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/choose-health-growth-agency/",
+      "destination": "/compare/generalist-dtc-agency-alternative/",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/payback-period/",
+      "destination": "/glossary/cac-payback-period/",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/server-side-tracking/",
+      "destination": "/glossary/capi/",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/retention-rate/",
+      "destination": "/glossary/churn-rate/",
+      "permanent": true
+    },
+    {
+      "source": "/glossary/creative-fatigue/",
+      "destination": "/glossary/creative-testing/",
       "permanent": true
     },
     {

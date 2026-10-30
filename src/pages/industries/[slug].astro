@@ -7,6 +7,7 @@ import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook } from '../../data/vertical-playbooks';
 import { AD_POLICIES } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
+import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -18,8 +19,8 @@ const v = getVertical(slug!)!;
 const pb = getPlaybook(v.slug)!;
 const SITE = siteBase(Astro.site);
 const path = `/industries/${v.slug}/`;
-const title = `${v.short} Marketing Agency | AdBoost Health`;
-const description = v.lede.slice(0, 155);
+const title = seoTitle(path, v.seoTitle ?? `${v.short} Marketing Agency | AdBoost Health`);
+const description = metaDescription(path, v.metaDescription);
 const faqAll = [...v.faq, ...pb.extraFaq];
 const jsonLd = [
   serviceNode(SITE, { name: `Growth marketing for ${v.short} brands`, description: v.serviceDesc, path }),

@@ -87,8 +87,8 @@ export function definedTerm(base: string, opts: { term: string; description: str
 }
 
 export function articleNode(base: string, opts: {
-  headline: string; description: string; path: string; datePublished: string; dateModified?: string;
-  author?: string; authorPath?: string; image?: string;
+  headline: string; description?: string; path: string; datePublished: string; dateModified?: string;
+  author?: string; authorPath?: string; authorIsOrg?: boolean; image?: string;
 }) {
   return {
     '@type': 'Article',
@@ -98,7 +98,9 @@ export function articleNode(base: string, opts: {
     mainEntityOfPage: `${base}${opts.path}`,
     datePublished: opts.datePublished,
     dateModified: opts.dateModified ?? opts.datePublished,
-    author: {
+    // authorIsOrg: YMYL policy pages with no approved visible byline credit the
+    // Organization, not a hidden Person (health plan O1, N2, N3).
+    author: opts.authorIsOrg ? { '@id': ORG_ID(base) } : {
       '@type': 'Person',
       name: opts.author ?? 'Amir Salihovic',
       ...(opts.authorPath ? { url: `${base}${opts.authorPath}` } : {}),

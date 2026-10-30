@@ -1,3 +1,5 @@
+import { isLive } from '../lib/live';
+
 export interface Service {
   seoTitle?: string;   // overrides the derived `${h1} | AdBoost Health` title
   slug: string;
@@ -17,7 +19,7 @@ export interface Service {
   faq: { q: string; a: string }[];
 }
 
-export const SERVICES: Service[] = [
+const ALL_SERVICES: Service[] = [
   {
     slug: 'paid-media',
     name: 'Paid media',
@@ -159,5 +161,8 @@ export const SERVICES: Service[] = [
     ],
   },
 ];
+
+// Only pages released in this build (src/data/pages.json gates).
+export const SERVICES = ALL_SERVICES.filter((s) => isLive(`/services/${s.slug}/`));
 
 export const getService = (slug: string) => SERVICES.find((s) => s.slug === slug);

@@ -6,6 +6,8 @@ import Faq from '../../components/Faq.astro';
 import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
 import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
+import { PAGES } from '../../lib/live';
+import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -24,14 +26,17 @@ const V_SHORT = {
   'TRT & hormone': 'TRT',
 };
 const shortVertical = V_SHORT[p.vertical] ?? p.vertical;
-const title = `${shortVertical} on ${p.platform}: 2026 ad compliance | AdBoost Health`;
-const description = p.answer.slice(0, 155);
-const updatedLabel = new Date(`${p.updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const title = seoTitle(path, p.seoTitle ?? `${shortVertical} on ${p.platform}: 2026 ad compliance | AdBoost Health`);
+const description = metaDescription(path, p.metaDescription);
+// Content date: src/data/pages.json (sitemap lastmod, this label and dateModified).
+const updated = PAGES[path]?.updated;
+if (!updated) throw new Error(`src/data/pages.json needs an "updated" date for ${path}`);
+const updatedLabel = new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const industry = getVertical(p.verticalSlug);
 const jsonLd = [
-  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: p.updated, image: '/og/og-home.png' }),
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: updated, image: '/og/og-home.png' }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];

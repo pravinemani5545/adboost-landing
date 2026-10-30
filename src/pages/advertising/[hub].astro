@@ -1,0 +1,13 @@
+---
+// Platform policy hubs (/advertising/meta/, /advertising/google/). The rule
+// sheets (/advertising/<vertical>-on-<platform>/) are built by [slug].astro;
+// the two routes generate disjoint paths. Gates: src/data/pages.json.
+import PlatformHub from '../../components/PlatformHub.astro';
+import { PLATFORM_HUBS, getPlatformHub } from '../../data/platformHubs';
+
+export function getStaticPaths() {
+  return PLATFORM_HUBS.map((h) => ({ params: { hub: h.slug } }));
+}
+const hub = getPlatformHub(Astro.params.hub!)!;
+---
+<PlatformHub {hub} />

@@ -1,9 +1,10 @@
 name: IndexNow on deploy
 
-# On every push to main that changes site content, wait for Vercel to deploy,
-# then push the current sitemap URLs to IndexNow (Bing, Yandex, Copilot,
-# DuckDuckGo) for instant re-crawl. Complements the scheduled Friday ping in
-# friday-publish.yml. Uses the same IndexNow key file served at the site root.
+# On every push to main that changes the site, wait until Vercel serves this
+# exact commit (/build.txt), then submit only what changed (health plan T3):
+# sitemap URLs whose lastmod is today (UTC), plus redirect sources this push
+# added or changed in vercel.json. A hub's lastmod follows its newest child,
+# so hubs of newly live pages are included by the same rule.
 on:
   push:
     branches: [main]
@@ -11,26 +12,43 @@ on:
       - 'src/**'
       - 'public/**'
       - 'astro.config.mjs'
+      - 'vercel.json'
   workflow_dispatch:
+    inputs:
+      since:
+        description: 'Submit sitemap URLs with lastmod on or after this date (YYYY-MM-DD). Default: today (UTC).'
+        required: false
 
 jobs:
   indexnow:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Vercel deploy to propagate
-        run: sleep 180
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Submit sitemap URLs to IndexNow
+      - name: Fix the submission date before waiting
+        run: echo "SINCE=${INPUT_SINCE:-$(date -u +%F)}" >> "$GITHUB_ENV"
+        env:
+          INPUT_SINCE: ${{ github.event.inputs.since }}
+
+      - name: Wait for this commit to be live
+        run: bash scripts/wait-for-deploy.sh
+        env:
+          WANT_SHA: ${{ github.sha }}
+
+      - name: Submit changed URLs to IndexNow
         run: |
-          KEY=70b8bdc92dc75dde445e7495e95258f2
-          HOST=www.adboost.health
-          URLS=$(curl -sf "https://$HOST/sitemap-0.xml" \
-            | grep -oE '<loc>[^<]+</loc>' | sed -E 's#</?loc>##g' \
-            | jq -R . | jq -sc .)
-          COUNT=$(echo "$URLS" | jq 'length')
-          echo "Submitting $COUNT URLs to IndexNow"
-          BODY=$(jq -nc --arg host "$HOST" --arg key "$KEY" --argjson urls "$URLS" \
-            '{host:$host, key:$key, keyLocation:("https://\($host)/\($key).txt"), urlList:$urls}')
-          curl -sf -X POST 'https://api.indexnow.org/indexnow' \
-            -H 'Content-Type: application/json; charset=utf-8' \
-            -d "$BODY" -w '\nHTTP %{http_code}\n' || echo "IndexNow ping failed (non-fatal)"
+          REDIRECTS=""
+          if [ "${{ github.event_name }}" = "push" ] && git cat-file -e "$BEFORE:vercel.json" 2>/dev/null; then
+            # Exact (non-pattern) redirect sources whose destination is new or changed.
+            REDIRECTS=$(jq -rn --argjson old "$(git show "$BEFORE:vercel.json")" --argjson new "$(cat vercel.json)" '
+              ($old.redirects | map({key: .source, value: .destination}) | from_entries) as $o
+              | $new.redirects[]
+              | select(.has == null and (.source | test("[:()*]") | not))
+              | select($o[.source] != .destination)
+              | "https://www.adboost.health" + .source')
+          fi
+          bash scripts/indexnow.sh "$SINCE" $REDIRECTS
+        env:
+          BEFORE: ${{ github.event.before }}
