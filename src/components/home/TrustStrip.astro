@@ -8,7 +8,7 @@ const { fact, logos } = Astro.props;
 // every mark sets at the same optical height; wide wordmarks a touch lower so they don't shout
 const H = 26;
 const width = (l: Logo) => Math.round((l.w / l.h) * (l.w / l.h > 3.2 ? H * 0.86 : l.w / l.h < 1.5 ? H * 1.25 : H));
-const row = (twin: boolean) => (
+const row = (
   `<li class="trust-fact">${fact}</li>` +
   logos
     .map((l) =>
@@ -23,8 +23,8 @@ const row = (twin: boolean) => (
 <div class="trust tone-frame" data-nav="frame" data-trust>
   <p class="sr-only">{fact}, including {logos.map((l) => l.name).join(', ')}.</p>
   <div class="trust-track" aria-hidden="true">
-    <ul class="trust-row" set:html={row(false)} />
-    <ul class="trust-row trust-twin" set:html={row(true)} />
+    <ul class="trust-row" set:html={row} />
+    <ul class="trust-row trust-twin" set:html={row} />
   </div>
 </div>
 

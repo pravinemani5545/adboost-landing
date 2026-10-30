@@ -51,7 +51,7 @@ Rules:
 
 ## Design tokens
 
-Palette from `src/styles/global.css`: blue `#0057ff` (primary), ink `#0a0a0f`, surfaces `#f6f7f9`/`#eceef3`, coral `#ff6b3d`, green `#16a34a`. Fonts: Geist + Instrument Serif (italic accents).
+The Mayfair system (branch `redesign/mayfair`): every colour is a role in `src/styles/system/brand.css` (FRAME `#0b1b3f`, PAPER `#f5f3ee`, ACCENT `#0057ff`, MIST, INK, the gradient-card fall, status colours); `base.css`, `surfaces.css` and `chrome.css` read only roles; inner-page reading pieces live in `src/styles/content.css`. Fonts: Fraunces 300 (+ italic accents) for display, Geist for text, self-hosted under `public/fonts/v1/`. Stills and loops: `src/assets/media/` and `public/media/`, looked up through `src/lib/media.ts`.
 
 ## Commands
 
