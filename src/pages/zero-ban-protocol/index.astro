@@ -1,5 +1,6 @@
 ---
 import LeadLayout from '../../layouts/LeadLayout.astro';
+import { CONSENT_LEAD_MAGNET } from '../../lib/newsletter';
 const title = 'Zero-Ban Protocol: Free Compliance Checklist | AdBoost';
 const description = 'Get the exact compliance protocol behind $50K/month in peptide & GLP-1 Meta ad spend, with zero bans. Free checklist for health-brand advertisers.';
 const steps = [
@@ -68,8 +69,10 @@ const steps = [
               </div>
               <button type="submit" class="zbp-btn" id="lf-submit">Send me the protocol <span aria-hidden="true">&rarr;</span></button>
               <p class="zbp-err" id="lf-error" hidden></p>
+              <!-- honeypot: humans never see or fill this -->
+              <div class="zbp-hp" aria-hidden="true"><label>Company website <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label></div>
             </form>
-            <p class="zbp-trust">No spam. Unsubscribe anytime. We only work with health-vertical brands.</p>
+            <p class="zbp-trust">{CONSENT_LEAD_MAGNET} AdBoost Health · <a href="/privacy/">Privacy policy</a></p>
           </div>
           <div id="successState" hidden>
             <div class="zbp-check" aria-hidden="true">✓</div>
@@ -148,6 +151,8 @@ const steps = [
     .zbp-btn:active { transform: translateY(0); }
     .zbp-err { color: var(--z-restricted); font-size: 13px; margin: 10px 0 0; }
     .zbp-trust { color: var(--z-mute); font-size: 11.5px; margin: 14px 0 0; text-align: center; line-height: 1.5; }
+    .zbp-trust a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    .zbp-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
     .zbp-check { width: 44px; height: 44px; border-radius: 50%; background: rgba(22,163,74,.1); border: 1px solid rgba(22,163,74,.3); color: var(--z-cleared); font-size: 22px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
 
     /* motion */
@@ -184,43 +189,45 @@ const steps = [
     }
   </style>
 
-  <script is:inline>
-    (function () {
-      const form = document.getElementById('leadForm');
-      const btn = document.getElementById('lf-submit');
-      const err = document.getElementById('lf-error');
-      const formState = document.getElementById('formState');
-      const successState = document.getElementById('successState');
-      form.addEventListener('submit', async function (e) {
-        e.preventDefault();
-        err.hidden = true;
-        const name = document.getElementById('lf-name').value.trim();
-        const email = document.getElementById('lf-email').value.trim();
-        const phone = document.getElementById('lf-phone').value.trim();
-        const country = document.getElementById('lf-cc').value;
-        if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-          err.textContent = 'Please enter your name and a valid email.'; err.hidden = false; return;
-        }
-        btn.disabled = true; btn.style.opacity = '.7'; btn.textContent = 'Sending…';
-        const qp = function (k) { try { return new URLSearchParams(location.search).get(k) || ''; } catch (e) { return ''; } };
-        const utm = { utm_source: qp('utm_source'), utm_medium: qp('utm_medium'), utm_campaign: qp('utm_campaign'), utm_content: qp('utm_content') };
-        try {
-          const r = await fetch('/api/subscribe/', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name, email: email, phone: phone, country: country, source: 'zero-ban-protocol', utm: utm })
-          });
-          if (!r.ok) throw new Error('bad status');
-          // Report the conversion to the admin portal, carries utm + visitor via t.js.
-          try { if (window.abTrack) window.abTrack('lead_captured', { cta_location: 'lead-form' }); } catch (e) {}
-          document.getElementById('sentTo').textContent = email;
-          formState.hidden = true; successState.hidden = false;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch (_) {
-          btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send me the protocol <span aria-hidden="true">&rarr;</span>';
-          err.textContent = 'Something went wrong. Please try again, or email hello@adboost.health.'; err.hidden = false;
-        }
-      });
-    })();
+  <script>
+    import { attribution, subscribe, track } from '../../lib/newsletter';
+
+    const loaded = Date.now();
+    const form = document.getElementById('leadForm') as HTMLFormElement;
+    const btn = document.getElementById('lf-submit') as HTMLButtonElement;
+    const err = document.getElementById('lf-error')!;
+    const formState = document.getElementById('formState')!;
+    const successState = document.getElementById('successState')!;
+    const val = (id: string) => (document.getElementById(id) as HTMLInputElement).value.trim();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.hidden = true;
+      const name = val('lf-name');
+      const email = val('lf-email');
+      if (!name || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        err.textContent = 'Please enter your name and a valid email.'; err.hidden = false; return;
+      }
+      btn.disabled = true; btn.style.opacity = '.7'; btn.textContent = 'Sending…';
+      try {
+        await subscribe({
+          ...attribution(),
+          name, email,
+          phone: val('lf-phone'),
+          country: val('lf-cc'),
+          source: 'lead-magnet:zero-ban-protocol',
+          company_website: (form.elements.namedItem('company_website') as HTMLInputElement).value,
+          elapsed_ms: Date.now() - loaded,
+        });
+        // Report the conversion to the admin portal, carries utm + visitor via t.js.
+        track('lead-form');
+        document.getElementById('sentTo')!.textContent = email;
+        formState.hidden = true; successState.hidden = false;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (_) {
+        btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send me the protocol <span aria-hidden="true">&rarr;</span>';
+        err.textContent = 'Something went wrong. Please try again, or email hello@adboost.health.'; err.hidden = false;
+      }
+    });
   </script>
 
   <script is:inline>

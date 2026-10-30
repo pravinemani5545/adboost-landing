@@ -1,0 +1,111 @@
+---
+// Newsletter popup. Rules:
+// - only on the first page of a visit (sessionStorage), never again that visit
+// - only after engagement: 50% scroll, 20s on page, or (desktop) exit intent
+// - never for subscribers, never within 7 days of a dismiss, never for
+//   visitors arriving from one of our emails (utm_medium=email)
+// - desktop: modal dialog; mobile (<=760px): small non-blocking bottom card,
+//   which keeps it clear of Google's intrusive-interstitial rule
+// Pages that must not show it use NewsletterVisitMark instead, so a visit that
+// starts there still counts its first page.
+import NewsletterForm from './NewsletterForm.astro';
+---
+
+<dialog class="nlp" aria-labelledby="nlp-title">
+  <button type="button" class="nlp-x" aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+  <p class="eyebrow nlp-eyebrow">Newsletter</p>
+  <h2 id="nlp-title" class="nlp-title">Know when the ad rules <span class="serif">change.</span></h2>
+  <p class="nlp-sub">Short notes for health brands on Meta, Google and TikTok policy, and what's working on our accounts.</p>
+  <NewsletterForm source="popup" />
+</dialog>
+
+<style>
+  .nlp {
+    width: min(440px, calc(100vw - 32px)); padding: 28px 26px 22px; border: 1px solid var(--line);
+    border-radius: var(--radius); box-shadow: var(--shadow-lg); color: var(--ink); background: #fff;
+  }
+  .nlp::backdrop { background: rgba(10, 10, 15, .38); }
+  .nlp[open] { animation: nlpIn .28s var(--ease) both; }
+  .nlp-x {
+    position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; display: grid; place-items: center;
+    border: 0; border-radius: 50%; background: var(--surface); color: var(--ink-3); cursor: pointer;
+  }
+  .nlp-x:hover { background: var(--surface-2); }
+  .nlp-eyebrow { margin: 0 0 10px; }
+  .nlp-title { margin: 0 0 8px; font-size: 26px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 600; padding-right: 28px; text-wrap: balance; }
+  .nlp-sub { margin: 0 0 18px; font-size: 14px; line-height: 1.5; color: var(--mute); }
+  @keyframes nlpIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 760px) {
+    .nlp {
+      position: fixed; inset: auto 12px calc(12px + env(safe-area-inset-bottom)) 12px; margin: 0;
+      width: auto; max-width: none; padding: 18px 16px 14px; z-index: 80; max-height: 46vh; overflow: auto;
+    }
+    .nlp-eyebrow, .nlp-sub { display: none; }
+    .nlp-title { font-size: 18px; margin-bottom: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .nlp[open] { animation: none; } }
+</style>
+
+<script>
+  import { NL_KEYS, store } from '../lib/newsletter';
+
+  const dlg = document.querySelector<HTMLDialogElement>('dialog.nlp');
+  const WEEK = 7 * 86400000;
+
+  function eligible(): boolean {
+    const firstPage = !store('session', NL_KEYS.visit);
+    store('session', NL_KEYS.visit, '1');
+    if (!firstPage) return false;
+    if (store('local', NL_KEYS.sub)) return false;
+    if (Date.now() - (Number(store('local', NL_KEYS.dismiss)) || 0) < WEEK) return false;
+    const medium = new URLSearchParams(location.search).get('utm_medium') || '';
+    if (/^(e-?mail|newsletter)$/i.test(medium)) {
+      store('local', NL_KEYS.sub, '1');
+      return false;
+    }
+    return true;
+  }
+
+  if (dlg && eligible()) {
+    const mobile = matchMedia('(max-width: 760px)');
+    let shown = false;
+    let timer = 0;
+    const open = () => {
+      if (shown) return;
+      shown = true;
+      clearTimeout(timer);
+      removeEventListener('scroll', onScroll);
+      document.removeEventListener('mouseout', onLeave);
+      if (mobile.matches) dlg.show();
+      else dlg.showModal();
+    };
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (max > 0 && scrollY / max >= 0.5) open();
+    };
+    const onLeave = (e: MouseEvent) => {
+      if (!e.relatedTarget && e.clientY <= 0) open();
+    };
+    timer = window.setTimeout(open, 20000);
+    addEventListener('scroll', onScroll, { passive: true });
+    if (matchMedia('(pointer: fine)').matches) document.addEventListener('mouseout', onLeave);
+
+    const close = () => {
+      if (!store('local', NL_KEYS.sub)) store('local', NL_KEYS.dismiss, String(Date.now()));
+      dlg.close();
+    };
+    dlg.querySelector('.nlp-x')!.addEventListener('click', close);
+    // Esc: the modal fires 'cancel'; the non-modal mobile card needs a key listener
+    dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && dlg.open && mobile.matches) close(); });
+    // backdrop click (outside the dialog box) closes the desktop modal
+    dlg.addEventListener('click', (e) => {
+      if (mobile.matches || e.target !== dlg) return;
+      const r = dlg.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) close();
+    });
+    dlg.addEventListener('nl:subscribed', () => setTimeout(() => dlg.open && dlg.close(), 3500));
+  }
+</script>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import { EMAIL, MAILING_ADDRESS, siteBase } from '../../lib/site';
+import { breadcrumb } from '../../lib/schema';
+
+const SITE = siteBase(Astro.site);
+const title = 'Newsletter: Health Ad Policy and Growth Notes | AdBoost Health';
+const description = 'The AdBoost Health newsletter: short notes on Meta, Google and TikTok ad policy changes and what is working for GLP-1, telehealth and supplement brands.';
+const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Newsletter', href: '/newsletter/' }])];
+const topics = [
+  { h: 'Policy changes, early', p: 'When Meta, Google or TikTok change what health brands can run, you hear what changed, who it hits and what to do about it.' },
+  { h: 'What is working now', p: 'Angles, formats and funnel fixes from the GLP-1, telehealth and supplement accounts we run, with the numbers that matter.' },
+  { h: 'No filler', p: 'Short, practical, and only when there is something worth saying. Every email has a one-click unsubscribe.' },
+];
+---
+<BaseLayout {title} {description} canonicalPath="/newsletter/" {jsonLd}>
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Newsletter' }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>NEWSLETTER</span>
+      <h1>Know when the ad rules <span class="serif">change.</span></h1>
+      <p class="phero-lede">Ad policy changes and growth notes for health and wellness brands, from the team that runs their paid media.</p>
+      <div class="nl-signup">
+        <NewsletterForm source="newsletter-page" withName button="Subscribe" />
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="grid-cards three">
+        {topics.map((t) => (
+          <div class="lcard">
+            <h3>{t.h}</h3>
+            <p>{t.p}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="prose" style="max-width:760px;margin-top:40px">
+        <h2>Who sends it</h2>
+        <p>
+          AdBoost Health{MAILING_ADDRESS && `, ${MAILING_ADDRESS}`}. Questions or requests: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+          You can withdraw your consent at any time with the unsubscribe link at the bottom of every email, or by emailing us.
+          How we handle your data is in our <a href="/privacy/">privacy policy</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nl-signup { max-width: 520px; margin-top: 26px; }
+</style>

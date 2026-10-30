@@ -1,5 +1,7 @@
 ---
 import Fonts from '../components/Fonts.astro';
+import NewsletterPopup from '../components/NewsletterPopup.astro';
+import NewsletterVisitMark from '../components/NewsletterVisitMark.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { BOOK_PATH, EMAIL, NAV, SISTER, siteBase } from '../lib/site';
@@ -12,8 +14,12 @@ interface Props {
   ogType?: string;
   noindex?: boolean;          // gated/conversion pages (e.g. lead magnets)
   jsonLd?: unknown;           // object or array of schema.org nodes
+  hideNewsletterPopup?: boolean;
 }
-const { title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd, noindex = false } = Astro.props;
+const { title, description, canonicalPath, ogImage = '/og/og-home.png', ogType = 'website', jsonLd, noindex = false, hideNewsletterPopup = false } = Astro.props;
+// Conversion and signup pages never get the newsletter popup.
+const NO_POPUP = ['/book/', '/zero-ban-protocol/checklist/', '/newsletter/'];
+const showPopup = !hideNewsletterPopup && !NO_POPUP.includes(canonicalPath);
 const SITE = siteBase(Astro.site);
 const canonical = `${SITE}${canonicalPath}`;
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${SITE}${ogImage}`;
@@ -147,6 +153,7 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
           <li><a href="/compare/">Compare</a></li>
           <li><a href="/faq/">FAQ</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li><a href="/newsletter/">Newsletter</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -232,6 +239,7 @@ const schemaNodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [js
   }
 </script>
 
+{showPopup ? <NewsletterPopup /> : <NewsletterVisitMark />}
 <slot name="scripts" />
 </body>
 </html>

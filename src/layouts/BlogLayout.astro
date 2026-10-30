@@ -1,5 +1,6 @@
 ---
 import Fonts from '../components/Fonts.astro';
+import NewsletterPopup from '../components/NewsletterPopup.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { versioned } from '../lib/assets';
@@ -270,6 +271,7 @@ const category = post?.tags[0]?.toUpperCase();
         <ul>
           <li><a href={BOOK_PATH}>Book a strategy call</a></li>
           <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
+          <li><a href="/newsletter/">Newsletter</a></li>
           <li><a href={SISTER.href} target="_blank" rel="noopener">AdBoost Media ↗</a></li>
           <li><span class="foot-loc">Toronto · Remote-first</span></li>
         </ul>
@@ -400,5 +402,6 @@ const category = post?.tags[0]?.toUpperCase();
   }
 </script>
 
+<NewsletterPopup />
 </body>
 </html>

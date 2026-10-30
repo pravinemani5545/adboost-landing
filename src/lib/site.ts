@@ -6,6 +6,9 @@
 export const BOOK_PATH = '/book/';
 export const BOOKING_EMBED_URL = 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3zojIwc77IB2k7y11etonn4j7oKffkeWbm-ErHiwITTBBInv12Tu8XUYsVJHJLUeUWng2BFkEs?gv=true';
 export const EMAIL = 'hello@adboost.health';
+// CASL: newsletter signups and emails must show a mailing address (a PO box or
+// virtual mailbox is fine). Shown on /privacy/ and /newsletter/ once set.
+export const MAILING_ADDRESS = '';
 // Sister agency for ecommerce / DTC brands (mirrors adboost.media's link back to this site).
 export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media/' };
 
@@ -50,6 +53,7 @@ export const NAV = [
       { label: 'Compare', href: '/compare/' },
       { label: 'FAQ', href: '/faq/' },
       { label: 'Blog', href: '/blog/' },
+      { label: 'Newsletter', href: '/newsletter/' },
     ],
   },
   { label: 'About', href: '/about/' },

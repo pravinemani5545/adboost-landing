@@ -1,5 +1,6 @@
 ---
 import Fonts from '../components/Fonts.astro';
+import NewsletterPopup from '../components/NewsletterPopup.astro';
 import '../styles/global.css';
 import '../styles/interior.css';
 import { BOOK_PATH, NAV, SISTER } from '../lib/site';
@@ -778,6 +779,7 @@ const jsonLd = {
           <li><a href="/compare/">Compare</a></li>
           <li><a href="/faq/">FAQ</a></li>
           <li><a href="/blog/">Blog</a></li>
+          <li><a href="/newsletter/">Newsletter</a></li>
         </ul>
       </div>
       <div class="foot-col">
@@ -965,5 +967,6 @@ const jsonLd = {
   }
 </script>
 
+<NewsletterPopup />
 </body>
 </html>

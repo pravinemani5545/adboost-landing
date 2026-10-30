@@ -1,0 +1,105 @@
+---
+// Newsletter signup form, shared by the popup and /newsletter/.
+// CASL: the consent sentence, sender identity and privacy link sit next to the
+// button; the privacy page carries the mailing address.
+import { CONSENT_NEWSLETTER } from '../lib/newsletter';
+
+interface Props {
+  source: 'popup' | 'newsletter-page' | 'footer';
+  withName?: boolean;
+  button?: string;
+}
+const { source, withName = false, button = 'Subscribe' } = Astro.props;
+---
+
+<form class="nlf" data-source={source} novalidate>
+  {withName && (
+    <label class="nlf-field">
+      <span>First name <em>(optional)</em></span>
+      <input type="text" name="name" autocomplete="given-name" maxlength="120" />
+    </label>
+  )}
+  <div class="nlf-row">
+    <label class="nlf-field nlf-grow">
+      <span class={withName ? undefined : 'nlf-sr'}>Email</span>
+      <input type="email" name="email" required autocomplete="email" placeholder="you@brand.com" maxlength="254" />
+    </label>
+    <button type="submit" class="btn btn-primary nlf-btn">{button}</button>
+  </div>
+  <!-- honeypot: humans never see or fill this -->
+  <div class="nlf-hp" aria-hidden="true">
+    <label>Company website <input type="text" name="company_website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+  <p class="nlf-consent">{CONSENT_NEWSLETTER} <span class="nlf-id">AdBoost Health · <a href="/privacy/">Privacy policy</a></span></p>
+  <p class="nlf-msg" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .nlf { display: grid; gap: 10px; }
+  .nlf-row { display: flex; gap: 8px; align-items: flex-end; }
+  .nlf-grow { flex: 1; min-width: 0; }
+  .nlf-field { display: grid; gap: 6px; font-size: 13px; color: var(--ink-3); }
+  .nlf-field em { color: var(--mute); font-style: normal; }
+  .nlf-field input {
+    height: 44px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 999px;
+    font: inherit; font-size: 14.5px; color: var(--ink); background: #fff; width: 100%; box-sizing: border-box;
+  }
+  .nlf-field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 87, 255, .13); }
+  .nlf-btn { flex-shrink: 0; justify-content: center; cursor: pointer; border: 0; font: inherit; font-size: 13.5px; font-weight: 500; }
+  .nlf-btn[disabled] { opacity: .6; cursor: default; }
+  .nlf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .nlf-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .nlf-consent { margin: 0; font-size: 12px; line-height: 1.5; color: var(--mute); }
+  .nlf-consent a { color: var(--mute); text-decoration: underline; text-underline-offset: 2px; }
+  .nlf-id { white-space: nowrap; }
+  .nlf-msg { margin: 0; font-size: 13px; min-height: 0; }
+  .nlf-msg:empty { display: none; }
+  .nlf-msg.ok { color: var(--green); font-weight: 500; }
+  .nlf-msg.err { color: #c2410c; }
+  @media (max-width: 420px) { .nlf-row { flex-direction: column; } .nlf-btn { height: 44px; } }
+</style>
+
+<script>
+  import { attribution, subscribe, track } from '../lib/newsletter';
+
+  const loaded = Date.now();
+  document.querySelectorAll<HTMLFormElement>('form.nlf').forEach((form) => {
+    const msg = form.querySelector<HTMLElement>('.nlf-msg')!;
+    const btn = form.querySelector<HTMLButtonElement>('.nlf-btn')!;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const email = String(fd.get('email') || '').trim();
+      msg.className = 'nlf-msg';
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email)) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.classList.add('err');
+        return;
+      }
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Subscribing…';
+      try {
+        await subscribe({
+          ...attribution(),
+          email,
+          name: String(fd.get('name') || '').trim() || null,
+          source: form.dataset.source,
+          company_website: String(fd.get('company_website') || ''),
+          elapsed_ms: Date.now() - loaded,
+        });
+        track(form.dataset.source || 'newsletter');
+        form.querySelectorAll('input').forEach((i) => (i.disabled = true));
+        btn.textContent = 'Subscribed';
+        msg.textContent = "You're in. Check your inbox for a welcome email.";
+        msg.classList.add('ok');
+        form.dispatchEvent(new CustomEvent('nl:subscribed', { bubbles: true }));
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = label;
+        msg.textContent = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+        msg.classList.add('err');
+      }
+    });
+  });
+</script>

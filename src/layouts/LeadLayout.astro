@@ -1,5 +1,6 @@
 ---
 import Fonts from '../components/Fonts.astro';
+import NewsletterVisitMark from '../components/NewsletterVisitMark.astro';
 // Minimal, distraction-free layout for lead-magnet opt-in pages.
 // No nav/footer chrome (maximizes conversion); always noindex.
 import '../styles/global.css';
@@ -61,5 +62,6 @@ const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health'
   .lead-top-tag { display: none; }
   @media (min-width: 720px) { .lead-top-tag { display: inline; } }
 </style>
+<NewsletterVisitMark />
 </body>
 </html>

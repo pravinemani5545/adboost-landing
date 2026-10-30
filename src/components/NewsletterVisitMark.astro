@@ -1,0 +1,5 @@
+---
+// For pages that never show the newsletter popup (lead magnet, legal, booking):
+// marks the visit as started, so the popup stays a first-page-only thing.
+---
+<script is:inline>try{sessionStorage.setItem('ab_nl_visit','1')}catch(e){}</script>

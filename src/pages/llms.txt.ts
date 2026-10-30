@@ -39,6 +39,7 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 - [Ad budget calculator](${base}/tools/ad-budget-calculator/): Budget needed to hit a customer target
 - [MER calculator](${base}/tools/mer-calculator/): Marketing efficiency ratio, total revenue over total marketing spend
 - [POAS calculator](${base}/tools/poas-calculator/): Profit on ad spend, ROAS after margin
+- [Newsletter](${base}/newsletter/): Ad policy changes and growth notes for health and wellness brands
 
 ## Ad compliance by platform × vertical
 
