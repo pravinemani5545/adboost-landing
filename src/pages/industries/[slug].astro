@@ -4,11 +4,14 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { VERTICALS, getVertical } from '../../data/verticals';
-import { getPlaybook } from '../../data/vertical-playbooks';
+import { getPlaybook, type Source } from '../../data/vertical-playbooks';
 import { AD_POLICIES } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
+import { pageDate } from '../../lib/live';
+import { getPublishedPosts } from '../../lib/blog';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
+import vercel from '../../../vercel.json';
 
 export function getStaticPaths() {
   return VERTICALS.map((v) => ({ params: { slug: v.slug } }));
@@ -23,32 +26,80 @@ const title = seoTitle(path, v.seoTitle ?? `${v.short} Marketing Agency | AdBoos
 const description = metaDescription(path, v.metaDescription);
 const faqAll = [...v.faq, ...pb.extraFaq];
 const jsonLd = [
-  serviceNode(SITE, { name: `Growth marketing for ${v.short} brands`, description: v.serviceDesc, path }),
+  serviceNode(SITE, { name: `Growth marketing for ${v.inline} brands`, description: v.serviceDesc, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short, href: path }]),
   faqPage(faqAll),
 ];
+
+// Content date from src/data/pages.json: the visible "Updated" label.
+const updated = pageDate(path);
+const updatedLabel = updated
+  ? new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+  : undefined;
+
+const posts = await getPublishedPosts();
+const publishedPaths = new Set(posts.map((p) => `/blog/${p.id}/`));
+
 const platformGuides = AD_POLICIES.filter((p) => p.verticalSlug === v.slug);
 const VERTICAL_BLOG: Record<string, { href: string; label: string }> = {
   'glp-1-weight-loss': { href: '/blog/glp1-advertising-compliance-2026/', label: 'How to run compliant GLP-1 ads without getting banned →' },
-  'telehealth': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'telehealth': { href: '/blog/legitscript-certification-telehealth-guide/', label: 'LegitScript certification for telehealth: cost, timeline and which ads need it →' },
   'supplements-dtc': { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'The supplement playbook for lowering CAC while scaling →' },
-  'trt-hormone': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
-  'med-spa': { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ads get rejected, and how to fix it →' },
-  'mental-health': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
+  'trt-hormone': { href: '/advertising/trt-on-meta/', label: 'TRT and testosterone ads on Meta: the 2026 rules →' },
+  'med-spa': { href: '/advertising/med-spa-on-meta/', label: 'Med spa ads on Meta after the July 2026 before-and-after change →' },
+  'mental-health': { href: '/advertising/telehealth-on-meta/', label: 'Telehealth ads on Meta: LegitScript and prescription rules →' },
   'longevity': { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'Telehealth CAC benchmarks: what top brands pay per patient →' },
   'peptides': { href: '/blog/glp1-meta-ad-policy-state-ag-2026/', label: 'GLP-1 on Meta after the 35-state-AG action: what changed →' },
-  'fertility-ivf': { href: '/blog/best-telehealth-marketing-agencies-2026/', label: 'The best telehealth marketing agencies, ranked →' },
+  'fertility-ivf': { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ads get rejected, and how to fix it →' },
 };
 const verticalBlog = VERTICAL_BLOG[v.slug] ?? { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ads get rejected, and how to fix it →' };
+
+// "Comparing agencies?" line in the answer box (health plan O10). Shown only once
+// the post is published, so the supplements line appears with its post.
+const VERTICAL_LISTICLE: Record<string, { href: string; lead: string; anchor: string }> = {
+  'glp-1-weight-loss': { href: '/blog/best-glp1-marketing-agencies-2026/', lead: 'Comparing agencies? Read', anchor: 'how to choose a GLP-1 marketing agency' },
+  'telehealth': { href: '/blog/best-telehealth-marketing-agencies-2026/', lead: 'Comparing agencies? Read', anchor: 'how to choose a telehealth marketing agency' },
+  'supplements-dtc': { href: '/blog/best-supplement-marketing-agencies/', lead: 'Comparing agencies? See', anchor: 'our list of supplement marketing agencies' },
+};
+const listicleEntry = VERTICAL_LISTICLE[v.slug];
+const listicle = listicleEntry && publishedPaths.has(listicleEntry.href) ? listicleEntry : undefined;
+
+// Related posts (health plan O17): the 3 published posts sharing the most tags
+// with the vertical, newest first on ties, skipping posts already linked above
+// and posts that now redirect.
+const RELATED_TAGS: Record<string, string[]> = {
+  'glp-1-weight-loss': ['glp-1', 'weight loss', 'compliance', 'meta ads', 'retention'],
+  'telehealth': ['telehealth', 'intake funnels', 'landing pages', 'attribution', 'google ads', 'patient acquisition'],
+  'supplements-dtc': ['supplements', 'dtc', 'scaling', 'ad creative', 'creative testing', 'retention', 'subscriptions'],
+  'trt-hormone': ['seo', 'ai search', 'content strategy', 'retention', 'lifecycle', 'google ads'],
+  'peptides': ['seo', 'ai search', 'content strategy', 'retention', 'email marketing', 'brand trust'],
+  'med-spa': ['creative testing', 'ad creative', 'ugc', 'lead generation', 'media buying'],
+  'mental-health': ['intake funnels', 'cro', 'attribution', 'analytics', 'landing pages'],
+  'longevity': ['retention', 'ltv', 'subscriptions', 'brand trust', 'ai search', 'patient trust', 'scaling'],
+  'fertility-ivf': ['lead generation', 'patient trust', 'conversion', 'cro', 'measurement', 'patient acquisition'],
+};
+const redirected = new Set((vercel.redirects ?? []).map((r) => r.source));
+const linkedAbove = new Set([verticalBlog.href, listicle?.href]);
+const wanted = new Set((RELATED_TAGS[v.slug] ?? []).map((t) => t.toLowerCase()));
+const relatedPosts = posts
+  .map((p) => ({ p, href: `/blog/${p.id}/`, score: p.data.tags.filter((t) => wanted.has(t.toLowerCase())).length }))
+  .filter((x) => x.score > 0 && !linkedAbove.has(x.href) && !redirected.has(x.href))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3);
+
+const sources: Source[] = [...pb.questions.flatMap((q) => q.sources), ...v.sources]
+  .filter((s, i, all) => all.findIndex((x) => x.url === s.url) === i);
+
 const services = [
   { t: 'Compliant paid media', d: 'Meta, Google & TikTok, structured for this vertical’s auction.', href: '/services/paid-media/' },
   { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/' },
   { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/' },
 ];
 const toc = [
+  ...pb.questions.map((q) => ({ id: q.id, label: q.nav })),
   { id: 'market', label: 'Market context' },
   { id: 'playbook', label: 'The growth playbook' },
-  { id: 'landmine', label: 'Compliance landmines' },
+  { id: 'landmine', label: 'Ad rules to watch' },
   { id: 'mistakes', label: 'Common mistakes' },
   { id: 'good', label: 'What good looks like' },
   { id: 'services', label: 'What we do' },
@@ -66,6 +117,7 @@ const toc = [
         <span>Typical CAC {v.cacDisplay}</span>
         <span>Compliance-first</span>
         <span>Setup in 5 days</span>
+        {updatedLabel && <span>Updated <time datetime={updated}>{updatedLabel}</time></span>}
       </div>
     </div>
   </section>
@@ -76,13 +128,21 @@ const toc = [
         <div class="doc-main">
           <div class="answer-box reveal">
             <span class="al">The short answer</span>
-            {v.proofLine} We only work in health, so the playbook, creative, and compliance are purpose-built for {v.short.toLowerCase()} - not adapted from a generic DTC template.
+            {v.summary} {v.proofLine} We only work in health, so the playbook, creative and policy review are built for {v.inline} brands.
+            {listicle && <span style="display:block;margin-top:10px">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
           </div>
           <div class="prose">
-            <h2 id="market">Market context</h2>
+            {pb.questions.map((q) => (
+              <>
+                <h2 id={q.id}>{q.q}</h2>
+                <Fragment set:html={q.html} />
+              </>
+            ))}
+
+            <h2 id="market">What is changing in the {v.inline} market in 2026?</h2>
             <p>{pb.marketContext}</p>
 
-            <h2 id="playbook">The {v.short.toLowerCase()} growth playbook</h2>
+            <h2 id="playbook">How do {v.inline} brands grow profitably?</h2>
             <p>{v.painPoint}</p>
             <div class="playbook">
               {pb.growthPlaybook.map((s) => (
@@ -90,17 +150,17 @@ const toc = [
               ))}
             </div>
 
-            <h2 id="landmine">Compliance landmines</h2>
+            <h2 id="landmine">Which ad rules and claims trip up {v.inline} brands?</h2>
             <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
 
-            <h2 id="mistakes">Common mistakes in {v.short.toLowerCase()}</h2>
+            <h2 id="mistakes">What are the most common {v.inline} marketing mistakes?</h2>
             <ul class="xlist">
               {pb.commonMistakes.map((m) => (
                 <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{m}</li>
               ))}
             </ul>
 
-            <h2 id="good">What good looks like</h2>
+            <h2 id="good">What does good performance look like for {v.inline} brands?</h2>
             <ul class="checks">
               {pb.whatGoodLooksLike.map((k) => (
                 <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{k}</li>
@@ -110,7 +170,7 @@ const toc = [
             <h3>Segments we work in</h3>
             <div class="chips">{pb.subSegments.map((s) => <span class="chip">{s}</span>)}</div>
 
-            <h2 id="services">What we do for {v.short.toLowerCase()} brands</h2>
+            <h2 id="services">What does AdBoost Health do for {v.inline} brands?</h2>
             <div class="related-grid">
               {services.map((s) => (
                 <a class="lcard" href={s.href}><h3 style="font-size:16px">{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
@@ -118,7 +178,24 @@ const toc = [
             </div>
 
             <h2 id="faq">{v.short} marketing FAQ</h2>
-            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} />
+            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} open />
+
+            {relatedPosts.length > 0 && (
+              <>
+                <h3 id="related">Related posts</h3>
+                <div class="related-grid">
+                  {relatedPosts.map(({ p, href }) => (
+                    <a class="lcard" href={href}><h3 style="font-size:16px">{p.data.title}</h3><p>{p.data.description}</p><span class="lc-more">Read the post →</span></a>
+                  ))}
+                </div>
+              </>
+            )}
+
+            <h3>Sources</h3>
+            <p style="font-size:13px;color:var(--mute)">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
+            <ul style="font-size:14px">
+              {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+            </ul>
           </div>
         </div>
 
@@ -144,8 +221,8 @@ const toc = [
             </div>
           )}
           <div class="aside-card dark">
-            <h4 style="color:#fff">Lower CAC on your {v.short.toLowerCase()} brand</h4>
-            <p>Free audit with a senior strategist - a written plan you keep either way.</p>
+            <h4 style="color:#fff">Lower CAC on your {v.inline} brand</h4>
+            <p>Free audit with a senior strategist: a written plan you keep either way.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
         </aside>
@@ -153,5 +230,5 @@ const toc = [
     </div>
   </section>
 
-  <CtaBand heading={`Ready to lower CAC on your ${v.short.toLowerCase()} brand?`} />
+  <CtaBand heading={`Ready to lower CAC on your ${v.inline} brand?`} />
 </BaseLayout>

@@ -15,16 +15,18 @@ export interface BenchmarkRow {
 export interface Vertical {
   slug: string;
   name: string;              // full display name
-  short: string;             // nav / chip label
+  short: string;             // nav / chip label (title case, never lowercased)
+  inline: string;            // label for running text: "your {inline} brand", "Launching {inline} ads"
   category: string;          // mono eyebrow tag
   // industry landing
   seoTitle?: string;         // title tag; defaults to the template in [slug].astro
   metaDescription?: string;  // REQUIRED, hand-written, 140-160 chars (src/lib/seo.ts)
   h1: string;
   lede: string;
+  summary: string;           // answer-first sentence opening "The short answer" box
+  proofLine: string;
   painPoint: string;
   adLandmine: string;        // the specific compliance landmine for this vertical
-  proofLine: string;
   serviceDesc: string;       // for Service schema description
   // benchmark page
   cacDisplay: string;        // e.g. "$180–$400"
@@ -43,11 +45,15 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'glp-1-weight-loss',
     name: 'GLP-1 & weight-loss brands',
     short: 'GLP-1 & weight loss',
+    inline: 'GLP-1 and weight-loss',
     category: 'GLP-1 · WEIGHT CARE',
+    seoTitle: 'GLP-1 & Weight Loss Marketing Agency | AdBoost Health',
+    metaDescription: 'Policy-reviewed paid acquisition for GLP-1 and weight-loss programs: advertise the program, not the molecule, and scale on retention-adjusted payback.',
     h1: 'Growth marketing for GLP-1 & weight-loss brands',
     lede: 'Compliant paid acquisition for compounded and brand-name GLP-1 programs - engineered for the one economics that actually matters here: retention-adjusted payback, not vanity ROAS.',
+    summary: 'AdBoost Health runs paid acquisition for GLP-1 and weight-loss programs: Meta, Google and TikTok ads that sell the program, not the drug, measured on retention-adjusted payback.',
     painPoint: 'Demand is red-hot, but ad accounts get disabled overnight and retention - not CAC - decides whether the model survives.',
-    adLandmine: 'Before/after imagery, “lose X lbs” claims, and content implying negative self-perception are the fastest routes to a Meta rejection or a state-AG complaint. Naming the drug in-ad triggers pharma review.',
+    adLandmine: 'Meta bans ads that promise a set result in a set time without qualifiers or that attack how someone looks, and naming the drug puts the ad under its prescription rules (LegitScript, Meta authorization, 18+, US, Canada or New Zealand only). Meta dropped its weight-loss before-and-after ban in July 2026; we still keep transformation imagery out of Rx programs (our guidance, not a Meta rule).',
     proofLine: 'Scaled a GLP-1 support brand 6× while cutting CAC 64% in 60 days.',
     serviceDesc: 'Compliant paid media, creative, and funnel optimization for GLP-1 and medical weight-loss brands.',
     cacDisplay: '$180–$400',
@@ -66,7 +72,7 @@ const ALL_VERTICALS: Vertical[] = [
     costDriver: 'CAC is relatively low because buyer intent is extreme; the real battle is retention and staying inside ad policy, not the auction price.',
     faq: [
       { q: 'What is a good CAC for a GLP-1 brand in 2026?', a: 'Fully-loaded CAC for compounded GLP-1 programs typically runs $180–$320, and $250–$400 for brand-name programs. Because subscriptions run $199–$299/month with 74–79% gross margins, a healthy program pays that CAC back in under a month.' },
-      { q: 'Can you still advertise GLP-1 on Meta and Google?', a: 'Yes, but within strict rules. You cannot use before/after weight-loss imagery, promise specific pound losses, or imply negative self-perception. Naming the drug typically triggers pharmaceutical ad review. Compliant brands sell the program and outcome, not the molecule.' },
+      { q: 'Can you still advertise GLP-1 on Meta and Google?', a: 'Yes, within each platform’s rules. On Meta, naming a prescription drug needs LegitScript certification, Meta’s authorization and 18+ targeting in the US, Canada or New Zealand, and ads cannot promise a specific result in a set time without qualifiers or attack how someone looks. On Google, drug names such as semaglutide can appear in ads only in the US, Canada and New Zealand, and keyword-targeting them needs certification. Meta dropped its weight-loss before-and-after ban in July 2026; we still advise against transformation imagery for Rx programs. Compliant brands sell the program and outcome, not the molecule.' },
     ],
     sources: [
       { label: 'Telehealth Media - patient acquisition cost', url: 'https://telehealthmedia.com/blog/telehealth-paid-social/telehealth-patient-acquisition-cost' },
@@ -77,9 +83,12 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'telehealth',
     name: 'Telehealth & patient-acquisition brands',
     short: 'Telehealth',
+    inline: 'telehealth',
     category: 'TELEHEALTH · PATIENT ACQUISITION',
+    metaDescription: 'Paid acquisition built for telehealth economics: Google captures demand, Meta creates it, and symptom quizzes feed memberships, measured on LTV:CAC and payback.',
     h1: 'Growth marketing for telehealth brands',
     lede: 'Paid acquisition built for telehealth economics - LTV:CAC and payback by sub-vertical, with the creative volume it actually takes to hold your benchmark.',
+    summary: 'AdBoost Health runs paid acquisition for telehealth brands: Google for active demand, Meta to create it, and condition-specific quiz funnels that turn visits into memberships, measured on LTV:CAC.',
     painPoint: 'Most telehealth brands quote consult CAC as if it were paying-patient CAC - and starve their ad account of the 30–60 fresh creatives a month it takes to stay efficient.',
     adLandmine: 'Prescription and “Rx” language, personal-health targeting, and HIPAA-adjacent claims. Google requires LegitScript certification for telehealth/pharmacy advertisers.',
     proofLine: 'Built a telehealth acquisition engine from a cold start to $1.6M in 90 days.',
@@ -101,7 +110,7 @@ const ALL_VERTICALS: Vertical[] = [
     costDriver: 'State-by-state prescriber availability creates artificial scarcity that distorts auctions, and holding benchmark CAC requires 30–60 fresh ads/month; running 5–10 runs 40–80% over.',
     faq: [
       { q: 'What is a good CAC for a telehealth brand?', a: 'It depends heavily on sub-vertical: ED runs $70–$140, hair loss $90–$170, GLP-1 $180–$400, and mental health $200–$400. Across the board, aim for an LTV:CAC of at least 3:1 and payback under 12 months.' },
-      { q: 'Do I need LegitScript certification to run telehealth ads?', a: 'For Google Ads, telehealth and online-pharmacy advertisers generally need LegitScript certification before running. Meta also restricts prescription-related advertising. Certification and a compliance review before launch prevent the account disruptions that wreck telehealth CAC.' },
+      { q: 'Do I need LegitScript certification to run telehealth ads?', a: 'For prescription services, yes. On Google, telemedicine providers that prescribe need LegitScript certification and then Google’s own certification. On Meta, telehealth providers need LegitScript and Meta’s authorization to promote prescription drugs, while ads that promote telehealth services generally need no authorization. Certification and a policy review before launch prevent the account disruptions that wreck telehealth CAC.' },
     ],
     sources: [
       { label: 'Telehealth Media', url: 'https://telehealthmedia.com/blog/telehealth-paid-social/telehealth-patient-acquisition-cost' },
@@ -112,9 +121,12 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'supplements-dtc',
     name: 'Supplement & DTC wellness brands',
     short: 'Supplements & DTC',
+    inline: 'supplement',
     category: 'SUPPLEMENTS · DTC',
+    metaDescription: 'Paid acquisition and retention for supplement and nutraceutical brands: compliant Meta and TikTok ads, UGC creative, quiz funnels and subscription-first LTV.',
     h1: 'Growth marketing for supplement & DTC brands',
     lede: 'Paid acquisition and retention for supplement and nutraceutical brands - built around contribution margin and LTV:CAC, in the category paying the steepest compliance tax in DTC.',
+    summary: 'AdBoost Health runs paid acquisition and retention for supplement brands: Meta and TikTok ads with substantiated structure and function claims, UGC creative, quiz funnels and subscription-first offers.',
     painPoint: 'Health & wellness ROAS fell 15.6% YoY to ~2.12 - the worst-declining category - while supplements pay a 20–60% CPL premium over unregulated DTC.',
     adLandmine: 'Disease claims (“treats,” “cures,” “prevents”), unsubstantiated structure/function claims, and testimonials without disclaimers draw FTC and platform enforcement. Structure/function claims need the FDA disclaimer.',
     proofLine: 'Cut a daily-supplement brand’s CAC 40% inside 14 days and held the floor for six months.',
@@ -147,9 +159,13 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'trt-hormone',
     name: 'TRT & hormone-therapy brands',
     short: 'TRT & hormone',
+    inline: 'TRT and hormone therapy',
     category: 'TRT · HRT',
+    seoTitle: 'TRT & Hormone Marketing Agency | AdBoost Health',
+    metaDescription: 'Acquisition for testosterone and hormone therapy brands under prescription ad rules: sell the evaluation, not the molecule, and diversify across channels.',
     h1: 'Growth marketing for TRT & hormone brands',
     lede: 'Acquisition for testosterone and hormone-therapy brands in the most ad-restricted corner of health - where the winning move is channel diversification, not paying the restricted-auction premium.',
+    summary: 'AdBoost Health runs acquisition for testosterone and hormone therapy brands: ads that sell the evaluation, not the drug, a quiz-to-lab funnel, and channels beyond Meta.',
     painPoint: 'Google and Meta auto-flag “testosterone/TRT/HRT” ads, so brands leaning on a single paid channel are one policy update away from zero.',
     adLandmine: 'Testosterone and hormone keywords trigger automatic review and disapprovals. Prescription drug promotion rules apply; claims about virility, performance, or body composition are high-risk.',
     proofLine: 'Helped launch a $99/mo all-inclusive TRT offer that cut CAC 54%.',
@@ -180,9 +196,13 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'peptides',
     name: 'Peptide-therapy brands',
     short: 'Peptides',
+    inline: 'peptide therapy',
     category: 'PEPTIDES',
+    seoTitle: 'Peptide Clinic & Therapy Marketing Agency | AdBoost Health',
+    metaDescription: 'Marketing for peptide therapy clinics and brands: organic and influencer channels, telehealth-gated funnels, refill-driven LTV, and where paid ads fit.',
     h1: 'Growth marketing for peptide brands',
     lede: 'Acquisition for peptide-therapy clinics and brands - a high-LTV, high-compliance category where a diversified funnel beats a fragile single-channel paid play.',
+    summary: 'AdBoost Health builds acquisition for peptide therapy clinics and brands: education-led content and expert creators, a prescriber-gated funnel, and refill-driven retention, with paid ads where they fit.',
     painPoint: 'Marketing eats ~60% of revenue in many peptide clinics today, often concentrated on one paid channel that shares TRT’s ad-policy minefield.',
     adLandmine: 'Peptides like BPC-157 face the same ad-policy restrictions as hormones, plus FDA compounding/regulatory scrutiny of the products themselves. Health claims are high-risk.',
     proofLine: 'Restructured a peptide clinic’s funnel to cut marketing from 60% toward 40% of revenue.',
@@ -211,11 +231,15 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'med-spa',
     name: 'Med spa & aesthetics brands',
     short: 'Med spa',
+    inline: 'med spa',
     category: 'MED SPA · AESTHETICS',
+    seoTitle: 'Med Spa Marketing Agency | AdBoost Health',
+    metaDescription: 'Paid acquisition for med spas and aesthetics clinics: Google for intent, Meta for demand, consult-first offers, and memberships that monetize re-treatment.',
     h1: 'Growth marketing for med spa & aesthetics brands',
     lede: 'Paid acquisition for med spas and aesthetics clinics - where Google intent is expensive, Meta is cheap but noisy, and show-rate, not lead volume, is the number that matters.',
+    summary: 'AdBoost Health runs paid acquisition for med spas and aesthetics clinics: Google Search for local intent, Meta for demand, consult-first offers with fast follow-up, and memberships that monetize re-treatment.',
     painPoint: 'Leaning on Meta lead-forms alone floods you with junk leads; the metric that actually pays rent is booked-and-showed appointments.',
-    adLandmine: 'Before/after imagery is restricted, health/medical claims about injectables are policed, and personal-attribute targeting is prohibited. High-intent local keywords are expensive and competitive.',
+    adLandmine: 'Since July 2026, Meta allows before-and-after images for cosmetic procedures, injectables included, for 18+ audiences, but still bans statements that attack how someone looks. Google treats Botox, Dysport and Xeomin as restricted prescription drug terms, and TikTok’s UK and EU rules list Botox as not allowed. High-intent local keywords are expensive and competitive.',
     proofLine: 'Drove booked aesthetics appointments under $100 while holding a 3×+ Google ROAS.',
     serviceDesc: 'Paid media, local demand capture, and booking-funnel optimization for med spas and aesthetics clinics.',
     cacDisplay: '$130–$285',
@@ -233,7 +257,7 @@ const ALL_VERTICALS: Vertical[] = [
     costDriver: 'High-intent local competition on premium keywords (Botox/filler) paired with high average order value that justifies aggressive bidding; Google intent is expensive, Meta is cheap-CPC but lower-quality.',
     faq: [
       { q: 'What is a good CAC for a med spa?', a: 'Cost per booked appointment typically runs $130–$285, with strong operators targeting under $100. Google delivers a median 3.33× ROAS on high-intent keywords; Meta’s CPCs are far cheaper but require filtering for show-rate, not raw lead volume.' },
-      { q: 'Can you run before/after ads for a med spa?', a: 'Before/after imagery is restricted on the major platforms and can get an account flagged, especially for injectables. Compliant med spa creative leads with the experience, the provider, and the booking offer rather than transformation photos.' },
+      { q: 'Can a med spa run before-and-after ads?', a: 'On Meta, yes: since July 2026 Meta allows before-and-after transformation images for cosmetic procedures, including dermal fillers and injectable treatments, for audiences 18 and over. TikTok restricts before-and-after imagery for aesthetic treatments in some UK and EU markets, and Google requires a visible disclaimer on testimonials that claim specific results. Show realistic results, and keep copy that attacks how someone looks out of the ad.' },
     ],
     sources: [
       { label: 'Pennock - med spa paid-media benchmarks', url: 'https://www.pennock.co/blog/medspa-and-aesthetics-paid-media-benchmarks-google-vs-meta' },
@@ -244,9 +268,13 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'mental-health',
     name: 'Mental health & telepsychiatry brands',
     short: 'Mental health',
+    inline: 'mental health',
     category: 'MENTAL HEALTH · TELEPSYCH',
+    seoTitle: 'Mental Health Marketing Agency | AdBoost Health',
+    metaDescription: 'Acquisition for mental health and telepsychiatry brands: high-intent Google search, Meta for demand, eligibility-check funnels, stimulant ad rules priced in.',
     h1: 'Growth marketing for mental health brands',
     lede: 'Acquisition for mental-health and telepsychiatry brands - the widest CAC range in telehealth, where stimulant restrictions and prescriber scarcity have to be priced into the model.',
+    summary: 'AdBoost Health runs acquisition for mental health and telepsychiatry brands: high-intent Google Search, Meta for awareness, and eligibility-check funnels that book a first session within days.',
     painPoint: 'State-by-state prescriber gaps spike CAC unpredictably, and ADHD/stimulant creative faces disapprovals that raise effective CPMs 30–50%.',
     adLandmine: 'Controlled-substance (stimulant/ADHD) promotion is heavily restricted, sensitive-health personalization is prohibited, and mental-health claims are policed. Consult CAC badly understates paying-patient CAC here.',
     proofLine: 'Stood up a telepsychiatry funnel that booked demos within the first 30 days.',
@@ -277,9 +305,12 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'longevity',
     name: 'Longevity & anti-aging brands',
     short: 'Longevity',
+    inline: 'longevity',
     category: 'LONGEVITY · ANTI-AGING',
+    metaDescription: 'Growth marketing for longevity clinics and anti-aging brands: channel mix by consideration level, diagnostic offers that lead into memberships, compliant ads.',
     h1: 'Growth marketing for longevity brands',
     lede: 'Acquisition for longevity and anti-aging brands - a young, high-ticket category where recurring membership economics, not cold paid ROAS, are the only thing that makes CAC survivable.',
+    summary: 'AdBoost Health builds membership-first acquisition for longevity clinics and anti-aging brands: channels matched to a long buying cycle, diagnostic offers that lead into memberships, and substantiated claims.',
     painPoint: 'A high price and a long consideration cycle make cold paid brutal - Forward Health raised $650M and shut down in 2024 when consumer CAC outran LTV.',
     adLandmine: 'Anti-aging and longevity health claims are policed, “reverse aging” language is high-risk, and affluent-audience targeting carries above-baseline CPMs. Substantiation matters.',
     proofLine: 'Built a membership-first funnel where recurring revenue covered CAC inside year one.',
@@ -308,9 +339,12 @@ const ALL_VERTICALS: Vertical[] = [
     slug: 'fertility-ivf',
     name: 'Fertility & IVF brands',
     short: 'Fertility & IVF',
+    inline: 'fertility and IVF',
     category: 'FERTILITY · IVF',
+    metaDescription: 'Acquisition for fertility and IVF clinics: Google for high intent, Meta for a long nurture, empathy-first creative, and consult-to-cycle conversion as the goal.',
     h1: 'Growth marketing for fertility & IVF brands',
     lede: 'Acquisition for fertility and IVF brands - a high-consideration, high-order-value category where the metric that matters is consult-to-cycle conversion, not cost per lead.',
+    summary: 'AdBoost Health runs acquisition for fertility and IVF clinics: Google for high-intent search, Meta for a long nurture, empathy-first creative, and reporting on consult-to-cycle conversion rather than cost per lead.',
     painPoint: 'Optimizing to cheap consult leads that never start a cycle burns budget; conversion takes 2–4 consults per started cycle.',
     adLandmine: 'Sensitive personal-health targeting is prohibited, success-rate claims are regulated, and emotionally manipulative creative draws scrutiny. Substantiated, compassionate messaging wins.',
     proofLine: 'Rebuilt a fertility clinic’s funnel around consult-to-cycle conversion, not cheap leads.',
