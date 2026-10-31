@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteBase } from '../../lib/site';
+import { isLive } from '../../lib/live';
 import { breadcrumb } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
@@ -9,6 +10,11 @@ const title = 'The Zero-Ban Protocol Checklist | AdBoost Health';
 const description = 'The compliance protocol we run on every peptide and GLP-1 Meta account before we spend a dollar: lane, warm-up, copy, creative, escalation.';
 const BOOK = '/book/?utm_source=lead-magnet&utm_medium=checklist&utm_campaign=zero-ban-protocol';
 const PDF = '/downloads/zero-ban-protocol.pdf';
+// Canonical home of Meta's July 2026 Health and Wellness change (health plan 2.2):
+// the /advertising/ hub block until /advertising/meta/ goes live.
+const META_CHANGE = isLive('/advertising/meta/') ? '/advertising/meta/' : '/advertising/#meta-july-2026';
+const MHW = 'https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/';
+const MDP = 'https://transparency.meta.com/policies/ad-standards/restricted-goods-services/drugs-pharmaceuticals/';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} noindex={true}>
@@ -22,6 +28,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
           <span class="zbc-tagm">5 checkpoints</span>
           <span class="zbc-tagm">Run before launch</span>
           <span class="zbc-tagm">Peptide · GLP-1</span>
+          <span class="zbc-tagm">Revised Oct 30, 2026</span>
           <a class="zbc-pdf" href={PDF} download>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Download PDF
@@ -43,7 +50,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
             <p>Two completely different compliance lanes exist, and brands constantly run one while set up like the other. Figure out your lane before you build anything. Everything below assumes you got this right.</p>
             <ul class="zbc-do">
               <li><strong>Lane A: research-use-only peptides.</strong> No prescription involved, no LegitScript certification required.</li>
-              <li><strong>Lane B: prescription / telehealth.</strong> GLP-1, ED, hair loss, anything dispensed against a script. <a href="/glossary/legitscript-certification/">LegitScript certification</a> is required by Meta, full stop; it doesn&rsquo;t verify you itself, it defers to the certifier.</li>
+              <li><strong>Lane B: prescription / telehealth.</strong> GLP-1, ED, hair loss, anything dispensed against a script. Meta requires telehealth providers and online pharmacies to hold active <a href="/glossary/legitscript-certification/">LegitScript certification</a>, plus Meta&rsquo;s own authorization, before an ad promotes a prescription drug (<a href={MDP} target="_blank" rel="noopener">Meta&rsquo;s Drugs and Pharmaceuticals standard</a>). Ads that promote telehealth services generally, without promoting a drug, don&rsquo;t need that authorization.</li>
               <li>Confirm you are <strong>not in the dangerous middle</strong>: advertising pure peptides for human use with no legitimate prescription pathway, the highest-risk lane, where most catastrophic bans happen.</li>
             </ul>
           </div>
@@ -99,9 +106,9 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
           <div class="zbc-body">
             <span class="zbc-cp-tag">Creative</span>
             <h2>Creative that passes review</h2>
-            <p>The review system looks at your creative just as hard as your copy, and this is where health brands get banned fastest.</p>
+            <p>The review system looks at your creative just as hard as your copy. Our creative rules are stricter than Meta&rsquo;s written ones on purpose: on a cold account, the safest asset is the one with nothing to argue about.</p>
             <ul class="zbc-dont">
-              <li><strong>No before-and-after images. Ever.</strong> The imagery is often near-explicit and makes viewers feel bad about their bodies.</li>
+              <li><strong>No before-and-after body images for prescription GLP-1 or peptides. That&rsquo;s our house rule.</strong> Meta no longer bans this in writing as of July 2026 (<a href={META_CHANGE}>what changed</a>). We still don&rsquo;t run it, because Meta&rsquo;s prescription-drug standard says nothing about imagery either way, and a body comparison sits one caption away from the rules Meta kept: no statements of inferiority about appearance, and no promises of specific results in a set timeframe without a qualifier.</li>
               <li><strong>GLP-1 specifically: no brand names on product images or vials.</strong> Unbranded product only.</li>
             </ul>
             <ul class="zbc-do">
@@ -111,9 +118,9 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
 
             <div class="zbc-teardown reveal">
               <div class="zbc-td-col rejected">
-                <span class="zbc-td-tag">&#10005; REJECTED</span>
+                <span class="zbc-td-tag">&#10005; WE DON&rsquo;T RUN</span>
                 <p class="zbc-td-ad">Split-screen before-and-after of a woman&rsquo;s midsection, with a vial labelled &ldquo;Semaglutide&rdquo; in the corner.</p>
-                <p class="zbc-td-why"><strong>Why it died:</strong> before-and-after body imagery is the single fastest ban in this vertical, and the branded compound on the vial is a second trigger on the same asset.</p>
+                <p class="zbc-td-why"><strong>Why we don&rsquo;t run it:</strong> a body before-and-after breaks our house rule for prescription GLP-1, and the named compound on the vial makes it a prescription-drug ad, which Meta allows only from LegitScript-certified advertisers with Meta&rsquo;s authorization.</p>
               </div>
               <div class="zbc-td-col compliant">
                 <span class="zbc-td-tag">&#10003; COMPLIANT</span>
@@ -140,9 +147,9 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
       </ol>
 
       <div class="zbc-recap reveal">
-        <span class="zbc-recap-label">The 6 triggers that kill health ads fastest</span>
+        <span class="zbc-recap-label">The 6 triggers we design around</span>
         <ol>
-          <li><strong>Before-and-after imagery.</strong> The single fastest ban. <span>Creative</span></li>
+          <li><strong>Before-and-after body imagery</strong> for prescription GLP-1 and peptides: our house rule, not a written Meta ban since July 2026. <span>Creative</span></li>
           <li><strong>Naming the compound</strong>: &ldquo;peptide,&rdquo; &ldquo;semaglutide,&rdquo; or a brand on a vial. <span>Copy &middot; Creative</span></li>
           <li><strong>Promising a physiological outcome</strong>: &ldquo;lose X lbs,&rdquo; &ldquo;boost testosterone.&rdquo; <span>Copy</span></li>
           <li><strong>Clinical or scientific terminology</strong> in headlines and primary text. <span>Copy</span></li>
@@ -160,7 +167,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
         <a class="zbc-cta-btn" href={BOOK}>Book a strategy call &rarr;</a>
       </div>
 
-      <p class="zbc-disclaimer">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta&rsquo;s current advertising standards and your own compliance counsel before launch.</p>
+      <p class="zbc-disclaimer">This is practitioner guidance based on how we run health-vertical ad accounts, not legal advice. Platform policies change; verify against Meta&rsquo;s current <a href={MHW} target="_blank" rel="noopener">Health and Wellness</a> and <a href={MDP} target="_blank" rel="noopener">Drugs and Pharmaceuticals</a> ad standards and your own compliance counsel before launch.</p>
     </div>
   </section>
 
@@ -242,6 +249,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
     .zbc-cta-btn { flex:none; background:var(--z-blue); color:#fff; text-decoration:none; font-weight:600; font-size:14.5px; border-radius:11px; padding:12px 20px; white-space:nowrap; transition:background .15s; }
     .zbc-cta-btn:hover { background:#1a6bff; }
     .zbc-disclaimer { font-size:12.5px; line-height:1.55; color:var(--z-mute); margin:0 0 10px; }
+    .zbc-disclaimer a { color:var(--z-mute); text-decoration:underline; text-underline-offset:2px; }
 
     @media (max-width:560px) {
       .zbc-cp { grid-template-columns:36px 1fr; gap:14px; }

@@ -22,7 +22,10 @@ const updated = pageDate(path) ?? published;
 
 const title = seoTitle(path, hub.seoTitle);
 const description = metaDescription(path, hub.metaDescription);
-const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+// A YYYY-MM date renders as "July 2026": Meta's change-log day shifts with the viewer's time zone.
+const fmtDay = (d: string) => d.length === 7
+  ? new Date(`${d}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+  : new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 const crumb = `${hub.platform} health ad policy`;
 const sheets = AD_POLICIES.filter((p) => p.platform === hub.platform);
 const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';

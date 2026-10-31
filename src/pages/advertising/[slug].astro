@@ -3,10 +3,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
-import { AD_POLICIES, getAdPolicy, STATUS_LABEL } from '../../data/adPolicies';
+import { AD_POLICIES, getAdPolicy, platformOverview, POLICY_YEAR, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
 import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
-import { PAGES } from '../../lib/live';
+import { isLive, PAGES } from '../../lib/live';
+import { getPublishedPosts } from '../../lib/blog';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
 
@@ -17,39 +18,94 @@ const { slug } = Astro.params;
 const p = getAdPolicy(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/advertising/${p.slug}/`;
-// Short vertical labels keep the title tag under Google's ~60-char limit.
-const V_SHORT = {
+// Short vertical labels keep the default title tag under Google's ~60-char limit.
+const V_SHORT: Record<string, string> = {
   'Med spa & aesthetics': 'Med spa',
   'GLP-1 & weight loss': 'GLP-1',
   'Supplements & DTC': 'Supplements',
   'Telehealth & Rx': 'Telehealth',
   'TRT & hormone': 'TRT',
 };
+// The vertical as it reads inside a sentence ("Launching GLP-1 and weight-loss ads on Meta?").
+const V_INLINE: Record<string, string> = {
+  'glp-1-weight-loss': 'GLP-1 and weight-loss',
+  'supplements-dtc': 'supplement',
+  'telehealth': 'telehealth',
+  'trt-hormone': 'TRT and hormone',
+  'med-spa': 'med spa',
+};
 const shortVertical = V_SHORT[p.vertical] ?? p.vertical;
-const title = seoTitle(path, p.seoTitle ?? `${shortVertical} on ${p.platform}: 2026 ad compliance | AdBoost Health`);
+const inline = V_INLINE[p.verticalSlug] ?? p.vertical.toLowerCase();
+const title = seoTitle(path, p.seoTitle ?? `${shortVertical} on ${p.platform}: ${POLICY_YEAR} ad compliance | AdBoost Health`);
 const description = metaDescription(path, p.metaDescription);
 // Content date: src/data/pages.json (sitemap lastmod, this label and dateModified).
 const updated = PAGES[path]?.updated;
 if (!updated) throw new Error(`src/data/pages.json needs an "updated" date for ${path}`);
-const updatedLabel = new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const industry = getVertical(p.verticalSlug);
+const NOTE_LABEL = { changed: 'Updated', corrected: 'Corrected', clarified: 'Clarified' } as const;
+
+// Platform up-links (health plan O1, CN 3.4): each sheet points at the one page
+// that states its platform's shared rules. Google's certification steps live on
+// the telehealth sheet, which every other Google sheet links.
+const overview = platformOverview(p.platform);
+const certSheet = p.platform === 'Google' && p.slug !== 'telehealth-on-google' && isLive('/advertising/telehealth-on-google/')
+  ? { href: '/advertising/telehealth-on-google/', label: 'Telehealth on Google: the certification steps' }
+  : undefined;
+
+// Related reading per vertical (health plan O1). Links render only once their
+// target is live, so a sidebar never shows an unlinked line.
+const livePosts = new Set((await getPublishedPosts()).map((post) => `/blog/${post.id}/`));
+const linkIsLive = (href: string) => (href.startsWith('/blog/') ? livePosts.has(href) : isLive(href));
+const READING: Record<string, { href: string; label: string }[]> = {
+  'glp-1-weight-loss': [
+    { href: '/blog/glp1-advertising-compliance-2026/', label: 'GLP-1 compliance guide: Meta and Google' },
+    { href: '/blog/best-glp1-marketing-agencies-2026/', label: 'GLP-1 marketing agencies compared' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'supplements-dtc': [
+    { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement brand CAC playbook' },
+    { href: '/industries/supplements-dtc/', label: 'Supplement marketing: the vertical playbook' },
+    { href: '/blog/best-supplement-marketing-agencies/', label: 'Supplement marketing agencies compared' },
+  ],
+  'telehealth': [
+    { href: '/blog/legitscript-certification-telehealth-guide/', label: 'LegitScript certification guide' },
+    { href: '/blog/google-ads-telehealth-strategy/', label: 'Google Ads strategy for telehealth' },
+    { href: '/blog/best-telehealth-marketing-agencies-2026/', label: 'Telehealth marketing agencies compared' },
+  ],
+  'trt-hormone': [
+    { href: '/industries/trt-hormone/', label: 'TRT marketing: the vertical playbook' },
+    { href: '/blog/telehealth-cac-benchmarks-2026/', label: 'CAC benchmarks by vertical' },
+  ],
+  'med-spa': [
+    { href: '/blog/health-ad-creative-rejected-fix/', label: 'Why health ad creative gets rejected' },
+    { href: '/industries/med-spa/', label: 'Med spa marketing: the vertical playbook' },
+  ],
+};
+const reading = [
+  ...(p.platform === 'TikTok' ? [{ href: '/blog/tiktok-ads-health-brands/', label: 'TikTok health ad policy at a glance' }] : []),
+  ...(READING[p.verticalSlug] ?? []),
+].filter((r) => linkIsLive(r.href));
+
 const jsonLd = [
-  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: updated, image: '/og/og-home.png' }),
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: updated, authorIsOrg: true, image: '/og/og-home.png' }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];
 const toc = [
   { id: 'status', label: 'Is it allowed?' },
   { id: 'cert', label: 'Certification' },
-  { id: 'prohibited', label: 'Prohibited claims' },
-  { id: 'requirements', label: 'Disclaimers & requirements' },
+  { id: 'prohibited', label: 'What’s prohibited' },
+  { id: 'requirements', label: 'Disclaimers & landing pages' },
   { id: 'rejections', label: 'Top rejection reasons' },
-  { id: 'enforcement', label: 'What enforcement looks like' },
+  { id: 'enforcement', label: 'Enforcement' },
   { id: 'comply', label: 'How to stay compliant' },
+  ...(p.sections ?? []).map((s) => ({ id: s.id, label: s.question })),
   { id: 'faq', label: 'FAQ' },
 ];
+const xIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
   <section class="phero">
@@ -59,8 +115,8 @@ const toc = [
       <h1>{p.h1}</h1>
       <div class="metabar" style="margin-top:14px">
         <span class={`badge ${badgeClass}`}>{STATUS_LABEL[p.status]}</span>
-        <span class="dot"></span><span>Updated {updatedLabel}</span>
-        <span class="dot"></span><span>Verify against live policy</span>
+        <span class="dot"></span><span>Rules checked against {p.platform}’s live policy on <time datetime={RULES_CHECKED_ON}>{fmtDay(RULES_CHECKED_ON)}</time></span>
+        <span class="dot"></span><span>Updated <time datetime={updated}>{fmtDay(updated)}</time></span>
       </div>
     </div>
   </section>
@@ -69,43 +125,88 @@ const toc = [
     <div class="container">
       <div class="doc-grid">
         <div class="doc-main">
-          <div class="answer-box reveal"><span class="al">The short answer</span>{p.answer}</div>
+          <div class="answer-box reveal" id="status"><span class="al">The short answer</span>{p.answer}</div>
+
           <div class="prose">
-            <h2 id="cert">Certification & authorization</h2>
-            <p>{p.certification}</p>
-
-            <h2 id="prohibited">What’s prohibited</h2>
-            <ul class="xlist">
-              {p.prohibited.map((x) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
-              ))}
-            </ul>
-
-            <h2 id="requirements">Disclaimers & landing-page requirements</h2>
-            <div class="callout"><span class="cl-label">Requirements</span>{p.requirements}</div>
-
-            <h2 id="rejections">Top reasons ads get rejected</h2>
-            <ul class="xlist">
-              {p.rejectionReasons.map((x) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{x}</li>
-              ))}
-            </ul>
-
-            <h2 id="enforcement">What enforcement actually looks like</h2>
-            <p>{p.enforcement}</p>
-
-            <h2 id="comply">How compliant brands still advertise</h2>
-            <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span>{p.howToComply}</div>
-
-            {industry && (
-              <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure, and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
+            {p.changeNotes && p.changeNotes.length > 0 && (
+              <div class="callout" style="margin-top:16px">
+                {p.changeNotes.map((n) => (
+                  <p style="margin:0 0 8px">
+                    <strong>{NOTE_LABEL[n.kind]} <time datetime={n.date}>{fmtDay(n.date)}</time>.</strong> {n.text}
+                    {n.sources && n.sources.length > 0 && (
+                      <> Source: {n.sources.map((s, i) => (<>{i > 0 && '; '}<a href={s.url} target="_blank" rel="noopener">{s.label}</a></>))}.</>
+                    )}
+                  </p>
+                ))}
+              </div>
             )}
 
-            <h2 id="faq">FAQ</h2>
+            <p style="font-size:14px;margin-top:14px">
+              {overview.lead} <a href={overview.href}>{overview.label}</a>.
+              {certSheet && <> Certification steps for every Google health ad: <a href={certSheet.href}>{certSheet.label}</a>.</>}
+            </p>
+
+            {p.checklist && (
+              <div class="callout" style="margin-top:14px">
+                <span class="cl-label">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span>
+                <ul style="margin:8px 0 6px">
+                  {p.checklist.items.map((x) => <li>{x}</li>)}
+                </ul>
+                <span style="font-size:13px">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
+              </div>
+            )}
+
+            <h2 id="cert">Do you need certification to run {inline} ads on {p.platform}?</h2>
+            <Fragment set:html={p.certification.trimStart().startsWith('<') ? p.certification : `<p>${p.certification}</p>`} />
+
+            <h2 id="prohibited">What can’t {inline} ads say or show on {p.platform}?</h2>
+            <p>{p.platform}’s own written rules:</p>
+            <ul class="xlist">
+              {p.prohibited.map((x) => (
+                <li><span class="xk" set:html={xIcon} />{x}</li>
+              ))}
+            </ul>
+            {p.guidance && p.guidance.length > 0 && (
+              <>
+                <p>What we also keep out of {inline} creative. This is our guidance, not {p.platform}’s wording:</p>
+                <ul>
+                  {p.guidance.map((x) => <li set:html={x} />)}
+                </ul>
+              </>
+            )}
+
+            <h2 id="requirements">Which disclaimers and landing-page rules apply?</h2>
+            <div class="callout"><span class="cl-label">Requirements</span><Fragment set:html={p.requirements} /></div>
+
+            <h2 id="rejections">Why do {inline} ads get rejected on {p.platform}?</h2>
+            <ul class="xlist">
+              {p.rejectionReasons.map((x) => (
+                <li><span class="xk" set:html={xIcon} />{x}</li>
+              ))}
+            </ul>
+
+            <h2 id="enforcement">What happens when {p.platform} enforces these rules?</h2>
+            <p set:html={p.enforcement} />
+
+            <h2 id="comply">How do compliant {inline} brands still advertise on {p.platform}?</h2>
+            <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span><Fragment set:html={p.howToComply} /></div>
+
+            {(p.sections ?? []).map((s) => (
+              <>
+                <h2 id={s.id}>{s.question}</h2>
+                <Fragment set:html={s.html} />
+              </>
+            ))}
+
+            {industry && (
+              <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
+            )}
+
+            <h2 id="faq">What else do {inline} brands ask about {p.platform} ads?</h2>
             <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
 
             <h3>Sources</h3>
-            <p style="font-size:13px;color:var(--mute)">Ad policies change frequently and enforcement is tightening - treat this as a starting point and confirm current requirements against each platform’s live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+            <p style="font-size:13px;color:var(--mute)">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
             <ul style="font-size:14px">
               {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
             </ul>
@@ -121,13 +222,25 @@ const toc = [
             <h4>{p.vertical} on other platforms</h4>
             <div class="link-list">
               {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
-              <a href="/blog/glp1-advertising-compliance-2026/">Compliance guide (GLP-1)</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
+              <a href={overview.href}>{overview.label}</a>
             </div>
+          </div>
+          {reading.length > 0 && (
+            <div class="aside-card">
+              <h4>Related reading</h4>
+              <div class="link-list">
+                {reading.map((r) => <a href={r.href}>{r.label}</a>)}
+              </div>
+            </div>
+          )}
+          <div class="aside-card">
+            <h4>Zero-Ban Protocol</h4>
+            <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>
+            <a href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist →</a>
           </div>
           <div class="aside-card dark">
             <h4 style="color:#fff">We clear this before you launch</h4>
-            <p>Every account and asset reviewed against live {p.platform} policy - so launches don’t get yanked.</p>
+            <p>Every account and asset reviewed against live {p.platform} policy, so launches don’t get yanked.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
         </aside>
@@ -135,5 +248,5 @@ const toc = [
     </div>
   </section>
 
-  <CtaBand heading={`Launching ${p.vertical.toLowerCase()} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
+  <CtaBand heading={`Launching ${inline} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
 </BaseLayout>
