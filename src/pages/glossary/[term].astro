@@ -4,6 +4,7 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { GLOSSARY, getTerm } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
+import { pageDate } from '../../lib/live';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, definedTerm } from '../../lib/schema';
 
@@ -17,6 +18,9 @@ const path = `/glossary/${t.slug}/`;
 const title = seoTitle(path, `${t.term}: Definition | AdBoost`);
 const description = metaDescription(path, t.metaDescription);
 const related = (t.related ?? []).map((r) => getTerm(r)).filter(Boolean);
+// Content date: src/data/pages.json (sitemap lastmod and this label).
+const updated = pageDate(path);
+const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 
 // Topic-aware related resources per term (fallback = default trio below).
 type Resource = { href: string; label: string };
@@ -62,10 +66,6 @@ const RESOURCES: Record<string, Resource[]> = {
     { href: '/tools/ad-budget-calculator/', label: 'Ad budget calculator' },
     { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement CAC playbook' },
   ],
-  'payback-period': [
-    { href: '/tools/ad-budget-calculator/', label: 'Ad budget calculator' },
-    { href: '/blog/supplement-brand-lower-cac-playbook/', label: 'Supplement CAC playbook' },
-  ],
   'hipaa-compliant-marketing': [
     { href: '/blog/legitscript-certification-telehealth-guide/', label: 'LegitScript certification guide' },
     { href: '/services/paid-media/', label: 'Compliant paid media for health brands' },
@@ -76,15 +76,11 @@ const RESOURCES: Record<string, Resource[]> = {
   ],
   'quiz-funnel': [
     { href: '/services/cro/', label: 'CRO & quiz funnels' },
-    { href: '/blog/choose-health-growth-agency/', label: 'How to choose a health growth agency' },
+    { href: '/compare/generalist-dtc-agency-alternative/#how-to-choose', label: 'How to choose a health growth agency' },
   ],
   'landing-page-conversion-rate': [
     { href: '/services/cro/', label: 'CRO & landing page optimization' },
-    { href: '/blog/choose-health-growth-agency/', label: 'How to choose a health growth agency' },
-  ],
-  'creative-fatigue': [
-    { href: '/blog/health-ad-creative-rejected-fix/', label: 'Fixing rejected health ad creative' },
-    { href: '/services/creative/', label: 'Compliant creative production' },
+    { href: '/compare/generalist-dtc-agency-alternative/#how-to-choose', label: 'How to choose a health growth agency' },
   ],
   'hook-rate': [
     { href: '/blog/health-ad-creative-rejected-fix/', label: 'Fixing rejected health ad creative' },
@@ -97,10 +93,6 @@ const RESOURCES: Record<string, Resource[]> = {
   'structure-function-claim': [
     { href: '/blog/glp1-meta-ad-policy-state-ag-2026/', label: 'Meta GLP-1 policy & state-AG crackdown' },
     { href: '/advertising/supplements-on-meta/', label: 'Advertising supplements on Meta' },
-  ],
-  'server-side-tracking': [
-    { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
-    { href: '/services/paid-media/', label: 'Paid media with clean attribution' },
   ],
   capi: [
     { href: '/blog/telehealth-attribution-server-side-tracking/', label: 'Server-side tracking for telehealth' },
@@ -128,6 +120,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
       <h1 style="margin-top:12px">{t.term}</h1>
+      {updatedLabel && <div class="metabar" style="margin-top:10px"><span>Updated {updatedLabel}</span><span class="dot"></span><span>AdBoost Health</span></div>}
     </div>
   </section>
 
@@ -138,6 +131,7 @@ const jsonLd = [
           <div class="prose">
             <h2 style="font-size:20px;margin:0 0 12px">What is {t.term.replace(/\s*\(.*\)/, '')}?</h2>
             <div class="answer-box reveal"><span class="al">Definition</span>{t.definition}</div>
+            {t.guide && <p class="term-guide"><a href={t.guide.href}>{t.guide.label} →</a></p>}
             {t.formula && <div class="callout reveal"><span class="cl-label">Formula</span><code style="font-size:15px">{t.formula}</code></div>}
             {t.body && <p class="reveal" set:html={t.body} />}
 
@@ -172,3 +166,9 @@ const jsonLd = [
 
   <CtaBand />
 </BaseLayout>
+
+<style>
+  .term-guide { margin: 14px 0 18px; }
+  .term-guide a { display: inline-block; font-weight: 600; color: var(--blue); border: 1px solid rgba(0, 87, 255, .28); border-radius: 10px; padding: 10px 14px; text-decoration: none; }
+  .term-guide a:hover { background: rgba(0, 87, 255, .06); border-color: var(--blue); }
+</style>

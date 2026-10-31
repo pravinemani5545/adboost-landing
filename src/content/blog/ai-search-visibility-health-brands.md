@@ -66,7 +66,7 @@ One warning shaped by the category: don't astroturf. Health communities are host
 
 Health is a **trust-dominant category for AI systems** - models are visibly calibrated to be cautious about health recommendations, so they lean harder on third-party validation before naming a brand. The signals that surface in answers about health brands, again and again: independent review volume and recency (Trustpilot, Google, category-specific platforms), third-party testing and certifications mentioned in crawlable text (not just a badge image), named clinicians or credentialed experts attached to the brand, press from recognizable health publishers, and a clean regulatory record.
 
-Most of these are things a good health brand builds anyway - GEO just raises their ROI, because they now compound into a channel with zero marginal cost per recommendation. The same diligence applies in reverse when *you're* the buyer: AI answers about agencies pull from the same signal pool, which is why we tell founders to verify everything in our [agency vetting guide](/blog/choose-health-growth-agency/) rather than trust any single source, machine or human.
+Most of these are things a good health brand builds anyway - GEO just raises their ROI, because they now compound into a channel with zero marginal cost per recommendation. The same diligence applies in reverse when *you're* the buyer: AI answers about agencies pull from the same signal pool, which is why we tell founders to verify everything in the [questions for vetting a health growth agency](/compare/generalist-dtc-agency-alternative/) rather than trust any single source, machine or human.
 
 ## Where does GEO fit next to paid media?
 
