@@ -1,7 +1,7 @@
 ---
 title: "Telehealth CAC Benchmarks: What Top Brands Actually Pay Per Patient in 2026"
 seoTitle: "Telehealth CAC Benchmarks 2026 | AdBoost Health"
-description: "Real telehealth CAC benchmarks by vertical and channel - see what top brands pay per patient in 2026 and the levers that actually cut CAC."
+description: "Telehealth CAC by vertical and channel: 2026 ranges per patient, the inputs that move them, and how to check your own number with our calculator."
 pubDate: 2026-05-20
 updatedDate: 2026-07-28
 author: "Amir Salihovic"
@@ -10,7 +10,7 @@ tags: ["telehealth", "CAC", "benchmarks", "paid media", "unit economics"]
 heroImage: "/blog/telehealth-cac-benchmarks-2026.webp"
 heroAlt: "Clean data visualization of descending CAC bars in AdBoost blue on a white background"
 ctaHeading: "Benchmark your CAC against your vertical."
-ctaText: "Free 30-minute call - we audit your account against vertical benchmarks and hand you the written plan."
+ctaText: "Free 30-minute call. We audit your account against vertical benchmarks and hand you the written plan."
 ---
 
 "Is our CAC good?" is the most common question founders ask on our strategy calls - usually because their agency reports [CAC](/glossary/cac/) in a vacuum, with no category context. A $250 CAC can be excellent or existential depending on your vertical, AOV, and retention curve.
@@ -23,13 +23,17 @@ A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology
 
 | Vertical | Typical blended CAC | Strong | Concerning |
 |---|---|---|---|
-| Weight loss / GLP-1 | $150–$350 | Under $180 | Over $400 |
+| [Weight loss / GLP-1](/industries/glp-1-weight-loss/) | $150–$350 | Under $180 | Over $400 |
 | Hair loss / dermatology | $80–$180 | Under $100 | Over $220 |
-| Mental health | $120–$280 | Under $150 | Over $320 |
-| Hormone / longevity | $200–$450 | Under $250 | Over $500 |
-| Supplements (subscription) | $40–$110 | Under $55 | Over $130 |
+| [Mental health](/industries/mental-health/) | $120–$280 | Under $150 | Over $320 |
+| [Hormone](/industries/trt-hormone/) / [longevity](/industries/longevity/) | $200–$450 | Under $250 | Over $500 |
+| [Supplements (subscription)](/industries/supplements-dtc/) | $40–$110 | Under $55 | Over $130 |
 
 *Ranges reflect blended CAC across AdBoost Health partner accounts in each vertical over the trailing 12 months, Meta + Google + TikTok combined.*
+
+If you're on the GLP-1 row and weighing outside help to move your number, we compared the [GLP-1 marketing agencies worth shortlisting](/blog/best-glp1-marketing-agencies-2026/).
+
+**Check your number.** Work out your own blended CAC in the [CAC calculator](/tools/cac-calculator/), then set it against lifetime value in the [LTV:CAC and payback calculator](/tools/ltv-cac-calculator/). A CAC in the Strong column with a thin LTV:CAC ratio is still a problem; a CAC in the Concerning column with long retention may not be. If your number lands somewhere you can't explain, [book a free strategy call](/book/) and we'll audit the account against your vertical's range.
 
 Two caveats that matter more than the table:
 

@@ -5,6 +5,8 @@ import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { SERVICES, getService } from '../../data/services';
 import { siteBase } from '../../lib/site';
+import { pageDate } from '../../lib/live';
+import { metaDescription } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -15,7 +17,10 @@ const s = getService(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/services/${s.slug}/`;
 const title = s.seoTitle ?? `${s.h1} | AdBoost Health`;
-const description = s.lede;
+const description = metaDescription(path, s.metaDescription);
+// Content date: src/data/pages.json (sitemap lastmod and this label).
+const updated = pageDate(path);
+const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const jsonLd = [
   serviceNode(SITE, { name: s.name, description: s.desc, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name, href: path }]),
@@ -35,7 +40,7 @@ const RELATED_RESOURCES: Record<string, { href: string; label: string }[]> = {
   ],
   'creative': [
     { href: '/glossary/hook-rate/', label: 'Hook rate: the first metric we check' },
-    { href: '/glossary/creative-fatigue/', label: 'Creative fatigue and how to spot it early' },
+    { href: '/glossary/creative-testing/#creative-fatigue', label: 'Creative fatigue and how to spot it early' },
     { href: '/glossary/creative-testing/', label: 'How structured creative testing works' },
   ],
 };
@@ -43,6 +48,7 @@ const relatedResources = RELATED_RESOURCES[s.slug] ?? [];
 const toc = [
   { id: 'outcomes', label: 'What you get' },
   { id: 'process', label: 'How it works' },
+  ...(s.extra ? [{ id: s.extra.id, label: 'Intake quizzes' }] : []),
   { id: 'deliverables', label: 'Deliverables' },
   { id: 'depth', label: 'Why it matters in health' },
   { id: 'faq', label: 'FAQ' },
@@ -55,6 +61,7 @@ const toc = [
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{s.navLabel.toUpperCase()}</span>
       <h1>{s.h1}</h1>
       <p class="phero-lede">{s.lede}</p>
+      {updatedLabel && <div class="metabar" style="margin-top:12px"><span>AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
     </div>
   </section>
 
@@ -75,6 +82,13 @@ const toc = [
             <div class="playbook">
               {s.process.map((p) => (<div class="pb"><h3>{p.phase}</h3><p>{p.detail}</p></div>))}
             </div>
+
+            {s.extra && (
+              <>
+                <h2 id={s.extra.id}>{s.extra.h}</h2>
+                <Fragment set:html={s.extra.html} />
+              </>
+            )}
 
             <h2 id="deliverables">What you receive</h2>
             <ul class="checks">
@@ -116,7 +130,7 @@ const toc = [
           )}
           <div class="aside-card dark">
             <h4 style="color:#fff">See it on your account</h4>
-            <p>Free audit with a senior strategist - a written plan you keep either way.</p>
+            <p>Free audit with a senior strategist: a written plan you keep either way.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
         </aside>

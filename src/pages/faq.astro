@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import CtaBand from '../components/CtaBand.astro';
-import Faq from '../components/Faq.astro';
 import { siteBase } from '../lib/site';
 import { breadcrumb, faqPage } from '../lib/schema';
 import { FAQ_GROUPS } from '../data/faq';
@@ -11,7 +10,7 @@ const SITE = siteBase(Astro.site);
 const groups = FAQ_GROUPS;
 const all = groups.flatMap((g) => g.items);
 const title = 'Frequently Asked Questions | AdBoost Health';
-const description = 'Answers to the questions health founders ask before hiring a growth agency - how we work, compliance, creative, and how fast you see results.';
+const description = 'Answers to the questions health founders ask before hiring a growth agency: how we work, compliance, creative, and how fast you see results.';
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'FAQ', href: '/faq/' }]),
   faqPage(all),
@@ -23,7 +22,7 @@ const jsonLd = [
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]} />
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FAQ</span>
       <h1>Answers to <span class="serif">popular questions</span></h1>
-      <p class="phero-lede">The questions we hear before every kickoff - how we work, how we handle compliance, and how fast you can expect results.</p>
+      <p class="phero-lede">The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results.</p>
     </div>
   </section>
 
@@ -34,7 +33,14 @@ const jsonLd = [
           {groups.map((g) => (
             <div id={g.title.toLowerCase().replace(/\W+/g, '-')} style="margin-bottom:32px;scroll-margin-top:90px">
               <h2 class="sec-title" style="font-size:22px">{g.title}</h2>
-              <div style="margin-top:12px"><Faq items={g.items} idPrefix={g.title.toLowerCase().replace(/\W+/g, '-')} /></div>
+              <div class="faq-open">
+                {g.items.map((it) => (
+                  <div class="fo-item">
+                    <h3>{it.q}</h3>
+                    <div class="fo-a" set:html={it.a} />
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -55,3 +61,14 @@ const jsonLd = [
 
   <CtaBand />
 </BaseLayout>
+
+<style>
+  /* Answers render open (health plan O18): readable without JavaScript, and the
+     visible text matches the FAQPage JSON-LD built from the same FAQ_GROUPS. */
+  .faq-open { margin-top: 12px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
+  .fo-item { padding: 22px 26px; border-bottom: 1px solid var(--line); }
+  .fo-item:last-child { border-bottom: 0; }
+  .fo-item h3 { margin: 0 0 8px; font-size: 17px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+  .fo-a { color: var(--mute); font-size: 15px; line-height: 1.6; max-width: 68ch; }
+  @media (max-width: 560px) { .fo-item { padding: 18px 20px; } .fo-item h3 { font-size: 15.5px; } }
+</style>

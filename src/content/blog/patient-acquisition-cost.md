@@ -3,6 +3,7 @@ title: "Patient Acquisition Cost: How to Calculate It and What's Driving Yours U
 seoTitle: "Patient Acquisition Cost Explained | AdBoost Health"
 description: "Understand patient acquisition cost, how to calculate it and what could be pushing your healthcare CAC higher than it needs to be."
 pubDate: 2026-08-27
+updatedDate: 2026-10-30
 tags: ["cac", "telehealth", "benchmarks"]
 heroImage: "/blog/patient-acquisition-cost.webp"
 heroAlt: "AdBoost Health brand graphic: patient acquisition cost explained, with a cost-per-patient metric card"
@@ -68,7 +69,7 @@ One more distinction that trips up healthcare teams: cost per lead is not cost p
 
 Patient acquisition cost in healthcare runs structurally higher than ecommerce CAC for the same media dollars, and it isn't because health marketers are worse at their jobs. Four forces stack:
 
-- **Compliance constraints on targeting and creative.** Ad platforms restrict health advertisers from using the personal-attribute targeting, before-and-after imagery, and aggressive claim structures that ecommerce brands lean on freely. You're running the same auction with fewer weapons, so the winning creative angles are harder to find and burn out faster. (When ads start getting rejected outright, that's its own compounding tax on CAC.)
+- **Compliance constraints on targeting and creative.** Ad platforms restrict health advertisers from using the personal-attribute targeting and aggressive claim structures that ecommerce brands lean on freely, and before-and-after imagery is allowed only within limits: Meta has allowed it for cosmetic procedures with 18+ targeting since July 2026 ([Meta's Health and Wellness standard](https://transparency.meta.com/policies/ad-standards/restricted-goods-services/health-wellness/)), while [TikTok restricts it in some markets](https://ads.tiktok.com/help/article/tiktok-ads-policy-healthcare-pharmaceuticals). You're running the same auction with fewer weapons, so the winning creative angles are harder to find and burn out faster. (When ads start getting rejected outright, that's its own compounding tax on CAC.)
 - **Certification gatekeeping.** Prescription-adjacent categories need LegitScript certification before Google and Meta will let the highest-intent inventory serve at all. Brands that skip it don't pay more for search traffic, they get none, which forces spend into colder, less efficient channels.
 - **Intake friction.** An ecommerce checkout is 90 seconds. A telehealth funnel adds eligibility screening, medical history forms, ID verification, sometimes a synchronous visit. Every added step sheds motivated clickers you already paid for, and that loss lands directly in CAC.
 - **Longer consideration.** Nobody impulse-buys hormone therapy. Health decisions involve research, comparison, and trust-building, which means more touches per conversion and paid dollars spent on people who convert weeks later, often attributed to nothing.

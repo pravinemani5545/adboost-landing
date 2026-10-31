@@ -103,7 +103,7 @@ The restriction is real. Meta's business help documentation on [prohibited infor
 What a workable setup looks like:
 
 1. **Neutral event names and clean URLs.** Generic events (purchase, lead, demo request) with no condition, symptom, or product-for-condition labels in event names, parameters, or URLs.
-2. **Server-side tracking with data scrubbing.** Send conversions from your server so you control exactly what leaves, and strip anything health-related before it goes. Whether HIPAA applies depends on your setup and your relationships with providers, so involve counsel, but platform terms apply either way. Our glossary entry on [server-side tracking](/glossary/server-side-tracking/) explains the mechanics.
+2. **Server-side tracking with data scrubbing.** Send conversions from your server so you control exactly what leaves, and strip anything health-related before it goes. Whether HIPAA applies depends on your setup and your relationships with providers, so involve counsel, but platform terms apply either way. Our glossary entry on [CAPI and server-side tracking](/glossary/capi/) explains the mechanics.
 3. **Your own source of truth.** For DTC, your order system. For clinician and B2B models, your CRM, with closed revenue tied back to the campaigns that sourced or influenced it.
 4. **A post-purchase or intake survey.** "How did you first hear about us?" catches the channels platform attribution misses, especially video and clinician word of mouth.
 

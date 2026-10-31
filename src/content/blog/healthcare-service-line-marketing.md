@@ -3,6 +3,7 @@ title: "Not Every Service Line Deserves the Same Budget"
 seoTitle: "Healthcare Service Line Marketing | AdBoost Health"
 description: "Healthcare service line marketing: allocate spend by patient value, local demand, capacity and growth priorities instead of equal budgets."
 pubDate: 2027-01-21
+draft: true
 tags: ["paid media", "growth strategy", "cac"]
 heroImage: "/blog/healthcare-service-line-marketing.webp"
 heroAlt: "AdBoost Health brand graphic: allocating healthcare marketing budget by service line, with a service-line budget tier checklist card"

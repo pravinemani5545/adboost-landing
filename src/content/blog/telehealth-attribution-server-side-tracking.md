@@ -37,13 +37,13 @@ The constraint, stated plainly: **no PHI in pixels - ever.** If you're a HIPAA-c
 - **Generally workable:** conversion *events* stripped of health context - "a purchase happened, of this value" - fired from pages and parameters that reveal nothing about the condition, with hashed identifiers handled under proper consent and legal review.
 - **The structural fix:** keep marketing pages and authenticated patient flows on separated infrastructure, so tracking lives where PHI doesn't.
 
-We are marketers, not your lawyers - the architecture below is what we implement, but your counsel signs off on the data map. Any agency that shrugs at this question shouldn't be running your ads; it's one of the sharper filters in our guide to [choosing a health growth agency](/blog/choose-health-growth-agency/).
+We are marketers, not your lawyers - the architecture below is what we implement, but your counsel signs off on the data map. Any agency that shrugs at this question shouldn't be running your ads; it's one of the sharper filters in our [questions for choosing a health growth agency](/compare/generalist-dtc-agency-alternative/).
 
 ## Does server-side tracking (CAPI) fix signal loss?
 
 Partially - and the partial matters. [Meta's Conversions API](/glossary/capi/) and Google's Enhanced Conversions move event transmission from the user's browser to your server. That recovers conversions lost to ad blockers and browser restrictions, improves match quality, and - critically for health brands - gives you a **filtering layer**: your server decides exactly which fields leave the building, instead of a pixel vacuuming up whatever's on the page.
 
-What it doesn't do: [server-side tracking](/glossary/server-side-tracking/) recovers *delivery* of signals, not *attribution truth*. It will not un-break cross-device journeys or credit the podcast ad that started the journey. Across partner accounts we typically see server-side implementations recover a meaningful double-digit percentage of previously invisible conversions - enough to change bidding behavior and reported CAC, not enough to be the whole answer.
+What it doesn't do: [server-side tracking](/glossary/capi/) recovers *delivery* of signals, not *attribution truth*. It will not un-break cross-device journeys or credit the podcast ad that started the journey. Across partner accounts we typically see server-side implementations recover a meaningful double-digit percentage of previously invisible conversions - enough to change bidding behavior and reported CAC, not enough to be the whole answer.
 
 Implementation order that works: define your event schema and PHI exclusion list first, deploy CAPI with deduplication against the remaining pixel, verify match quality in Events Manager, *then* start trusting directional platform data again.
 

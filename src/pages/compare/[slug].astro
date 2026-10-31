@@ -5,6 +5,8 @@ import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { COMPARES, getCompare } from '../../data/compare';
 import { siteBase } from '../../lib/site';
+import { pageDate } from '../../lib/live';
+import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage } from '../../lib/schema';
 
 export function getStaticPaths() {
@@ -14,11 +16,28 @@ const { slug } = Astro.params;
 const c = getCompare(slug!)!;
 const SITE = siteBase(Astro.site);
 const path = `/compare/${c.slug}/`;
-const title = c.metaTitle;
-const description = c.answer.slice(0, 155);
+const title = seoTitle(path, c.metaTitle);
+const description = metaDescription(path, c.metaDescription);
+// Content date: src/data/pages.json (sitemap lastmod, this label and dateModified).
+const updated = pageDate(path);
+const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const them = c.themLabel;
+const themLower = them.charAt(0).toLowerCase() + them.slice(1);
+const plain = (html: string) => html.replace(/<[^>]+>/g, '');
 const jsonLd = [
+  {
+    '@type': 'WebPage',
+    name: c.h1,
+    description,
+    url: `${SITE}${path}`,
+    ...(updated ? { dateModified: updated } : {}),
+    publisher: { '@id': `${SITE}/#org` },
+  },
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor, href: path }]),
-  faqPage(c.faq),
+  faqPage([
+    ...(c.questions ? c.questions.items.map((it) => ({ q: it.q, a: plain(it.a) })) : []),
+    ...c.faq,
+  ]),
   {
     '@type': 'ItemList',
     name: `${c.h1}: comparison dimensions`,
@@ -26,13 +45,24 @@ const jsonLd = [
     itemListElement: c.rows.map((r, i) => ({ '@type': 'ListItem', position: i + 1, name: r.dimension })),
   },
 ];
+const toc = [
+  { id: 'choose', label: 'Which to choose' },
+  { id: 'compare', label: 'Side by side' },
+  ...c.tradeoffs.map((t) => ({ id: t.id, label: t.q })),
+  ...(c.questions ? [{ id: 'how-to-choose', label: 'Nine questions to ask' }] : []),
+  { id: 'not-fit', label: 'When we are not the right fit' },
+  { id: 'faq', label: 'FAQ' },
+];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
   <section class="phero">
     <div class="container">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor }]} />
       <h1 style="margin-top:16px">{c.h1}</h1>
-      <p class="phero-lede">{c.intent}</p>
+      <div class="metabar" style="margin-top:12px">
+        <span>Published by AdBoost Health</span>
+        {updatedLabel && <><span class="dot"></span><span>Updated {updatedLabel}</span></>}
+      </div>
     </div>
   </section>
 
@@ -40,42 +70,92 @@ const jsonLd = [
     <div class="container">
      <div class="doc-grid">
       <div class="doc-main">
-      <div class="answer-box reveal"><span class="al">The short answer</span>{c.answer}</div>
+      <div class="answer-box"><span class="al">The short answer</span>{c.answer}</div>
+      <p class="cmp-intent"><strong>Who this page is for:</strong> {c.intent}</p>
 
-      <div class="tablewrap reveal">
-        <table class="dtable">
-          <thead><tr><th></th><th>{c.competitor.replace(/^a /, '').replace(/^an /, '')}</th><th>AdBoost Health</th></tr></thead>
-          <tbody>
-            {c.rows.map((r) => (
-              <tr><td class="row-h">{r.dimension}</td><td style="color:var(--mute)">{r.them}</td><td>{r.us}</td></tr>
+      <div class="prose">
+        <h2 id="choose">Should you choose {themLower} or AdBoost Health?</h2>
+        <div class="tablewrap">
+          <table class="dtable cmp-choose">
+            <thead><tr><th>Choose {themLower} if</th><th>Choose AdBoost Health if</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><ul>{c.chooseThem.map((x) => <li>{x}</li>)}</ul></td>
+                <td><ul>{c.chooseUs.map((x) => <li>{x}</li>)}</ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="compare">How do they compare, side by side?</h2>
+        <div class="tablewrap">
+          <table class="dtable">
+            <thead><tr><th></th><th>{them}</th><th>AdBoost Health</th></tr></thead>
+            <tbody>
+              {c.rows.map((r) => (
+                <tr><td class="row-h">{r.dimension}</td><td style="color:var(--mute)">{r.them}</td><td>{r.us}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Their focus:</strong> {c.theirFocus}</p>
+        <p><strong>Ours:</strong> {c.ourDifference}</p>
+
+        {c.tradeoffs.map((t) => (
+          <>
+            <h2 id={t.id}>{t.q}</h2>
+            <Fragment set:html={t.html} />
+          </>
+        ))}
+
+        {c.questions && (
+          <>
+            <h2 id="how-to-choose">How do you choose a health growth agency? Nine questions to ask</h2>
+            <p>{c.questions.intro}</p>
+            {c.questions.items.map((it, i) => (
+              <>
+                <h3>{i + 1}. {it.q}</h3>
+                <p set:html={it.a} />
+              </>
             ))}
-          </tbody>
-        </table>
+            <h3>The nine questions at a glance</h3>
+            <div class="tablewrap">
+              <table class="dtable">
+                <thead><tr><th>#</th><th>Question</th><th>A strong answer</th><th>Red flag</th></tr></thead>
+                <tbody>
+                  {c.questions.items.map((it, i) => (
+                    <tr><td>{i + 1}</td><td class="row-h">{it.q}</td><td>{it.strong}</td><td style="color:var(--mute)">{it.flag}</td></tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        <h2 id="not-fit">When is AdBoost Health not the right fit?</h2>
+        <p>{c.bestWhen}</p>
+        <ul>{c.notFit.map((x) => <li>{x}</li>)}</ul>
+
+        <h2 id="faq">Frequently asked questions</h2>
       </div>
-
-      <h2 class="sec-title" style="margin-top:36px">Where each one focuses</h2>
-      <p style="color:var(--ink-2);line-height:1.7"><strong>Them:</strong> {c.theirFocus}</p>
-      <p style="color:var(--ink-2);line-height:1.7"><strong>Us:</strong> {c.ourDifference}</p>
-
-      <div class="callout reveal">
-        <span class="cl-label">When the other option is the better fit</span>
-        {c.bestWhen}
-      </div>
-
-      <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
       <div style="margin-top:16px"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
       </div>
       <aside class="doc-aside">
+        <div class="aside-toc">
+          <div class="at-label">On this page</div>
+          <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+        </div>
         <div class="aside-card">
           <h4>Other comparisons</h4>
           <div class="link-list">
             {COMPARES.filter((x) => x.slug !== c.slug).map((x) => <a href={`/compare/${x.slug}/`}>{x.h1.replace('AdBoost Health vs. ', 'vs. ')}</a>)}
+            {c.slug !== 'generalist-dtc-agency-alternative' && <a href="/compare/generalist-dtc-agency-alternative/#how-to-choose">How to choose a health growth agency</a>}
             <a href="/about/">Why health-only</a>
           </div>
         </div>
         <div class="aside-card dark">
           <h4 style="color:#fff">See if we’re the right fit</h4>
-          <p>Free 30-minute call with a senior strategist - no pitch, just a plan.</p>
+          <p>Free 30-minute call with a senior strategist: no pitch, just a plan.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
         </div>
       </aside>
@@ -85,3 +165,10 @@ const jsonLd = [
 
   <CtaBand />
 </BaseLayout>
+
+<style>
+  .cmp-intent { color: var(--ink-2); font-size: 15px; line-height: 1.6; margin: 16px 0 8px; }
+  .cmp-choose td { vertical-align: top; width: 50%; }
+  .cmp-choose ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
+  .cmp-choose li { line-height: 1.5; }
+</style>

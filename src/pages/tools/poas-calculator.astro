@@ -4,16 +4,20 @@ import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { siteBase } from '../../lib/site';
+import { pageDate } from '../../lib/live';
 import { breadcrumb, faqPage } from '../../lib/schema';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/poas-calculator/';
 const title = 'Free POAS Calculator (Profit on Ad Spend) | AdBoost';
+// Content date: src/data/pages.json (sitemap lastmod and this label).
+const updated = pageDate(path);
+const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
 const description = 'Calculate POAS (profit on ad spend) from your revenue, margin, and ad spend, and see how it differs from ROAS. Free calculator for health and DTC brands.';
 const faq = [
   { q: 'What is POAS?', a: 'POAS (profit on ad spend) is the gross profit generated per dollar of ad spend: gross profit divided by ad spend. Unlike ROAS, which uses revenue, POAS reflects what you actually keep after cost of goods.' },
   { q: 'What is a good POAS?', a: 'POAS of 1.0 is break-even on ad spend (before overhead). Most brands target a POAS above 1.5-2.0 to cover fixed costs and profit, but the right number depends on your margin and payback tolerance.' },
-  { q: 'POAS vs ROAS - what is the difference?', a: 'ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with identical ROAS can have very different POAS if their margins differ, so POAS keeps spend pointed at what is actually profitable.' },
+  { q: 'POAS vs ROAS: what is the difference?', a: 'ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with identical ROAS can have very different POAS if their margins differ, so POAS keeps spend pointed at what is actually profitable.' },
 ];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'POAS Calculator', href: path }]),
@@ -27,6 +31,7 @@ const jsonLd = [
       <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
       <h1>POAS calculator</h1>
       <p class="phero-lede">Work out your profit on ad spend, the version of ROAS that accounts for margin, so you scale what is actually profitable, not just what looks efficient.</p>
+      {updatedLabel && <div class="metabar" style="margin-top:12px"><span>Free tool by AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
     </div>
   </section>
 
@@ -34,7 +39,9 @@ const jsonLd = [
     <div class="container">
      <div class="doc-grid">
       <div class="doc-main">
-      <div class="calc reveal">
+      <h2 class="sec-title poas-formula-h">POAS calculator formula: profit on ad spend = gross profit ÷ ad spend</h2>
+      <p class="poas-formula"><code>POAS = (revenue from ads × gross margin) ÷ ad spend</code> A POAS of 1.0 is break-even on ad spend, before overhead. Enter your numbers and the calculator below updates as you type.</p>
+      <div class="calc">
         <div class="calc-fields">
           <div class="calc-field">
             <label for="rev">Revenue from ads <span class="hint">(per period)</span></label>
@@ -58,7 +65,7 @@ const jsonLd = [
             <div><div class="k">GROSS PROFIT</div><div class="v" id="gpOut">$28,000</div></div>
             <div><div class="k">ROAS (for contrast)</div><div class="v" id="roasOut">4.0×</div></div>
           </div>
-          <div class="cr-note" id="poasNote">Above break-even - each ad dollar returns more than a dollar of profit.</div>
+          <div class="cr-note" id="poasNote">Healthy: each ad dollar returns well over a dollar of profit.</div>
         </div>
       </div>
       <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs in your browser. POAS uses gross profit (revenue × margin), so it falls below ROAS by exactly your cost of goods. Break-even on ad spend is a POAS of 1.0, before overhead.</p>
@@ -71,7 +78,29 @@ const jsonLd = [
         <li style="margin-bottom:8px"><strong>Divide gross profit by ad spend.</strong> POAS = (revenue × margin) ÷ ad spend. $40,000 at 70% margin on $10,000 spend is a POAS of 2.8.</li>
       </ol>
 
-      <h2 class="sec-title" style="margin-top:36px">POAS vs ROAS</h2>
+      <h2 class="sec-title" style="margin-top:36px">POAS vs ROAS: how do your numbers compare?</h2>
+      <p style="color:var(--ink-2);line-height:1.72">The same inputs, read both ways. This table updates with the calculator above (the starting values are an illustrative example, not a benchmark).</p>
+      <div class="tablewrap">
+        <table class="dtable">
+          <thead><tr><th></th><th>ROAS</th><th>POAS</th></tr></thead>
+          <tbody>
+            <tr><td class="row-h">Formula</td><td>Revenue from ads ÷ ad spend</td><td>Gross profit from ads ÷ ad spend</td></tr>
+            <tr><td class="row-h">Your result</td><td id="tRoas">4.0×</td><td id="tPoas">2.8×</td></tr>
+            <tr><td class="row-h">Break-even on ad spend</td><td>ROAS of <span id="tBe">1.4×</span> at your margin</td><td>POAS of 1.0×</td></tr>
+            <tr><td class="row-h">What it ignores</td><td>Cost of goods, so it overstates profit by your COGS</td><td>Overhead and fixed costs</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="color:var(--ink-2);line-height:1.72;margin-top:18px"><strong>Same ROAS, different POAS (illustrative example).</strong> Two campaigns each spend $10,000 and drive $40,000 in revenue, so both report a 4.0× ROAS. Their margins differ:</p>
+      <div class="tablewrap">
+        <table class="dtable">
+          <thead><tr><th>Illustrative campaign</th><th>Revenue</th><th>Gross margin</th><th>Ad spend</th><th>ROAS</th><th>POAS</th></tr></thead>
+          <tbody>
+            <tr><td class="row-h">A</td><td>$40,000</td><td>70%</td><td>$10,000</td><td>4.0×</td><td>2.8×</td></tr>
+            <tr><td class="row-h">B</td><td>$40,000</td><td>25%</td><td>$10,000</td><td>4.0×</td><td>1.0× (break-even)</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p style="color:var(--ink-2);line-height:1.72">ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with the same ROAS can have very different POAS if their margins differ, which is why optimizing to ROAS quietly scales low-margin products at a loss. For the full definitions, see <a href="/glossary/poas/" style="color:var(--blue)">POAS</a> and <a href="/glossary/roas/" style="color:var(--blue)">ROAS</a> in the glossary, and check whole-account efficiency with the <a href="/tools/mer-calculator/" style="color:var(--blue)">MER calculator</a>.</p>
 
       <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
@@ -98,6 +127,12 @@ const jsonLd = [
 
   <CtaBand />
 
+  <style>
+    .poas-formula-h { font-size: 20px; margin: 0 0 8px; }
+    .poas-formula { color: var(--ink-2); line-height: 1.7; margin: 0 0 18px; }
+    .poas-formula code { display: block; font-size: 15px; margin-bottom: 6px; color: var(--ink); }
+  </style>
+
   <script is:inline>
     (function () {
       const rev = document.getElementById('rev');
@@ -107,6 +142,9 @@ const jsonLd = [
       const gpOut = document.getElementById('gpOut');
       const roasOut = document.getElementById('roasOut');
       const note = document.getElementById('poasNote');
+      const tRoas = document.getElementById('tRoas');
+      const tPoas = document.getElementById('tPoas');
+      const tBe = document.getElementById('tBe');
       const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
       function calc() {
         const r = parseFloat(rev.value) || 0;
@@ -115,12 +153,15 @@ const jsonLd = [
         const gp = r * m;
         gpOut.textContent = money(gp);
         roasOut.textContent = s > 0 ? (r / s).toFixed(1) + '×' : '-';
-        if (s <= 0) { poasOut.textContent = '-'; poasOut.className = 'cr-value'; note.textContent = 'Enter your ad spend.'; return; }
+        tRoas.textContent = roasOut.textContent;
+        tBe.textContent = m > 0 ? (1 / m).toFixed(1) + '×' : '-';
+        if (s <= 0) { poasOut.textContent = '-'; tPoas.textContent = '-'; poasOut.className = 'cr-value'; note.textContent = 'Enter your ad spend.'; return; }
         const poas = gp / s;
         poasOut.textContent = poas.toFixed(1) + '×';
-        if (poas >= 1.5) { poasOut.className = 'cr-value good'; note.textContent = 'Healthy - each ad dollar returns well over a dollar of profit.'; }
+        tPoas.textContent = poasOut.textContent;
+        if (poas >= 1.5) { poasOut.className = 'cr-value good'; note.textContent = 'Healthy: each ad dollar returns well over a dollar of profit.'; }
         else if (poas >= 1) { poasOut.className = 'cr-value'; note.textContent = 'Above break-even, but thin once overhead is included.'; }
-        else { poasOut.className = 'cr-value bad'; note.textContent = 'Below break-even - these ads lose money after cost of goods.'; }
+        else { poasOut.className = 'cr-value bad'; note.textContent = 'Below break-even: these ads lose money after cost of goods.'; }
       }
       [rev, margin, spend].forEach((el) => el.addEventListener('input', calc));
       calc();

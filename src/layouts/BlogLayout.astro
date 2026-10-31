@@ -33,12 +33,15 @@ interface Props {
     heroAlt?: string;
     ctaHeading?: string;
     ctaText?: string;
+    itemList?: { name: string; url: string }[];
   };
   readMinutes?: number;
   related?: RelatedPost[];
+  /** The post's visible FAQ section (faqFromBody), emitted as FAQPage JSON-LD */
+  faq?: { q: string; a: string }[];
 }
 
-const { title, pageTitle, description, canonical, post, readMinutes, related = [] } = Astro.props;
+const { title, pageTitle, description, canonical, post, readMinutes, related = [], faq = [] } = Astro.props;
 const metaTitle = pageTitle ?? title;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
@@ -83,6 +86,26 @@ const jsonLd = post
             { '@type': 'ListItem', position: 3, name: displayTitleEarly, item: canonical },
           ],
         },
+        ...(faq.length
+          ? [{
+              '@type': 'FAQPage',
+              '@id': `${canonical}#faq`,
+              mainEntity: faq.map(({ q, a }) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+            }]
+          : []),
+        ...(post.itemList?.length
+          ? [{
+              '@type': 'ItemList',
+              name: displayTitleEarly,
+              itemListOrder: 'https://schema.org/ItemListOrderAscending',
+              numberOfItems: post.itemList.length,
+              itemListElement: post.itemList.map((e, i) => ({
+                '@type': 'ListItem',
+                position: i + 1,
+                item: { '@type': 'Organization', name: e.name, url: e.url },
+              })),
+            }]
+          : []),
       ],
     }
   : {

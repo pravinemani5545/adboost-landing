@@ -1,0 +1,136 @@
+---
+// Platform policy hub template (health plan N2, N3). Data: src/data/platformHubs.ts.
+// Dates: src/data/pages.json (`publish`, then `updated` once the page is edited).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import CtaBand from './CtaBand.astro';
+import Faq from './Faq.astro';
+import { AD_POLICIES, STATUS_LABEL } from '../data/adPolicies';
+import type { PlatformHub } from '../data/platformHubs';
+import { PAGES, pageDate } from '../lib/live';
+import { metaDescription, seoTitle } from '../lib/seo';
+import { siteBase } from '../lib/site';
+import { articleNode, breadcrumb, faqPage } from '../lib/schema';
+
+interface Props { hub: PlatformHub }
+const { hub } = Astro.props;
+const SITE = siteBase(Astro.site);
+const path = `/advertising/${hub.slug}/`;
+const published = PAGES[path]?.publish;
+if (!published) throw new Error(`src/data/pages.json needs a "publish" date for ${path}`);
+const updated = pageDate(path) ?? published;
+
+const title = seoTitle(path, hub.seoTitle);
+const description = metaDescription(path, hub.metaDescription);
+// A YYYY-MM date renders as "July 2026": Meta's change-log day shifts with the viewer's time zone.
+const fmtDay = (d: string) => d.length === 7
+  ? new Date(`${d}-01T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })
+  : new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const crumb = `${hub.platform} health ad policy`;
+const sheets = AD_POLICIES.filter((p) => p.platform === hub.platform);
+const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
+const jsonLd = [
+  articleNode(SITE, { headline: hub.h1, description, path, datePublished: published, dateModified: updated, authorIsOrg: true, image: '/og/og-home.png' }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: crumb, href: path }]),
+  faqPage(hub.faq),
+];
+const toc = [
+  ...hub.sections.map((s) => ({ id: s.id, label: s.question })),
+  { id: 'verticals', label: 'Rules by vertical' },
+  { id: 'changes', label: 'Change log' },
+  { id: 'faq', label: 'FAQ' },
+];
+---
+<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
+  <section class="phero">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: crumb }]} />
+      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{hub.platform.toUpperCase()} · HEALTH AD POLICY</span>
+      <h1>{hub.h1}</h1>
+      <div class="metabar" style="margin-top:14px">
+        <span>Rules checked against {hub.platform}’s live policy on {fmtDay(hub.checkedOn)}</span>
+        <span class="dot"></span><span>Updated <time datetime={updated}>{fmtDay(updated)}</time></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="iwrap">
+    <div class="container">
+      <div class="doc-grid">
+        <div class="doc-main">
+          <div class="answer-box reveal"><span class="al">The short answer</span>{hub.answer}</div>
+          <div class="prose">
+            {hub.sections.map((s) => (
+              <>
+                <h2 id={s.id}>{s.question}</h2>
+                <Fragment set:html={s.html} />
+              </>
+            ))}
+
+            <h2 id="verticals">Which {hub.platform} rule sheet covers your vertical?</h2>
+            <div class="tablewrap">
+              <table class="dtable">
+                <thead><tr><th>Vertical</th><th>Status on {hub.platform}</th><th>Rule sheet</th></tr></thead>
+                <tbody>
+                  {sheets.map((p) => (
+                    <tr>
+                      <td class="row-h">{p.vertical}</td>
+                      <td><span class={`badge ${badgeClass(p.status)}`}>{STATUS_LABEL[p.status]}</span></td>
+                      <td><a href={`/advertising/${p.slug}/`}>{p.vertical} on {p.platform}</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="changes">What changed, and when?</h2>
+            <div class="tablewrap">
+              <table class="dtable">
+                <thead><tr><th>Date</th><th>Change</th><th>Source</th></tr></thead>
+                <tbody>
+                  {hub.changeLog.map((c) => (
+                    <tr>
+                      <td class="num"><time datetime={c.date}>{fmtDay(c.date)}</time></td>
+                      <td>{c.change}</td>
+                      <td><a href={c.sourceUrl} target="_blank" rel="noopener">{hub.platform} policy</a></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <h2 id="faq">FAQ</h2>
+            <Faq items={hub.faq} idPrefix={`hub-${hub.slug}`} />
+
+            <h3>Sources</h3>
+            <p style="font-size:13px;color:var(--mute)">Ad policies change. This page reflects {hub.platform}’s published policy as checked on {fmtDay(hub.checkedOn)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+            <ul style="font-size:14px">
+              {hub.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+            </ul>
+          </div>
+        </div>
+
+        <aside class="doc-aside">
+          <div class="aside-toc">
+            <div class="at-label">On this page</div>
+            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
+          </div>
+          <div class="aside-card">
+            <h4>{hub.platform} rule sheets</h4>
+            <div class="link-list">
+              {sheets.map((p) => <a href={`/advertising/${p.slug}/`}>{p.vertical} on {p.platform}</a>)}
+              <a href="/advertising/">All platforms and verticals</a>
+            </div>
+          </div>
+          <div class="aside-card">
+            <h4>Zero-Ban Protocol</h4>
+            <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>
+            <a href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist →</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>

@@ -5,6 +5,7 @@ description: "Fix the intake funnel losing 60% of motivated patients: above-the-
 ctaHeading: "Where is your funnel leaking?"
 ctaText: "Book a free 30-min call - we tear down your funnel live and send you the written fix list either way."
 pubDate: 2026-07-31
+updatedDate: 2026-10-30
 author: "Amir Salihovic"
 authorTitle: "Co-Founder, AdBoost Health"
 tags: ["telehealth", "landing pages", "CRO", "intake funnels", "conversion"]
@@ -57,7 +58,7 @@ What transparent means in practice: real numbers on the lander (or one click awa
 
 Because platforms treat it that way - literally. Meta and Google crawl your landers during and after review, and lander violations trigger ad rejections and account-level damage under [Meta's ad standards](https://transparency.meta.com/policies/ad-standards/) even when every ad passed cleanly. For telehealth, the recurring offenders:
 
-- **Claims on the lander the ad never made** - outcome promises, drug names, before/after galleries that would never survive ad review
+- **Claims on the lander the ad never made**: outcome promises, drug names, and before/after galleries the ad itself was careful to leave out
 - **Missing medical disclaimers and provider licensing info**, or hiding them in images where crawlers can't read them
 - **Prescription products presented as guaranteed** rather than "if appropriate, as determined by a licensed provider"
 - **Pricing bait** - an advertised price the funnel never actually offers

@@ -3,6 +3,7 @@ import { getPublishedPosts } from '../lib/blog';
 import { AD_POLICIES } from '../data/adPolicies';
 import { GLOSSARY } from '../data/glossary';
 import { COMPARES } from '../data/compare';
+import { PLATFORM_HUBS } from '../data/platformHubs';
 
 export const GET: APIRoute = async ({ site }) => {
   const base = site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -44,7 +45,7 @@ AdBoost Health only works with health-vertical brands. Every playbook, creative 
 ## Ad compliance by platform × vertical
 
 - [Health ad compliance hub](${base}/advertising/): What's allowed advertising each health vertical on Meta, Google, and TikTok
-${AD_POLICIES.map((p) => `- [${p.vertical} on ${p.platform}](${base}/advertising/${p.slug}/): Certification, prohibited claims, rejection triggers, and the compliant path`).join('\n')}
+${PLATFORM_HUBS.map((h) => `- [${h.h1}](${base}/advertising/${h.slug}/): ${h.metaDescription}\n`).join('')}${AD_POLICIES.map((p) => `- [${p.vertical} on ${p.platform}](${base}/advertising/${p.slug}/)${p.metaDescription ? `: ${p.metaDescription}` : ''}`).join('\n')}
 
 ## Guides & reference
 

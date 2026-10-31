@@ -4,6 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { siteBase } from '../../lib/site';
+import { PREVIEW_ALL } from '../../lib/live';
 import { versioned } from '../../lib/assets';
 import { breadcrumb, organizationNode, personNode } from '../../lib/schema';
 
@@ -11,6 +12,12 @@ const SITE = siteBase(Astro.site);
 const path = '/about/';
 const title = 'About AdBoost Health | Healthcare Marketing Services';
 const description = 'AdBoost Health is a health and wellness marketing agency in Toronto, remote-first, serving telehealth, GLP-1 and supplement brands. 71+ founders served.';
+// Health plan X1: link the media sister brand's /about/ once that page is live.
+// It is held on owner sign-off (adboost-media src/data/pages.json, g2), so it has
+// no go-live date yet. Set this to its go-live date (YYYY-MM-DD) once it has one;
+// until then the link stays off so a scheduled rebuild cannot ship a 404.
+const SISTER_ABOUT_FROM: string | null = null;
+const showSisterAbout = PREVIEW_ALL || (SISTER_ABOUT_FROM !== null && Date.now() >= Date.parse(`${SISTER_ABOUT_FROM}T00:00:00Z`));
 
 // Founders. Photo renders when the webp exists in public/people/, else initials.
 const team = [
@@ -75,6 +82,7 @@ const jsonLd = [
             <h2>Why health-only</h2>
             <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them - every Meta health policy, every LegitScript requirement, every rejection trigger - because health is the only thing we do.</p>
             <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution - the full acquisition system, built for the one category we specialize in.</p>
+            {showSisterAbout && <p><a href="https://www.adboost.media/about/">AdBoost Media</a> (www.adboost.media) is our ecommerce sister brand for DTC brands outside health.</p>}
             <h2>Two founders, two platforms - and the engine underneath</h2>
             <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
             <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>

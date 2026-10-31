@@ -3,6 +3,7 @@ title: "Healthcare Creative Strategy: What Makes a Patient Stop, Trust and Conve
 seoTitle: "Healthcare Ad Creative Strategy | AdBoost Health"
 description: "Here's what effective healthcare ad creative needs to communicate to earn attention, build patient trust and turn paid traffic into action."
 pubDate: 2026-11-26
+draft: true
 tags: ["ad creative", "creative strategy", "Meta ads"]
 heroImage: "/blog/healthcare-ad-creative-strategy.webp"
 heroAlt: "AdBoost Health brand graphic: healthcare ad creative strategy, with a stop, trust and convert checklist card"
@@ -123,7 +124,7 @@ A practical structure:
 5. **Format assignment.** Which formats carry the stop, trust, and convert jobs for each angle.
 6. **Learning log.** Every test result tagged by situation, angle, and format, so the strategy updates from evidence rather than opinion.
 
-The learning log is what turns a strategy into a system. Without it, [creative fatigue](/glossary/creative-fatigue/) eventually wipes out your winners and the team restarts from guesswork. With it, the next concept starts from what you already know works for your patients.
+The learning log is what turns a strategy into a system. Without it, [creative fatigue](/glossary/creative-testing/) eventually wipes out your winners and the team restarts from guesswork. With it, the next concept starts from what you already know works for your patients.
 
 If you want this built and run for you rather than in-house, it's the core of our [creative service](/services/creative/): strategy, compliant production, and a testing cadence connected to real patient outcomes.
 

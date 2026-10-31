@@ -54,7 +54,7 @@ Budget for this. Creative production at scale is a real line item, and treating 
 ## What team structure does each tier need?
 
 - **$50–100K:** One accountable operator - a strong agency or one senior in-house buyer - plus a genuine creative pipeline. The killer at this tier is fragmentation: a freelancer buying media, a separate [UGC vendor](/blog/ugc-ads-health-brands-guide/), no one owning the number.
-- **$100–250K:** Specialization begins. Media buying and creative strategy become separate jobs; someone owns lifecycle/retention because at this spend a leaky funnel is a five-figure monthly leak. In-house vs agency matters less than whether the team has *seen this tier before* - the questions that expose that are in our [agency selection guide](/blog/choose-health-growth-agency/).
+- **$100–250K:** Specialization begins. Media buying and creative strategy become separate jobs; someone owns lifecycle/retention because at this spend a leaky funnel is a five-figure monthly leak. In-house vs agency matters less than whether the team has *seen this tier before* - the questions that expose that are in our [questions for choosing a health growth agency](/compare/generalist-dtc-agency-alternative/).
 - **$250–500K:** Growth becomes cross-functional. Finance is in the weekly meeting (see below), measurement is a named responsibility (holdouts, geo-tests, post-purchase surveys - not just [platform attribution](/blog/healthcare-marketing-attribution/)), and creative operates as a standing production system, not a request queue.
 
 The consistent failure mode: teams built for a tier below the one they're spending at. The symptom is always the same - reporting lags, creative queues, and a CAC chart nobody can explain.
