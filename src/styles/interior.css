@@ -127,7 +127,7 @@
 .answer-box .al { display: block; font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); margin-bottom: 6px; }
 .callout { border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-2); background: var(--surface); }
 .callout.warn { border-color: #f4d3c6; background: #fff6f2; }
-.callout.warn .cl-label { color: var(--warm); }
+.callout.warn .cl-label { color: #c2410c; } /* darker coral than --warm: 4.9:1 on the warn tint (AA) */
 .callout .cl-label { display: block; font-family: "Geist Mono", monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); margin-bottom: 5px; }
 
 /* ---- badges ---- */
@@ -184,7 +184,8 @@
 .link-list a { display: block; padding: 8px 0; font-size: 13.5px; color: var(--ink-2); border-bottom: 1px solid var(--surface-2); }
 .link-list a:hover { color: var(--blue); }
 .link-list li:last-child a { border-bottom: 0; }
-@media (max-width: 900px) { .doc-grid { grid-template-columns: 1fr; gap: 32px; } .doc-aside { position: static; } }
+/* minmax(0, 1fr), not 1fr: a wide table inside .tablewrap must scroll in its wrapper, not widen the column past the phone screen */
+@media (max-width: 900px) { .doc-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; } .doc-aside { position: static; } }
 
 /* ---- CTA band (reusable) ---- */
 .cta-band { position: relative; overflow: hidden; background: #0a0a0f; color: #fff; border-radius: var(--radius-xl); padding: 48px 40px; text-align: center; }
