@@ -3,6 +3,7 @@ title: "How AI Search Is Changing the Way Patients Find Healthcare Providers"
 seoTitle: "AI Search in Healthcare Marketing | AdBoost Health"
 description: "See how AI search in healthcare is changing provider discovery, patient research and the way practices need to think about digital visibility."
 pubDate: 2026-12-17
+draft: true
 tags: ["AI search", "SEO", "patient acquisition"]
 heroImage: "/blog/ai-search-healthcare-providers.webp"
 heroAlt: "AdBoost Health brand graphic: how AI search is changing the way patients find providers, with an AI answer card citing a local clinic"

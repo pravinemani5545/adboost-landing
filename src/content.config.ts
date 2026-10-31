@@ -19,6 +19,9 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     heroImage: z.string().optional(),
     heroAlt: z.string().optional(),
+    // Best-of posts: the agencies in the order listed (alphabetical, never
+    // AdBoost Health). Emitted as ItemList JSON-LD by BlogLayout.astro.
+    itemList: z.array(z.object({ name: z.string(), url: z.string().url() })).optional(),
   }),
 });
 

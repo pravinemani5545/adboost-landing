@@ -1,7 +1,7 @@
 ---
 import { render } from 'astro:content';
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import { getPublishedPosts } from '../../lib/blog';
+import { faqFromBody, getPublishedPosts } from '../../lib/blog';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -14,6 +14,8 @@ export async function getStaticPaths() {
 const { post, all } = Astro.props;
 const { Content } = await render(post);
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+
+const faq = faqFromBody(post.body);
 
 const readMinutes = Math.max(1, Math.round((post.body ?? '').split(/\s+/).length / 200));
 
@@ -43,6 +45,7 @@ const related = all
   post={post.data}
   readMinutes={readMinutes}
   related={related}
+  faq={faq}
 >
   <Content />
 </BlogLayout>

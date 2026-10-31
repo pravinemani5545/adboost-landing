@@ -3,6 +3,7 @@ title: "Stop Buying Demand You Can't Serve: A Capacity-Based Healthcare Marketin
 seoTitle: "Capacity-Based Healthcare Marketing | AdBoost Health"
 description: "Capacity-based healthcare marketing aligns spend with provider availability, service-line capacity and appointment demand to cut wasted budget."
 pubDate: 2027-01-07
+draft: true
 tags: ["paid media", "cac", "patient acquisition"]
 heroImage: "/blog/capacity-based-healthcare-marketing.webp"
 heroAlt: "AdBoost Health brand graphic: capacity-based healthcare marketing that matches ad spend to open appointment slots, with a location capacity status card"

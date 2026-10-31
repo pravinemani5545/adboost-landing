@@ -3,6 +3,7 @@ title: "Healthcare Marketing for Multi-Location Practices: How to Scale Without 
 seoTitle: "Multi-Location Healthcare Marketing | AdBoost Health"
 description: "Multi-location healthcare marketing: how practices can structure paid media, budgets and measurement to grow patient acquisition across locations."
 pubDate: 2026-12-24
+draft: true
 tags: ["paid media", "patient acquisition", "measurement"]
 heroImage: "/blog/multi-location-healthcare-marketing.webp"
 heroAlt: "AdBoost Health brand graphic: multi-location healthcare marketing, with a cost-per-patient by location card"
