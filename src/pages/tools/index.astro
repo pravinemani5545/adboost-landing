@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Flow from '../../kit/diagram/Flow.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
+import '../../styles/pages/tools.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'CAC, LTV:CAC & Ad Budget Calculators | AdBoost Health';
@@ -18,32 +20,52 @@ const tools = [
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }])];
 ---
 <BaseLayout {title} {description} canonicalPath="/tools/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOLS</span>
-      <h1>Free <span class="serif">health-marketing</span> calculators</h1>
-      <p class="phero-lede">Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good.</p>
-    </div>
-  </section>
+  <PageHero
+    wide
+    art="/art/tools/hub"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools' }]}
+    eyebrow="FREE TOOLS"
+    title='Free <span class="serif">health-marketing</span> calculators'
+    lede="Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good."
+  />
 
   <section class="iwrap">
     <div class="container">
-      <div class="grid-cards three">
+      <div class="grid-cards three tools-grid">
         {tools.map((t) => (
-          <a class="lcard reveal" href={t.href}>
-            <span class="lc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 3h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2zM9 7h6M9 11h6M9 15h3"/></svg></span>
-            <h3>{t.name}</h3>
+          <a class="lcard arrive" href={t.href}>
+            <span class="lc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 3h8a2 2 0 012 2v14a2 2 0 01-2 2H8a2 2 0 01-2-2V5a2 2 0 012-2zM9 7h6M9 11h6M9 15h3"/></svg></span>
+            <h2>{t.name}</h2>
             <p>{t.desc}</p>
             <span class="lc-more">Open calculator →</span>
           </a>
         ))}
       </div>
 
-      <div class="prose" style="max-width:760px;margin-top:40px">
-        <h2>Which calculator should you use?</h2>
-        <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
-        <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/capi/#server-side-tracking">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
+      <div class="tools-guide">
+        <div class="prose">
+          <h2>Which calculator should you use?</h2>
+          <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
+          <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/capi/#server-side-tracking">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
+        </div>
+        <Flow
+          orientation="column"
+          caption="Which calculator first, in the order this guide gives."
+          nodes={[
+            { label: 'CAC calculator', sub: 'Start here: size your acquisition cost against your vertical', href: '/tools/cac-calculator/' },
+            { label: 'LTV:CAC calculator', sub: 'Check whether that CAC is actually profitable', href: '/tools/ltv-cac-calculator/' },
+            { label: 'Ad budget calculator', sub: 'When you are planning spend: work backwards from a customer target', href: '/tools/ad-budget-calculator/' },
+            {
+              label: 'To judge whole-account efficiency',
+              icon: '→',
+              tone: 'ok',
+              branches: [
+                { label: 'MER calculator', sub: 'Blended revenue over spend', href: '/tools/mer-calculator/' },
+                { label: 'POAS calculator', sub: 'Layers in margin', href: '/tools/poas-calculator/' },
+              ],
+            },
+          ]}
+        />
       </div>
     </div>
   </section>

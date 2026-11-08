@@ -1,0 +1,186 @@
+/* Tools: the five calculators and the /tools/ index (design v2, package B5).
+   Kit tokens only (--k-*, the tone roles --t-*, and the diagram roles --dg-* inside a .k-dg).
+   The live visuals are driven only by the visitor's inputs, through the formula each page prints. */
+
+/* ---------- calculator card ---------- */
+.calc.arrive { --d: 140ms; }
+.calc-input input:first-child { padding-left: 14px; }
+.calc-input select {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--k-ink);
+  outline: none;
+}
+/* the result panel is a night slab: diagrams inside it read the night roles (data-tone="night") */
+.calc .calc-result { justify-content: flex-start; gap: 18px; }
+.calc-result .k-dg { gap: var(--k-sp-3); }
+.calc-result .k-dg .k-dg__cap { font-size: 12.5px; line-height: 1.5; }
+/* the big result value above the dial is its readout; the meter keeps aria-valuetext */
+.calc-result .k-dg--gauge .dg-read { display: none; }
+.calc-result .k-dg--gauge .dg-dial { max-width: 300px; }
+.calc-result .k-dg--gauge .dg-legend { font-size: 12.5px; gap: 6px 12px; }
+/* one bar figure per vertical; only the selected one shows */
+.calc-viz[hidden] { display: none; }
+/* a full-width row under the inputs and the result (the LTV:CAC payback chart) */
+.calc-wide { grid-column: 1 / -1; min-width: 0; padding-top: 22px; border-top: 1px solid var(--k-line); }
+
+/* ---------- ad budget: the equation chain is the result ---------- */
+.tool-chain .tool-chain__eq { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 8px; }
+.tool-term {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: var(--k-r-md);
+  background: var(--dg-card);
+  border: 1px solid var(--dg-card-line);
+}
+.tool-term__k { font-family: var(--k-font-mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--dg-fg-3); line-height: 1.35; }
+.tool-term__v { font-size: 22px; font-weight: 600; letter-spacing: -.02em; line-height: 1.05; color: var(--dg-fg); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.tool-op { align-self: center; font-size: 1.35em; line-height: 1; color: var(--dg-accent); padding-inline: 2px; }
+.tool-chain__res { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; }
+.tool-chain__res .tool-op { grid-row: 1; }
+.tool-term--res {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 92%, #fff), var(--k-accent));
+  border-color: transparent;
+  box-shadow: 0 18px 40px -18px var(--k-accent-glow), inset 0 1px 0 rgb(255 255 255 / .18);
+}
+.tool-term--res .cr-label { color: rgb(255 255 255 / .82); }
+.tool-term--res .cr-value { margin-top: 0; color: #fff; overflow-wrap: anywhere; }
+.js.motion .tool-chain[data-dg-anim]:not(.in) :is(.tool-term, .tool-op) { animation-play-state: paused; }
+.js.motion .tool-chain[data-dg-anim] .tool-term { animation: tools-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i, 0) * 90ms); }
+.js.motion .tool-chain[data-dg-anim] .tool-op { animation: tools-drop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + var(--i, 0) * 90ms); }
+.tool-op--x { --i: 1; }
+.tool-term--cac { --i: 2; }
+.tool-op--eq { --i: 3; }
+.tool-term--res { --i: 4; }
+@keyframes tools-in { from { translate: -12px 0; } }
+@keyframes tools-drop { from { translate: 0 -10px; scale: .6; } }
+
+/* ---------- LTV:CAC: payback chart ---------- */
+.tool-pb .pb-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--k-fs-small); color: var(--dg-fg-2); }
+.tool-pb .pb-key li { display: inline-flex; align-items: center; gap: 8px; }
+.tool-pb .pb-key strong { color: var(--dg-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+.pb-sw { flex: none; display: inline-block; width: 18px; height: 0; border-top: 3px solid var(--dg-accent-fill); border-radius: 2px; }
+.pb-sw--cac { border-top: 2px dashed var(--dg-bad-fill); }
+.pb-sw--pay { width: 10px; height: 10px; border: 2.5px solid var(--dg-fg); border-radius: 50%; background: var(--dg-card); }
+.pb-plot {
+  --a: 0;
+  --c: 0;
+  --p: 0;
+  position: relative;
+  aspect-ratio: 16 / 7;
+  margin-inline: 6px;
+}
+@container k-dg (max-width: 560px) { .pb-plot { aspect-ratio: 4 / 3; } }
+.pb-plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; display: block; }
+.pb-plot path { vector-effect: non-scaling-stroke; fill: none; }
+.pb-plot .pb-owed { fill: color-mix(in srgb, var(--dg-bad-fill) 11%, transparent); }
+.pb-plot .pb-ahead { fill: color-mix(in srgb, var(--dg-ok-fill) 15%, transparent); }
+.pb-plot .pb-base { stroke: var(--dg-line-2); stroke-width: 1.5; }
+.pb-plot .pb-ticks { stroke: var(--dg-line-2); stroke-width: 1; }
+.pb-plot .pb-cacline { stroke: var(--dg-bad-fill); stroke-width: 2; stroke-dasharray: 7 6; }
+.pb-plot .pb-guide { stroke: var(--dg-fg-3); stroke-width: 1.5; stroke-dasharray: 2 4; }
+.pb-plot .pb-line { stroke: var(--dg-accent-fill); stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 4px 8px var(--dg-glow)); }
+.pb-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: var(--dg-card);
+  border: 3px solid var(--dg-accent-fill);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--dg-accent-fill) 14%, transparent);
+}
+.pb-dot--pay { left: calc(var(--p) * 100%); top: calc((1 - var(--c)) * 100%); border-color: var(--dg-fg); box-shadow: 0 0 0 4px var(--dg-muted-soft); }
+.pb-dot--ltv { left: 100%; top: calc((1 - var(--a)) * 100%); }
+.pb-plot[data-pay="no"] .pb-dot--pay { display: none; }
+.pb-axis { display: flex; justify-content: space-between; gap: 12px; margin-inline: 6px; font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: .04em; color: var(--dg-fg-3); font-variant-numeric: tabular-nums; }
+/* draw-on: the ink wipes in left to right (the line only rises with the months), then the points pop */
+.js.motion .tool-pb[data-dg-anim]:not(.in) .pb-plot svg { clip-path: inset(0 100% 0 0); }
+.js.motion .tool-pb[data-dg-anim]:not(.in) .pb-dot { scale: 0; }
+.js.motion .tool-pb[data-dg-anim].in .pb-plot svg { animation: tools-wipe var(--k-d-draw) var(--k-ease-out) backwards; animation-delay: var(--dg-base); }
+.js.motion .tool-pb[data-dg-anim].in .pb-dot { animation: tools-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + 760ms); }
+.js.motion .tool-pb[data-dg-anim].in .pb-dot--ltv { animation-delay: calc(var(--dg-base) + 980ms); }
+@keyframes tools-wipe { from { clip-path: inset(0 100% 0 0); } }
+@keyframes tools-pop { from { scale: 0; } }
+
+/* ---------- body copy (replaces the per-element inline styles) ---------- */
+.tool-fine { color: var(--k-ink-3); font-size: 13px; line-height: 1.6; margin: 14px 0 0; }
+.tool-doc > .sec-title { margin-top: 36px; }
+.tool-doc > .tool-fine + .sec-title { margin-top: 40px; }
+.tool-doc > p:not(.tool-fine) { color: var(--k-ink-2); line-height: 1.7; }
+.tool-doc > .tablewrap + p { margin-top: 18px; }
+/* in-text links carry an underline, not colour alone (Lighthouse link-in-text-block) */
+.tool-doc :is(p, li) a:not(.btn) {
+  color: var(--k-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.tool-doc :is(p, li) a:not(.btn):hover { text-decoration-thickness: 2px; }
+.tool-faq { margin-top: 16px; }
+.tool-meta { margin-top: 12px; }
+.poas-formula-h { font-size: 20px; margin: 0 0 8px; }
+.tool-doc > p.poas-formula { margin: 0 0 18px; }
+.poas-formula code { display: block; font-size: 15px; margin-bottom: 6px; color: var(--k-ink); }
+
+/* ---------- how-to steps: numbered cards ---------- */
+.tool-steps { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 10px; counter-reset: tool-step; max-width: 74ch; }
+.tool-steps > li {
+  counter-increment: tool-step;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 16px 18px;
+  color: var(--k-ink-2);
+  line-height: 1.65;
+}
+.tool-steps > li::before {
+  content: counter(tool-step);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--k-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--k-accent-on);
+  background: var(--k-accent);
+  box-shadow: 0 0 0 4px var(--k-accent-soft);
+}
+.tool-steps > li > span { padding-top: 3px; min-width: 0; }
+.tool-steps strong { color: var(--k-ink); font-weight: 600; }
+.tool-steps > li:nth-child(2) { --i: 1; }
+.tool-steps > li:nth-child(3) { --i: 2; }
+.tool-steps > li:nth-child(4) { --i: 3; }
+
+/* ---------- /tools/ index ---------- */
+.tools-grid .lcard.arrive:nth-child(1) { --d: 120ms; }
+.tools-grid .lcard.arrive:nth-child(2) { --d: 170ms; }
+.tools-grid .lcard.arrive:nth-child(3) { --d: 220ms; }
+.tools-grid .lcard.arrive:nth-child(4) { --d: 270ms; }
+.tools-grid .lcard.arrive:nth-child(5) { --d: 320ms; }
+/* card titles are h2 (they sit straight under the h1), styled as the shared card title */
+.tools-grid .lcard h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; text-wrap: balance; }
+.tools-guide { margin-top: clamp(40px, 6vw, 64px); display: grid; gap: 28px; align-items: start; }
+.tools-guide .prose { max-width: 760px; }
+.tools-guide .prose h2:first-child { margin-top: 0; }
+@media (min-width: 1024px) {
+  .tools-guide { grid-template-columns: minmax(0, 1fr) minmax(0, 400px); gap: 56px; }
+  .tools-guide .k-dg--flow { position: sticky; top: calc(var(--k-nav-h) + 28px); }
+}
+
+@media (max-width: 760px) {
+  .calc-wide { padding-top: 18px; }
+  .tool-term__v { font-size: 20px; }
+}
