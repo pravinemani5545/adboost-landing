@@ -2,9 +2,18 @@
 // first seen below the fold animate, from 0 up to the number already printed (prefix, suffix,
 // decimals and thousands separators kept). Only the first number in the element moves; any
 // markup inside it stays. The element's width is locked first, so nothing around it shifts.
+// data-count-delay="<ms>" holds the count at 0 for that long once the element is on screen
+// (e.g. an equation's result waits for its terms to land).
 import { motionOn, whenShown } from './env';
 
 const NUM = /\d[\d,]*(?:\.\d+)?/;
+
+/** A CSS time token in ms. The minifier rewrites "1300ms" as "1.3s", so read the unit. */
+function durationMs(v: string, fallback: number): number {
+  const n = parseFloat(v);
+  if (!isFinite(n)) return fallback;
+  return /ms\s*$/.test(v) ? n : /s\s*$/.test(v) ? n * 1000 : n;
+}
 
 function firstNumberNode(el: Element): Text | null {
   const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -31,16 +40,19 @@ function run(el: HTMLElement) {
   };
   // lock the width at the final value before the digits change
   el.style.minWidth = `${el.getBoundingClientRect().width}px`;
-  const dur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--k-d-count')) || 1300;
-  const t0 = performance.now();
+  const dur = durationMs(getComputedStyle(document.documentElement).getPropertyValue('--k-d-count'), 1300);
+  const delay = Math.max(0, parseFloat(el.dataset.countDelay ?? '') || 0);
+  let t0 = 0;
   const tick = (t: number) => {
+    t0 ||= t;
     const k = Math.min(1, (t - t0) / dur);
     const eased = 1 - Math.pow(1 - k, 3);
     node.nodeValue = k < 1 ? before + fmt(target * eased) + after : text;
     if (k < 1) requestAnimationFrame(tick);
   };
   node.nodeValue = before + fmt(0) + after;
-  requestAnimationFrame(tick);
+  if (delay) setTimeout(() => requestAnimationFrame(tick), delay);
+  else requestAnimationFrame(tick);
 }
 
 const els = [...document.querySelectorAll<HTMLElement>('[data-count]')];

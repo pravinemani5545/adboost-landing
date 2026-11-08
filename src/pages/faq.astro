@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { siteBase } from '../lib/site';
 import { breadcrumb, faqPage } from '../lib/schema';
@@ -9,6 +9,7 @@ import { FAQ_GROUPS } from '../data/faq';
 const SITE = siteBase(Astro.site);
 const groups = FAQ_GROUPS;
 const all = groups.flatMap((g) => g.items);
+const groupId = (title: string) => title.toLowerCase().replace(/\W+/g, '-');
 const title = 'Frequently Asked Questions | AdBoost Health';
 const description = 'Answers to the questions health founders ask before hiring a growth agency: how we work, compliance, creative, and how fast you see results.';
 const jsonLd = [
@@ -17,22 +18,21 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath="/faq/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FAQ</span>
-      <h1>Answers to <span class="serif">popular questions</span></h1>
-      <p class="phero-lede">The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results.</p>
-    </div>
-  </section>
+  <PageHero
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]}
+    eyebrow="FAQ"
+    title='Answers to <span class="serif">popular questions</span>'
+    lede="The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results."
+    wide
+  />
 
   <section class="iwrap">
     <div class="container">
       <div class="doc-grid">
         <div class="doc-main">
-          {groups.map((g) => (
-            <div id={g.title.toLowerCase().replace(/\W+/g, '-')} style="margin-bottom:32px;scroll-margin-top:90px">
-              <h2 class="sec-title" style="font-size:22px">{g.title}</h2>
+          {groups.map((g, i) => (
+            <div id={groupId(g.title)} class="faq-group" data-reveal={i > 0 ? '' : undefined}>
+              <h2 class="sec-title faq-group__title">{g.title}</h2>
               <div class="faq-open">
                 {g.items.map((it) => (
                   <div class="fo-item">
@@ -47,10 +47,10 @@ const jsonLd = [
         <aside class="doc-aside">
           <div class="aside-toc">
             <div class="at-label">Jump to</div>
-            <ul>{groups.map((g) => <li><a href={`#${g.title.toLowerCase().replace(/\W+/g, '-')}`}>{g.title}</a></li>)}</ul>
+            <ul>{groups.map((g) => <li><a href={`#${groupId(g.title)}`}>{g.title}</a></li>)}</ul>
           </div>
           <div class="aside-card dark">
-            <h4 style="color:#fff">Still have a question?</h4>
+            <h4>Still have a question?</h4>
             <p>Ask a senior strategist on a free 30-minute call.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
@@ -65,10 +65,23 @@ const jsonLd = [
 <style>
   /* Answers render open (health plan O18): readable without JavaScript, and the
      visible text matches the FAQPage JSON-LD built from the same FAQ_GROUPS. */
-  .faq-open { margin-top: 12px; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; }
-  .fo-item { padding: 22px 26px; border-bottom: 1px solid var(--line); }
+  .faq-group { margin-bottom: var(--k-sp-6); scroll-margin-top: calc(var(--k-nav-h) + 22px); }
+  .faq-group:last-child { margin-bottom: 0; }
+  .faq-group__title { font-size: 22px; letter-spacing: -0.02em; }
+  .faq-open {
+    margin-top: var(--k-sp-3);
+    overflow: clip;
+    background: var(--k-paper);
+    border: 1px solid var(--k-line);
+    border-radius: var(--k-r-lg);
+    box-shadow: var(--k-e1), var(--k-edge-light);
+  }
+  .fo-item { padding: 22px 26px; border-bottom: 1px solid var(--k-line); }
   .fo-item:last-child { border-bottom: 0; }
-  .fo-item h3 { margin: 0 0 8px; font-size: 17px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
-  .fo-a { color: var(--mute); font-size: 15px; line-height: 1.6; max-width: 68ch; }
-  @media (max-width: 560px) { .fo-item { padding: 18px 20px; } .fo-item h3 { font-size: 15.5px; } }
+  .fo-item h3 { margin: 0 0 8px; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--k-ink); }
+  .fo-a { max-width: 68ch; color: var(--k-ink-3); font-size: 15px; line-height: 1.6; }
+  @media (max-width: 560px) {
+    .fo-item { padding: 18px 20px; }
+    .fo-item h3 { font-size: 15.5px; }
+  }
 </style>

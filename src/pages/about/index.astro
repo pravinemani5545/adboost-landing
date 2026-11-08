@@ -1,8 +1,10 @@
 ---
 import fs from 'node:fs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Count from '../../kit/components/Count.astro';
+import HubSpoke from '../../kit/diagram/HubSpoke.astro';
 import { siteBase } from '../../lib/site';
 import { PREVIEW_ALL } from '../../lib/live';
 import { versioned } from '../../lib/assets';
@@ -54,22 +56,24 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>ABOUT</span>
-      <h1>The growth agency that only works in <span class="serif">health</span>.</h1>
-      <p class="phero-lede">AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one.</p>
-    </div>
-  </section>
+  <PageHero
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
+    eyebrow="ABOUT"
+    title='The growth agency that only works in <span class="serif">health</span>.'
+    lede="AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one."
+    art="/art/about/hub"
+    wide
+  />
 
   <section class="iwrap-sm">
     <div class="container">
-      <div class="stat-row reveal">
-        <div class="stat"><div class="sv">71+</div><div class="sl">Founders served</div></div>
-        <div class="stat"><div class="sv">$153M+</div><div class="sl">Tracked revenue</div></div>
-        <div class="stat"><div class="sv">4.9<span style="font-size:18px;color:var(--mute)"> / 5</span></div><div class="sl">Average partner rating</div></div>
-        <div class="stat"><div class="sv">8,400+</div><div class="sl">Creatives shipped</div></div>
+      {/* Usually in the first viewport, so .arrive (never hidden); the numbers count up only
+          when the row starts below the fold (kit count.ts). */}
+      <div class="stat-row about-stats arrive">
+        <div class="stat"><div class="sv"><Count value="71+" /></div><div class="sl">Founders served</div></div>
+        <div class="stat"><div class="sv"><Count value="$153M+" /></div><div class="sl">Tracked revenue</div></div>
+        <div class="stat"><div class="sv"><Count value="4.9" class="sv-n" /><span class="sv-of"> / 5</span></div><div class="sl">Average partner rating</div></div>
+        <div class="stat"><div class="sv"><Count value="8,400+" /></div><div class="sl">Creatives shipped</div></div>
       </div>
     </div>
   </section>
@@ -86,11 +90,22 @@ const jsonLd = [
             <h2>Two founders, two platforms - and the engine underneath</h2>
             <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
             <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>
+            <div class="about-map">
+            <HubSpoke
+              caption="Two founders, two platforms, and the engine underneath: Amir on Meta, Pira on Google, and the technology layer Pravine owns as CTO."
+              hub={{ label: 'AdBoost Health', sub: 'The full acquisition system' }}
+              spokes={[
+                { label: 'Meta · Amir', sub: 'Creative strategy that stops the scroll' },
+                { label: 'Google · Pira', sub: 'There the moment they start searching' },
+                { label: 'Technology · Pravine', sub: 'Search and AI-engine visibility, server-side attribution, AI automation' },
+              ]}
+            />
+            </div>
           </div>
         </div>
         <aside class="doc-aside">
           <div class="aside-card">
-            <h4>Where we work</h4>
+            <h3>Where we work</h3>
             <p>Toronto-based and remote-first, serving health and telehealth brands across the US and Canada. Whether you want a digital marketing agency in Toronto or a fully remote marketing agency, you work with the same senior team.</p>
             <div class="link-list">
               <a href="mailto:hello@adboost.health">hello@adboost.health</a>
@@ -101,10 +116,10 @@ const jsonLd = [
         </aside>
       </div>
 
-      <h2 class="sec-title" style="margin-top:48px">Meet the team</h2>
-      <div class="team-grid" style="margin-top:20px">
-        {teamR.map((t) => (
-          <div class="bio reveal">
+      <h2 class="sec-title about-team-title">Meet the team</h2>
+      <div class="team-grid about-team">
+        {teamR.map((t, i) => (
+          <div class="bio" data-reveal style={`--i:${i}`}>
             <div class="avatar">{t.hasPhoto ? <img src={t.photo} width="56" height="56" alt={`${t.name}, ${t.role}`} loading="lazy" /> : t.initials}</div>
             <h3>{t.name}</h3>
             <div class="role">{t.role.toUpperCase()}</div>
@@ -120,3 +135,16 @@ const jsonLd = [
 
   <CtaBand />
 </BaseLayout>
+
+<style>
+  .about-stats { --d: 160ms; }
+  .sv-of { font-size: 18px; color: var(--k-ink-3); }
+  /* "4.9" is narrower than its 3ch reservation; the "/ 5" sits right after it */
+  .sv :global(.sv-n) { min-width: 0; }
+  /* the team map reads best at about card-row width, not the full column */
+  .about-map { width: 100%; max-width: 720px; }
+  /* h3 (was h4): the heading order runs h2, h3 here */
+  .aside-card h3 { margin: 0 0 8px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .about-team-title { margin-top: var(--k-sp-7); }
+  .about-team { margin-top: 20px; }
+</style>

@@ -150,7 +150,7 @@ are complete without JS. **Hosts of scroll-driven effects use `overflow: clip`, 
 
 | Hook | Behaviour |
 |---|---|
-| `[data-count]` (or `<Count value="71+"/>`) | the server prints the final value. Only elements first seen **below** the fold count up from 0, to the number already printed (prefix, suffix, decimals and separators kept; only the first number moves, inner markup survives). Width is locked first (tabular nums, `--w` in ch, then the measured width). Never pass a number the copy does not state. |
+| `[data-count]` (or `<Count value="71+"/>`) | the server prints the final value. Only elements first seen **below** the fold count up from 0, to the number already printed (prefix, suffix, decimals and separators kept; only the first number moves, inner markup survives). Width is locked first (tabular nums, `--w` in ch, then the measured width). `data-count-delay="<ms>"` holds it at 0 that long before counting. Never pass a number the copy does not state. Numbers in the first viewport stay static (no flash from final to 0). |
 | `[data-words]` | at most one per page, 80 words max: each word brightens in reading order as the page scrolls. Text nodes are split, so `.serif` spans and links survive. Skipped on lowpower and reduced motion. Dim words use `--t-wd-lo` (AA). |
 
 ### Pointer (fine pointer, motion on, not lowpower)
@@ -215,6 +215,44 @@ e1 + edge, one hover). Their own rules keep layout only.
 | `Faq` | `items: {q, a}[]`, `idPrefix?` | native `<details class="qa">` in `.faq-list.k-disclosure`; works without JS; eases open where `::details-content` is supported. Keep the page's FAQPage JSON-LD word for word in sync. |
 | `CtaBand` | `heading?` (HTML), `text?` | night slab with grid, aura, grain; `.cta-band` + `data-magnetic` button. |
 | `Breadcrumbs` | `items: {label, href?}[]` | `<nav class="crumbs"><ol>`; last item `aria-current="page"`. |
+
+## Diagrams (`diagram/`)
+
+Props for every kind are in `diagram/types.ts`; `src/pages/free/kit/_fixtures.ts` has a worked
+example of each, built from the Health data files.
+
+- **Import one component** (`kit/diagram/HeatMatrix.astro`), never `Diagram.astro` in a template:
+  the dispatcher imports every kind, so the page would ship every diagram's CSS. `Diagram.astro`
+  is for data-driven specs (blog frontmatter).
+- **Each figure is its own text alternative:** `<figure class="k-dg k-dg--{kind}">` with a visible
+  `<figcaption>`; nodes are real `ol`/`ul`/`table`/`p`, only wires, glows and marks are
+  `aria-hidden`. An optional `title` renders h3 (or h4 with `headingLevel: 4`), never h1/h2.
+- **Class prefix:** every class inside a diagram starts with `dg-` (`k-dg` on the figure), so page
+  CSS never collides with it. Page and prose rules must not style inside `.k-dg`: interior.css
+  scopes its `.prose` element rules with `:where(:not(.k-dg *))`.
+- **Width:** a diagram sizes from its container (`container: k-dg / inline-size`; layouts switch at
+  container widths), so give each figure a definite-width parent (a grid column with
+  `minmax(0, 1fr)`, a card), never a shrink-to-fit flex item.
+- **Motion (`data-dg-anim` on the figure):**
+  - `reveal` (default): the figure is `[data-reveal]`; it fades and rises in, and its parts draw
+    when it gets `.in`.
+  - `arrive` (`arrive` prop, first viewport and hero asides): the figure is `[data-draw]` instead,
+    so it is never hidden; only its parts draw (transform only) once it gets `.in`.
+  - none (`animate={false}`): static.
+  Parts wait at their keyframe start (paused) until `.in`. Without `html.js.motion` every diagram
+  is fully drawn.
+- **Live values:** calculators move a Gauge (`live="id"`) or a Bars marker (`marker.live`) with
+  `setLive(id, value, display)` from `kit/diagram/live.ts`: it sets `--k-v`, the visible
+  `[data-live-text]` readout and, on a meter, `aria-valuenow` / `aria-valuetext`. Feed it only the
+  visitor's inputs run through the formula printed on the page.
+- **`.is-lit`:** add it to a Timeline row (`rowIdPrefix` gives rows ids `${prefix}-${i}`) to light
+  it from outside, e.g. while the matching process card is hovered.
+- **Count-ups:** an Equation's worked result carries `data-count` + `data-count-delay`, so it
+  counts after its terms land (see Numbers).
+- **Links** are internal only (build error otherwise); links to unbuilt pages are unwrapped by
+  `releaseGates`.
+- **Fixtures:** `/free/kit/diagrams/` and `/free/kit/diagrams-night/` show every kind for visual
+  QA. They build only with `PREVIEW_ALL=1` (or in dev) and never ship.
 
 ## Tracker contract (t.js, never change)
 

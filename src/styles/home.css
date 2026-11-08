@@ -1,0 +1,178 @@
+/* Home page (src/pages/index.astro) only, on kit tokens. The section layouts it shares with the
+   old markup still live in global.css; this file holds what used to be inline styles plus the
+   design v2 layers: glass hero widget, tint fades, night slabs, dot spotlight, the compliance
+   matrix teaser and the motion details. */
+
+/* ---------- first screen: .arrive stagger (transform only, never hidden) ---------- */
+.hero .arrive.d1 { --d: 70ms; }
+.hero .arrive.d2 { --d: 140ms; }
+.hero .arrive.d3 { --d: 210ms; }
+.hero .meta b,
+.bento .section-head p b { color: var(--k-ink); }
+
+/* the hero widget: frosted glass over two soft accent blooms */
+.hero-vis { position: relative; isolation: isolate; }
+.hero-vis::before {
+  content: "";
+  position: absolute;
+  inset: -16% -12%;
+  z-index: -1;
+  pointer-events: none;
+  /* each bloom fades out (70% of its radius) inside the layer's box, so no edge shows */
+  background:
+    radial-gradient(36% 40% at 74% 30%, color-mix(in srgb, var(--k-accent) 22%, transparent), transparent 70%),
+    radial-gradient(36% 40% at 26% 70%, color-mix(in srgb, var(--k-accent-bright) 44%, transparent), transparent 70%);
+}
+.ops.k-glass { background: transparent; }
+.ops-live { color: var(--k-ink-3); font-size: 12px; }
+.ops-stat .ico--accent { background: color-mix(in srgb, var(--k-accent) 10%, transparent); color: var(--k-accent-ink); }
+.ops-stat .ico--ok { background: color-mix(in srgb, var(--k-ok) 12%, transparent); color: var(--k-ok); }
+.ops-stat .ico--violet { background: rgb(139 92 246 / 0.12); color: #8b5cf6; }
+
+/* ---------- band rhythm: tint bands fade in and out over 48px, the rest is paper ---------- */
+main > section[data-tone="tint"] {
+  background: linear-gradient(180deg, var(--k-paper) 0, var(--k-paper-2) 48px, var(--k-paper-2) calc(100% - 48px), var(--k-paper) 100%);
+}
+main > :is(.bento, .faq) { background: var(--k-paper); }
+
+/* ---------- links in copy ---------- */
+.tlink,
+.faq .ans-inner a { color: var(--k-accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.tlink:hover,
+.faq .ans-inner a:hover { color: var(--k-accent-strong); }
+
+/* ---------- trust marquee: without JS the cloned half is missing, so it holds still ---------- */
+html:not(.js) .marquee { animation: none; }
+
+/* ---------- creative strip and bento 04: the ad creatives ---------- */
+.strip-head h2 .serif { color: var(--k-accent-ink); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="ozempic"] { background-image: url('/ads/ozempic.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="alveos"] { background-image: url('/ads/alveos.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="nectar"] { background-image: url('/ads/nectar.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="vnella"] { background-image: url('/ads/vnella.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="limitless"] { background-image: url('/ads/limitless.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="mentaid"] { background-image: url('/ads/mentaid.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="sweating"] { background-image: url('/ads/sweating.webp'); }
+:is(.ph .ad, .b4 .vis .tile)[data-ad="cabo"] { background-image: url('/ads/cabo.webp'); }
+
+/* ---------- bento ---------- */
+.b1 .ico.i-blue { background: linear-gradient(135deg, #3b7bff, #0040c2); }
+.b1 .ico.i-green { background: linear-gradient(135deg, #16a34a, #0a6b34); }
+.b1 .ico.i-amber { background: linear-gradient(135deg, #f59e0b, #c47200); }
+.b1 .ico.i-violet { background: linear-gradient(135deg, #8b5cf6, #5b21b6); }
+.b1 .ico.i-cyan { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+/* the vertical chips pop in one after another once the card has arrived */
+.b1 .cat:nth-child(2) { --n: 1; }
+.b1 .cat:nth-child(3) { --n: 2; }
+.b1 .cat:nth-child(4) { --n: 3; }
+.b1 .cat:nth-child(5) { --n: 4; }
+.b1 .cat:nth-child(6) { --n: 5; }
+.js.motion .b1.in .cat {
+  animation: k-pop var(--k-t-bounce) var(--k-spring-bounce) backwards;
+  animation-delay: calc(260ms + var(--n, 0) * 70ms);
+}
+.b4-stats { display: flex; flex-wrap: wrap; gap: 24px; margin-top: 18px; }
+.b4-k { font-size: 11px; letter-spacing: 0.06em; color: var(--k-on-night-2); }
+.b4-v { margin-top: 2px; font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
+
+/* ---------- compliance by platform (HeatMatrix teaser) ---------- */
+.comp { padding: 96px 0; }
+.comp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+}
+.comp-head h2 {
+  margin: 14px 0;
+  font-size: clamp(32px, 4.4vw, 56px);
+  font-weight: var(--k-fw-display);
+  letter-spacing: -0.035em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.comp-head h2 .serif { color: var(--k-accent-ink); }
+.comp-head p { margin: 0 0 24px; max-width: 40ch; color: var(--k-ink-3); font-size: 16.5px; line-height: 1.55; text-wrap: pretty; }
+.comp-fig { padding: clamp(16px, 2.4vw, 28px); }
+
+/* ---------- case studies ---------- */
+.ccard .stats [data-count] { white-space: nowrap; }
+
+/* ---------- process ---------- */
+.process-cta { display: flex; gap: 10px; margin-top: 28px; }
+.step .demo > svg { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); }
+.demo-chip--center { left: 50%; top: 16px; transform: translateX(-50%); }
+.demo-chip--d31 { left: 54%; top: 12px; }
+.gauge line { stroke: var(--k-line); stroke-width: 2.6; stroke-linecap: round; }
+.gauge line.on { stroke: var(--k-accent); }
+.gauge .needle { stroke: var(--k-ink); stroke-width: 2.2; }
+.gauge .hub { fill: var(--k-ink); }
+.gauge .hub-dot { fill: var(--k-paper); }
+
+/* ---------- night slabs: the founder spotlight and the closing CTA ----------
+   Inset rounded panels on paper (kit .k-slab) with the kit's grid, aura and grain layers, so the
+   legacy full-bleed backgrounds and pseudo-element layers step aside. */
+.k-slab.spotlight,
+.k-slab.bigcta {
+  padding-block: var(--k-section);
+  background: linear-gradient(180deg, var(--k-night), var(--k-night-2));
+  color: var(--t-fg);
+}
+.k-slab.spotlight::before,
+.k-slab.spotlight::after,
+.k-slab.bigcta::before,
+.k-slab.bigcta::after { content: none; }
+/* the slab's lifted shadow reaches past the band's 16px padding: let it show, not clip it */
+main > .k-band--slab { overflow: visible; }
+.k-slab.spotlight .k-bg--grid { --k-grid-mask: 60% 70% at 50% 40%; }
+.k-slab.bigcta .k-bg--grid { --k-grid-mask: 70% 70% at 50% 50%; }
+.spot-pic .mv-accent { color: var(--k-accent-bright); }
+
+/* ---------- testimonials: the dot lattice, fading out toward the edges ---------- */
+.testimonials .section-head { margin-bottom: 42px; }
+.testimonials .k-bg--dots {
+  -webkit-mask-image: radial-gradient(75% 70% at 50% 45%, #000, transparent 85%);
+  mask-image: radial-gradient(75% 70% at 50% 45%, #000, transparent 85%);
+}
+.pav--1 { background: linear-gradient(135deg, #f5a623, #ec6b1c); }
+.pav--2 { background: linear-gradient(135deg, #76d39a, #22a559); }
+.pav--3 { background: linear-gradient(135deg, #a8b5ff, #5b7cff); }
+.pav--4 { background: linear-gradient(135deg, #f6b6c3, #e26b8c); }
+
+/* ---------- latest from the blog ---------- */
+.latest { padding: 96px 0; }
+.latest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.latest-card { display: flex; flex-direction: column; overflow: clip; }
+.latest-card img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-bottom: 1px solid var(--k-line); }
+.latest-card .lb { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 20px 22px 22px; }
+.latest-card time { font-size: 12px; font-weight: 500; letter-spacing: 0.02em; color: var(--k-ink-3); }
+.latest-card h3 { flex: 1; margin: 0; font-size: 17.5px; font-weight: 600; line-height: 1.3; letter-spacing: -0.015em; color: var(--k-ink); }
+.latest-card .lm { font-size: 13.5px; font-weight: 500; color: var(--k-accent-ink); }
+
+/* ---------- responsive ---------- */
+@media (max-width: 960px) {
+  .comp-grid { grid-template-columns: minmax(0, 1fr); }
+  .comp-head p { max-width: 54ch; }
+}
+@media (max-width: 900px) {
+  .latest { padding: 64px 0; }
+  .latest-grid { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
+}
+@media (max-width: 760px) {
+  .comp { padding: 64px 0; }
+  .comp-head h2 { font-size: 36px; }
+  /* skip rendering below-fold bands until they are near the screen */
+  .comp, .latest { content-visibility: auto; contain-intrinsic-size: auto 900px; }
+}
+@media (max-width: 560px) {
+  /* phones: the matrix panel runs edge to edge, so its row labels and cells keep whole words */
+  .comp-fig {
+    margin-inline: calc(-1 * var(--k-gutter));
+    padding: 18px 12px 16px;
+    border-inline: 0;
+    border-radius: 0;
+  }
+}
+@media (max-width: 420px) {
+  .comp-head h2 { font-size: 30px; }
+}
