@@ -1,0 +1,33 @@
+---
+// The compare hero card (not a route): the two options this page weighs, and a rail of the
+// dimensions its side-by-side table compares them on, in table order. Every string is a
+// compare.ts field (themLabel, rows[].dimension); the card itself adds no claims.
+import Figure from '../../kit/diagram/Figure.astro';
+
+interface Props { them: string; dimensions: string[] }
+const { them, dimensions } = Astro.props;
+const caption = `The ${dimensions.length} dimensions the side-by-side table below compares, in its order.`;
+---
+<Figure kind="versus" arrive {caption}>
+  <div class="dg-vc">
+    <p class="dg-vc-head">
+      <span class="dg-vc-side dg-vc-them">{them}</span>
+      <span class="dg-vc-badge">vs</span>
+      <span class="dg-vc-side dg-vc-us">AdBoost Health</span>
+    </p>
+    <div class="dg-vc-track">
+      <span class="dg-vc-post dg-vc-post--l k-draw-y" aria-hidden="true"></span>
+      <span class="dg-vc-post dg-vc-post--r k-draw-y" aria-hidden="true"></span>
+      <ol class="dg-vc-dims">
+        {dimensions.map((d, i) => (
+          <li class="dg-vc-dim" style={`--i:${i}`}>
+            <span class="dg-vc-knot dg-vc-knot--l" aria-hidden="true"></span>
+            <span class="dg-vc-rung k-draw-x" aria-hidden="true" style={`--di:${i + 2}`}></span>
+            <span class="dg-vc-name">{d}</span>
+            <span class="dg-vc-knot dg-vc-knot--r" aria-hidden="true"></span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</Figure>

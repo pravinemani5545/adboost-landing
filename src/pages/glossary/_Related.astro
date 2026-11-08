@@ -1,0 +1,45 @@
+---
+// "Related terms" as a small hub (not a route). Three or more related entries use the kit
+// HubSpoke; one or two (HubSpoke needs at least three) use the same hub-and-link look in a
+// pair layout. Spokes are only the entry's own related[] list, in its order.
+import HubSpoke from '../../kit/diagram/HubSpoke.astro';
+import Figure from '../../kit/diagram/Figure.astro';
+import type { Term } from '../../data/glossary';
+import { splitTerm } from './_diagrams';
+
+interface Props { term: Term; related: Term[] }
+const { term, related } = Astro.props;
+const hub = splitTerm(term.term);
+const spokes = related.map((r) => {
+  const s = splitTerm(r.term);
+  return { label: s.name, sub: s.expansion, href: `/glossary/${r.slug}/` };
+});
+const caption = `${hub.name} and the ${related.length === 1 ? 'term' : 'terms'} its entry lists as related.`;
+---
+{spokes.length >= 3 ? (
+  <div class="rf-related">
+    <HubSpoke caption={caption} hub={{ label: hub.name, sub: hub.expansion }} spokes={spokes} />
+  </div>
+) : spokes.length > 0 ? (
+  <div class="rf-related">
+    <Figure kind="related" caption={caption}>
+      <div class="dg-rel" data-n={spokes.length}>
+        <p class="dg-rel-hub">
+          <span class="dg-rel-name">{hub.name}</span>
+          {hub.expansion && <span class="dg-rel-sub">{hub.expansion}</span>}
+        </p>
+        <ul class="dg-rel-spokes">
+          {spokes.map((s, i) => (
+            <li class="dg-rel-spoke" style={`--i:${i}`}>
+              <span class="dg-rel-wire k-draw-x" aria-hidden="true" style={`--di:${i}`}></span>
+              <a class="dg-rel-card" href={s.href}>
+                <span class="dg-rel-name">{s.label}</span>
+                {s.sub && <span class="dg-rel-sub">{s.sub}</span>}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Figure>
+  </div>
+) : null}

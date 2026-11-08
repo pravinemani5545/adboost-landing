@@ -1,13 +1,17 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Compare from '../../kit/diagram/Compare.astro';
+import Timeline from '../../kit/diagram/Timeline.astro';
+import Versus from './_Versus.astro';
 import { COMPARES, getCompare } from '../../data/compare';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage } from '../../lib/schema';
+import '../../styles/pages/reference.css';
 
 export function getStaticPaths() {
   return COMPARES.map((c) => ({ params: { slug: c.slug } }));
@@ -53,30 +57,47 @@ const toc = [
   { id: 'not-fit', label: 'When we are not the right fit' },
   { id: 'faq', label: 'FAQ' },
 ];
+
+// Full-service page only (brief 5.5): the speed answer's three milestones on a day scale. The
+// labels are that answer's own words; the build stops if the answer no longer says them.
+let speedRail: { phases: { meta: string; label: string; start: number }[] } | undefined;
+if (c.slug === 'full-service-healthcare-agency-alternative') {
+  const speed = plain(c.tradeoffs.find((t) => t.id === 'speed')?.html ?? '');
+  for (const phrase of ['setup takes 5 days', 'Most partners see directional movement on CAC or ROAS within two weeks', 'the full system compounds by day 31']) {
+    if (!speed.includes(phrase)) throw new Error(`[compare] the speed answer no longer says "${phrase}"`);
+  }
+  speedRail = {
+    phases: [
+      { meta: '5 days', label: 'Setup', start: 5 },
+      { meta: 'Within two weeks', label: 'Most partners see directional movement on CAC or ROAS', start: 14 },
+      { meta: 'Day 31', label: 'The full system compounds', start: 31 },
+    ],
+  };
+}
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor }]} />
-      <h1 style="margin-top:16px">{c.h1}</h1>
-      <div class="metabar" style="margin-top:12px">
-        <span>Published by AdBoost Health</span>
-        {updatedLabel && <><span class="dot"></span><span>Updated {updatedLabel}</span></>}
-      </div>
+  <PageHero
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor }]}
+    title={c.h1}
+    answer={c.answer}
+    meta={['Published by AdBoost Health', ...(updatedLabel ? [`Updated ${updatedLabel}`] : [])]}
+    class="rf-hero rf-hero--compare"
+  >
+    <div slot="aside" class="rf-hero-card k-card k-card--float">
+      <Versus them={them} dimensions={c.rows.map((r) => r.dimension)} />
     </div>
-  </section>
+  </PageHero>
 
   <section class="iwrap-sm">
     <div class="container">
      <div class="doc-grid">
       <div class="doc-main">
-      <div class="answer-box"><span class="al">The short answer</span>{c.answer}</div>
-      <p class="cmp-intent"><strong>Who this page is for:</strong> {c.intent}</p>
+      <p class="rf-intent"><strong>Who this page is for:</strong> {c.intent}</p>
 
       <div class="prose">
         <h2 id="choose">Should you choose {themLower} or AdBoost Health?</h2>
         <div class="tablewrap">
-          <table class="dtable cmp-choose">
+          <table class="dtable rf-choose">
             <thead><tr><th>Choose {themLower} if</th><th>Choose AdBoost Health if</th></tr></thead>
             <tbody>
               <tr>
@@ -88,12 +109,21 @@ const toc = [
         </div>
 
         <h2 id="compare">How do they compare, side by side?</h2>
+        <div class="rf-figure">
+          <Compare
+            variant="vs"
+            caption={`${them} against AdBoost Health on each dimension. The table below holds the same rows.`}
+            left={{ label: them, items: [] }}
+            right={{ label: 'AdBoost Health', items: [] }}
+            rows={c.rows.map((r) => ({ label: r.dimension, left: r.them, right: r.us }))}
+          />
+        </div>
         <div class="tablewrap">
           <table class="dtable">
             <thead><tr><th></th><th>{them}</th><th>AdBoost Health</th></tr></thead>
             <tbody>
               {c.rows.map((r) => (
-                <tr><td class="row-h">{r.dimension}</td><td style="color:var(--mute)">{r.them}</td><td>{r.us}</td></tr>
+                <tr><td class="row-h">{r.dimension}</td><td class="rf-them">{r.them}</td><td>{r.us}</td></tr>
               ))}
             </tbody>
           </table>
@@ -105,6 +135,16 @@ const toc = [
           <>
             <h2 id={t.id}>{t.q}</h2>
             <Fragment set:html={t.html} />
+            {t.id === 'speed' && speedRail && (
+              <div class="rf-figure">
+                <Timeline
+                  variant="rail"
+                  total={31}
+                  caption="AdBoost Health’s first 31 days on a day scale, from the answer above: setup takes 5 days, most partners see directional movement within two weeks, and the full system compounds by day 31."
+                  phases={speedRail.phases}
+                />
+              </div>
+            )}
           </>
         ))}
 
@@ -116,6 +156,16 @@ const toc = [
               <>
                 <h3>{i + 1}. {it.q}</h3>
                 <p set:html={it.a} />
+                <div class="rf-qa" data-reveal>
+                  <p class="rf-qa__card rf-qa__card--ok">
+                    <span class="rf-qa__k"><span class="rf-qa__m" aria-hidden="true">✓</span>A strong answer</span>
+                    <span class="rf-qa__v">{it.strong}</span>
+                  </p>
+                  <p class="rf-qa__card rf-qa__card--bad">
+                    <span class="rf-qa__k"><span class="rf-qa__m" aria-hidden="true">✕</span>Red flag</span>
+                    <span class="rf-qa__v">{it.flag}</span>
+                  </p>
+                </div>
               </>
             ))}
             <h3>The nine questions at a glance</h3>
@@ -124,7 +174,7 @@ const toc = [
                 <thead><tr><th>#</th><th>Question</th><th>A strong answer</th><th>Red flag</th></tr></thead>
                 <tbody>
                   {c.questions.items.map((it, i) => (
-                    <tr><td>{i + 1}</td><td class="row-h">{it.q}</td><td>{it.strong}</td><td style="color:var(--mute)">{it.flag}</td></tr>
+                    <tr><td>{i + 1}</td><td class="row-h">{it.q}</td><td>{it.strong}</td><td class="rf-them">{it.flag}</td></tr>
                   ))}
                 </tbody>
               </table>
@@ -138,7 +188,7 @@ const toc = [
 
         <h2 id="faq">Frequently asked questions</h2>
       </div>
-      <div style="margin-top:16px"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
+      <div class="rf-faq"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
       </div>
       <aside class="doc-aside">
         <div class="aside-toc">
@@ -146,7 +196,7 @@ const toc = [
           <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
         </div>
         <div class="aside-card">
-          <h4>Other comparisons</h4>
+          <h2 class="rf-aside-h">Other comparisons</h2>
           <div class="link-list">
             {COMPARES.filter((x) => x.slug !== c.slug).map((x) => <a href={`/compare/${x.slug}/`}>{x.h1.replace('AdBoost Health vs. ', 'vs. ')}</a>)}
             {c.slug !== 'generalist-dtc-agency-alternative' && <a href="/compare/generalist-dtc-agency-alternative/#how-to-choose">How to choose a health growth agency</a>}
@@ -154,7 +204,7 @@ const toc = [
           </div>
         </div>
         <div class="aside-card dark">
-          <h4 style="color:#fff">See if we’re the right fit</h4>
+          <h2 class="rf-aside-h">See if we’re the right fit</h2>
           <p>Free 30-minute call with a senior strategist: no pitch, just a plan.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
         </div>
@@ -165,10 +215,3 @@ const toc = [
 
   <CtaBand />
 </BaseLayout>
-
-<style>
-  .cmp-intent { color: var(--ink-2); font-size: 15px; line-height: 1.6; margin: 16px 0 8px; }
-  .cmp-choose td { vertical-align: top; width: 50%; }
-  .cmp-choose ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
-  .cmp-choose li { line-height: 1.5; }
-</style>

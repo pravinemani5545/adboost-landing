@@ -1,0 +1,157 @@
+---
+// The glossary metric map (not a route): every live term in the two families the index copy
+// names, with a line wherever an entry lists another as related. Wide containers place each
+// family as a panel with its terms on a fixed grid over an aria-hidden SVG of links; narrow ones
+// show the same markup as two plain lists, each term with its related terms as text. The
+// lists are the text alternative in both layouts.
+import Figure from '../../kit/diagram/Figure.astro';
+import type { Term } from '../../data/glossary';
+import { cap, relatedEdges, splitTerm } from './_diagrams';
+
+interface Props { terms: Term[]; caption: string }
+const { terms, caption } = Astro.props;
+
+const FAMILIES = ['unit economics and paid media', 'health-specific compliance and measurement'] as const;
+const H = 59; // box height in width units (width = 100): the box keeps aspect-ratio 100 / H
+
+// Grid positions [x, y] in box units, laid out so linked terms sit near each other (columns
+// staggered by half a row, so no straight link runs through a third term).
+const POS: Record<string, [number, number]> = {
+  poas: [33.5, 8], incrementality: [59.5, 8],
+  'rebill-rate': [20.5, 13.5], mer: [46.5, 13.5],
+  'churn-rate': [7.5, 19], 'cac-payback-period': [33.5, 19], 'blended-cac': [59.5, 19],
+  'contribution-margin': [20.5, 24.5], roas: [46.5, 24.5],
+  ltv: [7.5, 30], 'ltv-cac-ratio': [33.5, 30], 'paid-cac': [59.5, 30],
+  aov: [20.5, 35.5], cac: [46.5, 35.5],
+  cpm: [33.5, 41], cpc: [59.5, 41],
+  'landing-page-conversion-rate': [20.5, 46.5], 'hook-rate': [46.5, 46.5],
+  'quiz-funnel': [7.5, 52], 'creative-testing': [33.5, 52],
+  capi: [80, 10], 'ios-att': [92, 20], 'hipaa-compliant-marketing': [80, 30],
+  'legitscript-certification': [92, 40], 'structure-function-claim': [80, 50],
+};
+// Family panels in box units [x0, x1]; both run the full height.
+const PANEL: [number, number][] = [[0, 67.5], [71.5, 100]];
+
+for (const t of terms) {
+  if (!t.family) throw new Error(`[metric map] /glossary/${t.slug}/ has no family`);
+  if (!POS[t.slug]) throw new Error(`[metric map] /glossary/${t.slug}/ has no position in _MetricMap.astro`);
+}
+const nameOf = new Map(terms.map((t) => [t.slug, splitTerm(t.term).name]));
+const famOf = new Map(terms.map((t) => [t.slug, t.family]));
+const edges = relatedEdges(terms);
+const nb = new Map<string, string[]>();
+for (const [a, b] of edges) {
+  nb.set(a, [...(nb.get(a) ?? []), b]);
+  nb.set(b, [...(nb.get(b) ?? []), a]);
+}
+
+// Each link bows gently toward whichever side keeps it furthest from the other terms' boxes,
+// so long links arc around the terms between their ends.
+const r2 = (n: number) => Math.round(n * 100) / 100;
+const HALF: [number, number] = [5.2, 2.2]; // a term's half-size in box units, roughly
+const path = (a: string, b: string) => {
+  const [x1, y1] = POS[a];
+  const [x2, y2] = POS[b];
+  const len = Math.hypot(x2 - x1, y2 - y1) || 1;
+  const max = Math.min(len * 0.14, 5);
+  const others = Object.entries(POS).filter(([s]) => s !== a && s !== b && nameOf.has(s)).map(([, p]) => p);
+  let best = { bow: 0, clear: -Infinity };
+  for (const k of [0, 0.5, -0.5, 1, -1]) {
+    const cx = (x1 + x2) / 2 + (-(y2 - y1) / len) * max * k;
+    const cy = (y1 + y2) / 2 + ((x2 - x1) / len) * max * k;
+    let clear = Infinity;
+    for (let i = 1; i < 16; i++) {
+      const t = i / 16;
+      const px = (1 - t) ** 2 * x1 + 2 * (1 - t) * t * cx + t * t * x2;
+      const py = (1 - t) ** 2 * y1 + 2 * (1 - t) * t * cy + t * t * y2;
+      for (const [ox, oy] of others) clear = Math.min(clear, Math.max(Math.abs(px - ox) / HALF[0], Math.abs(py - oy) / HALF[1]));
+    }
+    if (clear > best.clear + 0.05) best = { bow: k, clear };
+  }
+  const cx = (x1 + x2) / 2 + (-(y2 - y1) / len) * max * best.bow;
+  const cy = (y1 + y2) / 2 + ((x2 - x1) / len) * max * best.bow;
+  return `M ${r2(x1)} ${r2(y1)} Q ${r2(cx)} ${r2(cy)} ${r2(x2)} ${r2(y2)}`;
+};
+
+const families = FAMILIES.map((f, fi) => {
+  const [x0, x1] = PANEL[fi];
+  const list = terms
+    .filter((t) => t.family === f)
+    // alphabetical: the order the lists read in (and tab through) at every width
+    .sort((p, q) => nameOf.get(p.slug)!.localeCompare(nameOf.get(q.slug)!))
+    .map((t) => ({
+      t,
+      name: nameOf.get(t.slug)!,
+      rel: (nb.get(t.slug) ?? []).map((s) => nameOf.get(s)!),
+      // position inside the panel, in percent of the panel
+      x: r2(((POS[t.slug][0] - x0) / (x1 - x0)) * 100),
+      y: r2((POS[t.slug][1] / H) * 100),
+    }));
+  return { label: cap(f), list, style: `--x0:${x0};--x1:${x1}` };
+});
+---
+<Figure kind="metricmap" {caption}>
+  <div class="dg-gm" style={`--gm-ar:100 / ${H}`} data-gm>
+    <svg class="dg-gm-wires" viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      {edges.map(([a, b], i) => (
+        <path
+          class:list={['dg-gm-edge', 'k-draw', famOf.get(a) !== famOf.get(b) && 'dg-gm-cross']}
+          d={path(a, b)}
+          pathLength="1"
+          data-a={a}
+          data-b={b}
+          style={`--di:${i % 12}`}
+        />
+      ))}
+    </svg>
+    {families.map((f, fi) => (
+      <div class="dg-gm-fam" data-fam={fi} style={f.style}>
+        <h3 class="dg-gm-famh">{f.label} <span class="dg-gm-count">{f.list.length} terms</span></h3>
+        <ul class="dg-gm-list">
+          {f.list.map((n, i) => (
+            <li class="dg-gm-node k-pop" data-slug={n.t.slug} style={`--x:${n.x}%;--y:${n.y}%;--di:${i % 10}`}>
+              <a class="dg-gm-link" href={`/glossary/${n.t.slug}/`}>{n.name}</a>
+              {n.rel.length > 0 && (
+                <span class="dg-gm-rel"><span class="dg-gm-relk">Related:</span> {n.rel.join(', ')}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</Figure>
+
+<script>
+  // Hover or focus a term: light its links and the terms at their other ends, dim the rest.
+  for (const map of document.querySelectorAll<HTMLElement>('[data-gm]')) {
+    const edges = [...map.querySelectorAll<SVGPathElement>('.dg-gm-edge')];
+    const nodes = [...map.querySelectorAll<HTMLElement>('.dg-gm-node')];
+    const clear = () => {
+      map.classList.remove('is-hot');
+      for (const el of [...edges, ...nodes]) el.classList.remove('on', 'near');
+    };
+    const light = (slug: string) => {
+      clear();
+      map.classList.add('is-hot');
+      const near = new Set<string>();
+      for (const e of edges) {
+        const { a, b } = e.dataset;
+        if (a === slug || b === slug) {
+          e.classList.add('on');
+          near.add(a === slug ? b! : a!);
+        }
+      }
+      for (const n of nodes) {
+        if (n.dataset.slug === slug) n.classList.add('on');
+        else if (near.has(n.dataset.slug!)) n.classList.add('near');
+      }
+    };
+    for (const n of nodes) {
+      n.addEventListener('pointerenter', () => light(n.dataset.slug!));
+      n.addEventListener('pointerleave', clear);
+      n.addEventListener('focusin', () => light(n.dataset.slug!));
+      n.addEventListener('focusout', clear);
+    }
+  }
+</script>

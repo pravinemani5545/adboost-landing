@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import MetricMap from './_MetricMap.astro';
 import { GLOSSARY } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
+import '../../styles/pages/reference.css';
 
 const SITE = siteBase(Astro.site);
 const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
@@ -19,31 +21,41 @@ const jsonLd = [
     hasDefinedTerm: sorted.map((t) => ({ '@type': 'DefinedTerm', name: t.term, url: `${SITE}/glossary/${t.slug}/` })),
   },
 ];
+const mapCaption = `All ${GLOSSARY.length} terms in the two families above. A line joins two terms when either entry lists the other as related; hover or focus a term to light its links.`;
 ---
 <BaseLayout {title} {description} canonicalPath="/glossary/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>GLOSSARY</span>
-      <h1>Health & performance marketing <span class="serif">glossary</span></h1>
-      <p class="phero-lede">The metrics and rules that decide whether a health brand scales profitably, defined in plain English, every example drawn from real health verticals.</p>
-    </div>
-  </section>
+  <PageHero
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Glossary' }]}
+    eyebrow="GLOSSARY"
+    title='Health & performance marketing <span class="serif">glossary</span>'
+    lede="The metrics and rules that decide whether a health brand scales profitably, defined in plain English, every example drawn from real health verticals."
+    art="/art/glossary/hub"
+    class="rf-hero rf-hero--hub"
+  />
 
   <section class="iwrap">
     <div class="container">
       <div class="glossary-grid">
         {sorted.map((t) => (
-          <a class="gcard reveal" href={`/glossary/${t.slug}/`}>
-            <h3>{t.term}</h3>
+          <a class="gcard rf-gcard" href={`/glossary/${t.slug}/`}>
+            <h2>{t.term}</h2>
             <p>{t.short}</p>
           </a>
         ))}
       </div>
+    </div>
+  </section>
 
-      <div class="prose" style="max-width:760px;margin-top:40px">
+  <section class="k-band rf-guide" data-tone="tint">
+    <div class="container">
+      <div class="prose rf-guide__prose">
         <h2>How to use this glossary</h2>
         <p>Every definition here is written for one reader: a health or telehealth operator deciding where the next dollar of ad spend goes. The entries fall into two families. The first is unit economics and paid media: CAC, LTV:CAC, MER, POAS, payback period, and the creative and funnel metrics (hook rate, creative fatigue, landing page conversion rate) that move them. The second is health-specific compliance and measurement: LegitScript certification, structure/function claims, HIPAA-compliant marketing, and the tracking layer (iOS ATT, CAPI, server-side tracking) that decides what you can measure and what you may legally send to an ad platform.</p>
+      </div>
+      <div class="rf-map">
+        <MetricMap terms={GLOSSARY} caption={mapCaption} />
+      </div>
+      <div class="prose rf-guide__prose">
         <p>The metric entries pair with our free calculators: read the definition, then run your own numbers in the <a href="/tools/cac-calculator/">CAC calculator</a>, <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, <a href="/tools/mer-calculator/">MER calculator</a>, or <a href="/tools/poas-calculator/">POAS calculator</a>, each pre-loaded with health benchmark context. The compliance entries pair with our <a href="/advertising/">advertising policy guides</a>, which apply the same rules platform by platform: what GLP-1, TRT, telehealth, supplement, and med spa brands can and cannot say on Meta, Google, and TikTok. If a term you need is missing, it is likely covered in depth in a guide or on the <a href="/blog/">blog</a>.</p>
       </div>
     </div>

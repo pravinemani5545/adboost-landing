@@ -8,6 +8,10 @@ export interface Term {
   definition: string;        // answer-first
   body?: string;             // extra explanation (health-specific example)
   formula?: string;
+  /** The body's own worked example, copied verbatim (the Equation card's second line). */
+  example?: string;
+  /** Index family, exactly as /glossary/ "How to use this glossary" lists them. */
+  family?: 'unit economics and paid media' | 'health-specific compliance and measurement';
   related?: string[];        // slugs
   guide?: { href: string; label: string }; // prominent link under the definition
 }
@@ -15,16 +19,19 @@ export interface Term {
 const ALL_TERMS: Term[] = [
   {
     slug: 'cac',
+    family: 'unit economics and paid media',
     term: 'CAC (Customer Acquisition Cost)',
     short: 'What it costs to acquire one paying customer or patient.',
     metaDescription: 'CAC is the total sales and marketing cost to win one paying customer. See the CAC formula, a health-brand example, and how it connects to LTV and payback.',
     definition: 'CAC is the total sales and marketing cost to acquire one paying customer, calculated as total acquisition spend divided by new customers acquired in the same period.',
     body: 'CAC is the total sales and marketing cost to win one paying customer, and in health it is the yardstick every other unit-economics metric is measured against, so getting its denominator right matters more than almost any optimization downstream.<h3>The formula and a worked example</h3><p>CAC = total acquisition spend ÷ new customers acquired in the same period, where spend means media, agency fees, tooling, and creative, not the ad account alone. Work an example with round, illustrative numbers. A GLP-1 brand spends $50,000 in a month (ads, tools, and agency combined) and signs 200 paying patients, so CAC is $50,000 ÷ 200 = $250. Count only the $40,000 of media and CAC reads $200, but the missing $50 is real cost the P&amp;L still pays, which is exactly how a media-only CAC flatters the model.</p><h3>Fully-loaded CAC vs lead or consult CAC</h3><p>The single most common misreport in telehealth is quoting the cheaper number. Always separate <strong>fully-loaded CAC</strong> (cost per paying patient) from <strong>consult or lead CAC</strong> (cost per intake start or booked consult), which typically runs 40–60% lower. Illustratively, one GLP-1 program can show a $90 consult CAC beside a $250 paying-patient CAC, and only the second can be checked against <a href="/glossary/ltv/">LTV</a> or the standard 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC</a> bar. Report the lead number to feel good; underwrite the business on the paying-patient number.</p><h3>Benchmark CAC against your vertical</h3><p>There is no universal “good” CAC, because affordable cost scales with order value and margin. Across AdBoost Health partner accounts, blended CAC typically lands in these illustrative bands (ranges, not guarantees):</p><div class="tablewrap"><table class="dtable"><thead><tr><th>Vertical</th><th>Illustrative blended CAC</th><th>Common tell when above band</th></tr></thead><tbody><tr><td class="row-h">GLP-1 / weight loss</td><td>$150–350</td><td>Intake flow leaking motivated clickers</td></tr><tr><td class="row-h">Hair &amp; dermatology</td><td>$80–180</td><td>Weak ad-to-offer match</td></tr><tr><td class="row-h">Mental health</td><td>$120–280</td><td>Long or unclear intake</td></tr><tr><td class="row-h">Hormone &amp; longevity</td><td>$200–450</td><td>Costly auction, thin creative volume</td></tr><tr><td class="row-h">Subscription supplements</td><td>$40–110</td><td>First order alone never repays it</td></tr></tbody></table></div><h3>Why it matters for health and DTC brands</h3><p>A paying-patient CAC sitting well above your vertical band, even with healthy platform <a href="/glossary/roas/">ROAS</a>, usually points at the intake flow, where 40–60% of ad clickers are commonly lost before checkout, not at the media buying. That is why CAC is a funnel metric as much as a media one: more traffic into a leaky intake just buys more expensive misses. Read fully-loaded CAC next to <a href="/glossary/blended-cac/">blended CAC</a> and <a href="/glossary/paid-cac/">paid CAC</a> to separate whole-business cost from channel efficiency, and against <a href="/glossary/cac-payback-period/">CAC payback</a> to see how long the money is tied up. Because most health first orders only break even, the CAC you can afford is set by retention, so pressure-test it on real cohort economics with the <a href="/tools/cac-calculator/">CAC calculator</a>.</p>',
     formula: 'CAC = Total acquisition spend ÷ New customers acquired',
+    example: '$50,000 ÷ 200 = $250',
     related: ['ltv', 'ltv-cac-ratio', 'roas', 'cac-payback-period'],
   },
   {
     slug: 'ltv',
+    family: 'unit economics and paid media',
     term: 'LTV (Lifetime Value)',
     short: 'Total gross profit a customer generates over their lifetime.',
     metaDescription: 'LTV is the gross profit a customer generates over the whole relationship. See the LTV formula and why retention, not order value, decides it in health.',
@@ -35,6 +42,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'ltv-cac-ratio',
+    family: 'unit economics and paid media',
     term: 'LTV:CAC Ratio',
     short: 'Lifetime value divided by acquisition cost: the core unit-economics health check.',
     metaDescription: 'The LTV:CAC ratio compares a customer\'s lifetime value to the cost of acquiring them. Formula, the 3:1 benchmark, and what it means for health brands.',
@@ -45,6 +53,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'roas',
+    family: 'unit economics and paid media',
     term: 'ROAS (Return on Ad Spend)',
     short: 'Revenue generated per dollar of ad spend.',
     metaDescription: 'ROAS is revenue generated per dollar of ad spend: a 3x ROAS means $3 back for every $1 spent. Formula, a health example, and where ROAS misleads.',
@@ -55,26 +64,31 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'blended-cac',
+    family: 'unit economics and paid media',
     term: 'Blended CAC',
     short: 'Acquisition cost across all channels, including organic.',
     metaDescription: 'Blended CAC divides total sales and marketing spend by all new customers, paid and organic. Formula, when to use it, and how it differs from paid CAC.',
     definition: 'Blended CAC divides total sales and marketing spend by all new customers (including those from organic, referral, and brand) rather than isolating a single paid channel.',
     body: 'Blended CAC divides your entire sales and marketing spend by every new customer won in the period, paid and organic alike, so it reflects what growth actually costs the business rather than what any single ad platform reports.<h3>The formula and a worked example</h3><p>Blended CAC = total sales and marketing spend ÷ all new customers (paid, organic, referral, and brand) in the same period. Work an example with round, illustrative numbers. A telehealth brand spends $60,000 in a month across ads, tools, and agency fees, and signs 200 patients from paid plus another 100 from organic search, email, and referral. <a href="/glossary/paid-cac/">Paid CAC</a> reads $60,000 ÷ 200 = $300, but blended CAC is $60,000 ÷ 300 = $200, because the organic patients carried no incremental media cost. The larger the organic engine, the further blended CAC sits below paid CAC.</p><h3>Blended CAC vs paid CAC</h3><div class="tablewrap"><table class="dtable"><thead><tr><th>Metric</th><th>Denominator</th><th>What it answers</th><th>Blind spot</th></tr></thead><tbody><tr><td class="row-h">Blended CAC</td><td>All new customers</td><td>What growth costs the whole business</td><td>Hides a weakening paid channel behind free organic wins</td></tr><tr><td class="row-h">Paid CAC</td><td>Paid-acquired customers only</td><td>Whether media spend is efficient on its own</td><td>Ignores the compounding value of organic and brand</td></tr></tbody></table></div><p>Read the two together. Blended CAC flatters paid performance by folding in “free” customers, so a brand can watch blended hold steady while paid economics quietly break underneath it. The gap between them is itself the signal: across AdBoost Health partner accounts, blended CAC typically runs 30–50% below paid CAC once an organic engine (SEO, email, referral) is compounding, and if blended drifts up toward paid, the organic engine is stalling even while platform dashboards look stable.</p><h3>The trap: never optimize campaigns to blended CAC</h3><p>Blended CAC is a reporting and budgeting number, not a bidding target. Because it credits paid spend with organic and brand customers it never bought, steering individual campaigns toward a blended goal quietly rewards ad sets that ride existing demand (branded search, warm retargeting) and starves the cold prospecting that actually feeds the organic engine in the first place. Set campaign targets on <a href="/glossary/paid-cac/">paid CAC</a> or <a href="/glossary/poas/">POAS</a>, and reserve blended CAC for the question it answers well: how much the whole business can afford to spend next month.</p><h3>Why it matters for health and DTC brands</h3><p>Blended CAC is the number to underwrite the P&L against, because it is closest to what the bank account actually shows. Judge it against your vertical rather than a universal figure: across AdBoost Health partner accounts, blended CAC lands around $150–350 for GLP-1, $80–180 for hair and dermatology, and $40–110 for subscription supplements (illustrative ranges, not guarantees). A blended CAC well above your vertical band, even with healthy platform ROAS, usually points at the intake flow, where a large share of ad clickers are lost before checkout. Pair blended CAC with <a href="/glossary/ltv-cac-ratio/">LTV:CAC</a> to confirm the model clears the standard 3:1 bar, and with <a href="/glossary/mer/">marketing efficiency ratio (MER)</a> for the whole-account efficiency view. Run your own with the <a href="/tools/cac-calculator/">CAC calculator</a>.</p>',
     formula: 'Blended CAC = Total sales & marketing spend ÷ All new customers (paid + organic)',
+    example: '$60,000 ÷ 300 = $200',
     related: ['cac', 'paid-cac'],
   },
   {
     slug: 'paid-cac',
+    family: 'unit economics and paid media',
     term: 'Paid CAC',
     short: 'Acquisition cost from paid media only.',
     metaDescription: 'Paid CAC isolates the cost of customers acquired through paid ads only, excluding organic and referral. Formula and how it differs from blended CAC.',
     definition: 'Paid CAC isolates the cost of customers acquired specifically through paid advertising, excluding organic and referral, giving a true read on channel efficiency.',
     body: 'Paid CAC isolates the cost of customers won specifically through paid advertising, stripping out organic, referral, and brand, so it is the number that tells you whether ad spend itself is working while <a href="/glossary/blended-cac/">blended CAC</a> can look healthy over the top.<h3>The formula and a worked example</h3><p>Paid CAC = paid media spend ÷ customers acquired through paid channels in the same period. Work an example with round, illustrative numbers. A telehealth brand spends $60,000 on Meta and Google and signs 200 patients it can attribute to paid, so paid CAC is $60,000 ÷ 200 = $300. Fold in another 100 patients from organic search, email, and referral that carried no incremental media cost and <a href="/glossary/blended-cac/">blended CAC</a> drops to $200, even though paid economics did not change at all. The gap between the two is the size of your organic engine.</p><h3>Track paid CAC by platform</h3><p>A single paid CAC hides which channel is efficient, so split it. Illustratively, a $180 Meta paid CAC beside a $320 Google paid CAC on the identical offer usually points at the offer or the landing experience, not the channel, because a well-matched offer rarely costs twice as much on one platform. When one platform’s paid CAC drifts up on a stable offer, read <a href="/glossary/cpm/">CPM</a> and <a href="/glossary/hook-rate/">hook rate</a> first: rising CPM means the auction got more expensive, while a falling hook rate on flat CPM means the creative is fatiguing.</p><h3>Blended CAC vs paid CAC</h3><div class="tablewrap"><table class="dtable"><thead><tr><th>Metric</th><th>Denominator</th><th>What it answers</th><th>Blind spot</th></tr></thead><tbody><tr><td class="row-h">Paid CAC</td><td>Paid-acquired customers only</td><td>Whether media spend is efficient on its own</td><td>Ignores compounding organic and brand value</td></tr><tr><td class="row-h">Blended CAC</td><td>All new customers</td><td>What growth costs the whole business</td><td>Hides a weakening paid channel behind free wins</td></tr></tbody></table></div><p>Read the two together and set campaign bid targets on paid CAC, never on blended, because a blended goal quietly rewards ad sets that ride existing demand (branded search, warm retargeting) and starves the cold prospecting that feeds the funnel.</p><h3>Why it matters for health and DTC brands</h3><p>Benchmark paid CAC against your vertical rather than a universal figure. Across AdBoost Health partner accounts, blended CAC runs $150–350 for GLP-1 and $80–180 for hair and dermatology (illustrative ranges, not guarantees), with blended sitting 30–50% below paid once an organic engine compounds. On those bands a $250 paid GLP-1 CAC is comfortably inside range, while the same $250 on a hair offer signals a broken funnel, usually the intake flow where 40–60% of clickers are lost before checkout. Pair paid CAC with <a href="/glossary/roas/">ROAS</a> and <a href="/glossary/poas/">POAS</a> for the efficiency side, and with <a href="/glossary/cac-payback-period/">CAC payback</a> for cash timing. Run your own with the <a href="/tools/cac-calculator/">CAC calculator</a>.</p>',
     formula: 'Paid CAC = Paid media spend ÷ Customers acquired through paid channels',
+    example: '$60,000 ÷ 200 = $300',
     related: ['blended-cac', 'cac', 'roas'],
   },
   {
     slug: 'aov',
+    family: 'unit economics and paid media',
     term: 'AOV (Average Order Value)',
     short: 'Average revenue per order.',
     metaDescription: 'AOV is the average revenue per order: total revenue divided by orders. Formula, a health-brand example, and why AOV sets how much CAC you can afford.',
@@ -85,6 +99,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'churn-rate',
+    family: 'unit economics and paid media',
     term: 'Churn Rate',
     short: 'The share of customers who cancel in a period.',
     metaDescription: 'Churn rate is the share of customers who cancel or lapse in a period; retention rate is its complement. The formula for both, and how to read them in health.',
@@ -95,16 +110,19 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'cpm',
+    family: 'unit economics and paid media',
     term: 'CPM (Cost Per Mille)',
     short: 'Cost per 1,000 ad impressions.',
     metaDescription: 'CPM is the cost to serve 1,000 ad impressions. Formula, benchmark ranges for health and supplement ads on Meta, and what pushes CPMs up or down.',
     definition: 'CPM is the cost to serve 1,000 ad impressions. It reflects auction competition and audience value. Industry benchmark data puts health/medical Meta CPMs around $13, and supplement CPMs higher at ~$18, both inflating year over year.',
     formula: 'CPM = (Ad spend ÷ Impressions) × 1,000',
+    example: '($1,300 ÷ 100,000) × 1,000 = $13',
     body: 'CPM is the cost to serve 1,000 ad impressions (ad spend ÷ impressions, times 1,000), and it is a read on auction competition, audience value, and creative quality rather than a bid you force down.<h3>The formula and a worked example</h3><p>CPM = (ad spend ÷ impressions) × 1,000. Work an example with round, illustrative numbers. An ad set spends $1,300 and serves 100,000 impressions, so CPM is ($1,300 ÷ 100,000) × 1,000 = $13. Hold the audience steady but let the creative fatigue, and the platform charges more to keep forcing a tired ad into the same feeds, so the same 100,000 impressions might cost $2,200 (a $22 CPM) with nothing about the audience having changed.</p><h3>What CPM is actually telling you</h3><p>Three forces move CPM, and separating them is the whole skill. Auction competition sets a floor: more advertisers bidding for the same eyeballs, as in Q4 and around open enrollment, lifts everyone’s CPM at once. Audience value raises it further, since a high-intent, high-value segment costs more to reach than a broad one. And creative quality pulls it back down, because the platform rewards ads people stop for with cheaper delivery. That last lever is the one you control, which is why a rising CPM on a stable audience is usually a creative signal, not an auction one.</p><div class="tablewrap"><table class="dtable"><thead><tr><th>Pattern</th><th>Likely cause</th><th>The move</th></tr></thead><tbody><tr><td class="row-h">CPM rising, audience unchanged</td><td>Creative fatigue: the platform is paying to force a tired ad</td><td>Rotate to fresh angles</td></tr><tr><td class="row-h">CPM rising across the whole account</td><td>Auction competition (Q4, open enrollment, new entrants)</td><td>Judge against your trailing baseline, not a fixed target</td></tr><tr><td class="row-h">CPM high on a narrow audience</td><td>An expensive, high-value segment</td><td>Fine if downstream CAC still works</td></tr></tbody></table></div><h3>Why it matters for health and DTC brands</h3><p>Health CPMs run higher than most because the auctions are restricted and the audiences are valuable: industry benchmark data puts health and medical Meta CPMs around $13 and supplement CPMs higher near $18, both inflating year over year. That makes CPM the earliest place <a href="/glossary/creative-testing/#creative-fatigue">creative fatigue</a> shows up, ahead of <a href="/glossary/roas/">ROAS</a>: across AdBoost Health partner accounts, a GLP-1 account whose CPM climbs from $14 to $22 on a stable audience is watching its <strong>creative</strong> stop earning delivery, and the fix is fresh angles at the standard 15–25 variants per month, not a lower bid. Read CPM next to <a href="/glossary/hook-rate/">hook rate</a> to confirm fatigue (a falling hook rate on rising CPM is the tell) and next to <a href="/glossary/cpc/">CPC</a> to separate the cost of reach from the cost of a click. Because CPM is a symptom to interpret rather than a dial to force, monitor it against your own trailing baseline so a rotation still fixes the problem cheaply, and keep the pipeline feeding <a href="/glossary/creative-testing/">creative testing</a> ahead of the decay.</p>',
     related: ['cpc', 'roas'],
   },
   {
     slug: 'cpc',
+    family: 'unit economics and paid media',
     term: 'CPC (Cost Per Click)',
     short: 'Cost per ad click.',
     metaDescription: 'CPC is the average cost of each ad click. Formula, benchmark ranges for Meta and Google health ads, and why high-intent search clicks cost more.',
@@ -115,6 +133,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'legitscript-certification',
+    family: 'health-specific compliance and measurement',
     term: 'LegitScript Certification',
     short: 'The third-party certification behind telehealth and online pharmacy prescription ads on Meta and Google.',
     metaDescription: 'LegitScript certification verifies an online pharmacy or telehealth provider operates legally. Its fees, which Meta and Google ads need it, and how to check it.',
@@ -125,6 +144,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'structure-function-claim',
+    family: 'health-specific compliance and measurement',
     term: 'Structure/Function Claim',
     short: 'A permitted supplement claim about supporting the body, not treating disease.',
     metaDescription: 'A structure/function claim says how a supplement supports normal body function without claiming to treat disease. Examples, and where the FDA draws the line.',
@@ -134,6 +154,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'creative-testing',
+    family: 'unit economics and paid media',
     term: 'Creative Testing',
     short: 'Systematically testing ad variants to find and scale winners.',
     metaDescription: 'Creative testing is launching many ad variants, measuring them against clean benchmarks and scaling only winners, plus how to spot creative fatigue early.',
@@ -143,6 +164,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'contribution-margin',
+    family: 'unit economics and paid media',
     term: 'Contribution Margin',
     short: 'Revenue left after variable costs: what’s available to cover CAC and overhead.',
     metaDescription: 'Contribution margin is revenue left after variable costs like COGS, fulfillment and fees. Formula, and why it sets the real ceiling on affordable CAC.',
@@ -153,16 +175,19 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'mer',
+    family: 'unit economics and paid media',
     term: 'MER (Marketing Efficiency Ratio)',
     short: 'Total revenue ÷ total marketing spend: the whole-business efficiency number.',
     metaDescription: 'MER (marketing efficiency ratio) is total revenue divided by total marketing spend. Formula, how it differs from ROAS, and why it is hard to inflate.',
     definition: 'MER, the marketing efficiency ratio (also called media efficiency ratio), measures blended efficiency across every channel at once: total revenue divided by total marketing spend. Unlike platform ROAS, it can’t be inflated by multiple platforms each claiming the same conversion.',
     body: 'In ad reporting, MER means marketing efficiency ratio (also called media efficiency ratio): it measures blended efficiency across every channel at once: total revenue divided by total marketing spend. Unlike platform <a href="/glossary/roas/">ROAS</a>, which each channel reports in isolation inside its own attribution window, MER is the whole-business number the bank account actually shows, so it cannot be inflated by two platforms both claiming the same conversion.<h3>The formula and a worked example</h3><p>MER = total revenue ÷ total marketing spend, counting every dollar of revenue and every dollar of marketing across all channels in the same period. Work an example. A telehealth brand books $200,000 of revenue in a month against $50,000 of total marketing spend (Meta, Google, email tooling, and agency fees combined), so MER is $200,000 ÷ $50,000 = 4.0. Now look at what the platforms report for the same month: Meta claims a 3.5× ROAS on its $25,000 and Google claims 3× on its $20,000, which is $87,500 plus $60,000 of attributed revenue from just two channels, before email and organic add their own claims. Those numbers sum toward and past the $200,000 the business actually made, which is precisely the double-counting MER removes by design.</p><h3>MER vs ROAS</h3><div class="tablewrap"><table class="dtable"><thead><tr><th>Metric</th><th>Scope</th><th>Attribution</th><th>Best for</th></tr></thead><tbody><tr><td class="row-h">Platform ROAS</td><td>One channel</td><td>That platform’s own window and view or click model</td><td>Comparing ad sets and creatives inside a platform</td></tr><tr><td class="row-h">Blended MER</td><td>Whole business</td><td>None needed: total revenue over total spend</td><td>Deciding how much to spend in total</td></tr></tbody></table></div><p>When a patient sees a Meta ad, a Google ad, and an email before subscribing, all three platforms can take credit for the same $299, so summed platform-reported revenue routinely over-counts the truth by 30–100%. MER sidesteps the entire attribution argument: one revenue number (the total) over one spend number (the total), a ratio nobody can inflate. That is also why MER is the number to report upward: a founder or board does not care which platform earned the credit, only whether the marketing dollar came back with a profit attached.</p><h3>Benchmark context</h3><p>MER has no universal “good” value, because break-even is set entirely by margin. Your break-even MER is 1 ÷ contribution margin: a brand running a 40% <a href="/glossary/contribution-margin/">contribution margin</a> needs MER above 2.5 before ads add any profit, while a 25%-margin supplement line needs MER above 4.0 just to break even. So the same 4.0 MER is healthy for the first brand and merely break-even for the second. Always judge a MER target against your own margin, never against someone else’s headline number, and watch its trend against your trailing baseline rather than a fixed goal.</p><p>A useful sanity check runs the other direction: sum every platform’s reported revenue and compare it to actual booked revenue. If the platforms together claim more than the business truly made, the overage is the size of the attribution problem MER is quietly correcting, and the bigger that gap grows, the less any single ROAS number should be trusted to drive spend decisions.</p><h3>Blended MER vs platform ROAS: when to use which</h3><p>Use blended MER as the top-of-house scaling signal: it is the right metric for deciding whether total marketing is efficient, for setting an overall spend ceiling, and for P&L or board reporting where the only question that matters is whether marketing made money this month. Use platform ROAS for the tactical layer beneath it, comparing ad sets, creatives, and audiences inside a single platform, where relative differences still guide decisions even though the absolute number is inflated. The two are complements, not rivals: MER tells you how much to spend in total, and platform ROAS (with <a href="/glossary/poas/">POAS</a> to bring in margin) tells you where to move the next dollar. Health brands lean on MER harder than most, because their funnels are multi-touch and often run partly offline through intake and clinical review, so platform attribution misses more of the journey than it does in simple e-commerce. Pair MER with <a href="/glossary/blended-cac/">blended CAC</a> for the cost side of the same picture, and with <a href="/glossary/incrementality/">incrementality</a> tests when you need to know whether spend is causing sales or just taking credit for them.</p><h3>How to read a moving MER</h3><p>Because MER is a blended number, its movements need interpretation rather than a reflex reaction. A few common patterns are worth recognizing:</p><ul><li><strong>Falling MER on rising spend</strong> is often just diminishing returns as you scale past your best audiences, not a broken account, so measure it against break-even rather than last month’s peak.</li><li><strong>MER flat while platform ROAS climbs</strong> usually means the platforms are claiming more of the organic and brand demand you were already earning.</li><li><strong>MER and blended CAC drifting apart</strong> points at a mix shift between paid and organic that is worth understanding before you move budgets.</li><li><strong>A sudden MER jump with no spend change</strong> is usually a revenue event (a product launch, a price rise, or a seasonal spike) rather than genuinely improved efficiency, so confirm the driver before crediting the ad account.</li></ul><p>Run your own with the <a href="/tools/mer-calculator/">MER calculator</a>.</p>',
     formula: 'MER = Total revenue ÷ Total ad spend',
+    example: '$200,000 ÷ $50,000 = 4.0',
     related: ['blended-cac', 'roas', 'incrementality'],
   },
   {
     slug: 'incrementality',
+    family: 'unit economics and paid media',
     term: 'Incrementality',
     short: 'Whether ad spend actually caused a sale or just took credit for one.',
     metaDescription: 'Incrementality is the true causal lift from ads, measured with holdout tests rather than platform attribution. Formula and how health brands test it.',
@@ -173,6 +198,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'capi',
+    family: 'health-specific compliance and measurement',
     term: 'CAPI (Conversions API)',
     short: 'Server-side event sending that recovers conversions the browser pixel misses.',
     metaDescription: 'The Conversions API (CAPI) sends conversion events server to server, deduplicated against the pixel. How it works, and server-side tracking beyond Meta.',
@@ -182,6 +208,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'ios-att',
+    family: 'health-specific compliance and measurement',
     term: 'iOS ATT (App Tracking Transparency)',
     short: 'Apple’s opt-in prompt that broke deterministic cross-app tracking on iPhone.',
     metaDescription: 'iOS App Tracking Transparency (ATT) makes apps ask before tracking, and most users decline. What it broke for ad attribution and how brands adapt.',
@@ -191,6 +218,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'hook-rate',
+    family: 'unit economics and paid media',
     term: 'Hook Rate (Thumb-Stop Ratio)',
     short: 'Share of impressions that watch the first 3 seconds of a video ad.',
     metaDescription: 'Hook rate is 3-second video views divided by impressions, the first relevance signal ad algorithms read. Formula and how to use it to judge creative.',
@@ -201,6 +229,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'quiz-funnel',
+    family: 'unit economics and paid media',
     term: 'Quiz Funnel',
     short: 'A guided-questionnaire landing experience that personalizes the offer before checkout.',
     metaDescription: 'A quiz funnel swaps a static landing page for a short set of questions that route each visitor to a tailored recommendation. How it works in health.',
@@ -210,6 +239,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'rebill-rate',
+    family: 'unit economics and paid media',
     term: 'Rebill / Retention Rate',
     short: 'The share of subscribers who successfully renew past their first order(s).',
     metaDescription: 'Rebill rate is the share of subscribers who continue to later orders, the metric that turns a break-even first order into profit. Formula and examples.',
@@ -220,6 +250,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'cac-payback-period',
+    family: 'unit economics and paid media',
     term: 'CAC Payback Period',
     short: 'How many months of margin it takes to earn back acquisition cost.',
     metaDescription: 'CAC payback period is CAC divided by monthly contribution margin, the cash-flow check LTV:CAC hides. Formula, a health example and the gross-profit variant.',
@@ -230,6 +261,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'landing-page-conversion-rate',
+    family: 'unit economics and paid media',
     term: 'Landing Page Conversion Rate',
     short: 'Share of visitors who complete the primary action on the page.',
     metaDescription: 'Landing page conversion rate is the share of visitors who purchase, book or subscribe. Formula, and why it decides whether a given CAC is survivable.',
@@ -240,6 +272,7 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'hipaa-compliant-marketing',
+    family: 'health-specific compliance and measurement',
     term: 'HIPAA-Compliant Marketing',
     short: 'Running ads and tracking without illegally exposing protected health information.',
     metaDescription: 'HIPAA-compliant marketing keeps health data like conditions and intake answers away from ad platforms without a BAA. What it means for pixels and ads.',
@@ -249,12 +282,14 @@ const ALL_TERMS: Term[] = [
   },
   {
     slug: 'poas',
+    family: 'unit economics and paid media',
     term: 'POAS (Profit on Ad Spend)',
     short: 'ROAS after cost of goods: the version that actually reflects profit.',
     metaDescription: 'POAS is gross profit per dollar of ad spend, where ROAS uses revenue. Formula, and why two campaigns with the same ROAS can have very different POAS.',
     definition: 'POAS is gross profit generated per dollar of ad spend, unlike ROAS which uses revenue. Two campaigns with identical ROAS can have very different POAS depending on margin.',
     body: 'POAS (profit on ad spend) is the profit-aware version of <a href="/glossary/roas/">ROAS</a>: rather than revenue per ad dollar, it measures the gross profit each ad dollar returns, which is the only version of the metric that tells you whether a campaign is actually making money. Two campaigns with identical ROAS can sit on opposite sides of profitability once their margins differ, and POAS is what separates them.<h3>The formula and a worked example</h3><p>POAS = gross profit from ads ÷ ad spend, where gross profit is ad-driven revenue minus cost of goods sold (product cost, fulfillment, and payment processing). Work a real example. A supplement campaign spends $10,000 and returns $30,000 in revenue, a clean 3.0× ROAS that looks like a winner on the platform dashboard. Now bring in margin: if COGS on those orders runs 60%, gross profit is $30,000 minus $18,000, or $12,000, so POAS is $12,000 ÷ $10,000 = 1.2×. The same campaign that reads as a 3× on the revenue line is really clearing 20 cents of gross profit per ad dollar before a single overhead cost, salary, or software fee is paid. Push COGS to 70% and POAS falls to 0.9×: the campaign now loses money on every order while its ROAS never moves.</p><h3>POAS vs ROAS: why the profit-aware number wins</h3><p>ROAS answers a demand question (how much revenue does a dollar of spend pull in?) and POAS answers the business question (how much profit does that dollar leave behind?). For a single-SKU brand at a fixed margin the two move together, and ROAS is a fine proxy. The gap opens the moment margins vary, which for supplement and telehealth catalogs is almost always.</p><div class="tablewrap"><table class="dtable"><thead><tr><th>Metric</th><th>Formula</th><th>What it captures</th><th>Where it misleads</th></tr></thead><tbody><tr><td class="row-h">ROAS</td><td>Revenue ÷ ad spend</td><td>Top-line efficiency and demand</td><td>Ignores margin: a 3× on a 30%-margin SKU can lose money</td></tr><tr><td class="row-h">POAS</td><td>Gross profit ÷ ad spend</td><td>Whether the spend is actually profitable</td><td>Only as accurate as your per-SKU COGS inputs</td></tr></tbody></table></div><p>The failure mode is optimizing a mixed catalog to ROAS. Told to maximize revenue, the platform happily scales your cheapest, lowest-margin bundle because it converts, and blended ROAS holds while blended profit quietly erodes. A 70%-margin peptide SKU at 3× ROAS delivers 2.1× POAS and prints money; a 30%-margin bundle at the same 3× ROAS delivers 0.9× POAS and loses it. ROAS cannot see the difference. POAS is built to.</p><p>POAS can mislead too, but in a narrower way: it is only as good as your COGS inputs, so stale or coarsely averaged product, shipping, and payment costs feed straight through into a wrong number. It also stays a single-campaign, single-channel view, so it does not catch the cross-channel double-counting that the <a href="/glossary/mer/">marketing efficiency ratio</a> is built for, or the causality question that <a href="/glossary/incrementality/">incrementality</a> answers.</p><h3>When to use POAS</h3><p>Reach for POAS whenever margins differ across the products or offers a campaign can promote, when you are setting bid targets or budget caps at the campaign or ad-set level, and when a ROAS number is being used as the go or no-go for scaling. The clean decision rule: treat POAS above 1.0 as the floor for scaling a campaign, because below it ad spend is buying revenue that costs more than it earns, then set your real target high enough above 1.0 to cover overhead. Since POAS already nets out COGS, break-even is simply 1.0, which is far easier to reason about than a margin-adjusted ROAS target that shifts every time your SKU mix does. For health brands specifically, where a GLP-1 first order can break even on its own and only turn profitable on rebills, first-order POAS and <a href="/glossary/cac-payback-period/">CAC payback</a> across the subscription tell the real story together. Read POAS next to <a href="/glossary/contribution-margin/">contribution margin</a> and blended <a href="/glossary/mer/">marketing efficiency ratio (MER)</a> for the whole-account view.</p><p>POAS also reframes portfolio decisions. Ranking campaigns by POAS rather than ROAS routinely reorders which ones deserve the next budget increment, because the highest-revenue campaign is frequently not the highest-profit one, and the money should follow profit. It is the same reason two health brands with identical blended ROAS can post very different margins at the bottom of the P&L: the one that allocated by profit compounds, the one that allocated by revenue slowly bleeds.</p><h3>How to improve POAS</h3><p>Improving POAS is rarely about lowering bids; it is about changing what you spend on and what each order is worth, and the highest-leverage moves usually live outside the ad account.</p><ul><li><strong>Shift spend toward higher-margin SKUs.</strong> Moving budget from a 30%-margin bundle to a 60%-margin hero product raises POAS without changing ROAS at all.</li><li><strong>Lift gross margin per order.</strong> Negotiate COGS, raise price where the offer supports it, or move to 90-day supplies and bundles that spread fixed fulfillment and payment costs across more revenue.</li><li><strong>Feed the platform a profit signal.</strong> Pass gross profit rather than revenue as the conversion value, so the algorithm optimizes toward margin instead of top-line sales.</li><li><strong>Cut spend that never converts.</strong> Trim placements, audiences, and creatives with weak <a href="/glossary/hook-rate/">hook rates</a>; every wasted impression is ad spend with zero profit attached.</li><li><strong>Protect margin downstream.</strong> Reduce refunds, failed payments, and chargebacks, each of which erases gross profit the ROAS line never records.</li></ul><p>Run your own numbers with the <a href="/tools/poas-calculator/">POAS calculator</a> to see where each campaign lands once margin is in the math.</p>',
     formula: 'POAS = Gross profit from ads ÷ Ad spend',
+    example: '$12,000 ÷ $10,000 = 1.2×',
     related: ['roas', 'contribution-margin', 'mer'],
   },
 ];
