@@ -1,0 +1,191 @@
+/* Industries: the hub (/industries/) and the 9 industry pages (design v2, B3).
+   Kit tokens only (--k-*, --t-*). Every selector is page-prefixed (ind-), so this sheet never
+   reaches another template; diagram internals (dg-*) are styled by the kit, not here. */
+
+/* ============ hero: the vertical snapshot (detail) and the CAC panel (hub) ============ */
+@media (min-width: 1024px) {
+  .ind-hero .phero-grid { grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr); gap: 48px; }
+}
+.ind-snap {
+  display: grid;
+  gap: var(--k-sp-4);
+  padding: var(--k-sp-5);
+}
+.ind-snap__head,
+.ind-snap__label {
+  margin: 0;
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
+.ind-snap__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--k-sp-3); }
+.ind-snap__title { color: var(--k-ink); }
+.ind-snap__title::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--k-accent);
+  vertical-align: middle;
+  translate: 0 -1px;
+}
+.ind-snap__part { display: grid; gap: var(--k-sp-3); padding-top: var(--k-sp-4); border-top: 1px solid var(--k-line); }
+.ind-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ind-chips .k-chip { white-space: normal; line-height: 1.35; }
+
+/* hub hero panel: the legacy .hero-panel frame around the CAC range bars */
+.ind-panel .ind-panel__bars { padding: var(--k-sp-4) 14px var(--k-sp-2); }
+.ind-panel .hp-foot { border-top: 1px solid var(--k-line); }
+
+/* ============ growth playbook: numbered steps on a scroll-filled spine ============ */
+.prose .ind-steps { list-style: none; margin: 26px 0 8px; padding: 0; display: grid; gap: 30px; }
+.prose .ind-step { margin: 0; }
+.ind-step {
+  --dot: 32px;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--dot) minmax(0, 1fr);
+  gap: 18px;
+  view-timeline: --ind-st block;
+}
+/* spine: a track from this dot to the next, and its fill */
+.ind-step:not(:last-child)::before,
+.ind-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--dot) / 2 - 1px);
+  top: calc(var(--dot) + 6px);
+  bottom: -24px;
+  width: 2px;
+  border-radius: 2px;
+}
+.ind-step::before { background: var(--k-line-2); }
+.ind-step::after { background: var(--k-accent); transform-origin: center top; }
+.ind-step__n {
+  position: relative;
+  z-index: 1;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--k-font-mono);
+  font-size: 12.5px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--k-accent-on);
+  background: var(--k-accent);
+  box-shadow: 0 0 0 5px var(--k-accent-soft);
+}
+.ind-step__body { min-width: 0; padding-top: 3px; }
+.prose .ind-step__body h3 { margin: 0 0 8px; font-size: 18.5px; line-height: 1.3; text-wrap: balance; }
+.prose .ind-step__body > p { margin: 0; font-size: 15.5px; line-height: 1.68; color: var(--k-ink-2); }
+.prose .ind-step__body .ind-path { margin: var(--k-sp-5) 0 0; }
+
+/* each segment fills while its step crosses the reading line (60% down the screen);
+   each dot lights as its step reaches it. Where scroll-driven CSS is missing the segments
+   draw once on arrival. Default (no JS, reduced motion): fully drawn and lit. */
+@keyframes ind-fill { from { scale: 1 0; } }
+@keyframes ind-dot {
+  from { background: var(--k-paper); color: var(--k-ink-3); box-shadow: 0 0 0 5px var(--k-paper), inset 0 0 0 1.5px var(--k-line-3); }
+}
+@supports (animation-timeline: view()) {
+  .js.motion .ind-step::after {
+    animation: ind-fill linear both;
+    animation-timeline: --ind-st;
+    animation-range: cover 40vh cover calc(100% - 60vh);
+  }
+  .js.motion .ind-step__n {
+    animation: ind-dot linear both;
+    animation-timeline: --ind-st;
+    animation-range: cover 38vh cover calc(40vh + 24px);
+  }
+}
+@supports not (animation-timeline: view()) {
+  .js.motion .ind-steps[data-draw]:not(.in) .ind-step::after { scale: 1 0; }
+  .js.motion .ind-steps[data-draw].in .ind-step::after {
+    animation: ind-fill var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--i) * 3 * var(--k-stagger));
+  }
+}
+
+/* ============ ad rules: the compact strip under the callout ============ */
+.prose .ind-rules { margin: var(--k-sp-4) 0 var(--k-sp-2); }
+
+/* ============ mistakes vs good: both questions head the two columns ============ */
+.ind-cmp { container: ind-cmp / inline-size; margin-top: 44px; }
+.ind-cmp__heads { display: grid; gap: 6px; }
+.prose .ind-cmp__heads h2 { margin: 0; font-size: clamp(20px, 2.1vw, 24px); }
+.prose .ind-cmp .k-dg { margin-top: var(--k-sp-4); }
+@container ind-cmp (min-width: 560px) {
+  .ind-cmp__heads { grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1fr); align-items: end; }
+  .ind-cmp__heads h2:last-child { grid-column: 3; }
+}
+
+/* ============ small cleanups (were inline styles) ============ */
+.ind-listicle { display: block; margin-top: 10px; }
+.ind-cards .lcard h3 { font-size: 16px; }
+.prose .ind-cards .lcard h3 { margin: 0; }
+.prose .ind-cards .lcard p { margin: 0; }
+.prose .ind-src-note { font-size: 13px; color: var(--k-ink-3); }
+.ind-src-list { font-size: 14px; }
+
+/* ============ hub cards: tag row, initial tile, mini CAC range on the hero's axis ============ */
+.ind-grid .lcard { gap: 12px; }
+.ind-card__top { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ind-ic {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--ind-ic, #3b7bff), #0040c2);
+}
+.ind-ic--1 { --ind-ic: #3b7bff; }
+.ind-ic--2 { --ind-ic: #16a34a; }
+.ind-ic--3 { --ind-ic: #f59e0b; }
+.ind-ic--4 { --ind-ic: #8b5cf6; }
+.ind-ic--5 { --ind-ic: #06b6d4; }
+.ind-ic--6 { --ind-ic: #ec4899; }
+.ind-cac { display: grid; gap: 8px; margin-top: 2px; }
+.ind-cac .badge { justify-self: start; }
+.ind-mini {
+  position: relative;
+  display: block;
+  height: 8px;
+  border-radius: var(--k-r-pill);
+  background: color-mix(in srgb, var(--k-ink) 4%, transparent);
+  box-shadow: inset 0 0 0 1px var(--k-line);
+}
+.ind-mini__seg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--l);
+  width: max(var(--w), 4px);
+  border-radius: var(--k-r-pill);
+  background: var(--k-accent);
+}
+.ind-mini__seg.is-approx { -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px); mask-image: linear-gradient(90deg, transparent, #000 16px); }
+.ind-mini__seg.is-open { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 16px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 16px), transparent); }
+.ind-mini__seg.is-approx.is-open { -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent); mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent); }
+.ind-mini__brk {
+  position: absolute;
+  left: var(--x);
+  top: -3px;
+  bottom: -3px;
+  width: 6px;
+  translate: -50% 0;
+  background: var(--k-paper);
+  border-inline: 1px solid var(--k-ink-4);
+  transform: skewX(-18deg);
+}

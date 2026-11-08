@@ -22,6 +22,13 @@ export interface VerticalQuestion {
 export interface Playbook {
   marketContext: string;
   growthPlaybook: { h: string; p: string }[];
+  /**
+   * The funnel step of growthPlaybook as a path (drawn as a Flow under that step: step 3,
+   * step 4 for mental health). Only a chain the step already prints with arrows, split at
+   * each arrow, word for word: joined with " → " it must appear in a step's heading or text
+   * (the industry page checks this at build time). Leave it out when the copy has no chain.
+   */
+  pathway?: string[];
   commonMistakes: string[];
   whatGoodLooksLike: string[];
   subSegments: string[];
@@ -60,6 +67,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'The quiz → async-Rx → subscription machine', p: 'A 2–3 minute eligibility quiz (BMI ≥30, or ≥27 with a comorbidity) qualifies and segments the lead, feeding an asynchronous clinical intake that turns a script within 24–48 hours. Default users into a monthly subscription, not one-off fills, and use the cash-pay reframe as the offer wedge. The quiz doubles as your CRM entry point, so instrument SMS/email abandonment recovery.' },
       { h: 'Retention is the whole game', p: '50–65% of non-diabetic GLP-1 patients discontinue within 12 months, with GI distress driving ~62% of drop-offs and the steepest churn in the first 3 months - before meaningful weight loss lands. The LTV lever is proactive side-effect coaching, slower titration, anti-nausea support, and plateau/maintenance education - not more ad spend.' },
     ],
+    pathway: ['quiz', 'async-Rx', 'subscription'],
     commonMistakes: [
       'Running before-and-after transformation creative for a prescription program. Meta deleted its weight-loss side-by-side ban in July 2026, but its prescription drug rules say nothing about imagery, so we treat it as an avoidable account risk (our guidance, not a Meta rule).',
       'Marketing compounded GLP-1 as equivalent to branded Wegovy/Zepbound, or leaning on compounding as if the shortage exemption still exists.',
@@ -114,6 +122,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'Symptom quiz → condition-specific LP → membership', p: 'A short symptom/eligibility quiz feeds a dedicated condition page, not a generic homepage (wellness LPs median ~8.2% conversion vs ~5.1% general healthcare). Use a low-friction first-visit offer ($0–$20) to clear the async hurdle, then convert to an auto-refill membership. Price the subscription, not the visit - the visit is a loss-leader to acquire a recurring Rx relationship.' },
       { h: 'LTV: refill cadence + condition stacking', p: 'Episodic care becomes subscription revenue - Hims grew online revenue per subscriber to ~$73/mo in 2024 (+38% YoY) largely via cross-sell. Lock in 30/90-day auto-refill, stack conditions (finasteride + minoxidil, or ED + GLP-1) to raise ARPU without new CAC, and cross-sell across the lifecycle. This is what justifies $700–$930 CACs at scaled players.' },
     ],
+    pathway: ['Symptom quiz', 'condition-specific LP', 'membership'],
     commonMistakes: [
       'Launching prescription ads before securing LegitScript certification. Google requires it for telemedicine prescription services and Meta for telehealth providers promoting prescription drugs (Meta ads that promote telehealth services generally need no authorization).',
       'Running generic "see a doctor online" messaging instead of condition-specific angles - it buries intent and forfeits the 8%+ conversion dedicated LPs deliver.',
@@ -211,6 +220,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'Quiz → at-home lab → consult → membership', p: 'The proven structure: symptom quiz as lead magnet, an at-home or lab-draw panel to confirm eligibility (often $65–$99 as a low-friction tripwire), a synchronous video consult, then a monthly membership bundling labs + medication + provider access. Tiering works - a low entry tier (~$25/mo + meds) and premium (~$99–$149/mo). Automating labs end-to-end is critical; manual lab handling is the single biggest killer of TRT retention.' },
       { h: 'Monitoring is the moat', p: 'Unlike ED (episodic) or GLP-1 (weight-goal churn), TRT is ongoing-to-lifelong once dialed in, so LTV is structurally high and retention is the whole game. Build around a scheduled lab-monitoring cadence (baseline, ~6–8 week titration, then quarterly) that protects safety and creates re-engagement. Ancillary prescriptions (HCG, anastrozole, PT-141) raise AOV and stickiness; tightly qualified programs see 2–3× the retention of loose ones.' },
     ],
+    pathway: ['Quiz', 'at-home lab', 'consult', 'membership'],
     commonMistakes: [
       'Naming testosterone, showing vials or needles, or promising "boost your T" from an account without LegitScript certification and platform authorization: an avoidable rejection and account risk (keeping vials and needles out of creative is our guidance, not Meta’s wording).',
       'Treating TRT like an unregulated supplement and ignoring that it’s a Schedule III controlled substance requiring a synchronous video visit and documented diagnosis.',
@@ -258,6 +268,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'Gate the funnel through telehealth', p: 'The compliant, scalable structure is education-led SEO → free or low-cost async provider consult → prescriber-gated 503A compounded script → recurring vial subscription. Gating behind a licensed practitioner is both the compliance shield and the trust unlock; "research use only" gray-market SKUs cap you at low-trust one-off buyers and maximal liability.' },
       { h: 'LTV lives in stacks, cycles, and refills', p: 'Peptides are inherently recurring - vials deplete, protocols run in cycles (e.g., 8-week BPC-157 courses), and biohackers stack complementary peptides. Build retention on auto-refill subscriptions, protocol/stack bundles, cycling reminders, and lab-retest touchpoints; the money is in the second-through-tenth order.' },
     ],
+    pathway: ['education-led SEO', 'free or low-cost async provider consult', 'prescriber-gated 503A compounded script', 'recurring vial subscription'],
     commonMistakes: [
       'Trying to run Meta/Google paid ads on peptides at all - you’ll burn ad accounts, trip AI enforcement, and land on warning-letter lists.',
       'Making disease-treatment claims ("heals injuries," "reverses aging") instead of compliant structure/function benefit language.',
@@ -309,6 +320,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'Sell the consult, not the discount - and answer in under 5 minutes', p: 'The funnel that works is offer → booked consultation → in-person close, not a $99 coupon that attracts no-shows (deep-discount lead-gen drives no-show rates as high as 40%). Speed-to-lead is decisive: leads contacted within 5 minutes book far higher, so pair ads with instant SMS/CRM follow-up and let patients self-book - over 40% of bookings happen outside business hours.' },
       { h: 'Monetize the re-treatment cycle with memberships', p: 'Med spa LTV is a subscription in disguise: neurotoxin wears off every 3–4 months, so a first Botox visit is really 3–4 visits/year. Members spend ~67% more and add ~$1,100/patient/year; membership programs drive +31% neuromodulator and +43% filler sales and can supply 20–30% of revenue through slow months. Treat GLP-1 weight-loss patients as top-of-funnel that graduates into aesthetics memberships.' },
     ],
+    pathway: ['offer', 'booked consultation', 'in-person close'],
     commonMistakes: [
       'Discount-led acquisition ($99 offers) that fills the calendar with 40%-no-show, low-commitment leads instead of consult-qualified buyers.',
       'No speed-to-lead system - leads sit for hours while the 5-minute contact window (and the booking) evaporates.',
@@ -356,6 +368,7 @@ export const PLAYBOOKS: Record<string, Playbook> = {
       { h: 'Winning angles: insurance-covered, fast, de-stigmatized', p: 'The three hooks that move prospects: (1) "Covered by your insurance - check in 60 seconds," (2) "First appointment in days, not months," and (3) permission-giving copy ("You don’t have to be in crisis to get help"). Avoid outcome claims ("cure your anxiety") - they trigger Meta unapproved-health-claim rejections and LegitScript violations.' },
       { h: 'Eligibility check → matching quiz → fast first session → defend retention', p: 'The highest-converting structure is an insurance-eligibility check up front (removes the #1 objection), a short matching quiz, and a booked first appointment within 3–5 days. But the real P&L lever is retention: guided online therapy sees ~72% adherence vs ~26% self-guided, and LTV lives or dies on session-2 show rates, med-management refills, and reactivation of lapsed patients.' },
     ],
+    pathway: ['Eligibility check', 'matching quiz', 'fast first session', 'defend retention'],
     commonMistakes: [
       'Running prescription-service ads without LegitScript certification. Google and Meta both require it for that, and an uncertified launch puts the ad account at risk.',
       'Optimizing Meta campaigns on Purchase/lead-form health questions that are now prohibited, so the algorithm never learns and CPLs balloon.',

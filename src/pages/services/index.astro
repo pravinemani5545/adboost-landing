@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import HubSpoke from '../../kit/diagram/HubSpoke.astro';
 import { SERVICES } from '../../data/services';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
+import '../../styles/pages/services.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'Paid Media, Creative & CRO for Health Brands | AdBoost';
@@ -13,22 +15,38 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }]),
   { '@type': 'CollectionPage', name: 'AdBoost Health services', url: `${SITE}/services/` },
 ];
+
+// The triangle: the three services as this page's copy names them (its h3s), and on the
+// links between them the three gaps the copy lists ("creative the ad platform rejects,
+// landing pages that leak the traffic media buys, and attribution that cannot tell which
+// spend actually produced a patient or customer"), in that order.
+const spokes = [
+  { label: 'Paid media', href: '/services/paid-media/' },
+  { label: 'Creative', href: '/services/creative/' },
+  { label: 'Conversion (CRO)', href: '/services/cro/' },
+];
+const gaps = [
+  'Creative the ad platform rejects',
+  'Landing pages that leak the traffic media buys',
+  'Attribution that cannot tell which spend actually produced a patient or customer',
+];
 ---
 <BaseLayout {title} {description} canonicalPath="/services/" {jsonLd}>
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Services' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>SERVICES</span>
-      <h1>One <span class="serif">compliant</span> acquisition system, built for health.</h1>
-      <p class="phero-lede">Instead of disconnected tactics, we offer a unified performance system. By bringing together paid media, creative strategy, and CRO, we help health-adjacent brands acquire customers more efficiently and drive a higher ROAS.</p>
-    </div>
-  </section>
+  <PageHero
+    class="svc-hero svc-hub-hero"
+    wide
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services' }]}
+    eyebrow="SERVICES"
+    title='One <span class="serif">compliant</span> acquisition system, built for health.'
+    lede="Instead of disconnected tactics, we offer a unified performance system. By bringing together paid media, creative strategy, and CRO, we help health-adjacent brands acquire customers more efficiently and drive a higher ROAS."
+    art="/art/services/hub"
+  />
 
   <section class="iwrap">
     <div class="container">
       <div class="grid-cards">
         {SERVICES.map((s) => (
-          <a class="lcard reveal" href={`/services/${s.slug}/`}>
+          <a class="lcard" href={`/services/${s.slug}/`}>
             <h3>{s.name}</h3>
             <p>{s.lede}</p>
             <span class="lc-more">{s.name} →</span>
@@ -38,17 +56,29 @@ const jsonLd = [
     </div>
   </section>
 
-  <section class="iwrap-sm">
-    <div class="container prose" style="max-width:74ch">
-      <h2 class="sec-title">How the three services work as one system</h2>
-      <p>Most health brands do not lose money because one channel is broken. They lose it in the gaps between channels: creative the ad platform rejects, landing pages that leak the traffic media buys, and attribution that cannot tell which spend actually produced a patient or customer. AdBoost Health closes those gaps by running paid media, creative, and conversion as a single acquisition system rather than three separate retainers.</p>
-      <h3>Paid media</h3>
-      <p>Compliant account structure and daily optimization across Meta, Google, and TikTok, built specifically for regulated health, telehealth, GLP-1, and supplement brands. Every campaign is structured to lower customer acquisition cost and scale spend without tripping platform health policy. See <a href="/services/paid-media/">paid media</a>, and size the math with the free <a href="/tools/cac-calculator/">CAC calculator</a>.</p>
-      <h3>Creative</h3>
-      <p>In-house, pre-cleared ad creative produced at volume so testing never stalls. We pre-review every concept against Meta, Google, and TikTok health and drug policy before it runs, which is the difference between a steady test cadence and an account disabled on day one. See <a href="/services/creative/">creative</a>, and our reference on <a href="/advertising/">health ad compliance by platform</a>.</p>
-      <h3>Conversion (CRO)</h3>
-      <p>Landing pages and funnels tuned to turn expensive clicks into booked patients and customers, measured with clean <a href="/glossary/capi/#server-side-tracking">server-side tracking</a> so the numbers you optimize on are real. See <a href="/services/cro/">CRO</a>.</p>
-      <p>Because one team owns all three, a rejected ad, a weak landing page, and a broken tracking pixel get fixed in one place instead of pointing fingers across vendors. That is why partners average 24% lower CAC in the first 30 days and see results by day 31. Compare the model against <a href="/compare/">the usual alternatives</a>, or review benchmarks by vertical for <a href="/industries/telehealth/">telehealth</a> and <a href="/industries/glp-1-weight-loss/">GLP-1 weight loss</a>.</p>
+  <section class="iwrap-sm svc-system-band">
+    <div class="container">
+      <div class="prose svc-system">
+        <h2 class="sec-title">How the three services work as one system</h2>
+        <p>Most health brands do not lose money because one channel is broken. They lose it in the gaps between channels: creative the ad platform rejects, landing pages that leak the traffic media buys, and attribution that cannot tell which spend actually produced a patient or customer. AdBoost Health closes those gaps by running paid media, creative, and conversion as a single acquisition system rather than three separate retainers.</p>
+      </div>
+      <div class="svc-tri">
+        <HubSpoke
+          caption="Paid media, creative and conversion run as one system. The links between them are the three gaps where health brands lose money."
+          hub={{ label: 'A single acquisition system', sub: 'One team owns all three' }}
+          spokes={spokes}
+          edges={gaps}
+        />
+      </div>
+      <div class="prose svc-system">
+        <h3>Paid media</h3>
+        <p>Compliant account structure and daily optimization across Meta, Google, and TikTok, built specifically for regulated health, telehealth, GLP-1, and supplement brands. Every campaign is structured to lower customer acquisition cost and scale spend without tripping platform health policy. See <a href="/services/paid-media/">paid media</a>, and size the math with the free <a href="/tools/cac-calculator/">CAC calculator</a>.</p>
+        <h3>Creative</h3>
+        <p>In-house, pre-cleared ad creative produced at volume so testing never stalls. We pre-review every concept against Meta, Google, and TikTok health and drug policy before it runs, which is the difference between a steady test cadence and an account disabled on day one. See <a href="/services/creative/">creative</a>, and our reference on <a href="/advertising/">health ad compliance by platform</a>.</p>
+        <h3>Conversion (CRO)</h3>
+        <p>Landing pages and funnels tuned to turn expensive clicks into booked patients and customers, measured with clean <a href="/glossary/capi/#server-side-tracking">server-side tracking</a> so the numbers you optimize on are real. See <a href="/services/cro/">CRO</a>.</p>
+        <p>Because one team owns all three, a rejected ad, a weak landing page, and a broken tracking pixel get fixed in one place instead of pointing fingers across vendors. That is why partners average 24% lower CAC in the first 30 days and see results by day 31. Compare the model against <a href="/compare/">the usual alternatives</a>, or review benchmarks by vertical for <a href="/industries/telehealth/">telehealth</a> and <a href="/industries/glp-1-weight-loss/">GLP-1 weight loss</a>.</p>
+      </div>
     </div>
   </section>
 

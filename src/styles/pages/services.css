@@ -1,0 +1,114 @@
+/* Services: the hub (/services/) and the 3 service pages (design v2, B3).
+   Kit tokens only (--k-*, --t-*). Every selector is page-prefixed (svc-), so this sheet never
+   reaches another template; diagram internals (dg-*) are styled by the kit, not here. */
+
+/* ============ hero: a wider aside for the plan (Gantt) ============ */
+@media (min-width: 1024px) {
+  .svc-hero .phero-grid { grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr); gap: 48px; }
+}
+.svc-metabar { margin-top: 14px; }
+.svc-plan { display: grid; gap: var(--k-sp-4); padding: var(--k-sp-5); }
+.svc-plan__head {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--k-sp-3);
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
+.svc-plan__title { color: var(--k-ink); }
+.svc-plan__title::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--k-accent);
+  vertical-align: middle;
+  translate: 0 -1px;
+}
+
+/* ============ process cards: an ordered list, lit from the hero Gantt ============ */
+.prose .svc-process { list-style: none; margin: 20px 0; padding: 0; }
+.prose .svc-process > li { margin: 0; }
+.svc-process .pb { scroll-margin-top: calc(var(--k-nav-h) + 22px); }
+.svc-process .pb.is-lit,
+.svc-process .pb:target {
+  border-color: var(--k-accent-line);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k-accent) 12%, transparent), var(--k-glow);
+}
+.prose .svc-process .pb h3 { margin: 0 0 6px; }
+.prose .svc-process .pb p { margin: 0; }
+
+/* ============ measured on: chips ============ */
+.svc-measured { display: grid; gap: 10px; margin: 6px 0 8px; }
+.prose .svc-measured__label {
+  margin: 0;
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
+.prose .svc-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.prose .svc-chips > li { margin: 0; }
+.svc-chips .k-chip { white-space: normal; line-height: 1.4; font-size: 11.5px; color: var(--k-ink-2); }
+
+/* ============ the stat card ============ */
+.svc-stat {
+  position: relative;
+  overflow: clip;
+  isolation: isolate;
+  gap: 10px;
+  margin: 32px 0 8px;
+  padding: clamp(20px, 3vw, 28px);
+  border-radius: var(--k-r-lg);
+  border-color: var(--k-accent-line);
+  box-shadow: var(--k-e2), var(--k-edge-light);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 4%, var(--k-paper)), var(--k-paper) 70%);
+}
+.svc-stat::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -80px;
+  top: -120px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--k-accent-glow), transparent);
+  pointer-events: none;
+}
+.prose .svc-stat__eyebrow {
+  margin: 0;
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+  color: var(--k-accent-ink);
+}
+.prose .svc-stat__value { margin: 4px 0 0; font-size: clamp(40px, 5.4vw, 60px); letter-spacing: -0.04em; color: var(--k-accent-ink); }
+.prose .svc-stat__text { margin: 0; max-width: 60ch; font-size: 16px; line-height: 1.55; color: var(--k-ink-2); }
+.prose .svc-stat a.svc-stat__src {
+  justify-self: start;
+  align-self: flex-start;
+  margin-top: 4px;
+  color: var(--k-ink-2);
+  text-decoration: none;
+  transition: border-color var(--k-d-fast) var(--k-ease), color var(--k-d-fast) var(--k-ease);
+}
+.prose .svc-stat a.svc-stat__src:hover { color: var(--k-accent-ink); border-color: var(--k-accent-line); }
+
+/* ============ hub: the system section, with the triangle between its first paragraph and the rest.
+   The triangle gets up to 960px: the ring layout needs that much room for its gap labels. ============ */
+.svc-system { max-width: 74ch; margin-inline: auto; }
+.svc-tri { max-width: 960px; margin: var(--k-sp-6) auto var(--k-sp-7); }
+.svc-tri + .svc-system h3:first-child { margin-top: 0; }

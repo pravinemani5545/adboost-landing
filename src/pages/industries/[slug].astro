@@ -1,11 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Bars from '../../kit/diagram/Bars.astro';
+import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import Flow from '../../kit/diagram/Flow.astro';
+import Compare from '../../kit/diagram/Compare.astro';
+import type { Tone } from '../../kit/diagram/types';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook, type Source } from '../../data/vertical-playbooks';
-import { AD_POLICIES } from '../../data/adPolicies';
+import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL, type PolicyStatus } from '../../data/adPolicies';
+import { CAC_BREAK, cacItem, cacNotes } from './_cac';
+import '../../styles/pages/industries.css';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { getPublishedPosts } from '../../lib/blog';
@@ -95,6 +102,27 @@ const services = [
   { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/' },
   { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/' },
 ];
+// Vertical snapshot (hero aside) and the body diagrams. Every string and number below comes
+// from verticals.ts, vertical-playbooks.ts or adPolicies.ts as printed on the site.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const LEVEL: Record<PolicyStatus, Tone> = { allowed: 'ok', cert: 'accent', restricted: 'warn', prohibited: 'bad' };
+const PLATFORM_ORDER = ['Meta', 'Google', 'TikTok'];
+const strip = [...platformGuides]
+  .sort((a, b) => PLATFORM_ORDER.indexOf(a.platform) - PLATFORM_ORDER.indexOf(b.platform))
+  .map((p) => ({ label: p.platform, status: STATUS_LABEL[p.status], level: LEVEL[p.status], href: `/advertising/${p.slug}/` }));
+const statusLegend = (Object.keys(STATUS_LABEL) as PolicyStatus[]).map((s) => ({ level: LEVEL[s], label: STATUS_LABEL[s] }));
+const checkedLabel = new Date(`${RULES_CHECKED_ON}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+
+// The funnel path: only a chain the copy already prints with arrows (see Playbook.pathway).
+// It is drawn under the step that prints it.
+const pathway = pb.pathway?.length ? pb.pathway : undefined;
+const pathStep = pathway
+  ? pb.growthPlaybook.findIndex((s) => s.h.includes(pathway.join(' → ')) || s.p.includes(pathway.join(' → ')))
+  : -1;
+if (pathway && pathStep < 0) {
+  throw new Error(`[industries/${v.slug}] pathway "${pathway.join(' → ')}" is not printed in any growth playbook step`);
+}
+
 const toc = [
   ...pb.questions.map((q) => ({ id: q.id, label: q.nav })),
   { id: 'market', label: 'Market context' },
@@ -107,29 +135,54 @@ const toc = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{v.category}</span>
-      <h1>{v.h1}</h1>
-      <p class="phero-lede">{v.lede}</p>
-      <div class="phero-meta">
-        <span>Typical CAC {v.cacDisplay}</span>
-        <span>Compliance-first</span>
-        <span>Setup in 5 days</span>
-        {updatedLabel && <span>Updated <time datetime={updated}>{updatedLabel}</time></span>}
+  <PageHero
+    class="ind-hero"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]}
+    eyebrow={v.category}
+    title={esc(v.h1)}
+    lede={esc(v.lede)}
+    art="/art/industries/hub"
+  >
+    <div class="phero-meta">
+      <span>Typical CAC {v.cacDisplay}</span>
+      <span>Compliance-first</span>
+      <span>Setup in 5 days</span>
+      {updatedLabel && <span>Updated <time datetime={updated}>{updatedLabel}</time></span>}
+    </div>
+    <div slot="aside" class="k-card k-card--float k-card--glass ind-snap">
+      <p class="ind-snap__head"><span class="ind-snap__title">Vertical snapshot</span><span>Typical CAC</span></p>
+      <Bars
+        arrive
+        variant="range"
+        prefix="$"
+        axisBreakAbove={CAC_BREAK}
+        caption={`Typical CAC by vertical, as each industry page quotes it, with ${v.short} lit. ${cacNotes(VERTICALS)}`}
+        items={VERTICALS.map((x) => cacItem(x, v.slug))}
+      />
+      {strip.length > 0 && (
+        <div class="ind-snap__part">
+          <StatusStrip
+            arrive
+            caption={`${v.short} ad rules on each platform, from our rule sheets (checked ${checkedLabel}).`}
+            items={strip}
+          />
+        </div>
+      )}
+      <div class="ind-snap__part">
+        <p class="ind-snap__label">Segments we work in</p>
+        <ul class="ind-chips">{pb.subSegments.map((s) => <li class="k-chip">{s}</li>)}</ul>
       </div>
     </div>
-  </section>
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="iwrap ind-doc">
     <div class="container">
       <div class="doc-grid">
         <div class="doc-main">
-          <div class="answer-box reveal">
+          <div class="answer-box">
             <span class="al">The short answer</span>
             {v.summary} {v.proofLine} We only work in health, so the playbook, creative and policy review are built for {v.inline} brands.
-            {listicle && <span style="display:block;margin-top:10px">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
+            {listicle && <span class="ind-listicle">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
           </div>
           <div class="prose">
             {pb.questions.map((q) => (
@@ -144,56 +197,76 @@ const toc = [
 
             <h2 id="playbook">How do {v.inline} brands grow profitably?</h2>
             <p>{v.painPoint}</p>
-            <div class="playbook">
-              {pb.growthPlaybook.map((s) => (
-                <div class="pb"><h3>{s.h}</h3><p>{s.p}</p></div>
+            <ol class="ind-steps" data-draw>
+              {pb.growthPlaybook.map((s, i) => (
+                <li class="ind-step" style={`--i:${i}`}>
+                  <span class="ind-step__n" aria-hidden="true">{i + 1}</span>
+                  <div class="ind-step__body">
+                    <h3>{s.h}</h3>
+                    <p>{s.p}</p>
+                    {i === pathStep && pathway && (
+                      <Flow
+                        class="ind-path"
+                        numbered={false}
+                        pulse
+                        caption={`Step ${i + 1} as a path, each stage in the playbook’s own words.`}
+                        nodes={pathway.map((label) => ({ label: label.charAt(0).toUpperCase() + label.slice(1) }))}
+                      />
+                    )}
+                  </div>
+                </li>
               ))}
-            </div>
+            </ol>
 
             <h2 id="landmine">Which ad rules and claims trip up {v.inline} brands?</h2>
             <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
+            {strip.length > 0 && (
+              <StatusStrip
+                compact
+                class="ind-rules"
+                caption={`Where ${v.short} stands on each platform. Each one opens its rule sheet.`}
+                items={strip}
+                legend={statusLegend}
+              />
+            )}
 
-            <h2 id="mistakes">What are the most common {v.inline} marketing mistakes?</h2>
-            <ul class="xlist">
-              {pb.commonMistakes.map((m) => (
-                <li><span class="xk"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span>{m}</li>
-              ))}
-            </ul>
-
-            <h2 id="good">What does good performance look like for {v.inline} brands?</h2>
-            <ul class="checks">
-              {pb.whatGoodLooksLike.map((k) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{k}</li>
-              ))}
-            </ul>
-
-            <h3>Segments we work in</h3>
-            <div class="chips">{pb.subSegments.map((s) => <span class="chip">{s}</span>)}</div>
+            <div class="ind-cmp">
+              <div class="ind-cmp__heads">
+                <h2 id="mistakes">What are the most common {v.inline} marketing mistakes?</h2>
+                <h2 id="good">What does good performance look like for {v.inline} brands?</h2>
+              </div>
+              <Compare
+                variant="split"
+                caption={`The ${v.inline} mistakes we see most, set against what good performance looks like.`}
+                left={{ label: 'Common mistakes', items: pb.commonMistakes }}
+                right={{ label: 'What good looks like', items: pb.whatGoodLooksLike }}
+              />
+            </div>
 
             <h2 id="services">What does AdBoost Health do for {v.inline} brands?</h2>
-            <div class="related-grid">
+            <div class="related-grid ind-cards">
               {services.map((s) => (
-                <a class="lcard" href={s.href}><h3 style="font-size:16px">{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
+                <a class="lcard" href={s.href}><h3>{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
               ))}
             </div>
 
             <h2 id="faq">{v.short} marketing FAQ</h2>
-            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} open />
+            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} />
 
             {relatedPosts.length > 0 && (
               <>
                 <h3 id="related">Related posts</h3>
-                <div class="related-grid">
+                <div class="related-grid ind-cards">
                   {relatedPosts.map(({ p, href }) => (
-                    <a class="lcard" href={href}><h3 style="font-size:16px">{p.data.title}</h3><p>{p.data.description}</p><span class="lc-more">Read the post →</span></a>
+                    <a class="lcard" href={href}><h3>{p.data.title}</h3><p>{p.data.description}</p><span class="lc-more">Read the post →</span></a>
                   ))}
                 </div>
               </>
             )}
 
             <h3>Sources</h3>
-            <p style="font-size:13px;color:var(--mute)">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
-            <ul style="font-size:14px">
+            <p class="ind-src-note">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
+            <ul class="ind-src-list">
               {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
             </ul>
           </div>
@@ -221,7 +294,7 @@ const toc = [
             </div>
           )}
           <div class="aside-card dark">
-            <h4 style="color:#fff">Lower CAC on your {v.inline} brand</h4>
+            <h4>Lower CAC on your {v.inline} brand</h4>
             <p>Free audit with a senior strategist: a written plan you keep either way.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
