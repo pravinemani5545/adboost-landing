@@ -11,6 +11,17 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["telehealth", "landing pages", "CRO", "intake funnels", "conversion"]
 heroImage: "/blog/telehealth-landing-page-conversion.webp"
 heroAlt: "Wireframe of a telehealth landing page and intake flow with drop-off points highlighted in AdBoost blue"
+diagrams:
+  fix-order:
+    kind: timeline
+    variant: steps
+    caption: "In audit order. Most funnels have one dominant leak, and it's usually findable in an afternoon with funnel-step data."
+    phases:
+      - { label: "Message match above the fold", detail: "Does the headline repeat the ad's promise?" }
+      - { label: "Contact-info timing", detail: "Is email asked before eligibility?" }
+      - { label: "Eligibility screening", detail: "State and age on the first intake screen?" }
+      - { label: "Pricing visibility", detail: "Real numbers within one click?" }
+      - { label: "Crawlable compliance", detail: "Disclaimers in text, not images?" }
 ---
 
 Here's the pattern we find in most telehealth funnel audits: the ads are fine. The offer is fine. And somewhere between the click and the booked visit, more than half of genuinely motivated patients - people who clicked an ad about their actual health problem - quietly leave.
@@ -68,6 +79,8 @@ The uncomfortable implication: your CRO roadmap and your compliance posture are 
 ## What should you fix first?
 
 In audit order: message match above the fold, contact-info timing in intake, early eligibility screening, visible pricing, then crawlable compliance elements. Most funnels have one dominant leak, and it's usually findable in an afternoon with funnel-step data - every step needs an event, or you're guessing.
+
+<!-- diagram: fix-order -->
 
 | Fix order | Leak | Quick check |
 |---|---|---|

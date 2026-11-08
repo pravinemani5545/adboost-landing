@@ -1,11 +1,15 @@
 ---
-// Blog index and posts. A thin wrapper over the Shell (skip link, nav, #main, phone CTA, footer);
-// the Props API and the article markup are unchanged.
+// Blog index and posts. A thin wrapper over the Shell (skip link, nav, #main, phone CTA, footer)
+// that owns the article chrome: header and byline, hero, page index, reading progress, the CTA
+// banner and related reading. Styles: src/styles/pages/blog.css.
+//
+// Tracker contract: the CTA banner's Book link is "inline" for t.js (no nav, .mobile-cta,
+// .cta-band or footer ancestor), and the page index is a <nav> that never carries a /book/ link.
 import Shell from './Shell.astro';
 import { versioned } from '../lib/assets';
 import { BOOK_PATH } from '../lib/site';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-
+import '../styles/pages/blog.css';
 
 interface RelatedPost {
   href: string;
@@ -13,6 +17,7 @@ interface RelatedPost {
   description: string;
   heroImage?: string;
   heroAlt?: string;
+  pubDate?: Date;
 }
 
 interface Props {
@@ -21,6 +26,8 @@ interface Props {
   pageTitle?: string;
   description: string;
   canonical: string;
+  /** The post's id (its URL slug), on post pages */
+  slug?: string;
   /** Present on post pages, absent on the blog index */
   post?: {
     pubDate: Date;
@@ -38,9 +45,11 @@ interface Props {
   related?: RelatedPost[];
   /** The post's visible FAQ section (faqFromBody), emitted as FAQPage JSON-LD */
   faq?: { q: string; a: string }[];
+  /** The post's h2s for the page index (long posts only; empty hides it) */
+  toc?: { id: string; html: string }[];
 }
 
-const { title, pageTitle, description, canonical, post, readMinutes, related = [], faq = [] } = Astro.props;
+const { title, pageTitle, description, canonical, slug, post, readMinutes, related = [], faq = [], toc = [] } = Astro.props;
 const metaTitle = pageTitle ?? title;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
@@ -119,6 +128,7 @@ const jsonLd = post
 const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 const displayTitle = title.replace(/ \| AdBoost Health$/, '');
 const category = post?.tags[0]?.toUpperCase();
+const updated = post?.updatedDate && post.updatedDate.valueOf() > post.pubDate.valueOf() ? post.updatedDate : undefined;
 ---
 
 <Shell
@@ -132,6 +142,41 @@ const category = post?.tags[0]?.toUpperCase();
   {jsonLd}
   mainClass="blog-main"
 >
+  <Fragment slot="head">
+    <script is:inline>
+      // Card image to post hero morph. A view-transition-name goes only on the one element a
+      // navigation needs (the clicked card's image, the post hero) and is cleared after the
+      // transition, so no page ever carries a duplicate name. pagereveal must be registered
+      // before first render, hence a classic inline script in <head>.
+      (() => {
+        const slugOf = (u) => { try { const m = new URL(u, location.href).pathname.match(/^\/blog\/([^/]+)\/$/); return m ? m[1] : null; } catch { return null; } };
+        const isIndex = (u) => { try { return new URL(u, location.href).pathname === '/blog/'; } catch { return false; } };
+        const pick = (here, there) => {
+          const to = slugOf(there), from = slugOf(here);
+          if (isIndex(here) && to) return [document.querySelector('[data-vt-card="' + CSS.escape(to) + '"]'), to];
+          if (from && isIndex(there)) return [document.querySelector('[data-vt-hero]'), from];
+          return [null, null];
+        };
+        const name = (el, slug) => { el.style.viewTransitionName = slug ? 'post-' + slug : ''; el.style.viewTransitionClass = slug ? 'k-post' : ''; };
+        addEventListener('pageswap', async (e) => {
+          if (!e.viewTransition || !e.activation) return;
+          const [el, slug] = pick(location.href, e.activation.entry.url);
+          if (!el) return;
+          name(el, slug);
+          try { await e.viewTransition.finished; } catch {} finally { name(el, null); }
+        });
+        addEventListener('pagereveal', async (e) => {
+          const from = window.navigation && navigation.activation && navigation.activation.from;
+          if (!e.viewTransition || !from) return;
+          const [el, slug] = pick(location.href, from.url);
+          if (!el) return;
+          name(el, slug);
+          try { await e.viewTransition.ready; } catch {} finally { name(el, null); }
+        });
+      })();
+    </script>
+  </Fragment>
+
   {post ? (
     <article class="blog-article">
       <header class="post-head container">
@@ -140,26 +185,45 @@ const category = post?.tags[0]?.toUpperCase();
           <a class="all-link" href="/blog/">← All articles</a>
           {category && <span class="cat-chip">{category}</span>}
         </div>
-        <h1>{displayTitle}</h1>
-        <div class="byline">
-          <img src={versioned('/people/amir.webp')} alt={post.author} width="40" height="40" loading="eager" />
-          <div class="byline-meta">
-            <b>{post.author}</b>
-            <span>{post.authorTitle}</span>
-          </div>
-          <span class="byline-sep" aria-hidden="true"></span>
-          <span class="byline-date"><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time>{readMinutes && ` · ${readMinutes} min read`}{post.updatedDate && post.updatedDate.valueOf() > post.pubDate.valueOf() && ` · Updated ${fmt(post.updatedDate)}`}</span>
+        <h1 class="post-title arrive">{displayTitle}</h1>
+        <div class="byline arrive" style="--d:60ms">
+          <a class="byline-author" href="/about/">
+            <img src={versioned('/people/amir.webp')} alt="" width="44" height="44" loading="eager" />
+            <span class="byline-who">
+              <b>{post.author}</b>
+              <span>{post.authorTitle}</span>
+            </span>
+          </a>
+          <dl class="byline-facts">
+            <div><dt>Published</dt><dd><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time></dd></div>
+            {updated && <div><dt>Updated</dt><dd><time datetime={updated.toISOString()}>{fmt(updated)}</time></dd></div>}
+            {readMinutes && <div><dt>Read</dt><dd>{readMinutes} min</dd></div>}
+          </dl>
         </div>
       </header>
 
       {post.heroImage && (
-        <div class="hero-figure container" data-mcta-anchor>
-          <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" />
+        <div class="hero-figure container arrive" style="--d:90ms" data-mcta-anchor>
+          <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" data-vt-hero={slug} />
         </div>
       )}
 
-      <div class="prose prose--doc container">
-        <slot />
+      <div class:list={['post-body', 'container', toc.length > 0 && 'has-toc']}>
+        <div class="post-progress" aria-hidden="true"><span></span></div>
+        {toc.length > 0 && (
+          <nav class="post-toc" aria-label="On this page" data-toc>
+            <p class="post-toc__title">On this page</p>
+            <div class="post-toc__list">
+              <span class="post-toc__rail" aria-hidden="true"><span></span></span>
+              <ol>
+                {toc.map((t) => <li><a href={`#${t.id}`} set:html={t.html} /></li>)}
+              </ol>
+            </div>
+          </nav>
+        )}
+        <div class="post-prose">
+          <slot />
+        </div>
       </div>
 
       <section class="cta-banner-wrap container">
@@ -176,20 +240,25 @@ const category = post?.tags[0]?.toUpperCase();
       </section>
 
       {related.length > 0 && (
-        <section class="related container">
-          <h2>Keep reading</h2>
-          <div class="related-grid">
-            {related.map((r) => (
-              <a class="related-card" href={r.href}>
-                {r.heroImage && <img src={`${r.heroImage}?v=2`} alt={r.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
-                <div class="related-body">
-                  <h3>{r.title}</h3>
-                  <p>{r.description}</p>
-                  <span class="read-more">Read article →</span>
-                </div>
-              </a>
+        <section class="related container" aria-labelledby="related-h">
+          <h2 id="related-h">Keep reading</h2>
+          <ul class="related-grid">
+            {related.map((r, i) => (
+              <li data-reveal style={`--i:${i}`}>
+                <a class="k-card k-card--link rel-card" href={r.href}>
+                  {r.heroImage && (
+                    <span class="k-card__media"><img src={`${r.heroImage}?v=2`} alt={r.heroAlt ?? ''} loading="lazy" decoding="async" width="640" height="360" /></span>
+                  )}
+                  <span class="k-card__body">
+                    {r.pubDate && <time class="card-date" datetime={r.pubDate.toISOString()}>{fmt(r.pubDate)}</time>}
+                    <h3 class="card-title">{r.title}</h3>
+                    <span class="card-desc">{r.description}</span>
+                    <span class="read-more">Read article <span aria-hidden="true">→</span></span>
+                  </span>
+                </a>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
       )}
     </article>
@@ -200,65 +269,23 @@ const category = post?.tags[0]?.toUpperCase();
   )}
 </Shell>
 
-<style is:global>
-  .blog-main { padding: calc(var(--k-nav-h) + 40px) 0 90px; }
-
-  /* --- centered post header (reference format) --- */
-  .post-head { max-width: 760px; text-align: center; }
-  .post-head .crumbs { justify-content: center; margin-bottom: 14px; }
-  .post-meta-top { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 20px; }
-  .all-link { font-size: 13px; color: var(--mute); transition: color .15s; }
-  .all-link:hover { color: var(--blue); }
-  .cat-chip { font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--blue); background: var(--blue-soft); border-radius: 999px; padding: 5px 11px; }
-  .post-head h1 { font-size: clamp(30px, 4.6vw, 46px); letter-spacing: -.03em; line-height: 1.1; font-weight: 600; color: var(--ink); margin-bottom: 22px; }
-  .byline { display: flex; align-items: center; justify-content: center; gap: 11px; margin-bottom: 40px; }
-  .byline img { border-radius: 50%; object-fit: cover; }
-  .byline-meta { text-align: left; }
-  .byline-meta b { display: block; font-size: 13.5px; color: var(--ink); font-weight: 600; line-height: 1.25; }
-  .byline-meta span { font-size: 12px; color: var(--mute); }
-  .byline-sep { width: 1px; height: 26px; background: var(--line-2); }
-  .byline-date { font-size: 12.5px; color: var(--mute); }
-
-  /* --- hero image on the post itself --- */
-  .hero-figure { max-width: 980px; margin-bottom: 48px; }
-  .hero-figure img { width: 100%; height: auto; border-radius: var(--radius-lg); border: 1px solid var(--line); box-shadow: var(--shadow); }
-
-  /* --- blue gradient CTA banner (reference format) --- */
-  .cta-banner-wrap { max-width: 980px; margin-top: 56px; }
-  .cta-banner { display: flex; align-items: center; justify-content: space-between; gap: 26px; flex-wrap: wrap; background: linear-gradient(120deg, #0057ff 0%, #3b7bff 100%); border-radius: var(--radius-lg); padding: 34px 38px; box-shadow: 0 24px 48px -20px var(--blue-glow); }
-  .cta-banner-text h2 { font-size: 22px; letter-spacing: -.02em; font-weight: 600; color: #fff; margin-bottom: 6px; }
-  .cta-banner-text p { font-size: 14px; color: rgba(255,255,255,.82); max-width: 52ch; }
-  .btn-light { background: #fff; color: var(--blue); font-weight: 600; box-shadow: 0 8px 20px -8px rgba(10,10,15,.35); }
-  .btn-light:hover { background: #f2f6ff; }
-  .btn-light .chev { width: 18px; height: 18px; border-radius: 50%; background: var(--blue-soft); display: grid; place-items: center; transition: transform .2s; }
-  .btn-light:hover .chev { transform: translateX(3px); }
-
-  /* --- related posts --- */
-  .related { max-width: 980px; margin-top: 64px; }
-  .related > h2 { font-size: 22px; letter-spacing: -.02em; font-weight: 600; color: var(--ink); margin-bottom: 22px; }
-  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
-  .related-card { display: flex; flex-direction: column; overflow: clip; }
-  .related-card img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid var(--line); }
-  .related-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
-  .related-body h3 { font-size: 16px; letter-spacing: -.01em; line-height: 1.3; font-weight: 600; color: var(--ink); }
-  .related-body p { font-size: 13px; color: var(--mute); line-height: 1.5; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .related-body .read-more { font-size: 13px; font-weight: 500; color: var(--blue); }
-
-  /* --- tablet --- */
-  @media (max-width: 900px) {
-    .hero-figure { max-width: 100%; }
-    .related-grid { gap: 18px; }
+<script>
+  // Reading progress and the page-index spine where scroll-driven CSS is missing: the same
+  // measure blog.css gives animation-timeline (the post body from its top reaching the top of
+  // the screen to its bottom reaching the bottom), written to --post-p on .post-body.
+  const body = document.querySelector<HTMLElement>('.post-body');
+  if (body && !CSS.supports('animation-timeline: view()') && document.documentElement.classList.contains('motion')) {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const r = body.getBoundingClientRect();
+      const span = r.height - innerHeight;
+      const p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : r.top < 0 ? 1 : 0;
+      body.style.setProperty('--post-p', p.toFixed(4));
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(update); };
+    addEventListener('scroll', queue, { passive: true });
+    addEventListener('resize', queue, { passive: true });
+    update();
   }
-
-  @media (max-width: 640px) {
-    .blog-main { padding-top: calc(var(--k-nav-h) + 36px); }
-    .post-head h1 { font-size: clamp(26px, 7.2vw, 34px); }
-    .byline { flex-wrap: wrap; row-gap: 6px; }
-    .byline-sep { display: none; }
-    .byline-date { width: 100%; text-align: center; }
-    .hero-figure img { border-radius: var(--radius); }
-    .cta-banner { padding: 28px 22px; text-align: center; justify-content: center; }
-    .cta-banner-text p { margin-inline: auto; }
-    .related { margin-top: 48px; }
-  }
-</style>
+</script>

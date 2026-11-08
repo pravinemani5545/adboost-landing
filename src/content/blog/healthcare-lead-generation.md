@@ -8,6 +8,18 @@ heroImage: "/blog/healthcare-lead-generation.webp"
 heroAlt: "AdBoost Health brand graphic: healthcare lead generation from click to new patient, with a lead-to-patient funnel card"
 ctaHeading: "Leads coming in, patients not showing up?"
 ctaText: "Book a free 30-minute call. We trace your leads from click to first visit, show you where they stall, and send you the written plan either way."
+diagrams:
+  lead-funnel:
+    kind: funnel
+    scale: proportional
+    illustrative: true
+    caption: "How the handoffs compound in a clinic's month: 1,000 landing page visits down to 24 patients who showed. Deliberately round, illustrative numbers rather than benchmarks; bar widths are to scale."
+    stages:
+      - { label: "Visits", display: "1,000", value: 1000 }
+      - { label: "Inquiries", display: "80", value: 80, note: "8% of visits" }
+      - { label: "Qualified leads", display: "60", value: 60, note: "75% of inquiries" }
+      - { label: "Booked", display: "30", value: 30, note: "50% of qualified. Faster follow-up lifts booking to 65%: booked becomes 39" }
+      - { label: "Showed", display: "24", value: 24, note: "80% of booked. With that lift, showed becomes about 31" }
 ---
 
 Most healthcare lead generation advice stops at the form fill. Run search ads, launch some social campaigns, add a landing page, watch the leads roll in. Then the month closes, the lead count looks great, and the new-patient count barely moved. Somewhere between the click and the first visit, the leads you paid for quietly evaporated.
@@ -85,6 +97,8 @@ A booked appointment is not a patient yet. Same-day or next-day availability, co
 ### A worked example
 
 Here is how the handoffs compound, with deliberately round, illustrative numbers rather than benchmarks. Say a clinic's paid campaigns produce 1,000 landing page visits in a month:
+
+<!-- diagram: lead-funnel -->
 
 | Stage | Rate | Count |
 |---|---|---|

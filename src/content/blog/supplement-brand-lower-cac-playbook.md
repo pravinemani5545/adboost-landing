@@ -11,6 +11,16 @@ heroImage: "/blog/supplement-brand-lower-cac-playbook.webp"
 heroAlt: "Ascending growth curve over supplement product silhouettes in AdBoost blue and green"
 ctaHeading: "Scale spend without breaking CAC."
 ctaText: "Free 30-minute call: offer, creative, and funnel audit with a written scaling plan you keep."
+diagrams:
+  scaling-stages:
+    kind: ladder
+    direction: up
+    caption: "Each spend tier has prerequisites: fix these before scaling further. Steps are evenly spaced, not to scale."
+    levels:
+      - { label: "Validation · Under $10K", detail: "Server-side tracking live, post-purchase survey running, one offer-angle pair proven profitable" }
+      - { label: "Traction · $10K–$50K", detail: "Subscription/bundle ladder in place, 10–12 creative variants/month sustained, lander conversion holding above ~2.5%" }
+      - { label: "Scale · $50K–$150K", detail: "20+ variants/month, marginal CAC tracked by budget tier, second channel in active testing" }
+      - { label: "Expansion · $150K+", detail: "Cohort LTV gates (60/90-day net revenue) enforced, horizontal angle-audience expansion mapped, payback modeled against your cash conversion window" }
 ---
 
 Supplement paid media has a brutal shape: CAC looks great at $300/day, then you push spend and watch efficiency melt. Most founders conclude "we've saturated our audience." Almost none have. What they've saturated is their *offer-creative combination*, and that's fixable.
@@ -76,6 +86,8 @@ Measurement first, allowable CAC second, budget last, in that order. It's the se
 5. **Protect retention economics while you scale.** A rising share of discount-driven first orders can silently degrade cohort LTV, which lowers your allowable CAC right when you're raising spend. Watch 60/90-day net revenue by cohort as a scaling gate, not just CAC. (Benchmarks by vertical are in our [CAC benchmarks post](/blog/telehealth-cac-benchmarks-2026/).)
 
 Each spend tier has prerequisites. Scaling past a stage without them is how "we saturated our audience" stories get written:
+
+<!-- diagram: scaling-stages -->
 
 | Scaling stage | Monthly spend | Fix before scaling further |
 |---|---|---|

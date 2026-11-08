@@ -11,6 +11,36 @@ heroImage: "/blog/legitscript-certification-telehealth-guide.webp"
 heroAlt: "Abstract verified certification seal medallion with a checkmark floating over ad dashboards in AdBoost blue"
 ctaHeading: "Get certified and live without the false starts."
 ctaText: "Free 30-minute call. We'll map your certification path and account setup, and you keep the plan either way."
+diagrams:
+  legitscript-platforms:
+    kind: heatmatrix
+    rowHeader: "Platform"
+    cols: ["Prescription telehealth", "Online pharmacy", "General telehealth promotion"]
+    caption: "Meta and Google require it for prescription telehealth and online pharmacy advertising. TikTok's policies do not name telehealth at all. A dot means the post does not cover that case."
+    legend:
+      - { level: accent, label: "LegitScript required" }
+      - { level: warn, label: "LegitScript or another named body" }
+      - { level: ok, label: "No certification needed" }
+      - { level: muted, label: "Not named" }
+    rows:
+      - label: "Meta"
+        href: "/advertising/telehealth-on-meta/"
+        cells:
+          - { text: "Required", level: accent, note: "\"Meta requires online pharmacies and telehealth providers to be actively certified with LegitScript\" to promote prescription drugs" }
+          - { text: "Required", level: accent, note: "\"Meta requires online pharmacies and telehealth providers to be actively certified with LegitScript\" to promote prescription drugs" }
+          - { text: "No certification needed", level: ok, note: "Ads that \"Promote telehealth services generally\" need no written authorization" }
+      - label: "Google"
+        href: "/advertising/telehealth-on-google/"
+        cells:
+          - { text: "Required", level: accent, note: "Telemedicine providers offering prescription drug services must be \"accredited by LegitScript's Healthcare Merchant Certification Program\"" }
+          - { text: "Required", level: accent }
+          - null
+      - label: "TikTok"
+        href: "/advertising/telehealth-on-tiktok/"
+        cells:
+          - { text: "Not named", level: muted, note: "Not named for telehealth" }
+          - { text: "LegitScript, NABP or a regional equivalent (US)", level: warn, note: "US online pharmacy ads need proof of certification from a third-party body \"such as the National Association of Boards of Pharmacy (NABP) or LegitScript, or regional equivalent\"" }
+          - { text: "Not named", level: muted, note: "TikTok's policies do not name telehealth at all" }
 ---
 
 LegitScript certification costs $975 per website to apply plus $2,150 a year once approved, according to LegitScript's published fees. Meta requires it for telehealth providers and online pharmacies that promote prescription drugs, and Google requires it before its own certification for telemedicine prescription services. General telehealth promotion on Meta needs no certification.
@@ -26,6 +56,8 @@ LegitScript certification is a **third-party accreditation that verifies an onli
 ## Which ad platforms require LegitScript certification?
 
 Meta and Google require it for prescription telehealth and online pharmacy advertising. TikTok's policies do not name telehealth at all. What each platform's own policy says:
+
+<!-- diagram: legitscript-platforms -->
 
 | Platform | When LegitScript is required | What else you need |
 |---|---|---|

@@ -1,0 +1,32 @@
+---
+// The blog's diagram dispatcher: kit/diagram/Diagram.astro limited to the kinds posts use, so a
+// post page carries only those diagrams' CSS. A post that needs another kind fails the build
+// with the message below; add the import and the map entry here.
+import type { DiagramSpec } from '../../kit/diagram/types';
+import Bars from '../../kit/diagram/Bars.astro';
+import Compare from '../../kit/diagram/Compare.astro';
+import DecisionTree from '../../kit/diagram/DecisionTree.astro';
+import Flow from '../../kit/diagram/Flow.astro';
+import Funnel from '../../kit/diagram/Funnel.astro';
+import HeatMatrix from '../../kit/diagram/HeatMatrix.astro';
+import Ladder from '../../kit/diagram/Ladder.astro';
+import Timeline from '../../kit/diagram/Timeline.astro';
+
+type Props = DiagramSpec;
+const { kind, ...props } = Astro.props as DiagramSpec;
+
+const COMPONENTS: Partial<Record<DiagramSpec['kind'], any>> = {
+  bars: Bars,
+  compare: Compare,
+  decisiontree: DecisionTree,
+  flow: Flow,
+  funnel: Funnel,
+  heatmatrix: HeatMatrix,
+  ladder: Ladder,
+  timeline: Timeline,
+};
+
+const C = COMPONENTS[kind];
+if (!C) throw new Error(`[blog] diagram kind "${kind}" is not wired for posts: import it in src/pages/blog/_Diagram.astro`);
+---
+<C {...props} />

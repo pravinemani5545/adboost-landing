@@ -11,6 +11,52 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["TikTok ads", "ad creative", "compliance", "health marketing", "paid media"]
 heroImage: "/blog/tiktok-ads-health-brands.webp"
 heroAlt: "Phone screen showing a TikTok health ad next to a review checklist in AdBoost blue"
+diagrams:
+  tiktok-markets:
+    kind: heatmatrix
+    rowHeader: "Vertical"
+    cols: ["US and Canada", "UK and EU", "Australia", "New Zealand"]
+    caption: "TikTok health ad policy at a glance, checked Oct 30, 2026. \"May be allowed\" is TikTok's own wording: the ad can run if you meet the listed conditions, not that approval is automatic. Australia and New Zealand are split where the table gives each its own rule."
+    legend:
+      - { level: ok, label: "May be allowed" }
+      - { level: warn, label: "Policies conflict" }
+      - { level: bad, label: "Not allowed" }
+    rows:
+      - label: "GLP-1 and prescription weight-loss drugs"
+        href: "/advertising/glp-1-on-tiktok/"
+        cells:
+          - { text: "Policies conflict", level: warn, note: "Prescription medicine may be allowed with regulator approval and 18+, but drugs \"for the purpose of [...] weight loss\" are listed as not allowed" }
+          - { text: "Not allowed", level: bad, note: "Prescription medicine" }
+          - { text: "Not allowed", level: bad }
+          - { text: "Policies conflict", level: warn }
+      - label: "Supplements"
+        href: "/advertising/supplements-on-tiktok/"
+        cells:
+          - { text: "May be allowed", level: ok, note: "Weight loss supplements and meal replacements, 18+, healthy-lifestyle framing (added by September 2026)" }
+          - { text: "May be allowed in select countries", level: ok, note: "Weight loss supplements and meal replacements (TikTok does not say which countries)" }
+          - { text: "May be allowed", level: ok, note: "Healthcare supplements, 18+" }
+          - { text: "May be allowed", level: ok, note: "Healthcare supplements, 18+" }
+      - label: "Telehealth (prescription care)"
+        href: "/advertising/telehealth-on-tiktok/"
+        cells:
+          - { text: "May be allowed", level: ok, note: "Prescription medicine with regulator approval, such as the FDA or Health Canada, and 18+. TikTok does not name telehealth" }
+          - { text: "Not allowed", level: bad, note: "Prescription medicine" }
+          - { text: "Not allowed", level: bad }
+          - { text: "Policies conflict", level: warn }
+      - label: "TRT and testosterone"
+        href: "/advertising/trt-on-tiktok/"
+        cells:
+          - { text: "Policies conflict", level: warn, note: "Controlled drugs and drugs for \"enhancement, performance\" are listed as not allowed; the prescription exception does not say whether it covers them" }
+          - { text: "Not allowed", level: bad, note: "Prescription medicine" }
+          - { text: "Not allowed", level: bad }
+          - { text: "Policies conflict", level: warn }
+      - label: "Med spa and cosmetic clinics"
+        href: "/advertising/med-spa-on-tiktok/"
+        cells:
+          - { text: "May be allowed", level: ok, note: "Cosmetic clinics, for example fillers, 18+. Silent on Botox and on before-and-after imagery" }
+          - { text: "Aesthetic treatments may be allowed", level: ok, note: "With a TikTok sales rep's permission, 18+; Botox is listed as not allowed; no before-and-after imagery \"where restricted\"" }
+          - { text: "Not allowed", level: bad, note: "Cosmetic clinics" }
+          - { text: "Not allowed", level: bad, note: "Cosmetic clinics" }
 ---
 
 TikTok sets its health ad rules market by market. In the US and Canada, prescription drug ads may be allowed with regulator approval and 18+ targeting, and weight loss supplements and cosmetic clinics may be allowed for adults, but TikTok's own policies conflict on weight-loss and controlled drugs. Everywhere, weight claims must stay realistic and body-positive.
@@ -24,6 +70,8 @@ At AdBoost Health we run TikTok for health, telehealth, and supplement partners,
 <h2 id="policy-at-a-glance">What does TikTok allow for each health vertical, by market?</h2>
 
 TikTok health ad policy at a glance, checked Oct 30, 2026. "May be allowed" is TikTok's own wording: the ad can run if you meet the listed conditions, not that approval is automatic.
+
+<!-- diagram: tiktok-markets -->
 
 | Vertical | US and Canada | UK and EU | Australia and New Zealand | Full rules |
 |---|---|---|---|---|

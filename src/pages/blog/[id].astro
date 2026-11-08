@@ -1,0 +1,28 @@
+---
+// Posts with frontmatter diagrams. Each "<!-- diagram: id -->" line in the post becomes a figure
+// between two runs of prose (the table or list it draws stays right below it). They have their
+// own route so that diagram CSS ships only with them (see [slug].astro and _post.ts).
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import PostDiagram from './_Diagram.astro';
+import { getPublishedPosts } from '../../lib/blog';
+import { postLayoutProps, postParts } from './_post';
+
+export async function getStaticPaths() {
+  const all = await getPublishedPosts();
+  return all
+    .filter((post) => post.data.diagrams)
+    .map((post) => ({ params: { id: post.id }, props: { post, all } }));
+}
+
+const { post, all } = Astro.props;
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
+const parts = postParts(post);
+---
+
+<BlogLayout {...postLayoutProps(post, all, site)}>
+  {parts.map((p) =>
+    p.type === 'html'
+      ? <div class="prose prose--doc"><Fragment set:html={p.html} /></div>
+      : <PostDiagram {...p.spec} id={p.spec.id ?? `fig-${p.id}`} class:list={['post-fig', p.spec.class]} />
+  )}
+</BlogLayout>

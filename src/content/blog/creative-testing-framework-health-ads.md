@@ -10,6 +10,16 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["creative testing", "ad creative", "Meta ads", "media buying", "measurement"]
 heroImage: "/blog/creative-testing-framework-health-ads.webp"
 heroAlt: "Test matrix of ad variants with scale and kill markers in AdBoost blue"
+diagrams:
+  metric-flow:
+    kind: flow
+    caption: "Kill on leading indicators, scale on ROAS. Leading indicators are cheap and fast; ROAS is the decision metric, but it's slow and expensive per data point."
+    nodes:
+      - { label: "Hook rate", sub: "Kill early - a dead hook is unfixable by waiting" }
+      - { label: "Hold rate", sub: "Diagnose where creative loses people" }
+      - { label: "CPM", sub: "Spot creative the auction is penalizing" }
+      - { label: "Outbound CTR", sub: "Rank variants before conversions accrue" }
+      - { label: "CPA / ROAS", sub: "Make the scale decision - nothing else does", tone: ok }
 ---
 
 Ask a health brand's media buyer how creative testing works in the account and you'll usually get one of two answers: "we put new ads in and see what happens," or a testing framework so elaborate it hasn't produced a decision in six weeks. Both fail the same way - money goes out, and nobody can say what the account *learned*.
@@ -42,6 +52,8 @@ Higher-ticket telehealth complicates this: at a $200+ CPA, fully powering every 
 ## What are the leading indicators, and when do you trust them over ROAS?
 
 ROAS is the decision metric, but it's slow and expensive per data point. Leading indicators are cheap and fast - they can't tell you an ad *will* convert, but they reliably tell you an ad *won't*.
+
+<!-- diagram: metric-flow -->
 
 | Metric | What it tells you | Trust it to... |
 |---|---|---|
