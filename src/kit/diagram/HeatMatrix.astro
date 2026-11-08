@@ -1,0 +1,208 @@
+---
+// HeatMatrix: a real <table>. Every cell carries its text and a mark, so the level is
+// never colour alone. Linked cells are keyboard focusable; the current page's cell is
+// raised and ringed (aria-current). A cell note shows on hover and focus and is the
+// link's description.
+import Figure from './Figure.astro';
+import type { HeatMatrixProps } from './types';
+import { TONE_MARK, fail, internal, uid } from './util';
+
+type Props = HeatMatrixProps;
+const { rowHeader, cols, rows, legend, ...base } = Astro.props;
+if (!cols?.length || !rows?.length) fail('heatmatrix', base.caption, 'needs cols and rows');
+for (const r of rows) {
+  if (r.cells.length !== cols.length) fail('heatmatrix', base.caption, `row "${r.label}" has ${r.cells.length} cells for ${cols.length} columns`);
+  internal(r.href, `heatmatrix row "${r.label}"`);
+  r.cells.forEach((c) => internal(c?.href, `heatmatrix cell "${c?.text}"`));
+}
+const wide = cols.length > 4;
+const tid = uid('hm');
+---
+<Figure {...base} kind="heatmatrix">
+  <div class:list={['dg-hm-wrap', wide && 'dg-scroll']} {...(wide ? { role: 'region', 'aria-label': base.caption, tabindex: 0 } : {})}>
+    <table class="dg-hm" style={`--cols:${cols.length}`}>
+      <thead>
+        <tr>
+          <th scope="col" class="dg-corner">{rowHeader}</th>
+          {cols.map((c) => <th scope="col">{c}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((r, ri) => (
+          <tr>
+            <th scope="row">{r.href ? <a href={r.href}>{r.label}</a> : r.label}</th>
+            {r.cells.map((c, ci) => {
+              if (!c) return <td class="dg-empty" style={`--i:${ri + ci}`}><span class="dg-cell"><span aria-hidden="true">·</span><span class="k-vh">No entry</span></span></td>;
+              const Cell = c.href && !c.current ? 'a' : 'span';
+              const tip = c.note ? `${tid}-${ri}-${ci}` : undefined;
+              return (
+                <td data-level={c.level} aria-current={c.current ? 'page' : undefined} style={`--i:${ri + ci}`}>
+                  <Cell class="dg-cell" href={Cell === 'a' ? c.href : undefined} aria-describedby={tip}>
+                    <span class="dg-m" aria-hidden="true">{TONE_MARK[c.level]}</span>
+                    <span class="dg-t">{c.text}</span>
+                  </Cell>
+                  {tip && <span class="dg-tip" role="tooltip" id={tip}>{c.note}</span>}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  {legend?.length ? (
+    <ul class="dg-legend">
+      {legend.map((l) => (
+        <li data-level={l.level}><span class="dg-sw" aria-hidden="true">{TONE_MARK[l.level]}</span>{l.label}</li>
+      ))}
+    </ul>
+  ) : null}
+</Figure>
+
+<style>
+  [data-level] { --tone-ink: var(--dg-accent); --tone-fill: var(--dg-accent-fill); --tone-soft: var(--dg-accent-soft); }
+  [data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); --tone-soft: var(--dg-ok-soft); }
+  [data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); --tone-soft: var(--dg-warn-soft); }
+  [data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
+  [data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
+
+  .dg-hm-wrap { position: relative; }
+  .dg-hm-wrap.dg-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+  .dg-hm-wrap.dg-scroll:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 2px; border-radius: var(--k-r-sm); }
+  .dg-hm {
+    border-collapse: separate;
+    border-spacing: 4px;
+    margin: -4px;
+    width: calc(100% + 8px);
+    table-layout: fixed;
+    font-size: var(--k-fs-small);
+  }
+  .dg-scroll .dg-hm { min-width: calc(7rem + var(--cols) * 7.5rem); }
+  .dg-hm th, .dg-hm td { padding: 0; text-align: left; vertical-align: middle; border: 0; background: none; }
+  .dg-hm tr { background: none; transition: none; }
+  .dg-hm thead th {
+    background: none;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--dg-fg-3);
+    padding: 2px 6px 6px;
+    overflow-wrap: anywhere;
+  }
+  thead .dg-corner { width: 30%; }
+  .dg-hm tbody th {
+    font-weight: 600;
+    color: var(--dg-fg);
+    padding: 6px 8px 6px 2px;
+    line-height: var(--k-lh-snug);
+    overflow-wrap: anywhere;
+  }
+  .dg-hm tbody th a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
+  .dg-hm tbody th a:hover { color: var(--dg-accent); }
+  td { position: relative; height: 1px; }
+  .dg-cell {
+    box-sizing: border-box;
+    height: 100%;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 10px;
+    border-radius: var(--k-r-sm);
+    background: var(--tone-soft);
+    color: var(--tone-ink);
+    font-weight: 500;
+    line-height: var(--k-lh-snug);
+    text-decoration: none;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 22%, transparent);
+  }
+  .dg-empty .dg-cell { justify-content: center; color: var(--dg-fg-3); background: var(--dg-muted-soft); box-shadow: inset 0 0 0 1px var(--dg-line); }
+  .dg-m {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    line-height: 1;
+    background: var(--dg-card);
+    color: var(--tone-ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 40%, transparent);
+  }
+  .dg-t { min-width: 0; overflow-wrap: break-word; hyphens: auto; }
+  a.dg-cell[href] { color: var(--tone-ink); text-decoration: none; }
+  a.dg-cell { transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease); }
+  a.dg-cell:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 55%, transparent), var(--k-e2); }
+  a.dg-cell:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 2px; }
+  td[aria-current] .dg-cell {
+    box-shadow: 0 0 0 2px var(--dg-ring), var(--dg-raised);
+    transform: translateY(-2px);
+  }
+  .dg-tip {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    width: max-content;
+    max-width: min(260px, 70vw);
+    translate: -50% 4px;
+    padding: 8px 10px;
+    border-radius: var(--k-r-sm);
+    background: var(--k-night);
+    color: var(--k-on-night);
+    font-size: var(--k-fs-small);
+    font-weight: 400;
+    line-height: var(--k-lh-snug);
+    box-shadow: var(--k-e3);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--k-d-fast) var(--k-ease), translate var(--k-d-fast) var(--k-ease), visibility 0s linear var(--k-d-fast);
+  }
+  td:is(:hover, :focus-within) .dg-tip { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: 0s; }
+  /* edge columns anchor the note to their outer side, so it stays on screen */
+  td:nth-child(2) .dg-tip { left: 0; translate: 0 4px; }
+  td:nth-child(2):is(:hover, :focus-within) .dg-tip { translate: 0 0; }
+  td:last-child .dg-tip { left: auto; right: 0; translate: 0 4px; }
+  td:last-child:is(:hover, :focus-within) .dg-tip { translate: 0 0; }
+
+  .dg-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--k-fs-small); color: var(--dg-fg-2); }
+  .dg-legend li { display: inline-flex; align-items: center; gap: 6px; }
+  .dg-sw {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    line-height: 1;
+    background: var(--tone-soft);
+    color: var(--tone-ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 30%, transparent);
+  }
+
+  @container k-dg (max-width: 459px) {
+    .dg-hm { border-spacing: 3px; margin: -3px; width: calc(100% + 6px); font-size: 12px; }
+    .dg-hm thead .dg-corner { width: 27%; }
+    .dg-cell { padding: 7px 6px; gap: 4px; min-height: 44px; flex-direction: column; align-items: flex-start; justify-content: center; }
+    .dg-m { width: 15px; height: 15px; font-size: 9px; }
+    .dg-hm tbody th { font-size: 12.5px; }
+  }
+
+  /* motion: cells cascade in from the top-left */
+  :global(html.js.motion [data-dg-anim]) td > .dg-cell {
+    animation: k-dg-hm-in var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) td[aria-current] > .dg-cell {
+    animation: k-dg-hm-in var(--k-t-soft) var(--k-spring-soft) backwards, k-dg-hm-ring 1.1s var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--k-stagger)), calc(var(--dg-base) + 600ms + var(--i) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) td > .dg-cell { animation-play-state: paused; }
+
+  @keyframes k-dg-hm-in { from { transform: translateY(8px) scale(0.94); } }
+  @keyframes k-dg-hm-ring { from { box-shadow: 0 0 0 10px transparent, var(--dg-raised); } }
+</style>

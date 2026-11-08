@@ -1,0 +1,274 @@
+---
+// Compare: two sides of a claim.
+//   split  two cards side by side (stacked when narrow), each a list with a mark
+//   vs     rows across a centre rail: left muted, right accented (rows), or two lists
+//   diff   left items in <del> (strike draws on), right items in <ins>
+import Figure from './Figure.astro';
+import type { CompareProps, Side, Tone } from './types';
+import { TONE_MARK, fail } from './util';
+
+type Props = CompareProps;
+const { left, right, rows, variant = 'split', ...base } = Astro.props;
+if (!left?.items || !right?.items) fail('compare', base.caption, 'needs left and right sides');
+if (rows?.length && variant !== 'vs') fail('compare', base.caption, 'rows are drawn by variant "vs" only');
+
+const defTone: Record<string, [Tone, Tone]> = { split: ['bad', 'ok'], vs: ['muted', 'accent'], diff: ['muted', 'accent'] };
+const [lt, rt] = defTone[variant];
+const L: Side & { tone: Tone } = { ...left, tone: left.tone ?? lt };
+const R: Side & { tone: Tone } = { ...right, tone: right.tone ?? rt };
+const markOf = (s: Side & { tone: Tone }) => s.mark ?? (variant === 'diff' ? undefined : TONE_MARK[s.tone]);
+const lm = markOf(L);
+const rm = markOf(R);
+---
+<Figure {...base} kind="compare">
+  {variant !== 'vs' && (
+    <div class:list={['dg-cmp', `dg-${variant}`]}>
+      <div class="dg-side" data-level={L.tone} style="--s:0">
+        <p class="dg-head">{L.label}</p>
+        <ul class="dg-items">
+          {L.items.map((it, i) => (
+            <li style={`--i:${i}`}>
+              {lm && <span class="dg-m" aria-hidden="true">{lm}</span>}
+              <span>{variant === 'diff' ? <del>{it}</del> : it}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <span class="dg-divider" aria-hidden="true">{variant === 'diff' && <span class="dg-arrow">→</span>}</span>
+      <div class="dg-side" data-level={R.tone} style="--s:1">
+        <p class="dg-head">{R.label}</p>
+        <ul class="dg-items">
+          {R.items.map((it, i) => (
+            <li style={`--i:${i}`}>
+              {rm && <span class="dg-m" aria-hidden="true">{rm}</span>}
+              <span>{variant === 'diff' ? <ins>{it}</ins> : it}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )}
+
+  {variant === 'vs' && (
+    <div class="dg-cmp dg-vs">
+      <div class="dg-vshead" aria-hidden={rows?.length ? 'true' : undefined}>
+        <span class="dg-vsl" data-level={L.tone}>{L.label}</span>
+        <span class="dg-vsbadge">vs</span>
+        <span class="dg-vsr" data-level={R.tone}>{R.label}</span>
+      </div>
+      {rows?.length ? (
+        <ol class="dg-vsrows">
+          {rows.map((r, i) => (
+            <li class="dg-vsrow" style={`--i:${i}`}>
+              <p class="dg-dim">{r.label}</p>
+              <p class="dg-l" data-level={L.tone}><span class="dg-tag">{L.label}</span>{r.left}</p>
+              <span class="dg-rail" aria-hidden="true"><span class="dg-knot"></span></span>
+              <p class="dg-r" data-level={R.tone}><span class="dg-tag">{R.label}</span>{r.right}</p>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="dg-vslists">
+          <ul class="dg-items dg-l" data-level={L.tone} aria-label={L.label}>
+            {L.items.map((it, i) => <li style={`--i:${i}`}><span class="dg-m" aria-hidden="true">{lm}</span><span>{it}</span></li>)}
+          </ul>
+          <span class="dg-rail" aria-hidden="true"></span>
+          <ul class="dg-items dg-r" data-level={R.tone} aria-label={R.label}>
+            {R.items.map((it, i) => <li style={`--i:${i}`}><span class="dg-m" aria-hidden="true">{rm}</span><span>{it}</span></li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  )}
+</Figure>
+
+<style>
+  [data-level] { --tone-ink: var(--dg-accent); --tone-fill: var(--dg-accent-fill); --tone-soft: var(--dg-accent-soft); }
+  [data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); --tone-soft: var(--dg-ok-soft); }
+  [data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); --tone-soft: var(--dg-warn-soft); }
+  [data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
+  [data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
+
+  .dg-cmp { display: grid; gap: 14px; }
+  .dg-side {
+    position: relative;
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 18px 18px 20px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+    box-shadow: var(--k-e1);
+    overflow: clip;
+  }
+  .dg-side::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: var(--tone-fill);
+    transform-origin: left;
+  }
+  .dg-head {
+    margin: 0;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--tone-ink);
+  }
+  .dg-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .dg-items li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; line-height: var(--k-lh-body); color: var(--dg-fg-2); }
+  .dg-items li:not(:has(.dg-m)) { grid-template-columns: minmax(0, 1fr); }
+  .dg-m {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-grid;
+    place-items: center;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--tone-ink);
+    background: var(--tone-soft);
+    transform: translateY(3px);
+  }
+  .dg-divider { display: none; }
+
+  /* diff */
+  del, ins { text-decoration: none; }
+  del {
+    color: var(--dg-fg-3);
+    background-image: linear-gradient(var(--dg-bad), var(--dg-bad));
+    background-repeat: no-repeat;
+    background-size: 100% 1.5px;
+    background-position: 0 55%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+  ins { color: var(--dg-fg); }
+  .dg-diff .dg-side[data-level="accent"] { border-color: color-mix(in srgb, var(--dg-accent-fill) 32%, var(--dg-card-line)); box-shadow: var(--k-e2); }
+
+  @container k-dg (min-width: 560px) {
+    .dg-split, .dg-diff { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0; align-items: stretch; }
+    .dg-divider { display: grid; place-items: center; width: 40px; position: relative; }
+    .dg-divider::before { content: ''; position: absolute; top: 12%; bottom: 12%; left: 50%; width: 1px; background: var(--dg-line-2); transform-origin: top; }
+    .dg-arrow {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--dg-card);
+      border: 1px solid var(--dg-line-2);
+      color: var(--dg-accent);
+      font-size: 13px;
+      line-height: 1;
+    }
+  }
+
+  /* vs */
+  .dg-vshead { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; }
+  .dg-vsl, .dg-vsr { font-weight: 600; line-height: var(--k-lh-tight); }
+  .dg-vsl { text-align: right; color: var(--dg-fg-3); }
+  .dg-vsr { color: var(--tone-ink); }
+  .dg-vsbadge {
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-line-2);
+    color: var(--dg-fg-2);
+    box-shadow: var(--k-e1);
+  }
+  .dg-vsrows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .dg-vsrow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+    padding: 12px 14px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+  }
+  .dg-dim {
+    margin: 0;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--dg-fg-3);
+  }
+  .dg-l, .dg-r { margin: 0; line-height: var(--k-lh-body); display: grid; gap: 2px; }
+  .dg-l { color: var(--dg-fg-3); }
+  .dg-r { color: var(--dg-fg); font-weight: 500; }
+  .dg-tag { font-size: var(--k-fs-micro); font-family: var(--k-font-mono); letter-spacing: 0.06em; color: var(--tone-ink); font-weight: 500; }
+  .dg-vsrow .dg-rail { display: none; }
+  .dg-vslists { display: grid; gap: 14px; }
+  .dg-vslists .dg-rail { display: none; }
+  .dg-vslists .dg-l li { color: var(--dg-fg-3); }
+  @container k-dg (min-width: 600px) {
+    .dg-vsrow {
+      grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+      grid-template-areas: 'dim dim dim' 'l rail r';
+      column-gap: 0;
+      padding: 12px 18px 14px;
+    }
+    .dg-dim { grid-area: dim; text-align: center; }
+    .dg-l { grid-area: l; text-align: right; }
+    .dg-r { grid-area: r; }
+    .dg-tag { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .dg-vsrow .dg-rail { grid-area: rail; display: block; position: relative; }
+    .dg-vsrow .dg-rail::before { content: ''; position: absolute; left: 6px; right: 6px; top: 50%; height: 1px; background: var(--dg-line-2); transform-origin: left; }
+    .dg-knot { position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: var(--dg-accent-fill); box-shadow: 0 0 0 4px var(--dg-accent-soft); translate: -50% -50%; }
+    .dg-vslists { grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr); gap: 0 28px; }
+    .dg-vslists .dg-rail { display: block; background: var(--dg-line-2); transform-origin: top; }
+    .dg-vslists .dg-l li { grid-template-columns: minmax(0, 1fr) auto; text-align: right; }
+    .dg-vslists .dg-l li .dg-m { order: 2; }
+  }
+
+  /* motion */
+  :global(html.js.motion [data-dg-anim]) .dg-side {
+    animation: k-dg-cmp-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--s) * 140ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-side::before {
+    animation: k-dg-cmp-grow var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 120ms + var(--s) * 140ms);
+  }
+  :global(html.js.motion [data-dg-anim]) :is(.dg-items li, .dg-vsrow) {
+    animation: k-dg-cmp-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + 160ms + var(--i) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) del {
+    animation: k-dg-cmp-strike var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 520ms + var(--i) * 180ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-vsrow .dg-rail::before {
+    animation: k-dg-cmp-grow var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 260ms + var(--i) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) :is(.dg-vsbadge, .dg-knot) {
+    animation: k-dg-cmp-pop var(--k-t-bounce) var(--k-spring-bounce) backwards;
+    animation-delay: calc(var(--dg-base) + 200ms + var(--i, 0) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-side, .dg-items li, .dg-vsrow, del, .dg-vsbadge, .dg-knot),
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-side, .dg-vsrow .dg-rail)::before {
+    animation-play-state: paused;
+  }
+
+  @keyframes k-dg-cmp-rise { from { transform: translateY(10px); } }
+  @keyframes k-dg-cmp-grow { from { transform: scaleX(0); } }
+  @keyframes k-dg-cmp-pop { from { transform: scale(0.3); } }
+  @keyframes k-dg-cmp-strike { from { background-size: 0% 1.5px; } }
+</style>

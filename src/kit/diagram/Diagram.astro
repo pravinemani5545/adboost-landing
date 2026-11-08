@@ -1,0 +1,46 @@
+---
+// Renders any DiagramSpec by its `kind` (blog frontmatter, data-driven templates).
+// It imports every diagram, so a page using it ships every diagram's CSS; a template
+// that knows its kind should import that component directly.
+import type { DiagramSpec } from './types';
+import Flow from './Flow.astro';
+import Timeline from './Timeline.astro';
+import Compare from './Compare.astro';
+import HeatMatrix from './HeatMatrix.astro';
+import Matrix2 from './Matrix2.astro';
+import Ladder from './Ladder.astro';
+import HubSpoke from './HubSpoke.astro';
+import Funnel from './Funnel.astro';
+import Bars from './Bars.astro';
+import Gauge from './Gauge.astro';
+import Cycle from './Cycle.astro';
+import Swimlane from './Swimlane.astro';
+import Equation from './Equation.astro';
+import DecisionTree from './DecisionTree.astro';
+import StatusStrip from './StatusStrip.astro';
+
+type Props = DiagramSpec;
+const { kind, ...props } = Astro.props as DiagramSpec;
+
+const COMPONENTS = {
+  flow: Flow,
+  timeline: Timeline,
+  compare: Compare,
+  heatmatrix: HeatMatrix,
+  matrix2: Matrix2,
+  ladder: Ladder,
+  hubspoke: HubSpoke,
+  funnel: Funnel,
+  bars: Bars,
+  gauge: Gauge,
+  cycle: Cycle,
+  swimlane: Swimlane,
+  equation: Equation,
+  decisiontree: DecisionTree,
+  statusstrip: StatusStrip,
+} as const;
+
+const C = COMPONENTS[kind as keyof typeof COMPONENTS];
+if (!C) throw new Error(`[diagram] unknown kind "${kind}"`);
+---
+<C {...(props as any)} />

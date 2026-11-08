@@ -1,0 +1,264 @@
+---
+// Flow: an ordered chain of steps (<ol>), optional fork of alternatives under a step.
+// Row on wide containers, column on narrow ones (orientation="auto"). Connectors are
+// aria-hidden; the list order is the text alternative.
+import Figure from './Figure.astro';
+import type { FlowProps, FlowNode } from './types';
+import { fail, internal } from './util';
+
+type Props = FlowProps;
+const { nodes, numbered = true, orientation = 'auto', pulse = false, ...base } = Astro.props;
+
+if (!nodes?.length) fail('flow', base.caption, 'needs at least one node');
+for (const n of nodes) {
+  internal(n.href, `flow "${n.label}"`);
+  for (const b of n.branches ?? []) {
+    if (b.branches?.length) fail('flow', base.caption, `branches nest one level only ("${b.label}")`);
+    internal(b.href, `flow branch "${b.label}"`);
+  }
+}
+const fit = nodes.length <= 4 ? 'sm' : nodes.length <= 6 ? 'md' : 'lg';
+const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : '●');
+---
+<Figure {...base} kind="flow">
+  <ol class="dg-flow" data-orient={orientation} data-fit={fit} data-pulse={pulse ? '' : undefined} style={`--n:${nodes.length}`}>
+    {nodes.map((n, i) => {
+      const Card = n.href ? 'a' : 'div';
+      return (
+        <li class:list={['dg-step', n.branches?.length && 'dg-has-branches']} data-level={n.tone ?? 'accent'} style={`--i:${i}`}>
+          <Card class="dg-card" href={n.href}>
+            <span class="dg-badge" aria-hidden="true">{badge(n, i)}</span>
+            <span class="dg-text">
+              <span class="dg-label">{n.label}</span>
+              {n.sub && <span class="dg-sub">{n.sub}</span>}
+            </span>
+          </Card>
+          {n.branches?.length ? (
+            <ul class="dg-branches">
+              {n.branches.map((b, j) => {
+                const B = b.href ? 'a' : 'div';
+                return (
+                  <li class="dg-branch" data-level={b.tone ?? n.tone ?? 'accent'} style={`--j:${j}`}>
+                    <B class="dg-bcard" href={b.href}>
+                      <span class="dg-label">{b.label}</span>
+                      {b.sub && <span class="dg-sub">{b.sub}</span>}
+                    </B>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
+          {i < nodes.length - 1 && <span class="dg-link" aria-hidden="true"><span class="dg-line"></span><span class="dg-head"></span></span>}
+        </li>
+      );
+    })}
+  </ol>
+</Figure>
+
+<style>
+  .dg-flow {
+    --flow-gap: 26px;
+    --flow-step: 150ms;
+    --flow-x: 30px; /* connector axis: card padding + half the badge */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--flow-gap);
+  }
+  .dg-step {
+    --tone-ink: var(--dg-accent);
+    --tone-fill: var(--dg-accent-fill);
+    --tone-soft: var(--dg-accent-soft);
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  [data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); --tone-soft: var(--dg-ok-soft); }
+  [data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); --tone-soft: var(--dg-warn-soft); }
+  [data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
+  [data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
+
+  .dg-card {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+    box-shadow: var(--k-e1);
+    color: inherit;
+    text-decoration: none;
+  }
+  a.dg-card[href], a.dg-bcard[href] { color: inherit; text-decoration: none; }
+  a.dg-card, a.dg-bcard {
+    transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease);
+  }
+  a.dg-card:hover, a.dg-bcard:hover { transform: translateY(-2px); box-shadow: var(--k-e2); border-color: var(--dg-line-2); }
+  a.dg-card .dg-label, a.dg-bcard .dg-label {
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+    text-underline-offset: 3px;
+  }
+  .dg-badge {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--k-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    background: var(--tone-soft);
+    color: var(--tone-ink);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 30%, transparent);
+  }
+  .dg-text { display: grid; gap: 3px; min-width: 0; padding-top: 4px; }
+  .dg-label { font-weight: 600; line-height: var(--k-lh-snug); color: var(--dg-fg); overflow-wrap: anywhere; }
+  .dg-sub { font-size: var(--k-fs-small); line-height: var(--k-lh-snug); color: var(--dg-fg-3); }
+
+  /* connector to the next step (column) */
+  .dg-link {
+    position: absolute;
+    pointer-events: none;
+    left: calc(var(--flow-x) - 1px);
+    top: 100%;
+    width: 2px;
+    height: var(--flow-gap);
+  }
+  .dg-line { position: absolute; inset: 3px 0 4px; background: var(--dg-line-2); transform-origin: top; border-radius: 2px; }
+  .dg-head {
+    --head: translateX(-50%) rotate(45deg);
+    position: absolute;
+    left: 50%;
+    bottom: 3px;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--dg-line-2);
+    border-bottom: 2px solid var(--dg-line-2);
+    transform: var(--head);
+  }
+
+  /* fork of alternatives under a step */
+  .dg-branches {
+    list-style: none;
+    margin: 0 0 0 calc(var(--flow-x) - 1px);
+    padding: 0 0 0 20px;
+    display: grid;
+    gap: 8px;
+    position: relative;
+  }
+  .dg-branches::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -10px;
+    bottom: 50%;
+    width: 2px;
+    background: var(--dg-line-2);
+    border-radius: 2px;
+    transform-origin: top;
+  }
+  .dg-branch { position: relative; }
+  .dg-branch::before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 50%;
+    width: 16px;
+    height: 2px;
+    background: var(--dg-line-2);
+    transform-origin: left;
+  }
+  .dg-bcard .dg-sub { color: var(--dg-fg-2); } /* AA on the tinted branch card */
+  .dg-bcard {
+    display: grid;
+    gap: 2px;
+    padding: 10px 14px;
+    border: 1px dashed var(--dg-line-2);
+    border-radius: var(--k-r-sm);
+    background: color-mix(in srgb, var(--tone-soft) 55%, transparent);
+    color: inherit;
+    text-decoration: none;
+    font-size: var(--k-fs-small);
+  }
+
+  /* row layout: always for orientation="row"; for "auto" when the figure is wide enough */
+  .dg-flow[data-orient="row"] { flex-direction: row; --flow-gap: 40px; }
+  .dg-flow[data-orient="row"] .dg-step { flex: 1 1 0; }
+  .dg-flow[data-orient="row"] .dg-card { flex-direction: column; gap: 10px; }
+  .dg-flow[data-orient="row"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
+  .dg-flow[data-orient="row"] .dg-text { padding-top: 0; }
+  .dg-flow[data-orient="row"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+  .dg-flow[data-orient="row"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
+  .dg-flow[data-orient="row"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
+  .dg-flow[data-orient="row"] .dg-branches { margin-left: 29px; }
+
+  @container k-dg (min-width: 680px) {
+    .dg-flow[data-orient="auto"][data-fit="sm"] { flex-direction: row; --flow-gap: 40px; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-step { flex: 1 1 0; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-card { flex-direction: column; gap: 10px; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-text { padding-top: 0; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
+  }
+  @container k-dg (min-width: 920px) {
+    .dg-flow[data-orient="auto"][data-fit="md"] { flex-direction: row; --flow-gap: 36px; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-step { flex: 1 1 0; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-card { flex-direction: column; gap: 10px; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-text { padding-top: 0; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
+  }
+
+  /* motion: cards rise, connectors draw, in order. Paused until the figure gets .in. */
+  :global(html.js.motion [data-dg-anim]) .dg-card {
+    animation: k-dg-flow-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--flow-step));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-line {
+    animation: k-dg-flow-draw var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--flow-step) + 220ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-head {
+    animation: k-dg-flow-head var(--k-t-snap) var(--k-spring-snap) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--flow-step) + 480ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-branches::before {
+    animation: k-dg-flow-draw var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--flow-step) + 200ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-bcard {
+    animation: k-dg-flow-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--flow-step) + 300ms + var(--j) * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-flow[data-pulse] .dg-card {
+    animation:
+      k-dg-flow-rise var(--k-t-soft) var(--k-spring-soft) backwards calc(var(--dg-base) + var(--i) * var(--flow-step)),
+      k-dg-flow-pulse 900ms var(--k-ease-out) backwards calc(var(--dg-base) + var(--n) * var(--flow-step) + 500ms + var(--i) * 240ms);
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-card, .dg-line, .dg-head, .dg-bcard),
+  :global(html.js.motion [data-dg-anim]:not(.in)) .dg-branches::before {
+    animation-play-state: paused;
+  }
+
+  @keyframes k-dg-flow-rise { from { transform: translateY(10px); } }
+  @keyframes k-dg-flow-draw { from { transform: scale(var(--sx, 1), var(--sy, 0)); } }
+  @keyframes k-dg-flow-head { from { transform: var(--head) scale(0); } }
+  @keyframes k-dg-flow-pulse {
+    0% { box-shadow: var(--k-e1), 0 0 0 0 var(--dg-glow); }
+    40% { box-shadow: var(--k-e1), 0 0 0 6px var(--dg-glow); }
+    100% { box-shadow: var(--k-e1), 0 0 0 12px transparent; }
+  }
+</style>

@@ -1,0 +1,357 @@
+---
+// Timeline in four variants, all an <ol> in source order:
+//   steps  numbered spine; each segment fills as its step scrolls through view
+//          (scroll-driven where supported, a timed draw on .in otherwise)
+//   gantt  bars on a unit axis, proportional to the printed start/end; an open phase
+//          ("ongoing", "rolling") with no start begins where the phase before it ends
+//          and fades out at the axis end, because it has no end
+//   rail   milestones on one line, evenly spaced unless every phase has a start and a
+//          total is given (then proportional)
+//   log    dated entries with a kind badge, in the order given (pass newest first)
+import Figure from './Figure.astro';
+import type { TimelineProps, Phase } from './types';
+import { fail, internal, r4 } from './util';
+
+type Props = TimelineProps;
+const { phases, variant = 'steps', unit, total, rowIdPrefix, ...base } = Astro.props;
+if (!phases?.length) fail('timeline', base.caption, 'needs at least one phase');
+phases.forEach((p) => internal(p.href, `timeline "${p.label}"`));
+
+const isDate = (s?: string) => !!s && /^\d{4}(-\d{2}(-\d{2})?)?$/.test(s);
+
+/* gantt geometry */
+let gantt: { left: number; width: number; open: boolean }[] = [];
+let units: number[] = [];
+if (variant === 'gantt') {
+  const dated = phases.filter((p) => typeof p.start === 'number');
+  if (!dated.length) fail('timeline', base.caption, 'gantt needs at least one phase with a start');
+  const lo = Math.min(...dated.map((p) => p.start as number));
+  const ends = phases.map((p) => (typeof p.end === 'number' ? p.end : typeof p.start === 'number' ? p.start : lo));
+  const hasOpen = phases.some((p) => p.end === 'ongoing' || p.end === undefined);
+  const hi = total ?? Math.max(...ends) + (hasOpen ? 2 : 0);
+  const span = hi - lo + 1;
+  units = Array.from({ length: span }, (_, k) => lo + k);
+  let prevEnd = lo;
+  gantt = phases.map((p) => {
+    const open = p.end === 'ongoing' || p.end === undefined;
+    const a = typeof p.start === 'number' ? p.start : prevEnd;
+    const b = open ? hi : (p.end as number);
+    if (b < a) fail('timeline', base.caption, `phase "${p.label}" ends before it starts`);
+    if (!open) prevEnd = b;
+    return { left: r4(((a - lo) / span) * 100), width: r4(((b - a + 1) / span) * 100), open };
+  });
+}
+const tickEvery = units.length > 12 ? 2 : 1;
+
+/* rail geometry */
+const railScaled = variant === 'rail' && total !== undefined && phases.every((p) => typeof p.start === 'number');
+const railPos = (p: Phase, i: number) =>
+  railScaled ? r4(((p.start as number) / (total as number)) * 100) : r4(phases.length === 1 ? 50 : (i / (phases.length - 1)) * 100);
+---
+<Figure {...base} kind="timeline">
+  {variant === 'steps' && (
+    <ol class="dg-tl dg-steps">
+      {phases.map((p, i) => (
+        <li class="dg-st" style={`--i:${i}`} data-level={p.tone}>
+          <span class="dg-dot" aria-hidden="true">{i + 1}</span>
+          {i < phases.length - 1 && <span class="dg-seg" aria-hidden="true"><span class="dg-fill"></span></span>}
+          <div class="dg-body">
+            <p class="dg-label">
+              {p.href ? <a href={p.href}>{p.label}</a> : p.label}
+              {p.meta && <span class="dg-meta">{p.meta}</span>}
+            </p>
+            {p.detail && <p class="dg-detail">{p.detail}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  )}
+
+  {variant === 'gantt' && (
+    <div class="dg-tl dg-gantt" style={`--units:${units.length}`}>
+      <div class="dg-axis" aria-hidden="true">
+        <span class="dg-axis-pad"></span>
+        <span class="dg-ticks">
+          {units.map((u, k) => (
+            <span class="dg-tick">{k === 0 && unit && <span class="dg-tunit">{unit} </span>}{k % tickEvery === 0 ? String(u) : ''}</span>
+          ))}
+        </span>
+      </div>
+      <ol class="dg-rows">
+        {phases.map((p, i) => (
+          <li class="dg-row" id={rowIdPrefix ? `${rowIdPrefix}-${i}` : undefined} data-phase={i} style={`--i:${i};--a:${gantt[i].left}%;--w:${gantt[i].width}%`}>
+            <p class="dg-rlabel">
+              <span class="dg-name">{p.href ? <a href={p.href}>{p.label}</a> : p.label}</span>
+              {p.meta && <span class="dg-meta">{p.meta}</span>}
+            </p>
+            <span class="dg-track" aria-hidden="true"><span class:list={['dg-bar', gantt[i].open && 'dg-open']}></span></span>
+            {p.detail && <p class="dg-detail">{p.detail}</p>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  {variant === 'rail' && (
+    <div class:list={['dg-tl', 'dg-rail', railScaled && 'dg-scaled']}>
+      <span class="dg-rline" aria-hidden="true"><span class="dg-rfill"></span></span>
+      <ol class="dg-stops">
+        {phases.map((p, i) => (
+          <li class="dg-stop" style={`--i:${i};--x:${railPos(p, i)}%`} data-edge={i === 0 ? 'start' : i === phases.length - 1 ? 'end' : undefined}>
+            <span class="dg-pin" aria-hidden="true"></span>
+            {p.meta && <span class="dg-meta">{p.meta}</span>}
+            <span class="dg-label">{p.href ? <a href={p.href}>{p.label}</a> : p.label}</span>
+            {p.detail && <span class="dg-detail">{p.detail}</span>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  {variant === 'log' && (
+    <ol class="dg-tl dg-log">
+      {phases.map((p, i) => (
+        <li class="dg-entry" style={`--i:${i}`} data-level={p.tone}>
+          <span class="dg-node" aria-hidden="true"></span>
+          {p.meta && (
+            <span class="dg-when">{isDate(p.meta) ? <time datetime={p.meta}>{p.meta}</time> : p.meta}</span>
+          )}
+          <div class="dg-body">
+            {p.badge && <span class="dg-badge">{p.badge}</span>}
+            <p class="dg-label">{p.href ? <a href={p.href}>{p.label}</a> : p.label}</p>
+            {p.detail && <p class="dg-detail">{p.detail}</p>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  )}
+</Figure>
+
+<style>
+  .dg-tl { margin: 0; padding: 0; list-style: none; }
+  .dg-tl a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+  .dg-tl a:hover { color: var(--dg-accent); }
+  .dg-meta {
+    display: inline-block;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--dg-accent);
+    background: var(--dg-accent-soft);
+    border-radius: var(--k-r-pill);
+    padding: 2px 8px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .dg-detail { margin: 0; color: var(--dg-fg-3); font-size: var(--k-fs-small); line-height: var(--k-lh-body); max-width: var(--k-measure); }
+  .dg-label { margin: 0; font-weight: 600; color: var(--dg-fg); line-height: var(--k-lh-snug); }
+
+  /* ---------- steps ---------- */
+  .dg-steps { --dot: 30px; --gap: 22px; display: grid; gap: var(--gap); }
+  .dg-st { position: relative; display: grid; grid-template-columns: var(--dot) minmax(0, 1fr); gap: 14px; view-timeline-name: --dg-st; view-timeline-axis: block; }
+  .dg-dot {
+    width: var(--dot);
+    height: var(--dot);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--k-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--k-accent-on);
+    background: var(--dg-accent-fill);
+    box-shadow: 0 0 0 4px var(--dg-accent-soft);
+    position: relative;
+    z-index: 1;
+  }
+  .dg-seg {
+    position: absolute;
+    left: calc(var(--dot) / 2 - 1px);
+    top: calc(var(--dot) + 4px);
+    bottom: calc(-1 * var(--gap) + 4px);
+    width: 2px;
+    border-radius: 2px;
+    background: var(--dg-line-2);
+    overflow: clip;
+  }
+  .dg-fill { position: absolute; inset: 0; background: var(--dg-accent-fill); transform-origin: top; }
+  .dg-st .dg-body { display: grid; gap: 6px; padding-top: 4px; min-width: 0; }
+  .dg-st .dg-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px; font-size: var(--k-fs-body); }
+
+  /* ---------- gantt ---------- */
+  .dg-gantt { display: grid; gap: 10px; }
+  .dg-axis, .dg-row { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 18px; }
+  .dg-axis-pad { display: none; }
+  .dg-ticks { display: grid; grid-template-columns: repeat(var(--units), minmax(0, 1fr)); font-family: var(--k-font-mono); font-size: var(--k-fs-micro); color: var(--dg-fg-3); letter-spacing: 0.04em; }
+  .dg-tick { white-space: nowrap; padding-left: 3px; border-left: 1px solid var(--dg-line); line-height: 1.8; }
+  .dg-tunit { display: none; }
+  .dg-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .dg-row { row-gap: 6px; border-radius: var(--k-r-sm); }
+  .dg-rlabel { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-weight: 600; line-height: var(--k-lh-snug); }
+  .dg-track {
+    position: relative;
+    display: block;
+    height: 14px;
+    border-radius: var(--k-r-pill);
+    background:
+      repeating-linear-gradient(to right, var(--dg-line) 0 1px, transparent 1px calc(100% / var(--units))),
+      var(--dg-muted-soft);
+  }
+  .dg-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--a);
+    width: var(--w);
+    border-radius: var(--k-r-pill);
+    background: linear-gradient(90deg, var(--dg-accent-fill), color-mix(in srgb, var(--dg-accent-fill) 80%, white));
+    box-shadow: 0 6px 16px -8px var(--dg-glow);
+    transform-origin: left;
+  }
+  .dg-bar.dg-open {
+    background: linear-gradient(90deg, var(--dg-accent-fill) 0 50%, transparent);
+    border-radius: var(--k-r-pill) 0 0 var(--k-r-pill);
+  }
+  .dg-bar.dg-open::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-top: 2px solid var(--dg-accent);
+    border-right: 2px solid var(--dg-accent);
+    transform: translate(-2px, -50%) rotate(45deg);
+    opacity: 0.6;
+  }
+  .dg-row:is(:hover, :focus-within, .is-lit) .dg-bar { box-shadow: 0 0 0 3px var(--dg-accent-soft), 0 8px 18px -8px var(--dg-glow); }
+  .dg-gantt .dg-detail { grid-column: 1 / -1; }
+  @container k-dg (min-width: 560px) {
+    .dg-axis, .dg-row { grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.6fr); }
+    .dg-axis-pad { display: block; }
+    .dg-tunit { display: inline; }
+    .dg-row { align-items: center; }
+    .dg-gantt .dg-detail { grid-column: 1 / 2; }
+  }
+
+  /* ---------- rail ---------- */
+  .dg-rail { position: relative; padding-left: 26px; }
+  .dg-rline { position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--dg-line-2); border-radius: 2px; overflow: clip; }
+  .dg-rfill { position: absolute; inset: 0; background: var(--dg-accent-fill); transform-origin: top; }
+  .dg-stops { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+  .dg-stop { position: relative; display: grid; gap: 4px; justify-items: start; }
+  .dg-pin {
+    position: absolute;
+    left: -26px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--dg-card);
+    border: 2px solid var(--dg-accent-fill);
+    box-shadow: 0 0 0 4px var(--dg-accent-soft);
+  }
+  .dg-stop .dg-label { font-weight: 600; }
+  @container k-dg (min-width: 600px) {
+    .dg-rail { padding: 0; }
+    .dg-rline { left: 0; right: 0; top: 7px; bottom: auto; width: auto; height: 2px; }
+    .dg-rfill { transform-origin: left; }
+    .dg-stops { position: relative; display: block; min-height: 7.5em; }
+    .dg-stop {
+      position: absolute;
+      top: 0;
+      left: var(--x);
+      width: min(32%, 220px);
+      transform: translateX(-50%);
+      padding-top: 28px;
+      justify-items: center;
+      text-align: center;
+    }
+    .dg-stop[data-edge="start"] { transform: none; justify-items: start; text-align: left; }
+    .dg-stop[data-edge="end"] { transform: translateX(-100%); justify-items: end; text-align: right; }
+    .dg-pin { left: 50%; top: 0; translate: -50% 0; }
+    .dg-stop[data-edge="start"] .dg-pin { left: 0; translate: 0 0; }
+    .dg-stop[data-edge="end"] .dg-pin { left: auto; right: 0; translate: 0 0; }
+  }
+
+  /* ---------- log ---------- */
+  .dg-log { position: relative; display: grid; gap: 18px; padding-left: 26px; }
+  .dg-log::before { content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: var(--dg-line-2); border-radius: 2px; transform-origin: top; }
+  .dg-entry { position: relative; display: grid; gap: 6px; }
+  .dg-node { position: absolute; left: -26px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--dg-card); border: 2px solid var(--dg-line-2); }
+  .dg-entry:first-child .dg-node { border-color: var(--dg-accent-fill); box-shadow: 0 0 0 4px var(--dg-accent-soft); }
+  .dg-when { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: 0.06em; color: var(--dg-fg-3); font-variant-numeric: tabular-nums; padding-top: 3px; }
+  .dg-log .dg-body { display: grid; gap: 6px; justify-items: start; padding: 12px 14px; background: var(--dg-card); border: 1px solid var(--dg-card-line); border-radius: var(--k-r-md); box-shadow: var(--k-e1); min-width: 0; }
+  .dg-badge {
+    --b-ink: var(--dg-accent);
+    --b-soft: var(--dg-accent-soft);
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--b-ink);
+    background: var(--b-soft);
+    border-radius: var(--k-r-pill);
+    padding: 2px 8px;
+  }
+  .dg-entry[data-level="ok"] .dg-badge { --b-ink: var(--dg-ok); --b-soft: var(--dg-ok-soft); }
+  .dg-entry[data-level="warn"] .dg-badge { --b-ink: var(--dg-warn); --b-soft: var(--dg-warn-soft); }
+  .dg-entry[data-level="bad"] .dg-badge { --b-ink: var(--dg-bad); --b-soft: var(--dg-bad-soft); }
+  .dg-entry[data-level="muted"] .dg-badge { --b-ink: var(--dg-muted); --b-soft: var(--dg-muted-soft); }
+  .dg-log .dg-label { font-weight: 500; line-height: var(--k-lh-body); }
+  @container k-dg (min-width: 560px) {
+    .dg-entry { grid-template-columns: 9.5ch minmax(0, 1fr); column-gap: 16px; align-items: start; }
+    .dg-entry:not(:has(.dg-when)) .dg-body { grid-column: 2; }
+  }
+
+  /* ---------- motion ---------- */
+  :global(html.js.motion [data-dg-anim]) :is(.dg-dot, .dg-pin) {
+    animation: k-dg-tl-pop var(--k-t-bounce) var(--k-spring-bounce) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * 3 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) :is(.dg-st .dg-body, .dg-log .dg-body, .dg-stop .dg-label, .dg-rlabel) {
+    animation: k-dg-tl-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + 60ms + var(--i) * 3 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-fill {
+    animation: k-dg-tl-fill-y var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 200ms + var(--i) * 3 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-bar {
+    animation: k-dg-tl-grow var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 120ms + var(--i) * 2 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-rfill {
+    animation: k-dg-tl-fill-y var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: var(--dg-base);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-log::before {
+    animation: k-dg-tl-fill-y var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: var(--dg-base);
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-dot, .dg-pin, .dg-st .dg-body, .dg-log .dg-body, .dg-stop .dg-label, .dg-rlabel, .dg-fill, .dg-bar, .dg-rfill),
+  :global(html.js.motion [data-dg-anim]:not(.in)) .dg-log::before {
+    animation-play-state: paused;
+  }
+  @container k-dg (min-width: 600px) {
+    :global(html.js.motion [data-dg-anim]) .dg-rfill { animation-name: k-dg-tl-grow; }
+  }
+  /* steps: each spine segment fills while its step crosses the viewport */
+  @supports (animation-timeline: view()) {
+    :global(html.js.motion [data-dg-anim]) .dg-steps .dg-fill,
+    :global(html.js.motion [data-dg-anim]:not(.in)) .dg-steps .dg-fill {
+      animation: k-dg-tl-fill-y linear both;
+      animation-timeline: --dg-st;
+      animation-range: entry 70% cover 55%;
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes k-dg-tl-pop { from { transform: scale(0.4); } }
+  @keyframes k-dg-tl-rise { from { transform: translateY(10px); } }
+  @keyframes k-dg-tl-fill-y { from { transform: scaleY(0); } }
+  @keyframes k-dg-tl-grow { from { transform: scaleX(0); } }
+</style>

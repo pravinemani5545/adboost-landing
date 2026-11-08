@@ -1,0 +1,72 @@
+---
+// Funnel: ordered stages. scale="proportional" sizes each bar by its value (every stage
+// needs one); scale="uniform" uses a fixed taper that is not data, so the caption must
+// say the stages are not to scale.
+import Figure from './Figure.astro';
+import type { FunnelProps } from './types';
+import { fail, r4 } from './util';
+
+type Props = FunnelProps;
+const { stages, scale = 'uniform', ...base } = Astro.props;
+const n = stages?.length ?? 0;
+if (n < 2) fail('funnel', base.caption, 'needs at least two stages');
+if (scale === 'proportional' && stages.some((s) => typeof s.value !== 'number')) {
+  fail('funnel', base.caption, 'proportional scale needs a value on every stage');
+}
+const max = scale === 'proportional' ? Math.max(...stages.map((s) => s.value as number)) : 1;
+const width = (i: number) =>
+  scale === 'proportional' ? r4(((stages[i].value as number) / max) * 100) : r4(100 - (i * 42) / (n - 1));
+---
+<Figure {...base} kind="funnel">
+  <ol class="dg-fn" data-scale={scale}>
+    {stages.map((s, i) => (
+      <li class="dg-stage" style={`--i:${i};--w:${width(i)}%;--k:${n === 1 ? 0 : i / (n - 1)}`}>
+        <p class="dg-ft">
+          <span class="dg-lab">{s.label}</span>
+          {s.display && <span class="dg-val">{s.display}</span>}
+        </p>
+        <span class="dg-track" aria-hidden="true"><span class="dg-fbar"></span></span>
+        {s.note && <p class="dg-note">{s.note}</p>}
+      </li>
+    ))}
+  </ol>
+</Figure>
+
+<style>
+  .dg-fn { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .dg-stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .dg-ft { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; line-height: var(--k-lh-snug); }
+  .dg-lab { font-weight: 600; color: var(--dg-fg); }
+  .dg-val { font-family: var(--k-font-mono); font-size: var(--k-fs-small); font-weight: 500; color: var(--dg-accent); font-variant-numeric: tabular-nums; }
+  .dg-note { margin: 0; font-size: var(--k-fs-small); color: var(--dg-fg-3); line-height: var(--k-lh-snug); }
+  .dg-track { position: relative; display: flex; justify-content: center; height: 30px; }
+  .dg-fbar {
+    width: max(var(--w), 6px);
+    height: 100%;
+    border-radius: 8px;
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--dg-accent-fill) calc(100% - var(--k) * 45%), white),
+      color-mix(in srgb, var(--dg-accent-fill) calc(88% - var(--k) * 45%), white));
+    box-shadow: 0 10px 22px -14px var(--dg-glow);
+  }
+  .dg-fn[data-scale="uniform"] .dg-fbar { clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 100%, 10px 100%); border-radius: 4px; }
+  @container k-dg (min-width: 560px) {
+    .dg-stage { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.6fr); column-gap: 20px; align-items: center; }
+    .dg-ft { justify-content: flex-start; flex-direction: column; gap: 2px; align-items: flex-start; }
+    .dg-track { height: 38px; }
+    .dg-note { grid-column: 1; }
+  }
+
+  :global(html.js.motion [data-dg-anim]) .dg-fbar {
+    animation: k-dg-fn-grow var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * 2 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-ft {
+    animation: k-dg-fn-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * 2 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-fbar, .dg-ft) { animation-play-state: paused; }
+
+  @keyframes k-dg-fn-grow { from { transform: scaleX(0); } }
+  @keyframes k-dg-fn-rise { from { transform: translateY(8px); } }
+</style>

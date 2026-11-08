@@ -1,0 +1,106 @@
+---
+// Diagram kit fixtures for visual QA (rendered by ./[fixture].astro, never a route itself):
+// every diagram with sample data from the Health data files, on paper (/free/kit/diagrams/)
+// and on night slabs (/free/kit/diagrams-night/), at full width and at a hero-aside width.
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Band from '../../../kit/components/Band.astro';
+import Diagram from '../../../kit/diagram/Diagram.astro';
+import { FIXTURES } from './_fixtures';
+import type { DiagramSpec } from '../../../kit/diagram/types';
+
+interface Props { night: boolean }
+const { night } = Astro.props;
+const path = night ? '/free/kit/diagrams-night/' : '/free/kit/diagrams/';
+// the aside copy drops ids, so live hooks and row ids stay unique on the page
+const aside = (s: DiagramSpec): DiagramSpec => {
+  const c = { ...s, id: undefined, arrive: false } as DiagramSpec & { live?: string; rowIdPrefix?: string; marker?: { live?: string } };
+  if ('live' in c) c.live = undefined;
+  if ('rowIdPrefix' in c) c.rowIdPrefix = undefined;
+  if (c.kind === 'bars' && c.marker) c.marker = { ...c.marker, live: undefined };
+  return c;
+};
+---
+<BaseLayout title="Diagram kit fixtures | AdBoost Health" canonicalPath={path} noindex hideNewsletterPopup>
+  <Band tone="paper" size="sm">
+    <header class="fx-head">
+      <p class="fx-eyebrow">Kit · fixtures · {night ? 'night' : 'paper'}</p>
+      <h1>Diagram kit fixtures</h1>
+      <p>Every diagram at full width (left) and at a hero-aside width (right). <a href={night ? '/free/kit/diagrams/' : '/free/kit/diagrams-night/'}>{night ? 'Paper variant' : 'Night variant'}</a></p>
+      <ol class="fx-toc">
+        {FIXTURES.map((f) => <li><a href={`#fx-${f.id}`}>{f.label}</a></li>)}
+      </ol>
+    </header>
+  </Band>
+
+  {FIXTURES.map((f, i) => (
+    <Band tone={night ? 'night' : i % 2 ? 'tint' : 'paper'} slab={night} size="sm" id={`fx-${f.id}`}>
+      <h2 class="fx-label">{f.label}</h2>
+      <div class="fx-row">
+        <div class="fx-main" data-fx="main"><Diagram {...f.spec} /></div>
+        <div class="fx-aside" data-fx="aside"><Diagram {...aside(f.spec)} /></div>
+      </div>
+      {f.demo === 'gauge' && (
+        <label class="fx-demo">Fixture input, LTV:CAC <input type="range" min="0" max="8" step="0.1" value="3.4" data-fx-gauge /></label>
+      )}
+      {f.demo === 'marker' && (
+        <label class="fx-demo">Fixture input, your CAC <input type="range" min="0" max="600" step="5" value="260" data-fx-marker /></label>
+      )}
+    </Band>
+  ))}
+
+  <Band tone={night ? 'night' : 'paper'} slab={night} size="sm" id="fx-prose">
+    <h2 class="fx-label">Inside article prose (blog markers)</h2>
+    <div class="prose prose--doc fx-prose">
+      <p>Prose paragraph before the marker. The diagrams below sit inside the same .prose wrapper a blog post uses, so prose list, link and table rules must not leak into them.</p>
+      {FIXTURES.filter((f) => ['heat', 'flow-check', 'cmp-split', 'strip'].includes(f.id)).map((f) => <Diagram {...aside(f.spec)} />)}
+      <p>Prose paragraph after.</p>
+    </div>
+  </Band>
+</BaseLayout>
+
+<script is:inline>
+  // Fixture-only page script (inline, so a production build never bundles it).
+  // ?only=<fixture id> shows that fixture alone (screenshots).
+  (function () {
+    var only = new URLSearchParams(location.search).get('only');
+    if (only) {
+      document.querySelectorAll('main > .k-band').forEach(function (s) {
+        if (s.id !== 'fx-' + only) s.style.display = 'none';
+      });
+    }
+    // Same steps as setLive() in src/kit/diagram/live.ts.
+    function setLive(id, value, display) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.style.setProperty('--k-v', String(value));
+      el.querySelectorAll('[data-live-text]').forEach(function (n) { n.textContent = display; });
+      if (el.getAttribute('role') === 'meter') {
+        var lo = Number(el.getAttribute('aria-valuemin')), hi = Number(el.getAttribute('aria-valuemax'));
+        el.setAttribute('aria-valuenow', String(Math.min(hi, Math.max(lo, value))));
+        el.setAttribute('aria-valuetext', display);
+      }
+    }
+    var g = document.querySelector('[data-fx-gauge]');
+    if (g) g.addEventListener('input', function () { var v = Number(g.value); setLive('fx-ltv-gauge', v, v.toFixed(1) + ':1'); });
+    var m = document.querySelector('[data-fx-marker]');
+    if (m) m.addEventListener('input', function () { var v = Number(m.value); setLive('fx-cac-marker', v, '$' + v); });
+  })();
+</script>
+
+<style>
+  .fx-head { display: grid; gap: 10px; max-width: 900px; }
+  .fx-head h1 { margin: 0; font-size: var(--k-fs-h2); letter-spacing: -0.03em; }
+  .fx-head p { margin: 0; color: var(--t-fg-2); }
+  .fx-head a { color: var(--t-accent); text-decoration: underline; }
+  .fx-eyebrow { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: var(--k-ls-mono); text-transform: uppercase; }
+  .fx-toc { columns: 3 220px; margin: 8px 0 0; padding-left: 20px; font-size: var(--k-fs-small); }
+  .fx-label { margin: 0 0 18px; font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--t-fg-3); }
+  .fx-row { display: grid; gap: 40px; }
+  .fx-main, .fx-aside { min-width: 0; }
+  .fx-aside { max-width: 440px; }
+  @media (min-width: 1100px) {
+    .fx-row { grid-template-columns: minmax(0, 1fr) 400px; align-items: start; }
+  }
+  .fx-prose { max-width: 760px; }
+  .fx-demo { display: flex; gap: 12px; align-items: center; margin-top: 20px; font-size: var(--k-fs-small); color: var(--t-fg-2); }
+</style>

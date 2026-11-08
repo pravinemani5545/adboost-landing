@@ -1,0 +1,130 @@
+---
+// StatusStrip: one status per item (platform, vertical), as text plus a mark. The current
+// page's item is raised and ringed (aria-current="page") and is not a link; the others
+// link to their pages. legend chips are lit when their label equals the current item's
+// status. Row on wide containers, column on narrow ones or with orientation="column".
+import Figure from './Figure.astro';
+import type { StatusStripProps } from './types';
+import { TONE_MARK, fail, internal } from './util';
+
+type Props = StatusStripProps;
+const { items, legend, orientation = 'row', compact = false, ...base } = Astro.props;
+if (!items?.length) fail('statusstrip', base.caption, 'needs at least one item');
+items.forEach((it) => internal(it.href, `statusstrip "${it.label}"`));
+const lit = new Set(items.filter((it) => it.current).map((it) => it.status));
+const fit = items.length <= 3 ? 'sm' : items.length <= 5 ? 'md' : 'lg';
+---
+<Figure {...base} kind="statusstrip">
+  <div class="dg-ss" data-orient={orientation} data-fit={fit} data-compact={compact ? '' : undefined} style={`--n:${items.length}`}>
+    <ul class="dg-cells">
+      {items.map((it, i) => {
+        const Tag = it.href && !it.current ? 'a' : 'span';
+        return (
+          <li class="dg-c" data-level={it.level} aria-current={it.current ? 'page' : undefined} style={`--i:${i}`}>
+            <Tag class="dg-box" href={Tag === 'a' ? it.href : undefined}>
+              <span class="dg-cl">{it.label}</span>
+              <span class="dg-cs"><span class="dg-m" aria-hidden="true">{TONE_MARK[it.level]}</span><span>{it.status}</span></span>
+            </Tag>
+          </li>
+        );
+      })}
+    </ul>
+    {legend?.length ? (
+      <ul class="dg-legend">
+        {legend.map((l) => (
+          <li data-level={l.level} class:list={[lit.size > 0 && (lit.has(l.label) ? 'dg-lit' : 'dg-dim')]}>
+            <span class="dg-lm" aria-hidden="true">{TONE_MARK[l.level]}</span>{l.label}
+          </li>
+        ))}
+      </ul>
+    ) : null}
+  </div>
+</Figure>
+
+<style>
+  [data-level] { --tone-ink: var(--dg-accent); --tone-fill: var(--dg-accent-fill); --tone-soft: var(--dg-accent-soft); }
+  [data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); --tone-soft: var(--dg-ok-soft); }
+  [data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); --tone-soft: var(--dg-warn-soft); }
+  [data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
+  [data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
+
+  .dg-ss { display: grid; gap: 12px; }
+  .dg-cells { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .dg-c { min-width: 0; }
+  .dg-box {
+    position: relative;
+    height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 6px 12px;
+    padding: 12px 14px;
+    border-radius: var(--k-r-md);
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    box-shadow: var(--k-e1);
+    color: inherit;
+    text-decoration: none;
+    overflow: clip;
+  }
+  .dg-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tone-fill); }
+  .dg-cl { font-weight: 600; color: var(--dg-fg); line-height: var(--k-lh-snug); min-width: 0; }
+  a.dg-box .dg-cl { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
+  .dg-cs { display: inline-flex; align-items: center; gap: 6px; font-size: var(--k-fs-small); font-weight: 500; color: var(--tone-ink); line-height: var(--k-lh-snug); }
+  .dg-m { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; line-height: 1; background: var(--tone-soft); color: var(--tone-ink); }
+  a.dg-box[href] { color: inherit; text-decoration: none; }
+  a.dg-box { transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease); }
+  a.dg-box:hover { transform: translateY(-2px); box-shadow: var(--k-e2); border-color: var(--dg-line-2); }
+  .dg-c[aria-current] .dg-box {
+    background: var(--tone-soft);
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--dg-ring), var(--dg-raised);
+    transform: translateY(-2px);
+    z-index: 1;
+  }
+  .dg-c[aria-current] .dg-m { background: var(--dg-card); }
+
+  /* row layout */
+  @container k-dg (min-width: 360px) {
+    .dg-ss[data-orient="row"][data-fit="sm"] .dg-cells { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+    .dg-ss[data-orient="row"][data-fit="sm"] .dg-box { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  }
+  @container k-dg (min-width: 620px) {
+    .dg-ss[data-orient="row"][data-fit="md"] .dg-cells { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+    .dg-ss[data-orient="row"][data-fit="md"] .dg-box { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  }
+  @container k-dg (min-width: 860px) {
+    .dg-ss[data-orient="row"][data-fit="lg"] .dg-cells { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); }
+    .dg-ss[data-orient="row"][data-fit="lg"] .dg-box { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  }
+
+  .dg-ss[data-compact] .dg-box { padding: 9px 12px; gap: 4px 10px; }
+  .dg-ss[data-compact] .dg-cl { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dg-fg-2); }
+  .dg-ss[data-compact] .dg-cs { font-size: 12.5px; }
+
+  .dg-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .dg-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px 4px 6px;
+    border-radius: var(--k-r-pill);
+    font-size: var(--k-fs-small);
+    color: var(--dg-fg-2);
+    border: 1px solid var(--dg-line);
+    background: var(--dg-card);
+  }
+  .dg-legend .dg-lit { color: var(--tone-ink); background: var(--tone-soft); border-color: color-mix(in srgb, var(--tone-fill) 40%, transparent); font-weight: 600; }
+  .dg-legend .dg-dim { color: var(--dg-fg-3); }
+  .dg-lm { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; line-height: 1; background: var(--tone-soft); color: var(--tone-ink); }
+
+  :global(html.js.motion [data-dg-anim]) .dg-box { animation: k-dg-ss-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 90ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-c[aria-current] .dg-box { animation: k-dg-ss-in var(--k-t-soft) var(--k-spring-soft) backwards, k-dg-ss-ring 1.1s var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 90ms), calc(var(--dg-base) + var(--n) * 90ms + 200ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-legend .dg-lit { animation: k-dg-ss-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + var(--n) * 90ms + 300ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-box, .dg-legend .dg-lit) { animation-play-state: paused; }
+
+  @keyframes k-dg-ss-in { from { transform: translateY(10px); } }
+  @keyframes k-dg-ss-ring { from { box-shadow: 0 0 0 12px transparent, var(--dg-raised); } }
+  @keyframes k-dg-ss-pop { from { transform: scale(0.8); } }
+</style>

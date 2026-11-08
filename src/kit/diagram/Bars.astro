@@ -1,0 +1,232 @@
+---
+// Bars: values (variant="bar") or ranges (variant="range") on one shared axis.
+// Every row prints its value exactly as the copy has it (`display`); the bar is only its
+// picture. approxStart fades the left end ("~"), openEnd fades the right end ("+"),
+// unitNote flags a different unit, axisBreakAbove compresses everything above it into
+// the last 12% of the axis behind a break. highlight lights one row and ghosts the rest.
+// marker: a vertical rule at a value; with marker.live, a calculator moves it with
+// setLive(id, value, display) from ./live.ts.
+import Figure from './Figure.astro';
+import type { BarsProps } from './types';
+import { fail, group, internal, niceTicks, r4 } from './util';
+
+type Props = BarsProps;
+const {
+  variant = 'bar', items, min, max, axisBreakAbove: B, axisLabel, ticks: tickProp, prefix = '', suffix = '', marker, ...base
+} = Astro.props;
+if (!items?.length) fail('bars', base.caption, 'needs at least one item');
+for (const it of items) {
+  internal(it.href, `bars "${it.label}"`);
+  if (variant === 'range' && !it.range) fail('bars', base.caption, `"${it.label}" needs range [lo, hi]`);
+  if (variant === 'bar' && typeof it.value !== 'number') fail('bars', base.caption, `"${it.label}" needs a value`);
+}
+const highs = items.map((it) => (variant === 'range' ? it.range![1] : it.value!));
+const lows = items.map((it) => (variant === 'range' ? it.range![0] : 0));
+const lo = min ?? Math.min(0, ...lows);
+const hi = max ?? Math.max(...highs, marker?.value ?? -Infinity);
+const brk = B !== undefined && B > lo && B < hi ? B : undefined;
+const MAIN = brk === undefined ? 1 : 0.84;
+const GAP = 0.04;
+
+/** Axis position 0..1 for a value. */
+const pos = (v: number) => {
+  if (brk === undefined) return Math.min(1, Math.max(0, (v - lo) / (hi - lo)));
+  if (v <= brk) return Math.max(0, ((v - lo) / (brk - lo)) * MAIN);
+  return MAIN + GAP + Math.min(1, (v - brk) / (hi - brk)) * (1 - MAIN - GAP);
+};
+/** Segments [left, width] in % for a [a, b] span, split at the axis break. */
+const segs = (a: number, b: number) => {
+  if (brk === undefined || b <= brk || a > brk) return [{ l: r4(pos(a) * 100), w: r4((pos(b) - pos(a)) * 100), cut: '' }];
+  return [
+    { l: r4(pos(a) * 100), w: r4((MAIN - pos(a)) * 100), cut: 'r' },
+    { l: r4((MAIN + GAP) * 100), w: r4((pos(b) - MAIN - GAP) * 100), cut: 'l' },
+  ];
+};
+
+const tickVals = tickProp ?? [...niceTicks(lo, brk ?? hi, 4), ...(brk !== undefined ? [hi] : [])];
+const ticks = tickVals.map((t) => {
+  const x = r4(pos(t) * 100);
+  return { v: t, x, text: `${prefix}${group(t)}${suffix}`, align: x <= 4 ? 'start' : x >= 96 ? 'end' : undefined };
+});
+const anyLit = items.some((it) => it.highlight);
+const n = items.length;
+
+// live marker: --k-v drives --mkn (0..1) through the same piecewise scale
+const mkn = brk === undefined
+  ? `clamp(0, (var(--k-v) - ${lo}) / ${hi - lo}, 1)`
+  : `calc(clamp(0, (min(var(--k-v), ${brk}) - ${lo}) / ${brk - lo}, 1) * ${MAIN} + clamp(0, (var(--k-v) - ${brk}) * 1000000, 1) * ${GAP} + clamp(0, (min(var(--k-v), ${hi}) - ${brk}) / ${hi - brk}, 1) * ${r4(1 - MAIN - GAP)})`;
+const rootStyle = [`--n:${n}`, marker ? `--k-v:${marker.value};--mkn:${mkn}` : ''].filter(Boolean).join(';');
+---
+<Figure {...base} kind="bars">
+  <div class="dg-bars" data-variant={variant} id={marker?.live} data-marker={marker ? '' : undefined} style={rootStyle}>
+    {marker && (
+      <div class="dg-mkrow">
+        <span class="dg-mkpad" aria-hidden="true"></span>
+        <span class="dg-mkband"><span class="dg-mkchip">{marker.label && <span class="dg-mklab">{marker.label}</span>}<span class="dg-mkval" data-live-text>{marker.display}</span></span></span>
+      </div>
+    )}
+    <ul class="dg-rows">
+      {items.map((it, i) => {
+        const [a, b] = variant === 'range' ? it.range! : [lo, it.value!];
+        const order = it.highlight ? n + 1 : i;
+        return (
+          <li
+            class:list={['dg-row', it.highlight && 'dg-lit', anyLit && !it.highlight && 'dg-ghost']}
+            data-level={it.tone ?? 'accent'}
+            aria-current={it.highlight ? 'true' : undefined}
+            style={`--i:${order}`}
+          >
+            <p class="dg-bl">
+              <span class="dg-lab">{it.href ? <a href={it.href}>{it.label}</a> : it.label}</span>
+              <span class="dg-disp">{it.display}</span>
+              {it.unitNote && <span class="dg-unit">{it.unitNote}</span>}
+            </p>
+            <span class="dg-track" aria-hidden="true">
+              {segs(a, b).map((s, k) => (
+                <span
+                  class:list={['dg-seg', k === 0 && it.approxStart && 'dg-approx', (k === segs(a, b).length - 1) && it.openEnd && 'dg-open', s.cut && `dg-cut-${s.cut}`]}
+                  style={`--l:${s.l}%;--w:${s.w}%`}
+                ></span>
+              ))}
+              {marker && <span class="dg-mk"></span>}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+    {ticks.length > 0 && (
+      <div class="dg-axis" aria-hidden="true">
+        <span class="dg-axpad"></span>
+        <span class="dg-ticks">
+          {ticks.map((t) => <span class="dg-tick" data-align={t.align} style={`--x:${t.x}%`}>{t.text}</span>)}
+          {brk !== undefined && <span class="dg-brkmark" style={`--x:${r4((MAIN + GAP / 2) * 100)}%`}></span>}
+        </span>
+      </div>
+    )}
+    {axisLabel && <p class="dg-axlabel">{axisLabel}</p>}
+  </div>
+</Figure>
+
+<style>
+  .dg-bars { --lab: 0px; --mkpos: calc(var(--mkn, 0) * 100%); display: grid; gap: 8px; }
+  .dg-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .dg-row {
+    --tone-ink: var(--dg-accent);
+    --tone-fill: var(--dg-accent-fill);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .dg-row[data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); }
+  .dg-row[data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); }
+  .dg-row[data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); }
+  .dg-row[data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); }
+  .dg-bl { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; line-height: var(--k-lh-snug); min-width: 0; }
+  .dg-lab { font-weight: 600; color: var(--dg-fg); flex: 1 1 auto; min-width: 0; }
+  .dg-lab a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
+  .dg-lab a:hover { color: var(--dg-accent); }
+  .dg-disp { font-family: var(--k-font-mono); font-size: var(--k-fs-small); font-weight: 500; color: var(--tone-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dg-unit { flex-basis: 100%; font-size: var(--k-fs-micro); font-family: var(--k-font-mono); letter-spacing: 0.04em; color: var(--dg-fg-3); }
+  .dg-track {
+    position: relative;
+    display: block;
+    height: 12px;
+    border-radius: var(--k-r-pill);
+    background: var(--dg-muted-soft);
+    box-shadow: inset 0 0 0 1px var(--dg-line);
+  }
+  .dg-seg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--l);
+    width: max(var(--w), 4px);
+    border-radius: var(--k-r-pill);
+    background: var(--tone-fill);
+    transform-origin: left;
+  }
+  .dg-seg.dg-approx { -webkit-mask-image: linear-gradient(90deg, transparent, #000 22px); mask-image: linear-gradient(90deg, transparent, #000 22px); border-top-left-radius: 0; border-bottom-left-radius: 0; }
+  .dg-seg.dg-open { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 22px), transparent); border-top-right-radius: 0; border-bottom-right-radius: 0; }
+  .dg-seg.dg-approx.dg-open { -webkit-mask-image: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent); mask-image: linear-gradient(90deg, transparent, #000 22px, #000 calc(100% - 22px), transparent); }
+  .dg-seg.dg-cut-r { border-top-right-radius: 0; border-bottom-right-radius: 0; clip-path: polygon(0 0, 100% 0, calc(100% - 4px) 100%, 0 100%); }
+  .dg-seg.dg-cut-l { border-top-left-radius: 0; border-bottom-left-radius: 0; clip-path: polygon(4px 0, 100% 0, 100% 100%, 0 100%); }
+
+  .dg-ghost .dg-seg { background: color-mix(in srgb, var(--tone-fill) 30%, transparent); }
+  :global(:is(.k-dg--night, .k-tone-night, [data-tone="night"])) .dg-ghost .dg-seg { background: color-mix(in srgb, var(--tone-fill) 50%, transparent); }
+  .dg-ghost .dg-lab { color: var(--dg-fg-2); font-weight: 500; }
+  .dg-ghost .dg-disp { color: var(--dg-fg-3); }
+  .dg-lit .dg-seg { box-shadow: 0 0 0 3px var(--dg-accent-soft), 0 6px 16px -6px var(--dg-glow); }
+  .dg-lit .dg-track { height: 14px; }
+
+  /* axis */
+  .dg-axis { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .dg-axpad { display: none; }
+  .dg-ticks { position: relative; height: 1.6em; border-top: 1px solid var(--dg-line); font-family: var(--k-font-mono); font-size: var(--k-fs-micro); color: var(--dg-fg-3); font-variant-numeric: tabular-nums; }
+  .dg-tick { position: absolute; left: var(--x); top: 4px; translate: -50% 0; white-space: nowrap; }
+  .dg-tick[data-align="start"] { translate: 0 0; }
+  .dg-tick[data-align="end"] { translate: -100% 0; }
+  .dg-tick::before { content: ''; position: absolute; left: 50%; top: -8px; width: 1px; height: 5px; background: var(--dg-line-2); }
+  .dg-tick[data-align="start"]::before { left: 0; }
+  .dg-tick[data-align="end"]::before { left: calc(100% - 1px); }
+  .dg-brkmark { position: absolute; left: var(--x); top: -7px; width: 10px; height: 12px; translate: -50% 0; background: linear-gradient(115deg, transparent 40%, var(--dg-fg-3) 40% 52%, transparent 52%), linear-gradient(115deg, transparent 62%, var(--dg-fg-3) 62% 74%, transparent 74%); }
+  .dg-axlabel { margin: 0; font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--dg-fg-3); text-align: right; }
+
+  /* marker */
+  .dg-mkrow { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .dg-mkpad { display: none; }
+  .dg-mkband { position: relative; height: 26px; }
+  .dg-mkchip {
+    position: absolute;
+    left: var(--mkpos);
+    bottom: 0;
+    translate: calc(var(--mkn, 0) * -100%) 0;
+    display: inline-flex;
+    gap: 6px;
+    align-items: baseline;
+    white-space: nowrap;
+    padding: 3px 9px;
+    border-radius: var(--k-r-pill);
+    background: var(--dg-fg);
+    color: var(--dg-inverse);
+    font-size: var(--k-fs-small);
+    font-weight: 600;
+    box-shadow: var(--k-e2);
+    transition: left var(--k-t-snap) var(--k-spring-snap), translate var(--k-t-snap) var(--k-spring-snap);
+  }
+  .dg-mklab { font-weight: 500; opacity: 0.8; }
+  .dg-mkval { font-variant-numeric: tabular-nums; }
+  .dg-mk {
+    position: absolute;
+    top: -5px;
+    bottom: -5px;
+    left: var(--mkpos);
+    width: 2px;
+    translate: -1px 0;
+    border-radius: 2px;
+    background: var(--dg-fg);
+    transition: left var(--k-t-snap) var(--k-spring-snap);
+  }
+
+  @container k-dg (min-width: 520px) {
+    .dg-bars { --lab: minmax(0, 0.62fr); }
+    .dg-row, .dg-axis, .dg-mkrow { grid-template-columns: var(--lab) minmax(0, 1fr); column-gap: 18px; align-items: center; }
+    .dg-axpad, .dg-mkpad { display: block; }
+    .dg-bl { justify-content: space-between; }
+  }
+
+  /* motion: bars grow from their left end; the lit row finishes last, with a glow */
+  :global(html.js.motion [data-dg-anim]) .dg-seg {
+    animation: k-dg-bars-grow var(--k-d-draw) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--k-stagger) * 1.5);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-lit .dg-seg {
+    animation: k-dg-bars-grow var(--k-d-draw) var(--k-ease-out) backwards, k-dg-bars-glow 1.2s var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * var(--k-stagger) * 1.5), calc(var(--dg-base) + var(--i) * var(--k-stagger) * 1.5 + 700ms);
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-mkchip { animation: k-dg-bars-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + var(--n) * var(--k-stagger) * 1.5 + 500ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-seg, .dg-mkchip) { animation-play-state: paused; }
+
+  @keyframes k-dg-bars-grow { from { transform: scaleX(0); } }
+  @keyframes k-dg-bars-glow { from { box-shadow: 0 0 0 10px transparent, 0 6px 26px -4px var(--dg-glow); } }
+  @keyframes k-dg-bars-pop { from { transform: scale(0.5); } }
+</style>

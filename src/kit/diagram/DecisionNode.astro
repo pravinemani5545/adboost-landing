@@ -1,0 +1,126 @@
+---
+// One question of a DecisionTree and its two answers (recursive via Astro.self).
+// Internal to DecisionTree.astro.
+import type { DecisionNode, Leaf } from './types';
+import { TONE_MARK, internal } from './util';
+
+interface Props { node: DecisionNode; depth: number; yesLabel: string; noLabel: string; seq: number }
+const { node, depth, yesLabel, noLabel, seq } = Astro.props;
+const isLeaf = (x: DecisionNode | Leaf): x is Leaf => 'result' in x;
+const branches = [
+  { key: 'yes', label: yesLabel, to: node.yes },
+  { key: 'no', label: noLabel, to: node.no },
+];
+for (const b of branches) if (isLeaf(b.to)) internal(b.to.href, `decision leaf "${b.to.result}"`);
+---
+<div class="dg-dn" data-depth={depth} style={`--i:${seq}`}>
+  <p class="dg-q"><span class="dg-qmark" aria-hidden="true"></span><span>{node.q}</span></p>
+  <ul class="dg-br">
+    {branches.map((b, k) => (
+      <li class:list={['dg-b', `dg-${b.key}`]} style={`--i:${seq + 1 + k}`}>
+        <span class="dg-ans">{b.label}</span>
+        {isLeaf(b.to) ? (
+          <p class="dg-leaf" data-level={b.to.tone ?? 'accent'}>
+            <span class="dg-lm" aria-hidden="true">{TONE_MARK[b.to.tone ?? 'accent']}</span>
+            <span class="dg-lt">
+              {b.to.href ? <a href={b.to.href}>{b.to.result}</a> : <span class="dg-lr">{b.to.result}</span>}
+              {b.to.detail && <span class="dg-ld">{b.to.detail}</span>}
+            </span>
+          </p>
+        ) : (
+          <Astro.self node={b.to} depth={depth + 1} yesLabel={yesLabel} noLabel={noLabel} seq={seq + 3 + k * 4} />
+        )}
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .dg-dn { display: grid; gap: 0; min-width: 0; }
+  .dg-q {
+    margin: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: var(--k-r-md);
+    background: var(--dg-card);
+    border: 1px solid color-mix(in srgb, var(--dg-accent-fill) 40%, var(--dg-card-line));
+    box-shadow: var(--k-e2);
+    font-weight: 600;
+    color: var(--dg-fg);
+    line-height: var(--k-lh-snug);
+  }
+  .dg-qmark { flex: none; width: 12px; height: 12px; margin-top: 4px; border-radius: 3px; background: var(--dg-accent-fill); transform: rotate(45deg); }
+  .dg-br { list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 10px; position: relative; }
+  .dg-br::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 18px; width: 2px; background: var(--dg-line-2); transform-origin: top; }
+  .dg-b { position: relative; display: grid; gap: 8px; justify-items: start; padding-top: 12px; }
+  .dg-b::before { content: ''; position: absolute; left: -11px; top: 23px; width: 10px; height: 2px; background: var(--dg-line-2); }
+  .dg-ans {
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: var(--k-r-pill);
+    background: var(--dg-card);
+    border: 1px solid var(--dg-line-2);
+    color: var(--dg-fg-2);
+  }
+  .dg-yes > .dg-ans { color: var(--dg-ok); border-color: color-mix(in srgb, var(--dg-ok-fill) 40%, transparent); }
+  .dg-no > .dg-ans { color: var(--dg-bad); border-color: color-mix(in srgb, var(--dg-bad-fill) 40%, transparent); }
+  .dg-b > .dg-dn { width: 100%; }
+  .dg-leaf {
+    --tone-ink: var(--dg-accent);
+    --tone-fill: var(--dg-accent-fill);
+    --tone-soft: var(--dg-accent-soft);
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: var(--k-r-md);
+    background: var(--tone-soft);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 26%, transparent);
+  }
+  .dg-leaf[data-level="ok"] { --tone-ink: var(--dg-ok); --tone-fill: var(--dg-ok-fill); --tone-soft: var(--dg-ok-soft); }
+  .dg-leaf[data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); --tone-soft: var(--dg-warn-soft); }
+  .dg-leaf[data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
+  .dg-leaf[data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
+  .dg-lm { flex: none; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 10.5px; line-height: 1; background: var(--dg-card); color: var(--tone-ink); }
+  .dg-lt { display: grid; gap: 4px; min-width: 0; }
+  .dg-lr, .dg-lt a { font-weight: 600; color: var(--tone-ink); line-height: var(--k-lh-snug); }
+  .dg-lt a { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
+  .dg-ld { font-size: var(--k-fs-small); color: var(--dg-fg-2); line-height: var(--k-lh-body); }
+
+  /* split layout: the question on top, the two answers side by side */
+  @container k-dg (min-width: 600px) {
+    .dg-dn[data-depth="0"] > .dg-q { justify-self: center; max-width: 34em; }
+    .dg-dn[data-depth="0"] > .dg-br { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; padding: 26px 0 0; }
+    .dg-dn[data-depth="0"] > .dg-br::before { left: 50%; top: 0; bottom: auto; height: 14px; translate: -1px 0; }
+    .dg-dn[data-depth="0"] > .dg-br > .dg-b { justify-items: center; padding-top: 14px; }
+    .dg-dn[data-depth="0"] > .dg-br > .dg-b::before { top: 0; left: 50%; right: -10px; width: auto; height: 2px; }
+    .dg-dn[data-depth="0"] > .dg-br > .dg-b.dg-no::before { left: -10px; right: 50%; }
+    .dg-dn[data-depth="0"] > .dg-br > .dg-b::after { content: ''; position: absolute; top: 0; left: 50%; width: 2px; height: 14px; translate: -1px 0; background: var(--dg-line-2); }
+  }
+  @container k-dg (min-width: 900px) {
+    .dg-dn[data-depth="1"] > .dg-q { justify-self: center; }
+    .dg-dn[data-depth="1"] > .dg-br { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; padding: 22px 0 0; }
+    .dg-dn[data-depth="1"] > .dg-br::before { left: 50%; top: 0; bottom: auto; height: 12px; translate: -1px 0; }
+    .dg-dn[data-depth="1"] > .dg-br > .dg-b { justify-items: center; padding-top: 12px; }
+    .dg-dn[data-depth="1"] > .dg-br > .dg-b::before { top: 0; left: 50%; right: -7px; width: auto; height: 2px; }
+    .dg-dn[data-depth="1"] > .dg-br > .dg-b.dg-no::before { left: -7px; right: 50%; }
+    .dg-dn[data-depth="1"] > .dg-br > .dg-b::after { content: ''; position: absolute; top: 0; left: 50%; width: 2px; height: 12px; translate: -1px 0; background: var(--dg-line-2); }
+  }
+
+  :global(html.js.motion [data-dg-anim]) :is(.dg-q, .dg-leaf, .dg-ans) { animation: k-dg-dt-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 120ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-br::before { animation: k-dg-dt-y var(--k-d-base) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 120ms + 120ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-q, .dg-leaf, .dg-ans),
+  :global(html.js.motion [data-dg-anim]:not(.in)) .dg-br::before { animation-play-state: paused; }
+
+  @keyframes k-dg-dt-in { from { transform: translateY(10px); } }
+  @keyframes k-dg-dt-y { from { transform: scaleY(0); } }
+</style>

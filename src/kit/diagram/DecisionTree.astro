@@ -1,0 +1,33 @@
+---
+// DecisionTree: yes/no questions down to results. Nested lists, so it reads in order
+// without the drawing; the two answers sit side by side on wide containers.
+// note: the copy's own caveat, printed under the tree.
+import Figure from './Figure.astro';
+import DecisionNode from './DecisionNode.astro';
+import type { DecisionTreeProps } from './types';
+import { fail } from './util';
+
+type Props = DecisionTreeProps;
+const { root, yesLabel = 'Yes', noLabel = 'No', note, ...base } = Astro.props;
+if (!root?.q) fail('decisiontree', base.caption, 'needs a root question');
+---
+<Figure {...base} kind="decisiontree">
+  <div class="dg-dt">
+    <DecisionNode node={root} depth={0} yesLabel={yesLabel} noLabel={noLabel} seq={0} />
+    {note && <p class="dg-note">{note}</p>}
+  </div>
+</Figure>
+
+<style>
+  .dg-dt { display: grid; gap: 16px; }
+  .dg-note {
+    margin: 0;
+    padding: 10px 14px;
+    border-left: 3px solid var(--dg-warn-fill);
+    background: var(--dg-warn-soft);
+    border-radius: 0 var(--k-r-sm) var(--k-r-sm) 0;
+    font-size: var(--k-fs-small);
+    line-height: var(--k-lh-body);
+    color: var(--dg-fg-2);
+  }
+</style>
