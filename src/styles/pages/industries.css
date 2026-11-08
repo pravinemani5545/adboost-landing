@@ -114,8 +114,9 @@
   }
 }
 
-/* ============ ad rules: the compact strip under the callout ============ */
-.prose .ind-rules { margin: var(--k-sp-4) 0 var(--k-sp-2); }
+/* ============ ad rules: each platform's rule sheet, linked under the callout ============ */
+.prose .ind-rulelinks { list-style: none; margin: calc(var(--k-sp-2) * -1) 0 var(--k-sp-5); padding: 0; display: flex; flex-wrap: wrap; gap: var(--k-sp-2) var(--k-sp-5); font-size: var(--k-fs-small); }
+.prose .ind-rulelinks li { margin: 0; }
 
 /* ============ mistakes vs good: both questions head the two columns ============ */
 .ind-cmp { container: ind-cmp / inline-size; margin-top: 44px; }

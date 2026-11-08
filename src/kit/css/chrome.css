@@ -310,8 +310,10 @@ html.k-sheet-open .k-mcta { translate: 0 calc(100% + 32px); opacity: 0; pointer-
 @media (prefers-reduced-motion: no-preference) {
   @view-transition { navigation: auto; }
 }
-.k-nav { view-transition-name: k-nav; }
-.k-mcta { view-transition-name: k-mcta; }
+/* named only while a transition runs (KitHead sets html.k-vt): a named element is a backdrop root,
+   so a permanent name would stop the nav glass from blurring what scrolls under it */
+html.k-vt .k-nav { view-transition-name: k-nav; }
+html.k-vt .k-mcta { view-transition-name: k-mcta; }
 @keyframes k-vt-out { to { opacity: 0; } }
 @keyframes k-vt-in { from { opacity: 0; translate: 0 8px; } }
 ::view-transition-old(root) { animation: k-vt-out 160ms var(--k-ease-in) both; }

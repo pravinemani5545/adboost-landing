@@ -2,11 +2,11 @@
 import Shell from '../layouts/Shell.astro';
 import Faq from '../components/Faq.astro';
 import HeatMatrix from '../kit/diagram/HeatMatrix.astro';
-import type { Tone } from '../kit/diagram/types';
 import { BOOK_PATH } from '../lib/site';
 import { organizationNode } from '../lib/schema';
 import { getPublishedPosts } from '../lib/blog';
-import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL, type Platform, type PolicyStatus } from '../data/adPolicies';
+import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../data/adPolicies';
+import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, policyHref } from '../components/adv/status';
 import '../styles/home.css';
 
 const SITE = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -61,22 +61,20 @@ const jsonLd = {
   ],
 };
 
-// Compliance by platform: the live rule sheets as a vertical x platform matrix. The status
-// colours match the share cards (_og/genog.mjs): certification accent, restricted warn,
-// prohibited bad, allowed ok.
-const PLATFORMS: Platform[] = ['Meta', 'Google', 'TikTok'];
-const LEVEL: Record<PolicyStatus, Tone> = { allowed: 'ok', restricted: 'warn', cert: 'accent', prohibited: 'bad' };
+// Compliance by platform: the live rule sheets as a vertical x platform matrix. Status colours
+// come from STATUS_TONE (components/adv/status.ts), shared with the advertising pages, the
+// industry strips and the share cards.
 const policyRows = [...new Set(AD_POLICIES.map((p) => p.verticalSlug))].map((vs) => {
   const ps = AD_POLICIES.filter((p) => p.verticalSlug === vs);
   return {
     label: ps[0].vertical,
     cells: PLATFORMS.map((pl) => {
       const p = ps.find((x) => x.platform === pl);
-      return p ? { text: STATUS_LABEL[p.status], level: LEVEL[p.status], href: `/advertising/${p.slug}/` } : null;
+      return p ? { text: STATUS_LABEL[p.status], level: STATUS_TONE[p.status], href: policyHref(p) } : null;
     }),
   };
 });
-const policyLegend = (Object.keys(STATUS_LABEL) as PolicyStatus[]).map((s) => ({ level: LEVEL[s], label: STATUS_LABEL[s] }));
+const policyLegend = STATUS_LEGEND;
 const rulesChecked = new Date(`${RULES_CHECKED_ON}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 // Process step 1 gauge, drawn at build time so it is complete without JS:
@@ -483,7 +481,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
           <p>From a single-channel test to a multi-platform system shipping 25+ creatives a week.</p>
         </div>
         <div class="stats">
-          <div class="s"><div class="l">ROAS</div><div class="v">0.8× → <span class="blue" data-count>3.5×</span></div></div>
+          <div class="s"><div class="l">ROAS</div><div class="v">0.8× → <span class="blue" data-count data-count-from="0.8">3.5×</span></div></div>
           <div class="s"><div class="l">CAC</div><div class="v"><span class="green" data-count>−64%</span></div></div>
           <div class="s"><div class="l">TIME</div><div class="v"><span data-count>60 days</span></div></div>
         </div>
@@ -506,7 +504,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
           <p>UGC creative refactor + LP redesign + offer test on day 3. Held the new floor for 6 months.</p>
         </div>
         <div class="stats">
-          <div class="s"><div class="l">ROAS</div><div class="v">1.2× → <span class="blue" data-count>2.8×</span></div></div>
+          <div class="s"><div class="l">ROAS</div><div class="v">1.2× → <span class="blue" data-count data-count-from="1.2">2.8×</span></div></div>
           <div class="s"><div class="l">CAC</div><div class="v"><span class="green" data-count>−40%</span></div></div>
           <div class="s"><div class="l">TIME</div><div class="v"><span data-count>14 days</span></div></div>
         </div>

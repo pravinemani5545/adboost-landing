@@ -46,8 +46,8 @@ const accent = (text, phrase) => {
   return esc(text.slice(0, i)) + '<em>' + esc(phrase) + '</em>' + esc(text.slice(i + phrase.length));
 };
 const fmtDay = (s) => new Date(`${s}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-const TONE = { allowed: 'ok', restricted: 'warn', cert: 'accent', prohibited: 'bad' };
-const PLATFORMS = ['Meta', 'Google', 'TikTok'];
+// status colours and platform order: the site's own mapping (src/components/adv/status.ts)
+const { STATUS_TONE: TONE, PLATFORMS } = d.status;
 const termShort = (t) => t.term.replace(/\s*\(.*\)\s*$/, '');
 
 /** Split a printed formula into chips at top-level operators (parenthesised groups stay whole). */
@@ -434,7 +434,7 @@ const TOOLS = [
 ];
 // Guard: every tool string must still be printed on its page.
 for (const t of TOOLS) {
-  const src = fs.readFileSync(path.join(ROOT, `src/pages/tools/${t.slug}.astro`), 'utf8');
+  const src = fs.readFileSync(path.join(ROOT, `src/pages/tools/${t.slug}.astro`), 'utf8').replace(/&amp;/g, '&');
   for (const s of [t.h1, t.lede, t.note, ...t.formulas.map((f) => f.replace(/^[^=≈]*[=≈]\s*/, ''))].filter(Boolean)) {
     if (!src.includes(s)) throw new Error(`tool copy not on page ${t.slug}: ${s}`);
   }

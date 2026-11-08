@@ -3,6 +3,9 @@
 // never colour alone. Linked cells are keyboard focusable; the current page's cell is
 // raised and ringed (aria-current). A cell note shows on hover and focus and is the
 // link's description.
+// Words are never broken: columns share the width evenly until a column's longest word needs
+// more, and when the whole table needs more than the figure has (a phone), it scrolls sideways
+// inside its wrapper instead of splitting words or widening the page.
 import Figure from './Figure.astro';
 import type { HeatMatrixProps } from './types';
 import { TONE_MARK, fail, internal, uid } from './util';
@@ -66,17 +69,19 @@ const tid = uid('hm');
   [data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); --tone-soft: var(--dg-bad-soft); }
   [data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); --tone-soft: var(--dg-muted-soft); }
 
-  .dg-hm-wrap { position: relative; }
-  .dg-hm-wrap.dg-scroll { overflow-x: auto; overscroll-behavior-x: contain; }
+  /* the wrapper reaches 4px past the body on every side so the cells (inset by border-spacing) sit
+     flush with the caption; it scrolls sideways when the words need more width than the figure has */
+  .dg-hm-wrap { position: relative; margin: -4px; overflow-x: auto; overscroll-behavior-x: contain; }
   .dg-hm-wrap.dg-scroll:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 2px; border-radius: var(--k-r-sm); }
   .dg-hm {
     border-collapse: separate;
     border-spacing: 4px;
-    margin: -4px;
-    width: calc(100% + 8px);
-    table-layout: fixed;
+    margin: 0;
+    width: 100%;
+    table-layout: auto;
     font-size: var(--k-fs-small);
   }
+  .dg-hm thead th:not(.dg-corner) { width: calc(70% / var(--cols)); }
   .dg-scroll .dg-hm { min-width: calc(7rem + var(--cols) * 7.5rem); }
   .dg-hm th, .dg-hm td { padding: 0; text-align: left; vertical-align: middle; border: 0; background: none; }
   .dg-hm tr { background: none; transition: none; }
@@ -89,7 +94,8 @@ const tid = uid('hm');
     text-transform: uppercase;
     color: var(--dg-fg-3);
     padding: 2px 6px 6px;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    hyphens: manual;
   }
   thead .dg-corner { width: 30%; }
   .dg-hm tbody th {
@@ -97,7 +103,8 @@ const tid = uid('hm');
     color: var(--dg-fg);
     padding: 6px 8px 6px 2px;
     line-height: var(--k-lh-snug);
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    hyphens: manual;
   }
   .dg-hm tbody th a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
   .dg-hm tbody th a:hover { color: var(--dg-accent); }
@@ -132,7 +139,7 @@ const tid = uid('hm');
     color: var(--tone-ink);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 40%, transparent);
   }
-  .dg-t { min-width: 0; overflow-wrap: break-word; hyphens: auto; }
+  .dg-t { min-width: 0; overflow-wrap: normal; hyphens: manual; }
   a.dg-cell[href] { color: var(--tone-ink); text-decoration: none; }
   a.dg-cell { transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease); }
   a.dg-cell:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 55%, transparent), var(--k-e2); }
@@ -163,13 +170,15 @@ const tid = uid('hm');
     transition: opacity var(--k-d-fast) var(--k-ease), translate var(--k-d-fast) var(--k-ease), visibility 0s linear var(--k-d-fast);
   }
   td:is(:hover, :focus-within) .dg-tip { opacity: 1; visibility: visible; translate: -50% 0; transition-delay: 0s; }
+  /* the wrapper scrolls, so it clips above its top edge: the first row's notes open below the cell */
+  tbody tr:first-child .dg-tip { bottom: auto; top: calc(100% + 8px); }
   /* edge columns anchor the note to their outer side, so it stays on screen */
   td:nth-child(2) .dg-tip { left: 0; translate: 0 4px; }
   td:nth-child(2):is(:hover, :focus-within) .dg-tip { translate: 0 0; }
   td:last-child .dg-tip { left: auto; right: 0; translate: 0 4px; }
   td:last-child:is(:hover, :focus-within) .dg-tip { translate: 0 0; }
 
-  .dg-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--k-fs-small); color: var(--dg-fg-2); }
+  .dg-legend { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--k-fs-small); color: var(--dg-fg-2); }
   .dg-legend li { display: inline-flex; align-items: center; gap: 6px; }
   .dg-sw {
     width: 18px;
@@ -185,14 +194,18 @@ const tid = uid('hm');
   }
 
   @container k-dg (max-width: 459px) {
-    .dg-hm { border-spacing: 3px; margin: -3px; width: calc(100% + 6px); font-size: 12px; }
+    .dg-hm-wrap { margin: -3px; }
+    .dg-hm { border-spacing: 3px; font-size: 12px; }
+    .dg-hm thead th { padding-inline: 3px; letter-spacing: 0.06em; }
     .dg-hm thead .dg-corner { width: 27%; }
+    .dg-hm thead th:not(.dg-corner) { width: calc(73% / var(--cols)); }
     .dg-cell { padding: 7px 6px; gap: 4px; min-height: 44px; flex-direction: column; align-items: flex-start; justify-content: center; }
     .dg-m { width: 15px; height: 15px; font-size: 9px; }
     .dg-hm tbody th { font-size: 12.5px; }
   }
 
-  /* motion: cells cascade in from the top-left */
+  /* motion: cells cascade in from the top-left, growing in place (scale only: transform, never
+     opacity, since the matrix can be a hero visual; no travel, so no cell crosses the legend) */
   :global(html.js.motion [data-dg-anim]) td > .dg-cell {
     animation: k-dg-hm-in var(--k-t-soft) var(--k-spring-soft) backwards;
     animation-delay: calc(var(--dg-base) + var(--i) * var(--k-stagger));
@@ -203,6 +216,6 @@ const tid = uid('hm');
   }
   :global(html.js.motion [data-dg-anim]:not(.in)) td > .dg-cell { animation-play-state: paused; }
 
-  @keyframes k-dg-hm-in { from { transform: translateY(8px) scale(0.94); } }
+  @keyframes k-dg-hm-in { from { transform: scale(0.94); } }
   @keyframes k-dg-hm-ring { from { box-shadow: 0 0 0 10px transparent, var(--dg-raised); } }
 </style>

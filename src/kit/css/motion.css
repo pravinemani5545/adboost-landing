@@ -31,8 +31,9 @@
 .js.motion [data-reveal="left"].in { animation-name: k-fade, k-from-left; }
 .js.motion [data-reveal="right"].in { animation-name: k-fade, k-from-right; }
 
-/* ---------- first screen: transform only, never hidden from paint timing ---------- */
-.js.motion .arrive {
+/* ---------- first screen: transform only, never hidden from paint timing ----------
+   Skipped on a page revealed by a view transition (html.k-vt-in): the transition is its entrance. */
+.js.motion:not(.k-vt-in) .arrive {
   animation: k-arrive var(--k-t-air) var(--k-spring-air) backwards;
   animation-delay: var(--d, 0ms);
 }

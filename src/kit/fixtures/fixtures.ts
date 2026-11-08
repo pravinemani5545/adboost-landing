@@ -1,18 +1,17 @@
 // Fixture specs for /free/kit/diagrams/ (visual QA only; the route never builds in production).
 // Drawn from the Health data files wherever a diagram has a real counterpart; the two
 // with none on the site yet (Matrix2, Swimlane) say "Fixture sample" in their caption.
-import type { DiagramSpec, Tone } from '../../../kit/diagram/types';
-import { parsePhase } from '../../../kit/diagram/parse';
-import { AD_POLICIES, STATUS_LABEL, type PolicyStatus } from '../../../data/adPolicies';
-import { VERTICALS } from '../../../data/verticals';
-import { SERVICES } from '../../../data/services';
-import { PLAYBOOKS } from '../../../data/vertical-playbooks';
-import { COMPARES } from '../../../data/compare';
+import type { DiagramSpec } from '../diagram/types';
+import { parsePhase } from '../diagram/parse';
+import { AD_POLICIES, STATUS_LABEL } from '../../data/adPolicies';
+import { STATUS_LEGEND, STATUS_TONE as LEVEL } from '../../components/adv/status';
+import { VERTICALS } from '../../data/verticals';
+import { SERVICES } from '../../data/services';
+import { PLAYBOOKS } from '../../data/vertical-playbooks';
+import { COMPARES } from '../../data/compare';
 
 export interface Fixture { id: string; label: string; spec: DiagramSpec; demo?: 'gauge' | 'marker' }
 
-const LEVEL: Record<PolicyStatus, Tone> = { allowed: 'ok', cert: 'accent', restricted: 'warn', prohibited: 'bad' };
-const STATUS_LEGEND = (Object.keys(STATUS_LABEL) as PolicyStatus[]).map((s) => ({ level: LEVEL[s], label: STATUS_LABEL[s] }));
 
 /* ---------- data-driven pieces ---------- */
 const platforms = ['Meta', 'Google', 'TikTok'] as const;

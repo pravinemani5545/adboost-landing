@@ -2,8 +2,10 @@
 // first seen below the fold animate, from 0 up to the number already printed (prefix, suffix,
 // decimals and thousands separators kept). Only the first number in the element moves; any
 // markup inside it stays. The element's width is locked first, so nothing around it shifts.
-// data-count-delay="<ms>" holds the count at 0 for that long once the element is on screen
-// (e.g. an equation's result waits for its terms to land).
+// data-count-delay="<ms>" holds the count at its start for that long once the element is on screen
+// (e.g. an equation's result waits for its terms to land). data-count-from="<n>" starts the count
+// there instead of 0: the "to" value of a printed "0.8× → 3.5×" pair counts up from 0.8, so it
+// never reads as a drop.
 import { motionOn, whenShown } from './env';
 
 const NUM = /\d[\d,]*(?:\.\d+)?/;
@@ -32,6 +34,8 @@ function run(el: HTMLElement) {
   const decimals = raw.includes('.') ? raw.split('.')[1].length : 0;
   const commas = raw.includes(',');
   const before = text.slice(0, m.index), after = text.slice(m.index! + raw.length);
+  const from = parseFloat(el.dataset.countFrom ?? '');
+  const start = isFinite(from) && from < target ? from : 0;
   const fmt = (v: number) => {
     const s = v.toFixed(decimals);
     if (!commas) return s;
@@ -47,10 +51,10 @@ function run(el: HTMLElement) {
     t0 ||= t;
     const k = Math.min(1, (t - t0) / dur);
     const eased = 1 - Math.pow(1 - k, 3);
-    node.nodeValue = k < 1 ? before + fmt(target * eased) + after : text;
+    node.nodeValue = k < 1 ? before + fmt(start + (target - start) * eased) + after : text;
     if (k < 1) requestAnimationFrame(tick);
   };
-  node.nodeValue = before + fmt(0) + after;
+  node.nodeValue = before + fmt(start) + after;
   if (delay) setTimeout(() => requestAnimationFrame(tick), delay);
   else requestAnimationFrame(tick);
 }

@@ -8,6 +8,11 @@
 // tracker and log a pageview for a page that may never be opened) on touch devices, where
 // Astro's hover prefetch cannot help. And a failsafe: if the kit script has not set
 // window.__kitReady within 3s of DOMContentLoaded, motion is removed so nothing stays hidden.
+// Page transitions: the nav and phone CTA carry their view-transition-name only while a
+// cross-document transition runs (k-vt, set on pageswap / pagereveal), because a named element
+// is a backdrop root and its glass would stop blurring. A page revealed by a transition gets
+// k-vt-in, which skips the .arrive entrance so a navigation animates once, not twice. The
+// pagereveal listener must be registered before first render, which this inline script is.
 ---
 <script is:inline>
   (function () {
@@ -35,6 +40,13 @@
       });
       document.head.appendChild(s);
     }
+    var vt = function (e) {
+      if (!e.viewTransition) return;
+      c.add('k-vt');
+      e.viewTransition.finished.then(function () { c.remove('k-vt'); }, function () { c.remove('k-vt'); });
+    };
+    window.addEventListener('pageswap', vt);
+    window.addEventListener('pagereveal', function (e) { if (e.viewTransition) c.add('k-vt-in'); vt(e); });
     document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () { if (!window.__kitReady) c.remove('motion'); }, 3000);
     });

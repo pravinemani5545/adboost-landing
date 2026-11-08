@@ -16,6 +16,7 @@ scripts/    env scroll reveal count words pointer dots toc menu media lit app
 components/ KitHead Band SectionHead Pic Video Count
 diagram/    diagram kit (A2): Figure, Diagram and one component per kind
 content/    markers.ts (A2)
+fixtures/   the diagram fixtures route (QA only, injected in dev and PREVIEW_ALL builds)
 ```
 
 The Shell (`src/layouts/Shell.astro`) imports `kit/css/index.css`, then `site-tokens.css`, then the
@@ -102,6 +103,8 @@ KitHead runs inline in `<head>` before first paint and sets on `<html>`:
 | `motion` | unless `prefers-reduced-motion: reduce` | **every hidden or pre-animation state is gated on `html.js.motion`** |
 | `lowpower` | `hardwareConcurrency <= 4`, `deviceMemory <= 4` or Save-Data | solid nav and glass, no grain, no dot spotlight, no words, no aura drift, poster-only video, no pointer effects. Plain reveals stay. |
 | `pre` | while prerendering | `.arrive` waits for `prerenderingchange` |
+| `k-vt` | while a cross-document view transition runs (`pageswap` / `pagereveal`) | the nav and phone CTA carry their `view-transition-name` |
+| `k-vt-in` | the page was revealed by a view transition | `.arrive` is skipped: the transition is the entrance |
 
 Failsafe: if `window.__kitReady` (set by `reveal.ts`) is missing 3s after DOMContentLoaded, `motion` is
 removed and everything shows. KitHead also injects speculation rules on touch devices that
@@ -150,7 +153,7 @@ are complete without JS. **Hosts of scroll-driven effects use `overflow: clip`, 
 
 | Hook | Behaviour |
 |---|---|
-| `[data-count]` (or `<Count value="71+"/>`) | the server prints the final value. Only elements first seen **below** the fold count up from 0, to the number already printed (prefix, suffix, decimals and separators kept; only the first number moves, inner markup survives). Width is locked first (tabular nums, `--w` in ch, then the measured width). `data-count-delay="<ms>"` holds it at 0 that long before counting. Never pass a number the copy does not state. Numbers in the first viewport stay static (no flash from final to 0). |
+| `[data-count]` (or `<Count value="71+"/>`) | the server prints the final value. Only elements first seen **below** the fold count up from 0, to the number already printed (prefix, suffix, decimals and separators kept; only the first number moves, inner markup survives). Width is locked first (tabular nums, `--w` = the digit count in ch, then the measured width). `data-count-delay="<ms>"` holds it at its start that long before counting. `data-count-from="<n>"` starts at n instead of 0: put it on the "to" value of a printed "from → to" pair so the count never reads as a drop. Never pass a number the copy does not state. Numbers in the first viewport stay static (no flash from final to 0). |
 | `[data-words]` | at most one per page, 80 words max: each word brightens in reading order as the page scrolls. Text nodes are split, so `.serif` spans and links survive. Skipped on lowpower and reduced motion. Dim words use `--t-wd-lo` (AA). |
 
 ### Pointer (fine pointer, motion on, not lowpower)
@@ -189,8 +192,8 @@ e3, line-2, cursor light, focus ring), `--lit` (current / selected). Parts: `.k-
 `--k-ar`, default 16/9), `.k-card__body`, `.k-card__foot`. Stats: `.k-stat` with `__value`, `__label`,
 `__source`. Chips: `.k-chip`. Hover lift uses `translate`, so it composes with any entrance.
 
-Legacy cards (`.lcard .gcard .bcard .ccard .tcard .post-card .related-card .latest-card .bio .stat .kpi
-.aside-card .calc .hero-panel .step .pb`) share one recipe in `global.css` (surface, line, radius,
+Legacy cards (`.lcard .gcard .bcard .ccard .tcard .latest-card .bio .stat .aside-card .calc
+.hero-panel .step .pb`) share one recipe in `global.css` (surface, line, radius,
 e1 + edge, one hover). Their own rules keep layout only.
 
 ## Components
@@ -218,7 +221,7 @@ e1 + edge, one hover). Their own rules keep layout only.
 
 ## Diagrams (`diagram/`)
 
-Props for every kind are in `diagram/types.ts`; `src/pages/free/kit/_fixtures.ts` has a worked
+Props for every kind are in `diagram/types.ts`; `src/kit/fixtures/fixtures.ts` has a worked
 example of each, built from the Health data files.
 
 - **Import one component** (`kit/diagram/HeatMatrix.astro`), never `Diagram.astro` in a template:
@@ -252,7 +255,11 @@ example of each, built from the Health data files.
 - **Links** are internal only (build error otherwise); links to unbuilt pages are unwrapped by
   `releaseGates`.
 - **Fixtures:** `/free/kit/diagrams/` and `/free/kit/diagrams-night/` show every kind for visual
-  QA. They build only with `PREVIEW_ALL=1` (or in dev) and never ship.
+  QA. The route lives in `src/kit/fixtures/` (not `src/pages`) and `astro.config.mjs` injects it
+  only in dev and `PREVIEW_ALL=1` builds, so production never has it in its module graph.
+- **CSS delivery:** every diagram's scoped styles build into one shared stylesheet
+  (`kit-diagrams.*.css`, via `manualChunks` in `astro.config.mjs`): a page with any diagram loads
+  it once and every later page reuses it from cache. A page with no diagram never loads it.
 
 ## Tracker contract (t.js, never change)
 
@@ -268,7 +275,9 @@ example of each, built from the Health data files.
 
 `chrome.css` opts in to cross-document view transitions under `prefers-reduced-motion: no-preference`:
 the old page fades out (160ms), the new one fades in with an 8px rise (240ms). The nav (`k-nav`) and
-phone CTA (`k-mcta`) are named, so they hold still. No H1 morph. A `view-transition-name` must be
+phone CTA (`k-mcta`) are named only while a transition runs (`html.k-vt`), so they hold still; a
+permanent name would make the nav a backdrop root and its glass would stop blurring. A page that
+arrives by a transition skips `.arrive` (`html.k-vt-in`). No H1 morph. A `view-transition-name` must be
 unique on a page (a duplicate aborts the whole transition): name per-item elements per page only,
 e.g. `post-<slug>`.
 
@@ -286,4 +295,9 @@ sits before its `.tablewrap`.
   `style="display:block;margin-top:16px"` on `.phero .sec-eyebrow`, `style="color:#fff"` on
   `.aside-card.dark h4`, `style="color:var(--blue)"` on body links in `.doc-main`.
 - `.callout.ok` exists for the green "how to comply" callout.
+- **A named slot written inside an expression always counts as filled.** `{cond && <div slot="aside">...</div>}`
+  makes `Astro.slots.has('aside')` true even when `cond` is false, so `PageHero` (and `SectionHead`'s
+  `actions`) would lay out an empty aside column. Branch on the whole component instead:
+  `{cond ? <PageHero {...hero}><div slot="aside">...</div></PageHero> : <PageHero {...hero} />}`
+  (see `src/pages/compare/index.astro`).
 - `--mute-2` now resolves to `--k-ink-3` (it was used for dates, which must pass AA).

@@ -24,8 +24,9 @@
   background: linear-gradient(180deg, var(--k-paper) 0, var(--k-paper-2) 48px, var(--k-paper-2) calc(100% - 48px), var(--k-paper) 100%);
 }
 .k-band[data-tone="night"] { background: linear-gradient(180deg, var(--k-night), var(--k-night-2)); }
-/* a slab band: paper around an inset, rounded night panel */
-.k-band--slab { background: var(--k-paper); padding-block: var(--k-sp-4); }
+/* a slab band: paper around an inset, rounded night panel. The slab clips its own layers, so the
+   band does not clip: its 16px padding is less than the reach of the slab's e3 shadow. */
+.k-band--slab { overflow: visible; background: var(--k-paper); padding-block: var(--k-sp-4); }
 
 /* ---------- night slab ---------- */
 .k-slab {

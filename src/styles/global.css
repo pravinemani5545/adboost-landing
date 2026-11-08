@@ -53,23 +53,23 @@ a, button { touch-action: manipulation; }
 /* ============ CARDS: one token-driven recipe for every legacy card ============
    Surface, line, radius, resting elevation and one hover (lift 3px, deeper shadow, stronger
    line). Each card's own rule below keeps only its layout; the dark variants override. */
-:is(.lcard, .gcard, .bcard, .ccard, .tcard, .post-card, .related-card, .latest-card, .bio, .stat, .kpi, .aside-card, .calc, .hero-panel, .step, .pb) {
+:is(.lcard, .gcard, .bcard, .ccard, .tcard, .latest-card, .bio, .stat, .aside-card, .calc, .hero-panel, .step, .pb) {
   background: var(--k-paper);
   border: 1px solid var(--k-line);
   border-radius: var(--k-r-lg);
   box-shadow: var(--k-e1), var(--k-edge-light);
   transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease);
 }
-:is(.tcard, .stat, .kpi, .gcard, .pb, .aside-card) { border-radius: var(--k-r-md); }
+:is(.tcard, .stat, .gcard, .pb, .aside-card) { border-radius: var(--k-r-md); }
 :is(.calc, .hero-panel) { border-radius: var(--k-r-xl); box-shadow: var(--k-e4), var(--k-edge-light), 0 30px 60px -34px var(--k-accent-glow); }
 @media (hover: hover) {
-  :is(.lcard, .gcard, .bcard, .ccard, .tcard, .post-card, .related-card, .latest-card, .step, .pb):hover {
+  :is(.lcard, .gcard, .bcard, .ccard, .tcard, .latest-card, .step, .pb):hover {
     transform: translateY(-3px);
     box-shadow: var(--k-e3), var(--k-edge-light);
     border-color: var(--k-line-2);
   }
 }
-:is(a.lcard, a.gcard, a.post-card, a.related-card, a.latest-card):focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
+:is(a.lcard, a.gcard, a.latest-card):focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
 
 /* ============ BRAND + BUTTONS ============ */
 .brand { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -.015em; font-size: 15.5px; color: var(--k-ink); }
@@ -237,7 +237,7 @@ section { position: relative; z-index: 1; }
 .partner .who { font-size: 13px; font-weight: 500; letter-spacing: -.005em; }
 .partner .role { font-size: 11px; color: var(--mute); font-family: "Geist Mono", monospace; }
 .partner .msg { margin-top: 10px; font-size: 12.5px; color: var(--ink-2); background: var(--surface); border-radius: 9px; padding: 8px 10px; line-height: 1.45; }
-.partner .status { margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--green); }
+.partner .status { margin-top: 8px; display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--k-ok-ink); }
 .partner .status .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(22, 163, 74, .5); animation: pulse 1.8s ease-out infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, .5); } 100% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); } }
 
@@ -298,7 +298,7 @@ section { position: relative; z-index: 1; }
 .ccard .stats .s .l { font-family: "Geist Mono", monospace; font-size: 10px; color: var(--mute); letter-spacing: .06em; text-transform: uppercase; }
 .ccard .stats .s .v { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin-top: 4px; line-height: 1; }
 .ccard .stats .s .v .blue { color: var(--blue); }
-.ccard .stats .s .v .green { color: var(--green); }
+.ccard .stats .s .v .green { color: var(--k-ok-ink); } /* status text on paper: the ink tone passes AA */
 
 /* ============ PROCESS ============ */
 .process { padding: 96px 0; background: #fff; position: relative; }

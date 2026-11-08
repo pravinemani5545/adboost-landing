@@ -16,6 +16,7 @@ export async function loadData() {
     export * as services from './src/data/services.ts';
     export * as platformHubs from './src/data/platformHubs.ts';
     export * as faq from './src/data/faq.ts';
+    export * as status from './src/components/adv/status.ts';
     export { default as pages } from './src/data/pages.json';
   `;
   const out = await build({

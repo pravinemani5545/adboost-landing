@@ -14,14 +14,21 @@ if (n < 3 || n > 8) fail('hubspoke', base.caption, `needs 3 to 8 spokes (got ${n
 if (edges && edges.length !== n) fail('hubspoke', base.caption, `edges needs one label per spoke pair (${n}), got ${edges.length}`);
 spokes.forEach((s) => internal(s.href, `hubspoke "${s.label}"`));
 
+// Ring geometry in % of the box (the SVG viewBox is 0-100 on both axes). A triangle (3 spokes)
+// spreads over the whole height: with edge labels the top spoke sits at y 8 and the base at y 78,
+// leaving room for the base label; without them (tri="bare") the top card hangs from the box's
+// top edge and the base cards stand on its bottom edge, so no band is left empty whatever the
+// card heights. The hub sits at (cx, hy).
+const tri = n === 3 ? (edges ? 'edges' : 'bare') : undefined;
 const cx = 50;
-const cy = n === 3 ? 54 : 50;
+const [cy, ry] = tri === 'edges' ? [54.67, 46.67] : tri === 'bare' ? [65, 60] : [50, 40];
 const rx = n <= 4 ? 36 : 38;
-const ry = n === 3 ? 42 : 40;
+const hy = tri === 'bare' ? 52 : cy;
 const pts = spokes.map((_, i) => {
   const a = (-90 + (i * 360) / n) * (Math.PI / 180);
   return { x: r4(cx + rx * Math.cos(a)), y: r4(cy + ry * Math.sin(a)) };
 });
+// edge labels sit on the outward normal of each link, 12 units past its midpoint, clear of the hub
 const edgePts = (edges ?? []).map((_, i) => {
   const p = pts[i];
   const q = pts[(i + 1) % n];
@@ -30,16 +37,16 @@ const edgePts = (edges ?? []).map((_, i) => {
   const vx = mx - cx;
   const vy = my - cy;
   const len = Math.hypot(vx, vy) || 1;
-  const k = (len + 4) / len;
+  const k = (len + 12) / len;
   return { x: r4(cx + vx * k), y: r4(cy + vy * k), mx: r4(mx), my: r4(my) };
 });
 const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
 ---
 <Figure {...base} kind="hubspoke">
-  <div class="dg-hs" data-fit={fit} data-edges={edges ? '' : undefined} style={`--n:${n};--cy:${cy}`}>
+  <div class="dg-hs" data-fit={fit} data-edges={edges ? '' : undefined} data-tri={tri} style={`--n:${n};--cy:${hy}`}>
     <svg class="dg-wires" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {pts.map((p, i) => (
-        <line class="dg-spokeline" x1={cx} y1={cy} x2={p.x} y2={p.y} style={`--i:${i};transform-origin:${cx}% ${cy}%`} />
+        <line class="dg-spokeline" x1={cx} y1={hy} x2={p.x} y2={p.y} style={`--i:${i};transform-origin:${cx}% ${hy}%`} />
       ))}
       {edges && pts.map((p, i) => {
         const q = pts[(i + 1) % n];
@@ -131,13 +138,17 @@ const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
   .dg-hs[data-fit] > * { min-width: 0; }
   @container k-dg (min-width: 500px) {
     .dg-hs[data-fit="sm"] { display: block; aspect-ratio: 10 / 7; }
-    .dg-hs[data-fit="sm"][data-edges] { aspect-ratio: 10 / 7.2; }
+    /* triangles: height follows the width but keeps a floor for wrapped cards and labels */
+    .dg-hs[data-fit="sm"][data-tri="edges"] { aspect-ratio: auto; height: max(360px, 66cqi); }
+    .dg-hs[data-fit="sm"][data-tri="bare"] { aspect-ratio: auto; height: max(340px, 62cqi); }
     .dg-hs[data-fit="sm"] .dg-wires { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
-    .dg-hs[data-fit="sm"] .dg-hub { position: absolute; left: 50%; top: calc(var(--cy) * 1%); width: min(26%, 210px); translate: -50% -50%; justify-items: center; text-align: center; z-index: 2; }
+    .dg-hs[data-fit="sm"] .dg-hub { position: absolute; left: 50%; top: calc(var(--cy) * 1%); width: min(20%, 160px); translate: -50% -50%; justify-items: center; text-align: center; z-index: 2; }
     .dg-hs[data-fit="sm"] .dg-spokes, .dg-hs[data-fit="sm"] .dg-edges { position: static; padding: 0; display: block; }
     .dg-hs[data-fit="sm"] .dg-spokes::before, .dg-hs[data-fit="sm"] .dg-spoke::before { display: none; }
     .dg-hs[data-fit="sm"] :is(.dg-spoke, .dg-edge) { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; z-index: 2; }
     .dg-hs[data-fit="sm"] .dg-spoke { width: min(30%, 220px); }
+    .dg-hs[data-tri="bare"] .dg-spoke:first-child { top: 0; translate: -50% 0; }
+    .dg-hs[data-tri="bare"] .dg-spoke:not(:first-child) { top: auto; bottom: 0; translate: -50% 0; }
     .dg-hs[data-fit="sm"] .dg-scard { text-align: center; justify-items: center; }
     .dg-hs[data-fit="sm"] .dg-edge { width: min(26%, 200px); text-align: center; background: var(--dg-card); border-style: solid; border-color: var(--dg-line); box-shadow: var(--k-e1); z-index: 1; }
     .dg-hs[data-fit="sm"] .dg-pair { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -170,14 +181,14 @@ const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
   .dg-spokeline { stroke: var(--dg-line-2); stroke-width: 1.5; }
   .dg-edgeline { stroke: var(--dg-accent-fill); stroke-width: 1.5; stroke-dasharray: 5 5; opacity: 0.7; }
 
-  /* motion: hub, links from the hub, spokes, then edges and their labels */
+  /* motion: hub, links from the hub, spokes, then edges and their labels, all within about 1.2s */
   :global(html.js.motion [data-dg-anim]) .dg-hub { animation: k-dg-hs-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: var(--dg-base); }
-  :global(html.js.motion [data-dg-anim]) .dg-spokeline { animation: k-dg-hs-draw var(--k-d-slow) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 160ms + var(--i) * var(--k-stagger)); }
-  :global(html.js.motion [data-dg-anim]) .dg-scard { animation: k-dg-hs-pop var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + 380ms + var(--i) * var(--k-stagger)); }
-  :global(html.js.motion [data-dg-anim]) .dg-edgeline { animation: k-dg-hs-draw var(--k-d-slow) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 760ms + var(--i) * 140ms); }
-  :global(html.js.motion [data-dg-anim]) .dg-edge { animation: k-dg-hs-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + 1100ms + var(--i) * 140ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-spokeline { animation: k-dg-hs-draw var(--k-d-slow) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 80ms + var(--i) * 40ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-scard { animation: k-dg-hs-pop var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + 160ms + var(--i) * var(--k-stagger)); }
+  :global(html.js.motion [data-dg-anim]) .dg-edgeline { animation: k-dg-hs-draw var(--k-d-slow) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 300ms + var(--i) * 80ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-edge { animation: k-dg-hs-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + 500ms + var(--i) * 80ms); }
   :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-hub, .dg-spokeline, .dg-scard, .dg-edgeline, .dg-edge) { animation-play-state: paused; }
 
-  @keyframes k-dg-hs-pop { from { transform: scale(0.6); } }
+  @keyframes k-dg-hs-pop { from { transform: scale(0.92); } }
   @keyframes k-dg-hs-draw { from { transform: scale(0); } }
 </style>

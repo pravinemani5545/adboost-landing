@@ -216,15 +216,6 @@
   background: linear-gradient(180deg, var(--k-paper), var(--k-paper-2));
   box-shadow: var(--k-e1), var(--k-edge-light);
 }
-/* Kit gap, reported to the kit owner: in a DecisionTree whose Yes answer is a leaf and whose No
-   answer is a deeper question, the leaf column stretches to the deeper column's height and its
-   answer pill grows with it. Keep each answer at its own height. */
-.post-prose .post-fig .dg-b { align-content: start; }
-/* Kit gap, reported: matrix column heads (mono, wide tracking, overflow-wrap: anywhere) split words
-   mid-letter in a narrow figure. Smaller, tighter heads keep whole words on a phone. */
-@container k-dg (max-width: 459px) {
-  .blog-article .post-prose .post-fig .dg-hm-wrap .dg-hm thead th { padding-inline: 2px; font-size: 10px; letter-spacing: 0.02em; overflow-wrap: normal; }
-}
 
 /* ============ CTA banner (t.js: "inline"; never rename it .cta-band) ============ */
 .cta-banner-wrap { max-width: 980px; margin-top: var(--k-sp-8); }

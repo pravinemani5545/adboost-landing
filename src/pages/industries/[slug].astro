@@ -7,10 +7,10 @@ import Bars from '../../kit/diagram/Bars.astro';
 import StatusStrip from '../../kit/diagram/StatusStrip.astro';
 import Flow from '../../kit/diagram/Flow.astro';
 import Compare from '../../kit/diagram/Compare.astro';
-import type { Tone } from '../../kit/diagram/types';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook, type Source } from '../../data/vertical-playbooks';
-import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL, type PolicyStatus } from '../../data/adPolicies';
+import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
+import { PLATFORMS, STATUS_TONE, policyHref } from '../../components/adv/status';
 import { CAC_BREAK, cacItem, cacNotes } from './_cac';
 import '../../styles/pages/industries.css';
 import { siteBase } from '../../lib/site';
@@ -105,12 +105,11 @@ const services = [
 // Vertical snapshot (hero aside) and the body diagrams. Every string and number below comes
 // from verticals.ts, vertical-playbooks.ts or adPolicies.ts as printed on the site.
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const LEVEL: Record<PolicyStatus, Tone> = { allowed: 'ok', cert: 'accent', restricted: 'warn', prohibited: 'bad' };
-const PLATFORM_ORDER = ['Meta', 'Google', 'TikTok'];
-const strip = [...platformGuides]
-  .sort((a, b) => PLATFORM_ORDER.indexOf(a.platform) - PLATFORM_ORDER.indexOf(b.platform))
-  .map((p) => ({ label: p.platform, status: STATUS_LABEL[p.status], level: LEVEL[p.status], href: `/advertising/${p.slug}/` }));
-const statusLegend = (Object.keys(STATUS_LABEL) as PolicyStatus[]).map((s) => ({ level: LEVEL[s], label: STATUS_LABEL[s] }));
+const guides = [...platformGuides].sort((a, b) => PLATFORMS.indexOf(a.platform) - PLATFORMS.indexOf(b.platform));
+const strip = guides.map((p) => ({ label: p.platform, status: STATUS_LABEL[p.status], level: STATUS_TONE[p.status], href: policyHref(p) }));
+// The hero strip shows each platform's status; the body links each rule sheet under the callout,
+// skipping one the callout already links.
+const ruleLinks = guides.filter((p) => policyHref(p) !== verticalBlog.href);
 const checkedLabel = new Date(`${RULES_CHECKED_ON}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 // The funnel path: only a chain the copy already prints with arrows (see Playbook.pathway).
@@ -220,14 +219,10 @@ const toc = [
 
             <h2 id="landmine">Which ad rules and claims trip up {v.inline} brands?</h2>
             <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
-            {strip.length > 0 && (
-              <StatusStrip
-                compact
-                class="ind-rules"
-                caption={`Where ${v.short} stands on each platform. Each one opens its rule sheet.`}
-                items={strip}
-                legend={statusLegend}
-              />
+            {ruleLinks.length > 0 && (
+              <ul class="ind-rulelinks">
+                {ruleLinks.map((p) => <li><a href={policyHref(p)}>{p.vertical} ads on {p.platform}: what is allowed<span aria-hidden="true"> →</span></a></li>)}
+              </ul>
             )}
 
             <div class="ind-cmp">

@@ -2,11 +2,11 @@
 // Diagram kit fixtures for visual QA (rendered by ./[fixture].astro, never a route itself):
 // every diagram with sample data from the Health data files, on paper (/free/kit/diagrams/)
 // and on night slabs (/free/kit/diagrams-night/), at full width and at a hero-aside width.
-import BaseLayout from '../../../layouts/BaseLayout.astro';
-import Band from '../../../kit/components/Band.astro';
-import Diagram from '../../../kit/diagram/Diagram.astro';
-import { FIXTURES } from './_fixtures';
-import type { DiagramSpec } from '../../../kit/diagram/types';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Band from '../components/Band.astro';
+import Diagram from '../diagram/Diagram.astro';
+import { FIXTURES } from './fixtures';
+import type { DiagramSpec } from '../diagram/types';
 
 interface Props { night: boolean }
 const { night } = Astro.props;

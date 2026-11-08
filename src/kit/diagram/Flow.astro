@@ -19,9 +19,11 @@ for (const n of nodes) {
 }
 const fit = nodes.length <= 4 ? 'sm' : nodes.length <= 6 ? 'md' : 'lg';
 const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : '●');
+// a chain of bare labels (no sub-lines, no forks) draws compact: badge and label on one line
+const compact = nodes.every((n) => !n.sub && !n.branches?.length);
 ---
 <Figure {...base} kind="flow">
-  <ol class="dg-flow" data-orient={orientation} data-fit={fit} data-pulse={pulse ? '' : undefined} style={`--n:${nodes.length}`}>
+  <ol class="dg-flow" data-orient={orientation} data-fit={fit} data-pulse={pulse ? '' : undefined} data-compact={compact ? '' : undefined} style={`--n:${nodes.length}`}>
     {nodes.map((n, i) => {
       const Card = n.href ? 'a' : 'div';
       return (
@@ -124,6 +126,11 @@ const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : 
   .dg-label { font-weight: 600; line-height: var(--k-lh-snug); color: var(--dg-fg); overflow-wrap: anywhere; }
   .dg-sub { font-size: var(--k-fs-small); line-height: var(--k-lh-snug); color: var(--dg-fg-3); }
 
+  /* compact: one line per card, so a chain of short labels never leaves empty boxes */
+  .dg-flow[data-compact] { --flow-x: 28px; --flow-top: 24px; }
+  .dg-flow[data-compact] .dg-card { align-items: center; gap: 10px; padding: 10px 14px; }
+  .dg-flow[data-compact] .dg-text { padding-top: 0; }
+
   /* connector to the next step (column) */
   .dg-link {
     position: absolute;
@@ -196,7 +203,8 @@ const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : 
   .dg-flow[data-orient="row"] .dg-card { flex-direction: column; gap: 10px; }
   .dg-flow[data-orient="row"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
   .dg-flow[data-orient="row"] .dg-text { padding-top: 0; }
-  .dg-flow[data-orient="row"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+  .dg-flow[data-orient="row"] .dg-link { left: 100%; top: var(--flow-top, 29px); width: var(--flow-gap); height: 2px; }
+  .dg-flow[data-orient="row"][data-compact] .dg-card { flex-direction: row; }
   .dg-flow[data-orient="row"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
   .dg-flow[data-orient="row"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
   .dg-flow[data-orient="row"] .dg-branches { margin-left: 29px; }
@@ -207,7 +215,8 @@ const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : 
     .dg-flow[data-orient="auto"][data-fit="sm"] .dg-card { flex-direction: column; gap: 10px; }
     .dg-flow[data-orient="auto"][data-fit="sm"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
     .dg-flow[data-orient="auto"][data-fit="sm"] .dg-text { padding-top: 0; }
-    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="sm"] .dg-link { left: 100%; top: var(--flow-top, 29px); width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="sm"][data-compact] .dg-card { flex-direction: row; }
     .dg-flow[data-orient="auto"][data-fit="sm"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
     .dg-flow[data-orient="auto"][data-fit="sm"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
   }
@@ -217,7 +226,8 @@ const badge = (n: FlowNode, i: number) => n.icon ?? (numbered ? String(i + 1) : 
     .dg-flow[data-orient="auto"][data-fit="md"] .dg-card { flex-direction: column; gap: 10px; }
     .dg-flow[data-orient="auto"][data-fit="md"] .dg-step:not(.dg-has-branches) .dg-card { flex: 1 0 auto; }
     .dg-flow[data-orient="auto"][data-fit="md"] .dg-text { padding-top: 0; }
-    .dg-flow[data-orient="auto"][data-fit="md"] .dg-link { left: 100%; top: 29px; width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="md"] .dg-link { left: 100%; top: var(--flow-top, 29px); width: var(--flow-gap); height: 2px; }
+    .dg-flow[data-orient="auto"][data-fit="md"][data-compact] .dg-card { flex-direction: row; }
     .dg-flow[data-orient="auto"][data-fit="md"] .dg-line { inset: 0 5px 0 4px; transform-origin: left; --sx: 0; --sy: 1; }
     .dg-flow[data-orient="auto"][data-fit="md"] .dg-head { left: auto; right: 5px; bottom: auto; top: 50%; --head: translateY(-50%) rotate(-45deg); }
   }

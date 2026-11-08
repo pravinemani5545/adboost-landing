@@ -151,8 +151,10 @@ const rm = markOf(R);
   .dg-diff .dg-side[data-level="accent"] { border-color: color-mix(in srgb, var(--dg-accent-fill) 32%, var(--dg-card-line)); box-shadow: var(--k-e2); }
 
   @container k-dg (min-width: 560px) {
-    .dg-split, .dg-diff { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0; align-items: stretch; }
-    .dg-divider { display: grid; place-items: center; width: 40px; position: relative; }
+    /* each side keeps its own height (a short list never leaves a half-empty card); the divider
+       alone spans the row */
+    .dg-split, .dg-diff { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 0; align-items: start; }
+    .dg-divider { display: grid; place-items: center; align-self: stretch; width: 40px; position: relative; }
     .dg-divider::before { content: ''; position: absolute; top: 12%; bottom: 12%; left: 50%; width: 1px; background: var(--dg-line-2); transform-origin: top; }
     .dg-arrow {
       position: relative;

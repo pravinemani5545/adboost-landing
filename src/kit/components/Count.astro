@@ -2,9 +2,11 @@
 // A number that counts up when first scrolled into view (count.ts). Pass the value exactly as
 // the page already prints it ("71+", "$153M+", "4.9 / 5", "24%"); the server renders it as is,
 // so no-JS, reduced motion and first-screen numbers show it unchanged. Never pass a number the
-// copy does not already state. The width is reserved (tabular digits, --w in ch) so the
-// count never shifts the layout.
+// copy does not already state. The width is reserved with tabular digits and --w, the number of
+// digits in the final value (in ch): only the digits change while counting, so prefixes,
+// suffixes and separators need no reserve, and the box is never wider than the printed value.
 interface Props { value: string; class?: string }
 const { value, class: cls } = Astro.props;
+const digits = value.replace(/\D/g, '').length;
 ---
-<span class:list={['k-count', cls]} data-count style={`--w:${value.length}`}>{value}</span>
+<span class:list={['k-count', cls]} data-count style={`--w:${digits}`}>{value}</span>

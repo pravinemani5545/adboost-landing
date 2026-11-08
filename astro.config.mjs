@@ -120,7 +120,8 @@ const releaseGates = {
 // Errors (always fail the build):
 //   - an internal link (<a href>, canonical, or a URL in llms*.txt) to a URL
 //     that is neither built nor redirected
-//   - an em-dash (U+2014 or its entities) anywhere in dist
+//   - an em-dash (U+2014 or its entities) anywhere in dist: HTML, XML, llms text and the built
+//     CSS and JS (stylesheets are external, so a CSS comment or content string is checked too)
 // Warnings (fail only with SEO_STRICT, see src/lib/seo.ts):
 //   - an internal link to a redirected URL (link the destination instead)
 //   - a built page shadowed by a vercel.json redirect (finish the merge)
@@ -154,7 +155,8 @@ const siteGuards = {
       for (const f of files) {
         const isHtml = f.endsWith('.html');
         const isTxt = /^\/llms(-full)?\.txt$/.test(f);
-        if (!isHtml && !isTxt && !f.endsWith('.xml')) continue;
+        const isAsset = /\.(css|js)$/.test(f);
+        if (!isHtml && !isTxt && !isAsset && !f.endsWith('.xml')) continue;
         const body = fs.readFileSync(path.join(dist, f), 'utf8');
         if (/\u2014|&mdash;|&#8212;|&#x2014;/i.test(body)) errors.push(`${f} contains an em-dash`);
         if (isHtml) {
@@ -219,6 +221,28 @@ const minifyInlineScripts = {
   },
 };
 
+// Diagram kit fixtures (/free/kit/diagrams/, /free/kit/diagrams-night/): visual QA only. The route
+// lives in src/kit/fixtures/ and is injected in dev and PREVIEW_ALL builds only, so a production
+// build has no fixture page in its module graph.
+const kitFixtures = {
+  name: 'kit-fixtures',
+  hooks: {
+    'astro:config:setup': ({ command, injectRoute }) => {
+      if (command === 'dev' || PREVIEW_ALL) {
+        injectRoute({ pattern: '/free/kit/[fixture]', entrypoint: './src/kit/fixtures/[fixture].astro' });
+      }
+    },
+  },
+};
+
+// CSS delivery. Astro splits shared CSS by the exact set of pages that use each component, so the
+// diagram kit (one scoped <style> per kind) became up to 9 render-blocking sheets on one page.
+// Group every diagram's styles into one stylesheet instead (about 10KB brotli): a page with any
+// diagram loads it once and later pages reuse it from cache, so a page links 3 sheets at most.
+// Lighthouse mobile on HTTP/2 + brotli (10 pages, median of 3) put this level with or ahead of
+// inlineStylesheets: 'always', which re-sends ~20KB brotli of CSS in every page's HTML.
+const kitDiagramCss = (id) => (id.includes('/src/kit/diagram/') && /[?&]type=style/.test(id) ? 'kit-diagrams' : undefined);
+
 // Markdown tables (blog posts): one table look site-wide. Each table gets the .dtable class and
 // a .tablewrap wrapper that scrolls on phones instead of crushing the columns. No dependencies:
 // a plain walk over the hast tree.
@@ -248,9 +272,10 @@ export default defineConfig({
   markdown: { rehypePlugins: [rehypeTableWrap] },
   vite: {
     // esbuild, not Lightning CSS: Lightning CSS drops animation-timeline (scroll-driven motion).
-    build: { cssMinify: 'esbuild' },
+    build: { cssMinify: 'esbuild', rollupOptions: { output: { manualChunks: kitDiagramCss } } },
   },
   integrations: [
+    kitFixtures,
     sitemap({
       filter: (page) => inSitemap(new URL(page).pathname),
       serialize(item) {

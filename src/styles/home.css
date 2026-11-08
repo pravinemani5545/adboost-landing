@@ -122,8 +122,6 @@ html:not(.js) .marquee { animation: none; }
 .k-slab.spotlight::after,
 .k-slab.bigcta::before,
 .k-slab.bigcta::after { content: none; }
-/* the slab's lifted shadow reaches past the band's 16px padding: let it show, not clip it */
-main > .k-band--slab { overflow: visible; }
 .k-slab.spotlight .k-bg--grid { --k-grid-mask: 60% 70% at 50% 40%; }
 .k-slab.bigcta .k-bg--grid { --k-grid-mask: 70% 70% at 50% 50%; }
 .spot-pic .mv-accent { color: var(--k-accent-bright); }

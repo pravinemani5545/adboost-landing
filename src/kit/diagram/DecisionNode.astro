@@ -54,7 +54,7 @@ for (const b of branches) if (isLeaf(b.to)) internal(b.to.href, `decision leaf "
   .dg-qmark { flex: none; width: 12px; height: 12px; margin-top: 4px; border-radius: 3px; background: var(--dg-accent-fill); transform: rotate(45deg); }
   .dg-br { list-style: none; margin: 0; padding: 0 0 0 18px; display: grid; gap: 10px; position: relative; }
   .dg-br::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 18px; width: 2px; background: var(--dg-line-2); transform-origin: top; }
-  .dg-b { position: relative; display: grid; gap: 8px; justify-items: start; padding-top: 12px; }
+  .dg-b { position: relative; display: grid; gap: 8px; justify-items: start; align-content: start; padding-top: 12px; }
   .dg-b::before { content: ''; position: absolute; left: -11px; top: 23px; width: 10px; height: 2px; background: var(--dg-line-2); }
   .dg-ans {
     font-family: var(--k-font-mono);
