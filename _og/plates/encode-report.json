@@ -1,0 +1,142 @@
+[
+  {
+    "key": "advertising/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 13.8,
+    "avifQ": 80,
+    "webpKB": 36.1,
+    "webpQ": 90
+  },
+  {
+    "key": "advertising/meta",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 21.1,
+    "avifQ": 80,
+    "webpKB": 50.6,
+    "webpQ": 90
+  },
+  {
+    "key": "advertising/google",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 18.2,
+    "avifQ": 80,
+    "webpKB": 44.9,
+    "webpQ": 90
+  },
+  {
+    "key": "services/paid-media",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 17.9,
+    "avifQ": 80,
+    "webpKB": 45.7,
+    "webpQ": 90
+  },
+  {
+    "key": "services/creative",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 15.9,
+    "avifQ": 80,
+    "webpKB": 43.2,
+    "webpQ": 90
+  },
+  {
+    "key": "services/cro",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 21,
+    "avifQ": 80,
+    "webpKB": 53.4,
+    "webpQ": 90
+  },
+  {
+    "key": "services/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 14.1,
+    "avifQ": 80,
+    "webpKB": 38.5,
+    "webpQ": 90
+  },
+  {
+    "key": "industries/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 17.9,
+    "avifQ": 80,
+    "webpKB": 48,
+    "webpQ": 90
+  },
+  {
+    "key": "glossary/hub",
+    "take": 2,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 22.1,
+    "avifQ": 80,
+    "webpKB": 52.2,
+    "webpQ": 90
+  },
+  {
+    "key": "compare/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 13.7,
+    "avifQ": 80,
+    "webpKB": 39.3,
+    "webpQ": 90
+  },
+  {
+    "key": "tools/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 18,
+    "avifQ": 80,
+    "webpKB": 50.6,
+    "webpQ": 90
+  },
+  {
+    "key": "about/hub",
+    "take": 1,
+    "w": 1920,
+    "h": 1072,
+    "avifKB": 44.1,
+    "avifQ": 80,
+    "webpKB": 74.9,
+    "webpQ": 90
+  },
+  {
+    "key": "cta/night-1",
+    "take": 1,
+    "w": 1920,
+    "h": 815,
+    "avifKB": 17.6,
+    "avifQ": 80,
+    "webpKB": 39.2,
+    "webpQ": 90
+  },
+  {
+    "key": "cta/night-2",
+    "take": 1,
+    "w": 1920,
+    "h": 815,
+    "avifKB": 14.7,
+    "avifQ": 80,
+    "webpKB": 38.3,
+    "webpQ": 90
+  }
+]
