@@ -108,7 +108,8 @@
 .prose .svc-stat a.svc-stat__src:hover { color: var(--k-accent-ink); border-color: var(--k-accent-line); }
 
 /* ============ hub: the system section, with the triangle between its first paragraph and the rest.
-   The triangle gets up to 960px: the ring layout needs that much room for its gap labels. ============ */
+   The triangle is capped at 760px: the three services are the subject, the gaps are notes on its wires. ============ */
 .svc-system { max-width: 74ch; margin-inline: auto; }
-.svc-tri { max-width: 960px; margin: var(--k-sp-6) auto var(--k-sp-7); }
+.svc-tri { max-width: 760px; margin: var(--k-sp-6) auto var(--k-sp-7); }
+.svc-tri .k-dg__cap { max-width: 60ch; margin-inline: auto; text-align: center; justify-content: center; }
 .svc-tri + .svc-system h3:first-child { margin-top: 0; }

@@ -3,26 +3,40 @@
    platform hubs. Kit tokens only (src/kit/KIT.md). Prefix: adv-.
    ============================================================ */
 
-/* ---------- status badge: the OG card mapping (components/adv/status.ts) ---------- */
+/* ---------- status badge: the HeatMatrix cell chip (tinted, with its mark), one look for every status ---------- */
 .adv-badge {
+  --adv-ink: var(--k-accent-ink);
+  --adv-fill: var(--k-accent);
+  --adv-soft: var(--k-accent-soft);
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 3px 10px 3px 8px;
-  border: 1px solid;
-  border-radius: var(--k-r-pill);
-  font-family: var(--k-font-mono);
-  font-size: 11px;
+  gap: 6px;
+  padding: 3px 10px 3px 4px;
+  border-radius: var(--k-r-sm);
+  background: var(--adv-soft);
+  color: var(--adv-ink);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--adv-fill) 22%, transparent);
+  font-size: 12.5px;
   font-weight: 500;
-  letter-spacing: 0.02em;
-  line-height: 1.5;
+  line-height: 1.35;
   white-space: nowrap;
 }
-.adv-badge i { flex: none; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.adv-badge[data-level="ok"] { color: var(--k-ok-ink); background: var(--k-ok-soft); border-color: color-mix(in srgb, var(--k-ok) 32%, transparent); }
-.adv-badge[data-level="warn"] { color: var(--k-warn-ink); background: var(--k-warn-soft); border-color: color-mix(in srgb, var(--k-warn) 42%, transparent); }
-.adv-badge[data-level="accent"] { color: var(--k-accent-ink); background: var(--k-accent-soft); border-color: var(--k-accent-line); }
-.adv-badge[data-level="bad"] { color: var(--k-bad-ink); background: var(--k-bad-soft); border-color: color-mix(in srgb, var(--k-bad) 30%, transparent); }
+.adv-badge[data-level="ok"] { --adv-ink: var(--k-ok-ink); --adv-fill: var(--k-ok); --adv-soft: var(--k-ok-soft); }
+.adv-badge[data-level="warn"] { --adv-ink: var(--k-warn-ink); --adv-fill: var(--k-warn); --adv-soft: var(--k-warn-soft); }
+.adv-badge[data-level="bad"] { --adv-ink: var(--k-bad-ink); --adv-fill: var(--k-bad); --adv-soft: var(--k-bad-soft); }
+.adv-badge__m {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 9px;
+  line-height: 1;
+  background: var(--k-paper);
+  color: var(--adv-ink);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--adv-fill) 40%, transparent);
+}
 
 /* ---------- hero ---------- */
 .adv-hero .phero-grid { align-items: center; }
@@ -31,6 +45,10 @@
   .adv-hero:not(.adv-hero--index) .phero-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
 }
 .adv-hero .answer-box { max-width: 62ch; }
+/* rule sheets and hubs: a long H1 in a split hero stays within three lines */
+@media (min-width: 1024px) {
+  .adv-hero:not(.adv-hero--index) h1 { font-size: clamp(36px, 4vw, 52px); }
+}
 .adv-hero .k-plate { --k-plate-o: 0.36; }
 
 /* the aside card (rule sheets, hubs, index matrix): glass over the art plate */
@@ -128,6 +146,15 @@
   -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
   mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
 }
+/* with the sidebar beside the document (1024px up), the grid stays behind the content column */
+@media (min-width: 1024px) {
+  .adv-band::after {
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent), radial-gradient(48% 80% at 34% 50%, #000 45%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent), radial-gradient(48% 80% at 34% 50%, #000 45%, transparent);
+    mask-composite: intersect;
+  }
+}
 .prose .adv-band > :is(h2, h3):first-child { margin-top: 0; }
 .prose .adv-band > :last-child { margin-bottom: 0; }
 .prose .adv-band > .k-dg:first-of-type { margin-top: var(--k-sp-5); }
@@ -206,6 +233,9 @@
 /* single-tier rules (a sheet with no guidance) */
 .prose .adv-xlist { max-width: none; }
 
+/* ---------- sidebar: other platforms and related reading share one card ---------- */
+.adv-links .adv-links__h { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--k-line); }
+
 /* ---------- sidebar index: progress spine ---------- */
 .adv-toc__rail { position: relative; }
 .adv-toc__rail ul { position: relative; z-index: 1; }
@@ -257,15 +287,11 @@
   color: var(--k-ink-3);
 }
 
-.adv-groups { display: grid; gap: clamp(36px, 5vw, 56px); margin-top: 32px; }
-.adv-group { display: grid; gap: 16px; }
-.adv-cards .lc-tag { display: inline-flex; align-items: center; gap: 8px; }
-.adv-cards .lc-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--k-line-3); }
-.adv-card[data-level="ok"] .lc-tag::before { background: var(--k-ok); }
-.adv-card[data-level="warn"] .lc-tag::before { background: var(--k-warn); }
-.adv-card[data-level="accent"] .lc-tag::before { background: var(--k-accent); }
-.adv-card[data-level="bad"] .lc-tag::before { background: var(--k-bad); }
-.adv-card h3 { font-size: 16px; }
+.adv-groups { display: grid; gap: clamp(32px, 4.5vw, 48px); margin-top: 32px; }
+.adv-group { display: grid; gap: 14px; }
+.adv-group__h { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; color: var(--k-ink); }
+.adv-card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.adv-card h4 { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; text-wrap: balance; color: var(--k-ink); }
 .adv-bigger { margin-top: 40px; }
 
 /* hyphenated words in headings ("GLP-1", "weight-loss") never break at the hyphen */

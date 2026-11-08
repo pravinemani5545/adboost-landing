@@ -83,13 +83,13 @@
 .sec-eyebrow { margin-bottom: 12px; }
 .sec-title { font-size: clamp(26px, 3.4vw, 40px); letter-spacing: -.03em; font-weight: var(--k-fw-display); line-height: 1.06; margin: 0 0 14px; text-wrap: balance; }
 .sec-title .serif { color: var(--k-accent-ink); }
-.lcard h3, .gcard h3, .bio h3 { text-wrap: balance; }
+.lcard :is(h2, h3), .gcard h3, .bio h3 { text-wrap: balance; }
 
 /* ---- card grids (hub pages) ---- */
 .grid-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .lcard { display: flex; flex-direction: column; gap: 10px; padding: 24px; position: relative; overflow: clip; }
 .lcard .lc-ico { width: 40px; height: 40px; border-radius: 11px; background: var(--k-accent-soft); color: var(--k-accent-ink); display: grid; place-items: center; margin-bottom: 4px; }
-.lcard h3 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
+.lcard :is(h2, h3) { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; }
 .lcard p { margin: 0; color: var(--k-ink-3); font-size: 13.5px; line-height: 1.55; flex: 1; }
 .lcard .lc-more { font-size: 12.5px; color: var(--k-accent-ink); font-weight: 500; display: inline-flex; align-items: center; gap: 5px; margin-top: 2px; }
 .lcard .lc-tag { font-family: var(--k-font-mono); font-size: 10.5px; color: var(--k-ink-3); letter-spacing: .05em; }
@@ -254,7 +254,7 @@
 .calc-result .cr-main { position: relative; }
 .calc-result .cr-label { font-family: var(--k-font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: rgb(255 255 255 / .6); }
 .calc-result .cr-value { font-size: clamp(38px, 6vw, 54px); font-weight: 600; letter-spacing: -.03em; line-height: 1; margin-top: 6px; font-variant-numeric: tabular-nums; }
-.calc-result .cr-value.good { color: var(--k-ok-bright); } .calc-result .cr-value.bad { color: var(--k-bad-bright); }
+.calc-result .cr-value.good { color: var(--k-ok-bright); } .calc-result .cr-value.bad { color: var(--k-bad-bright); } .calc-result .cr-value.warn { color: var(--k-warn-bright); }
 .calc-result .cr-note { position: relative; font-size: 13px; line-height: 1.5; color: rgb(255 255 255 / .72); border-top: 1px solid rgb(255 255 255 / .1); padding-top: 14px; }
 .calc-result .cr-note a { color: var(--k-accent-bright); }
 .calc-result .cr-sub { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

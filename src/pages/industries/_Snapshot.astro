@@ -1,0 +1,38 @@
+---
+// "Vertical snapshot" for an industry page (not a route): every vertical's typical CAC on one
+// axis with this one lit, then this vertical's status on each ad platform. PageHero shows it as
+// the hero aside from 1024px; below that the page renders it again right after the short answer
+// (the hero has no aside there), so phones read the answer first. Both copies draw in place
+// (arrive: never hidden), whichever width shows them.
+import Bars from '../../kit/diagram/Bars.astro';
+import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import { VERTICALS } from '../../data/verticals';
+import type { StatusStripProps } from '../../kit/diagram/types';
+import { CAC_BREAK, cacItem, cacNotes } from './_cac';
+
+interface Props {
+  slug: string;
+  short: string;
+  strip: StatusStripProps['items'];
+  checkedLabel: string;
+}
+const { slug, short, strip, checkedLabel } = Astro.props;
+---
+<p class="ind-snap__head"><span class="ind-snap__title">Vertical snapshot</span><span>Typical CAC</span></p>
+<Bars
+  arrive
+  variant="range"
+  prefix="$"
+  axisBreakAbove={CAC_BREAK}
+  caption={`Typical CAC by vertical, as each industry page quotes it, with ${short} lit. ${cacNotes(VERTICALS)}`}
+  items={VERTICALS.map((x) => cacItem(x, slug))}
+/>
+{strip.length > 0 && (
+  <div class="ind-snap__part">
+    <StatusStrip
+      arrive
+      caption={`${short} ad rules on each platform, from our rule sheets (checked ${checkedLabel}).`}
+      items={strip}
+    />
+  </div>
+)}

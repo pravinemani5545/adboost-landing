@@ -151,14 +151,20 @@
 .lowpower .k-glass::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--k-paper); }
 .lowpower :is(.k-tone-night, [data-tone="night"]) .k-glass::before { background: var(--k-night-2); }
 
-/* ---------- art plate: decorative, masked, 20-40% opacity, never the LCP element ---------- */
+/* ---------- art plate: decorative, masked, 20-40% opacity, never the LCP element ----------
+   The files are small on purpose (256px wide, _og/plates/encode.mjs): Chrome's LCP counts an
+   image by the smaller of its shown and intrinsic area, so a plate never outranks the H1. The mask
+   is a soft oval that also fades out toward the bottom, so a plate never ends in a hard edge where
+   its band does. */
 .k-plate {
   position: absolute;
   z-index: var(--k-z-below);
   pointer-events: none;
   opacity: var(--k-plate-o, 0.32);
-  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
-  mask-image: radial-gradient(closest-side, #000 55%, transparent);
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent), linear-gradient(180deg, #000 55%, transparent 96%);
+  -webkit-mask-composite: source-in;
+  mask-image: radial-gradient(closest-side, #000 55%, transparent), linear-gradient(180deg, #000 55%, transparent 96%);
+  mask-composite: intersect;
 }
 .k-plate img, .k-plate picture { display: block; width: 100%; height: 100%; object-fit: cover; }
 .k-plate--fallback {

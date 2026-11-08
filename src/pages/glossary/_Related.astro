@@ -1,9 +1,8 @@
 ---
-// "Related terms" as a small hub (not a route). Three or more related entries use the kit
-// HubSpoke; one or two (HubSpoke needs at least three) use the same hub-and-link look in a
-// pair layout. Spokes are only the entry's own related[] list, in its order.
+// "Related terms" (not a route): the entry's own related[] list, in its order. Four or more
+// related entries draw as a small hub (kit HubSpoke), centred in the column; three or fewer are a
+// row of link chips, since a hub with one to three spokes is mostly empty canvas.
 import HubSpoke from '../../kit/diagram/HubSpoke.astro';
-import Figure from '../../kit/diagram/Figure.astro';
 import type { Term } from '../../data/glossary';
 import { splitTerm } from './_diagrams';
 
@@ -14,32 +13,18 @@ const spokes = related.map((r) => {
   const s = splitTerm(r.term);
   return { label: s.name, sub: s.expansion, href: `/glossary/${r.slug}/` };
 });
-const caption = `${hub.name} and the ${related.length === 1 ? 'term' : 'terms'} its entry lists as related.`;
+const caption = `${hub.name} and the terms its entry lists as related.`;
 ---
-{spokes.length >= 3 ? (
+{spokes.length >= 4 ? (
   <div class="rf-related">
     <HubSpoke caption={caption} hub={{ label: hub.name, sub: hub.expansion }} spokes={spokes} />
   </div>
 ) : spokes.length > 0 ? (
-  <div class="rf-related">
-    <Figure kind="related" caption={caption}>
-      <div class="dg-rel" data-n={spokes.length}>
-        <p class="dg-rel-hub">
-          <span class="dg-rel-name">{hub.name}</span>
-          {hub.expansion && <span class="dg-rel-sub">{hub.expansion}</span>}
-        </p>
-        <ul class="dg-rel-spokes">
-          {spokes.map((s, i) => (
-            <li class="dg-rel-spoke" style={`--i:${i}`}>
-              <span class="dg-rel-wire k-draw-x" aria-hidden="true" style={`--di:${i}`}></span>
-              <a class="dg-rel-card" href={s.href}>
-                <span class="dg-rel-name">{s.label}</span>
-                {s.sub && <span class="dg-rel-sub">{s.sub}</span>}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </Figure>
-  </div>
+  <ul class="rf-relchips">
+    {spokes.map((s) => (
+      <li>
+        <a href={s.href}><span class="rf-relchips__n">{s.label}</span>{s.sub && <span class="rf-relchips__x">{s.sub}</span>}<span class="rf-relchips__ar" aria-hidden="true">→</span></a>
+      </li>
+    ))}
+  </ul>
 ) : null}

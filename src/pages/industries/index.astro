@@ -80,7 +80,7 @@ const FIRST_ROW = 3;
                 <span class={`ind-ic ind-ic--${(i % 6) + 1}`} aria-hidden="true">{v.short[0]}</span>
                 <span class="lc-tag">{v.category}</span>
               </span>
-              <h3>{v.short}</h3>
+              <h2>{v.short}</h2>
               <p>{v.painPoint}</p>
               <span class="ind-cac">
                 <span class="badge blue">Typical CAC {v.cacDisplay}</span>
@@ -91,7 +91,8 @@ const FIRST_ROW = 3;
                       style={`--l:${s.l}%;--w:${s.w}%`}
                     ></span>
                   ))}
-                  {mini.breakAt !== undefined && <span class="ind-mini__brk" style={`--x:${mini.breakAt}%`}></span>}
+                  {/* the axis break is marked only on a bar that runs past it (longevity), not on all nine */}
+                  {mini.breakAt !== undefined && v.cacHigh > CAC_BREAK && <span class="ind-mini__brk" style={`--x:${mini.breakAt}%`}></span>}
                 </span>
               </span>
               <span class="lc-more">See the playbook

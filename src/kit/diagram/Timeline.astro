@@ -129,8 +129,8 @@ const railPos = (p: Phase, i: number) =>
 
 <style>
   .dg-tl { margin: 0; padding: 0; list-style: none; }
-  .dg-tl a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
-  .dg-tl a:hover { color: var(--dg-accent); }
+  .dg-tl a { color: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: color var(--k-d-fast) var(--k-ease), text-decoration-color var(--k-d-fast) var(--k-ease); }
+  .dg-tl a:is(:hover, :focus-visible) { color: var(--dg-accent); text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
   .dg-meta {
     display: inline-block;
     font-family: var(--k-font-mono);

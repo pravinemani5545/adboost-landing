@@ -208,13 +208,15 @@ html:not(.js) .k-burger { display: none !important; }
   font-weight: 600;
   color: var(--k-ink);
 }
-.k-sheet__sub { display: flex; flex-wrap: wrap; gap: 0 14px; padding: 0 8px 10px; }
+/* sub-links: a two-column grid of full-size touch targets (44px), not a run of small grey text */
+.k-sheet__sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; padding: 0 8px 10px; }
 .k-sheet__sub a {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  min-height: 36px;
-  font-size: 13.5px;
-  color: var(--k-ink-3);
+  min-height: 44px;
+  font-size: 15px;
+  line-height: 1.3;
+  color: var(--k-ink-2);
 }
 .k-sheet a:hover { color: var(--k-accent-ink); }
 .js.motion .k-sheet__item {
@@ -277,6 +279,7 @@ html.k-sheet-open .k-mcta { translate: 0 calc(100% + 32px); opacity: 0; pointer-
   flex-shrink: 0;
 }
 @media (max-width: 760px) { .k-mcta { display: flex; } }
+@media (min-width: 761px) { .k-mcta-region { display: none; } }
 
 /* ---------- footer curtain: full-bleed night with a rounded top ---------- */
 .k-foot {

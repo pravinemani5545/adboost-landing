@@ -163,13 +163,15 @@ html:not(.js) .marquee { animation: none; }
   .comp, .latest { content-visibility: auto; contain-intrinsic-size: auto 900px; }
 }
 @media (max-width: 560px) {
-  /* phones: the matrix panel runs edge to edge, so its row labels and cells keep whole words */
+  /* phones: the matrix panel reaches 8px into the gutter (as on /advertising/), so its row labels
+     and cells keep whole words while the card still reads as a card */
   .comp-fig {
-    margin-inline: calc(-1 * var(--k-gutter));
-    padding: 18px 12px 16px;
-    border-inline: 0;
-    border-radius: 0;
+    margin-inline: calc(8px - var(--k-gutter));
+    padding: 16px 8px 14px;
+    border-radius: var(--k-r-lg);
   }
+  /* the founder photo is narrow here: the metric chip sits above the name card, clear of the label */
+  .spot-pic .metric { top: auto; bottom: 104px; }
 }
 @media (max-width: 420px) {
   .comp-head h2 { font-size: 30px; }

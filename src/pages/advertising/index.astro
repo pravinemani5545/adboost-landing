@@ -7,7 +7,7 @@ import HeatMatrix from '../../kit/diagram/HeatMatrix.astro';
 import Compare from '../../kit/diagram/Compare.astro';
 import DecisionTree from '../../kit/diagram/DecisionTree.astro';
 import Flow from '../../kit/diagram/Flow.astro';
-import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import StatusBadge from '../../components/adv/StatusBadge.astro';
 import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, policyHref } from '../../components/adv/status';
 import { AD_POLICIES, platformOverview, RULES_CHECKED_ON, STATUS_LABEL, type Platform } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
@@ -172,18 +172,12 @@ const NOW = [
       <div class="adv-groups">
         {verticals.map((v) => (
           <div class="adv-group">
-            <StatusStrip
-              compact
-              class="adv-group__strip"
-              title={v.name}
-              caption={`${v.name}: status on each platform.`}
-              items={PLATFORMS.map((pl) => cell(v.slug, pl)).filter((c): c is NonNullable<typeof c> => !!c).map((c) => ({ label: c.platform, status: STATUS_LABEL[c.status], level: STATUS_TONE[c.status] }))}
-            />
+            <h3 class="adv-group__h">{v.name}</h3>
             <div class="grid-cards three adv-cards">
               {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p, i) => (
-                <a class="lcard adv-card" data-k-light href={policyHref(p)} data-level={STATUS_TONE[p.status]} data-reveal style={`--i:${i}`}>
-                  <span class="lc-tag">{p.platform.toUpperCase()}</span>
-                  <h3>{p.vertical} on {p.platform}</h3>
+                <a class="lcard adv-card" data-k-light href={policyHref(p)} data-reveal style={`--i:${i}`}>
+                  <span class="adv-card__top"><span class="lc-tag">{p.platform.toUpperCase()}</span><StatusBadge status={p.status} /></span>
+                  <h4>{p.vertical} on {p.platform}</h4>
                   <p>{p.rejectionReasons[0]}.</p>
                   <span class="lc-more">Read the rules →</span>
                 </a>

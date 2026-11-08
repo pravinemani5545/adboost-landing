@@ -70,7 +70,9 @@ const fit = items.length <= 3 ? 'sm' : items.length <= 5 ? 'md' : 'lg';
   }
   .dg-box::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--tone-fill); }
   .dg-cl { font-weight: 600; color: var(--dg-fg); line-height: var(--k-lh-snug); min-width: 0; }
-  a.dg-box .dg-cl { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
+  /* a linked box is its own affordance (lift on hover): the label underlines only on hover or focus */
+  a.dg-box .dg-cl { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: text-decoration-color var(--k-d-fast) var(--k-ease); }
+  a.dg-box:is(:hover, :focus-visible) .dg-cl { text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
   .dg-cs { display: inline-flex; align-items: center; gap: 6px; font-size: var(--k-fs-small); font-weight: 500; color: var(--tone-ink); line-height: var(--k-lh-snug); }
   .dg-m { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; line-height: 1; background: var(--tone-soft); color: var(--tone-ink); }
   a.dg-box[href] { color: inherit; text-decoration: none; }

@@ -118,6 +118,9 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
               </svg>
               <span class="pb-dot pb-dot--pay" aria-hidden="true"></span>
               <span class="pb-dot pb-dot--ltv" aria-hidden="true"></span>
+              {/* the y scale: the two values the key prints, at their own heights (the baseline is $0) */}
+              <span class="pb-y pb-y--cac" id="pbYCac" aria-hidden="true">{money(CAC)}</span>
+              <span class="pb-y pb-y--ltv" id="pbYLtv" aria-hidden="true">{r.ltvText}</span>
             </div>
             <p class="pb-axis" aria-hidden="true"><span>Month 0</span><span>Month <span id="pbEnd">{monthLabel(MONTHS)}</span></span></p>
           </Figure>
@@ -179,6 +182,8 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
   const keyLtv = document.getElementById('pbKeyLtv')!;
   const keyCac = document.getElementById('pbKeyCac')!;
   const keyPay = document.getElementById('pbKeyPay')!;
+  const yCac = document.getElementById('pbYCac')!;
+  const yLtv = document.getElementById('pbYLtv')!;
   const axisEnd = document.getElementById('pbEnd')!;
   let shown: Shape = { a: Number(plot.style.getPropertyValue('--a')) || 0, c: Number(plot.style.getPropertyValue('--c')) || 0 };
   let raf = 0;
@@ -230,6 +235,8 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
 
     keyLtv.textContent = r.ltvText;
     keyCac.textContent = money(cac);
+    yLtv.textContent = r.ltvText;
+    yCac.textContent = money(cac);
     keyPay.textContent = r.paybackText;
     axisEnd.textContent = monthLabel(months);
     pTicks.setAttribute('d', monthTicks(months));

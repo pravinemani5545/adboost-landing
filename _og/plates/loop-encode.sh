@@ -2,7 +2,8 @@
 # Turn the raw Seedance clip into a seamless loop and web deliverables:
 # crossfade the last 0.6s into the first 0.6s (so the end frame equals the start frame),
 # then encode 720p H.264 mp4 + VP9 webm (no audio, each <= 1.5MB) and a poster
-# (the loop's first frame) as AVIF + WebP.
+# (the loop's first frame) as AVIF + WebP, 256px wide like the hero plates, so the poster is
+# never the LCP element (the video fades in over it once it plays).
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "$HERE/../.." && pwd)"
@@ -20,7 +21,7 @@ ffmpeg -v error -y -i "$TMP/loop.mp4" -an -c:v libvpx-vp9 -crf 30 -b:v 0 -row-mt
 ffmpeg -v error -y -i "$TMP/loop.mp4" -frames:v 1 "$TMP/poster.png"
 node -e "
 const sharp=require('$ROOT/node_modules/.pnpm/sharp@0.34.5/node_modules/sharp');
-(async()=>{const i=sharp('$TMP/poster.png');
+(async()=>{const i=sharp('$TMP/poster.png').resize({width:256,kernel:'lanczos3'});
 await i.clone().avif({quality:70,effort:7}).toFile('$OUT/hub-loop-poster.avif');
 await i.clone().webp({quality:86,effort:6}).toFile('$OUT/hub-loop-poster.webp');})()"
 ls -la "$OUT"/hub-loop*

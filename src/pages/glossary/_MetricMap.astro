@@ -1,15 +1,22 @@
 ---
 // The glossary metric map (not a route): every live term in the two families the index copy
-// names, with a line wherever an entry lists another as related. Wide containers place each
-// family as a panel with its terms on a fixed grid over an aria-hidden SVG of links; narrow ones
-// show the same markup as two plain lists, each term with its related terms as text. The
-// lists are the text alternative in both layouts.
+// names. Wide containers place each family as a panel with its terms on a fixed grid over an
+// aria-hidden SVG of links. At rest the links are faint; hovering or focusing a term draws its own
+// links and lights the terms at their other ends. A link never crosses between the two panels: a
+// related term in the other family is named on the term instead ("-> LegitScript") and lights up
+// with it. Narrow containers show the same markup as two plain lists, each term with its related
+// terms as text. The lists are the text alternative in both layouts.
 import Figure from '../../kit/diagram/Figure.astro';
 import type { Term } from '../../data/glossary';
 import { cap, relatedEdges, splitTerm } from './_diagrams';
 
-interface Props { terms: Term[]; caption: string }
-const { terms, caption } = Astro.props;
+interface Props {
+  terms: Term[];
+  caption: string;
+  /** a line about the wires, shown only in the wide layout (the narrow layout is two lists) */
+  hint?: string;
+}
+const { terms, caption, hint } = Astro.props;
 
 const FAMILIES = ['unit economics and paid media', 'health-specific compliance and measurement'] as const;
 const H = 59; // box height in width units (width = 100): the box keeps aspect-ratio 100 / H
@@ -38,12 +45,14 @@ for (const t of terms) {
 }
 const nameOf = new Map(terms.map((t) => [t.slug, splitTerm(t.term).name]));
 const famOf = new Map(terms.map((t) => [t.slug, t.family]));
-const edges = relatedEdges(terms);
+const allEdges = relatedEdges(terms);
 const nb = new Map<string, string[]>();
-for (const [a, b] of edges) {
+for (const [a, b] of allEdges) {
   nb.set(a, [...(nb.get(a) ?? []), b]);
   nb.set(b, [...(nb.get(b) ?? []), a]);
 }
+// links drawn as wires: inside a family only
+const edges = allEdges.filter(([a, b]) => famOf.get(a) === famOf.get(b));
 
 // Each link bows gently toward whichever side keeps it furthest from the other terms' boxes,
 // so long links arc around the terms between their ends.
@@ -83,6 +92,9 @@ const families = FAMILIES.map((f, fi) => {
       t,
       name: nameOf.get(t.slug)!,
       rel: (nb.get(t.slug) ?? []).map((s) => nameOf.get(s)!),
+      nb: (nb.get(t.slug) ?? []).join(' '),
+      // related terms in the other family: named on the term, never wired across the gutter
+      cross: (nb.get(t.slug) ?? []).filter((s) => famOf.get(s) !== f).map((s) => nameOf.get(s)!),
       // position inside the panel, in percent of the panel
       x: r2(((POS[t.slug][0] - x0) / (x1 - x0)) * 100),
       y: r2((POS[t.slug][1] / H) * 100),
@@ -91,11 +103,12 @@ const families = FAMILIES.map((f, fi) => {
 });
 ---
 <Figure kind="metricmap" {caption}>
+  {hint && <p class="dg-gm-hint">{hint}</p>}
   <div class="dg-gm" style={`--gm-ar:100 / ${H}`} data-gm>
     <svg class="dg-gm-wires" viewBox={`0 0 100 ${H}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
       {edges.map(([a, b], i) => (
         <path
-          class:list={['dg-gm-edge', 'k-draw', famOf.get(a) !== famOf.get(b) && 'dg-gm-cross']}
+          class="dg-gm-edge k-draw"
           d={path(a, b)}
           pathLength="1"
           data-a={a}
@@ -109,8 +122,9 @@ const families = FAMILIES.map((f, fi) => {
         <h3 class="dg-gm-famh">{f.label} <span class="dg-gm-count">{f.list.length} terms</span></h3>
         <ul class="dg-gm-list">
           {f.list.map((n, i) => (
-            <li class="dg-gm-node k-pop" data-slug={n.t.slug} style={`--x:${n.x}%;--y:${n.y}%;--di:${i % 10}`}>
+            <li class="dg-gm-node k-pop" data-slug={n.t.slug} data-nb={n.nb} style={`--x:${n.x}%;--y:${n.y}%;--di:${i % 10}`}>
               <a class="dg-gm-link" href={`/glossary/${n.t.slug}/`}>{n.name}</a>
+              {n.cross.length > 0 && <span class="dg-gm-x" aria-hidden="true">{n.cross.map((c) => <span>→ {c}</span>)}</span>}
               {n.rel.length > 0 && (
                 <span class="dg-gm-rel"><span class="dg-gm-relk">Related:</span> {n.rel.join(', ')}</span>
               )}
@@ -123,7 +137,8 @@ const families = FAMILIES.map((f, fi) => {
 </Figure>
 
 <script>
-  // Hover or focus a term: light its links and the terms at their other ends, dim the rest.
+  // Hover or focus a term: draw its links, light it and the terms it is related to (in either
+  // family), dim the rest.
   for (const map of document.querySelectorAll<HTMLElement>('[data-gm]')) {
     const edges = [...map.querySelectorAll<SVGPathElement>('.dg-gm-edge')];
     const nodes = [...map.querySelectorAll<HTMLElement>('.dg-gm-node')];
@@ -131,26 +146,19 @@ const families = FAMILIES.map((f, fi) => {
       map.classList.remove('is-hot');
       for (const el of [...edges, ...nodes]) el.classList.remove('on', 'near');
     };
-    const light = (slug: string) => {
+    const light = (n: HTMLElement) => {
       clear();
       map.classList.add('is-hot');
-      const near = new Set<string>();
-      for (const e of edges) {
-        const { a, b } = e.dataset;
-        if (a === slug || b === slug) {
-          e.classList.add('on');
-          near.add(a === slug ? b! : a!);
-        }
-      }
-      for (const n of nodes) {
-        if (n.dataset.slug === slug) n.classList.add('on');
-        else if (near.has(n.dataset.slug!)) n.classList.add('near');
-      }
+      const slug = n.dataset.slug!;
+      const near = new Set((n.dataset.nb ?? '').split(' '));
+      n.classList.add('on');
+      for (const m of nodes) if (near.has(m.dataset.slug!)) m.classList.add('near');
+      for (const e of edges) if (e.dataset.a === slug || e.dataset.b === slug) e.classList.add('on');
     };
     for (const n of nodes) {
-      n.addEventListener('pointerenter', () => light(n.dataset.slug!));
+      n.addEventListener('pointerenter', () => light(n));
       n.addEventListener('pointerleave', clear);
-      n.addEventListener('focusin', () => light(n.dataset.slug!));
+      n.addEventListener('focusin', () => light(n));
       n.addEventListener('focusout', clear);
     }
   }

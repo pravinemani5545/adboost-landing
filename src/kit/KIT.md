@@ -181,7 +181,7 @@ are complete without JS. **Hosts of scroll-driven effects use `overflow: clip`, 
 - `.k-slab` (`data-tone="night"`): an inset, rounded night panel on paper (margin-inline `clamp(8px,1.5vw,20px)`, `--k-r-xl`). Roughly one night slab per three screens; never more than two same-tone bands in a row.
 - Layers (children, `aria-hidden`, z-index -1): `.k-bg.k-bg--grid` (56px blueprint grid, mask via `--k-grid-mask`), `--dots` (lattice; spotlight with `.k-dots-clip > .k-dots-spot`), `--aura` (accent bloom, stronger on night), `--mesh` (two quiet blooms), `--noise` (grain, night only, data-URI SVG).
 - `.k-glass`: blur(14px) saturate(1.6), white .72, white .5 hairline, edge light, painted on `::before` (never on the host). Solid where unsupported and on lowpower. At most 3 per viewport.
-- `.k-plate`: decorative art plate, masked, 20-40% opacity (`--k-plate-o`), never the LCP element; `.k-plate--fallback` is the gradient stand-in.
+- `.k-plate`: decorative art plate, masked (a soft oval that also fades toward the bottom), 20-40% opacity (`--k-plate-o`); `.k-plate--fallback` is the gradient stand-in. Plate files are full resolution (1920px, `_og/plates/encode.mjs`) so the glass stays sharp on retina screens. On desktop a plate can be the LCP element (about 0.45s, perf 100); sharp art was chosen over that on 2026-11-08.
 - `.k-container`: `min(--k-container, 100% - 2 * --k-gutter)`. The legacy `.container` is the same.
 
 ## Cards (`css/cards.css`)
@@ -213,7 +213,7 @@ e1 + edge, one hover). Their own rules keep layout only.
 |---|---|---|
 | `layouts/Shell` | SiteHead props + `chrome?: 'full'\|'lead'`, `navTransparentTop?`, `preloadSerif?`, `popup?: boolean\|'none'`, `leadTag?`, `bodyClass?`, `mainClass?`; slots: default, `head`, `scripts` | head, skip link, nav, `<main id="main">`, phone CTA, footer, kit script, popup or visit mark (never on `/book/`, `/zero-ban-protocol/checklist/`, `/newsletter/`). |
 | `site/SiteHead` | `title`, `description?`, `canonicalPath?` or `canonical?` (absolute), `robots?`, `ogType?`, `ogTitle?`, `ogDescription?`, `ogImage?`, `ogImageAlt?`, `twitterTitle?`, `twitterDescription?`, `article?`, `jsonLd?`, `bingVerify?`, `social?` | og:image defaults to `ogImageFor(path)` (`src/lib/og.ts`): `/og/<first-segment>/<rest-or-index>.jpg` when it exists in `public/`, else `/og/og-home.png`. Always JPEG/PNG. |
-| `site/Nav`, `site/Footer`, `site/MobileCta` | `Nav`: `transparentTop?` | see Tracker contract. |
+| `site/Nav`, `site/Footer`, `site/MobileCta` | `Nav`: `transparentTop?` | see Tracker contract. `MobileCta` is an `<aside aria-label="Book a call">` (a landmark; not rendered from 761px) around the `.mobile-cta` link. |
 | `PageHero` | `crumbs?`, `eyebrow?`, `title` (HTML), `lede?` (HTML), `answer?` (HTML), `meta?: string[]`, `wide?`, `art?` (public path without extension), `layers?: ('dots'\|'mesh')[]`, `id?`, `class?`; slots: default (under the lede), `aside` | renders `.phero` (and `.phero-grid` with an aside: right column from 1024px). H1, lede, aside use `.arrive`. Art plate: `public/art/...{avif,webp}` if present, else a gradient; hidden below 1024px, lazy, alt="". |
 | `Faq` | `items: {q, a}[]`, `idPrefix?` | native `<details class="qa">` in `.faq-list.k-disclosure`; works without JS; eases open where `::details-content` is supported. Keep the page's FAQPage JSON-LD word for word in sync. |
 | `CtaBand` | `heading?` (HTML), `text?` | night slab with grid, aura, grain; `.cta-band` + `data-magnetic` button. |
@@ -252,6 +252,12 @@ example of each, built from the Health data files.
   it from outside, e.g. while the matching process card is hovered.
 - **Count-ups:** an Equation's worked result carries `data-count` + `data-count-delay`, so it
   counts after its terms land (see Numbers).
+- **Link labels** (bar names, matrix row heads, timeline phases, linked cards) are not underlined at rest:
+  the underline (and accent colour on text labels) shows on hover and keyboard focus; a linked
+  card's own lift is its affordance.
+- **HubSpoke triangles:** with `edges` the three spokes carry the weight (h3-size label, accent ring)
+  and the edge labels are plain notes on the wires; without edges the two base cards share one grid
+  row, so they always match in height.
 - **Links** are internal only (build error otherwise); links to unbuilt pages are unwrapped by
   `releaseGates`.
 - **Fixtures:** `/free/kit/diagrams/` and `/free/kit/diagrams-night/` show every kind for visual
@@ -268,7 +274,7 @@ example of each, built from the Health data files.
 
 - The Book button stays inside `<nav class="nav k-nav">`. The phone sheet `#mnav` is a sibling of the
   nav and has no Book link. Breadcrumb and TOC `<nav>`s never carry a `/book/` link.
-- Keep the `.mobile-cta` and `.cta-band` class names and the `<footer>` element.
+- Keep the `.mobile-cta` and `.cta-band` class names and the `<footer>` element. `.mobile-cta` sits on the link itself (its `<aside>` wrapper only adds the landmark).
 - One pageview per real load: no `<ClientRouter/>`, prefetch only, never prerender.
 
 ## Page transitions

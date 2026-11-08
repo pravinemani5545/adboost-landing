@@ -1,13 +1,13 @@
 ---
 // The one site footer: a full-bleed night curtain with a rounded top, so a CTA slab above it
-// never fuses with it. Tracker contract: it stays a <footer> element ("footer" label for its
+// never fuses with it. Flat night with grain only: the CTA slab above is the page's one lit dark
+// moment, so the footer carries no grid or aura of its own. Tracker contract: it stays a <footer> element ("footer" label for its
 // /book/ link). The trust figures are owner-confirmed (71+, $153M+, 4.9/5); keep every mention.
 import Count from '../../kit/components/Count.astro';
 import { BOOK_PATH, EMAIL, SISTER } from '../../lib/site';
 ---
 <footer class="k-foot" data-tone="night">
-  <div class="k-bg k-bg--grid" aria-hidden="true"></div>
-  <div class="k-bg k-bg--aura" aria-hidden="true"></div>
+  <div class="k-bg k-bg--noise" aria-hidden="true"></div>
   <div class="container">
     <div class="k-foot__numbers">
       <p class="k-foot__label">BY THE NUMBERS</p>
@@ -76,8 +76,6 @@ import { BOOK_PATH, EMAIL, SISTER } from '../../lib/site';
 </footer>
 
 <style>
-  .k-foot .k-bg--grid { --k-grid-mask: 60% 70% at 50% 0%; }
-  .k-foot .k-bg--aura { inset: -50% -10% auto; height: 110%; }
   .k-foot__label {
     margin: 0 0 16px;
     font-family: var(--k-font-mono);

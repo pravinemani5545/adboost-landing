@@ -138,15 +138,17 @@ const rm = markOf(R);
 
   /* diff */
   del, ins { text-decoration: none; }
+  /* deleted text stays readable: body colour, a light 1px strike, and a muted rule down its side */
   del {
-    color: var(--dg-fg-3);
-    background-image: linear-gradient(var(--dg-bad), var(--dg-bad));
+    color: var(--dg-fg-2);
+    background-image: linear-gradient(color-mix(in srgb, var(--dg-bad) 45%, transparent), color-mix(in srgb, var(--dg-bad) 45%, transparent));
     background-repeat: no-repeat;
-    background-size: 100% 1.5px;
-    background-position: 0 55%;
+    background-size: 100% 1px;
+    background-position: 0 58%;
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
+  .dg-diff .dg-items li:has(del) { padding-left: 12px; box-shadow: inset 2px 0 0 color-mix(in srgb, var(--dg-bad) 28%, transparent); }
   ins { color: var(--dg-fg); }
   .dg-diff .dg-side[data-level="accent"] { border-color: color-mix(in srgb, var(--dg-accent-fill) 32%, var(--dg-card-line)); box-shadow: var(--k-e2); }
 
@@ -272,5 +274,5 @@ const rm = markOf(R);
   @keyframes k-dg-cmp-rise { from { transform: translateY(10px); } }
   @keyframes k-dg-cmp-grow { from { transform: scaleX(0); } }
   @keyframes k-dg-cmp-pop { from { transform: scale(0.3); } }
-  @keyframes k-dg-cmp-strike { from { background-size: 0% 1.5px; } }
+  @keyframes k-dg-cmp-strike { from { background-size: 0% 1px; } }
 </style>

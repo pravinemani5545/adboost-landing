@@ -102,11 +102,14 @@ const compact = nodes.every((n) => !n.sub && !n.branches?.length);
     transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease);
   }
   a.dg-card:hover, a.dg-bcard:hover { transform: translateY(-2px); box-shadow: var(--k-e2); border-color: var(--dg-line-2); }
+  /* a linked card is its own affordance (lift on hover): the label underlines only on hover or focus */
   a.dg-card .dg-label, a.dg-bcard .dg-label {
     text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+    text-decoration-color: transparent;
     text-underline-offset: 3px;
+    transition: text-decoration-color var(--k-d-fast) var(--k-ease);
   }
+  a:is(.dg-card, .dg-bcard):is(:hover, :focus-visible) .dg-label { text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
   .dg-badge {
     flex: none;
     width: 28px;

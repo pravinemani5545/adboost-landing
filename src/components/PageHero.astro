@@ -7,8 +7,9 @@
 //   </PageHero>
 // The H1, lede and aside arrive by transform only (never hidden), so they paint on the first
 // frame. art is a public path without extension (public/art/<section>/<slug>.avif|webp, from
-// public/art/MANIFEST.md): a decorative plate behind the aside at 20-40% opacity, alt="",
-// lazy, hidden below 1024px; a soft gradient stands in when the file does not exist yet.
+// _og/plates/MANIFEST.md): a decorative plate behind the aside at 20-40% opacity, alt="",
+// lazy, hidden below 1024px; a soft gradient stands in when the file does not exist yet. The
+// files are 256px wide so the plate is never the LCP element (see .k-plate in kit/css/layers.css).
 // title, lede and answer accept trusted inline HTML (serif accents, links).
 import fs from 'node:fs';
 import path from 'node:path';

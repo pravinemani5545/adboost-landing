@@ -35,6 +35,14 @@
   translate: 0 -1px;
 }
 .ind-snap__part { display: grid; gap: var(--k-sp-3); padding-top: var(--k-sp-4); border-top: 1px solid var(--k-line); }
+/* the snapshot is the hero aside from 1024px; below that the hero has no aside and the same
+   snapshot follows the short answer, so a phone reads the answer before the chart */
+.ind-snap--body { display: none; }
+@media (max-width: 1023px) {
+  .ind-hero .phero-aside { display: none; }
+  .ind-snap--body { display: grid; margin-top: var(--k-sp-5); }
+}
+.ind-segs { display: grid; gap: var(--k-sp-3); margin: var(--k-sp-5) 0 var(--k-sp-7); }
 .ind-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .ind-chips .k-chip { white-space: normal; line-height: 1.35; }
 

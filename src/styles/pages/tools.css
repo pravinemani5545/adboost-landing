@@ -101,6 +101,23 @@
 .pb-dot--pay { left: calc(var(--p) * 100%); top: calc((1 - var(--c)) * 100%); border-color: var(--dg-fg); box-shadow: 0 0 0 4px var(--dg-muted-soft); }
 .pb-dot--ltv { left: 100%; top: calc((1 - var(--a)) * 100%); }
 .pb-plot[data-pay="no"] .pb-dot--pay { display: none; }
+/* y scale: CAC labelled on its line at the left, LTV above the end of the profit line */
+.pb-y {
+  position: absolute;
+  padding: 1px 7px;
+  border-radius: var(--k-r-pill);
+  background: var(--dg-card);
+  box-shadow: 0 0 0 1px var(--dg-line);
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.pb-y--cac { left: 0; top: calc((1 - var(--c)) * 100%); translate: 0 -50%; color: var(--dg-bad); }
+.pb-y--ltv { right: 0; top: calc((1 - var(--a)) * 100%); translate: 0 calc(-100% - 12px); color: var(--dg-accent); }
 .pb-axis { display: flex; justify-content: space-between; gap: 12px; margin-inline: 6px; font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: .04em; color: var(--dg-fg-3); font-variant-numeric: tabular-nums; }
 /* draw-on: the ink wipes in left to right (the line only rises with the months), then the points pop */
 .js.motion .tool-pb[data-dg-anim]:not(.in) .pb-plot svg { clip-path: inset(0 100% 0 0); }
@@ -170,6 +187,12 @@
 .tools-grid .lcard.arrive:nth-child(3) { --d: 220ms; }
 .tools-grid .lcard.arrive:nth-child(4) { --d: 270ms; }
 .tools-grid .lcard.arrive:nth-child(5) { --d: 320ms; }
+/* five tools as 2 + 3: the two the guide starts with (CAC, then LTV:CAC) lead, wider */
+@media (min-width: 900px) {
+  .grid-cards.tools-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .tools-grid > .lcard:nth-child(-n + 2) { grid-column: span 3; }
+  .tools-grid > .lcard:nth-child(n + 3) { grid-column: span 2; }
+}
 /* card titles are h2 (they sit straight under the h1), styled as the shared card title */
 .tools-grid .lcard h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.015em; line-height: 1.25; text-wrap: balance; }
 .tools-guide { margin-top: clamp(40px, 6vw, 64px); display: grid; gap: 28px; align-items: start; }

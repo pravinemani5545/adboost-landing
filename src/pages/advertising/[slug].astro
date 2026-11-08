@@ -235,21 +235,21 @@ const toc = [
 
         <aside class="doc-aside">
           <Toc items={toc} />
-          <div class="aside-card">
+          <div class="aside-card adv-links">
             <h4>{p.vertical} on other platforms</h4>
             <div class="link-list">
               {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
               <a href={overview.href}>{overview.label}</a>
             </div>
+            {reading.length > 0 && (
+              <>
+                <h4 class="adv-links__h">Related reading</h4>
+                <div class="link-list">
+                  {reading.map((r) => <a href={r.href}>{r.label}</a>)}
+                </div>
+              </>
+            )}
           </div>
-          {reading.length > 0 && (
-            <div class="aside-card">
-              <h4>Related reading</h4>
-              <div class="link-list">
-                {reading.map((r) => <a href={r.href}>{r.label}</a>)}
-              </div>
-            </div>
-          )}
           <div class="aside-card">
             <h4>Zero-Ban Protocol</h4>
             <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>

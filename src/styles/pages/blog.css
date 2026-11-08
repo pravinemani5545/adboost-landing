@@ -8,6 +8,14 @@
 .post-head { max-width: 920px; text-align: center; }
 .post-head .crumbs { justify-content: center; margin-bottom: var(--k-sp-3); }
 .post-head .crumbs .cur { display: inline-block; max-width: min(46ch, 70vw); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
+/* phones: one line, the post title truncates (never a second line starting with "/") */
+@media (max-width: 640px) {
+  .post-head .crumbs { min-width: 0; }
+  .post-head .crumbs ol { flex-wrap: nowrap; min-width: 0; max-width: 100%; }
+  .post-head .crumbs li { flex: none; }
+  .post-head .crumbs li:last-child { flex: 0 1 auto; min-width: 0; }
+  .post-head .crumbs li:last-child .cur { flex: 0 1 auto; max-width: none; min-width: 0; }
+}
 .post-meta-top { display: flex; align-items: center; justify-content: center; gap: var(--k-sp-3); margin-bottom: var(--k-sp-4); }
 .all-link { font-size: 13px; color: var(--k-ink-3); transition: color var(--k-d-fast) var(--k-ease); }
 .all-link:hover { color: var(--k-accent-ink); }

@@ -121,12 +121,15 @@ const rootStyle = [`--n:${n}`, marker ? `--k-v:${marker.value};--mkn:${mkn}` : '
   .dg-row[data-level="warn"] { --tone-ink: var(--dg-warn); --tone-fill: var(--dg-warn-fill); }
   .dg-row[data-level="bad"] { --tone-ink: var(--dg-bad); --tone-fill: var(--dg-bad-fill); }
   .dg-row[data-level="muted"] { --tone-ink: var(--dg-muted); --tone-fill: var(--dg-muted-fill); }
-  .dg-bl { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; line-height: var(--k-lh-snug); min-width: 0; }
-  .dg-lab { font-weight: 600; color: var(--dg-fg); flex: 1 1 auto; min-width: 0; }
-  .dg-lab a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
-  .dg-lab a:hover { color: var(--dg-accent); }
-  .dg-disp { font-family: var(--k-font-mono); font-size: var(--k-fs-small); font-weight: 500; color: var(--tone-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .dg-unit { flex-basis: 100%; font-size: var(--k-fs-micro); font-family: var(--k-font-mono); letter-spacing: 0.04em; color: var(--dg-fg-3); }
+  /* name and value in two columns: the value keeps its own right-aligned column (the name wraps,
+     never the value), and a unit note runs underneath both */
+  .dg-bl { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 2px 10px; line-height: var(--k-lh-snug); min-width: 0; }
+  .dg-lab { font-weight: 600; color: var(--dg-fg); min-width: 0; }
+  /* label links: accent and underlined on hover or focus, plain at rest (rows of links read as a list, not a wall of underlines) */
+  .dg-lab a { color: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: color var(--k-d-fast) var(--k-ease), text-decoration-color var(--k-d-fast) var(--k-ease); }
+  .dg-lab a:is(:hover, :focus-visible) { color: var(--dg-accent); text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+  .dg-disp { font-family: var(--k-font-mono); font-size: var(--k-fs-small); font-weight: 500; color: var(--tone-ink); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+  .dg-unit { grid-column: 1 / -1; font-size: var(--k-fs-micro); font-family: var(--k-font-mono); letter-spacing: 0.04em; color: var(--dg-fg-3); }
   .dg-track {
     position: relative;
     display: block;
@@ -211,7 +214,6 @@ const rootStyle = [`--n:${n}`, marker ? `--k-v:${marker.value};--mkn:${mkn}` : '
     .dg-bars { --lab: minmax(0, 0.62fr); }
     .dg-row, .dg-axis, .dg-mkrow { grid-template-columns: var(--lab) minmax(0, 1fr); column-gap: 18px; align-items: center; }
     .dg-axpad, .dg-mkpad { display: block; }
-    .dg-bl { justify-content: space-between; }
   }
 
   /* motion: bars grow from their left end; the lit row finishes last, with a glow */

@@ -17,13 +17,13 @@ spokes.forEach((s) => internal(s.href, `hubspoke "${s.label}"`));
 // Ring geometry in % of the box (the SVG viewBox is 0-100 on both axes). A triangle (3 spokes)
 // spreads over the whole height: with edge labels the top spoke sits at y 8 and the base at y 78,
 // leaving room for the base label; without them (tri="bare") the top card hangs from the box's
-// top edge and the base cards stand on its bottom edge, so no band is left empty whatever the
-// card heights. The hub sits at (cx, hy).
+// top edge and the two base cards stand on its bottom edge, side by side in one grid row (so they
+// always match in height, whatever their text) centred at x 25 and 75. The hub sits at (cx, hy).
 const tri = n === 3 ? (edges ? 'edges' : 'bare') : undefined;
 const cx = 50;
 const [cy, ry] = tri === 'edges' ? [54.67, 46.67] : tri === 'bare' ? [65, 60] : [50, 40];
-const rx = n <= 4 ? 36 : 38;
-const hy = tri === 'bare' ? 52 : cy;
+const rx = tri === 'bare' ? 28.87 : n <= 4 ? 36 : 38;
+const hy = tri === 'bare' ? 48 : cy;
 const pts = spokes.map((_, i) => {
   const a = (-90 + (i * 360) / n) * (Math.PI / 180);
   return { x: r4(cx + rx * Math.cos(a)), y: r4(cy + ry * Math.sin(a)) };
@@ -120,7 +120,9 @@ const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
   a.dg-scard[href] { color: inherit; text-decoration: none; }
   a.dg-scard { transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease); }
   a.dg-scard:hover { transform: translateY(-2px); box-shadow: var(--k-e2); border-color: var(--dg-line-2); }
-  a.dg-scard .dg-sl { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
+  /* a linked card is its own affordance (lift on hover): the label underlines only on hover or focus */
+  a.dg-scard .dg-sl { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: text-decoration-color var(--k-d-fast) var(--k-ease); }
+  a.dg-scard:is(:hover, :focus-visible) .dg-sl { text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
   .dg-edges { padding-left: 0; }
   .dg-edge {
     display: grid;
@@ -139,16 +141,30 @@ const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
   @container k-dg (min-width: 500px) {
     .dg-hs[data-fit="sm"] { display: block; aspect-ratio: 10 / 7; }
     /* triangles: height follows the width but keeps a floor for wrapped cards and labels */
-    .dg-hs[data-fit="sm"][data-tri="edges"] { aspect-ratio: auto; height: max(360px, 66cqi); }
-    .dg-hs[data-fit="sm"][data-tri="bare"] { aspect-ratio: auto; height: max(340px, 62cqi); }
+    .dg-hs[data-fit="sm"][data-tri="edges"] { aspect-ratio: auto; height: max(380px, 60cqi); }
+    .dg-hs[data-fit="sm"][data-tri="bare"] { aspect-ratio: auto; height: max(380px, 70cqi); }
     .dg-hs[data-fit="sm"] .dg-wires { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
     .dg-hs[data-fit="sm"] .dg-hub { position: absolute; left: 50%; top: calc(var(--cy) * 1%); width: min(20%, 160px); translate: -50% -50%; justify-items: center; text-align: center; z-index: 2; }
     .dg-hs[data-fit="sm"] .dg-spokes, .dg-hs[data-fit="sm"] .dg-edges { position: static; padding: 0; display: block; }
     .dg-hs[data-fit="sm"] .dg-spokes::before, .dg-hs[data-fit="sm"] .dg-spoke::before { display: none; }
     .dg-hs[data-fit="sm"] :is(.dg-spoke, .dg-edge) { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; z-index: 2; }
     .dg-hs[data-fit="sm"] .dg-spoke { width: min(30%, 220px); }
-    .dg-hs[data-tri="bare"] .dg-spoke:first-child { top: 0; translate: -50% 0; }
-    .dg-hs[data-tri="bare"] .dg-spoke:not(:first-child) { top: auto; bottom: 0; translate: -50% 0; }
+    /* bare triangle: the spokes sit on a grid over the whole box, top card centred in row 1, the
+       two base cards in row 3 (centred at x 25 and 75, matching the wires), stretched to one height */
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spokes {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto minmax(0, 1fr) auto;
+    }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke { position: static; translate: none; justify-self: center; }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke:first-child { grid-column: 1 / -1; grid-row: 1; }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke:not(:first-child) { grid-row: 3; width: min(60%, 220px); }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke:nth-child(2) { grid-column: 2; }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke:nth-child(3) { grid-column: 1; }
+    .dg-hs[data-fit="sm"][data-tri="bare"] .dg-spoke:not(:first-child) .dg-scard { height: 100%; box-sizing: border-box; align-content: center; }
     .dg-hs[data-fit="sm"] .dg-scard { text-align: center; justify-items: center; }
     .dg-hs[data-fit="sm"] .dg-edge { width: min(26%, 200px); text-align: center; background: var(--dg-card); border-style: solid; border-color: var(--dg-line); box-shadow: var(--k-e1); z-index: 1; }
     .dg-hs[data-fit="sm"] .dg-pair { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -176,6 +192,29 @@ const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
     .dg-hs[data-fit="lg"] .dg-scard { text-align: center; justify-items: center; padding: 10px 12px; }
     .dg-hs[data-fit="lg"] .dg-edge { width: min(20%, 170px); text-align: center; background: var(--dg-card); border-style: solid; border-color: var(--dg-line); box-shadow: var(--k-e1); z-index: 1; }
     .dg-hs[data-fit="lg"] .dg-pair { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  }
+  /* edge triangle (ring layout): the spokes are the subject, so they carry the weight (h3 size, accent
+     ring); the edge labels read as notes on the wires, not as a second set of nodes */
+  @container k-dg (min-width: 500px) {
+    .dg-hs[data-tri="edges"] .dg-scard {
+      padding: 12px 18px;
+      border-color: color-mix(in srgb, var(--dg-accent-fill) 40%, var(--dg-card-line));
+      box-shadow: 0 0 0 4px var(--dg-accent-soft), var(--k-e2);
+    }
+    .dg-hs[data-tri="edges"] .dg-sl { font-size: var(--k-fs-h3); font-weight: var(--k-fw-display); letter-spacing: -0.015em; line-height: var(--k-lh-tight); }
+    .dg-hs[data-tri="edges"] a.dg-scard:hover { box-shadow: 0 0 0 4px var(--dg-accent-soft), var(--k-e3); }
+    .dg-hs[data-fit="sm"][data-tri="edges"] .dg-hub { width: min(26%, 196px); }
+    .dg-hs[data-fit="sm"][data-tri="edges"] .dg-edge {
+      width: min(28%, 190px);
+      padding: 0;
+      background: none;
+      border: 0;
+      box-shadow: none;
+      font-size: var(--k-fs-small);
+      line-height: var(--k-lh-snug);
+      color: var(--dg-fg-2);
+      text-wrap: balance;
+    }
   }
   .dg-wires line { vector-effect: non-scaling-stroke; stroke-linecap: round; transform-box: view-box; }
   .dg-spokeline { stroke: var(--dg-line-2); stroke-width: 1.5; }

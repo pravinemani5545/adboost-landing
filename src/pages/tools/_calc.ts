@@ -4,11 +4,11 @@
 // only the LTV:CAC "very high" note now starts above 5:1, as the FAQ on that page says.
 // (Not a route: files starting with "_" are ignored by Astro's router.)
 
-export type Verdict = '' | 'good' | 'bad';
+export type Verdict = '' | 'good' | 'bad' | 'warn';
 
 export const money = (n: number) => '$' + Math.round(n).toLocaleString('en-US');
 
-/** The class the result value has always carried: "cr-value", "cr-value good", "cr-value bad". */
+/** The result value's class: "cr-value", plus "good", "bad" or (LTV:CAC above 5:1) "warn". */
 export const valueClass = (v: Verdict) => (v ? `cr-value ${v}` : 'cr-value');
 
 /* ---------- CAC ---------- */
@@ -44,8 +44,12 @@ export function ltvCalc(mrev: number, margin: number, months: number, cac: numbe
   if (cac <= 0) return { ...base, ratio: null, ratioText: '-', verdict: '', note: 'Enter your CAC to see the ratio.' };
   const ratio = ltv / cac;
   const ratioText = ratio.toFixed(1) + '×';
-  if (ratio >= 3) {
-    return { ...base, ratio, ratioText, verdict: 'good', note: 'Healthy - at or above the 3:1 benchmark.' + (ratio > LTV_VERY_HIGH ? ' Very high - you may be under-investing in growth.' : '') };
+  // judged on the ratio as printed (one decimal), so "3.0×" is never called below 3:1; the tone
+  // follows the gauge's bands: below 3:1 bad, 3:1 to 5:1 good, above 5:1 warn ("Very high")
+  const shown = Math.round(ratio * 10) / 10;
+  if (shown >= 3) {
+    const veryHigh = shown > LTV_VERY_HIGH;
+    return { ...base, ratio, ratioText, verdict: veryHigh ? 'warn' : 'good', note: 'Healthy - at or above the 3:1 benchmark.' + (veryHigh ? ' Very high - you may be under-investing in growth.' : '') };
   }
   return { ...base, ratio, ratioText, verdict: 'bad', note: 'Below the 3:1 benchmark - you’re likely buying revenue at a loss after overhead.' };
 }

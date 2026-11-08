@@ -1,10 +1,14 @@
 ---
 // Sticky phone CTA. Tracker contract: the class name .mobile-cta labels its /book/ clicks
-// "mobile". menu.ts shows it once the hero CTA (or the H1) has scrolled off and hides it while a
-// .cta-band, #cta, .cta-banner or [data-mcta-hide] is on screen.
+// "mobile", so it stays on the link itself. menu.ts shows it once the hero CTA (or the H1) has
+// scrolled off and hides it while a .cta-band, #cta, .cta-banner or [data-mcta-hide] is on screen.
+// The labelled <aside> gives it a landmark (it sits outside <main> and the footer); it is not
+// rendered from 761px up, where the link never shows.
 import { BOOK_PATH } from '../../lib/site';
 ---
-<a class="mobile-cta k-mcta" href={BOOK_PATH} aria-label="Book a free strategy call">
-  <span>Book a free strategy call</span>
-  <span class="k-mcta__chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-</a>
+<aside class="k-mcta-region" aria-label="Book a call">
+  <a class="mobile-cta k-mcta" href={BOOK_PATH} aria-label="Book a free strategy call">
+    <span>Book a free strategy call</span>
+    <span class="k-mcta__chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </a>
+</aside>

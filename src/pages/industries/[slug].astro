@@ -3,15 +3,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
-import Bars from '../../kit/diagram/Bars.astro';
-import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import Snapshot from './_Snapshot.astro';
 import Flow from '../../kit/diagram/Flow.astro';
 import Compare from '../../kit/diagram/Compare.astro';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook, type Source } from '../../data/vertical-playbooks';
 import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
 import { PLATFORMS, STATUS_TONE, policyHref } from '../../components/adv/status';
-import { CAC_BREAK, cacItem, cacNotes } from './_cac';
 import '../../styles/pages/industries.css';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
@@ -148,29 +146,8 @@ const toc = [
       <span>Setup in 5 days</span>
       {updatedLabel && <span>Updated <time datetime={updated}>{updatedLabel}</time></span>}
     </div>
-    <div slot="aside" class="k-card k-card--float k-card--glass ind-snap">
-      <p class="ind-snap__head"><span class="ind-snap__title">Vertical snapshot</span><span>Typical CAC</span></p>
-      <Bars
-        arrive
-        variant="range"
-        prefix="$"
-        axisBreakAbove={CAC_BREAK}
-        caption={`Typical CAC by vertical, as each industry page quotes it, with ${v.short} lit. ${cacNotes(VERTICALS)}`}
-        items={VERTICALS.map((x) => cacItem(x, v.slug))}
-      />
-      {strip.length > 0 && (
-        <div class="ind-snap__part">
-          <StatusStrip
-            arrive
-            caption={`${v.short} ad rules on each platform, from our rule sheets (checked ${checkedLabel}).`}
-            items={strip}
-          />
-        </div>
-      )}
-      <div class="ind-snap__part">
-        <p class="ind-snap__label">Segments we work in</p>
-        <ul class="ind-chips">{pb.subSegments.map((s) => <li class="k-chip">{s}</li>)}</ul>
-      </div>
+    <div slot="aside" class="k-card k-card--float k-card--glass ind-snap ind-snap--hero">
+      <Snapshot slug={v.slug} short={v.short} strip={strip} checkedLabel={checkedLabel} />
     </div>
   </PageHero>
 
@@ -182,6 +159,14 @@ const toc = [
             <span class="al">The short answer</span>
             {v.summary} {v.proofLine} We only work in health, so the playbook, creative and policy review are built for {v.inline} brands.
             {listicle && <span class="ind-listicle">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
+          </div>
+          {/* below 1024px the hero has no aside: the snapshot follows the short answer instead */}
+          <div class="k-card k-card--raised ind-snap ind-snap--body">
+            <Snapshot slug={v.slug} short={v.short} strip={strip} checkedLabel={checkedLabel} />
+          </div>
+          <div class="ind-segs">
+            <p class="ind-snap__label">Segments we work in</p>
+            <ul class="ind-chips">{pb.subSegments.map((s) => <li class="k-chip">{s}</li>)}</ul>
           </div>
           <div class="prose">
             {pb.questions.map((q) => (

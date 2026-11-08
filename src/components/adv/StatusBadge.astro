@@ -1,11 +1,14 @@
 ---
 // A policy status badge, coloured by STATUS_TONE (the OG card mapping): allowed green,
-// restricted amber, requires certification blue, prohibited red. The label always
-// carries the meaning; the dot is decorative. Styles: src/styles/pages/advertising.css.
+// restricted amber, requires certification blue, prohibited red. It is the same tinted chip,
+// with the same mark, as a HeatMatrix cell, so a status looks the same everywhere it appears.
+// The label always carries the meaning; the mark is decorative. Styles: styles/pages/advertising.css.
 import { STATUS_LABEL, type PolicyStatus } from '../../data/adPolicies';
+import { TONE_MARK } from '../../kit/diagram/util';
 import { STATUS_TONE } from './status';
 
 interface Props { status: PolicyStatus; class?: string }
 const { status, class: cls } = Astro.props;
+const tone = STATUS_TONE[status];
 ---
-<span class:list={['adv-badge', cls]} data-level={STATUS_TONE[status]}><i aria-hidden="true"></i>{STATUS_LABEL[status]}</span>
+<span class:list={['adv-badge', cls]} data-level={tone}><span class="adv-badge__m" aria-hidden="true">{TONE_MARK[tone]}</span>{STATUS_LABEL[status]}</span>

@@ -106,8 +106,8 @@ const tid = uid('hm');
     overflow-wrap: normal;
     hyphens: manual;
   }
-  .dg-hm tbody th a { color: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
-  .dg-hm tbody th a:hover { color: var(--dg-accent); }
+  .dg-hm tbody th a { color: inherit; text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 3px; transition: color var(--k-d-fast) var(--k-ease), text-decoration-color var(--k-d-fast) var(--k-ease); }
+  .dg-hm tbody th a:is(:hover, :focus-visible) { color: var(--dg-accent); text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
   td { position: relative; height: 1px; }
   .dg-cell {
     box-sizing: border-box;

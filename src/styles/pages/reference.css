@@ -1,7 +1,7 @@
 /* Reference pages: the glossary (index + 25 terms) and compare (index + 3 pages), design v2 B4.
    Kit tokens only (--k-*, --t-*, and the --dg-* roles inside a figure). Page selectors carry the
-   rf- prefix; the three page-owned figures (metric map, related pair, versus card) carry dg-gm-,
-   dg-rel- and dg-vc-, which no kit diagram uses. Kit diagram internals are never styled here. */
+   rf- prefix; the two page-owned figures (metric map, versus card) carry dg-gm- and dg-vc-,
+   which no kit diagram uses. Kit diagram internals are never styled here. */
 
 /* ============ shared: hero card, aside headings, figure spacing ============ */
 .rf-hero-card { padding: var(--k-sp-5) var(--k-sp-5) var(--k-sp-4); gap: var(--k-sp-3); }
@@ -56,68 +56,44 @@
 }
 .prose .rf-term-guide a:not(.btn):hover { background: var(--k-accent-soft); border-color: var(--k-accent); }
 
-.rf-related { max-width: 600px; margin-top: var(--k-sp-4); }
+.rf-related { max-width: 600px; margin: var(--k-sp-4) auto 0; }
 
-/* related pair: one or two related terms (HubSpoke needs three), the same hub-and-link look */
-.dg-rel { position: relative; display: grid; gap: 12px; }
-.dg-rel-hub {
-  margin: 0;
-  display: grid;
-  gap: 2px;
-  padding: 12px 16px;
-  border-radius: var(--k-r-md);
-  background: var(--dg-accent-fill);
-  color: var(--k-accent-on);
-  box-shadow: 0 14px 30px -14px var(--dg-glow), var(--k-e1);
-}
-.dg-rel-name { font-weight: 600; line-height: var(--k-lh-snug); }
-.dg-rel-sub { font-size: var(--k-fs-small); line-height: var(--k-lh-snug); }
-.dg-rel-spokes { list-style: none; margin: 0; padding: 0 0 0 22px; display: grid; gap: 8px; position: relative; }
-.dg-rel-spokes::before { content: ""; position: absolute; left: 8px; top: -12px; bottom: 22px; width: 2px; border-radius: 2px; background: var(--dg-line-2); }
-.dg-rel-spoke { position: relative; }
-.dg-rel-wire { position: absolute; left: -14px; top: 50%; width: 12px; height: 2px; background: var(--dg-line-2); }
-.dg-rel-card {
-  display: grid;
-  gap: 2px;
-  padding: 11px 14px;
-  border-radius: var(--k-r-md);
-  background: var(--dg-card);
-  border: 1px solid var(--dg-card-line);
+/* one to three related terms: a row of link chips */
+.prose .rf-relchips { list-style: none; margin: var(--k-sp-4) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.prose .rf-relchips li { margin: 0; }
+.prose .rf-relchips li a {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--k-line-2);
+  border-radius: var(--k-r-pill);
+  background: var(--k-paper);
   box-shadow: var(--k-e1);
-  color: inherit;
+  color: var(--k-ink);
   text-decoration: none;
-  transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease);
+  line-height: 1.3;
+  transition: border-color var(--k-d-fast) var(--k-ease), translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease);
 }
-.dg-rel-card .dg-rel-name { color: var(--dg-fg); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 30%, transparent); text-underline-offset: 3px; }
-.dg-rel-card .dg-rel-sub { color: var(--dg-fg-3); }
-.dg-rel-card:hover { translate: 0 -2px; box-shadow: var(--k-e2); border-color: var(--dg-line-2); }
-.dg-rel-card:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 2px; }
-@container k-dg (min-width: 500px) {
-  .dg-rel { --hub-w: 184px; --wire: 44px; display: block; }
-  .dg-rel-hub { position: absolute; top: 50%; translate: 0 -50%; width: var(--hub-w); justify-items: center; text-align: center; z-index: 1; }
-  .dg-rel-spokes { padding: 0; min-height: 76px; align-items: center; }
-  .dg-rel-spokes::before { content: none; }
-  .dg-rel-card { justify-items: center; text-align: center; min-height: 64px; align-content: center; }
-  .dg-rel-wire { top: 50%; width: var(--wire); }
-  /* one: hub, link, term */
-  .dg-rel[data-n="1"] .dg-rel-hub { left: 0; }
-  .dg-rel[data-n="1"] .dg-rel-spokes { margin-left: calc(var(--hub-w) + var(--wire)); max-width: 260px; }
-  .dg-rel[data-n="1"] .dg-rel-wire { left: auto; right: 100%; transform-origin: left center; }
-  /* two: term, link, hub, link, term */
-  .dg-rel[data-n="2"] .dg-rel-hub { left: 50%; translate: -50% -50%; }
-  .dg-rel[data-n="2"] .dg-rel-spokes { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(var(--hub-w) + 2 * var(--wire)); }
-  .dg-rel[data-n="2"] .dg-rel-spoke:first-child .dg-rel-wire { left: 100%; transform-origin: right center; }
-  .dg-rel[data-n="2"] .dg-rel-spoke:last-child .dg-rel-wire { left: auto; right: 100%; transform-origin: left center; }
-}
-/* the hub lands first, then each link draws (kit .k-draw-x), then the terms */
-html.js.motion .k-dg--related .dg-rel-hub { animation: rf-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: 140ms; }
-html.js.motion .k-dg--related .dg-rel-wire { --dd: 300ms; }
-html.js.motion .k-dg--related .dg-rel-card { animation: rf-pop var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(520ms + var(--i, 0) * var(--k-stagger)); }
-html.js.motion .k-dg--related:not(.in) :is(.dg-rel-hub, .dg-rel-card) { animation-play-state: paused; }
+.prose .rf-relchips li a:hover { border-color: var(--k-accent-line); translate: 0 -2px; box-shadow: var(--k-e2); }
+.prose .rf-relchips li a:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+.rf-relchips__n { font-size: 15px; font-weight: 600; }
+.rf-relchips__x { font-size: var(--k-fs-small); color: var(--k-ink-3); }
+.rf-relchips__ar { font-size: var(--k-fs-small); color: var(--k-accent-ink); }
 @keyframes rf-pop { from { transform: scale(0.6); } }
 
 /* ============ glossary index ============ */
 .rf-gcard h2 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+/* 25 terms: five across on wide screens (five full rows, no orphan card); two across on phones,
+   so the list is half as long */
+@media (min-width: 1100px) { .glossary-grid:has(.rf-gcard) { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (max-width: 540px) {
+  .glossary-grid:has(.rf-gcard) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .gcard.rf-gcard { padding: 14px 14px 16px; }
+  .rf-gcard h2 { font-size: 14.5px; text-wrap: balance; }
+  .gcard.rf-gcard p { font-size: 12.5px; }
+}
 .rf-guide__prose { max-width: 760px; }
 .rf-guide__prose > :last-child { margin-bottom: 0; }
 .rf-map { margin: var(--k-sp-6) 0 var(--k-sp-7); }
@@ -149,6 +125,8 @@ html.js.motion .k-dg--related:not(.in) :is(.dg-rel-hub, .dg-rel-card) { animatio
 .dg-gm-link { justify-self: start; font-weight: 600; color: var(--dg-accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
 .dg-gm-link:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 3px; border-radius: 4px; }
 .dg-gm-rel { font-size: var(--k-fs-small); line-height: var(--k-lh-snug); color: var(--dg-fg-3); }
+/* the other family's related terms and the wire hint belong to the wide layout only */
+.dg-gm-x, .dg-gm-hint { display: none; }
 .dg-gm-relk { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); letter-spacing: 0.06em; text-transform: uppercase; }
 @container k-dg (min-width: 560px) {
   .dg-gm-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
@@ -198,13 +176,32 @@ html.js.motion .k-dg--related:not(.in) :is(.dg-rel-hub, .dg-rel-card) { animatio
   .dg-gm.is-hot .dg-gm-node:not(.on, .near) { opacity: 0.4; }
   /* the related list stays in the accessibility tree; the lines carry it on screen */
   .dg-gm-rel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* a related term in the other family: named under the term (no wire across the gutter) */
+  .dg-gm-x {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 50%;
+    translate: -50% 0;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    white-space: nowrap;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+    color: var(--dg-fg-3);
+    transition: color var(--k-d-fast) var(--k-ease);
+  }
+  .dg-gm-node.on .dg-gm-x { color: var(--dg-accent); }
+  .dg-gm-hint { display: block; margin: 0 0 var(--k-sp-4); font-size: var(--k-fs-small); line-height: var(--k-lh-body); color: var(--dg-fg-3); }
 }
 /* the box keeps the viewBox ratio, so strokes scale evenly: widths are in box units (about 1.3px
-   at 1240px), and pathLength stays true for the kit draw-on (non-scaling strokes break its dashes) */
-.dg-gm-edge { fill: none; stroke: var(--dg-line-2); stroke-width: 0.11; stroke-linecap: round; transition: opacity var(--k-d-fast) var(--k-ease), stroke var(--k-d-fast) var(--k-ease); }
-.dg-gm-cross { stroke: color-mix(in srgb, var(--dg-accent-fill) 40%, var(--dg-line-2)); }
-.dg-gm.is-hot .dg-gm-edge:not(.on) { opacity: 0.14; }
-.dg-gm-edge.on { stroke: var(--dg-accent-fill); stroke-width: 0.2; }
+   at 1240px), and pathLength stays true for the kit draw-on (non-scaling strokes break its dashes).
+   At rest the wires are a faint texture; a hovered or focused term draws its own links in accent. */
+.dg-gm-edge { fill: none; stroke: var(--dg-line-2); stroke-width: 0.1; stroke-linecap: round; opacity: 0.45; transition: opacity var(--k-d-fast) var(--k-ease), stroke var(--k-d-fast) var(--k-ease); }
+.dg-gm.is-hot .dg-gm-edge:not(.on) { opacity: 0.12; }
+.dg-gm-edge.on { stroke: var(--dg-accent-fill); stroke-width: 0.2; opacity: 1; }
 
 /* ============ compare page ============ */
 .rf-intent { color: var(--k-ink-2); font-size: 15px; line-height: 1.6; margin: 0 0 var(--k-sp-6); max-width: 74ch; }
@@ -212,6 +209,26 @@ html.js.motion .k-dg--related:not(.in) :is(.dg-rel-hub, .dg-rel-card) { animatio
 .prose .rf-choose ul { margin: 0; padding-left: 18px; display: grid; gap: 8px; }
 .prose .rf-choose li { margin: 0; line-height: 1.5; }
 .dtable .rf-them { color: var(--k-ink-3); }
+/* the same rows as the vs rail above it, kept as a table but collapsed (native details, no JS) */
+.rf-tablemore { margin: calc(-1 * var(--k-sp-3)) 0 var(--k-sp-5); }
+.rf-tablemore summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px 8px 10px;
+  border: 1px solid var(--k-line-2);
+  border-radius: var(--k-r-pill);
+  background: var(--k-paper);
+  font-size: var(--k-fs-ui);
+  font-weight: 500;
+  color: var(--k-ink-2);
+  transition: border-color var(--k-d-fast) var(--k-ease), color var(--k-d-fast) var(--k-ease);
+}
+.rf-tablemore summary:hover { border-color: var(--k-accent-line); color: var(--k-accent-ink); }
+.rf-tablemore summary:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+.rf-tablemore__chev { width: 8px; height: 8px; margin: 0 2px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: -45deg; transition: rotate var(--k-t-snap) var(--k-spring-snap); }
+.rf-tablemore details[open] .rf-tablemore__chev { rotate: 45deg; }
+.rf-tablemore .tablewrap { margin-top: var(--k-sp-4); }
 .rf-faq { margin-top: 16px; }
 
 /* versus card (hero): the two options, and a rail of the dimensions the table compares */
@@ -297,7 +314,7 @@ html.js.motion .k-dg--versus:not(.in) .dg-vc-name { animation-play-state: paused
 @media (min-width: 1024px) {
   .rf-hero--hub .phero-grid { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 40px; }
 }
-.rf-hero-hub { min-width: 0; }
+.rf-hero-hub { min-width: 0; padding: var(--k-sp-5) var(--k-sp-5) var(--k-sp-4); }
 .rf-inshort { max-width: 760px; margin-inline: auto; }
 .rf-inshort .answer-box { margin: 0; }
 .lcard .rf-lcard-h { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; text-wrap: balance; }
