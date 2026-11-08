@@ -1,15 +1,24 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Flow from '../../kit/diagram/Flow.astro';
+import StatusAside from '../../components/adv/StatusAside.astro';
+import ChangeLog from '../../components/adv/ChangeLog.astro';
+import RuleTiers from '../../components/adv/RuleTiers.astro';
+import Toc from '../../components/adv/Toc.astro';
+import { certFlowFor } from '../../components/adv/certFlows';
+import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, fmtDay, policyHref } from '../../components/adv/status';
 import { AD_POLICIES, getAdPolicy, platformOverview, POLICY_YEAR, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
 import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { isLive, PAGES } from '../../lib/live';
 import { getPublishedPosts } from '../../lib/blog';
 import { metaDescription, seoTitle } from '../../lib/seo';
+import { ogImageFor } from '../../lib/og';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
+import '../../styles/pages/advertising.css';
 
 export function getStaticPaths() {
   return AD_POLICIES.map((p) => ({ params: { slug: p.slug } }));
@@ -41,11 +50,31 @@ const description = metaDescription(path, p.metaDescription);
 // Content date: src/data/pages.json (sitemap lastmod, this label and dateModified).
 const updated = PAGES[path]?.updated;
 if (!updated) throw new Error(`src/data/pages.json needs an "updated" date for ${path}`);
-const fmtDay = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-const badgeClass = p.status === 'allowed' ? 'green' : p.status === 'prohibited' ? 'red' : 'amber';
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const industry = getVertical(p.verticalSlug);
 const NOTE_LABEL = { changed: 'Updated', corrected: 'Corrected', clarified: 'Clarified' } as const;
+const NOTE_TONE = { changed: 'accent', corrected: 'warn', clarified: 'muted' } as const;
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+// Headings keep hyphenated words whole ("GLP-1", "weight-loss"); the text is unchanged.
+const inlineHtml = esc(inline).replace(/[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+/g, '<span class="adv-nw">$&</span>');
+
+// Hero aside: this vertical on the three platforms, the current sheet ringed, the others linked.
+const strip = PLATFORMS
+  .map((pl) => AD_POLICIES.find((x) => x.verticalSlug === p.verticalSlug && x.platform === pl))
+  .filter((x): x is NonNullable<typeof x> => !!x)
+  .map((x) => ({
+    label: x.platform,
+    status: STATUS_LABEL[x.status],
+    level: STATUS_TONE[x.status],
+    href: x.slug === p.slug ? undefined : policyHref(x),
+    current: x.slug === p.slug || undefined,
+  }));
+const art = `/art/advertising/${p.platform === 'TikTok' ? 'hub' : p.platform.toLowerCase()}`;
+
+// #cert: a Flow only where this sheet's certification copy states the chain (certFlows.ts).
+// The page's one tint band goes to that Flow, else to the two-tier rules under #prohibited.
+const flow = certFlowFor(p);
+const band = flow ? 'cert' : 'prohibited';
 
 // Platform up-links (health plan O1, CN 3.4): each sheet points at the one page
 // that states its platform's shared rules. Google's certification steps live on
@@ -90,7 +119,7 @@ const reading = [
 ].filter((r) => linkIsLive(r.href));
 
 const jsonLd = [
-  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: updated, authorIsOrg: true, image: '/og/og-home.png' }),
+  articleNode(SITE, { headline: p.h1, description, path, datePublished: p.published, dateModified: updated, authorIsOrg: true, image: ogImageFor(path) }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];
@@ -105,91 +134,82 @@ const toc = [
   ...(p.sections ?? []).map((s) => ({ id: s.id, label: s.question })),
   { id: 'faq', label: 'FAQ' },
 ];
-const xIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{p.platform.toUpperCase()} · {p.vertical.toUpperCase()}</span>
-      <h1>{p.h1}</h1>
-      <div class="metabar" style="margin-top:14px">
-        <span class={`badge ${badgeClass}`}>{STATUS_LABEL[p.status]}</span>
-        <span class="dot"></span><span>Rules checked against {p.platform}’s live policy on <time datetime={RULES_CHECKED_ON}>{fmtDay(RULES_CHECKED_ON)}</time></span>
-        <span class="dot"></span><span>Updated <time datetime={updated}>{fmtDay(updated)}</time></span>
-      </div>
-    </div>
-  </section>
+  <PageHero
+    class="adv-hero"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]}
+    eyebrow={`${p.platform.toUpperCase()} · ${p.vertical.toUpperCase()}`}
+    title={esc(p.h1)}
+    {art}
+  >
+    <div class="answer-box arrive" id="status" style="--d:60ms"><span class="al">The short answer</span>{p.answer}</div>
+    <StatusAside
+      slot="aside"
+      label="Status on each platform"
+      caption={`${p.vertical} on Meta, Google and TikTok. This sheet covers ${p.platform}.`}
+      items={strip}
+      legend={STATUS_LEGEND}
+      platform={p.platform}
+      checkedOn={RULES_CHECKED_ON}
+      {updated}
+    />
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="iwrap adv-doc">
     <div class="container">
-      <div class="doc-grid">
+      <div class="doc-grid k-scrub-scope">
         <div class="doc-main">
-          <div class="answer-box reveal" id="status"><span class="al">The short answer</span>{p.answer}</div>
-
           <div class="prose">
             {p.changeNotes && p.changeNotes.length > 0 && (
-              <div class="callout" style="margin-top:16px">
-                {p.changeNotes.map((n) => (
-                  <p style="margin:0 0 8px">
-                    <strong>{NOTE_LABEL[n.kind]} <time datetime={n.date}>{fmtDay(n.date)}</time>.</strong> {n.text}
-                    {n.sources && n.sources.length > 0 && (
-                      <> Source: {n.sources.map((s, i) => (<>{i > 0 && '; '}<a href={s.url} target="_blank" rel="noopener">{s.label}</a></>))}.</>
-                    )}
-                  </p>
-                ))}
-              </div>
+              <ChangeLog
+                arrive
+                caption="Dated notes for this page. Updated: the platform changed its rules. Corrected or clarified: this page was wrong or unclear before."
+                entries={p.changeNotes.map((n) => ({ date: n.date, text: n.text, badge: NOTE_LABEL[n.kind], tone: NOTE_TONE[n.kind], sources: n.sources }))}
+              />
             )}
 
-            <p style="font-size:14px;margin-top:14px">
+            <p class="adv-overview">
               {overview.lead} <a href={overview.href}>{overview.label}</a>.
               {certSheet && <> Certification steps for every Google health ad: <a href={certSheet.href}>{certSheet.label}</a>.</>}
             </p>
 
             {p.checklist && (
-              <div class="callout" style="margin-top:14px">
+              <div class="callout adv-checklist">
                 <span class="cl-label">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span>
-                <ul style="margin:8px 0 6px">
+                <ul>
                   {p.checklist.items.map((x) => <li>{x}</li>)}
                 </ul>
-                <span style="font-size:13px">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
+                <span class="adv-checklist__src">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
               </div>
             )}
 
-            <h2 id="cert">Do you need certification to run {inline} ads on {p.platform}?</h2>
-            <Fragment set:html={p.certification.trimStart().startsWith('<') ? p.certification : `<p>${p.certification}</p>`} />
+            <div class:list={['adv-sec', band === 'cert' && 'adv-band']} data-tone={band === 'cert' ? 'tint' : undefined}>
+              <h2 id="cert">Do you need certification to run <Fragment set:html={inlineHtml} /> ads on {p.platform}?</h2>
+              {flow && <Flow pulse class="adv-flow" caption={flow.caption} nodes={flow.nodes} />}
+              <Fragment set:html={p.certification.trimStart().startsWith('<') ? p.certification : `<p>${p.certification}</p>`} />
+            </div>
 
-            <h2 id="prohibited">What can’t {inline} ads say or show on {p.platform}?</h2>
-            <p>{p.platform}’s own written rules:</p>
-            <ul class="xlist">
-              {p.prohibited.map((x) => (
-                <li><span class="xk" set:html={xIcon} />{x}</li>
-              ))}
-            </ul>
-            {p.guidance && p.guidance.length > 0 && (
-              <>
-                <p>What we also keep out of {inline} creative. This is our guidance, not {p.platform}’s wording:</p>
-                <ul>
-                  {p.guidance.map((x) => <li set:html={x} />)}
-                </ul>
-              </>
-            )}
+            <div class:list={['adv-sec', band === 'prohibited' && 'adv-band']} data-tone={band === 'prohibited' ? 'tint' : undefined}>
+              <h2 id="prohibited">What can’t <Fragment set:html={inlineHtml} /> ads say or show on {p.platform}?</h2>
+              <RuleTiers platform={p.platform} {inline} prohibited={p.prohibited} guidance={p.guidance} sources={p.sources} />
+            </div>
 
             <h2 id="requirements">Which disclaimers and landing-page rules apply?</h2>
             <div class="callout"><span class="cl-label">Requirements</span><Fragment set:html={p.requirements} /></div>
 
-            <h2 id="rejections">Why do {inline} ads get rejected on {p.platform}?</h2>
-            <ul class="xlist">
-              {p.rejectionReasons.map((x) => (
-                <li><span class="xk" set:html={xIcon} />{x}</li>
+            <h2 id="rejections">Why do <Fragment set:html={inlineHtml} /> ads get rejected on {p.platform}?</h2>
+            <ul class="adv-rejects">
+              {p.rejectionReasons.map((x, i) => (
+                <li data-reveal style={`--i:${i}`}><span class="adv-rejects__m" aria-hidden="true">✕</span><span>{x}</span></li>
               ))}
             </ul>
 
             <h2 id="enforcement">What happens when {p.platform} enforces these rules?</h2>
             <p set:html={p.enforcement} />
 
-            <h2 id="comply">How do compliant {inline} brands still advertise on {p.platform}?</h2>
-            <div class="callout" style="border-left:3px solid var(--green);background:linear-gradient(180deg,rgba(22,163,74,.04),transparent)"><span class="cl-label" style="color:var(--green)">The compliant path</span><Fragment set:html={p.howToComply} /></div>
+            <h2 id="comply">How do compliant <Fragment set:html={inlineHtml} /> brands still advertise on {p.platform}?</h2>
+            <div class="callout ok"><span class="cl-label">The compliant path</span><Fragment set:html={p.howToComply} /></div>
 
             {(p.sections ?? []).map((s) => (
               <>
@@ -202,22 +222,19 @@ const xIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-
               <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
             )}
 
-            <h2 id="faq">What else do {inline} brands ask about {p.platform} ads?</h2>
+            <h2 id="faq">What else do <Fragment set:html={inlineHtml} /> brands ask about {p.platform} ads?</h2>
             <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
 
             <h3>Sources</h3>
-            <p style="font-size:13px;color:var(--mute)">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
-            <ul style="font-size:14px">
+            <p class="adv-fine">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+            <ul class="adv-sources">
               {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
             </ul>
           </div>
         </div>
 
         <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-          </div>
+          <Toc items={toc} />
           <div class="aside-card">
             <h4>{p.vertical} on other platforms</h4>
             <div class="link-list">
@@ -239,7 +256,7 @@ const xIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-
             <a href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist →</a>
           </div>
           <div class="aside-card dark">
-            <h4 style="color:#fff">We clear this before you launch</h4>
+            <h4>We clear this before you launch</h4>
             <p>Every account and asset reviewed against live {p.platform} policy, so launches don’t get yanked.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>

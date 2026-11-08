@@ -1,21 +1,27 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import Video from '../../kit/components/Video.astro';
+import HeatMatrix from '../../kit/diagram/HeatMatrix.astro';
+import Compare from '../../kit/diagram/Compare.astro';
+import DecisionTree from '../../kit/diagram/DecisionTree.astro';
+import Flow from '../../kit/diagram/Flow.astro';
+import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, policyHref } from '../../components/adv/status';
 import { AD_POLICIES, platformOverview, RULES_CHECKED_ON, STATUS_LABEL, type Platform } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
 import { isLive } from '../../lib/live';
 import { breadcrumb } from '../../lib/schema';
+import '../../styles/pages/advertising.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'Health Ad Compliance Review by Platform (2026) | AdBoost';
 const description = 'Pre-launch compliance review for GLP-1, supplement, telehealth, TRT and med spa ads on Meta, Google and TikTok: certification, prohibited claims, rejections.';
-const badgeClass = (s: string) => s === 'allowed' ? 'green' : s === 'prohibited' ? 'red' : 'amber';
 // group by vertical for a clean matrix
 const verticals = [...new Map(AD_POLICIES.map((p) => [p.verticalSlug, { name: p.vertical, slug: p.verticalSlug }])).values()];
-const PLATFORMS: Platform[] = ['Meta', 'Google', 'TikTok'];
 const cell = (verticalSlug: string, platform: Platform) => AD_POLICIES.find((p) => p.verticalSlug === verticalSlug && p.platform === platform);
-// Column headers link each platform's overview (health plan O9, CN 3.4).
+// Platform overviews (health plan O9, CN 3.4).
 // Google's certification steps live on the telehealth sheet until /advertising/google/ is live.
 const metaHubLive = isLive('/advertising/meta/');
 const googleHubLive = isLive('/advertising/google/');
@@ -34,20 +40,64 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }]),
   { '@type': 'CollectionPage', name: 'Health ad compliance by platform and vertical', url: `${SITE}/advertising/` },
 ];
+
+// Hero aside: vertical x platform, every cell linked, its top rejection reason on hover and focus.
+const matrixRows = verticals.map((v) => ({
+  label: v.name,
+  cells: PLATFORMS.map((pl) => {
+    const c = cell(v.slug, pl);
+    return c ? { text: STATUS_LABEL[c.status], level: STATUS_TONE[c.status], href: policyHref(c), note: c.rejectionReasons[0] } : null;
+  }),
+}));
+
+// Meta, July 2026 (blog posts link #meta-july-2026 for "the full deleted and added text"):
+// every item verbatim, struck through on the left, the standard now on the right.
+const DELETED = [
+  'The ban on “Side-by-side comparison after the use of a product or transformation for weight loss” (with an exception for fitness classes such as Pilates).',
+  'The ban on “Side-by-side comparison after the use of a product or transformation for wrinkles treatment such as; Botox, dermal fillers, or any other anti-aging treatment.”',
+  'The line that anti-aging close-ups “should not include side-by-side comparisons”.',
+  'Every negative self-perception sentence, including “Ads must not imply or attempt to generate negative self-perception or declare there is a perfect body type or appearance one should aspire to”.',
+];
+const NOW = [
+  'Allowed for 18+: “General cosmetic products, procedures, surgeries depicting before and after transformation”, and cosmetic procedures including “dermal fillers”, “injectable treatments”, chemical peels, micro-needling and non-ablative laser treatments.',
+  'Allowed for 18+: dietary weight loss or weight gain products such as supplements or pills, where “The ad can illustrate people using the product or the service, and its impact of using it, and clearly indicate the time taken to achieve noticeable results.”',
+  'Banned for weight loss, weight gain and cosmetic ads: “statements of inferiority about physical appearance (i.e., terms, descriptions, or questions that are negative and attack an individual’s appearance, specific body parts, or hygiene)”.',
+  'Banned: claims to “cure, heal, or eliminate” an exhaustive list of incurable diseases (diabetes, herpes, thyroid, psoriasis, Ebola, cancer, autism, Alzheimer’s, Parkinson’s, ALS, HIV), not including claims about treating or managing symptoms.',
+  'Banned: clickbait, “such as sensational language with exaggerated or extreme claims, or promises of specific outcomes within a set timeframe without disclaimers or qualifiers”.',
+  'Banned in weight loss and gain ads: “Close up on specific body area by pinching fat” and “Claims that results can be achieved solely by using wearable products”.',
+  'Still required: 18+ targeting for dietary, health, weight loss or weight gain products and services, and for cosmetic products, procedures or surgeries. Meta exempts general wellbeing products such as fitness services, general food and protein products, non-permanent cosmetics such as creams and makeup, and dental products.',
+];
 ---
 <BaseLayout {title} {description} canonicalPath="/advertising/" {jsonLd} ogType="article">
-  <section class="phero wide">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>AD COMPLIANCE · 2026</span>
-      <h1>What’s allowed, by <span class="serif">platform</span> and vertical</h1>
-      <p class="phero-lede">Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch.</p>
+  <PageHero
+    class="adv-hero adv-hero--index"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]}
+    eyebrow="AD COMPLIANCE · 2026"
+    title='What’s allowed, by <span class="serif">platform</span> and vertical'
+    lede="Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch."
+    art="/art/advertising/hub"
+  >
+    <div slot="aside" class="adv-matrix">
+      <div class="adv-matrix__loop" aria-hidden="true">
+        <Video src="/art/advertising/hub-loop.mp4" webm="/art/advertising/hub-loop.webm" poster="/art/advertising/hub-loop-poster.webp" width={1280} height={720} />
+      </div>
+      <div class="adv-aside adv-matrix__card k-card k-card--glass">
+        <p class="adv-aside__label"><span class="adv-aside__dot" aria-hidden="true"></span>Status by vertical and platform</p>
+        <HeatMatrix
+          arrive
+          rowHeader="Vertical"
+          cols={[...PLATFORMS]}
+          rows={matrixRows}
+          legend={STATUS_LEGEND}
+          caption="Ad policy status by vertical and platform. Hover or focus a cell for its top rejection reason; each cell opens that rule sheet."
+        />
+      </div>
     </div>
-  </section>
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="iwrap adv-doc">
     <div class="container">
-      <div class="prose" style="max-width:820px">
+      <div class="prose adv-index">
         {metaHubLive ? (
           <div id="meta-july-2026">
             <h2>Meta Health and Wellness, July 2026: what changed</h2>
@@ -57,33 +107,37 @@ const jsonLd = [
           <>
             <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
             <p>Meta rewrote its <a href={MHW} target="_blank" rel="noopener">Health and Wellness ad standard</a> in July 2026. Its change log shows the deleted text struck through. Checked {checked}.</p>
-            <p><strong>Deleted from the standard:</strong></p>
-            <ul>
-              <li>The ban on “Side-by-side comparison after the use of a product or transformation for weight loss” (with an exception for fitness classes such as Pilates).</li>
-              <li>The ban on “Side-by-side comparison after the use of a product or transformation for wrinkles treatment such as; Botox, dermal fillers, or any other anti-aging treatment.”</li>
-              <li>The line that anti-aging close-ups “should not include side-by-side comparisons”.</li>
-              <li>Every negative self-perception sentence, including “Ads must not imply or attempt to generate negative self-perception or declare there is a perfect body type or appearance one should aspire to”.</li>
-            </ul>
-            <p><strong>In the standard now</strong> (<a href={MHW} target="_blank" rel="noopener">Meta’s current text</a>):</p>
-            <ul>
-              <li>Allowed for 18+: “General cosmetic products, procedures, surgeries depicting before and after transformation”, and cosmetic procedures including “dermal fillers”, “injectable treatments”, chemical peels, micro-needling and non-ablative laser treatments.</li>
-              <li>Allowed for 18+: dietary weight loss or weight gain products such as supplements or pills, where “The ad can illustrate people using the product or the service, and its impact of using it, and clearly indicate the time taken to achieve noticeable results.”</li>
-              <li>Banned for weight loss, weight gain and cosmetic ads: “statements of inferiority about physical appearance (i.e., terms, descriptions, or questions that are negative and attack an individual’s appearance, specific body parts, or hygiene)”.</li>
-              <li>Banned: claims to “cure, heal, or eliminate” an exhaustive list of incurable diseases (diabetes, herpes, thyroid, psoriasis, Ebola, cancer, autism, Alzheimer’s, Parkinson’s, ALS, HIV), not including claims about treating or managing symptoms.</li>
-              <li>Banned: clickbait, “such as sensational language with exaggerated or extreme claims, or promises of specific outcomes within a set timeframe without disclaimers or qualifiers”.</li>
-              <li>Banned in weight loss and gain ads: “Close up on specific body area by pinching fat” and “Claims that results can be achieved solely by using wearable products”.</li>
-              <li>Still required: 18+ targeting for dietary, health, weight loss or weight gain products and services, and for cosmetic products, procedures or surgeries. Meta exempts general wellbeing products such as fitness services, general food and protein products, non-permanent cosmetics such as creams and makeup, and dental products.</li>
-            </ul>
+            <Compare
+              arrive
+              variant="diff"
+              class="adv-diff"
+              caption="Meta’s July 2026 change to its Health and Wellness standard: what its change log struck through, and what the standard says now."
+              source={{ label: 'Meta’s current text', href: MHW }}
+              left={{ label: 'Deleted from the standard', items: DELETED }}
+              right={{ label: 'In the standard now', items: NOW }}
+            />
 
-            <h3 id="meta-which-standard">Health and Wellness vs Drugs and Pharmaceuticals: which standard applies?</h3>
-            <p>Meta’s Health and Wellness standard says: “For weight loss products that require prescription, please refer to Drugs and Pharmaceuticals ads policy and comply with the geo-targeting, and written permission requirements.” So a prescription weight-loss product, such as a GLP-1, follows the <a href={MDP} target="_blank" rel="noopener">Drugs and Pharmaceuticals standard</a>, which Meta last changed in February 2025:</p>
-            <ul>
-              <li>Online pharmacies and telehealth providers must be actively certified with LegitScript and must obtain authorization from Meta.</li>
-              <li>Ads may target only the United States, Canada or New Zealand, only the countries the advertiser is certified in, and only people 18 or older.</li>
-              <li>Ads that educate about prescription drugs or promote telehealth services generally need no written authorization.</li>
-              <li>The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated.</li>
-            </ul>
-            <p>Vertical by vertical: <a href="/advertising/med-spa-on-meta/">med spa</a>, <a href="/advertising/glp-1-on-meta/">GLP-1</a>, <a href="/advertising/supplements-on-meta/">supplements</a>, <a href="/advertising/trt-on-meta/">TRT</a> and <a href="/advertising/telehealth-on-meta/">telehealth</a> on Meta.</p>
+            <div class="adv-band" data-tone="tint">
+              <h3 id="meta-which-standard">Health and Wellness vs Drugs and Pharmaceuticals: which standard applies?</h3>
+              <DecisionTree
+                class="adv-tree"
+                caption="Which Meta standard a weight-loss ad follows, from the quoted Health and Wellness text below."
+                root={{
+                  q: 'Prescription weight-loss product?',
+                  yes: { result: 'Drugs and Pharmaceuticals', detail: 'LegitScript, authorization from Meta, the United States, Canada or New Zealand only, 18 or older', tone: 'accent' },
+                  no: { result: 'Health and Wellness', detail: '18+ targeting for dietary, health, weight loss or weight gain products and services', tone: 'ok' },
+                }}
+                note="The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated."
+              />
+              <p>Meta’s Health and Wellness standard says: “For weight loss products that require prescription, please refer to Drugs and Pharmaceuticals ads policy and comply with the geo-targeting, and written permission requirements.” So a prescription weight-loss product, such as a GLP-1, follows the <a href={MDP} target="_blank" rel="noopener">Drugs and Pharmaceuticals standard</a>, which Meta last changed in February 2025:</p>
+              <ul>
+                <li>Online pharmacies and telehealth providers must be actively certified with LegitScript and must obtain authorization from Meta.</li>
+                <li>Ads may target only the United States, Canada or New Zealand, only the countries the advertiser is certified in, and only people 18 or older.</li>
+                <li>Ads that educate about prescription drugs or promote telehealth services generally need no written authorization.</li>
+                <li>The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated.</li>
+              </ul>
+              <p>Vertical by vertical: <a href="/advertising/med-spa-on-meta/">med spa</a>, <a href="/advertising/glp-1-on-meta/">GLP-1</a>, <a href="/advertising/supplements-on-meta/">supplements</a>, <a href="/advertising/trt-on-meta/">TRT</a> and <a href="/advertising/telehealth-on-meta/">telehealth</a> on Meta.</p>
+            </div>
           </>
         )}
 
@@ -96,52 +150,49 @@ const jsonLd = [
           <>
             <h2 id="google-ads">Google Ads healthcare rules: drug terms and certification</h2>
             <p>Google’s <a href={G_TERMS} target="_blank" rel="noopener">restricted drug terms policy</a> lets ads and landing pages use prescription drug terms for promotion only in campaigns targeting Canada, New Zealand or the United States, and only certified advertisers may keyword-target them. Prescribing and pharmacy services need LegitScript and then Google certification; the steps, and Google’s 2026 telemedicine changes for New Zealand and Spain, are on the <a href="/advertising/telehealth-on-google/">telehealth on Google sheet</a>. Checked {checked}.</p>
+            <Flow
+              pulse
+              class="adv-flow"
+              caption="Prescribing and pharmacy services need LegitScript and then Google certification; only certified advertisers may keyword-target prescription drug terms."
+              nodes={[
+                { label: 'LegitScript', sub: 'Prescribing and pharmacy services' },
+                { label: 'Then Google certification', sub: 'The steps are on the telehealth on Google sheet', href: '/advertising/telehealth-on-google/' },
+                { label: 'Keyword-target prescription drug terms', sub: 'Only certified advertisers', tone: 'ok' },
+              ]}
+            />
           </>
         )}
 
         <h2 id="matrix">Status by vertical and platform</h2>
-        <div class="tablewrap">
-          <table class="dtable">
-            <thead>
-              <tr>
-                <th>Vertical</th>
-                {PLATFORMS.map((pl) => <th>{pl} <span style="font-weight:400;font-size:12px">(<a href={columnLink[pl].href}>{columnLink[pl].label}</a>)</span></th>)}
-              </tr>
-            </thead>
-            <tbody>
-              {verticals.map((v) => (
-                <tr>
-                  <td class="row-h">{v.name}</td>
-                  {PLATFORMS.map((pl) => {
-                    const c = cell(v.slug, pl);
-                    return <td>{c ? <a href={`/advertising/${c.slug}/`}><span class={`badge ${badgeClass(c.status)}`} style="white-space:nowrap">{STATUS_LABEL[c.status]}</span></a> : 'n/a'}</td>;
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <p class="adv-cols">
+          {PLATFORMS.map((pl) => <a href={columnLink[pl].href}><span class="adv-cols__k">{pl}</span>{columnLink[pl].label}</a>)}
+        </p>
       </div>
 
-      {verticals.map((v) => (
-        <div style="margin-bottom:28px" class="reveal">
-          <h2 class="sec-title" style="font-size:20px">{v.name}</h2>
-          <div class="grid-cards three" style="margin-top:14px">
-            {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p) => (
-              <a class="lcard" href={`/advertising/${p.slug}/`}>
-                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <div class="adv-groups">
+        {verticals.map((v) => (
+          <div class="adv-group">
+            <StatusStrip
+              compact
+              class="adv-group__strip"
+              title={v.name}
+              caption={`${v.name}: status on each platform.`}
+              items={PLATFORMS.map((pl) => cell(v.slug, pl)).filter((c): c is NonNullable<typeof c> => !!c).map((c) => ({ label: c.platform, status: STATUS_LABEL[c.status], level: STATUS_TONE[c.status] }))}
+            />
+            <div class="grid-cards three adv-cards">
+              {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p, i) => (
+                <a class="lcard adv-card" data-k-light href={policyHref(p)} data-level={STATUS_TONE[p.status]} data-reveal style={`--i:${i}`}>
                   <span class="lc-tag">{p.platform.toUpperCase()}</span>
-                  <span class={`badge ${badgeClass(p.status)}`}>{STATUS_LABEL[p.status]}</span>
-                </div>
-                <h3 style="font-size:16px">{p.vertical} on {p.platform}</h3>
-                <p>{p.rejectionReasons[0]}.</p>
-                <span class="lc-more">Read the rules →</span>
-              </a>
-            ))}
+                  <h3>{p.vertical} on {p.platform}</h3>
+                  <p>{p.rejectionReasons[0]}.</p>
+                  <span class="lc-more">Read the rules →</span>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
-      <div class="callout reveal" style="margin-top:8px">
+        ))}
+      </div>
+      <div class="callout reveal adv-bigger">
         <span class="cl-label">The bigger picture</span>
         For the FTC and FDA standards underneath these platform rules (structure/function claims, LegitScript, compounded GLP-1, health-data privacy), see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
       </div>

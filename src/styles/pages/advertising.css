@@ -1,0 +1,278 @@
+/* ============================================================
+   Ad compliance pages: /advertising/, the 15 rule sheets and the
+   platform hubs. Kit tokens only (src/kit/KIT.md). Prefix: adv-.
+   ============================================================ */
+
+/* ---------- status badge: the OG card mapping (components/adv/status.ts) ---------- */
+.adv-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 10px 3px 8px;
+  border: 1px solid;
+  border-radius: var(--k-r-pill);
+  font-family: var(--k-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.adv-badge i { flex: none; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.adv-badge[data-level="ok"] { color: var(--k-ok-ink); background: var(--k-ok-soft); border-color: color-mix(in srgb, var(--k-ok) 32%, transparent); }
+.adv-badge[data-level="warn"] { color: var(--k-warn-ink); background: var(--k-warn-soft); border-color: color-mix(in srgb, var(--k-warn) 42%, transparent); }
+.adv-badge[data-level="accent"] { color: var(--k-accent-ink); background: var(--k-accent-soft); border-color: var(--k-accent-line); }
+.adv-badge[data-level="bad"] { color: var(--k-bad-ink); background: var(--k-bad-soft); border-color: color-mix(in srgb, var(--k-bad) 30%, transparent); }
+
+/* ---------- hero ---------- */
+.adv-hero .phero-grid { align-items: center; }
+/* rule sheets and hubs: long H1s, a compact status card */
+@media (min-width: 1024px) {
+  .adv-hero:not(.adv-hero--index) .phero-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); }
+}
+.adv-hero .answer-box { max-width: 62ch; }
+.adv-hero .k-plate { --k-plate-o: 0.36; }
+
+/* the aside card (rule sheets, hubs, index matrix): glass over the art plate */
+.adv-aside {
+  isolation: isolate;
+  gap: var(--k-sp-4);
+  padding: 18px 18px 16px;
+  border-radius: var(--k-r-xl);
+  box-shadow: var(--k-e3), 0 30px 60px -34px var(--k-accent-glow);
+}
+.adv-aside__label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
+.adv-aside__dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--k-accent); box-shadow: 0 0 0 4px var(--k-accent-soft); }
+.adv-aside__foot {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--k-line);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--k-ink-3);
+}
+
+/* index: the matrix card, with the ambient loop glowing through and around it */
+.adv-matrix { position: relative; isolation: isolate; }
+.adv-matrix__loop {
+  position: absolute;
+  z-index: -1;
+  inset: -16% -14% -12%;
+  pointer-events: none;
+  opacity: 0.6;
+  -webkit-mask-image: radial-gradient(closest-side, #000 52%, transparent);
+  mask-image: radial-gradient(closest-side, #000 52%, transparent);
+}
+.adv-matrix__loop video.k-video { width: 100%; height: 100%; object-fit: cover; background: transparent; }
+@media (max-width: 1023px) { .adv-matrix__loop { display: none; } }
+.adv-hero--index h1 { max-width: 16ch; }
+@media (min-width: 1024px) {
+  .adv-hero--index .phero-grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; }
+}
+
+/* ---------- document ---------- */
+.prose .adv-overview { font-size: 14px; margin-top: 14px; }
+.prose .adv-checklist { margin-top: 14px; }
+.prose .adv-checklist ul { margin: 8px 0 6px; }
+.adv-checklist__src { font-size: 13px; }
+.prose .adv-fine { font-size: 13px; color: var(--k-ink-3); }
+.prose .adv-sources { font-size: 14px; }
+
+/* one full-bleed tint band per page: the certification Flow, else the two-tier rules.
+   It sits in the document column (which starts at the container's left edge); its paint
+   runs from screen edge to screen edge behind the sticky aside, computed, not overflowing. */
+.adv-band {
+  position: relative;
+  isolation: isolate;
+  /* the container width: the band starts at its left edge, so the paint reaches the screen edges exactly */
+  --adv-c: min(var(--k-container), 100vw - 2 * var(--k-gutter));
+  margin: 52px 0 40px;
+  padding: 44px 0 36px;
+}
+.adv-band::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: calc((var(--adv-c) - 100vw) / 2);
+  right: calc(100% - (100vw + var(--adv-c)) / 2);
+  background: linear-gradient(180deg, var(--k-paper) 0, var(--k-paper-2) 48px, var(--k-paper-2) calc(100% - 48px), var(--k-paper) 100%);
+}
+.adv-band::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: calc((var(--adv-c) - 100vw) / 2);
+  right: calc(100% - (100vw + var(--adv-c)) / 2);
+  pointer-events: none;
+  background-image: linear-gradient(var(--t-grid) 1px, transparent 1px), linear-gradient(90deg, var(--t-grid) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: 50% 0;
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 30%, #000 70%, transparent);
+}
+.prose .adv-band > :is(h2, h3):first-child { margin-top: 0; }
+.prose .adv-band > :last-child { margin-bottom: 0; }
+.prose .adv-band > .k-dg:first-of-type { margin-top: var(--k-sp-5); }
+
+/* the dated notes, and any change log: Timeline + source links */
+.prose .adv-log { margin: 0 0 var(--k-sp-6); }
+.prose .adv-log > figure.k-dg { margin-block: 0; }
+.prose .adv-srcline {
+  margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--k-ink-3);
+}
+.adv-srcline__k {
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--k-ls-mono);
+  text-transform: uppercase;
+}
+.adv-srcline__sep { color: var(--k-ink-4); }
+
+/* top rejection reasons: unranked cards (an unordered list, no numbers) */
+.doc-main > .prose .adv-rejects {
+  list-style: none;
+  margin: 18px 0 24px;
+  padding: 0;
+  max-width: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: 10px;
+}
+.prose .adv-rejects li {
+  position: relative;
+  overflow: clip;
+  margin: 0;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px 14px 18px;
+  background: var(--k-paper);
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-md);
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--k-ink-2);
+}
+.prose .adv-rejects li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: color-mix(in srgb, var(--k-bad) 70%, transparent);
+}
+.adv-rejects__m {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  font-size: 11px;
+  line-height: 1;
+  background: var(--k-bad-soft);
+  color: var(--k-bad-ink);
+}
+
+/* single-tier rules (a sheet with no guidance) */
+.prose .adv-xlist { max-width: none; }
+
+/* ---------- sidebar index: progress spine ---------- */
+.adv-toc__rail { position: relative; }
+.adv-toc__rail ul { position: relative; z-index: 1; }
+.aside-toc.adv-toc a { margin-left: 0; padding-left: 14px; }
+.adv-toc__track {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  bottom: 2px;
+  width: 2px;
+  border-radius: 2px;
+  overflow: clip;
+  background: var(--k-line);
+}
+.adv-toc__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--k-accent) 42%, transparent);
+}
+/* where scroll-driven CSS is missing, Toc.astro's fallback script drives the fill */
+@supports not (animation-timeline: view()) {
+  .js.motion .adv-toc__fill { scale: 1 0; }
+}
+
+/* ---------- index ---------- */
+.adv-index { max-width: 860px; }
+.prose .adv-cols { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; }
+.prose .adv-cols a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-pill);
+  background: var(--k-paper);
+  font-size: 13px;
+  color: var(--k-ink-2);
+  text-decoration: none;
+  transition: border-color var(--k-d-fast) var(--k-ease), color var(--k-d-fast) var(--k-ease);
+}
+.prose .adv-cols a:hover { border-color: var(--k-accent-line); color: var(--k-accent-ink); }
+.adv-cols__k {
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
+
+.adv-groups { display: grid; gap: clamp(36px, 5vw, 56px); margin-top: 32px; }
+.adv-group { display: grid; gap: 16px; }
+.adv-cards .lc-tag { display: inline-flex; align-items: center; gap: 8px; }
+.adv-cards .lc-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--k-line-3); }
+.adv-card[data-level="ok"] .lc-tag::before { background: var(--k-ok); }
+.adv-card[data-level="warn"] .lc-tag::before { background: var(--k-warn); }
+.adv-card[data-level="accent"] .lc-tag::before { background: var(--k-accent); }
+.adv-card[data-level="bad"] .lc-tag::before { background: var(--k-bad); }
+.adv-card h3 { font-size: 16px; }
+.adv-bigger { margin-top: 40px; }
+
+/* hyphenated words in headings ("GLP-1", "weight-loss") never break at the hyphen */
+.adv-nw { white-space: nowrap; }
+.adv-bigger a { color: var(--k-accent-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+@media (max-width: 560px) {
+  .adv-aside { padding: 14px 12px 12px; border-radius: var(--k-r-lg); }
+  .adv-matrix__card { padding-inline: 8px; margin-inline: calc(8px - var(--k-gutter)); }
+  .adv-matrix__card .adv-aside__label, .adv-matrix__card .adv-aside__foot { padding-inline: 4px; }
+}

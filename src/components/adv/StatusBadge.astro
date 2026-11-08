@@ -1,0 +1,11 @@
+---
+// A policy status badge, coloured by STATUS_TONE (the OG card mapping): allowed green,
+// restricted amber, requires certification blue, prohibited red. The label always
+// carries the meaning; the dot is decorative. Styles: src/styles/pages/advertising.css.
+import { STATUS_LABEL, type PolicyStatus } from '../../data/adPolicies';
+import { STATUS_TONE } from './status';
+
+interface Props { status: PolicyStatus; class?: string }
+const { status, class: cls } = Astro.props;
+---
+<span class:list={['adv-badge', cls]} data-level={STATUS_TONE[status]}><i aria-hidden="true"></i>{STATUS_LABEL[status]}</span>
