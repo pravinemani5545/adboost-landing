@@ -1,13 +1,16 @@
 ---
-// Visual FAQ accordion. Pair with faqPage() schema at the page level for AEO/GEO.
+// Visual FAQ: native <details>, so it opens without JS and the answers are in the HTML for
+// crawlers. Where ::details-content is supported the answer eases open (kit .k-disclosure).
+// Pair with faqPage() schema at the page level for AEO/GEO; the visible text and the JSON-LD
+// must stay word for word in sync. Answers accept trusted inline HTML (links).
 interface Props { items: { q: string; a: string }[]; idPrefix?: string; }
 const { items, idPrefix = 'faq' } = Astro.props;
 ---
-<div class="faq-list faq-block reveal">
+<div class="faq-list faq-block k-disclosure" data-reveal>
   {items.map((it, i) => (
-    <div class="qa">
-      <h3><button aria-expanded="false" aria-controls={`${idPrefix}-${i}`}>{it.q}<span class="plus"></span></button></h3>
-      <div class="ans" id={`${idPrefix}-${i}`}><div class="ans-inner" set:html={it.a} /></div>
-    </div>
+    <details class="qa" id={`${idPrefix}-${i}`}>
+      <summary><h3>{it.q}</h3><span class="plus" aria-hidden="true"></span></summary>
+      <div class="ans"><div class="ans-inner" set:html={it.a} /></div>
+    </details>
   ))}
 </div>

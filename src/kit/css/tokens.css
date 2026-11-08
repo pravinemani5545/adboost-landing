@@ -1,0 +1,181 @@
+/* Kit tokens: brand-agnostic scales (elevation, radii, spacing, type, motion, layers) and the
+   tone-local roles that components read. Brand colours, ink and paper come from the site's
+   site-tokens.css (the --k-accent*, --k-paper*, --k-ink*, --k-line*, --k-night*, status and
+   --k-shadow-rgb values). Kit CSS reads only --k-* and --t-*, never a site's legacy names.
+   The --k-* names are a frozen contract (see src/kit/KIT.md). */
+
+:root {
+  /* ---------- elevation ---------- */
+  --k-e1: 0 1px 2px rgb(var(--k-shadow-rgb) / 0.04), 0 1px 1px rgb(var(--k-shadow-rgb) / 0.03);
+  --k-e2: 0 14px 32px -14px rgb(var(--k-shadow-rgb) / 0.18), 0 6px 14px -8px rgb(var(--k-shadow-rgb) / 0.08);
+  --k-e3: 0 40px 80px -30px rgb(var(--k-shadow-rgb) / 0.28), 0 16px 32px -16px rgb(var(--k-shadow-rgb) / 0.14);
+  --k-e4: 0 40px 80px -30px rgb(var(--k-shadow-rgb) / 0.28), 0 16px 32px -16px rgb(var(--k-shadow-rgb) / 0.14), 0 0 0 1px rgb(var(--k-shadow-rgb) / 0.06);
+  --k-edge-light: inset 0 1px 0 rgb(255 255 255 / 0.6);
+  --k-edge-night: inset 0 1px 0 rgb(255 255 255 / 0.08);
+  --k-glow: 0 18px 44px -16px var(--k-accent-glow);
+
+  /* ---------- radii ---------- */
+  --k-r-xs: 6px;
+  --k-r-sm: 10px;
+  --k-r-md: 14px;
+  --k-r-lg: 22px;
+  --k-r-xl: 30px;
+  --k-r-pill: 999px;
+
+  /* ---------- spacing ---------- */
+  --k-sp-1: 4px;
+  --k-sp-2: 8px;
+  --k-sp-3: 12px;
+  --k-sp-4: 16px;
+  --k-sp-5: 24px;
+  --k-sp-6: 32px;
+  --k-sp-7: 48px;
+  --k-sp-8: 64px;
+  --k-sp-9: 96px;
+  --k-sp-10: 128px;
+  --k-section: clamp(64px, 9vw, 112px);
+  --k-section-sm: clamp(44px, 6vw, 72px);
+  --k-gutter: 24px;
+  --k-measure: 68ch;
+  --k-nav-h: 68px;
+
+  /* ---------- type ---------- */
+  --k-font-sans: "Geist", "Geist Fallback", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --k-font-serif: "Instrument Serif", "Instrument Serif Fallback", Georgia, serif;
+  --k-font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --k-fs-display: clamp(44px, 7vw, 96px);
+  --k-fs-h1: clamp(36px, 5.2vw, 64px);
+  --k-fs-h2: clamp(30px, 4.4vw, 56px);
+  --k-fs-h3: clamp(19px, 1.6vw, 22px);
+  --k-fs-lede: clamp(16px, 1.3vw, 19px);
+  --k-fs-body: 16.5px;
+  --k-fs-ui: 14px;
+  --k-fs-small: 13.5px;
+  --k-fs-micro: 11px;
+  --k-lh-tight: 1.04;
+  --k-lh-snug: 1.3;
+  --k-lh-body: 1.65;
+  --k-ls-display: -0.04em;
+  --k-ls-mono: 0.16em;
+  /* Geist Mono ships 400 and 500 only: never ask the mono for more than 500 */
+
+  /* ---------- durations ---------- */
+  --k-d-instant: 90ms;
+  --k-d-fast: 160ms;
+  --k-d-base: 240ms;
+  --k-d-slow: 420ms;
+  --k-d-reveal: 600ms;
+  --k-d-draw: 1100ms;
+  --k-d-count: 1300ms;
+  --k-d-vt: 240ms;
+  --k-stagger: 60ms;
+
+  /* ---------- easings ---------- */
+  --k-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --k-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --k-ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+  /* ---------- springs ----------
+     Each curve is a real damped spring sampled into linear(), so the overshoot is baked into the
+     curve. A curve and its duration belong together (shortening the time re-shapes the spring),
+     so always use the pair.
+       soft    k200/c20  4.3% overshoot  entrances with travel >= 24px
+       snap    k400/c30  2.8%            disclosure, chevrons, hover shifts
+       settle  k300/c35  none            opacity, and anything that must not bounce
+       bounce  k250/c16  15.8%           tiny travel only (number nudge, press release)
+       air     k120/c16  3.5%            big headlines
+     Bezier stand-ins here; the real curves follow under @supports. */
+  --k-spring-soft: cubic-bezier(0.22, 1.2, 0.36, 1);
+  --k-spring-snap: cubic-bezier(0.2, 1.1, 0.3, 1);
+  --k-spring-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --k-spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --k-spring-air: cubic-bezier(0.2, 1.15, 0.35, 1);
+  --k-t-soft: 0.7s;
+  --k-t-snap: 0.4s;
+  --k-t-settle: 0.53s;
+  --k-t-bounce: 0.8s;
+  --k-t-air: 0.72s;
+
+  /* ---------- z-index ---------- */
+  --k-z-below: -1;
+  --k-z-raised: 1;
+  --k-z-sticky: 30;
+  --k-z-mcta: 40;
+  --k-z-scrim: 45;
+  --k-z-nav: 50;
+  --k-z-sheet: 55;
+  --k-z-panel: 60;
+  --k-z-popup: 90;
+  --k-z-skip: 200;
+}
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --k-spring-soft: linear(0, 0.034 2.9%, 0.1186 5.7%, 0.2319 8.6%, 0.3573 11.4%, 0.4828 14.3%, 0.6005 17.1%, 0.7053 20%, 0.7948 22.9%, 0.8682 25.7%, 0.9261 28.6%, 0.9698 31.4%, 1.001 34.3%, 1.022 37.1%, 1.043 45%, 1.04 50%, 1.032 55%, 1.022 60%, 1.014 65%, 1.007 70%, 1.003 75%, 0.9999 80%, 0.9986 85%, 0.9981 90%, 0.9982 95%, 1);
+    --k-spring-snap: linear(0, 0.0233 2.9%, 0.0828 5.7%, 0.1655 8.6%, 0.2609 11.4%, 0.3611 14.3%, 0.4604 17.1%, 0.5547 20%, 0.6412 22.9%, 0.7184 25.7%, 0.7855 28.6%, 0.8427 31.4%, 0.8901 34.3%, 0.9287 37.1%, 0.9962 45%, 1.017 50%, 1.026 55%, 1.028 60%, 1.026 65%, 1.022 70%, 1.017 75%, 1.012 80%, 1.008 85%, 1.005 90%, 1.003 95%, 1);
+    --k-spring-settle: linear(0, 0.0289 2.9%, 0.0975 5.7%, 0.1857 8.6%, 0.2809 11.4%, 0.3751 14.3%, 0.4638 17.1%, 0.5444 20%, 0.616 22.9%, 0.6786 25.7%, 0.7325 28.6%, 0.7784 31.4%, 0.8172 34.3%, 0.8498 37.1%, 0.9137 45%, 0.9399 50%, 0.9583 55%, 0.9713 60%, 0.9803 65%, 0.9865 70%, 0.9908 75%, 0.9937 80%, 0.9957 85%, 0.9971 90%, 0.998 95%, 1);
+    --k-spring-bounce: linear(0, 0.0574 2.9%, 0.1992 5.7%, 0.3843 8.6%, 0.5793 11.4%, 0.76 14.3%, 0.9114 17.1%, 1.026 20%, 1.103 22.9%, 1.145 25.7%, 1.158 28.6%, 1.151 31.4%, 1.129 34.3%, 1.1 37.1%, 1.021 45%, 0.99 50%, 0.9764 55%, 0.976 60%, 0.9826 65%, 0.9911 70%, 0.9981 75%, 1.002 80%, 1.004 85%, 1.004 90%, 1.002 95%, 1);
+    --k-spring-air: linear(0, 0.0221 2.9%, 0.0792 5.7%, 0.1591 8.6%, 0.2522 11.4%, 0.3509 14.3%, 0.4495 17.1%, 0.5439 20%, 0.6312 22.9%, 0.7099 25.7%, 0.7789 28.6%, 0.8381 31.4%, 0.8877 34.3%, 0.9282 37.1%, 1 45%, 1.023 50%, 1.033 55%, 1.035 60%, 1.032 65%, 1.027 70%, 1.021 75%, 1.015 80%, 1.01 85%, 1.006 90%, 1.003 95%, 1);
+  }
+}
+@media (max-width: 760px) {
+  :root { --k-gutter: 16px; --k-nav-h: 60px; }
+}
+
+/* ---------- tones ----------
+   Components read these roles, so the same card or diagram works on paper, tint and night.
+   fg = headings, fg-2 = body copy, fg-3 = muted copy and captions (AA on its own background). */
+:root,
+.k-tone-paper,
+[data-tone="paper"] {
+  --t-bg: var(--k-paper);
+  --t-fg: var(--k-ink);
+  --t-fg-2: var(--k-ink-2);
+  --t-fg-3: var(--k-ink-3);
+  --t-line: var(--k-line);
+  --t-line-2: var(--k-line-2);
+  --t-accent: var(--k-accent-ink);
+  --t-card: var(--k-paper);
+  --t-card-line: var(--k-line);
+  --t-btn-bg: var(--k-accent);
+  --t-btn-fg: var(--k-accent-on);
+  --t-glow: color-mix(in srgb, var(--k-accent) 7%, transparent);
+  --t-dot: rgb(var(--k-shadow-rgb) / 0.13);
+  --t-grid: rgb(var(--k-shadow-rgb) / 0.04);
+  --t-wd-lo: 0.6;
+}
+.k-tone-tint,
+[data-tone="tint"] {
+  --t-bg: var(--k-paper-2);
+  --t-fg: var(--k-ink);
+  --t-fg-2: var(--k-ink-2);
+  --t-fg-3: var(--k-ink-3);
+  --t-line: var(--k-line);
+  --t-line-2: var(--k-line-2);
+  --t-accent: var(--k-accent-ink);
+  --t-card: var(--k-paper);
+  --t-card-line: var(--k-line);
+  --t-btn-bg: var(--k-accent);
+  --t-btn-fg: var(--k-accent-on);
+  --t-glow: color-mix(in srgb, var(--k-accent) 7%, transparent);
+  --t-dot: rgb(var(--k-shadow-rgb) / 0.14);
+  --t-grid: rgb(var(--k-shadow-rgb) / 0.045);
+  --t-wd-lo: 0.6;
+}
+.k-tone-night,
+[data-tone="night"] {
+  --t-bg: var(--k-night);
+  --t-fg: var(--k-on-night);
+  --t-fg-2: rgb(255 255 255 / 0.8);
+  --t-fg-3: var(--k-on-night-2);
+  --t-line: rgb(255 255 255 / 0.1);
+  --t-line-2: rgb(255 255 255 / 0.18);
+  --t-accent: var(--k-accent-bright);
+  --t-card: rgb(255 255 255 / 0.04);
+  --t-card-line: rgb(255 255 255 / 0.1);
+  --t-btn-bg: var(--k-accent);
+  --t-btn-fg: var(--k-accent-on);
+  --t-glow: rgb(255 255 255 / 0.075);
+  --t-dot: rgb(255 255 255 / 0.14);
+  --t-grid: rgb(255 255 255 / 0.03);
+  --t-wd-lo: 0.5;
+}

@@ -219,9 +219,37 @@ const minifyInlineScripts = {
   },
 };
 
+// Markdown tables (blog posts): one table look site-wide. Each table gets the .dtable class and
+// a .tablewrap wrapper that scrolls on phones instead of crushing the columns. No dependencies:
+// a plain walk over the hast tree.
+function rehypeTableWrap() {
+  const visit = (node) => {
+    if (!node.children) return;
+    node.children = node.children.map((c) => {
+      if (c.type === 'element' && c.tagName === 'table') {
+        const cls = [].concat(c.properties?.className ?? []);
+        c.properties = { ...c.properties, className: [...cls, 'dtable'] };
+        return { type: 'element', tagName: 'div', properties: { className: ['tablewrap'] }, children: [c] };
+      }
+      visit(c);
+      return c;
+    });
+  };
+  return (tree) => visit(tree);
+}
+
 export default defineConfig({
   site: SITE,
   devToolbar: { enabled: false },
+  // Hover (and focus) prefetch for every internal link. Prefetch only: never prerender (t.js would
+  // log a pageview for a page that was never opened), so no experimental clientPrerender and no
+  // <ClientRouter/>. Touch devices get speculation-rules prefetch from KitHead instead.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
+  markdown: { rehypePlugins: [rehypeTableWrap] },
+  vite: {
+    // esbuild, not Lightning CSS: Lightning CSS drops animation-timeline (scroll-driven motion).
+    build: { cssMinify: 'esbuild' },
+  },
   integrations: [
     sitemap({
       filter: (page) => inSitemap(new URL(page).pathname),

@@ -1,10 +1,9 @@
 ---
-import Fonts from '../components/Fonts.astro';
-import NewsletterPopup from '../components/NewsletterPopup.astro';
-import '../styles/global.css';
-import '../styles/interior.css';
+// Blog index and posts. A thin wrapper over the Shell (skip link, nav, #main, phone CTA, footer);
+// the Props API and the article markup are unchanged.
+import Shell from './Shell.astro';
 import { versioned } from '../lib/assets';
-import { BOOK_PATH, NAV, SISTER } from '../lib/site';
+import { BOOK_PATH } from '../lib/site';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 
@@ -122,85 +121,17 @@ const displayTitle = title.replace(/ \| AdBoost Health$/, '');
 const category = post?.tags[0]?.toUpperCase();
 ---
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{metaTitle}</title>
-<meta name="description" content={description} />
-<meta name="theme-color" content="#ffffff" />
-<link rel="canonical" href={canonical} />
-<meta property="og:type" content={post ? 'article' : 'website'} />
-<meta property="og:title" content={metaTitle} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={canonical} />
-<meta property="og:site_name" content="AdBoost Health" />
-<meta property="og:image" content={ogImage} />
-<meta property="og:image:alt" content={post?.heroAlt ?? title} />
-{post && <meta property="article:published_time" content={post.pubDate.toISOString()} />}
-{post && <meta property="article:author" content={post.author} />}
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={metaTitle} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-<meta name="twitter:image:alt" content={post?.heroAlt ?? title} />
-<link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${site}/rss.xml`} />
-<link rel="sitemap" href="/sitemap-index.xml" />
-<Fonts />
-<link rel="preconnect" href="https://admin.adboost.health" />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-<script defer src="https://admin.adboost.health/t.js"></script>
-</head>
-<body>
-
-<nav class="nav scrolled" id="nav">
-  <div class="container nav-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
-    </a>
-    <div class="nav-links" id="navLinks">
-      {NAV.map((item) => (
-        item.children ? (
-          <div class="nav-group">
-            <a href={item.href} class="nav-top">{item.label}
-              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <div class="nav-menu">
-              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
-            </div>
-          </div>
-        ) : (
-          <a href={item.href} class={item.external ? 'nav-top nav-ext' : 'nav-top'} {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && <Fragment set:html={`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:4px;opacity:.55;vertical-align:-1px"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />}</a>
-        )
-      ))}
-    </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <a class="btn btn-primary" href={BOOK_PATH}>
-        Book a call
-        <span class="chev">
-          <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-      </a>
-      <button class="nav-burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-  </div>
-</nav>
-<div class="mnav" id="mnav">
-  {NAV.map((item) => (
-    <>
-      <a href={item.href} class="mnav-top" {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && ' ↗'}</a>
-      {item.children && <div class="mnav-sub">{item.children.map((c) => <a href={c.href}>{c.label}</a>)}</div>}
-    </>
-  ))}
-</div>
-
-<main class="blog-main">
+<Shell
+  title={metaTitle}
+  {description}
+  {canonical}
+  ogType={post ? 'article' : 'website'}
+  ogImage={post?.heroImage ? ogImage : undefined}
+  ogImageAlt={post?.heroAlt ?? title}
+  article={post ? { publishedTime: post.pubDate.toISOString(), author: post.author } : undefined}
+  {jsonLd}
+  mainClass="blog-main"
+>
   {post ? (
     <article class="blog-article">
       <header class="post-head container">
@@ -222,12 +153,12 @@ const category = post?.tags[0]?.toUpperCase();
       </header>
 
       {post.heroImage && (
-        <div class="hero-figure container">
+        <div class="hero-figure container" data-mcta-anchor>
           <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" />
         </div>
       )}
 
-      <div class="prose container">
+      <div class="prose prose--doc container">
         <slot />
       </div>
 
@@ -267,48 +198,10 @@ const category = post?.tags[0]?.toUpperCase();
       <slot />
     </div>
   )}
-</main>
-
-<a class="mobile-cta" id="mcta" href={BOOK_PATH} aria-label="Book a free strategy call">
-  <span>Book a free strategy call</span>
-  <span class="m-chev"><svg width="10" height="10" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-</a>
-
-<footer>
-  <div class="container">
-    <div class="foot">
-      <div class="foot-brand">
-        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span style="color:rgba(255,255,255,.5);font-weight:400">Health</span></span></a>
-        <p class="about">Growth marketing built exclusively for health, telehealth, supplement & wellness brands.</p>
-      </div>
-      <div class="foot-proof">
-        <p class="foot-label">BY THE NUMBERS</p>
-        <ul>
-          <li><b>71+</b><span>founders served</span></li>
-          <li><b>4.9 / 5</b><span>average rating</span></li>
-          <li><b>$153M+</b><span>tracked revenue</span></li>
-        </ul>
-      </div>
-      <div class="foot-contact">
-        <p class="foot-label">GET IN TOUCH</p>
-        <ul>
-          <li><a href={BOOK_PATH}>Book a strategy call</a></li>
-          <li><a href="mailto:hello@adboost.health">hello@adboost.health</a></li>
-          <li><a href="/newsletter/">Newsletter</a></li>
-          <li><a href={SISTER.href} target="_blank" rel="noopener">AdBoost Media ↗</a></li>
-          <li><span class="foot-loc">Toronto · Remote-first</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="legal">
-      <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
-    </div>
-  </div>
-</footer>
+</Shell>
 
 <style is:global>
-  .blog-main { padding: 108px 0 90px; }
+  .blog-main { padding: calc(var(--k-nav-h) + 40px) 0 90px; }
 
   /* --- centered post header (reference format) --- */
   .post-head { max-width: 760px; text-align: center; }
@@ -330,21 +223,6 @@ const category = post?.tags[0]?.toUpperCase();
   .hero-figure { max-width: 980px; margin-bottom: 48px; }
   .hero-figure img { width: 100%; height: auto; border-radius: var(--radius-lg); border: 1px solid var(--line); box-shadow: var(--shadow); }
 
-  /* --- article column --- */
-  .prose { max-width: 720px; font-size: 16.5px; line-height: 1.72; color: var(--ink-2); }
-  .prose h2 { font-size: clamp(21px, 2.6vw, 27px); letter-spacing: -.02em; line-height: 1.25; font-weight: 600; color: var(--ink); margin: 44px 0 14px; }
-  .prose h3 { font-size: 18px; font-weight: 600; color: var(--ink); margin: 30px 0 10px; }
-  .prose p { margin: 0 0 18px; }
-  .prose ul, .prose ol { margin: 0 0 18px; padding-left: 24px; }
-  .prose li { margin-bottom: 8px; }
-  .prose a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
-  .prose blockquote { background: var(--blue-soft); border: 1px solid #d8e6ff; border-radius: var(--radius); margin: 26px 0; padding: 16px 20px; color: var(--ink-2); }
-  .prose blockquote p:last-child { margin-bottom: 0; }
-  .prose table { width: 100%; border-collapse: collapse; margin: 26px 0; font-size: 14.5px; }
-  .prose th, .prose td { text-align: left; padding: 10px 14px; border: 1px solid var(--line); }
-  .prose th { background: var(--surface); font-weight: 600; color: var(--ink); }
-  .prose strong { color: var(--ink); }
-
   /* --- blue gradient CTA banner (reference format) --- */
   .cta-banner-wrap { max-width: 980px; margin-top: 56px; }
   .cta-banner { display: flex; align-items: center; justify-content: space-between; gap: 26px; flex-wrap: wrap; background: linear-gradient(120deg, #0057ff 0%, #3b7bff 100%); border-radius: var(--radius-lg); padding: 34px 38px; box-shadow: 0 24px 48px -20px var(--blue-glow); }
@@ -359,8 +237,7 @@ const category = post?.tags[0]?.toUpperCase();
   .related { max-width: 980px; margin-top: 64px; }
   .related > h2 { font-size: 22px; letter-spacing: -.02em; font-weight: 600; color: var(--ink); margin-bottom: 22px; }
   .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
-  .related-card { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; transition: transform .18s ease, box-shadow .22s ease, border-color .2s; }
-  .related-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--line-2); }
+  .related-card { display: flex; flex-direction: column; overflow: clip; }
   .related-card img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid var(--line); }
   .related-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .related-body h3 { font-size: 16px; letter-spacing: -.01em; line-height: 1.3; font-weight: 600; color: var(--ink); }
@@ -373,58 +250,15 @@ const category = post?.tags[0]?.toUpperCase();
     .related-grid { gap: 18px; }
   }
 
-  /* --- mobile --- */
-  @media (max-width: 760px) {
-    /* markdown tables scroll inside their own container instead of crushing */
-    .prose table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; border-collapse: collapse; }
-    .prose th, .prose td { min-width: 138px; }
-    .prose th:first-child, .prose td:first-child { min-width: 42px; }
-  }
-
   @media (max-width: 640px) {
-    .blog-main { padding-top: 96px; }
+    .blog-main { padding-top: calc(var(--k-nav-h) + 36px); }
     .post-head h1 { font-size: clamp(26px, 7.2vw, 34px); }
     .byline { flex-wrap: wrap; row-gap: 6px; }
     .byline-sep { display: none; }
     .byline-date { width: 100%; text-align: center; }
     .hero-figure img { border-radius: var(--radius); }
-    .prose { font-size: 15.5px; line-height: 1.68; }
-    .prose h2 { font-size: 21px; }
     .cta-banner { padding: 28px 22px; text-align: center; justify-content: center; }
     .cta-banner-text p { margin-inline: auto; }
     .related { margin-top: 48px; }
   }
 </style>
-
-<script is:inline>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav.classList.add('scrolled'), { passive: true });
-
-  // mobile menu
-  const burger = document.getElementById('burger');
-  const mnav = document.getElementById('mnav');
-  if (burger && mnav) {
-    burger.addEventListener('click', () => {
-      const open = mnav.classList.toggle('open');
-      burger.setAttribute('aria-expanded', String(open));
-    });
-    mnav.addEventListener('click', (e) => { if (e.target.tagName === 'A') mnav.classList.remove('open'); });
-  }
-
-  // mobile sticky CTA: show once past the header area, hide over the CTA banner (if present)
-  const mcta = document.getElementById('mcta');
-  const heroRef = document.querySelector('.hero-figure') || document.querySelector('.byline') || document.querySelector('.blog-head') || document.querySelector('h1');
-  const banner = document.querySelector('.cta-banner');
-  if (mcta && heroRef) {
-    let past = false, over = false;
-    const update = () => mcta.classList.toggle('show', past && !over);
-    new IntersectionObserver(([e]) => {
-      past = !e.isIntersecting && e.boundingClientRect.top < 0; update();
-    }, { threshold: 0 }).observe(heroRef);
-    if (banner) new IntersectionObserver(([e]) => { over = e.isIntersecting; update(); }, { threshold: 0 }).observe(banner);
-  }
-</script>
-
-<NewsletterPopup />
-</body>
-</html>

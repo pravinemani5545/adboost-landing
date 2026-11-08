@@ -1,0 +1,42 @@
+---
+// The kit's pre-paint gate. Inline in <head>, before any stylesheet paints, it sets on <html>:
+//   js        always (the page has JS)
+//   motion    unless the visitor prefers reduced motion; every hidden state needs it
+//   lowpower  4 cores or fewer, 4GB memory or less, or Save-Data: lighter effects
+//   pre       while the page is being prerendered (removed on prerenderingchange)
+// It adds speculation rules that PREFETCH (never prerender: a prerendered page would run the
+// tracker and log a pageview for a page that may never be opened) on touch devices, where
+// Astro's hover prefetch cannot help. And a failsafe: if the kit script has not set
+// window.__kitReady within 3s of DOMContentLoaded, motion is removed so nothing stays hidden.
+---
+<script is:inline>
+  (function () {
+    var d = document.documentElement, c = d.classList, n = navigator;
+    var mm = function (q) { return window.matchMedia(q).matches; };
+    c.add('js');
+    if (!mm('(prefers-reduced-motion: reduce)')) c.add('motion');
+    if ((n.hardwareConcurrency || 8) <= 4 || (n.deviceMemory || 8) <= 4 || (n.connection && n.connection.saveData)) c.add('lowpower');
+    if (document.prerendering) {
+      c.add('pre');
+      document.addEventListener('prerenderingchange', function () { c.remove('pre'); }, { once: true });
+    }
+    if (!mm('(hover: hover) and (pointer: fine)') && window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+      var s = document.createElement('script');
+      s.type = 'speculationrules';
+      s.textContent = JSON.stringify({
+        prefetch: [{
+          where: { and: [
+            { href_matches: '/*' },
+            { not: { href_matches: '/' } },
+            { not: { selector_matches: '[download], [target]' } }
+          ] },
+          eagerness: 'conservative'
+        }]
+      });
+      document.head.appendChild(s);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () { if (!window.__kitReady) c.remove('motion'); }, 3000);
+    });
+  })();
+</script>

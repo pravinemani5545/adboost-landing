@@ -1,0 +1,318 @@
+/* Kit chrome: base, skip link, nav with disclosure menus, phone sheet and scrim, sticky phone CTA,
+   footer curtain, native disclosures and page transitions. Colour comes from tokens only; the
+   site's components supply the brand mark and copy. */
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--k-paper);
+}
+body {
+  margin: 0;
+  background: var(--k-paper);
+  color: var(--k-ink);
+  font-family: var(--k-font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html.scroll-locked { overflow: hidden; }
+[id] { scroll-margin-top: calc(var(--k-nav-h) + 16px); }
+:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+:is(.k-tone-night, [data-tone="night"]) :focus-visible { outline-color: var(--k-accent-bright); }
+::selection { background: var(--k-accent); color: var(--k-accent-on); }
+.k-vh {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* ---------- skip link: the first stop on every page ---------- */
+.k-skip {
+  position: fixed;
+  left: 12px;
+  top: 12px;
+  z-index: var(--k-z-skip);
+  padding: 10px 16px;
+  border-radius: var(--k-r-sm);
+  background: var(--k-ink);
+  color: var(--k-paper);
+  font-size: var(--k-fs-small);
+  font-weight: 500;
+  translate: 0 -160%;
+  transition: translate var(--k-d-fast) var(--k-ease);
+}
+.k-skip:focus-visible { translate: none; outline: 2px solid var(--k-accent); outline-offset: 2px; }
+
+/* ---------- nav ---------- */
+.k-nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: var(--k-z-nav);
+  color: var(--k-ink-2);
+}
+/* glass on ::before (a backdrop-filter on the nav would break the fixed phone sheet) */
+.k-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(255 255 255 / 0.78);
+  -webkit-backdrop-filter: blur(14px) saturate(1.8);
+  backdrop-filter: blur(14px) saturate(1.8);
+  border-bottom: 1px solid var(--k-line);
+  transition: opacity var(--k-d-base) var(--k-ease), box-shadow var(--k-d-base) var(--k-ease);
+}
+.k-nav.elevated::before { box-shadow: 0 8px 24px -18px rgb(var(--k-shadow-rgb) / 0.25); }
+/* home: clear over the hero until the page scrolls (or a menu opens) */
+.k-nav[data-top="clear"]:not(.scrolled)::before { opacity: 0; }
+html.k-sheet-open .k-nav::before { opacity: 1; }
+.lowpower .k-nav::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--k-paper); }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .k-nav::before { background: var(--k-paper); }
+}
+.k-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--k-sp-4);
+  height: var(--k-nav-h);
+}
+.k-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.k-nav__links > li { display: flex; align-items: center; }
+.k-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 7px;
+  font-size: 13.5px;
+  color: inherit;
+  white-space: nowrap;
+  transition: color var(--k-d-fast) var(--k-ease);
+}
+.k-nav__link:hover, .k-nav__link[aria-current="page"] { color: var(--k-accent-ink); }
+.k-nav__link svg { opacity: 0.55; }
+.k-nav__actions { display: flex; align-items: center; gap: 10px; }
+/* disclosure groups: the label links to the hub, the caret button opens its menu */
+.k-nav__group { position: relative; }
+.k-nav__toggle {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 32px;
+  margin-left: -6px;
+  border-radius: var(--k-r-xs);
+  color: inherit;
+}
+.k-nav__toggle svg { opacity: 0.55; transition: rotate var(--k-t-snap) var(--k-spring-snap); }
+.k-nav__toggle[aria-expanded="true"] svg { rotate: 180deg; opacity: 0.9; }
+.k-nav__group:hover > .k-nav__link,
+.k-nav__toggle[aria-expanded="true"] { color: var(--k-accent-ink); }
+.k-menu {
+  position: absolute;
+  top: calc(100% - 2px);
+  left: -12px;
+  z-index: var(--k-z-panel);
+  min-width: 228px;
+  padding: 8px;
+  display: grid;
+  gap: 2px;
+  background: var(--k-paper);
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-md);
+  box-shadow: var(--k-e3), var(--k-edge-light);
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 6px;
+  transition:
+    opacity var(--k-d-fast) var(--k-ease),
+    translate var(--k-t-snap) var(--k-spring-snap),
+    visibility 0s linear var(--k-d-fast);
+}
+.k-menu a {
+  display: block;
+  padding: 9px 12px;
+  border-radius: var(--k-r-sm);
+  font-size: 13.5px;
+  color: var(--k-ink-2);
+  transition: background-color var(--k-d-instant), color var(--k-d-instant);
+}
+.k-menu a:hover, .k-menu a:focus-visible { background: var(--k-paper-2); color: var(--k-accent-ink); }
+.k-nav__group.is-open > .k-menu,
+html:not(.js) .k-nav__group:is(:hover, :focus-within) > .k-menu {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+  transition-delay: 0s;
+}
+.k-nav__ext { white-space: nowrap; }
+@media (max-width: 960px) { .k-nav__links .k-nav__ext { display: none; } }
+
+/* burger: phones only */
+.k-burger {
+  display: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid var(--k-line);
+  background: rgb(255 255 255 / 0.7);
+  color: var(--k-ink);
+}
+.k-burger:active { scale: 0.96; }
+.k-burger .k-burger__close { display: none; }
+.k-burger[aria-expanded="true"] .k-burger__open { display: none; }
+.k-burger[aria-expanded="true"] .k-burger__close { display: block; }
+html:not(.js) .k-burger { display: none !important; }
+@media (max-width: 760px) {
+  .k-nav__links { display: none; }
+  .k-burger { display: grid; }
+}
+
+/* ---------- phone sheet ---------- */
+.k-sheet {
+  position: fixed;
+  inset: var(--k-nav-h) 0 auto 0;
+  z-index: var(--k-z-sheet);
+  max-height: calc(100dvh - var(--k-nav-h));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 6px var(--k-gutter) 22px;
+  background: var(--k-paper);
+  border-bottom: 1px solid var(--k-line);
+  box-shadow: var(--k-e3);
+  visibility: hidden;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 320ms var(--k-ease-out), visibility 0s linear 320ms;
+}
+.k-sheet.is-open {
+  visibility: visible;
+  clip-path: inset(0);
+  transition: clip-path 320ms var(--k-ease-out), visibility 0s;
+}
+.k-sheet__item { border-bottom: 1px solid var(--k-paper-3); }
+.k-sheet__item:last-child { border-bottom: 0; }
+.k-sheet__top {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 6px 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--k-ink);
+}
+.k-sheet__sub { display: flex; flex-wrap: wrap; gap: 0 14px; padding: 0 8px 10px; }
+.k-sheet__sub a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  font-size: 13.5px;
+  color: var(--k-ink-3);
+}
+.k-sheet a:hover { color: var(--k-accent-ink); }
+.js.motion .k-sheet__item {
+  opacity: 0;
+  translate: 0 8px;
+  transition: opacity 200ms var(--k-ease), translate 320ms var(--k-ease-out);
+}
+.js.motion .k-sheet.is-open .k-sheet__item {
+  opacity: 1;
+  translate: 0 0;
+  transition-delay: calc(var(--i, 0) * 30ms + 60ms);
+}
+.k-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--k-z-scrim);
+  background: rgb(var(--k-shadow-rgb) / 0.32);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 200ms var(--k-ease), visibility 0s linear 200ms;
+}
+.k-scrim.is-open { opacity: 1; visibility: visible; transition: opacity 200ms var(--k-ease), visibility 0s; }
+@media (min-width: 761px) { .k-sheet, .k-scrim { display: none; } }
+
+/* ---------- sticky phone CTA ---------- */
+.k-mcta {
+  display: none;
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: var(--k-z-mcta);
+  height: 52px;
+  padding: 0 22px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--k-accent);
+  color: var(--k-accent-on);
+  border-radius: var(--k-r-pill);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  box-shadow: 0 18px 32px -10px var(--k-accent-glow), 0 8px 16px -6px rgb(var(--k-shadow-rgb) / 0.22);
+  translate: 0 calc(100% + 32px);
+  opacity: 0;
+  pointer-events: none;
+  transition: translate 0.45s var(--k-spring-snap), opacity 0.3s var(--k-ease), background-color 0.2s;
+}
+.k-mcta.show { translate: 0 0; opacity: 1; pointer-events: auto; }
+.k-mcta.show:active { scale: 0.98; background: var(--k-accent-strong); }
+html.k-sheet-open .k-mcta { translate: 0 calc(100% + 32px); opacity: 0; pointer-events: none; }
+.k-mcta__chev {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+@media (max-width: 760px) { .k-mcta { display: flex; } }
+
+/* ---------- footer curtain: full-bleed night with a rounded top ---------- */
+.k-foot {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  margin-top: var(--k-sp-4);
+  padding: clamp(56px, 7vw, 88px) 0 36px;
+  background: linear-gradient(180deg, var(--k-night-2), var(--k-night));
+  color: var(--t-fg-3);
+  border-radius: var(--k-r-xl) var(--k-r-xl) 0 0;
+  box-shadow: var(--k-edge-night);
+}
+@media (max-width: 760px) {
+  .k-foot { border-radius: var(--k-r-lg) var(--k-r-lg) 0 0; padding-bottom: 100px; }
+}
+
+/* ---------- native disclosures (FAQ) ----------
+   <details> works without JS; where ::details-content is supported the body eases open. */
+.k-disclosure { interpolate-size: allow-keywords; }
+.k-disclosure summary { list-style: none; cursor: pointer; }
+.k-disclosure summary::-webkit-details-marker { display: none; }
+.k-disclosure details::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: block-size var(--k-d-slow) var(--k-ease-out), content-visibility var(--k-d-slow) allow-discrete;
+}
+.k-disclosure details[open]::details-content { block-size: auto; }
+
+/* ---------- page transitions (cross-document) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+.k-nav { view-transition-name: k-nav; }
+.k-mcta { view-transition-name: k-mcta; }
+@keyframes k-vt-out { to { opacity: 0; } }
+@keyframes k-vt-in { from { opacity: 0; translate: 0 8px; } }
+::view-transition-old(root) { animation: k-vt-out 160ms var(--k-ease-in) both; }
+::view-transition-new(root) { animation: k-vt-in var(--k-d-vt) var(--k-ease-out) both; }

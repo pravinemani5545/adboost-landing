@@ -1,0 +1,103 @@
+---
+// The one page shell. In order: <head> (pre-paint gate, fonts, SEO head, tracker), skip link,
+// nav, <main id="main">, sticky phone CTA, footer, the kit script, then the newsletter popup or
+// the visit mark. chrome="lead" swaps nav and footer for the minimal lead-magnet header and
+// footer (no phone CTA). Layouts wrap this; pages never import it directly except / and 404.
+//
+// Tracker contract (adboost-admin t.js): one pageview per real page load, so no <ClientRouter/>
+// and prefetch only (never prerender). /book/ labels come from DOM ancestry: nav, .mobile-cta,
+// .cta-band, footer. See src/kit/KIT.md.
+import '../kit/css/index.css';
+import '../styles/site-tokens.css';
+import '../styles/global.css';
+import '../styles/interior.css';
+import KitHead from '../kit/components/KitHead.astro';
+import Fonts from '../components/Fonts.astro';
+import NewsletterPopup from '../components/NewsletterPopup.astro';
+import NewsletterVisitMark from '../components/NewsletterVisitMark.astro';
+import SiteHead from '../components/site/SiteHead.astro';
+import type { SiteHeadProps } from '../components/site/head';
+import Nav from '../components/site/Nav.astro';
+import Footer from '../components/site/Footer.astro';
+import MobileCta from '../components/site/MobileCta.astro';
+import revealSrc from '../kit/scripts/reveal.ts?raw';
+import { transformSync } from 'esbuild';
+
+interface Props extends SiteHeadProps {
+  chrome?: 'full' | 'lead';
+  /** nav is clear over the hero until the page scrolls (home) */
+  navTransparentTop?: boolean;
+  preloadSerif?: boolean;
+  /** false: the visit mark instead of the newsletter popup; 'none': neither (404) */
+  popup?: boolean | 'none';
+  /** lead chrome: the tag beside the logo */
+  leadTag?: string;
+  bodyClass?: string;
+  mainClass?: string;
+}
+const {
+  chrome = 'full', navTransparentTop = false, preloadSerif = true, popup = true, leadTag,
+  bodyClass, mainClass, ...head
+} = Astro.props;
+
+// The reveal script runs inline at the end of <body>, during parsing, so content waiting to
+// arrive never waits on a network request (the rest of the kit loads as a module).
+const revealJs = transformSync(revealSrc, { loader: 'ts', format: 'iife', minify: true, legalComments: 'none' }).code;
+
+// Conversion and signup pages never get the newsletter popup.
+const NO_POPUP = ['/book/', '/zero-ban-protocol/checklist/', '/newsletter/'];
+const path = head.canonicalPath ?? (head.canonical ? new URL(head.canonical).pathname : Astro.url.pathname);
+const showPopup = popup === true && chrome === 'full' && !NO_POPUP.includes(path);
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<KitHead />
+<SiteHead {...head} />
+<Fonts preloadSerif={preloadSerif} />
+<link rel="preconnect" href="https://admin.adboost.health" />
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<slot name="head" />
+<script defer src="https://admin.adboost.health/t.js"></script>
+</head>
+<body class={bodyClass}>
+<a href="#main" class="k-skip">Skip to content</a>
+
+{chrome === 'full' ? <Nav transparentTop={navTransparentTop} /> : (
+  <header class="lead-top">
+    <div class="container">
+      <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span class="brand-sub">Health</span></span></a>
+      {leadTag && <span class="lead-top-tag">{leadTag}</span>}
+    </div>
+  </header>
+)}
+
+<main id="main" class={mainClass}>
+  <slot />
+</main>
+
+{chrome === 'full' ? (
+  <>
+    <MobileCta />
+    <Footer />
+  </>
+) : (
+  <footer class="lead-foot">
+    <div class="container">
+      <span>© 2026 AdBoost Health · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    </div>
+  </footer>
+)}
+
+<script is:inline set:html={revealJs}></script>
+<script>
+  import '../kit/scripts/app';
+</script>
+<slot name="scripts" />
+
+{popup !== 'none' && (showPopup ? <NewsletterPopup /> : <NewsletterVisitMark />)}
+</body>
+</html>

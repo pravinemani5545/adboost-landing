@@ -1,0 +1,167 @@
+/* Kit layers: bands and their background layers, the night slab, glass and the art plate.
+   A band paints its tone (data-tone="paper|tint|night") and isolates its layers, which sit
+   behind the content at z-index -1. overflow: clip (never hidden) keeps sticky children sticky
+   and scroll-driven timelines alive. */
+
+.k-container {
+  width: min(var(--k-container), calc(100% - 2 * var(--k-gutter)));
+  margin-inline: auto;
+}
+
+/* ---------- bands ---------- */
+.k-band {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  padding-block: var(--k-section);
+  background: var(--t-bg);
+  color: var(--t-fg);
+}
+.k-band--sm { padding-block: var(--k-section-sm); }
+.k-band--flush { padding-block: 0; }
+/* tint bands fade in and out over 48px instead of a hard edge */
+.k-band[data-tone="tint"] {
+  background: linear-gradient(180deg, var(--k-paper) 0, var(--k-paper-2) 48px, var(--k-paper-2) calc(100% - 48px), var(--k-paper) 100%);
+}
+.k-band[data-tone="night"] { background: linear-gradient(180deg, var(--k-night), var(--k-night-2)); }
+/* a slab band: paper around an inset, rounded night panel */
+.k-band--slab { background: var(--k-paper); padding-block: var(--k-sp-4); }
+
+/* ---------- night slab ---------- */
+.k-slab {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  margin-inline: clamp(8px, 1.5vw, 20px);
+  border-radius: var(--k-r-xl);
+  padding-block: var(--k-section);
+  background: linear-gradient(180deg, var(--k-night), var(--k-night-2));
+  color: var(--t-fg);
+  box-shadow: var(--k-edge-night), var(--k-e3);
+}
+@media (max-width: 760px) { .k-slab { border-radius: var(--k-r-lg); } }
+
+/* ---------- background layers ---------- */
+.k-bg {
+  position: absolute;
+  inset: 0;
+  z-index: var(--k-z-below);
+  pointer-events: none;
+}
+/* blueprint grid: one grid for heroes, interiors and night bands */
+.k-bg--grid {
+  --k-grid-size: 56px;
+  background-image:
+    linear-gradient(var(--t-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--t-grid) 1px, transparent 1px);
+  background-size: var(--k-grid-size) var(--k-grid-size);
+  background-position: 50% 0;
+  -webkit-mask-image: radial-gradient(var(--k-grid-mask, 70% 60% at 50% 0%), #000, transparent 78%);
+  mask-image: radial-gradient(var(--k-grid-mask, 70% 60% at 50% 0%), #000, transparent 78%);
+}
+/* aura: a soft accent bloom from the top; drifts +-40px with scroll where supported */
+.k-bg--aura {
+  inset: -40px 0 auto;
+  height: min(1100px, 140%);
+  background: radial-gradient(50% 50% at 50% 30%, color-mix(in srgb, var(--k-accent) 10%, transparent), transparent 70%);
+}
+:is(.k-tone-night, [data-tone="night"]) .k-bg--aura,
+.k-bg--aura:is(.k-tone-night, [data-tone="night"]) {
+  inset: auto -10% -40% -10%;
+  height: 120%;
+  background: radial-gradient(55% 55% at 50% 60%, color-mix(in srgb, var(--k-accent) 34%, transparent), transparent 66%);
+}
+/* mesh: quiet accent blooms in two corners */
+.k-bg--mesh {
+  background:
+    radial-gradient(48% 60% at 88% 0%, color-mix(in srgb, var(--k-accent) 9%, transparent), transparent 70%),
+    radial-gradient(40% 50% at 6% 10%, color-mix(in srgb, var(--k-accent-bright) 14%, transparent), transparent 70%);
+}
+/* grain: night bands only (a 160px feTurbulence tile, about 300 bytes) */
+.k-bg--noise {
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+.lowpower .k-bg--noise { display: none; }
+/* dot lattice, with a brighter disc that follows the cursor on [data-dots] hosts (dots.ts) */
+.k-bg--dots {
+  --dx: -1000px;
+  --dy: -1000px;
+  background-image: radial-gradient(circle, var(--t-dot) 0.8px, transparent 1.6px);
+  background-size: 28px 28px;
+  background-position: 50% 50%;
+}
+.k-dots-clip {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(circle, #000 0.8px, transparent 1.6px);
+  mask-image: radial-gradient(circle, #000 0.8px, transparent 1.6px);
+  -webkit-mask-size: 28px 28px;
+  mask-size: 28px 28px;
+  -webkit-mask-position: 50% 50%;
+  mask-position: 50% 50%;
+}
+.k-dots-spot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 720px;
+  height: 720px;
+  background: var(--t-accent);
+  opacity: 0;
+  transform: translate3d(calc(var(--dx) - 360px), calc(var(--dy) - 360px), 0);
+  transition: opacity 0.4s var(--k-ease);
+  -webkit-mask-image: radial-gradient(closest-side, #000, rgb(0 0 0 / 0.5) 40%, transparent);
+  mask-image: radial-gradient(closest-side, #000, rgb(0 0 0 / 0.5) 40%, transparent);
+}
+[data-dots] { position: relative; isolation: isolate; overflow: clip; }
+[data-dots].k-lit .k-dots-spot { opacity: 0.9; }
+@media (hover: none), (prefers-reduced-motion: reduce) { .k-dots-clip { display: none; } }
+.lowpower .k-dots-clip { display: none; }
+
+/* ---------- glass ----------
+   The blur paints on ::before, never on the host: a backdrop-filter on the host would make it the
+   containing block for fixed descendants. Solid where unsupported and on low-power devices.
+   At most three glass surfaces per viewport. */
+.k-glass { position: relative; isolation: isolate; }
+.k-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(255 255 255 / 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5), var(--k-edge-light);
+  pointer-events: none;
+}
+:is(.k-tone-night, [data-tone="night"]) .k-glass::before,
+.k-glass:is(.k-tone-night, [data-tone="night"])::before {
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1), var(--k-edge-night);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .k-glass::before { background: var(--k-paper); }
+  :is(.k-tone-night, [data-tone="night"]) .k-glass::before { background: var(--k-night-2); }
+}
+.lowpower .k-glass::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--k-paper); }
+.lowpower :is(.k-tone-night, [data-tone="night"]) .k-glass::before { background: var(--k-night-2); }
+
+/* ---------- art plate: decorative, masked, 20-40% opacity, never the LCP element ---------- */
+.k-plate {
+  position: absolute;
+  z-index: var(--k-z-below);
+  pointer-events: none;
+  opacity: var(--k-plate-o, 0.32);
+  -webkit-mask-image: radial-gradient(closest-side, #000 55%, transparent);
+  mask-image: radial-gradient(closest-side, #000 55%, transparent);
+}
+.k-plate img, .k-plate picture { display: block; width: 100%; height: 100%; object-fit: cover; }
+.k-plate--fallback {
+  background:
+    radial-gradient(40% 50% at 60% 40%, color-mix(in srgb, var(--k-accent) 18%, transparent), transparent 70%),
+    radial-gradient(30% 40% at 30% 70%, color-mix(in srgb, var(--k-accent-bright) 22%, transparent), transparent 70%);
+}

@@ -1,0 +1,151 @@
+/* Kit cards: one recipe with modifiers, reading the tone roles so a card works on paper, tint
+   and night. Hover lift uses the translate property, so it composes with any entrance. */
+
+.k-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--t-card);
+  color: var(--t-fg);
+  border: 1px solid var(--t-card-line);
+  border-radius: var(--k-r-lg);
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  transition:
+    translate var(--k-t-snap) var(--k-spring-snap),
+    box-shadow var(--k-d-base) var(--k-ease),
+    border-color var(--k-d-base) var(--k-ease);
+}
+.k-card__media {
+  position: relative;
+  overflow: clip;
+  aspect-ratio: var(--k-ar, 16 / 9);
+  border-radius: calc(var(--k-r-lg) - 1px) calc(var(--k-r-lg) - 1px) 0 0;
+  border-bottom: 1px solid var(--t-card-line);
+}
+.k-card__media :is(img, picture, video) { width: 100%; height: 100%; object-fit: cover; }
+.k-card__body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--k-sp-2);
+  flex: 1;
+  padding: var(--k-sp-5);
+}
+.k-card__foot {
+  position: relative;
+  z-index: 1;
+  padding: var(--k-sp-4) var(--k-sp-5);
+  border-top: 1px solid var(--t-card-line);
+}
+
+/* ---------- modifiers ---------- */
+.k-card--flat { box-shadow: none; }
+.k-card--raised { box-shadow: var(--k-e2), var(--k-edge-light); }
+/* hero widgets, calculators, menus */
+.k-card--float {
+  border-radius: var(--k-r-xl);
+  box-shadow: var(--k-e4), var(--k-edge-light), 0 30px 60px -34px var(--k-accent-glow);
+}
+.k-card--glass { background: transparent; border-color: transparent; }
+.k-card--glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(255 255 255 / 0.72);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.5);
+}
+.lowpower .k-card--glass::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--k-paper); }
+.k-card--night {
+  --t-fg: var(--k-on-night);
+  --t-fg-2: rgb(255 255 255 / 0.8);
+  --t-fg-3: var(--k-on-night-2);
+  --t-line: rgb(255 255 255 / 0.1);
+  --t-card-line: rgb(255 255 255 / 0.1);
+  --t-accent: var(--k-accent-bright);
+  --t-glow: rgb(255 255 255 / 0.075);
+  background: linear-gradient(180deg, var(--k-night-2), var(--k-night));
+  border-color: rgb(255 255 255 / 0.08);
+  box-shadow: var(--k-edge-night), var(--k-e2);
+}
+/* the answer box */
+.k-card--accent {
+  border-left: 3px solid var(--k-accent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 4%, var(--t-card)), var(--t-card));
+  box-shadow: none;
+}
+/* callouts, page index */
+.k-card--well { background: var(--k-paper-2); box-shadow: none; }
+:is(.k-tone-night, [data-tone="night"]) .k-card--well { background: rgb(255 255 255 / 0.03); }
+.k-card--warn {
+  background: var(--k-warn-soft);
+  border-color: color-mix(in srgb, var(--k-warn) 35%, transparent);
+  box-shadow: none;
+}
+/* a whole-card link: lifts, deepens, lights under the cursor, rings on focus */
+.k-card--link { cursor: pointer; }
+.k-card--link:focus-visible,
+.k-card--link:has(:focus-visible) {
+  outline: 2px solid var(--k-accent);
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .k-card--link:hover {
+    translate: 0 -3px;
+    box-shadow: var(--k-e3), var(--k-edge-light);
+    border-color: var(--t-line-2);
+  }
+}
+/* current, selected or "this one" */
+.k-card--lit {
+  border-color: var(--k-accent-line);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--k-accent) 12%, transparent), var(--k-glow);
+}
+
+/* ---------- stat ---------- */
+.k-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--k-sp-2);
+  padding: var(--k-sp-5);
+  background: var(--t-card);
+  border: 1px solid var(--t-card-line);
+  border-radius: var(--k-r-md);
+  box-shadow: var(--k-e1);
+}
+.k-stat__value {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: var(--k-fw-display);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--t-fg);
+  font-variant-numeric: tabular-nums;
+}
+.k-stat__label { font-size: var(--k-fs-small); line-height: 1.45; color: var(--t-fg-3); }
+.k-stat__source {
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  letter-spacing: 0.04em;
+  color: var(--t-fg-3);
+}
+
+/* ---------- chip ---------- */
+.k-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border: 1px solid var(--t-line);
+  border-radius: var(--k-r-pill);
+  background: var(--t-card);
+  color: var(--t-fg-2);
+  font-family: var(--k-font-mono);
+  font-size: var(--k-fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}

@@ -1,10 +1,9 @@
 ---
-import Fonts from '../components/Fonts.astro';
-import NewsletterVisitMark from '../components/NewsletterVisitMark.astro';
-import '../styles/global.css';
-import '../styles/interior.css';
-import { NAV } from '../lib/site';
+// Privacy and terms. A thin wrapper over the Shell (full chrome: nav with the phone menu, the
+// site footer); the Props API is unchanged. Never shows the newsletter popup.
+import Shell from './Shell.astro';
 import { breadcrumb } from '../lib/schema';
+import { siteBase } from '../lib/site';
 
 interface Props {
   title: string;
@@ -12,8 +11,7 @@ interface Props {
   canonicalPath: string;
 }
 const { title, description, canonicalPath } = Astro.props;
-const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
-const ogImage = `${site}/og/og-home.png`;
+const site = siteBase(Astro.site);
 const pageLabel = title.replace(/ \| AdBoost Health$/, '');
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -23,87 +21,21 @@ const jsonLd = {
   ],
 };
 ---
-
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>{title}</title>
-<meta name="description" content={description} />
-<link rel="canonical" href={`${site}${canonicalPath}`} />
-<meta property="og:type" content="website" />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:url" content={`${site}${canonicalPath}`} />
-<meta property="og:site_name" content="AdBoost Health" />
-<meta property="og:image" content={ogImage} />
-<meta property="og:image:alt" content={title} />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
-<meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={ogImage} />
-<meta name="twitter:image:alt" content={title} />
-<Fonts preloadSerif={false} />
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
-<script defer src="https://admin.adboost.health/t.js"></script>
-</head>
-<body>
-
-<nav class="nav scrolled">
-  <div class="container nav-inner">
-    <a class="brand" href="/">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>AdBoost <span style="color:var(--mute);font-weight:400">Health</span></span>
-    </a>
-    <div class="nav-links">
-      {NAV.map((item) => (
-        item.children ? (
-          <div class="nav-group">
-            <a href={item.href} class="nav-top">{item.label}
-              <svg class="nav-caret" width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1.5 3l3 3 3-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <div class="nav-menu">
-              {item.children.map((c) => <a href={c.href}>{c.label}</a>)}
-            </div>
-          </div>
-        ) : (
-          <a href={item.href} class={item.external ? 'nav-top nav-ext' : 'nav-top'} {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}>{item.label}{item.external && <Fragment set:html={`<svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true" style="margin-left:4px;opacity:.55;vertical-align:-1px"><path d="M3 9L9 3M4.5 3H9v4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>`} />}</a>
-        )
-      ))}
-    </div>
-    <a class="btn btn-primary" href="/book/">Book a call</a>
-  </div>
-</nav>
-
-<main class="legal-main container">
-  <div class="legal-prose">
-    <slot />
-  </div>
-</main>
-
-<footer>
-  <div class="container">
-    <div class="legal">
-      <span>© 2026 AdBoost Health. All rights reserved.</span>
-      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+<Shell {title} {description} {canonicalPath} {jsonLd} preloadSerif={false} popup={false}>
+  <div class="legal-main container">
+    <div class="legal-prose">
+      <slot />
     </div>
   </div>
-</footer>
+</Shell>
 
 <style is:global>
-  .legal-main { padding: 120px 0 80px; }
-  .legal-prose { max-width: 720px; font-size: 15.5px; line-height: 1.7; color: var(--ink-2); }
-  .legal-prose h1 { font-size: clamp(28px, 4vw, 38px); letter-spacing: -.03em; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
-  .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--ink); margin: 32px 0 10px; }
+  .legal-main { padding: calc(var(--k-nav-h) + 52px) 0 80px; }
+  .legal-prose { max-width: 720px; font-size: 15.5px; line-height: 1.7; color: var(--k-ink-2); }
+  .legal-prose h1 { font-size: var(--k-fs-h1); line-height: var(--k-lh-tight); letter-spacing: -0.035em; font-weight: var(--k-fw-display); color: var(--k-ink); margin: 0 0 14px; text-wrap: balance; }
+  .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--k-ink); margin: 32px 0 10px; }
   .legal-prose p { margin: 0 0 14px; }
   .legal-prose ul { margin: 0 0 14px; padding-left: 22px; }
   .legal-prose li { margin-bottom: 8px; }
-  .legal-prose a { color: var(--blue); text-decoration: underline; text-underline-offset: 3px; }
+  .legal-prose a { color: var(--k-accent-ink); text-decoration: underline; text-underline-offset: 3px; }
 </style>
-
-<NewsletterVisitMark />
-</body>
-</html>

@@ -1,0 +1,70 @@
+---
+// A section's eyebrow, heading and intro, in one place.
+//   <SectionHead eyebrow="Process" title='How it <span class="serif">works</span>' lede="..." />
+// title and lede accept trusted inline HTML (our own copy: serif accents, links). A named
+// "actions" slot sits under the lede. align="start" for left-aligned heads; level 3 inside cards.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  align?: 'center' | 'start';
+  level?: 2 | 3;
+  id?: string;
+  reveal?: boolean;
+  class?: string;
+}
+const { eyebrow, title, lede, align = 'center', level = 2, id, reveal = true, class: cls } = Astro.props;
+const H = level === 3 ? 'h3' : 'h2';
+---
+<div class:list={['k-shead', `k-shead--${align}`, cls]} data-reveal={reveal ? '' : undefined}>
+  {eyebrow && <p class="k-shead__eyebrow"><span class="k-shead__dot" aria-hidden="true"></span>{eyebrow}</p>}
+  <H id={id} class="k-shead__title" set:html={title} />
+  {lede && <p class="k-shead__lede" set:html={lede} />}
+  {Astro.slots.has('actions') && <div class="k-shead__actions"><slot name="actions" /></div>}
+</div>
+
+<style>
+  .k-shead { display: grid; gap: var(--k-sp-3); max-width: 760px; margin-bottom: var(--k-sp-7); }
+  .k-shead--center { margin-inline: auto; text-align: center; justify-items: center; }
+  .k-shead__eyebrow {
+    margin: 0;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--t-fg-2);
+  }
+  .k-shead__dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: var(--t-accent);
+    vertical-align: middle;
+    translate: 0 -1px;
+  }
+  .k-shead__title {
+    margin: 0;
+    font-size: var(--k-fs-h2);
+    font-weight: var(--k-fw-display);
+    letter-spacing: -0.035em;
+    line-height: var(--k-lh-tight);
+    color: var(--t-fg);
+    text-wrap: balance;
+  }
+  h3.k-shead__title { font-size: clamp(24px, 2.6vw, 32px); letter-spacing: -0.025em; }
+  .k-shead__title :global(.serif) { color: var(--t-accent); }
+  .k-shead__lede {
+    margin: 0;
+    max-width: 56ch;
+    font-size: var(--k-fs-lede);
+    line-height: 1.55;
+    color: var(--t-fg-3);
+    text-wrap: pretty;
+  }
+  .k-shead__actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: var(--k-sp-2); }
+  .k-shead--center .k-shead__actions { justify-content: center; }
+  @media (max-width: 760px) { .k-shead { margin-bottom: var(--k-sp-6); } }
+</style>

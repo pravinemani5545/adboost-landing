@@ -1,0 +1,68 @@
+---
+// The one interior hero (replaces hand-written .phero, .phero.wide and .phero-grid + .hero-panel).
+//   <PageHero crumbs={[...]} eyebrow="FREE TOOL" title='CAC <span class="serif">calculator</span>'
+//             lede="..." meta={['5 verticals', 'Updated monthly']} art="/art/tools/hub">
+//     <div class="ctas">...</div>            default slot: under the lede (CTAs, metabar)
+//     <Fragment slot="aside">...</Fragment>  optional: the right column from 1024px (a card, a diagram)
+//   </PageHero>
+// The H1, lede and aside arrive by transform only (never hidden), so they paint on the first
+// frame. art is a public path without extension (public/art/<section>/<slug>.avif|webp, from
+// public/art/MANIFEST.md): a decorative plate behind the aside at 20-40% opacity, alt="",
+// lazy, hidden below 1024px; a soft gradient stands in when the file does not exist yet.
+// title, lede and answer accept trusted inline HTML (serif accents, links).
+import fs from 'node:fs';
+import path from 'node:path';
+import Breadcrumbs from './Breadcrumbs.astro';
+
+type Layer = 'dots' | 'mesh';
+interface Props {
+  crumbs?: { label: string; href?: string }[];
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  /** an answer-first box under the H1 ("The short answer") */
+  answer?: string;
+  meta?: string[];
+  wide?: boolean;
+  art?: string;
+  /** extra layers over the hero's grid and aura */
+  layers?: Layer[];
+  id?: string;
+  class?: string;
+}
+const { crumbs, eyebrow, title, lede, answer, meta, wide = false, art, layers = [], id, class: cls } = Astro.props;
+const hasAside = Astro.slots.has('aside');
+
+const exists = (rel: string) => fs.existsSync(path.join(process.cwd(), 'public', rel));
+const artSources = art
+  ? (['avif', 'webp'] as const).filter((ext) => exists(`${art}.${ext}`)).map((ext) => ({ ext, src: `${art}.${ext}` }))
+  : [];
+const artFallback = artSources.find((s) => s.ext === 'webp') ?? artSources[0];
+---
+<section id={id} class:list={['phero', { wide }, cls]} data-tone="paper">
+  {layers.map((l) => l === 'dots'
+    ? <div class="k-bg k-bg--dots" aria-hidden="true"><div class="k-dots-clip"><div class="k-dots-spot"></div></div></div>
+    : <div class={`k-bg k-bg--${l}`} aria-hidden="true"></div>)}
+  {art && (artFallback ? (
+    <div class="k-plate" aria-hidden="true">
+      <picture>
+        {artSources.filter((s) => s !== artFallback).map((s) => <source type={`image/${s.ext}`} srcset={s.src} />)}
+        <img src={artFallback.src} alt="" loading="lazy" decoding="async" fetchpriority="low" />
+      </picture>
+    </div>
+  ) : <div class="k-plate k-plate--fallback" aria-hidden="true"></div>)}
+  <div class="container">
+    <div class={hasAside ? 'phero-grid' : undefined}>
+      <div class="phero-main">
+        {crumbs && <Breadcrumbs items={crumbs} />}
+        {eyebrow && <span class="eyebrow sec-eyebrow"><span class="dot"></span>{eyebrow}</span>}
+        <h1 class="arrive" set:html={title} />
+        {answer && <div class="answer-box arrive" style="--d:60ms"><span class="al">The short answer</span><Fragment set:html={answer} /></div>}
+        {lede && <p class="phero-lede arrive" style="--d:60ms" set:html={lede} />}
+        <slot />
+        {meta && meta.length > 0 && <div class="phero-meta">{meta.map((m) => <span>{m}</span>)}</div>}
+      </div>
+      {hasAside && <div class="phero-aside arrive" style="--d:120ms"><slot name="aside" /></div>}
+    </div>
+  </div>
+</section>

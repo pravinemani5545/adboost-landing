@@ -1,0 +1,154 @@
+/* Kit motion. Every hidden or pre-animation state lives under html.js.motion, which KitHead adds
+   before first paint (js always; motion unless the visitor prefers reduced motion). Without JS,
+   with reduced motion, or after the 3s failsafe, nothing here hides anything and every draw is
+   complete. Entrances animate the individual translate / scale properties and opacity with
+   keyframes (fill: backwards), so they never fight a component's own transform or transition. */
+
+@keyframes k-fade { from { opacity: 0; } }
+@keyframes k-rise { from { translate: 0 24px; } }
+@keyframes k-from-left { from { translate: -32px 0; } }
+@keyframes k-from-right { from { translate: 32px 0; } }
+@keyframes k-arrive { from { translate: 0 28px; } }
+@keyframes k-draw { from { stroke-dashoffset: 1; } }
+@keyframes k-draw-x { from { scale: 0 1; } }
+@keyframes k-draw-y { from { scale: 1 0; } }
+@keyframes k-pop { from { scale: 0.6; opacity: 0; } }
+
+/* ---------- reveal: [data-reveal], and the legacy .reveal / .d1-.d4 markup ---------- */
+.reveal.d1 { --d: 80ms; }
+.reveal.d2 { --d: 160ms; }
+.reveal.d3 { --d: 240ms; }
+.reveal.d4 { --d: 320ms; }
+.js.motion :is([data-reveal], .reveal):not(.in) { opacity: 0; translate: 0 24px; }
+.js.motion [data-reveal="left"]:not(.in) { translate: -32px 0; }
+.js.motion [data-reveal="right"]:not(.in) { translate: 32px 0; }
+.js.motion :is([data-reveal], .reveal).in {
+  animation:
+    k-fade var(--k-t-settle) var(--k-spring-settle) backwards,
+    k-rise var(--k-t-soft) var(--k-spring-soft) backwards;
+  animation-delay: calc(var(--i, 0) * var(--k-stagger) + var(--d, 0ms));
+}
+.js.motion [data-reveal="left"].in { animation-name: k-fade, k-from-left; }
+.js.motion [data-reveal="right"].in { animation-name: k-fade, k-from-right; }
+
+/* ---------- first screen: transform only, never hidden from paint timing ---------- */
+.js.motion .arrive {
+  animation: k-arrive var(--k-t-air) var(--k-spring-air) backwards;
+  animation-delay: var(--d, 0ms);
+}
+.js.motion.pre .arrive { animation-play-state: paused; }
+
+/* ---------- draw-on ----------
+   SVG strokes: class="k-draw" with pathLength="1". HTML connectors: .k-draw-x (grows from its
+   transform-origin, left by default) and .k-draw-y (top by default). They draw when the nearest
+   [data-reveal] or [data-draw] ancestor gets .in; --di (index) and --dd (delay) offset each one. */
+.k-draw-x { transform-origin: left center; }
+.k-draw-y { transform-origin: center top; }
+.js.motion .k-draw { stroke-dasharray: 1; }
+.js.motion :is([data-reveal], [data-draw]):not(.in) .k-draw { stroke-dashoffset: 1; }
+.js.motion :is([data-reveal], [data-draw]):not(.in) .k-draw-x { scale: 0 1; }
+.js.motion :is([data-reveal], [data-draw]):not(.in) .k-draw-y { scale: 1 0; }
+.js.motion :is([data-reveal], [data-draw]).in :is(.k-draw, .k-draw-x, .k-draw-y) {
+  animation: k-draw var(--k-d-draw) var(--k-ease-out) backwards;
+  animation-delay: calc(var(--di, 0) * var(--k-stagger) + var(--dd, 0ms));
+}
+.js.motion :is([data-reveal], [data-draw]).in .k-draw-x { animation-name: k-draw-x; }
+.js.motion :is([data-reveal], [data-draw]).in .k-draw-y { animation-name: k-draw-y; }
+/* pops: small marks (dots, labels) that land after their line */
+.js.motion :is([data-reveal], [data-draw]):not(.in) .k-pop { scale: 0.6; opacity: 0; }
+.js.motion :is([data-reveal], [data-draw]).in .k-pop {
+  animation: k-pop var(--k-t-bounce) var(--k-spring-bounce) backwards;
+  animation-delay: calc(var(--di, 0) * var(--k-stagger) + var(--dd, 0ms) + var(--k-d-reveal));
+}
+
+/* legacy .drawline paths: reveal.ts gives each one pathLength="1", then they draw like .k-draw */
+.js.motion .drawline[pathLength] { stroke-dasharray: 1; }
+.js.motion .drawline[pathLength]:not(.in) { stroke-dashoffset: 1; }
+.js.motion .drawline[pathLength].in { animation: k-draw 900ms var(--k-ease) backwards; }
+.demo .fill { transition: opacity 0.6s ease 0.45s; }
+.js.motion .demo:not(.drawn) .fill { opacity: 0; }
+
+/* ---------- count-up: the server prints the final value; count.ts animates from 0 below the fold ---------- */
+[data-count] {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  min-width: calc(var(--w, 0) * 1ch);
+}
+
+/* ---------- words: one [data-words] statement per page brightens word by word ---------- */
+[data-words] { --r0: 8%; --r1: 56%; --ww: 1.8; }
+.k-wd { display: inline; }
+.js.motion [data-words][data-split] .k-wd { opacity: var(--t-wd-lo, 0.5); }
+@supports (animation-timeline: view()) {
+  [data-words] { view-timeline: --k-words block; }
+  .js.motion [data-words][data-split] .k-wd {
+    animation: k-word linear both;
+    animation-timeline: --k-words;
+    animation-range:
+      cover calc(var(--r0) + var(--i) / var(--n) * (var(--r1) - var(--r0)))
+      cover calc(var(--r0) + (var(--i) + var(--ww)) / var(--n) * (var(--r1) - var(--r0)));
+  }
+  @keyframes k-word { from { opacity: var(--t-wd-lo, 0.5); } to { opacity: 1; } }
+}
+@supports not (animation-timeline: view()) {
+  /* words.ts writes --p on the statement: 0 before it is reached, 1 at --r1 */
+  .js.motion [data-words][data-split] .k-wd {
+    opacity: clamp(var(--t-wd-lo, 0.5), var(--t-wd-lo, 0.5) + (var(--p, 0) * var(--n) - var(--i)) * (1 - var(--t-wd-lo, 0.5)) * 1.8 / var(--ww), 1);
+  }
+}
+@media (max-width: 640px) { [data-words] { --r0: 6%; --r1: 50%; } }
+
+/* ---------- scroll-lit: brightest at the middle of the screen ---------- */
+@supports (animation-timeline: view()) {
+  .js.motion [data-lit] { animation: k-lit linear both; animation-timeline: view(); }
+  @keyframes k-lit { 0%, 6% { opacity: 0.22; } 42%, 58% { opacity: 1; } 94%, 100% { opacity: 0.22; } }
+}
+
+/* ---------- scroll-driven rails, spines and progress ----------
+   .k-scrub-x / .k-scrub-y fill with their own passage through the screen. Inside a
+   .k-scrub-scope (e.g. an article), .k-spine fills with the scope's passage instead.
+   .k-progress fills with the whole page. Without scroll-driven CSS they draw once on arrival
+   (the nearest [data-reveal] / [data-draw] .in), and stay drawn without JS. Hosts must use
+   overflow: clip, never hidden (hidden makes the host the scroll container and kills view()). */
+.k-scrub-x, .k-progress { transform-origin: left center; }
+.k-scrub-y, .k-spine { transform-origin: center top; }
+@supports (animation-timeline: view()) {
+  .k-scrub-scope { view-timeline: --k-scope block; }
+  .js.motion .k-scrub-x { animation: k-draw-x linear both; animation-timeline: view(); animation-range: entry 10% cover 50%; }
+  .js.motion .k-scrub-y { animation: k-draw-y linear both; animation-timeline: view(); animation-range: entry 10% cover 50%; }
+  .js.motion .k-scrub-scope .k-spine { animation: k-draw-y linear both; animation-timeline: --k-scope; animation-range: contain 0% contain 100%; }
+  .js.motion .k-progress { animation: k-draw-x linear both; animation-timeline: scroll(root block); }
+  .js.motion:not(.lowpower) .k-bg--aura { animation: k-aura linear both; animation-timeline: view(); }
+  @keyframes k-aura { from { translate: 0 -40px; } to { translate: 0 40px; } }
+}
+@supports not (animation-timeline: view()) {
+  .js.motion :is([data-reveal], [data-draw]):not(.in) :is(.k-scrub-x, .k-scrub-y) { scale: 0 1; }
+  .js.motion :is([data-reveal], [data-draw]):not(.in) .k-scrub-y { scale: 1 0; }
+  .js.motion :is([data-reveal], [data-draw]).in .k-scrub-x { animation: k-draw-x var(--k-d-draw) var(--k-ease-out) backwards; }
+  .js.motion :is([data-reveal], [data-draw]).in .k-scrub-y { animation: k-draw-y var(--k-d-draw) var(--k-ease-out) backwards; }
+  .k-progress { display: none; }
+}
+
+/* ---------- pointer: magnetic lean, cursor light ---------- */
+[data-magnetic] {
+  translate: var(--mx, 0px) var(--my, 0px);
+  transition: translate 0.28s var(--k-spring-settle);
+}
+[data-magnetic].k-release { transition: translate var(--k-t-soft) var(--k-spring-soft); }
+/* the light follows the cursor inside .k-card--link and [data-k-light] (pointer.ts sets --lx/--ly and .k-lit);
+   hosts keep ::after free for it */
+:is(.k-card--link, [data-k-light])::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(420px circle at var(--lx, 50%) var(--ly, 0%), var(--t-glow), transparent 62%);
+  opacity: 0; transition: opacity 0.35s var(--k-ease);
+}
+:is(.k-card--link, [data-k-light]).k-lit::after { opacity: 1; }
+[data-k-light] { position: relative; }
+.lowpower :is(.k-card--link, [data-k-light])::after { content: none; }
+
+/* ---------- reduced motion: a complete, still design ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  [data-lit] { opacity: 1 !important; }
+  [data-magnetic] { translate: none !important; }
+}

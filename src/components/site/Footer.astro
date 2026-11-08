@@ -1,0 +1,200 @@
+---
+// The one site footer: a full-bleed night curtain with a rounded top, so a CTA slab above it
+// never fuses with it. Tracker contract: it stays a <footer> element ("footer" label for its
+// /book/ link). The trust figures are owner-confirmed (71+, $153M+, 4.9/5); keep every mention.
+import Count from '../../kit/components/Count.astro';
+import { BOOK_PATH, EMAIL, SISTER } from '../../lib/site';
+---
+<footer class="k-foot" data-tone="night">
+  <div class="k-bg k-bg--grid" aria-hidden="true"></div>
+  <div class="k-bg k-bg--aura" aria-hidden="true"></div>
+  <div class="container">
+    <div class="k-foot__numbers">
+      <p class="k-foot__label">BY THE NUMBERS</p>
+      <ul>
+        <li><b><Count value="71+" /></b><span>founders served</span></li>
+        <li><b><Count value="4.9 / 5" /></b><span>average rating</span></li>
+        <li><b><Count value="$153M+" /></b><span>tracked revenue</span></li>
+      </ul>
+    </div>
+    <div class="k-foot__grid">
+      <div class="k-foot__brand">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span class="brand-sub">Health</span></span></a>
+        <p class="k-foot__about">Growth marketing built exclusively for health, telehealth, GLP-1, supplement & wellness brands.</p>
+        <div class="k-foot__chips">
+          <span class="k-foot__chip"><span class="k-foot__ldot" aria-hidden="true"></span>Accepting new partners</span>
+          <span class="k-foot__chip"><span class="k-foot__ldot" aria-hidden="true"></span>71+ founders · $153M+ tracked · 4.9/5</span>
+        </div>
+      </div>
+      <div class="k-foot__col">
+        <p class="k-foot__label">SERVICES</p>
+        <ul>
+          <li><a href="/services/paid-media/">Paid media</a></li>
+          <li><a href="/services/creative/">Creative production</a></li>
+          <li><a href="/services/cro/">CRO & funnels</a></li>
+          <li><a href="/services/">All services</a></li>
+          <li><a href="/advertising/">Compliance review</a></li>
+        </ul>
+      </div>
+      <div class="k-foot__col">
+        <p class="k-foot__label">INDUSTRIES</p>
+        <ul>
+          <li><a href="/industries/glp-1-weight-loss/">GLP-1 & weight loss</a></li>
+          <li><a href="/industries/telehealth/">Telehealth</a></li>
+          <li><a href="/industries/supplements-dtc/">Supplements & DTC</a></li>
+          <li><a href="/industries/">All industries</a></li>
+          <li><a href="/advertising/telehealth-on-google/">Telehealth</a></li>
+          <li><a href="/advertising/">All verticals</a></li>
+        </ul>
+      </div>
+      <div class="k-foot__col">
+        <p class="k-foot__label">RESOURCES</p>
+        <ul>
+          <li><a href="/advertising/">Ad compliance</a></li>
+          <li><a href="/tools/">Free tools</a></li>
+          <li><a href="/glossary/">Glossary</a></li>
+          <li><a href="/compare/">Compare</a></li>
+          <li><a href="/faq/">FAQ</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/newsletter/">Newsletter</a></li>
+        </ul>
+      </div>
+      <div class="k-foot__col">
+        <p class="k-foot__label">GET IN TOUCH</p>
+        <ul>
+          <li><a href={BOOK_PATH}>Book a strategy call</a></li>
+          <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          <li><a href={SISTER.href} target="_blank" rel="noopener">AdBoost Media ↗</a></li>
+          <li><span class="k-foot__loc">Toronto · Remote-first</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="k-foot__legal">
+      <span>© 2026 AdBoost Health. All rights reserved.</span>
+      <span><a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .k-foot .k-bg--grid { --k-grid-mask: 60% 70% at 50% 0%; }
+  .k-foot .k-bg--aura { inset: -50% -10% auto; height: 110%; }
+  .k-foot__label {
+    margin: 0 0 16px;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--t-fg);
+  }
+  .k-foot__numbers {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    align-items: center;
+    gap: var(--k-sp-5);
+    padding-bottom: clamp(32px, 4vw, 48px);
+    margin-bottom: clamp(36px, 5vw, 56px);
+    border-bottom: 1px solid var(--t-line);
+  }
+  .k-foot__numbers .k-foot__label { margin: 0; color: var(--t-fg-3); }
+  .k-foot__numbers ul {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--k-sp-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .k-foot__numbers li { display: grid; gap: 4px; }
+  .k-foot__numbers b {
+    font-size: clamp(30px, 4vw, 46px);
+    font-weight: var(--k-fw-display);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--t-fg);
+  }
+  .k-foot__numbers span:not(.k-count) {
+    font-family: var(--k-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--t-fg-3);
+  }
+  .k-foot__grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr 1.1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .k-foot .brand { color: var(--t-fg); font-size: 17px; }
+  .k-foot .brand-sub { color: var(--t-fg-3); }
+  .k-foot__about {
+    margin: 16px 0 18px;
+    max-width: 36ch;
+    font-size: var(--k-fs-small);
+    line-height: 1.55;
+    color: var(--t-fg-3);
+  }
+  .k-foot__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .k-foot__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 10px;
+    border-radius: var(--k-r-pill);
+    background: color-mix(in srgb, var(--k-accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--k-accent) 28%, transparent);
+    font-size: 12px;
+    color: var(--t-fg);
+  }
+  .k-foot__ldot { width: 6px; height: 6px; border-radius: 50%; background: var(--k-ok); }
+  .k-foot__col ul {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--k-fs-small);
+  }
+  .k-foot__col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: var(--t-fg-3);
+    transition: color var(--k-d-fast) var(--k-ease);
+  }
+  .k-foot__col a:hover { color: var(--t-fg); }
+  .k-foot__loc {
+    display: inline-flex;
+    min-height: 32px;
+    align-items: center;
+    font-family: var(--k-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: rgb(255 255 255 / 0.55);
+  }
+  .k-foot__legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 56px;
+    padding-top: 24px;
+    border-top: 1px solid var(--t-line);
+    font-size: 12.5px;
+    color: var(--t-fg-3);
+  }
+  .k-foot__legal a { display: inline-block; padding: 6px 0; color: inherit; }
+  .k-foot__legal a:hover { color: var(--t-fg); }
+  @media (max-width: 960px) {
+    .k-foot__grid { grid-template-columns: 1fr 1fr; }
+    .k-foot__brand { grid-column: span 2; }
+    .k-foot__numbers { grid-template-columns: 1fr; gap: var(--k-sp-4); }
+  }
+  @media (max-width: 520px) {
+    .k-foot__grid { gap: 28px 16px; }
+    .k-foot__numbers ul { grid-template-columns: 1fr 1fr; }
+    .k-foot__col a { min-height: 40px; }
+    .k-foot__legal { margin-top: 40px; }
+  }
+</style>
