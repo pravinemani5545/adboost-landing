@@ -31,6 +31,7 @@ Any page or content change must keep these true:
 
 - Posts: `src/content/blog/<slug>.md`, schema in `src/content.config.ts`. Author: Amir Salihovic (photo `public/people/amir.webp`).
 - **Scheduled publish (Tue + Thu 12:00 UTC)**: GH Actions `friday-publish.yml` (old file name, no Friday run) hits a Vercel deploy hook (repo secret `VERCEL_DEPLOY_HOOK_URL`) → the rebuild picks up posts whose `pubDate` has arrived and pages whose `pages.json` `publish` date has arrived. Hold a post with `draft: true`.
+  - **The timer lives in adboost-admin, not GitHub** (since 2026-11-15): a Vercel cron calls admin `/api/cron/publish` at 12:00 UTC Tue/Thu, which starts `friday-publish.yml` through `workflow_dispatch`. GitHub was starting its own `schedule` runs 4 to 7 hours late. The `schedule` in the workflow is only a fallback and skips itself when the day's dispatched run already succeeded.
 - **IndexNow (changed URLs only, one key `70b8bdc9...`)**: `indexnow-on-push.yml` (every content push to `main`) and the scheduled publish wait until `/build.txt` shows the new build (no fixed sleep), then `scripts/indexnow.sh` submits sitemap URLs whose `lastmod` is today plus redirect sources the push added or changed in `vercel.json`. A full-sitemap submission is never sent. To catch up a missed day: run `indexnow-on-push.yml` by hand with a `since` date.
 - New post checklist: markdown file with full frontmatter (incl. `heroImage`/`heroAlt`) → hero webp + og jpg generated via the skill-based hero system below (`_heroes/`) → build check.
 

@@ -1,22 +1,45 @@
 name: Scheduled publish
 
-# Rebuilds production Tue and Thu at 12:00 UTC (8:00 Toronto in EDT, 7:00 in
-# EST) so blog posts whose pubDate has arrived and pages whose pages.json
-# `publish` date has arrived go live, then submits only what changed to
-# IndexNow (health plan T3). The file keeps its old name so existing
-# `gh workflow run friday-publish.yml` calls still work; there is no Friday run.
+# Rebuilds production Tue and Thu so blog posts whose pubDate has arrived and
+# pages whose pages.json `publish` date has arrived go live, then submits only
+# what changed to IndexNow (health plan T3). The file keeps its old name so
+# existing `gh workflow run friday-publish.yml` calls still work; there is no
+# Friday run.
+#
+# The 12:00 UTC timer (8:00 Toronto in EDT, 7:00 in EST) lives in adboost-admin:
+# a Vercel cron calls /api/cron/publish, which starts this workflow through
+# workflow_dispatch. GitHub was starting its own `schedule` runs 4 to 7 hours
+# late. The schedule below stays as a fallback and skips itself when the day's
+# dispatched run already succeeded.
 on:
   schedule:
     - cron: '0 12 * * 2,4'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
+      - name: Skip the fallback when today's publish already ran
+        id: guard
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ran=$(gh api -X GET "repos/$GITHUB_REPOSITORY/actions/workflows/friday-publish.yml/runs" \
+            -f event=workflow_dispatch -f status=success -f created=">=$(date -u +%F)" --jq '.total_count')
+          echo "Successful dispatched runs today: $ran"
+          if [ "$ran" -gt 0 ]; then echo "skip=true" >> "$GITHUB_OUTPUT"; fi
+
       - uses: actions/checkout@v4
+        if: steps.guard.outputs.skip != 'true'
 
       - name: Trigger Vercel production rebuild
+        if: steps.guard.outputs.skip != 'true'
         run: |
           echo "BUILT_AFTER=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
           echo "SINCE=$(date -u +%F)" >> "$GITHUB_ENV"
@@ -25,7 +48,9 @@ jobs:
           DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
 
       - name: Wait for the rebuild to go live
+        if: steps.guard.outputs.skip != 'true'
         run: bash scripts/wait-for-deploy.sh
 
       - name: Submit changed URLs to IndexNow
+        if: steps.guard.outputs.skip != 'true'
         run: bash scripts/indexnow.sh "$SINCE"

@@ -10,12 +10,23 @@ KEY=70b8bdc92dc75dde445e7495e95258f2
 SINCE="$1"
 shift
 
-CHANGED=$(curl -sf "https://$HOST/sitemap-0.xml?t=$(date +%s)" \
-  | grep -oE '<url><loc>[^<]+</loc><lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}' \
-  | sed -E 's#<url><loc>([^<]+)</loc><lastmod>(.*)#\2 \1#' \
-  | awk -v since="$SINCE" '$1 >= since { print $2 }')
+# Read the live sitemap up to three times, 10 seconds apart, until it shows a
+# change: right after a deploy an edge node can still serve the previous
+# build's sitemap for a moment. Nothing matching is a valid result, not an error.
+changed_urls() {
+  curl -sf "https://$HOST/sitemap-0.xml?t=$(date +%s)$1" \
+    | grep -oE '<url><loc>[^<]+</loc><lastmod>[0-9]{4}-[0-9]{2}-[0-9]{2}' \
+    | sed -E 's#<url><loc>([^<]+)</loc><lastmod>(.*)#\2 \1#' \
+    | awk -v since="$SINCE" '$1 >= since { print $2 }' || true
+}
+CHANGED=""
+for attempt in 1 2 3; do
+  CHANGED=$(changed_urls "$attempt")
+  if [ -n "$CHANGED" ]; then break; fi
+  if [ "$attempt" -lt 3 ]; then sleep 10; fi
+done
 
-URLS=$({ printf '%s\n' "$CHANGED"; printf '%s\n' "$@"; } | grep -E '^https://' | sort -u | jq -R . | jq -sc .)
+URLS=$({ printf '%s\n' "$CHANGED"; printf '%s\n' "$@"; } | { grep -E '^https://' || true; } | sort -u | jq -R . | jq -sc .)
 COUNT=$(jq 'length' <<<"$URLS")
 if [ "$COUNT" -eq 0 ]; then
   echo "No URLs changed since $SINCE; nothing submitted."
