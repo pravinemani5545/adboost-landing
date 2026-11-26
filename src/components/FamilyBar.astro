@@ -16,7 +16,10 @@ const { current, home, links } = Astro.props;
 
 <div class="fam" role="navigation" aria-label="AdBoost family">
   <div class="container fam-in">
-    <a class="fam-home" href={home} aria-current={current === 'company' ? 'page' : undefined}>AdBoost</a>
+    <a class="fam-home" href={home} aria-label="AdBoost home" aria-current={current === 'company' ? 'page' : undefined}>
+      <svg class="fam-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>
+      <span class="fam-name">AdBoost</span>
+    </a>
     <div class="fam-tabs">
       {links.map((l) => (
         <a href={l.href} class={l.id === current ? 'is-on' : undefined} style={`--dot:${l.dot}`} aria-current={l.id === current ? 'true' : undefined}><i class="fam-dot" aria-hidden="true"></i>{l.tab}</a>
@@ -39,11 +42,17 @@ const { current, home, links } = Astro.props;
   .fam-tabs a:hover .fam-dot { transform: scale(1.35); opacity: 1; }
   .fam-tabs a.is-on { color: #fff; border-bottom-color: var(--dot); }
   .fam-tabs a.is-on .fam-dot { opacity: 1; box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot) 28%, transparent); }
+  .fam-ic { display: none; width: 15px; height: 15px; }
+  /* Phones: the home link becomes an icon and only the current tab keeps its dot,
+     so all four tabs fit across the screen without scrolling. */
   @media (max-width: 760px) {
-    .fam-in { gap: 12px; }
-    .fam-home { padding-right: 12px; }
-    .fam-tabs { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); padding-right: 18px; }
-    .fam-tabs a { padding: 0 9px; }
+    .fam-in { gap: 8px; }
+    .fam-name { display: none; }
+    .fam-ic { display: block; }
+    .fam-home { padding-right: 10px; }
+    .fam-tabs { flex: 1; justify-content: space-between; gap: 0; }
+    .fam-tabs a { padding: 0 5px; gap: 5px; font-size: 12px; }
+    .fam-tabs a:not(.is-on) .fam-dot { display: none; }
   }
   @media (prefers-reduced-motion: no-preference) {
     @view-transition { navigation: auto; }
