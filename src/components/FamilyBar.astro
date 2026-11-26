@@ -2,11 +2,14 @@
 // Row 1 of the navigation: the AdBoost family switcher. It is the same on every
 // page of every section, including the Health site (which carries a copy of this
 // file), so it is self-contained: no site tokens, only its own colours.
+// Each tab carries its section's colour as a dot; the current tab is underlined in it.
 // It is fixed to the top; each site offsets its own header by --fam-h.
+// It also opts every page into cross-page view transitions, so moving between
+// sections fades instead of flashing (browsers without support just navigate).
 interface Props {
   current: string;                                   // id of the active tab, or 'company'
   home: string;                                      // the AdBoost company home
-  links: { id: string; tab: string; href: string }[];
+  links: { id: string; tab: string; href: string; dot: string }[];
 }
 const { current, home, links } = Astro.props;
 ---
@@ -16,7 +19,7 @@ const { current, home, links } = Astro.props;
     <a class="fam-home" href={home} aria-current={current === 'company' ? 'page' : undefined}>AdBoost</a>
     <div class="fam-tabs">
       {links.map((l) => (
-        <a href={l.href} class={l.id === current ? 'is-on' : undefined} aria-current={l.id === current ? 'true' : undefined}>{l.tab}</a>
+        <a href={l.href} class={l.id === current ? 'is-on' : undefined} style={`--dot:${l.dot}`} aria-current={l.id === current ? 'true' : undefined}><i class="fam-dot" aria-hidden="true"></i>{l.tab}</a>
       ))}
     </div>
   </div>
@@ -24,20 +27,26 @@ const { current, home, links } = Astro.props;
 
 <style>
   :global(:root) { --fam-h: 38px; }
-  .fam { position: fixed; inset: 0 0 auto 0; z-index: 90; height: var(--fam-h); background: #0b1114; color: rgba(255, 255, 255, .64); font-family: "Geist", "Geist Fallback", system-ui, sans-serif; font-size: 12.5px; line-height: 1; }
+  .fam { position: fixed; inset: 0 0 auto 0; z-index: 90; height: var(--fam-h); background: #0b0d10; color: rgba(255, 255, 255, .62); font-family: "Geist", "Geist Fallback", system-ui, sans-serif; font-size: 12.5px; line-height: 1; view-transition-name: fam-bar; }
   .fam-in { height: 100%; display: flex; align-items: stretch; gap: 18px; }
-  .fam a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; transition: color .15s; }
+  .fam a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; transition: color .18s; }
   .fam a:hover { color: #fff; }
   .fam-home { font-weight: 700; font-size: 13px; letter-spacing: -.02em; color: #fff; padding-right: 18px; border-right: 1px solid rgba(255, 255, 255, .14); margin: 9px 0; }
   .fam-tabs { display: flex; align-items: stretch; gap: 2px; overflow-x: auto; scrollbar-width: none; }
   .fam-tabs::-webkit-scrollbar { display: none; }
-  .fam-tabs a { padding: 0 11px; border-bottom: 2px solid transparent; border-top: 2px solid transparent; font-weight: 500; }
-  .fam-tabs a.is-on { color: #fff; border-bottom-color: #fff; }
+  .fam-tabs a { gap: 7px; padding: 0 11px; border-bottom: 2px solid transparent; border-top: 2px solid transparent; font-weight: 500; }
+  .fam-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot); opacity: .8; transition: transform .2s, opacity .2s; }
+  .fam-tabs a:hover .fam-dot { transform: scale(1.35); opacity: 1; }
+  .fam-tabs a.is-on { color: #fff; border-bottom-color: var(--dot); }
+  .fam-tabs a.is-on .fam-dot { opacity: 1; box-shadow: 0 0 0 3px color-mix(in srgb, var(--dot) 28%, transparent); }
   @media (max-width: 760px) {
     .fam-in { gap: 12px; }
     .fam-home { padding-right: 12px; }
     .fam-tabs { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 26px), transparent); padding-right: 18px; }
     .fam-tabs a { padding: 0 9px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
   }
 </style>
 

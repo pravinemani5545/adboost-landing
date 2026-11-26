@@ -16,15 +16,15 @@ export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media
 // Row 1 of the navigation: the AdBoost family bar, the same on every page of
 // www.adboost.media (src/components/FamilyBar.astro is a copy of the one in the
 // adboost-media repo; keep the two files and this list identical to that site's
-// src/lib/family.ts). The other sections are absolute links because another project
+// src/lib/family.ts, including each section's dot colour). The other sections are absolute links because another project
 // serves them; "/" is this site's own home, published at /health/.
 const FAMILY_SITE = 'https://www.adboost.media';
 export const FAMILY_HOME = `${FAMILY_SITE}/`;
 export const FAMILY_LINKS = [
-  { id: 'ecommerce', tab: 'Ecommerce', href: `${FAMILY_SITE}/ecommerce/` },
-  { id: 'tech', tab: 'SaaS & Apps', href: `${FAMILY_SITE}/tech/` },
-  { id: 'health', tab: 'Health', href: '/' },
-  { id: 'automation', tab: 'Automation', href: `${FAMILY_SITE}/automation/` },
+  { id: 'ecommerce', tab: 'Ecommerce', dot: '#66d2df', href: `${FAMILY_SITE}/ecommerce/` },
+  { id: 'tech', tab: 'SaaS & Apps', dot: '#a78bfa', href: `${FAMILY_SITE}/tech/` },
+  { id: 'health', tab: 'Health', dot: '#4d8dff', href: '/' },
+  { id: 'automation', tab: 'Automation', dot: '#22c55e', href: `${FAMILY_SITE}/automation/` },
 ];
 
 export function siteBase(site: URL | undefined): string {
