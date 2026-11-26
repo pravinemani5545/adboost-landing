@@ -9,6 +9,8 @@ Marketing site for a health/telehealth growth agency. Conversion goal: booked st
 
 **Canonical domain: `https://www.adboost.health`** (apex 308-redirects to www). It is set once in `astro.config.mjs` `site` and everything derives from it. Never hardcode the apex domain in canonicals, schema, or sitemap references.
 
+**Branch `feat/health-under-media`: published at `https://www.adboost.media/health/`.** The site is still authored as if it sat at the root of `www.adboost.health` (write links as `/blog/x/`, never `/health/blog/x/`; `pnpm dev` serves it at `/`). The `relocate` integration at the end of `astro.config.mjs` then moves the build into `dist/health/` (`404.html` stays at the root), swaps the address to `www.adboost.media/health` and prefixes every root-relative URL, and fails the build on any URL it left outside `/health/` or that does not resolve. `pnpm preview` serves the published layout. `vercel.json` holds published paths (`/health/...`). A root-relative path inside a script is not rewritten (the build warns): use a relative URL or `location` there. Not done on this branch: everything the real move needs outside the build (see the branch's commit message).
+
 ## Copy & content style
 
 - **No em-dashes anywhere** (the em-dash character U+2014, or its `mdash` / `#8212` HTML entities). Not in page copy, UI text, emails (`api/subscribe.js`), blog content, meta descriptions, alt text, comments, or these docs. Use a comma, colon, period, or parentheses instead. They read as an "AI tell" and are banned across AdBoost.

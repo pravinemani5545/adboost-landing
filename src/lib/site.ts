@@ -9,7 +9,8 @@ export const EMAIL = 'hello@adboost.health';
 // CASL: newsletter signups and emails must show a mailing address (a PO box or
 // virtual mailbox is fine). Shown on /privacy/ and /newsletter/ once set.
 export const MAILING_ADDRESS = '';
-// Sister agency for ecommerce / DTC brands (mirrors adboost.media's link back to this site).
+// The rest of www.adboost.media (ecommerce / DTC), which this site is published inside at
+// /health/. A same-tab link: absolute, because it leaves this site's own folder.
 export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media/' };
 
 export function siteBase(site: URL | undefined): string {
@@ -17,7 +18,8 @@ export function siteBase(site: URL | undefined): string {
 }
 
 // Primary nav. Items with `children` render as hover dropdowns in the header
-// (and as grouped sub-links in the mobile menu); `external` opens in a new tab.
+// (and as grouped sub-links in the mobile menu); `external` opens in a new tab. `sister`
+// is the link to the parent site: same tab, and hidden where the header is tight.
 export const NAV = [
   {
     label: 'Services',
@@ -57,5 +59,5 @@ export const NAV = [
     ],
   },
   { label: 'About', href: '/about/' },
-  { label: SISTER.label, href: SISTER.href, external: true },
+  { label: SISTER.label, href: SISTER.href, sister: true },
 ];

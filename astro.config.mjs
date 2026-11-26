@@ -6,7 +6,18 @@ import path from 'node:path';
 import { PAGES, PREVIEW_ALL, gatedPaths, isLive, pageDate } from './src/lib/live.ts';
 import { SEO_STRICT } from './src/lib/seo.ts';
 
+// The site is authored as if it sat at the root of SITE: every link, canonical,
+// sitemap entry and schema URL is written or derived that way, and the release
+// gates and build guards below check that layout. The `relocate` integration
+// runs last and publishes the result at PUBLISHED instead (see it for details).
+// `pnpm dev` serves the authored layout at /; `pnpm preview` serves the
+// published one at /health/.
 const SITE = 'https://www.adboost.health';
+const BASE = '/health';
+const PUBLISHED = `https://www.adboost.media${BASE}`;
+// vercel.json holds published paths. Authored form of one, or null when the
+// path is outside this site (the deployment-root redirect on the preview).
+const authored = (p) => (p === BASE || p.startsWith(`${BASE}/`) ? p.slice(BASE.length) || '/' : null);
 
 if (PREVIEW_ALL && process.env.VERCEL_ENV === 'production') {
   throw new Error('PREVIEW_ALL=1 builds unreleased pages and posts; it is not allowed on a production build.');
@@ -52,7 +63,8 @@ function lastmodFor(p) {
 // A built page whose path is also a redirect source is unreachable on Vercel
 // (redirects run before the filesystem), so it stays out of the sitemap.
 const REDIRECTS = JSON.parse(fs.readFileSync('./vercel.json', 'utf8')).redirects
-  .filter((r) => !r.has && r.source.startsWith('/'))
+  .filter((r) => !r.has && authored(r.source) !== null)
+  .map((r) => ({ ...r, source: authored(r.source), destination: authored(r.destination) ?? r.destination }))
   .map((r) => ({
     ...r,
     re: new RegExp('^' + r.source.replace(/\./g, '\\.').replace(/:\w+\(([^)]*)\)/g, '($1)').replace(/:\w+/g, '([^/]+)') + '$'),
@@ -219,6 +231,118 @@ const minifyInlineScripts = {
   },
 };
 
+// ── Published location: www.adboost.media/health/ ────────────────────────────
+// Runs after every other build step, on the authored output they have checked:
+//   1. moves the files into dist/health/ (404.html stays at the root, where
+//      Vercel looks for the error page);
+//   2. rewrites every text file: SITE becomes PUBLISHED, and root-relative URLs
+//      (href/src/action/poster/srcset attributes, CSS url(), Markdown links in
+//      the llms files) gain the BASE prefix;
+//   3. re-checks the published tree. Errors (always fail the build): the old
+//      address anywhere, a root-relative URL outside BASE, or a same-site URL
+//      that is neither a file nor a vercel.json redirect. Warning (fails only
+//      with SEO_STRICT): a root-relative path inside a script, which this step
+//      does not rewrite.
+// Email addresses (@adboost.health) and the tracker and signup host
+// (admin.adboost.health) are not site URLs and are left alone, as are links to
+// the rest of www.adboost.media.
+const TEXT = /\.(html|css|js|xml|txt|json|svg|webmanifest)$/;
+const relocate = {
+  name: 'relocate',
+  hooks: {
+    'astro:build:done': ({ dir, logger }) => {
+      const dist = new URL(dir).pathname;
+      const pub = path.join(dist, BASE);
+      fs.mkdirSync(pub);
+      for (const e of fs.readdirSync(dist)) {
+        if (e === BASE.slice(1) || e === '404.html') continue;
+        fs.renameSync(path.join(dist, e), path.join(pub, e));
+      }
+
+      const host = (u) => u.replace(/^https:\/\//, '');
+      const prefixUrls = (s) => s.replace(/(url\(\s*['"]?)\/(?!\/)/g, `$1${BASE}/`);
+      const texts = walk(dist).filter((f) => TEXT.test(f));
+      for (const f of texts) {
+        const body = fs.readFileSync(f, 'utf8');
+        let out = body.split(SITE).join(PUBLISHED).split(host(SITE)).join(host(PUBLISHED));
+        if (f.endsWith('.html')) {
+          out = prefixUrls(out.replace(/(\s(?:href|src|action|poster)=["'])\/(?!\/)/g, `$1${BASE}/`))
+            .replace(/(\s(?:srcset|imagesrcset)=)(["'])([^"']*)\2/g, (_, attr, q, list) =>
+              `${attr}${q}${list.replace(/(^|,\s*)\/(?!\/)/g, `$1${BASE}/`)}${q}`);
+        } else if (f.endsWith('.css')) {
+          out = prefixUrls(out);
+        } else if (f.endsWith('.txt')) {
+          out = out.replace(/(\]\()\/(?!\/)/g, `$1${BASE}/`);
+        }
+        if (out !== body) fs.writeFileSync(f, out);
+      }
+
+      const redirects = JSON.parse(fs.readFileSync('./vercel.json', 'utf8')).redirects
+        .filter((r) => !r.has)
+        .map((r) => new RegExp('^' + r.source.replace(/\./g, '\\.').replace(/:\w+\(([^)]*)\)/g, '($1)').replace(/:\w+/g, '([^/]+)') + '$'));
+      const exists = (p) => {
+        const clean = decodeURI(p.replace(/[?#].*$/, ''));
+        const file = path.join(dist, clean);
+        if (fs.existsSync(file) && (fs.statSync(file).isFile() || fs.existsSync(path.join(file, 'index.html')))) return true;
+        return redirects.some((re) => re.test(clean) || re.test(clean.replace(/(.)\/$/, '$1')));
+      };
+      const errors = [];
+      const warnings = [];
+      const inBase = (p) => p === BASE || p.startsWith(`${BASE}/`) || p.startsWith(`${BASE}?`) || p.startsWith(`${BASE}#`);
+      const scriptPaths = (rel, code) => {
+        for (const m of code.matchAll(/["'`](\/(?!\/)[A-Za-z_][^"'`\s]*)/g)) {
+          if (!inBase(m[1])) warnings.push(`${rel} has the root-relative path ${m[1]} in a script; relocate does not rewrite it`);
+        }
+      };
+      const stray = fs.readdirSync(dist).filter((e) => e !== BASE.slice(1) && e !== '404.html');
+      if (stray.length) errors.push(`left at the deployment root: ${stray.join(', ')}`);
+      for (const f of texts) {
+        const rel = '/' + path.relative(dist, f);
+        const body = fs.readFileSync(f, 'utf8');
+        if (body.includes(host(SITE))) errors.push(`${rel} still contains ${host(SITE)}`);
+        const refs = [];
+        if (/\.(html|css)$/.test(f)) {
+          for (const m of body.matchAll(/url\(\s*['"]?(\/(?!\/)[^'")\s]*)/g)) refs.push(m[1]);
+        }
+        if (f.endsWith('.html')) {
+          const markup = body.replace(/(<script\b[^>]*>)([\s\S]*?)<\/script>/g, (tag, open, code) => {
+            if (!/application\/(ld\+json|json)/.test(open)) scriptPaths(rel, code);
+            return `${open}</script>`;
+          });
+          for (const m of markup.matchAll(/\s[a-zA-Z:-]+=["'](\/(?!\/)[^"']*)["']/g)) refs.push(m[1]);
+          for (const m of markup.matchAll(/\s(?:srcset|imagesrcset)=["']([^"']*)["']/g)) {
+            for (const part of m[1].split(',')) {
+              const u = part.trim().split(/\s+/)[0];
+              if (u.startsWith('/') && !u.startsWith('//')) refs.push(u);
+            }
+          }
+          for (const m of body.matchAll(new RegExp(`${escapeRe(PUBLISHED)}(?=[/?#"'<\\s)]|$)([^"'<>\\s)]*)`, 'g'))) refs.push(BASE + m[1]);
+          if (/href=\\"\/(?!\/)/.test(body)) errors.push(`${rel} has an escaped root-relative href (HTML inside JSON) that was not rewritten`);
+        } else if (f.endsWith('.txt')) {
+          for (const m of body.matchAll(/\]\((\/(?!\/)[^)\s]*)\)/g)) refs.push(m[1]);
+          for (const m of body.matchAll(new RegExp(`${escapeRe(PUBLISHED)}(/[^\\s)>\\]"]*)`, 'g'))) refs.push(BASE + m[1]);
+        } else if (f.endsWith('.js')) {
+          scriptPaths(rel, body);
+        } else if (f.endsWith('.xml')) {
+          for (const m of body.matchAll(new RegExp(`${escapeRe(PUBLISHED)}(/[^<"'\\s]*)`, 'g'))) refs.push(BASE + m[1]);
+        }
+        for (const ref of new Set(refs)) {
+          if (!inBase(ref)) errors.push(`${rel} has the root-relative URL ${ref}, outside ${BASE}/`);
+          else if (!exists(ref)) errors.push(`${rel} points at ${ref}, which is not in the published output`);
+        }
+      }
+
+      const uniq = (xs) => [...new Set(xs)];
+      for (const w of uniq(warnings)) logger.warn(w);
+      const fatal = uniq(SEO_STRICT ? [...errors, ...warnings] : errors);
+      if (fatal.length) {
+        throw new Error(`Relocation to ${PUBLISHED} failed (${fatal.length}):\n${fatal.slice(0, 60).join('\n')}`);
+      }
+      logger.info(`published at ${PUBLISHED}/ (${texts.length} text files checked, ${uniq(warnings).length} warning(s))`);
+    },
+  },
+};
+
 export default defineConfig({
   site: SITE,
   devToolbar: { enabled: false },
@@ -233,5 +357,6 @@ export default defineConfig({
     releaseGates,
     minifyInlineScripts,
     siteGuards,
+    relocate,
   ],
 });

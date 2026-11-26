@@ -27,7 +27,7 @@
       ]
     },
     {
-      "source": "/fonts/(.*)",
+      "source": "/health/fonts/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -36,7 +36,7 @@
       ]
     },
     {
-      "source": "/(logos|ads|people|og)/(.*)",
+      "source": "/health/(logos|ads|people|og)/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "source": "/blog/(.*)\\.(webp|jpg|jpeg|png|avif|svg)",
+      "source": "/health/blog/(.*)\\.(webp|jpg|jpeg|png|avif|svg)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -54,7 +54,7 @@
       ]
     },
     {
-      "source": "/(favicon.ico|favicon.png|apple-touch-icon.png)",
+      "source": "/health/(favicon.ico|favicon.png|apple-touch-icon.png)",
       "headers": [
         {
           "key": "Cache-Control",
@@ -76,122 +76,127 @@
       "permanent": true
     },
     {
-      "source": "/protocol/",
-      "destination": "/zero-ban-protocol/",
+      "source": "/",
+      "destination": "/health/",
+      "permanent": false
+    },
+    {
+      "source": "/health/protocol/",
+      "destination": "/health/zero-ban-protocol/",
       "permanent": true
     },
     {
-      "source": "/free/zero-ban-protocol/",
-      "destination": "/zero-ban-protocol/",
+      "source": "/health/free/zero-ban-protocol/",
+      "destination": "/health/zero-ban-protocol/",
       "permanent": true
     },
     {
-      "source": "/free/zero-ban-protocol/checklist/",
-      "destination": "/zero-ban-protocol/checklist/",
+      "source": "/health/free/zero-ban-protocol/checklist/",
+      "destination": "/health/zero-ban-protocol/checklist/",
       "permanent": true
     },
     {
-      "source": "/case-studies",
-      "destination": "/industries/",
+      "source": "/health/case-studies",
+      "destination": "/health/industries/",
       "permanent": true
     },
     {
-      "source": "/case-studies/:path(.*)",
-      "destination": "/industries/",
+      "source": "/health/case-studies/:path(.*)",
+      "destination": "/health/industries/",
       "permanent": true
     },
     {
-      "source": "/services/compliance",
-      "destination": "/services/",
+      "source": "/health/services/compliance",
+      "destination": "/health/services/",
       "permanent": true
     },
     {
-      "source": "/services/compliance/:path(.*)",
-      "destination": "/services/",
+      "source": "/health/services/compliance/:path(.*)",
+      "destination": "/health/services/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/telehealth/",
-      "destination": "/industries/telehealth/",
+      "source": "/health/benchmarks/telehealth/",
+      "destination": "/health/industries/telehealth/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/med-spa/",
-      "destination": "/industries/med-spa/",
+      "source": "/health/benchmarks/med-spa/",
+      "destination": "/health/industries/med-spa/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/glp-1-weight-loss/",
-      "destination": "/industries/glp-1-weight-loss/",
+      "source": "/health/benchmarks/glp-1-weight-loss/",
+      "destination": "/health/industries/glp-1-weight-loss/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/supplements-dtc/",
-      "destination": "/industries/supplements-dtc/",
+      "source": "/health/benchmarks/supplements-dtc/",
+      "destination": "/health/industries/supplements-dtc/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/fertility-ivf/",
-      "destination": "/industries/fertility-ivf/",
+      "source": "/health/benchmarks/fertility-ivf/",
+      "destination": "/health/industries/fertility-ivf/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/peptides/",
-      "destination": "/industries/peptides/",
+      "source": "/health/benchmarks/peptides/",
+      "destination": "/health/industries/peptides/",
       "permanent": true
     },
     {
-      "source": "/benchmarks/:path(.*)",
-      "destination": "/industries/",
+      "source": "/health/benchmarks/:path(.*)",
+      "destination": "/health/industries/",
       "permanent": true
     },
     {
-      "source": "/guides/health-ad-compliance/",
-      "destination": "/advertising/",
+      "source": "/health/guides/health-ad-compliance/",
+      "destination": "/health/advertising/",
       "permanent": true
     },
     {
-      "source": "/guides/:path(.*)",
-      "destination": "/advertising/",
+      "source": "/health/guides/:path(.*)",
+      "destination": "/health/advertising/",
       "permanent": true
     },
     {
-      "source": "/blog/choose-health-growth-agency/",
-      "destination": "/compare/generalist-dtc-agency-alternative/",
+      "source": "/health/blog/choose-health-growth-agency/",
+      "destination": "/health/compare/generalist-dtc-agency-alternative/",
       "permanent": true
     },
     {
-      "source": "/glossary/payback-period/",
-      "destination": "/glossary/cac-payback-period/",
+      "source": "/health/glossary/payback-period/",
+      "destination": "/health/glossary/cac-payback-period/",
       "permanent": true
     },
     {
-      "source": "/glossary/server-side-tracking/",
-      "destination": "/glossary/capi/",
+      "source": "/health/glossary/server-side-tracking/",
+      "destination": "/health/glossary/capi/",
       "permanent": true
     },
     {
-      "source": "/glossary/retention-rate/",
-      "destination": "/glossary/churn-rate/",
+      "source": "/health/glossary/retention-rate/",
+      "destination": "/health/glossary/churn-rate/",
       "permanent": true
     },
     {
-      "source": "/glossary/creative-fatigue/",
-      "destination": "/glossary/creative-testing/",
+      "source": "/health/glossary/creative-fatigue/",
+      "destination": "/health/glossary/creative-testing/",
       "permanent": true
     },
     {
-      "source": "/blog/choosing-paid-media-agency-2026/",
+      "source": "/health/blog/choosing-paid-media-agency-2026/",
       "destination": "https://www.adboost.media/blog/choosing-paid-media-agency-2026/",
       "permanent": true
     },
     {
-      "source": "/blog/b2b-reviews-buying-decisions/",
+      "source": "/health/blog/b2b-reviews-buying-decisions/",
       "destination": "https://www.adboost.media/blog/b2b-reviews-buying-decisions/",
       "permanent": true
     },
     {
-      "source": "/blog/ecommerce-advertising-budget/",
+      "source": "/health/blog/ecommerce-advertising-budget/",
       "destination": "https://www.adboost.media/blog/ecommerce-advertising-budget/",
       "permanent": true
     }
