@@ -13,13 +13,27 @@ export const MAILING_ADDRESS = '';
 // /health/. A same-tab link: absolute, because it leaves this site's own folder.
 export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media/' };
 
+// Row 1 of the navigation: the AdBoost family bar, the same on every page of
+// www.adboost.media (src/components/FamilyBar.astro is a copy of the one in the
+// adboost-media repo; keep the two files and this list identical to that site's
+// src/lib/family.ts). The other sections are absolute links because another project
+// serves them; "/" is this site's own home, published at /health/.
+const FAMILY_SITE = 'https://www.adboost.media';
+export const FAMILY_HOME = `${FAMILY_SITE}/`;
+export const FAMILY_LINKS = [
+  { id: 'ecommerce', tab: 'Ecommerce', href: `${FAMILY_SITE}/ecommerce/` },
+  { id: 'tech', tab: 'SaaS & Apps', href: `${FAMILY_SITE}/tech/` },
+  { id: 'health', tab: 'Health', href: '/' },
+  { id: 'automation', tab: 'Automation', href: `${FAMILY_SITE}/automation/` },
+];
+
 export function siteBase(site: URL | undefined): string {
   return site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 }
 
 // Primary nav. Items with `children` render as hover dropdowns in the header
-// (and as grouped sub-links in the mobile menu); `external` opens in a new tab. `sister`
-// is the link to the parent site: same tab, and hidden where the header is tight.
+// (and as grouped sub-links in the mobile menu); `external` opens in a new tab. The
+// link to the rest of www.adboost.media is the family bar above this nav.
 export const NAV = [
   {
     label: 'Services',
@@ -59,5 +73,4 @@ export const NAV = [
     ],
   },
   { label: 'About', href: '/about/' },
-  { label: SISTER.label, href: SISTER.href, sister: true },
 ];

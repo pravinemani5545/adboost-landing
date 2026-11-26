@@ -50,7 +50,7 @@ html, body { overflow-x: clip; max-width: 100vw; }
 ::selection { background: var(--blue); color: #fff; }
 a, button { touch-action: manipulation; }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
-[id] { scroll-margin-top: 84px; }
+[id] { scroll-margin-top: calc(84px + var(--fam-h, 0px)); }
 
 .container { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
 .container-wide { width: min(1360px, calc(100% - 48px)); margin-inline: auto; }
@@ -66,7 +66,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--blue); outline-
 .mono { font-family: "Geist Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
 
 /* ============ NAV ============ */
-.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease; }
+/* Row 1 is the fixed FamilyBar (height --fam-h, 0 on pages without it); this nav is row 2. */
+body { padding-top: var(--fam-h, 0px); }
+.nav { position: fixed; inset: var(--fam-h, 0px) 0 auto 0; z-index: 50; transition: background .25s ease, border-color .25s ease, backdrop-filter .25s ease; }
 .nav.scrolled { background: rgba(255, 255, 255, .78); backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--line); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
 .brand { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -.015em; font-size: 15.5px; }
@@ -691,7 +693,7 @@ footer { background: #0a0a0f; color: rgba(255, 255, 255, .6); padding: 80px 0 36
 /* ---- mobile menu (burger) ---- */
 .nav-burger { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,.7); color: var(--ink); place-items: center; cursor: pointer; }
 .nav-burger:active { transform: scale(.96); }
-.mnav { display: none; position: fixed; top: 60px; left: 0; right: 0; z-index: 49; background: rgba(255,255,255,.97); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); padding: 8px 16px 14px; }
+.mnav { display: none; position: fixed; top: calc(60px + var(--fam-h, 0px)); left: 0; right: 0; z-index: 49; background: rgba(255,255,255,.97); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); padding: 8px 16px 14px; }
 .mnav.open { display: block; }
 .mnav a { display: block; padding: 13px 8px; font-size: 15px; font-weight: 500; color: var(--ink-2); border-bottom: 1px solid var(--surface-2); }
 .mnav a:last-child { border-bottom: 0; }

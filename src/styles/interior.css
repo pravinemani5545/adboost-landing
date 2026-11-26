@@ -294,7 +294,7 @@
 .aside-toc a.active { color: var(--blue); border-color: var(--blue); font-weight: 500; }
 
 /* section anchor offset for sticky nav */
-.doc-main h2[id], .doc-main h3[id] { scroll-margin-top: 90px; }
+.doc-main h2[id], .doc-main h3[id] { scroll-margin-top: calc(90px + var(--fam-h, 0px)); }
 
 /* inside a doc-main, FAQ + narrow blocks fill the column */
 .doc-main .faq-block { max-width: none; margin: 0; }
