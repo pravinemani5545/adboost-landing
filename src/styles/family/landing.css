@@ -332,3 +332,40 @@
 @media (prefers-reduced-motion: reduce) {
   [data-depth] { translate: none !important; }
 }
+
+/* ---------- 14. Page hero: the full-width band the Media interior pages open on ----------
+   Texture and glows (Backdrop) with a faded bottom edge; crumbs, kicker, the H1 with its
+   gradient serif accent, the lede on a card with a gradient edge; a graphic on the right. */
+.fl-ph { position: relative; isolation: isolate; overflow: clip; padding: calc(var(--k-nav-h) + 52px) 0 80px; }
+.fl-ph > .container { position: relative; z-index: 1; }
+.fl-ph-grid { display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr); gap: 56px; align-items: center; }
+.fl-ph .fl-kicker { margin-top: 20px; }
+.fl-ph h1 { margin: 16px 0 0; max-width: 15ch; font-size: clamp(40px, 5.2vw, 70px); line-height: 1.02; letter-spacing: -.04em; font-weight: var(--k-fw-display); text-wrap: balance; color: var(--text); }
+.fl-ph-lede { position: relative; max-width: 58ch; margin: 26px 0 0; padding: 18px 22px 18px 24px; border-radius: 18px; background: rgb(255 255 255 / .88); box-shadow: var(--shadow-stack); font-size: 16.5px; line-height: 1.6; color: var(--text-2); text-wrap: pretty; }
+.fl-ph-lede::before { content: ""; position: absolute; left: -1px; top: 16px; bottom: 16px; width: 3px; border-radius: 3px; background: linear-gradient(180deg, var(--deep-a), var(--deep-b), rgb(var(--hue-c))); }
+.fl-ph-vis { position: relative; min-width: 0; }
+@media (max-width: 1023px) {
+  .fl-ph-grid { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .fl-ph { padding-bottom: 56px; }
+}
+@media (max-width: 640px) {
+  .fl-ph { padding-top: calc(var(--k-nav-h) + 30px); }
+  .fl-ph h1 { font-size: clamp(34px, 9.4vw, 44px); }
+  .fl-ph-lede { padding: 16px 16px 16px 18px; font-size: 15.5px; }
+}
+
+/* ---------- 15. Chapters: numbered sections, text beside a graphic, alternating bands ---------- */
+.fl-ch { position: relative; padding: clamp(64px, 8vw, 104px) 0; }
+.fl-ch.tint { background: linear-gradient(180deg, var(--k-paper), var(--k-paper-2) 64px, var(--k-paper-2) calc(100% - 64px), var(--k-paper)); }
+.fl-ch-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); gap: clamp(36px, 5vw, 72px); align-items: center; }
+.fl-ch-grid.flip > :first-child { order: 2; }
+.fl-ch-n { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--grad-brand); font-family: var(--k-font-mono); font-size: 12.5px; font-weight: 500; color: #fff; box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .4); }
+.fl-ch h2 { margin: 18px 0 18px; font-size: clamp(30px, 3.8vw, 48px); line-height: 1.06; letter-spacing: -.035em; font-weight: var(--k-fw-display); text-wrap: balance; color: var(--text); }
+.fl-ch p { margin: 0 0 16px; max-width: 62ch; font-size: 16.5px; line-height: 1.7; color: var(--text-2); text-wrap: pretty; }
+.fl-ch p strong { color: var(--text); font-weight: 600; }
+.fl-ch p a { color: var(--k-accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.fl-ch-vis { position: relative; min-width: 0; }
+@media (max-width: 960px) {
+  .fl-ch-grid { grid-template-columns: minmax(0, 1fr); }
+  .fl-ch-grid.flip > :first-child { order: 0; }
+}

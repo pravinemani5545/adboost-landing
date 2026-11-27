@@ -1,7 +1,7 @@
 ---
 import fs from 'node:fs';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Count from '../../kit/components/Count.astro';
 import HubSpoke from '../../kit/diagram/HubSpoke.astro';
@@ -9,7 +9,12 @@ import { siteBase } from '../../lib/site';
 import { PREVIEW_ALL } from '../../lib/live';
 import { versioned } from '../../lib/assets';
 import { breadcrumb, organizationNode, personNode } from '../../lib/schema';
-import '../../styles/pages/chapters.css';
+import Backdrop from '../../family/landing/Backdrop.astro';
+import Hub from '../../family/landing/Hub.astro';
+import Win from '../../family/landing/Win.astro';
+import Glyph from '../../family/landing/Glyph.astro';
+import '../../styles/family/landing.css';
+import '../../styles/pages/about.css';
 
 const SITE = siteBase(Astro.site);
 const path = '/about/';
@@ -56,6 +61,12 @@ const STAT_ICON = [
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8L12 3.5z"/></svg>',
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="4" y="4" width="7" height="9" rx="1.5"/><rect x="13" y="4" width="7" height="6" rx="1.5"/><rect x="13" y="12" width="7" height="8" rx="1.5"/><rect x="4" y="15" width="7" height="5" rx="1.5"/></svg>',
 ];
+// The platform each founder covers, as the system diagram on this page names it (a chip on each card).
+const LANE = ['Meta', 'Google', 'Technology'];
+const LANE_GLYPH = ['feed', 'search', 'pulse'] as const;
+// The policy areas the "Why health-only" chapter names, as rows of a review card.
+const RULES = ['Meta health policy', 'LegitScript requirement', 'rejection trigger', 'FTC and FDA'];
+const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 const teamR = team.map((t) => ({ ...t, hasPhoto: fs.existsSync(`./public${t.photo}`), photo: versioned(t.photo) }));
 const jsonLd = [
   organizationNode(SITE),
@@ -64,55 +75,92 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
-    eyebrow="ABOUT"
-    title='The growth agency that only works in <span class="serif">health</span>.'
-    lede="AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one."
-    art="/art/about/hub"
-  >
-    {/* decorative: the team this page introduces, as a roster card (names and roles as below) */}
-    <div slot="aside" class="k-card k-card--float k-card--glass about-crew" aria-hidden="true">
-      <p class="about-crew__head"><span class="ch-dots"><i></i><i></i><i></i></span><span>Meet the team</span></p>
-      <ul class="about-crew__rows">
-        {teamR.map((t) => (
-          <li>
-            <span class="about-crew__av">{t.hasPhoto ? <img src={t.photo} width="44" height="44" alt="" decoding="async" /> : t.initials}</span>
-            <span class="about-crew__who"><b>{t.name}</b><span>{t.role.toUpperCase()}</span></span>
-            <span class="about-crew__on"></span>
-          </li>
-        ))}
-      </ul>
-      <p class="about-crew__foot"><span class="about-crew__pin"></span>Toronto-based and remote-first</p>
-    </div>
-  </PageHero>
-
-  <section class="iwrap-sm">
-    <div class="container">
-      {/* Usually in the first viewport, so .arrive (never hidden); the numbers count up only
-          when the row starts below the fold (kit count.ts). */}
-      <div class="stat-row about-stats arrive">
-        <div class="stat"><span class="ch-ico" aria-hidden="true" set:html={STAT_ICON[0]} /><div class="sv"><Count value="71+" /></div><div class="sl">Founders served</div></div>
-        <div class="stat"><span class="ch-ico" aria-hidden="true" set:html={STAT_ICON[1]} /><div class="sv"><Count value="$153M+" /></div><div class="sl">Tracked revenue</div></div>
-        <div class="stat"><span class="ch-ico" aria-hidden="true" set:html={STAT_ICON[2]} /><div class="sv"><Count value="4.9" class="sv-n" /><span class="sv-of"> / 5</span></div><div class="sl">Average partner rating</div></div>
-        <div class="stat"><span class="ch-ico" aria-hidden="true" set:html={STAT_ICON[3]} /><div class="sv"><Count value="8,400+" /></div><div class="sl">Creatives shipped</div></div>
+<div class="fl ab">
+  <!-- HERO: the band every family page opens on; the founders wired to the agency beside the copy -->
+  <section class="fl-ph ab-hero" data-pointer>
+    <Backdrop spotlight focus={['74%', '34%']} />
+    <div class="container fl-ph-grid">
+      <div>
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
+        <span class="eyebrow fl-kicker sec-eyebrow"><span class="dot"></span>ABOUT</span>
+        <h1 class="arrive">The growth agency that only works in <span class="serif">health</span>.</h1>
+        <p class="fl-ph-lede arrive" style="--d:60ms">AdBoost Health exists because generalist agencies keep costing health founders 30 days to a rejected launch. We built the opposite: a team that only knows health, so compliance, creative, and CAC are handled from day one.</p>
+      </div>
+      {/* decorative: the three founders this page introduces, wired to the agency (names and roles as below) */}
+      <div class="fl-ph-vis fl-stage ab-hero-vis arrive" style="--d:120ms" data-parallax>
+        <i class="fl-stage-plate" aria-hidden="true" data-depth="0.5"></i>
+        <i class="fl-stage-ring" aria-hidden="true" data-depth="1.5"></i>
+        <div data-depth="1"><Hub core="mark" label="AdBoost Health" nodes={teamR.map((t, i) => ({ label: t.name, sub: t.role.toUpperCase(), img: t.hasPhoto ? t.photo : undefined, hue: (['a', 'b', 'c'] as const)[i] }))} /></div>
+        <span class="ab-pin fl-float" aria-hidden="true" data-depth="2.2"><i></i>Toronto-based and remote-first</span>
       </div>
     </div>
   </section>
 
-  <section class="iwrap-sm">
+  <!-- THE NUMBERS: four cards; below the fold they count up to the printed figure (kit count.ts) -->
+  <section class="ab-stats-band">
     <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="prose">
-            <h2>Why health-only</h2>
-            <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them - every Meta health policy, every LegitScript requirement, every rejection trigger - because health is the only thing we do.</p>
-            <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution - the full acquisition system, built for the one category we specialize in.</p>
-            {showSisterAbout && <p><a href="https://www.adboost.media/about/">AdBoost Media</a> (www.adboost.media) is our ecommerce sister brand for DTC brands outside health.</p>}
-            <h2>Two founders, two platforms - and the engine underneath</h2>
-            <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
-            <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>
-            <div class="about-map ch-card ch-edge" data-reveal>
+      <div class="ab-stats">
+        <div class="ab-stat reveal"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[0]} /><div class="sv fl-grad-num"><Count value="71+" /></div><div class="sl">Founders served</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.38"></i><i style="--h:.52"></i><i style="--h:.48"></i><i style="--h:.7"></i><i style="--h:.86"></i></span></div>
+        <div class="ab-stat reveal d1"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[1]} /><div class="sv fl-grad-num"><Count value="$153M+" /></div><div class="sl">Tracked revenue</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.3"></i><i style="--h:.42"></i><i style="--h:.58"></i><i style="--h:.74"></i><i style="--h:.94"></i></span></div>
+        <div class="ab-stat reveal d2"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[2]} /><div class="sv"><span class="fl-grad-num"><Count value="4.9" class="sv-n" /></span><span class="sv-of"> / 5</span></div><div class="sl">Average partner rating</div><span class="ab-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+        <div class="ab-stat reveal d3"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[3]} /><div class="sv fl-grad-num"><Count value="8,400+" /></div><div class="sl">Creatives shipped</div><span class="ab-tiles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 01: why health-only, beside a policy review card naming the rules the text names -->
+  <section class="fl-ch ab-ch1">
+    <div class="container fl-ch-grid">
+      <div class="reveal">
+        <span class="fl-ch-n" aria-hidden="true">01</span>
+        <h2 class="fl-words">Why health-only</h2>
+        <p>Health is the hardest category in paid media. Ad accounts get disabled overnight, every platform has its own health-vertical policy, and the FTC and FDA are watching the claims. A generalist agency learns those rules on your budget. We already know them - every Meta health policy, every LegitScript requirement, every rejection trigger - because health is the only thing we do.</p>
+        <p>That focus is why our partners average 24% lower CAC in the first 30 days and why their accounts stay live through scale. We pair senior strategists with an in-house creative studio and clean, server-side attribution - the full acquisition system, built for the one category we specialize in.</p>
+        {showSisterAbout && <p><a href="https://www.adboost.media/about/">AdBoost Media</a> (www.adboost.media) is our ecommerce sister brand for DTC brands outside health.</p>}
+      </div>
+      <div class="fl-ch-vis fl-stage reveal d1">
+        <i class="fl-stage-plate" aria-hidden="true"></i>
+        <Win title="Why health-only" class="ab-rules">
+          {RULES.map((r, i) => (
+            <div class="lx-row lx-in" style={`--i:${i}`}>
+              <span class:list={['lx-ic', ['', 'b', 'c', ''][i]]}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5-4-1.9-7-5.3-7-9.5V6l7-3z"/></svg></span>
+              <span class="lx-tx"><span class="lx-t">{r}</span><span class="lx-sk" style={`--w:${[62, 48, 56, 40][i]}%`}></span></span>
+              <span class="lx-check" set:html={CHECK}></span>
+            </div>
+          ))}
+          <Fragment slot="foot"><span class="lx-dot ok live"></span>health is the only thing we do</Fragment>
+        </Win>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 02: the founders and the engine; both halves of the auction beside the text, then the
+       system diagram on its own card -->
+  <section class="fl-ch tint ab-ch2">
+    <div class="container">
+      <div class="fl-ch-grid flip">
+        <div class="reveal">
+          <span class="fl-ch-n" aria-hidden="true">02</span>
+          <h2 class="fl-words">Two founders, two platforms - and the engine underneath</h2>
+          <p>Amir, our Meta ads expert for health brands, focuses on health-vertical creative strategy that stops the scroll and finds the right person; Pira, our Google Ads expert for telehealth, believes in being there the moment they start searching and in developing robust offer architecture for health DTC. We argue, we test, we grow - and health brands get both halves of the auction covered by a founder, not a junior pod. Between us, we’ve helped generate <strong>$150M+</strong> in tracked revenue for health and wellness brands and apps.</p>
+          <p>Underneath both platforms sits the technology layer Pravine owns as CTO: search and AI-engine visibility, server-side attribution, and the AI automation that keeps senior strategists on strategy instead of spreadsheets. When an AI assistant recommends a health brand or a dashboard attributes a booked call to its true source, that’s the part of the agency you’re seeing, powered by our advanced attribution infrastructure.</p>
+        </div>
+        {/* decorative: the two halves of the auction (scroll and search) over the engine, labelled as the diagram below labels them */}
+        <div class="fl-ch-vis fl-stage reveal d1">
+          <i class="fl-stage-ring" aria-hidden="true"></i>
+          <Win title="both halves of the auction" class="ab-auction">
+            <div class="ab-halves">
+              <div class="ab-half lx-in" style="--i:0"><span class="ab-half-art"><Glyph kind="feed" /></span><span class="lx-pill">Meta · Amir</span></div>
+              <div class="ab-half lx-in" style="--i:1"><span class="ab-half-art c"><Glyph kind="search" /></span><span class="lx-pill b">Google · Pira</span></div>
+            </div>
+            <div class="ab-engine lx-in" style="--i:2"><span class="lx-ic solid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></span><span class="lx-t">Technology · Pravine</span><span class="ab-engine-bar"><i></i></span></div>
+          </Win>
+        </div>
+      </div>
+      <div class="ab-map reveal">
+        <div class="lx-win ab-map-win">
+          <div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot live"></span></div>
+          <div class="lx-body">
             <HubSpoke
               arrive
               caption="Two founders, two platforms, and the engine underneath: Amir on Meta, Pira on Google, and the technology layer Pravine owns as CTO."
@@ -123,27 +171,43 @@ const jsonLd = [
                 { label: 'Technology · Pravine', sub: 'Search and AI-engine visibility, server-side attribution, AI automation' },
               ]}
             />
-            </div>
           </div>
         </div>
-        <aside class="doc-aside">
-          <div class="aside-card">
-            <h3>Where we work</h3>
-            <p>Toronto-based and remote-first, serving health and telehealth brands across the US and Canada. Whether you want a digital marketing agency in Toronto or a fully remote marketing agency, you work with the same senior team.</p>
-            <div class="link-list">
-              <a href="mailto:hello@adboost.health">hello@adboost.health</a>
-              <a href="/advertising/">Ad compliance by vertical</a>
-              <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks</a>
-            </div>
-          </div>
-        </aside>
       </div>
 
-      <h2 class="sec-title about-team-title">Meet the team</h2>
-      <div class="team-grid about-team">
+      <aside class="ab-where reveal">
+        <div class="ab-where-art" aria-hidden="true">
+          <span class="ab-where-grid"></span>
+          <span class="ab-where-pin"><i></i></span>
+          <span class="ab-where-ring"></span><span class="ab-where-ring b"></span>
+        </div>
+        <div class="ab-where-txt">
+          <h3>Where we work</h3>
+          <p>Toronto-based and remote-first, serving health and telehealth brands across the US and Canada. Whether you want a digital marketing agency in Toronto or a fully remote marketing agency, you work with the same senior team.</p>
+          <div class="ab-links">
+            <a href="mailto:hello@adboost.health">hello@adboost.health</a>
+            <a href="/advertising/">Ad compliance by vertical</a>
+            <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- THE TEAM: rich cards, each with the platform it covers -->
+  <section class="fl-ch ab-team-sec">
+    <div class="container">
+      <div class="fl-shead center reveal">
+        <span class="fl-kicker" aria-hidden="true"><span class="fl-kdot"></span>03</span>
+        <h2 class="fl-words">Meet the team</h2>
+      </div>
+      <div class="ab-team">
         {teamR.map((t, i) => (
-          <div class="bio about-bio" data-reveal style={`--i:${i}`}>
-            <span class="about-bio__band" aria-hidden="true"></span>
+          <div class="ab-bio" data-reveal style={`--i:${i}`}>
+            <div class="ab-bio-top" aria-hidden="true">
+              <span class="ab-bio-glyph"><Glyph kind={LANE_GLYPH[i]} /></span>
+              <span class:list={['lx-pill', ['', 'b', 'c'][i]]}>{LANE[i]}</span>
+            </div>
             <div class="avatar">{t.hasPhoto ? <img src={t.photo} width="96" height="96" alt={`${t.name}, ${t.role}`} loading="lazy" /> : t.initials}</div>
             <h3>{t.name}</h3>
             <div class="role">{t.role.toUpperCase()}</div>
@@ -158,51 +222,11 @@ const jsonLd = [
   </section>
 
   <CtaBand />
+</div>
+
+<Fragment slot="scripts">
+<script>
+  import '../../family/landing/landing';
+</script>
+</Fragment>
 </BaseLayout>
-
-<style>
-  .about-stats { --d: 160ms; gap: 14px; }
-  .about-stats .stat { position: relative; overflow: clip; display: grid; gap: 4px; padding: 20px 20px 18px; border-radius: var(--k-r-lg); }
-  .about-stats .stat::after { content: ""; position: absolute; inset: auto -30% -60% 30%; height: 120px; background: radial-gradient(closest-side, rgb(var(--hue-b) / .14), transparent); pointer-events: none; }
-  .about-stats .ch-ico { margin-bottom: 10px; }
-  .about-stats .stat:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
-  .about-stats .stat:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
-  .about-stats .sv { font-size: clamp(28px, 3.4vw, 40px); }
-  .sv-of { font-size: 18px; color: var(--k-ink-3); }
-  /* "4.9" is narrower than its 3ch reservation; the "/ 5" sits right after it */
-  .sv :global(.sv-n) { min-width: 0; }
-  /* the team map: a compact triangle on a card, centred in the column */
-  .about-map { width: 100%; max-width: 620px; margin: 28px auto 8px; padding: clamp(14px, 3vw, 26px); }
-  /* h3 (was h4): the heading order runs h2, h3 here */
-  .aside-card h3 { margin: 0 0 8px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
-  .about-team-title { margin-top: var(--k-sp-8); }
-  .about-team { margin-top: 24px; gap: 18px; }
-
-  /* the hero roster card */
-  .about-crew { display: grid; gap: 14px; padding: var(--k-sp-5); }
-  .about-crew__head { margin: 0; display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--k-line); font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--k-ink); }
-  .about-crew__rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
-  .about-crew__rows li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border-radius: var(--k-r-md); background: var(--k-paper); border: 1px solid var(--k-line); box-shadow: var(--k-e1); }
-  .about-crew__rows li:nth-child(2) { margin-left: 22px; }
-  .about-crew__rows li:nth-child(3) { margin-left: 44px; }
-  .about-crew__av { width: 44px; height: 44px; border-radius: 12px; overflow: clip; display: grid; place-items: center; background: var(--grad-vivid); color: #fff; font-weight: 600; box-shadow: 0 0 0 2px var(--k-paper), 0 0 0 3px rgb(var(--hue-b) / .35); }
-  .about-crew__av img { width: 100%; height: 100%; object-fit: cover; }
-  .about-crew__who { display: grid; gap: 2px; min-width: 0; }
-  .about-crew__who b { font-size: 14.5px; font-weight: 600; color: var(--k-ink); }
-  .about-crew__who span { font-family: var(--k-font-mono); font-size: 11px; letter-spacing: .04em; color: var(--k-accent-ink); }
-  .about-crew__on { width: 8px; height: 8px; border-radius: 50%; background: var(--k-ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--k-ok) 18%, transparent); }
-  .about-crew__foot { margin: 0; display: flex; align-items: center; gap: 10px; padding-top: 12px; border-top: 1px solid var(--k-line); font-size: 13px; color: var(--k-ink-3); }
-  .about-crew__pin { width: 8px; height: 8px; border-radius: 50%; background: var(--grad-brand); }
-  @media (max-width: 1023px) { :global(.phero-aside):has(.about-crew) { display: none; } }
-
-  /* founder cards: a hue band, the photo overlapping it, then the story */
-  .about-bio { position: relative; overflow: clip; padding: 0 24px 24px; }
-  .about-bio__band { display: block; height: 86px; margin: 0 -24px; background: radial-gradient(80% 120% at 0% 0%, rgb(var(--hue-a) / .5), transparent 60%), radial-gradient(80% 120% at 100% 100%, rgb(var(--hue-c) / .45), transparent 60%), linear-gradient(120deg, rgb(var(--hue-b) / .35), rgb(var(--hue-a) / .2)); border-bottom: 1px solid var(--k-line); }
-  .about-bio:nth-child(2) .about-bio__band { background: radial-gradient(80% 120% at 0% 0%, rgb(var(--hue-b) / .5), transparent 60%), radial-gradient(80% 120% at 100% 100%, rgb(var(--hue-a) / .45), transparent 60%), linear-gradient(120deg, rgb(var(--hue-c) / .3), rgb(var(--hue-b) / .2)); }
-  .about-bio:nth-child(3) .about-bio__band { background: radial-gradient(80% 120% at 0% 0%, rgb(var(--hue-c) / .5), transparent 60%), radial-gradient(80% 120% at 100% 100%, rgb(var(--hue-b) / .45), transparent 60%), linear-gradient(120deg, rgb(var(--hue-a) / .3), rgb(var(--hue-c) / .2)); }
-  .about-bio .avatar { width: 96px; height: 96px; margin-top: -48px; border-radius: 24px; position: relative; box-shadow: 0 0 0 4px var(--k-paper), 0 18px 30px -16px rgb(var(--hue-b) / .7); }
-  .about-bio .avatar img { border-radius: 24px; }
-  .about-bio h3 { margin-top: 18px; font-size: 19px; }
-  .about-bio .role { display: inline-block; margin-top: 4px; padding: 3px 9px; border-radius: var(--k-r-pill); background: var(--k-accent-soft); }
-  .about-bio p { font-size: 14px; }
-</style>
