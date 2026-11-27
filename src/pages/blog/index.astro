@@ -1,14 +1,57 @@
 ---
+// The blog index: a hero (H1, lede, topic filter) beside the latest post, then every other post in
+// varied rows (two wide cards, three standard, four compact, repeating). The topic filter is a
+// radio group from the posts' own tags and works without JavaScript: CSS hides the cards a topic
+// does not cover (rules generated below). The varied rows give way to an even grid while a topic
+// is chosen.
 import BlogLayout from '../../layouts/BlogLayout.astro';
+import PostCard from '../../components/resources/PostCard.astro';
 import { getPublishedPosts } from '../../lib/blog';
-import { readMinutes } from './_post';
+import { category, readMinutes } from './_post';
 
 const posts = await getPublishedPosts();
 
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
-const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
-// The first screen never waits on a reveal: the lead card and the next row stay put.
-const REVEAL_FROM = 4;
+
+// Topics: every tag on a published post, merged case-insensitively ("CAC" and "cac"), the spelling
+// with capitals kept. Most-used first; the first ones are chips, the rest sit under "More topics".
+const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const topicMap = new Map<string, { slug: string; label: string; count: number; feed: number }>();
+posts.forEach((p, i) => {
+  for (const tag of new Set(p.data.tags)) {
+    const slug = slugify(tag);
+    const t = topicMap.get(slug) ?? { slug, label: tag, count: 0, feed: 0 };
+    if (tag !== tag.toLowerCase() && t.label === t.label.toLowerCase()) t.label = tag;
+    t.count++;
+    if (i > 0) t.feed++;
+    topicMap.set(slug, t);
+  }
+});
+// each topic gets a short key (tp0, tp1, ...): the radio id and the word in each card's data-t
+const topics = [...topicMap.values()]
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+  .map((t, i) => ({ ...t, key: `tp${i}` }));
+const keyOf = new Map(topics.map((t) => [t.slug, t.key]));
+const SHOWN = 9;
+const lead = topics.slice(0, SHOWN);
+const more = topics.slice(SHOWN);
+const topicsOf = (tags: string[]) => [...new Set(tags.map((t) => keyOf.get(slugify(t))))].join(' ');
+
+// One rule per topic: the cards it does not cover get --rs-off (blog.css hides a feed card with it
+// and dims the latest post), and a note shows when the latest post is the only one on the topic.
+const filterCss = topics
+  .map((t) => {
+    const on = `.rs-blog:has(#${t.key}:checked)`;
+    return `${on} :is(.rs-feed>li,.rs-feature):not([data-t~=${t.key}]){--rs-off:none;--rs-dim:.42;--rs-f:saturate(.2)}` +
+      (t.feed === 0 ? `${on} .rs-feed__empty{display:block}` : '');
+  })
+  .join('');
+
+// Row pattern for the feed (the latest post leads the hero): 2 wide, 3 standard, 4 compact.
+const PATTERN = ['wide', 'wide', 'std', 'std', 'std', 'row', 'row', 'row', 'row'] as const;
+// The first screen never waits on a reveal: the hero and the first row stay put.
+const REVEAL_FROM = 2;
+const [latest, ...rest] = posts;
 ---
 
 <BlogLayout
@@ -16,36 +59,94 @@ const REVEAL_FROM = 4;
   description="Playbooks on compliant health advertising, telehealth CAC benchmarks, and scaling paid media for GLP-1, supplement & wellness brands."
   canonical={`${site}/blog/`}
 >
-  <header class="blog-head">
-    <span class="eyebrow arrive"><span class="dot"></span>Blog</span>
-    <h1 class="arrive">Growth playbooks for <span class="serif">health</span> brands.</h1>
-    <p class="arrive" style="--d:60ms">What we learn managing paid media for 71+ health, telehealth, and supplement founders - written down.</p>
-  </header>
-  <ol class="post-grid">
-    {posts.map((post, i) => (
-      <li
-        class:list={['post-grid__item', i === 0 && 'is-lead']}
-        data-reveal={i >= REVEAL_FROM ? '' : undefined}
-        style={i >= REVEAL_FROM ? `--i:${(i - REVEAL_FROM) % 3}` : undefined}
-      >
-        <a class="k-card k-card--link blog-card" href={`/blog/${post.id}/`}>
-          {post.data.heroImage && (
-            <span class="k-card__media" data-vt-card={post.id}>
-              <img src={`${post.data.heroImage}?v=2`} alt={post.data.heroAlt ?? ''} loading={i === 0 ? 'eager' : 'lazy'} decoding={i === 0 ? undefined : 'async'} fetchpriority={i === 0 ? 'high' : undefined} width="640" height="360" />
-            </span>
-          )}
-          <span class="k-card__body">
-            <span class="card-meta">
-              <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-              <span aria-hidden="true">·</span>
-              <span>{readMinutes(post)} min read</span>
-            </span>
-            <h2 class="card-title">{post.data.title}</h2>
-            <span class="card-desc">{post.data.description}</span>
-            <span class="read-more">Read article <span aria-hidden="true">→</span></span>
-          </span>
-        </a>
-      </li>
-    ))}
-  </ol>
+  <style is:inline set:html={filterCss}></style>
+  <div class="rs-blog">
+    <section class="rs-bhero">
+      <div class="rs-bhero__bg" aria-hidden="true">
+        <div class="k-bg k-bg--grid"></div>
+        <div class="rs-glow rs-glow--a"></div>
+        <div class="rs-glow rs-glow--b"></div>
+      </div>
+      <div class="container rs-bhero__grid">
+        <div class="rs-bhero__head">
+          <header class="blog-head">
+            <span class="eyebrow arrive"><span class="dot"></span>Blog</span>
+            <h1 class="arrive">Growth playbooks for <span class="serif">health</span> brands.</h1>
+            <p class="arrive" style="--d:60ms">What we learn managing paid media for 71+ health, telehealth, and supplement founders - written down.</p>
+          </header>
+          <fieldset class="rs-topics arrive" style="--d:90ms">
+            <legend class="rs-topics__k">Browse by topic</legend>
+            <div class="rs-topics__row">
+              <input class="rs-topic-in" type="radio" name="topic" id="tp-all" value="" checked />
+              <label class="rs-chip" for="tp-all">All topics</label>
+              {lead.map((t) => (
+                <>
+                  <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                  <label class="rs-chip" for={t.key}>{t.label}</label>
+                </>
+              ))}
+            </div>
+            {more.length > 0 && (
+              <details class="rs-topics__more">
+                <summary class="rs-chip rs-chip--more">More topics</summary>
+                <div class="rs-topics__row">
+                  {more.map((t) => (
+                    <>
+                      <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                      <label class="rs-chip" for={t.key}>{t.label}</label>
+                    </>
+                  ))}
+                </div>
+              </details>
+            )}
+          </fieldset>
+        </div>
+        {latest && (
+          <div class="rs-feature arrive" style="--d:120ms" data-t={topicsOf(latest.data.tags)}>
+            <PostCard
+              href={`/blog/${latest.id}/`}
+              title={latest.data.title}
+              description={latest.data.description}
+              image={latest.data.heroImage}
+              alt={latest.data.heroAlt}
+              date={latest.data.pubDate}
+              category={category(latest)}
+              minutes={readMinutes(latest)}
+              size="feature"
+              flag="Latest"
+              eager
+              vt={latest.id}
+            />
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="container rs-feedwrap" aria-label="All articles">
+      <ol class="rs-feed">
+        {rest.map((post, i) => (
+          <li
+            class={`rs-feed__item rs-feed__item--${PATTERN[i % PATTERN.length]}`}
+            data-t={topicsOf(post.data.tags)}
+            data-reveal={i >= REVEAL_FROM ? '' : undefined}
+            style={i >= REVEAL_FROM ? `--i:${i % 3}` : undefined}
+          >
+            <PostCard
+              href={`/blog/${post.id}/`}
+              title={post.data.title}
+              description={post.data.description}
+              image={post.data.heroImage}
+              alt={post.data.heroAlt}
+              date={post.data.pubDate}
+              category={category(post)}
+              minutes={readMinutes(post)}
+              size={PATTERN[i % PATTERN.length]}
+              vt={post.id}
+            />
+          </li>
+        ))}
+      </ol>
+      <p class="rs-feed__empty">The latest article, above, is the only one on this topic so far.</p>
+    </section>
+  </div>
 </BlogLayout>

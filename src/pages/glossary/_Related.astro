@@ -1,30 +1,34 @@
 ---
-// "Related terms" (not a route): the entry's own related[] list, in its order. Four or more
-// related entries draw as a small hub (kit HubSpoke), centred in the column; three or fewer are a
-// row of link chips, since a hub with one to three spokes is mostly empty canvas.
-import HubSpoke from '../../kit/diagram/HubSpoke.astro';
+// "Related terms" (not a route): the entry's own related[] list, in its order, as link cards
+// (term, its expansion, and its family), with the caption the hub diagram used to carry.
 import type { Term } from '../../data/glossary';
 import { splitTerm } from './_diagrams';
 
 interface Props { term: Term; related: Term[] }
 const { term, related } = Astro.props;
 const hub = splitTerm(term.term);
-const spokes = related.map((r) => {
+const cards = related.map((r) => {
   const s = splitTerm(r.term);
-  return { label: s.name, sub: s.expansion, href: `/glossary/${r.slug}/` };
+  return { label: s.name, sub: s.expansion, href: `/glossary/${r.slug}/`, compliance: r.family === 'health-specific compliance and measurement', formula: Boolean(r.formula) };
 });
 const caption = `${hub.name} and the terms its entry lists as related.`;
 ---
-{spokes.length >= 4 ? (
-  <div class="rf-related">
-    <HubSpoke caption={caption} hub={{ label: hub.name, sub: hub.expansion }} spokes={spokes} />
+{cards.length > 0 && (
+  <div class="rs-related">
+    <ul class="rs-related__grid rs-rise" data-draw>
+      {cards.map((c, i) => (
+        <li style={`--i:${i}`}>
+          <a class="k-card k-card--link rs-rcard" href={c.href}>
+            <span class="rs-rcard__mark" aria-hidden="true">{c.label.charAt(0)}</span>
+            <span class="rs-rcard__text">
+              <span class="rs-rcard__n">{c.label}</span>
+              {c.sub && <span class="rs-rcard__x">{c.sub}</span>}
+            </span>
+            <span class="rs-rcard__ar" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="rs-related__cap">{caption}</p>
   </div>
-) : spokes.length > 0 ? (
-  <ul class="rf-relchips">
-    {spokes.map((s) => (
-      <li>
-        <a href={s.href}><span class="rf-relchips__n">{s.label}</span>{s.sub && <span class="rf-relchips__x">{s.sub}</span>}<span class="rf-relchips__ar" aria-hidden="true">→</span></a>
-      </li>
-    ))}
-  </ul>
-) : null}
+)}

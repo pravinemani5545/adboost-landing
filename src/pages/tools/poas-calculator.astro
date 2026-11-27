@@ -7,8 +7,10 @@ import Gauge from '../../kit/diagram/Gauge.astro';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { breadcrumb, faqPage } from '../../lib/schema';
-import { poasCalc, valueClass } from './_calc';
+import { money, poasCalc, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
+import '../../styles/resources/tools.css';
+import ResIcon from '../../components/resources/ResIcon.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/poas-calculator/';
@@ -44,13 +46,14 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
     {updatedLabel && <div class="metabar tool-meta"><span>Free tool by AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
   </PageHero>
 
-  <section class="iwrap-sm">
+  <section class="iwrap-sm rs-tool">
     <div class="container">
-     <div class="doc-grid">
-      <div class="doc-main tool-doc">
+     <div class="rs-tdoc">
+      <div class="rs-tdoc__main tool-doc rs-tables">
       <h2 class="sec-title poas-formula-h">POAS calculator formula: profit on ad spend = gross profit ÷ ad spend</h2>
       <p class="poas-formula"><code>POAS = (revenue from ads × gross margin) ÷ ad spend</code> A POAS of 1.0 is break-even on ad spend, before overhead. Enter your numbers and the calculator below updates as you type.</p>
-      <div class="calc k-card k-card--float arrive">
+      <div class="calc k-card k-card--float arrive rs-calc">
+        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">POAS calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="rev">Revenue from ads <span class="hint">(per period)</span></label>
@@ -91,6 +94,10 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
             <div><div class="k">GROSS PROFIT</div><div class="v" id="gpOut">{r.gpText}</div></div>
             <div><div class="k">ROAS (for contrast)</div><div class="v" id="roasOut">{r.roasText}</div></div>
           </div>
+          <div class="rs-fxline">
+            <p class="rs-fxline__sym">POAS = (revenue from ads × gross margin) ÷ ad spend</p>
+            <p class="rs-fxline__live" id="fxLive">({money(REV)} × {MARGIN}%) ÷ {money(SPEND)} = {r.value}</p>
+          </div>
           <div class="cr-note" id="poasNote">{r.note}</div>
         </div>
       </div>
@@ -110,10 +117,10 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
         <table class="dtable">
           <thead><tr><th></th><th>ROAS</th><th>POAS</th></tr></thead>
           <tbody>
-            <tr><th scope="row" class="row-h">Formula</th><td>Revenue from ads ÷ ad spend</td><td>Gross profit from ads ÷ ad spend</td></tr>
-            <tr><th scope="row" class="row-h">Your result</th><td id="tRoas">{r.roasText}</td><td id="tPoas">{r.value}</td></tr>
-            <tr><th scope="row" class="row-h">Break-even on ad spend</th><td>ROAS of <span id="tBe">{r.breakEvenText}</span> at your margin</td><td>POAS of 1.0×</td></tr>
-            <tr><th scope="row" class="row-h">What it ignores</th><td>Cost of goods, so it overstates profit by your COGS</td><td>Overhead and fixed costs</td></tr>
+            <tr><th scope="row" class="row-h">Formula</th><td data-label="ROAS">Revenue from ads ÷ ad spend</td><td data-label="POAS">Gross profit from ads ÷ ad spend</td></tr>
+            <tr><th scope="row" class="row-h">Your result</th><td id="tRoas" data-label="ROAS">{r.roasText}</td><td id="tPoas" data-label="POAS">{r.value}</td></tr>
+            <tr><th scope="row" class="row-h">Break-even on ad spend</th><td data-label="ROAS">ROAS of <span id="tBe">{r.breakEvenText}</span> at your margin</td><td data-label="POAS">POAS of 1.0×</td></tr>
+            <tr><th scope="row" class="row-h">What it ignores</th><td data-label="ROAS">Cost of goods, so it overstates profit by your COGS</td><td data-label="POAS">Overhead and fixed costs</td></tr>
           </tbody>
         </table>
       </div>
@@ -122,26 +129,26 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
         <table class="dtable">
           <thead><tr><th>Illustrative campaign</th><th>Revenue</th><th>Gross margin</th><th>Ad spend</th><th>ROAS</th><th>POAS</th></tr></thead>
           <tbody>
-            <tr><th scope="row" class="row-h">A</th><td>$40,000</td><td>70%</td><td>$10,000</td><td>4.0×</td><td>2.8×</td></tr>
-            <tr><th scope="row" class="row-h">B</th><td>$40,000</td><td>25%</td><td>$10,000</td><td>4.0×</td><td>1.0× (break-even)</td></tr>
+            <tr><th scope="row" class="row-h" data-label="Illustrative campaign">A</th><td data-label="Revenue">$40,000</td><td data-label="Gross margin">70%</td><td data-label="Ad spend">$10,000</td><td data-label="ROAS">4.0×</td><td data-label="POAS">2.8×</td></tr>
+            <tr><th scope="row" class="row-h" data-label="Illustrative campaign">B</th><td data-label="Revenue">$40,000</td><td data-label="Gross margin">25%</td><td data-label="Ad spend">$10,000</td><td data-label="ROAS">4.0×</td><td data-label="POAS">1.0× (break-even)</td></tr>
           </tbody>
         </table>
       </div>
       <p>ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with the same ROAS can have very different POAS if their margins differ, which is why optimizing to ROAS quietly scales low-margin products at a loss. For the full definitions, see <a href="/glossary/poas/">POAS</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, and check whole-account efficiency with the <a href="/tools/mer-calculator/">MER calculator</a>.</p>
 
       <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq"><Faq items={faq} idPrefix="poas" /></div>
+      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="poas" /></div>
       </div>
-      <aside class="doc-aside">
-        <div class="aside-card">
+      <aside class="rs-side">
+        <div class="rs-sidecard">
           <h4>More free tools</h4>
-          <div class="link-list">
-            <a href="/tools/mer-calculator/">MER calculator</a>
-            <a href="/tools/cac-calculator/">CAC calculator</a>
-            <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
-          </div>
+          <ul class="rs-links">
+            <li><a href="/tools/mer-calculator/"><ResIcon href="/tools/mer-calculator/" /><span>MER calculator</span></a></li>
+            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
+            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
+          </ul>
         </div>
-        <div class="aside-card night">
+        <div class="rs-nightcard">
           <h4>Scaling the wrong campaigns?</h4>
           <p>We optimize health accounts to POAS and payback, not vanity ROAS. Free audit, written plan you keep either way.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
@@ -156,7 +163,7 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
 
 <script>
   import { setLive } from '../../kit/diagram/live';
-  import { num, poasCalc, valueClass } from './_calc';
+  import { money, num, poasCalc, valueClass } from './_calc';
 
   const rev = document.getElementById('rev') as HTMLInputElement;
   const margin = document.getElementById('margin') as HTMLInputElement;
@@ -168,6 +175,7 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
   const tRoas = document.getElementById('tRoas')!;
   const tPoas = document.getElementById('tPoas')!;
   const tBe = document.getElementById('tBe')!;
+  const fx = document.getElementById('fxLive')!;
   function calc() {
     const r = poasCalc(num(rev), num(margin), num(spend));
     gpOut.textContent = r.gpText;
@@ -178,6 +186,7 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
     tPoas.textContent = r.value;
     poasOut.className = valueClass(r.verdict);
     note.textContent = r.note;
+    fx.textContent = `(${money(num(rev))} × ${num(margin)}%) ÷ ${money(num(spend))} = ${r.value}`;
     setLive('poas-gauge', r.poas ?? 0, r.value, r.poas === null ? 'Not calculated: enter your ad spend' : `${r.poas.toFixed(1)} times ad spend`);
   }
   [rev, margin, spend].forEach((el) => el.addEventListener('input', calc));

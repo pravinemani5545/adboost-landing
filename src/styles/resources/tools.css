@@ -1,0 +1,299 @@
+@import "./base.css";
+/* Tools: the hub (calculator window hero, one card per calculator with its graphic, the guide)
+   and the five calculators as app cards (window bar, inputs, live result with the formula, steps
+   as a track, FAQ card, side cards). Loaded after styles/pages/tools.css, which keeps the live
+   chart and equation-chain styles. Shared parts in base.css. */
+
+/* ================= hub ================= */
+/* hero window (decorative): tabs, input fields, a result gauge */
+.rs-twin {
+  position: relative;
+  max-width: 500px;
+  margin-inline: auto;
+  border-radius: 24px;
+  background: var(--k-paper);
+  border: 1px solid var(--k-line);
+  box-shadow: var(--k-e4), var(--k-edge-light), 0 50px 90px -50px rgb(var(--hue-a) / 0.55);
+  overflow: clip;
+}
+.rs-twin__bar { display: flex; gap: 6px; padding: 14px 18px; border-bottom: 1px solid var(--k-line); background: var(--k-paper-2); }
+.rs-twin__bar span { width: 10px; height: 10px; border-radius: 50%; background: var(--k-line-2); }
+.rs-twin__bar span:first-child { background: rgb(var(--hue-a) / 0.6); }
+.rs-twin__tabs { display: flex; gap: 6px; padding: 14px 18px 0; flex-wrap: wrap; }
+.rs-twin__tabs span { padding: 5px 11px; border-radius: var(--k-r-pill); font-family: var(--k-font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; color: var(--k-ink-3); background: var(--k-paper-2); box-shadow: inset 0 0 0 1px var(--k-line); }
+.rs-twin__tabs span.on { color: #fff; background: var(--grad-vivid); box-shadow: none; }
+.rs-twin__body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 14px; padding: 18px; }
+.rs-twin__fields { display: grid; gap: 10px; align-content: start; }
+.rs-twin__f { display: grid; gap: 6px; }
+.rs-twin__f i { width: 62%; height: 6px; border-radius: 6px; background: var(--k-line-2); }
+.rs-twin__f b { display: flex; align-items: center; height: 34px; padding: 0 10px; border-radius: 10px; font-family: var(--k-font-mono); font-size: 12px; font-weight: 500; color: var(--k-ink-3); background: var(--k-paper-2); box-shadow: inset 0 0 0 1px var(--k-line); }
+.rs-twin__f--sel b { box-shadow: inset 0 0 0 1.5px var(--k-accent), 0 0 0 4px rgb(var(--hue-a) / 0.12); background: var(--k-paper); }
+.rs-twin__res {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  display: grid;
+  gap: 10px;
+  align-content: center;
+  padding: 16px 14px;
+  border-radius: 16px;
+  background: linear-gradient(160deg, #111836, var(--k-night) 70%);
+  box-shadow: var(--k-edge-night);
+}
+.rs-twin__res::before { content: ""; position: absolute; inset: auto -30% -70% -30%; z-index: -1; height: 200px; background: radial-gradient(closest-side, rgb(var(--hue-a) / 0.55), transparent); }
+.rs-twin__gauge { width: 100%; height: auto; overflow: visible; }
+.rs-g { fill: none; stroke-width: 12; stroke-linecap: round; }
+.rs-g--bad { stroke: #ff8a6b; }
+.rs-g--ok { stroke: #7ee2a8; }
+.rs-g--warn { stroke: #f5c26b; }
+.rs-twin__needle { stroke: #fff; stroke-width: 4; stroke-linecap: round; transform-origin: 100px 100px; }
+.rs-twin__hub { fill: #fff; }
+.rs-twin__lines { display: grid; gap: 6px; }
+.rs-twin__lines i { height: 6px; border-radius: 6px; background: rgb(255 255 255 / 0.18); }
+.rs-twin__lines i:last-child { width: 60%; }
+@media (prefers-reduced-motion: no-preference) {
+  .js.motion .rs-twin__needle { animation: rs-needle 1.4s var(--k-ease-out) 0.3s backwards; }
+}
+@keyframes rs-needle { from { rotate: -86deg; } }
+@media (max-width: 1023px) { .rs-thero .phero-aside { display: none; } }
+
+/* calculator cards: two lead (the guide starts with them), three follow */
+.rs-tgrid { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 700px) { .rs-tgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) {
+  .rs-tgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px; }
+  .rs-tgrid > :nth-child(-n + 2) { grid-column: span 3; }
+  .rs-tgrid > :nth-child(n + 3) { grid-column: span 2; }
+}
+.rs-tcard2 { overflow: clip; color: var(--k-ink); }
+.rs-tcard2__art {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 7;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--k-line);
+  background:
+    radial-gradient(70% 90% at 80% 0%, rgb(var(--hue-c) / 0.12), transparent 70%),
+    radial-gradient(60% 80% at 10% 100%, rgb(var(--hue-b) / 0.1), transparent 70%),
+    linear-gradient(180deg, var(--k-paper-2), var(--k-paper));
+}
+.rs-tcard2__art::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--t-grid) 1px, transparent 1px), linear-gradient(90deg, var(--t-grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(80% 80% at 50% 50%, #000, transparent);
+  mask-image: radial-gradient(80% 80% at 50% 50%, #000, transparent);
+}
+.rs-tgrid > :nth-child(n + 3) .rs-tcard2__art { aspect-ratio: 16 / 8; }
+.rs-art { position: relative; width: min(100%, 300px); height: auto; overflow: visible; }
+.rs-tcard2__body { position: relative; z-index: 1; display: grid; gap: 8px; padding: 22px 24px 22px; flex: 1; align-content: start; }
+.rs-tcard2__ico { position: absolute; right: 22px; top: -22px; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 14px; color: #fff; background: var(--grad-vivid); box-shadow: 0 12px 24px -12px rgb(var(--hue-a) / 0.9), inset 0 1px 0 rgb(255 255 255 / 0.22); }
+.rs-tcard2 h2 { margin: 0; font-size: 19px; font-weight: 600; letter-spacing: -0.016em; line-height: 1.25; color: var(--k-ink); }
+.rs-tcard2 p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--k-ink-3); }
+.rs-tcard2__go { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--k-accent-ink); }
+.rs-tcard2__go span { display: inline-block; transition: translate var(--k-t-snap) var(--k-spring-snap); }
+@media (hover: hover) { .rs-tcard2:hover .rs-tcard2__go span { translate: 4px 0; } }
+
+/* card graphics (ToolArt) */
+.rs-art :is(.k-draw-x, .k-draw-y, .k-pop) { transform-box: fill-box; }
+.rs-art .k-draw-y { transform-origin: center bottom; }
+.rs-art .k-draw-x { transform-origin: left center; }
+.rs-art .k-pop { transform-origin: center; }
+.rs-art__track { fill: var(--k-paper-3); }
+.rs-art__band { fill: rgb(var(--hue-a) / 0.14); stroke: rgb(var(--hue-a) / 0.4); stroke-dasharray: 4 4; }
+.rs-art__tick { stroke: var(--k-line-2); stroke-width: 2; stroke-linecap: round; fill: none; }
+.rs-art__stem { stroke: rgb(var(--hue-a) / 0.6); stroke-width: 2; fill: none; }
+.rs-art__pill { fill: var(--k-night); }
+.rs-art__knob { fill: #fff; stroke: rgb(var(--hue-a)); stroke-width: 4; }
+.rs-art__arc { fill: none; stroke-width: 14; stroke-linecap: round; }
+.rs-art__arc--bad { stroke: #ff9a80; }
+.rs-art__arc--ok { stroke: #34c77b; }
+.rs-art__arc--warn { stroke: #f5b544; }
+.rs-art__needle { stroke: var(--k-night); stroke-width: 5; stroke-linecap: round; fill: none; }
+.rs-art__term { fill: var(--k-paper); stroke: var(--k-line-2); stroke-width: 1.5; filter: drop-shadow(0 6px 10px rgb(var(--k-shadow-rgb) / 0.08)); }
+.rs-art__ln { fill: var(--k-line-2); }
+.rs-art__ln--strong { fill: rgb(var(--hue-a) / 0.55); }
+.rs-art__op { stroke: rgb(var(--hue-a)); stroke-width: 3; stroke-linecap: round; fill: none; }
+.rs-art__res { filter: drop-shadow(0 10px 14px rgb(var(--hue-a) / 0.35)); }
+.rs-art__ring { fill: none; stroke: var(--k-paper-3); stroke-width: 16; }
+.rs-art__seg { fill: none; stroke-width: 16; stroke-linecap: round; }
+.rs-art__core { fill: var(--k-paper); stroke: var(--k-line); }
+.rs-art__bar2 { fill: rgb(var(--hue-b) / 0.18); stroke: rgb(var(--hue-b) / 0.35); }
+.rs-art__be { stroke: var(--k-bad); stroke-width: 2; stroke-dasharray: 6 5; fill: none; }
+
+/* guide: prose beside the flow, the flow framed */
+.rs-tguide { margin-top: clamp(48px, 7vw, 80px); }
+.rs-tguide .prose h2 { font-size: clamp(26px, 3vw, 36px); letter-spacing: -0.03em; line-height: 1.1; }
+.rs-tguide__flow {
+  min-width: 0;
+  padding: clamp(16px, 2.6vw, 26px);
+  border: 1px solid var(--k-line);
+  border-radius: 24px;
+  background: linear-gradient(180deg, var(--k-paper), color-mix(in srgb, var(--k-accent) 2.5%, var(--k-paper-2)));
+  box-shadow: var(--k-e2), var(--k-edge-light);
+}
+@media (min-width: 1024px) { .rs-tguide__flow { position: sticky; top: calc(var(--k-top) + 28px); } .tools-guide.rs-tguide .k-dg--flow { position: static; } }
+
+/* ================= a calculator page ================= */
+.rs-tool { padding-top: clamp(32px, 4vw, 48px); }
+.rs-tdoc { display: grid; gap: 40px; }
+@media (min-width: 1024px) { .rs-tdoc { grid-template-columns: minmax(0, 1fr) 300px; gap: 56px; align-items: start; } }
+.rs-tdoc__main { min-width: 0; }
+
+/* the calculator as an app card */
+.calc.rs-calc { position: relative; padding: 0 22px 22px; gap: 22px; border-radius: 28px; overflow: clip; }
+.rs-calc > .rs-appbar { grid-column: 1 / -1; }
+.rs-appbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 -22px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--k-line);
+  background: linear-gradient(180deg, var(--k-paper-2), var(--k-paper));
+}
+.rs-appbar__dots { display: flex; gap: 6px; }
+.rs-appbar__dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--k-line-2); }
+.rs-appbar__dots i:first-child { background: rgb(var(--hue-a) / 0.6); }
+.rs-appbar__t { flex: 1; font-family: var(--k-font-mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--k-ink-3); }
+.rs-appbar__live { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--k-r-pill); font-family: var(--k-font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--k-ok-ink); background: var(--k-ok-soft); }
+.rs-appbar__live i { width: 6px; height: 6px; border-radius: 50%; background: var(--k-ok); box-shadow: 0 0 0 3px rgb(22 163 74 / 0.18); }
+@media (prefers-reduced-motion: no-preference) { .js.motion .rs-appbar__live i { animation: rs-blink 2.4s var(--k-ease) infinite; } }
+@keyframes rs-blink { 50% { opacity: 0.35; } }
+
+.rs-calc .calc-fields { gap: 18px; align-content: start; padding-top: 2px; }
+.rs-calc .calc-field label { margin-bottom: 8px; font-size: 13.5px; font-weight: 600; color: var(--k-ink); }
+.rs-calc .calc-field .hint { font-weight: 400; font-size: 12px; color: var(--k-ink-3); }
+.rs-calc .calc-input {
+  min-height: 52px;
+  border-radius: 14px;
+  border-color: var(--k-line-2);
+  background: var(--k-paper);
+  box-shadow: inset 0 1px 2px rgb(var(--k-shadow-rgb) / 0.05);
+  transition: border-color var(--k-d-fast) var(--k-ease), box-shadow var(--k-d-base) var(--k-ease);
+}
+.rs-calc .calc-input:hover { border-color: var(--k-line-3); }
+.rs-calc .calc-input:focus-within { border-color: var(--k-accent); box-shadow: 0 0 0 4px rgb(var(--hue-a) / 0.14); }
+.rs-calc .calc-input .pfx,
+.rs-calc .calc-input .sfx { align-self: stretch; display: grid; place-items: center; padding: 0 12px; font-size: 13px; color: var(--k-accent-ink); background: var(--k-accent-soft); }
+.rs-calc .calc-input .pfx { border-right: 1px solid var(--k-accent-line); margin-right: 4px; }
+.rs-calc .calc-input .sfx { border-left: 1px solid var(--k-accent-line); }
+.rs-calc .calc-input input { font-size: 16px; font-weight: 500; padding-left: 10px; }
+.rs-calc .calc-input input:first-child { padding-left: 14px; }
+
+/* the live result: a night panel with the formula under the number */
+.rs-calc .calc-result {
+  border-radius: 22px;
+  background: linear-gradient(160deg, #111836 0%, var(--k-night) 58%, #0c1129 100%);
+  box-shadow: var(--k-edge-night), 0 30px 60px -30px rgb(var(--hue-a) / 0.55);
+}
+.rs-calc .calc-result::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px), linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+  -webkit-mask-image: radial-gradient(90% 70% at 100% 0%, #000, transparent 75%);
+  mask-image: radial-gradient(90% 70% at 100% 0%, #000, transparent 75%);
+}
+.rs-calc .calc-result .cr-value { font-size: clamp(42px, 6vw, 60px); letter-spacing: -0.04em; text-shadow: 0 10px 30px rgb(var(--hue-a) / 0.35); }
+.rs-fxline {
+  position: relative;
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgb(255 255 255 / 0.05);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+.rs-fxline p { margin: 0; font-family: var(--k-font-mono); line-height: 1.5; overflow-wrap: anywhere; }
+.rs-fxline__sym { font-size: 11.5px; color: var(--k-on-night-2); }
+.rs-fxline__sym span:first-child { color: var(--k-accent-bright); }
+.rs-fxline__live { font-size: 14px; font-weight: 500; color: #fff; font-variant-numeric: tabular-nums; }
+
+/* the copy under the calculator */
+.rs-tool .tool-doc > .sec-title { margin-top: 56px; font-size: clamp(26px, 3vw, 36px); }
+.rs-tool .tool-doc > p:not(.tool-fine) { font-size: 16.5px; line-height: 1.72; max-width: 70ch; }
+.rs-tool .tool-fine {
+  position: relative;
+  margin-top: 16px;
+  padding: 12px 16px 12px 42px;
+  border-radius: 14px;
+  background: var(--k-paper-2);
+  border: 1px solid var(--k-line);
+}
+.rs-tool .tool-fine::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--k-ok);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5zm-1.2 14.2-3.9-3.9 1.4-1.4 2.5 2.5 5.4-5.4 1.4 1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5zm-1.2 14.2-3.9-3.9 1.4-1.4 2.5 2.5 5.4-5.4 1.4 1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* steps: a three-card track with a connector from 900px */
+.rs-tool .tool-steps { max-width: none; gap: 14px; margin-top: 20px; }
+.rs-tool .tool-steps > li { position: relative; padding: 18px 20px; border-radius: 18px; background: linear-gradient(180deg, var(--k-paper), var(--k-paper-2)); box-shadow: var(--k-e1), var(--k-edge-light); }
+.rs-tool .tool-steps > li::before { width: 34px; height: 34px; border-radius: 11px; background: var(--grad-vivid); box-shadow: 0 10px 20px -10px rgb(var(--hue-a) / 0.85); }
+@media (min-width: 900px) {
+  .rs-tool .tool-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rs-tool .tool-steps > li { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 14px; }
+  .rs-tool .tool-steps > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(20px + 34px + 10px);
+    right: -8px;
+    top: 35px;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, rgb(var(--hue-a) / 0.45), rgb(var(--hue-c) / 0.1));
+  }
+}
+
+/* FAQ in a card */
+.rs-faqcard { padding: 6px 22px; border: 1px solid var(--k-line); border-radius: 22px; background: var(--k-paper); box-shadow: var(--k-e2), var(--k-edge-light); }
+
+/* POAS: the comparison tables as cards (rs-tables in base.css) */
+.rs-tool .tablewrap { margin-block: 20px 22px; }
+
+@media (max-width: 760px) {
+  .calc.rs-calc { padding: 0 16px 16px; gap: 18px; border-radius: 22px; }
+  .rs-appbar { margin: 0 -16px; padding: 12px 16px; }
+  .rs-tcard2__body { padding: 20px; }
+}
+
+/* POAS: the formula block above the calculator as a card */
+.rs-tool .poas-formula-h { font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; letter-spacing: -0.024em; margin: 0 0 14px; }
+.rs-tool .tool-doc > p.poas-formula {
+  margin: 0 0 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--k-accent-line);
+  border-radius: 18px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--k-accent) 7%, var(--k-paper)), var(--k-paper) 65%);
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  font-size: 15.5px;
+}
+.rs-tool .poas-formula code {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 10px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-family: var(--k-font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #fff;
+  background: linear-gradient(160deg, #111836, var(--k-night));
+  box-shadow: var(--k-edge-night), 0 14px 28px -16px rgb(var(--hue-a) / 0.7);
+  overflow-wrap: anywhere;
+}

@@ -4,7 +4,7 @@
 // CSS off these pages. Shared page logic lives in _post.ts.
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getPublishedPosts } from '../../lib/blog';
-import { postLayoutProps, postParts } from './_post';
+import { postBody, postLayoutProps } from './_post';
 
 export async function getStaticPaths() {
   const all = await getPublishedPosts();
@@ -16,9 +16,10 @@ export async function getStaticPaths() {
 const { post, all } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 // With no frontmatter diagrams, any <!-- diagram: id --> marker fails the build here.
-const html = postParts(post).map((p) => (p.type === 'html' ? p.html : '')).join('');
+const { lead, parts } = postBody(post);
+const html = parts.map((p) => (p.type === 'html' ? p.html : '')).join('');
 ---
 
-<BlogLayout {...postLayoutProps(post, all, site)}>
-  <div class="prose prose--doc"><Fragment set:html={html} /></div>
+<BlogLayout {...postLayoutProps(post, all, site)} {lead}>
+  <div class="prose prose--doc rs-prose"><Fragment set:html={html} /></div>
 </BlogLayout>

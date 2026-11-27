@@ -6,8 +6,10 @@ import Faq from '../../components/Faq.astro';
 import Gauge from '../../kit/diagram/Gauge.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
-import { merCalc, valueClass } from './_calc';
+import { merCalc, money, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
+import '../../styles/resources/tools.css';
+import ResIcon from '../../components/resources/ResIcon.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/mer-calculator/';
@@ -36,11 +38,12 @@ const r = merCalc(REV, SPEND);
     lede="Marketing efficiency ratio (also called media efficiency ratio) is total revenue over total spend, the blended number platforms can't inflate. See what your whole account is really returning."
   />
 
-  <section class="iwrap-sm">
+  <section class="iwrap-sm rs-tool">
     <div class="container">
-     <div class="doc-grid">
-      <div class="doc-main tool-doc">
-      <div class="calc k-card k-card--float arrive">
+     <div class="rs-tdoc">
+      <div class="rs-tdoc__main tool-doc">
+      <div class="calc k-card k-card--float arrive rs-calc">
+        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">MER calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="rev">Total revenue <span class="hint">(all channels, per period)</span></label>
@@ -73,6 +76,10 @@ const r = merCalc(REV, SPEND);
             ]}
             ticks={[{ at: 2, label: '2×' }, { at: 3, label: '3×' }]}
           />
+          <div class="rs-fxline">
+            <p class="rs-fxline__sym">MER = total revenue ÷ total marketing spend</p>
+            <p class="rs-fxline__live" id="fxLive">{money(REV)} ÷ {money(SPEND)} = {r.value}</p>
+          </div>
           <div class="cr-note" id="merNote">{r.note}</div>
         </div>
       </div>
@@ -90,18 +97,18 @@ const r = merCalc(REV, SPEND);
       <p>When a patient sees a Meta ad, a Google ad, and an email before subscribing, each platform can claim the same conversion, so summed platform ROAS over-counts revenue by 30-100%. MER can't be double-counted. Use it as your north star and platform ROAS only for in-channel optimization. See <a href="/glossary/mer/">marketing efficiency ratio (MER)</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, or add margin with the <a href="/tools/poas-calculator/">POAS calculator</a>.</p>
 
       <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq"><Faq items={faq} idPrefix="mer" /></div>
+      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="mer" /></div>
       </div>
-      <aside class="doc-aside">
-        <div class="aside-card">
+      <aside class="rs-side">
+        <div class="rs-sidecard">
           <h4>More free tools</h4>
-          <div class="link-list">
-            <a href="/tools/poas-calculator/">POAS calculator</a>
-            <a href="/tools/cac-calculator/">CAC calculator</a>
-            <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
-          </div>
+          <ul class="rs-links">
+            <li><a href="/tools/poas-calculator/"><ResIcon href="/tools/poas-calculator/" /><span>POAS calculator</span></a></li>
+            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
+            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
+          </ul>
         </div>
-        <div class="aside-card night">
+        <div class="rs-nightcard">
           <h4>Platform ROAS lying to you?</h4>
           <p>We rebuild attribution to blended MER and payback so you scale on real numbers. Free audit, plan you keep either way.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
@@ -116,17 +123,19 @@ const r = merCalc(REV, SPEND);
 
 <script>
   import { setLive } from '../../kit/diagram/live';
-  import { merCalc, num, valueClass } from './_calc';
+  import { merCalc, money, num, valueClass } from './_calc';
 
   const rev = document.getElementById('rev') as HTMLInputElement;
   const spend = document.getElementById('spend') as HTMLInputElement;
   const out = document.getElementById('merOut')!;
   const note = document.getElementById('merNote')!;
+  const fx = document.getElementById('fxLive')!;
   function calc() {
     const r = merCalc(num(rev), num(spend));
     out.textContent = r.value;
     out.className = valueClass(r.verdict);
     note.textContent = r.note;
+    fx.textContent = `${money(num(rev))} ÷ ${money(num(spend))} = ${r.value}`;
     setLive('mer-gauge', r.mer ?? 0, r.value, r.mer === null ? 'Not calculated: enter your total marketing spend' : `${r.mer.toFixed(1)} times total spend`);
   }
   [rev, spend].forEach((el) => el.addEventListener('input', calc));

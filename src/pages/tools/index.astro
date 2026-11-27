@@ -1,25 +1,33 @@
 ---
+// The tools hub: hero with a calculator window (decorative), one card per calculator with a small
+// graphic of what it works out, then the "which calculator" guide and its flow. Styles:
+// resources/tools.css (shared parts in resources/base.css).
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Flow from '../../kit/diagram/Flow.astro';
+import ToolArt from '../../components/resources/ToolArt.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
 import '../../styles/pages/tools.css';
+import '../../styles/resources/tools.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'CAC, LTV:CAC & Ad Budget Calculators | AdBoost Health';
 const description = 'Free calculators for health and DTC brands: work out your CAC, LTV:CAC ratio and payback, and a compliant-scale ad budget, with built-in health benchmarks.';
 // Each tool has its own line glyph (decorative): a target (acquisition cost), a division sign
 // (a ratio), a wallet (budget), a pie (blended efficiency), a rising line (profit on spend).
+// art: the card's graphic (components/resources/ToolArt.astro), shapes only, no numbers.
 const tools = [
-  { href: '/tools/cac-calculator/', name: 'CAC Calculator', desc: 'Work out your true customer acquisition cost and see how it compares to your vertical’s benchmark.', ico: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/>' },
-  { href: '/tools/ltv-cac-calculator/', name: 'LTV:CAC Calculator', desc: 'Check your unit economics: lifetime value, LTV:CAC ratio, and payback period in months.', ico: '<path d="M5 12h14"/><circle cx="12" cy="6.5" r="1.8"/><circle cx="12" cy="17.5" r="1.8"/>' },
-  { href: '/tools/ad-budget-calculator/', name: 'Ad Budget Calculator', desc: 'Reverse-engineer the monthly ad budget you need to hit a customer target at your CAC.', ico: '<path d="M4 7.5A2.5 2.5 0 016.5 5H17v3.5"/><path d="M4 7.5v10A2.5 2.5 0 006.5 20H20v-11.5H6.5A2.5 2.5 0 014 6"/><path d="M16 14.25h1"/>' },
-  { href: '/tools/mer-calculator/', name: 'MER Calculator', desc: 'Marketing efficiency ratio: total revenue over total spend, the blended number platforms can’t inflate.', ico: '<path d="M12 4a8 8 0 108 8h-8z"/><path d="M15 3.6A8 8 0 0120.4 9H15z"/>' },
-  { href: '/tools/poas-calculator/', name: 'POAS Calculator', desc: 'Profit on ad spend: ROAS after margin, so you scale what’s actually profitable, not just efficient.', ico: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>' },
-];
+  { href: '/tools/cac-calculator/', name: 'CAC Calculator', art: 'cac', desc: 'Work out your true customer acquisition cost and see how it compares to your vertical’s benchmark.', ico: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/>' },
+  { href: '/tools/ltv-cac-calculator/', name: 'LTV:CAC Calculator', art: 'ltv', desc: 'Check your unit economics: lifetime value, LTV:CAC ratio, and payback period in months.', ico: '<path d="M5 12h14"/><circle cx="12" cy="6.5" r="1.8"/><circle cx="12" cy="17.5" r="1.8"/>' },
+  { href: '/tools/ad-budget-calculator/', name: 'Ad Budget Calculator', art: 'budget', desc: 'Reverse-engineer the monthly ad budget you need to hit a customer target at your CAC.', ico: '<path d="M4 7.5A2.5 2.5 0 016.5 5H17v3.5"/><path d="M4 7.5v10A2.5 2.5 0 006.5 20H20v-11.5H6.5A2.5 2.5 0 014 6"/><path d="M16 14.25h1"/>' },
+  { href: '/tools/mer-calculator/', name: 'MER Calculator', art: 'mer', desc: 'Marketing efficiency ratio: total revenue over total spend, the blended number platforms can’t inflate.', ico: '<path d="M12 4a8 8 0 108 8h-8z"/><path d="M15 3.6A8 8 0 0120.4 9H15z"/>' },
+  { href: '/tools/poas-calculator/', name: 'POAS Calculator', art: 'poas', desc: 'Profit on ad spend: ROAS after margin, so you scale what’s actually profitable, not just efficient.', ico: '<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>' },
+] as const;
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }])];
+// hero window tabs: the calculators' own names, shortened to the metric
+const TABS = ['CAC', 'LTV:CAC', 'Ad Budget', 'MER', 'POAS'];
 ---
 <BaseLayout {title} {description} canonicalPath="/tools/" {jsonLd}>
   <PageHero
@@ -29,45 +37,73 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools'
     eyebrow="FREE TOOLS"
     title='Free <span class="serif">health-marketing</span> calculators'
     lede="Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good."
-  />
+    class="rs-thero"
+  >
+    <div slot="aside" class="rs-twin" aria-hidden="true">
+      <div class="rs-twin__bar"><span></span><span></span><span></span></div>
+      <div class="rs-twin__tabs">{TABS.map((t, i) => <span class:list={[i === 0 && 'on']}>{t}</span>)}</div>
+      <div class="rs-twin__body">
+        <div class="rs-twin__fields">
+          <span class="rs-twin__f"><i></i><b>$</b></span>
+          <span class="rs-twin__f"><i></i><b></b></span>
+          <span class="rs-twin__f rs-twin__f--sel"><i></i><b></b></span>
+        </div>
+        <div class="rs-twin__res">
+          <svg viewBox="0 0 200 112" class="rs-twin__gauge">
+            <path d="M20 100 A80 80 0 0 1 72 25" class="rs-g rs-g--bad" />
+            <path d="M76 23.5 A80 80 0 0 1 150 30" class="rs-g rs-g--ok" />
+            <path d="M154 33 A80 80 0 0 1 180 100" class="rs-g rs-g--warn" />
+            <path d="M100 100 L132 46" class="rs-twin__needle" />
+            <circle cx="100" cy="100" r="7" class="rs-twin__hub" />
+          </svg>
+          <span class="rs-twin__lines"><i></i><i></i></span>
+        </div>
+      </div>
+    </div>
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="iwrap rs-thub">
     <div class="container">
-      <div class="grid-cards three tools-grid">
-        {tools.map((t) => (
-          <a class="lcard arrive" href={t.href}>
-            <span class="lc-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={t.ico} /></span>
-            <h2>{t.name}</h2>
-            <p>{t.desc}</p>
-            <span class="lc-more">Open calculator →</span>
+      <div class="rs-tgrid">
+        {tools.map((t, i) => (
+          <a class="k-card k-card--link rs-tcard2 arrive" href={t.href} style={`--d:${120 + i * 50}ms`}>
+            <span class="rs-tcard2__art"><ToolArt kind={t.art} /></span>
+            <span class="rs-tcard2__body">
+              <span class="rs-tcard2__ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={t.ico} /></span>
+              <h2>{t.name}</h2>
+              <p>{t.desc}</p>
+              <span class="rs-tcard2__go">Open calculator <span aria-hidden="true">→</span></span>
+            </span>
           </a>
         ))}
       </div>
 
-      <div class="tools-guide">
+      <div class="tools-guide rs-tguide">
         <div class="prose">
           <h2>Which calculator should you use?</h2>
           <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
           <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/capi/#server-side-tracking">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
         </div>
-        <Flow
-          orientation="column"
-          caption="Which calculator first, in the order this guide gives."
-          nodes={[
-            { label: 'CAC calculator', sub: 'Start here: size your acquisition cost against your vertical', href: '/tools/cac-calculator/' },
-            { label: 'LTV:CAC calculator', sub: 'Check whether that CAC is actually profitable', href: '/tools/ltv-cac-calculator/' },
-            { label: 'Ad budget calculator', sub: 'When you are planning spend: work backwards from a customer target', href: '/tools/ad-budget-calculator/' },
-            {
-              label: 'To judge whole-account efficiency',
-              icon: '→',
-              tone: 'ok',
-              branches: [
-                { label: 'MER calculator', sub: 'Blended revenue over spend', href: '/tools/mer-calculator/' },
-                { label: 'POAS calculator', sub: 'Layers in margin', href: '/tools/poas-calculator/' },
-              ],
-            },
-          ]}
-        />
+        <div class="rs-tguide__flow">
+          <Flow
+            orientation="column"
+            caption="Which calculator first, in the order this guide gives."
+            nodes={[
+              { label: 'CAC calculator', sub: 'Start here: size your acquisition cost against your vertical', href: '/tools/cac-calculator/' },
+              { label: 'LTV:CAC calculator', sub: 'Check whether that CAC is actually profitable', href: '/tools/ltv-cac-calculator/' },
+              { label: 'Ad budget calculator', sub: 'When you are planning spend: work backwards from a customer target', href: '/tools/ad-budget-calculator/' },
+              {
+                label: 'To judge whole-account efficiency',
+                icon: '→',
+                tone: 'ok',
+                branches: [
+                  { label: 'MER calculator', sub: 'Blended revenue over spend', href: '/tools/mer-calculator/' },
+                  { label: 'POAS calculator', sub: 'Layers in margin', href: '/tools/poas-calculator/' },
+                ],
+              },
+            ]}
+          />
+        </div>
       </div>
     </div>
   </section>

@@ -1,7 +1,8 @@
 ---
 // Blog index and posts. A thin wrapper over the Shell (skip link, nav, #main, phone CTA, footer)
-// that owns the article chrome: header and byline, hero, page index, reading progress, the CTA
-// banner and related reading. Styles: src/styles/pages/blog.css.
+// that owns the article chrome: the article hero (H1, the opening paragraph, the author card and
+// the hero graphic), the page index with reading progress, the CTA banner and related reading.
+// The index page lays out its own sections. Styles: src/styles/resources/{base,blog}.css.
 //
 // Tracker contract: the CTA banner's Book link is "inline" for t.js (no nav, .mobile-cta,
 // .cta-band or footer ancestor), and the page index is a <nav> that never carries a /book/ link.
@@ -9,7 +10,8 @@ import Shell from './Shell.astro';
 import { versioned } from '../lib/assets';
 import { BOOK_PATH } from '../lib/site';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import '../styles/pages/blog.css';
+import PostCard from '../components/resources/PostCard.astro';
+import '../styles/resources/blog.css';
 
 interface RelatedPost {
   href: string;
@@ -18,6 +20,8 @@ interface RelatedPost {
   heroImage?: string;
   heroAlt?: string;
   pubDate?: Date;
+  category?: string;
+  minutes?: number;
 }
 
 interface Props {
@@ -43,13 +47,15 @@ interface Props {
   };
   readMinutes?: number;
   related?: RelatedPost[];
-  /** The post's visible FAQ section (faqFromBody), emitted as FAQPage JSON-LD */
+  /** The post's visible FAQ section (faqFromHtml), emitted as FAQPage JSON-LD */
   faq?: { q: string; a: string }[];
   /** The post's h2s for the page index (long posts only; empty hides it) */
   toc?: { id: string; html: string }[];
+  /** The post's opening paragraph (rendered HTML), shown under the H1 */
+  lead?: string;
 }
 
-const { title, pageTitle, description, canonical, slug, post, readMinutes, related = [], faq = [], toc = [] } = Astro.props;
+const { title, pageTitle, description, canonical, slug, post, readMinutes, related = [], faq = [], toc = [], lead = '' } = Astro.props;
 const metaTitle = pageTitle ?? title;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
 
@@ -182,94 +188,134 @@ const updated = post?.updatedDate && post.updatedDate.valueOf() > post.pubDate.v
   </Fragment>
 
   {post ? (
-    <article class="blog-article">
-      <header class="post-head container">
-        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog/' }, { label: displayTitle }]} />
-        <div class="post-meta-top">
-          <a class="all-link" href="/blog/">← All articles</a>
-          {category && <span class="cat-chip">{category}</span>}
+    <article class="blog-article rs-post">
+      <header class="rs-phero">
+        <div class="rs-phero__bg" aria-hidden="true">
+          <div class="k-bg k-bg--grid"></div>
+          <div class="rs-glow rs-glow--a"></div>
+          <div class="rs-glow rs-glow--b"></div>
         </div>
-        <h1 class="post-title arrive">{displayTitle}</h1>
-        <div class="byline arrive" style="--d:60ms">
-          <a class="byline-author" href="/about/">
-            <img src={versioned('/people/amir.webp')} alt="" width="44" height="44" loading="eager" />
-            <span class="byline-who">
-              <b>{post.author}</b>
-              <span>{post.authorTitle}</span>
-            </span>
-          </a>
-          <dl class="byline-facts">
-            <div><dt>Published</dt><dd><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time></dd></div>
-            {updated && <div><dt>Updated</dt><dd><time datetime={updated.toISOString()}>{fmt(updated)}</time></dd></div>}
-            {readMinutes && <div><dt>Read</dt><dd>{readMinutes} min</dd></div>}
-          </dl>
+        <div class="rs-wrap">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Blog', href: '/blog/' }, { label: displayTitle }]} />
+          <div class="rs-phero__top">
+            <a class="rs-back" href="/blog/">← All articles</a>
+            {category && <span class="rs-cat">{category}</span>}
+          </div>
+          <h1 class="rs-phero__title arrive">{displayTitle}</h1>
+          <div class:list={['rs-phero__grid', post.heroImage && 'has-art']}>
+            <div class="rs-phero__main">
+              {lead && <div class="rs-lead arrive" style="--d:60ms" set:html={lead} />}
+              <div class="rs-byline arrive" style="--d:90ms">
+                <a class="rs-byline__who" href="/about/">
+                  <img src={versioned('/people/amir.webp')} alt="" width="48" height="48" loading="eager" />
+                  <span class="rs-byline__name">
+                    <b>{post.author}</b>
+                    <span>{post.authorTitle}</span>
+                  </span>
+                </a>
+                <dl class="rs-byline__facts">
+                  <div><dt>Published</dt><dd><time datetime={post.pubDate.toISOString()}>{fmt(post.pubDate)}</time></dd></div>
+                  {updated && <div><dt>Updated</dt><dd><time datetime={updated.toISOString()}>{fmt(updated)}</time></dd></div>}
+                  {readMinutes && <div><dt>Read</dt><dd>{readMinutes} min</dd></div>}
+                </dl>
+              </div>
+            </div>
+            {post.heroImage && (
+              <div class="rs-phero__art arrive" style="--d:120ms" data-mcta-anchor>
+                <div class="rs-shot">
+                  <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" data-vt-hero={slug} />
+                </div>
+                {post.tags.length > 1 && (
+                  <ul class="rs-tags" aria-label="Topics">
+                    {post.tags.map((t) => <li>{t}</li>)}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
-      {post.heroImage && (
-        <div class="hero-figure container arrive" style="--d:90ms" data-mcta-anchor>
-          <img src={`${post.heroImage}?v=2`} alt={post.heroAlt ?? ''} width="1600" height="900" fetchpriority="high" data-vt-hero={slug} />
-        </div>
-      )}
-
-      <div class:list={['post-body', 'container', toc.length > 0 && 'has-toc']}>
+      <div class:list={['post-body', 'rs-body', 'rs-wrap', toc.length > 0 && 'has-toc']}>
         <div class="post-progress" aria-hidden="true"><span></span></div>
         {toc.length > 0 && (
-          <nav class="post-toc" aria-label="On this page" data-toc>
-            <p class="post-toc__title">On this page</p>
-            <div class="post-toc__list">
-              <span class="post-toc__rail" aria-hidden="true"><span></span></span>
-              <ol>
-                {toc.map((t) => <li><a href={`#${t.id}`} set:html={t.html} /></li>)}
-              </ol>
-            </div>
+          <nav class="rs-toc" aria-label="On this page" data-toc>
+            <details class="rs-toc__box" open>
+              <summary class="rs-toc__title">On this page</summary>
+              <div class="rs-toc__list">
+                <span class="rs-toc__rail" aria-hidden="true"><span></span></span>
+                <ol>
+                  {toc.map((t) => <li><a href={`#${t.id}`} set:html={t.html} /></li>)}
+                </ol>
+              </div>
+            </details>
+            <script is:inline>
+              // Collapsed on narrow screens (the page index sits above the article there); open
+              // everywhere without JavaScript.
+              (function () { var d = document.currentScript.previousElementSibling; if (d && matchMedia('(max-width: 1099px)').matches) d.open = false; })();
+            </script>
           </nav>
         )}
-        <div class="post-prose">
+        <div class="post-prose rs-article">
           <slot />
         </div>
       </div>
 
-      <section class="cta-banner-wrap container">
-        <div class="cta-banner">
+      <section class="cta-banner-wrap rs-wrap">
+        <div class="cta-banner rs-cta" data-tone="night">
+          <div class="rs-cta__bg" aria-hidden="true">
+            <div class="k-bg k-bg--grid"></div>
+            <div class="rs-glow rs-glow--a"></div>
+          </div>
           <div class="cta-banner-text">
             <h2>{post.ctaHeading ?? 'Lower CAC. Scale profitably.'}</h2>
             <p>{post.ctaText ?? 'A free 30-minute strategy call with a full account audit - you leave with a written plan, whether we work together or not.'}</p>
           </div>
-          <a class="btn btn-light" href={BOOK_PATH}>
+          <a class="btn rs-cta__btn" href={BOOK_PATH}>
             Book a free strategy call
             <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </a>
+          <svg class="rs-cta__art" viewBox="0 0 220 140" aria-hidden="true" focusable="false" data-draw>
+            <rect x="1" y="1" width="218" height="138" rx="16" class="rs-cta__card" />
+            <rect x="18" y="20" width="64" height="6" rx="3" class="rs-cta__ln" />
+            <rect x="18" y="34" width="110" height="6" rx="3" class="rs-cta__ln rs-cta__ln--dim" />
+            <path d="M18 118 L60 96 L96 104 L134 74 L170 62 L202 34" class="rs-cta__line k-draw" pathLength="1" />
+            <circle cx="202" cy="34" r="5" class="rs-cta__dot k-pop" />
+            <path d="M18 118 H202" class="rs-cta__base" />
+          </svg>
         </div>
       </section>
 
       {related.length > 0 && (
-        <section class="related container" aria-labelledby="related-h">
-          <h2 id="related-h">Keep reading</h2>
-          <ul class="related-grid">
-            {related.map((r, i) => (
-              <li data-reveal style={`--i:${i}`}>
-                <a class="k-card k-card--link rel-card" href={r.href}>
-                  {r.heroImage && (
-                    <span class="k-card__media"><img src={`${r.heroImage}?v=2`} alt={r.heroAlt ?? ''} loading="lazy" decoding="async" width="640" height="360" /></span>
-                  )}
-                  <span class="k-card__body">
-                    {r.pubDate && <time class="card-date" datetime={r.pubDate.toISOString()}>{fmt(r.pubDate)}</time>}
-                    <h3 class="card-title">{r.title}</h3>
-                    <span class="card-desc">{r.description}</span>
-                    <span class="read-more">Read article <span aria-hidden="true">→</span></span>
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+        <section class="related rs-more" aria-labelledby="related-h">
+          <div class="rs-wrap">
+            <div class="rs-more__head">
+              <h2 id="related-h">Keep reading</h2>
+              <a class="rs-more__all" href="/blog/">All articles <span aria-hidden="true">→</span></a>
+            </div>
+            <ul class="rs-more__grid">
+              {related.map((r, i) => (
+                <li data-reveal style={`--i:${i}`}>
+                  <PostCard
+                    href={r.href}
+                    title={r.title}
+                    description={r.description}
+                    image={r.heroImage}
+                    alt={r.heroAlt}
+                    date={r.pubDate}
+                    category={r.category}
+                    minutes={r.minutes}
+                    level={3}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       )}
     </article>
   ) : (
-    <div class="container">
-      <slot />
-    </div>
+    <slot />
   )}
 </Shell>
 
