@@ -37,10 +37,17 @@
 .bk-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
 .bk-dots i:first-child { background: rgb(var(--hue-a)); }
 .bk-url { width: 38%; height: 14px; border-radius: 99px; background: #fff; border: 1px solid var(--line); }
-.bk-frame iframe { display: block; width: 100%; height: 760px; border: 0; }
-.js.motion .bk-steps li { animation: core-rise .6s var(--ease) both; animation-delay: calc(.25s + var(--i) * .12s); }
-.js.motion .bk-steps li:not(:last-child)::before { animation: k-draw-y .7s var(--ease) both; animation-delay: calc(.45s + var(--i) * .12s); }
-@keyframes core-rise { from { opacity: 0; transform: translateY(12px); } }
+/* until Google's calendar paints over it, the frame shows a quiet calendar skeleton, never an empty box */
+.bk-frame { position: relative; background: #fff; }
+.js .bk-frame:not(.is-loaded) { background: radial-gradient(circle at 50% 50%, var(--bg-2) 0 13px, transparent 14px) 22px 92px / 44px 44px, linear-gradient(var(--bg-2), var(--bg-2)) 24px 32px / 180px 14px no-repeat, #fff; }
+.bk-frame iframe { position: relative; display: block; width: 100%; height: 760px; border: 0; }
+/* first screen: on the page from the first frame, a short rise only */
+.js.motion .bk-steps li { animation: core-rise .36s var(--ease) backwards; animation-delay: calc(var(--i) * 40ms); }
+.js.motion .bk-steps li:not(:last-child)::before { animation: core-draw-y .38s var(--ease) backwards; animation-delay: calc(var(--i) * 40ms); }
+@keyframes core-rise { from { transform: translateY(8px); } }
+@keyframes core-draw-y { from { transform: scaleY(.3); } }
+/* FAQ: the first group sits on the first screen, so its list (Faq.astro carries data-reveal) is shown from the first frame */
+.js.motion .fq-groups > .fq-group:first-child .faq-list[data-reveal] { opacity: 1; translate: none; animation: none; }
 @media (max-width: 960px) {
   .bk-card { grid-template-columns: minmax(0, 1fr); }
   .bk-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; padding: 20px 18px; }
@@ -97,9 +104,9 @@
 .nw-lines i { display: block; width: 92%; height: 6px; border-radius: 99px; background: var(--bg-3); }
 .nw-lines .s { width: 62%; } .nw-lines .m { width: 46%; }
 .nw-mail-foot { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 20px 16px; font-size: 11.5px; color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line-3); }
-.js.motion .nw-chart i { animation: core-grow .9s var(--ease) both; animation-delay: calc(.4s + var(--h) * .5s); }
+.js.motion .nw-chart i { animation: core-grow .38s var(--ease) backwards; animation-delay: calc(var(--h) * 60ms); }
 .js.motion .nw-issue { animation: fl-float 9s ease-in-out -2s infinite; }
-@keyframes core-grow { from { transform: scaleY(.08); opacity: .3; } }
+@keyframes core-grow { from { transform: scaleY(.45); } }
 /* the three topics */
 .nw-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 96px 0 0; }
 .nw-card { position: relative; padding: 28px 26px 26px; border-radius: 24px; background: #fff; box-shadow: var(--shadow-stack); transition: translate .35s var(--ease), box-shadow .35s; --ta: var(--hue-a); --td: var(--deep-a); }
