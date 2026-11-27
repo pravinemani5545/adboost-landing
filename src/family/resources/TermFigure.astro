@@ -46,11 +46,25 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   <figure class="tf">
     <Win name="Formula" pill={{ text: famLabel, tone: isCompliance ? 'c' : '' }}>
       <div class="tf-body">
-        {eqs.map((e) => (
-          <p class="tf-line">
-            {e.tokens.map((tok, i) => <span class={tokClass(tok, i < e.lhs.length)} style={`--i:${i}`}>{tok.text}</span>)}
-          </p>
-        ))}
+        {eqs.map((e) => {
+          // "X = A ÷ B" is drawn as a fraction: A over a bar over B (the ÷ stays in the text)
+          const frac = e.lhs.length > 0 && e.rhs.length === 3 && e.rhs[1].type === 'op' && e.rhs[1].op === '÷' && e.rhs[0].type === 'term' && e.rhs[2].type === 'term';
+          return frac ? (
+            <p class="tf-line tf-frac-line">
+              {e.lhs.map((tok, i) => <span class={tokClass(tok, true)} style={`--i:${i}`}>{tok.text}</span>)}
+              <span class="tf-op tf-eq" style={`--i:${e.lhs.length}`}>=</span>
+              <span class="tf-frac" style={`--i:${e.lhs.length + 1}`}>
+                <span class="tf-term">{e.rhs[0].text}</span>
+                <span class="tf-div"><span class="tf-sr">{e.rhs[1].text}</span></span>
+                <span class="tf-term">{e.rhs[2].text}</span>
+              </span>
+            </p>
+          ) : (
+            <p class="tf-line">
+              {e.tokens.map((tok, i) => <span class={tokClass(tok, i < e.lhs.length)} style={`--i:${i}`}>{tok.text}</span>)}
+            </p>
+          );
+        })}
         {ex && (
           <div class="tf-ex">
             {worked?.illustrative && <span class="tf-tag">Illustrative example</span>}
@@ -175,7 +189,13 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-term { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border-radius: 11px; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line-2), 0 6px 14px -10px rgb(var(--k-shadow-rgb) / .35); }
   .tf-lhs { color: #fff; font-weight: 600; background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
   .tf-op { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-family: var(--font-mono); font-size: 13px; color: var(--deep-a); background: rgb(var(--hue-a) / .1); }
-  .tf-eq { color: #fff; background: var(--text); }
+  .tf-eq { color: #fff; background: var(--cp-vivid); box-shadow: 0 6px 12px -6px rgb(var(--hue-b) / .8); }
+  /* a single division as a fraction: numerator, a gradient bar, denominator */
+  .tf-frac-line { flex-wrap: nowrap; }
+  .tf-frac { display: inline-grid; justify-items: center; gap: 6px; min-width: 0; }
+  .tf-frac .tf-term { max-width: 100%; text-align: center; }
+  .tf-div { display: block; width: 100%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgb(var(--hue-a)), rgb(var(--hue-b)) 60%, rgb(var(--hue-c))); }
+  .tf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .tf-paren { font-family: var(--font-mono); font-size: 16px; color: var(--mute); }
   .tf-ex { position: relative; display: grid; gap: 10px; padding: 14px; border-radius: 14px; background: radial-gradient(80% 120% at 100% 0%, rgb(var(--hue-a) / .1), transparent 60%), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
   .tf-tag { justify-self: start; padding: 4px 9px; border-radius: 99px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
@@ -185,8 +205,9 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-rel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
   .tf-rel .ui-lab { margin-right: 4px; }
   .tf-rel-p { padding: 4px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 500; color: var(--text-2); background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
-  :global(.js.motion) .tf-line > span { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .07s); }
-  @keyframes tf-in { from { opacity: 0; translate: 0 6px; } }
+  /* the figure is the page's hero: it paints complete at first paint and settles in under 400ms */
+  :global(.js.motion) .tf-line > span { animation: tf-in .3s var(--ease) backwards; animation-delay: calc(var(--i) * 20ms); }
+  @keyframes tf-in { from { translate: 0 6px; } }
 
   /* flow */
   .tf-flow { position: relative; list-style: none; display: grid; gap: 8px; margin: 0; padding: 16px; }
@@ -203,7 +224,7 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-br :global(.gi) { width: 12px; height: 12px; stroke-width: 2.4; }
   .tf-br.is-ok { color: var(--ok-ink); background: var(--ok-soft); }
   .tf-br.is-bad { color: var(--k-bad-ink); background: var(--k-bad-soft); }
-  :global(.js.motion) .tf-node { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .09s); }
+  :global(.js.motion) .tf-node { animation: tf-in .3s var(--ease) backwards; animation-delay: calc(var(--i) * 25ms); }
 
   /* compare: a claims checker, the two columns of the page's table */
   .tf-cmp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -218,7 +239,7 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-col ul { list-style: none; display: grid; gap: 7px; margin: 0; padding: 0; }
   .tf-col li { margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 12px; line-height: 1.4; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line); }
   .is-bad li { color: var(--text-2); background: var(--bg-2); }
-  :global(.js.motion) .tf-col li { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i) * .08s); }
+  :global(.js.motion) .tf-col li { animation: tf-in .3s var(--ease) backwards; animation-delay: calc(var(--i) * 25ms); }
 
   /* cycle: the pipeline in order, with the loop back to the start drawn on the right */
   .tf-cycle { list-style: none; display: grid; gap: 8px; margin: 0; padding: 16px 44px 16px 16px; }
@@ -228,7 +249,7 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-cycle li:nth-child(3) .tf-cyc-n { background: linear-gradient(135deg, var(--deep-c), var(--deep-a)); }
   .tf-loop { position: absolute; right: 12px; top: 56px; bottom: 16px; width: 24px; height: calc(100% - 72px); fill: none; stroke: rgb(var(--hue-b) / .55); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
   .tf-loop path { vector-effect: non-scaling-stroke; }
-  :global(.js.motion) .tf-cycle li { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .09s); }
+  :global(.js.motion) .tf-cycle li { animation: tf-in .3s var(--ease) backwards; animation-delay: calc(var(--i) * 25ms); }
 
   /* funnel */
   .tf-funnel { list-style: none; display: grid; gap: 8px; margin: 0; padding: 18px 16px; }
@@ -237,8 +258,8 @@ const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
   .tf-funnel li:last-child .tf-fbar { background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9); }
   .tf-funnel li:last-child .tf-node-l { color: #fff; }
   .tf-fnote { padding: 3px 9px; border-radius: 99px; font-size: 11.5px; line-height: 1.35; text-align: center; color: var(--deep-a); background: rgb(var(--hue-a) / .08); }
-  :global(.js.motion) .tf-fbar { animation: tf-grow .6s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .1s); }
-  @keyframes tf-grow { from { opacity: 0; scale: .9 1; } }
+  :global(.js.motion) .tf-fbar { animation: tf-grow .32s var(--ease) backwards; animation-delay: calc(var(--i) * 25ms); }
+  @keyframes tf-grow { from { scale: .92 1; } }
 
   /* iOS ATT: the prompt and the reporting gap of the page's worked example */
   .tf-prompt { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 14px 14px 4px; padding: 12px; border-radius: 14px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }

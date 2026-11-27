@@ -1,69 +1,168 @@
 ---
-// A small graphic of what each calculator works out (decorative, aria-hidden, shapes only, no
-// numbers): CAC a benchmark range with your marker; LTV:CAC a gauge with its three bands; the ad
-// budget its equation chain; MER revenue against spend; POAS two bars against a break-even line.
-// Lines draw and bars grow when the card arrives (data-draw); without motion they are simply there.
+// A small product-UI picture of what each calculator works out, for its card on /tools/
+// (decorative, aria-hidden; shapes only, no words, no numbers): a white mini card with a second
+// floating piece for depth.
+//   cac     benchmark ranges, one per vertical, with your marker on the first
+//   ltv     the night result card with the gauge's three bands
+//   budget  the equation chain: two inputs multiplied into the budget block
+//   mer     several platforms' claims stacked up against one blended bar
+//   poas    ROAS and POAS bars side by side against a break-even line
+// Bars grow and the needle settles when the card arrives (data-draw gets .in); without motion,
+// or before the script runs, the drawing is complete.
 interface Props { kind: 'cac' | 'ltv' | 'budget' | 'mer' | 'poas' }
 const { kind } = Astro.props;
+const ICON = {
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7"/>',
+  users: '<circle cx="9" cy="9" r="3"/><path d="M3.5 18.5c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5M16 6.5a3 3 0 0 1 0 5.5M17.5 14.5c1.5.6 2.6 2 3 4"/>',
+  feed: '<rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/>',
+  mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4 7 8 6 8-6"/>',
+};
+const ic = (name: keyof typeof ICON) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON[name]}</svg>`;
 ---
-<svg class={`rs-art rs-art--${kind}`} viewBox="0 0 240 132" aria-hidden="true" focusable="false" data-draw>
-  <defs>
-    <linearGradient id={`rs-art-g-${kind}`} x1="0" x2="1" y1="0" y2="0">
-      <stop offset="0" stop-color="rgb(var(--hue-a))" />
-      <stop offset="0.6" stop-color="rgb(var(--hue-b))" />
-      <stop offset="1" stop-color="rgb(var(--hue-c))" />
-    </linearGradient>
-  </defs>
+<span class={`ta ta-${kind}`} aria-hidden="true" data-draw>
   {kind === 'cac' && (
     <>
-      <rect x="20" y="58" width="200" height="20" rx="10" class="rs-art__track" />
-      <rect x="92" y="58" width="78" height="20" rx="10" class="rs-art__band" />
-      <rect x="20" y="64" width="112" height="8" rx="4" fill={`url(#rs-art-g-${kind})`} class="k-draw-x" />
-      <path d="M20 96v6M86.7 96v6M153.3 96v6M220 96v6" class="rs-art__tick" />
-      <path d="M132 50 L132 34" class="rs-art__stem k-draw" pathLength="1" />
-      <rect x="108" y="14" width="48" height="22" rx="11" class="rs-art__pill k-pop" />
-      <circle cx="132" cy="68" r="9" class="rs-art__knob k-pop" />
+      <span class="ta-card">
+        <span class="ta-head"><span class="ta-dots"><i></i><i></i><i></i></span><span class="ta-sk" style="width:34%"></span><span class="ta-pill"></span></span>
+        {[[18, 52, true], [36, 74, false], [24, 60, false], [44, 88, false]].map(([lo, hi, me], i) => (
+          <span class:list={['ta-range', me && 'is-me']} style={`--i:${i}`}>
+            <span class="ta-sk" style={`width:${[64, 48, 56, 42][i]}%`}></span>
+            <span class="ta-track"><i class="ta-band" style={`left:${lo}%;right:${100 - (hi as number)}%`}></i>{me && <b class="ta-mk" style="left:34%"></b>}</span>
+          </span>
+        ))}
+      </span>
+      <span class="ta-float ta-float-br"><span class="ta-ic g" set:html={ic('target')} /><span class="ta-lines"><span class="ta-sk d" style="width:72%"></span><span class="ta-sk" style="width:46%"></span></span></span>
     </>
   )}
   {kind === 'ltv' && (
     <>
-      <path d="M40 110 A80 80 0 0 1 95 34" class="rs-art__arc rs-art__arc--bad k-draw" pathLength="1" />
-      <path d="M100 32 A80 80 0 0 1 164 44" class="rs-art__arc rs-art__arc--ok k-draw" pathLength="1" style="--di:1" />
-      <path d="M169 48 A80 80 0 0 1 200 110" class="rs-art__arc rs-art__arc--warn k-draw" pathLength="1" style="--di:2" />
-      <path d="M120 110 L150 52" class="rs-art__needle k-draw" pathLength="1" style="--di:3" />
-      <circle cx="120" cy="110" r="9" class="rs-art__knob k-pop" />
+      <span class="ta-card ta-night">
+        <svg class="ta-gauge" viewBox="0 0 200 112">
+          <path d="M20 100 A80 80 0 0 1 72 25" class="g bad" />
+          <path d="M76 23.5 A80 80 0 0 1 150 30" class="g ok" />
+          <path d="M154 33 A80 80 0 0 1 180 100" class="g warn" />
+          <path d="M100 100 L136 50" class="n" />
+          <circle cx="100" cy="100" r="8" class="h" />
+        </svg>
+        <span class="ta-nl"><i></i><i></i></span>
+      </span>
+      <span class="ta-float ta-float-tl"><span class="ta-ic ok" set:html={ic('check')} /><span class="ta-lines"><span class="ta-sk d" style="width:70%"></span><span class="ta-sk" style="width:44%"></span></span></span>
     </>
   )}
   {kind === 'budget' && (
-    <>
-      <rect x="14" y="40" width="58" height="52" rx="14" class="rs-art__term k-pop" />
-      <rect x="26" y="54" width="22" height="6" rx="3" class="rs-art__ln" />
-      <rect x="26" y="68" width="34" height="10" rx="5" class="rs-art__ln rs-art__ln--strong" />
-      <path d="M82 58 L94 70 M94 58 L82 70" class="rs-art__op" />
-      <rect x="104" y="40" width="58" height="52" rx="14" class="rs-art__term k-pop" style="--di:1" />
-      <rect x="116" y="54" width="22" height="6" rx="3" class="rs-art__ln" />
-      <rect x="116" y="68" width="34" height="10" rx="5" class="rs-art__ln rs-art__ln--strong" />
-      <path d="M172 60 H184 M172 68 H184" class="rs-art__op" />
-      <rect x="192" y="30" width="36" height="72" rx="14" fill={`url(#rs-art-g-${kind})`} class="rs-art__res k-draw-y" />
-    </>
+    <span class="ta-chain">
+      <span class="ta-term"><span class="ta-ic" set:html={ic('users')} /><span class="ta-sk" style="width:80%"></span><span class="ta-sk a" style="width:56%"></span></span>
+      <span class="ta-op">×</span>
+      <span class="ta-term"><span class="ta-ic b" set:html={ic('target')} /><span class="ta-sk" style="width:70%"></span><span class="ta-sk a" style="width:48%"></span></span>
+      <span class="ta-op">=</span>
+      <span class="ta-res"><span class="ta-sk w" style="width:60%"></span><span class="ta-sk w2" style="width:84%"></span><span class="ta-res-bar"></span></span>
+    </span>
   )}
   {kind === 'mer' && (
-    <>
-      <circle cx="78" cy="66" r="42" class="rs-art__ring" />
-      <path d="M78 24 A42 42 0 1 1 36 66" class="rs-art__seg k-draw" pathLength="1" stroke={`url(#rs-art-g-${kind})`} />
-      <circle cx="78" cy="66" r="24" class="rs-art__core" />
-      <rect x="146" y="40" width="74" height="12" rx="6" fill={`url(#rs-art-g-${kind})`} class="k-draw-x" />
-      <rect x="146" y="62" width="30" height="12" rx="6" class="rs-art__bar2 k-draw-x" />
-      <rect x="146" y="84" width="52" height="6" rx="3" class="rs-art__ln" />
-    </>
+    <span class="ta-card ta-mer">
+      <span class="ta-claims">
+        {(['feed', 'search', 'mail'] as const).map((n, i) => (
+          <span class="ta-claim" style={`--i:${i}`}><span class:list={['ta-ic', i === 1 && 'b', i === 2 && 'c']} set:html={ic(n)} /><span class="ta-track"><i class="ta-fill" style={`width:${[82, 70, 58][i]}%`}></i></span></span>
+        ))}
+      </span>
+      <span class="ta-brace"></span>
+      <span class="ta-blend"><span class="ta-blend-bar"></span><span class="ta-sk" style="width:70%"></span></span>
+    </span>
   )}
   {kind === 'poas' && (
-    <>
-      <path d="M20 112 H220" class="rs-art__tick" />
-      <rect x="54" y="26" width="44" height="86" rx="10" class="rs-art__bar2 k-draw-y" />
-      <rect x="132" y="52" width="44" height="60" rx="10" fill={`url(#rs-art-g-${kind})`} class="k-draw-y" />
-      <path d="M24 74 H216" class="rs-art__be" />
-      <circle cx="154" cy="52" r="6" class="rs-art__knob k-pop" />
-    </>
+    <span class="ta-card ta-poas">
+      <span class="ta-plot">
+        <span class="ta-be"></span>
+        {[[78, 58], [86, 34], [70, 50]].map(([r, p], i) => (
+          <span class="ta-pair" style={`--i:${i}`}><i class="ta-col r" style={`height:${r}%`}></i><i class:list={['ta-col', 'p', p < 40 && 'lo']} style={`height:${p}%`}></i></span>
+        ))}
+      </span>
+      <span class="ta-key"><i class="r"></i><span class="ta-sk" style="width:22px"></span><i class="p"></i><span class="ta-sk" style="width:22px"></span></span>
+    </span>
   )}
-</svg>
+</span>
+
+<style>
+  .ta { position: relative; display: grid; place-items: center; width: 100%; height: 100%; }
+  .ta-card { position: relative; display: grid; gap: 8px; width: min(80%, 270px); padding: 12px 14px 14px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 18px 34px -20px rgb(var(--hue-b) / .55), 0 2px 6px -2px rgb(var(--k-shadow-rgb) / .12); }
+  .ta-head { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  .ta-dots { display: inline-flex; gap: 3px; }
+  .ta-dots i { width: 5px; height: 5px; border-radius: 50%; background: rgb(var(--hue-a)); }
+  .ta-dots i:nth-child(2) { background: rgb(var(--hue-b)); } .ta-dots i:nth-child(3) { background: rgb(var(--hue-c)); }
+  .ta-pill { width: 30px; height: 10px; margin-left: auto; border-radius: 99px; background: var(--ok-soft); }
+  .ta-sk { display: block; height: 6px; border-radius: 99px; background: var(--bg-3); }
+  .ta-sk.d { background: var(--line-2); }
+  .ta-sk.a { background: rgb(var(--hue-a) / .35); }
+  .ta-sk.w { background: rgb(255 255 255 / .55); } .ta-sk.w2 { height: 10px; background: rgb(255 255 255 / .9); }
+  .ta-ic { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0; color: var(--deep-a); background: rgb(var(--hue-a) / .1); }
+  .ta-ic.b { color: var(--deep-b); background: rgb(var(--hue-b) / .12); }
+  .ta-ic.c { color: #0e7490; background: rgb(var(--hue-c) / .16); }
+  .ta-ic.g { color: #fff; background: var(--cp-vivid); }
+  .ta-ic.ok { color: var(--ok-ink); background: var(--ok-soft); }
+  .ta-ic :global(svg) { width: 13px; height: 13px; }
+  .ta-float { position: absolute; z-index: 2; display: flex; align-items: center; gap: 8px; width: 112px; padding: 8px 10px 8px 8px; border-radius: 12px; background: rgb(255 255 255 / .94); box-shadow: 0 0 0 1px var(--line), 0 16px 30px -16px rgb(var(--k-shadow-rgb) / .35); }
+  .ta-float-br { right: 7%; bottom: 12%; }
+  .ta-float-tl { left: 8%; top: 14%; }
+  .ta-lines { display: grid; gap: 5px; flex: 1; }
+  .ta-track { position: relative; display: block; height: 8px; border-radius: 99px; background: var(--bg-3); }
+  .ta-band { position: absolute; top: 0; bottom: 0; border-radius: inherit; background: linear-gradient(90deg, rgb(var(--hue-a) / .55), rgb(var(--hue-c) / .55)); }
+  .ta-range.is-me .ta-band { background: var(--grad-brand); }
+  .ta-mk { position: absolute; top: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: #fff; box-shadow: inset 0 0 0 3.5px var(--deep-a), 0 4px 10px -3px rgb(var(--hue-b) / .9); }
+  .ta-range { display: grid; grid-template-columns: 30% minmax(0, 1fr); align-items: center; gap: 10px; }
+
+  /* ltv */
+  .ta-night { justify-items: center; width: min(50%, 164px); padding: 12px 14px 10px; background: radial-gradient(80% 70% at 100% 0%, rgb(var(--hue-b) / .45), transparent 62%), linear-gradient(180deg, var(--k-night-2), var(--k-night)); box-shadow: 0 18px 34px -18px rgb(var(--hue-b) / .8); }
+  .ta-gauge { width: 100%; height: auto; overflow: visible; }
+  .ta-gauge .g { fill: none; stroke-width: 13; stroke-linecap: round; }
+  .ta-gauge .bad { stroke: rgb(var(--hue-c) / .4); } .ta-gauge .ok { stroke: rgb(var(--hue-a)); } .ta-gauge .warn { stroke: rgb(var(--hue-b) / .65); }
+  .ta-gauge .n { stroke: #fff; stroke-width: 4; stroke-linecap: round; transform-origin: 100px 100px; }
+  .ta-gauge .h { fill: #fff; }
+  .ta-nl { display: grid; gap: 5px; justify-items: center; width: 100%; }
+  .ta-nl i { display: block; width: 62%; height: 6px; border-radius: 99px; background: rgb(255 255 255 / .24); }
+  .ta-nl i + i { width: 40%; background: rgb(255 255 255 / .12); }
+  .ta-ltv .ta-float-tl { left: 6%; top: auto; bottom: 14%; }
+
+  /* budget */
+  .ta-chain { display: flex; align-items: center; gap: 8px; }
+  .ta-term { display: grid; gap: 6px; width: 76px; padding: 10px; border-radius: 13px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 14px 26px -18px rgb(var(--hue-b) / .6); }
+  .ta-op { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--deep-a); }
+  .ta-res { position: relative; display: grid; align-content: start; gap: 6px; width: 70px; height: 92px; padding: 12px 10px; border-radius: 14px; background: var(--cp-vivid); box-shadow: 0 16px 28px -14px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
+  .ta-res-bar { position: absolute; left: 10px; right: 10px; bottom: 12px; height: 26px; border-radius: 8px; background: rgb(255 255 255 / .16); }
+
+  /* mer */
+  .ta-mer { grid-template-columns: minmax(0, 1fr) 10px 64px; align-items: center; gap: 10px; }
+  .ta-claims { display: grid; gap: 7px; }
+  .ta-claim { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: center; gap: 8px; }
+  .ta-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: inherit; background: rgb(var(--hue-b) / .5); }
+  .ta-claim:nth-child(2) .ta-fill { background: rgb(var(--hue-c) / .6); }
+  .ta-claim:nth-child(3) .ta-fill { background: rgb(var(--hue-a) / .45); }
+  .ta-brace { align-self: stretch; margin: 10px 0; border: 1.5px solid rgb(var(--hue-a) / .5); border-left: 0; border-radius: 0 8px 8px 0; }
+  .ta-blend { display: grid; gap: 7px; justify-items: center; padding: 10px 8px; border-radius: 12px; background: radial-gradient(90% 120% at 100% 0%, rgb(var(--hue-a) / .14), transparent 60%), #fff; box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .4); }
+  .ta-blend-bar { width: 100%; height: 30px; border-radius: 8px; background: var(--cp-vivid); }
+
+  /* poas */
+  .ta-poas { gap: 10px; }
+  .ta-plot { position: relative; display: flex; align-items: flex-end; justify-content: space-around; height: 78px; padding: 0 6px; border-bottom: 1.5px solid var(--line-2); }
+  .ta-be { position: absolute; left: 0; right: 0; bottom: 42%; border-top: 1.5px dashed rgb(220 38 38 / .5); }
+  .ta-pair { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 4px; height: 100%; }
+  .ta-col { display: block; width: 16px; border-radius: 5px 5px 2px 2px; transform-origin: 50% 100%; }
+  .ta-col.r { background: rgb(var(--hue-b) / .28); box-shadow: inset 0 0 0 1px rgb(var(--hue-b) / .3); }
+  .ta-col.p { background: var(--cp-vivid); }
+  .ta-col.p.lo { background: rgb(220 38 38 / .65); }
+  .ta-key { display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .ta-key i { width: 9px; height: 9px; border-radius: 3px; }
+  .ta-key i.r { background: rgb(var(--hue-b) / .3); } .ta-key i.p { margin-left: 8px; background: var(--cp-vivid); }
+
+  /* arrival: bars grow from a third, columns rise from half, the needle settles (transform only) */
+  :global(.js.motion) .ta.in :is(.ta-band, .ta-fill) { transform-origin: 0 50%; animation: ta-x .6s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 60ms + 120ms); }
+  :global(.js.motion) .ta.in .ta-col { animation: ta-y .6s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 70ms + 120ms); }
+  :global(.js.motion) .ta.in .ta-gauge .n { animation: ta-swing .8s var(--ease) .15s backwards; }
+  :global(.js.motion) .ta.in .ta-float { animation: ta-up .5s var(--ease) .25s backwards; }
+  @keyframes ta-x { from { transform: scaleX(.35); } }
+  @keyframes ta-y { from { transform: scaleY(.4); } }
+  @keyframes ta-swing { from { rotate: -50deg; } }
+  @keyframes ta-up { from { translate: 0 8px; } }
+  @media (max-width: 420px) { .ta-term { width: 64px; } .ta-res { width: 58px; height: 80px; } .ta-float { width: 96px; } }
+</style>

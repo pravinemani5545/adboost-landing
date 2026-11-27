@@ -76,9 +76,10 @@
 .family .adr-rv-flags li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; margin: 0; padding: 8px 10px; border-radius: 11px; font-size: 12.5px; line-height: 1.4; color: var(--text); background: linear-gradient(90deg, var(--k-bad-soft), rgb(255 255 255 / 0) 85%); }
 .family .adr-x { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; color: #fff; background: var(--k-bad); }
 .family .adr-x .gi { width: 12px; height: 12px; stroke-width: 2.6; }
-.js.motion .family .adr-rv-plats li, .js.motion .family .adr-rv-flags li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .09s); }
-.js.motion .family .adr-rv-flags li { animation-delay: calc(.7s + var(--i, 0) * .1s); }
-@keyframes adr-in { from { opacity: 0; translate: 0 8px; } }
+/* hero graphics paint complete at first paint: rows settle in, transform only, under 400ms */
+.js.motion .family .adr-rv-plats li, .js.motion .family .adr-rv-flags li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
+.js.motion .family .adr-rv-flags li { animation-delay: calc(40ms + var(--i, 0) * 30ms); }
+@keyframes adr-in { from { translate: 0 6px; } }
 @media (max-width: 480px) {
   .family .adr-rv-top { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 12px; }
   .family .adr-ad { min-height: 150px; }
@@ -357,8 +358,8 @@
 .family .adr-pm-l { font-size: 10.5px; font-weight: 600; line-height: 1.2; color: var(--lv-ink); }
 .family .adr-pm-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 0; padding: 11px 16px 13px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
 .family .adr-pm-legend li { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 11.5px; color: var(--text-2); }
-.js.motion .family .adr-pm-cell { animation: adr-pop .45s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .035s); }
-@keyframes adr-pop { from { opacity: 0; scale: .85; } }
+.js.motion .family .adr-pm-cell { animation: adr-pop .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 4ms); }
+@keyframes adr-pop { from { scale: .94; } }
 @media (max-width: 480px) {
   .family .adr-pm-grid { grid-template-columns: minmax(0, 1fr) repeat(var(--cols), 44px); gap: 5px; padding: 12px 10px 10px; }
   .family .adr-pm-cell { align-items: center; min-height: 38px; padding: 0; }
@@ -500,16 +501,22 @@
 /* platform hub hero: the platform's status per vertical */
 .family .adr-pp-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px; }
 .family .adr-pp-head b { font-family: var(--font-display); font-size: 17px; letter-spacing: -.015em; }
-.family .adr-pp-rows { list-style: none; margin: 0; padding: 6px 12px 12px; display: grid; gap: 7px; }
-.family .adr-pp-rows li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; margin: 0; padding: 9px 10px; border-radius: 13px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 8px 16px -14px rgb(var(--k-shadow-rgb) / .3); }
-.family .adr-pp-ic { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--deep-a); background: rgb(var(--hue-a) / .1); }
-.family .adr-pp-rows li:nth-child(3n+2) .adr-pp-ic { color: var(--deep-b); background: rgb(var(--hue-b) / .12); }
-.family .adr-pp-rows li:nth-child(3n) .adr-pp-ic { color: #0e7490; background: rgb(var(--hue-c) / .16); }
-.family .adr-pp-name { min-width: 0; font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
-.family .adr-pp-rows .adr-badge { font-size: 11px; padding: 2px 8px 2px 3px; }
-.family .adr-pp-rows .adr-badge-m { width: 15px; height: 15px; font-size: 8px; }
-.js.motion .family .adr-pp-rows li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .08s); }
-@media (max-width: 420px) { .family .adr-pp-rows li { grid-template-columns: minmax(0, 1fr) auto; } .family .adr-pp-ic { display: none; } }
+/* the change log as a release timeline (PlatformPanel) */
+.family .adr-pp-log { position: relative; list-style: none; display: grid; gap: 6px; margin: 0; padding: 6px 16px 14px; }
+.family .adr-pp-log::before { content: ""; position: absolute; left: 25px; top: 22px; bottom: 30px; width: 2px; border-radius: 2px; background: linear-gradient(rgb(var(--hue-a) / .6), rgb(var(--hue-b) / .3) 60%, var(--line-2)); }
+.family .adr-pp-log li { position: relative; display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 2px 12px; margin: 0; padding: 9px 12px 10px 0; border-radius: 13px; }
+.family .adr-pp-log li.is-new { padding-left: 0; background: radial-gradient(90% 120% at 100% 0%, rgb(var(--hue-a) / .1), transparent 60%), #fff; box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .45), 0 14px 26px -16px rgb(var(--hue-b) / .7); }
+.family .adr-pp-dot { grid-row: 1 / 3; justify-self: center; position: relative; z-index: 1; width: 12px; height: 12px; margin-top: 3px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--line-3), 0 0 0 5px #fff; }
+.family .is-new .adr-pp-dot { background: var(--k-accent); box-shadow: 0 0 0 3px rgb(var(--hue-a) / .25), 0 0 0 6px #fff; }
+.family .adr-pp-when { font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .06em; color: var(--deep-a); }
+.family .adr-pp-txt { font-size: 12.5px; line-height: 1.45; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.family .is-new .adr-pp-txt { color: var(--text); font-weight: 500; }
+.family .adr-pp-marks { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 10px; margin: 0; padding: 11px 16px 13px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
+.family .adr-pp-marks li { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 11.5px; font-weight: 500; color: var(--text-2); }
+.family .adr-pp-marks .adr-badge-m { width: 15px; height: 15px; font-size: 8px; }
+.family .adr-pp-marks li[data-level="warn"] .adr-badge-m { color: #3b2300; }
+.js.motion .family .adr-pp-log li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
+@media (max-width: 480px) { .family .adr-pp-log { padding-inline: 12px; } .family .adr-pp-marks { padding-inline: 12px; } }
 /* platform hub vertical table */
 .family .adr-vt td { vertical-align: middle; }
 .family .adr-vt a { color: var(--deep-a); font-weight: 500; text-decoration: underline; text-decoration-color: rgb(var(--hue-a) / .45); text-underline-offset: 3px; }
@@ -535,7 +542,7 @@
 .family .adr-vs-rung { position: absolute; left: 22px; right: 22px; top: 50%; height: 1px; background: linear-gradient(90deg, var(--line-2), rgb(var(--hue-a) / .5)); }
 .family .adr-vs-name { position: relative; justify-self: center; padding: 6px 12px; border-radius: 99px; font-size: 12.5px; font-weight: 600; line-height: 1.3; text-align: center; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line), 0 6px 14px -10px rgb(var(--k-shadow-rgb) / .35); }
 .family .adr-vs > figcaption { margin: 14px 4px 0; font-size: 12.5px; line-height: 1.5; color: var(--mute); }
-.js.motion .family .adr-vs-dims li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.4s + var(--i, 0) * .08s); }
+.js.motion .family .adr-vs-dims li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 20ms); }
 @media (max-width: 480px) { .family .adr-vs-head { grid-template-columns: minmax(0, 1fr); } .family .adr-vs-badge { justify-self: center; } .family .adr-vs-side { font-size: 13.5px; } }
 
 /* choose: the table as two contrasting card columns */
@@ -700,7 +707,7 @@
 .family .adr-hs-label { font-family: var(--font-display); font-size: 14px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
 .family .adr-hs-sub { font-size: 12.5px; line-height: 1.45; color: var(--text-2); }
 .family .adr-hs > figcaption { margin: 14px 4px 0; font-size: 12.5px; line-height: 1.5; color: var(--mute); }
-.js.motion .family .adr-hs-spokes li { animation: adr-in .55s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .12s); }
+.js.motion .family .adr-hs-spokes li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
 @media (max-width: 1079.98px) {
   .family .adr-hs-stage { height: auto; display: grid; gap: 12px; }
   .family .adr-hs-lines { display: none; }
@@ -738,7 +745,8 @@
 .family .adr-tint .pg-prose > p:first-child { font-size: 17px; color: var(--text); }
 @media (max-width: 640px) { .family .adr-tint { padding: 18px 16px 2px; border-radius: 20px; } }
 
-/* platform hubs: on phones the hero panel would repeat the status card right under it */
+/* platform hubs: on phones the hero (the change log as a timeline, decorative) is skipped: the hero
+   text is already a screen long and the change log is in the body */
 @media (max-width: 720px) { .family .cp-art:has(> .adr-pp) { display: none; } }
 /* platform hubs: a list whose items open with a bold label reads as a stack of small rule cards */
 .family:has(.adr-pp) .pg-prose ul:not([class]):has(> li > strong:first-child) { display: grid; gap: 10px; }
@@ -754,3 +762,29 @@
 .family .adr-check .cp-tick svg { display: none; }
 .family .adr-dark > p + p { margin-top: 14px; }
 .family .adr-dark > :is(ul, ol) { margin: 14px 0 0; padding-left: 20px; color: rgb(255 255 255 / .86); }
+
+/* Rule sheets on phones: the hero's review panel (decorative) repeats the status card that follows
+   the hero, so phones skip it and reach the first chapter a screen sooner. No text is hidden. */
+@media (max-width: 720px) { .family .cp-art:has(> .adr-rv) { display: none; } }
+
+/* hub: the two platform chapters as a pair of cards when both platform hubs are live (each is still
+   its own numbered chapter with its own H2; the reading column holds them side by side) */
+.family .cp-body:has(> .cp-ch > .adr-brief) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 14px; }
+.family .cp-body:has(> .cp-ch > .adr-brief) > * { grid-column: 1 / -1; }
+.family .cp-body > .cp-ch:has(> .adr-brief) { grid-column: auto; display: flex; flex-direction: column; }
+.family .adr-brief { position: relative; flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 22px 22px 24px; border-radius: 22px; background: radial-gradient(90% 70% at 100% 0%, rgb(var(--hue-a) / .09), transparent 60%), #fff; box-shadow: var(--shadow-stack); }
+.family .cp-ch:has(> .adr-brief) + .cp-ch:has(> .adr-brief) .adr-brief { background: radial-gradient(90% 70% at 100% 0%, rgb(var(--hue-b) / .1), transparent 60%), #fff; }
+.family .adr-brief-top { display: flex; align-items: center; gap: 10px; }
+.family .adr-brief-ic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: #fff; background: var(--cp-vivid); box-shadow: 0 10px 18px -10px rgb(var(--hue-b) / .9); }
+.family .adr-brief-ic.is-b { background: linear-gradient(135deg, var(--deep-b), var(--deep-c)); }
+.family .adr-brief-ic .gi { width: 16px; height: 16px; }
+.family .adr-brief-k { font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.family .adr-brief h2 { margin: 0; font-family: var(--font-display); font-size: 21px; line-height: 1.25; letter-spacing: -.018em; font-weight: 600; color: var(--text); text-wrap: balance; }
+.family .adr-brief p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--text-2); }
+.family .adr-brief a { color: var(--deep-a); text-decoration: underline; text-decoration-color: rgb(var(--hue-a) / .4); text-underline-offset: 3px; }
+@media (max-width: 720px) {
+  .family .cp-body:has(> .cp-ch > .adr-brief) { grid-template-columns: minmax(0, 1fr); }
+  .family .adr-brief { padding: 20px 18px 22px; }
+}
+.family .cp-body > .cp-ch:has(> .adr-brief) { padding-top: 0; }
+.family .cp-ch:has(> .adr-brief)::before { align-self: flex-start; }

@@ -48,21 +48,13 @@ const data = {
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = updatedLabel ? [{ text: 'Free tool by AdBoost Health', icon: 'org' as const }, { text: `Updated ${updatedLabel}`, icon: 'date' as const }] : [];
-// The hero: this calculator's formula as a chain, with the values it shows on load
+// The hero: what the page explains around the calculator (CalcHero.astro), not a copy of it
 const hero = {
-  name: 'POAS calculator',
-  op: '÷' as const,
-  rows: [
-    { label: 'Revenue from ads', sub: 'per period', value: money(REV), icon: 'chart', op: '×' as const },
-    { label: 'Gross margin', value: `${MARGIN}%`, icon: 'tag', op: '÷' as const },
-    { label: 'Ad spend', sub: 'same period', value: money(SPEND), icon: 'layers' },
-  ],
-  result: { label: 'POAS', value: r.value, tone: r.verdict },
-  gauge: { bands: [{ to: 1, tone: 'bad' as const }, { to: 1.5, tone: 'warn' as const }, { to: 4, tone: 'ok' as const }], value: r.poas ?? 0 },
-  subs: [{ label: 'Gross profit', value: r.gpText }, { label: 'ROAS (for contrast)', value: r.roasText }],
-  formula: 'POAS = (revenue from ads × gross margin) ÷ ad spend',
-  chip: { title: 'POAS of 1.0×', label: 'break-even on ad spend', icon: 'gauge' },
+  kind: 'poas' as const,
+  name: 'POAS vs ROAS',
+  pill: { text: 'After margin', tone: 'b' as const },
 };
+
 ---
 <FamilyPage
   path={path}

@@ -65,17 +65,16 @@ const data = {
   ctaText: "Book a free audit: we’ll benchmark your account and show you the fastest levers to bring CAC down.",
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs entirely in your browser', icon: 'check' as const }];
-// The hero: this calculator's formula as a chain, with the values it shows on load
+// The hero: what the page explains around the calculator, not a copy of it: the four parts of
+// fully-loaded spend (the FAQ's list), the formula, and every vertical's typical range at once
+// (the calculator shows one at a time), on the calculator's own axis.
 const hero = {
-  name: 'CAC calculator',
-  op: '÷' as const,
-  rows: [
-    { label: 'Total acquisition spend', sub: 'media + creative + fees, per period', value: money(SPEND), icon: 'layers' },
-    { label: 'New customers acquired', sub: 'same period', value: CUSTOMERS.toLocaleString('en-US'), icon: 'users' },
-  ],
-  result: { label: 'Your CAC', value: initial.value, tone: initial.verdict },
-  range: { lo: def.lo, hi: def.hi, max: AXIS_MAX, value: initial.cac ?? 0, label: `${def.label} (${def.display})` },
-  formula: 'CAC = total acquisition spend ÷ new customers',
+  kind: 'cac' as const,
+  name: 'How CAC is calculated',
+  pill: { text: 'Fully loaded', tone: 'b' as const },
+  parts: ['Paid media', 'Creative production', 'Agency or team', 'Martech'],
+  ranges: verticals.map((v) => ({ label: v.label, lo: v.lo, hi: v.hi })),
+  axis: { max: AXIS_MAX, ticks: [0, 200, 400, 600] },
   chip: { title: 'Runs entirely in your browser', label: 'nothing is stored or sent', icon: 'lock' },
 };
 ---

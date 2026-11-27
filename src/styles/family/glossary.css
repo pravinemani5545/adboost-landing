@@ -116,3 +116,55 @@
   .family :is(.gh-term, .gh-term-go, .gl-guide a) { transition: none; }
   .family .gh-term:hover { transform: none; }
 }
+
+/* ---------- 3. The metric map (src/pages/glossary/_MetricMap.astro) ----------
+   Its styles went with src/styles/pages/reference.css when that file was removed, so the map drew
+   its wires as filled black shapes and its terms as unstyled lists. Restored here in the family's
+   drawing style: two plain lists by default (phones, narrow), a panel network from 880px of
+   figure width (the kit figure's k-dg container). At rest the wires are a faint texture; a hovered
+   or focused term draws its own links and lights the terms at their other ends. */
+.family .dg-gm { display: grid; gap: 14px; }
+.family .dg-gm-wires { display: none; }
+.family .dg-gm-fam { position: relative; min-width: 0; padding: 18px 20px 20px; border-radius: 20px; background: #fff; box-shadow: var(--shadow-stack); }
+.family .dg-gm-famh { margin: 0 0 12px; font-family: var(--font-display); font-size: 15px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; color: var(--text); }
+.family .dg-gm-famh::before { content: ""; display: inline-block; vertical-align: .1em; width: 8px; height: 8px; margin-right: 10px; border-radius: 50%; background: var(--k-accent); box-shadow: 0 0 0 3px rgb(var(--hue-a) / .18); }
+.family .dg-gm-fam[data-fam="1"] .dg-gm-famh::before { background: rgb(var(--hue-c)); box-shadow: 0 0 0 3px rgb(var(--hue-c) / .2); }
+.family .dg-gm-count { margin-left: 6px; white-space: nowrap; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .06em; color: var(--mute); }
+.family .dg-gm-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.family .dg-gm-node { position: relative; display: grid; gap: 2px; min-width: 0; margin: 0; }
+/* list layout: the whole entry is the tap target, not just the term */
+.family .dg-gm-link::after { content: ""; position: absolute; inset: -6px 0; }
+.family .dg-gm-link { justify-self: start; font-weight: 600; color: var(--deep-a); text-decoration: underline; text-decoration-color: rgb(var(--hue-a) / .4); text-underline-offset: 3px; }
+.family .dg-gm-link:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; border-radius: 4px; }
+.family .dg-gm-rel { font-size: 13px; line-height: 1.45; color: var(--mute); }
+.family .dg-gm-x, .family .dg-gm-hint { display: none; }
+.family .dg-gm-relk { font-family: var(--font-mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+@container k-dg (min-width: 560px) {
+  .family .dg-gm-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 24px; }
+}
+@container k-dg (min-width: 880px) {
+  .family .dg-gm { display: block; position: relative; aspect-ratio: var(--gm-ar); }
+  .family .dg-gm-wires { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; pointer-events: none; }
+  .family .dg-gm-fam { position: absolute; top: 0; bottom: 0; left: calc(var(--x0) * 1%); width: calc((var(--x1) - var(--x0)) * 1%); padding: 0; background: radial-gradient(80% 60% at 0% 0%, rgb(var(--hue-a) / .07), transparent 60%), rgb(255 255 255 / .72); box-shadow: inset 0 0 0 1px var(--line); }
+  .family .dg-gm-fam[data-fam="1"] { background: radial-gradient(80% 60% at 100% 0%, rgb(var(--hue-c) / .09), transparent 60%), rgb(255 255 255 / .72); }
+  .family .dg-gm-famh { position: absolute; left: 20px; top: 16px; right: 20px; margin: 0; }
+  .family .dg-gm-link::after { content: none; }
+  .family .dg-gm-list { display: block; }
+  .family .dg-gm-node { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; z-index: 2; width: max-content; max-width: calc(11.5 / (var(--x1) - var(--x0)) * 100%); }
+  .family .dg-gm-link { display: block; justify-self: stretch; padding: 7px 11px; border-radius: 11px; background: #fff; box-shadow: 0 0 0 1px var(--line-2), 0 8px 16px -12px rgb(var(--k-shadow-rgb) / .35); font-size: 12.5px; font-weight: 500; line-height: 1.25; text-align: center; text-wrap: balance; text-decoration: none; color: var(--text); transition: background .2s, color .2s, box-shadow .25s; }
+  .family .dg-gm-link:hover { box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .5), 0 10px 20px -12px rgb(var(--hue-b) / .7); }
+  .family .dg-gm-node.on .dg-gm-link { background: var(--cp-vivid); color: #fff; box-shadow: 0 12px 26px -12px rgb(var(--hue-b) / .9); }
+  .family .dg-gm-node.near .dg-gm-link { color: var(--deep-a); box-shadow: 0 0 0 1.5px var(--k-accent), 0 0 0 4px rgb(var(--hue-a) / .14); }
+  .family .dg-gm.is-hot .dg-gm-node:not(.on, .near) { opacity: .4; }
+  /* the related list stays in the accessibility tree; the wires carry it on screen */
+  .family .dg-gm-rel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* a related term in the other family: named under the term (no wire across the gutter) */
+  .family .dg-gm-x { position: absolute; top: calc(100% + 5px); left: 50%; translate: -50% 0; display: grid; justify-items: center; gap: 2px; white-space: nowrap; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .04em; line-height: 1.3; color: var(--mute); transition: color .2s; }
+  .family .dg-gm-node.on .dg-gm-x { color: var(--deep-a); }
+  .family .dg-gm-hint { display: block; margin: 0 0 14px; font-size: 13px; line-height: 1.5; color: var(--mute); }
+}
+/* the box keeps the viewBox ratio, so strokes scale evenly: widths are in box units */
+.family .dg-gm-edge { fill: none; stroke: rgb(var(--hue-b) / .55); stroke-width: .12; stroke-linecap: round; opacity: .5; transition: opacity .2s, stroke .2s; }
+.family .dg-gm.is-hot .dg-gm-edge:not(.on) { opacity: .12; }
+.family .dg-gm-edge.on { stroke: var(--k-accent); stroke-width: .22; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .family .dg-gm-link, .family .dg-gm-edge, .family .dg-gm-x { transition: none; } }

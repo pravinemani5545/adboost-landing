@@ -45,19 +45,14 @@ const data = {
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
-// The hero: this calculator's formula as a chain, with the values it shows on load
+// The hero: what the page explains around the calculator (CalcHero.astro), not a copy of it
 const hero = {
-  name: 'Ad budget calculator',
-  op: '×' as const,
-  rows: [
-    { label: 'Target new customers', sub: 'per month', value: count(TARGET), icon: 'users' },
-    { label: 'Target CAC', value: `$${count(CAC)}`, icon: 'target' },
-  ],
-  result: { label: 'Monthly ad budget', value: r.budgetText },
-  subs: [{ label: 'Expected revenue', value: r.revText }, { label: 'Blended ROAS', value: r.roasText }],
-  formula: 'Ad budget = target new customers × CAC',
-  chip: { title: '30–60 fresh creatives a month', label: 'to hold that CAC', icon: 'video' },
+  kind: 'budget' as const,
+  name: 'Budget for creative volume',
+  pill: { text: 'Not just media', tone: 'b' as const },
+  chip: { title: 'Plan on CAC and payback', label: 'rather than ROAS', icon: 'target' },
 };
+
 ---
 <FamilyPage
   path={path}

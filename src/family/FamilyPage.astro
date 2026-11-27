@@ -140,7 +140,7 @@ const BYLINE_ICON = {
   <div class:list={['family', hasRail && 'pg-has-rail']}>
     <div class="read-bar" aria-hidden="true"></div>
 
-    <header class:list={['cp-hero', hasArt && 'has-art']} data-spot>
+    <header class:list={['cp-hero', 'fp-hero', hasArt && 'has-art']} data-spot>
       <Backdrop texture={['dots', 'grid']} spotlight focus={['72%', '34%']} />
       <div class="container cp-hero-grid">
         <div class="cp-head">
@@ -150,14 +150,14 @@ const BYLINE_ICON = {
             ? <h1 class="arrive" set:html={data.h1Html} />
             : <h1 class="arrive">{h1Lead && `${h1Lead} `}<span class="serif">{h1Tail}</span></h1>}
           {data.summary && (
-            <div class="pg-answer arrive" style="--d:60ms">
+            <div class="pg-answer arrive" style="--d:20ms">
               {data.summaryLabel && <span class="pg-answer-lab">{data.summaryLabel}</span>}
               <Fragment set:html={data.summary} />
             </div>
           )}
-          {data.lede && <p class="cp-lede arrive" style="--d:90ms" set:html={data.lede} />}
+          {data.lede && <p class="cp-lede arrive" style="--d:30ms" set:html={data.lede} />}
           {byline.length > 0 && (
-            <p class="pg-byline arrive" style="--d:120ms">
+            <p class="pg-byline arrive" style="--d:40ms">
               {byline.map((b) => (
                 <span>
                   {b.icon && <svg class="cp-bi" viewBox="0 0 16 16" aria-hidden="true" set:html={BYLINE_ICON[b.icon]} />}
@@ -169,14 +169,14 @@ const BYLINE_ICON = {
         </div>
 
         {hero && (
-          <div class="cp-art stage arrive" style="--d:140ms">
+          <div class="cp-art stage arrive" style="--d:40ms">
             <span class="stage-plate" aria-hidden="true"></span>
             <span class="stage-ring" aria-hidden="true"></span>
             <Fragment set:html={hero} />
           </div>
         )}
         {factsInHero && (
-          <div class="cp-art cp-art-facts stage arrive" style="--d:140ms">
+          <div class="cp-art cp-art-facts stage arrive" style="--d:40ms">
             <span class="stage-plate" aria-hidden="true"></span>
             <span class="stage-ring" aria-hidden="true"></span>
             <section class="cp-facts" aria-label="Key facts">
