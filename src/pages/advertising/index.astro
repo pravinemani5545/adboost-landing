@@ -1,20 +1,29 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Video from '../../kit/components/Video.astro';
-import HeatMatrix from '../../kit/diagram/HeatMatrix.astro';
-import Compare from '../../kit/diagram/Compare.astro';
-import DecisionTree from '../../kit/diagram/DecisionTree.astro';
-import Flow from '../../kit/diagram/Flow.astro';
-import StatusBadge from '../../components/adv/StatusBadge.astro';
-import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, policyHref } from '../../components/adv/status';
-import { AD_POLICIES, platformOverview, RULES_CHECKED_ON, STATUS_LABEL, type Platform } from '../../data/adPolicies';
+// /advertising/: the ad compliance hub on the family layer (src/family/FamilyPage.astro;
+// src/family/README.md). Every word, heading, link and JSON-LD node is the one this page had on the
+// old interior layout; only the layout and the graphics are new.
+//   hero     the policy matrix: every vertical against Meta, Google and TikTok, with the legend
+//   chapters Meta's July 2026 change (the diff, then the "which standard" fork on a tinted band),
+//            Google's rules (the certification chain), then the matrix as a card table (each cell
+//            opens its sheet and shows its top rejection reason on hover or focus) and the vertical
+//            cards with their three sheets, closed by "The bigger picture"
+//   end      the closing card (.cta-band) with this page's copy
+// When /advertising/meta/ and /advertising/google/ are live the first two chapters shrink to their
+// pointers, as before.
+import FamilyPage from '../../family/FamilyPage.astro';
+import PolicyMatrix from '../../family/adrules/PolicyMatrix.astro';
+import Diff from '../../family/adrules/Diff.astro';
+import DecisionFork from '../../family/adrules/DecisionFork.astro';
+import CertChain from '../../family/adrules/CertChain.astro';
+import Badge from '../../family/adrules/Badge.astro';
+import Ic from '../../family/graphics/Ic.astro';
+import { PLATFORM_ICON } from '../../family/adrules/status';
+import { PLATFORMS, policyHref } from '../../components/adv/status';
+import { AD_POLICIES, platformOverview, RULES_CHECKED_ON, type Platform } from '../../data/adPolicies';
 import { siteBase } from '../../lib/site';
 import { isLive } from '../../lib/live';
 import { breadcrumb } from '../../lib/schema';
-import '../../styles/pages/chapters.css';
-import '../../styles/pages/advertising.css';
+import '../../styles/family/adrules.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'Health Ad Compliance Review by Platform (2026) | AdBoost';
@@ -42,15 +51,6 @@ const jsonLd = [
   { '@type': 'CollectionPage', name: 'Health ad compliance by platform and vertical', url: `${SITE}/advertising/` },
 ];
 
-// Hero aside: vertical x platform, every cell linked, its top rejection reason on hover and focus.
-const matrixRows = verticals.map((v) => ({
-  label: v.name,
-  cells: PLATFORMS.map((pl) => {
-    const c = cell(v.slug, pl);
-    return c ? { text: STATUS_LABEL[c.status], level: STATUS_TONE[c.status], href: policyHref(c), note: c.rejectionReasons[0] } : null;
-  }),
-}));
-
 // Meta, July 2026 (blog posts link #meta-july-2026 for "the full deleted and added text"):
 // every item verbatim, struck through on the left, the standard now on the right.
 const DELETED = [
@@ -68,134 +68,158 @@ const NOW = [
   'Banned in weight loss and gain ads: “Close up on specific body area by pinching fat” and “Claims that results can be achieved solely by using wearable products”.',
   'Still required: 18+ targeting for dietary, health, weight loss or weight gain products and services, and for cosmetic products, procedures or surgeries. Meta exempts general wellbeing products such as fitness services, general food and protein products, non-permanent cosmetics such as creams and makeup, and dental products.',
 ];
+
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  ogType: 'article',
+  h1: 'What’s allowed, by platform and vertical',
+  h1Html: 'What’s allowed, by <span class="serif">platform</span> and vertical',
+  lede: 'Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch.',
+  ctaHeading: 'Don’t risk a disabled ad account.',
+  ctaText: 'We review every account and asset against these platform rules before launch, the single biggest thing generalist agencies get wrong in health.',
+};
+const matrixRows = verticals.map((v) => ({ name: v.name, cells: PLATFORMS.map((pl) => cell(v.slug, pl)?.status ?? null) }));
+const chips = [
+  { title: columnLink.Meta.label, label: 'Meta', icon: PLATFORM_ICON.Meta },
+  { title: columnLink.Google.label, label: 'Google', icon: PLATFORM_ICON.Google },
+];
+const HUES = ['a', 'b', 'c'];
 ---
-<BaseLayout {title} {description} canonicalPath="/advertising/" {jsonLd} ogType="article">
-  <PageHero
-    class="adv-hero adv-hero--index"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]}
-    eyebrow="AD COMPLIANCE · 2026"
-    title='What’s allowed, by <span class="serif">platform</span> and vertical'
-    lede="Every health vertical hits a different wall on every ad platform. Pick your exact combination for the certification, prohibited claims, rejection triggers, and the compliant way to still advertise. Use it as a pre-launch compliance review, then verify against live policy before launch."
-    art="/art/advertising/hub"
-  >
-    <div slot="aside" class="adv-matrix">
-      <div class="adv-matrix__loop" aria-hidden="true">
-        <Video src="/art/advertising/hub-loop.mp4" webm="/art/advertising/hub-loop.webm" poster="/art/advertising/hub-loop-poster.webp" width={1280} height={720} />
+<FamilyPage
+  path="/advertising/"
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance' }]}
+  eyebrow="AD COMPLIANCE · 2026"
+  schema={jsonLd}
+>
+  <PolicyMatrix slot="hero" title="Status by vertical and platform" platforms={[...PLATFORMS]} rows={matrixRows} chips={chips} />
+
+  {metaHubLive ? (
+    <div class="pg-prose">
+      <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
+      <p>In July 2026 Meta rewrote its Health and Wellness ad standard: before and after images are now allowed for cosmetic procedures (18+), and its negative self-perception wording became a ban on statements of inferiority about appearance. The full change, and which Meta standard applies to your ad, is on our <a href="/advertising/meta/">Meta health and wellness ad policy overview</a>.</p>
+    </div>
+  ) : (
+    <>
+      <div class="pg-prose">
+        <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
+        <p>Meta rewrote its <a href={MHW} target="_blank" rel="noopener">Health and Wellness ad standard</a> in July 2026. Its change log shows the deleted text struck through. Checked {checked}.</p>
       </div>
-      <div class="adv-aside adv-matrix__card k-card k-card--glass">
-        <p class="adv-aside__label"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>Status by vertical and platform</p>
-        <HeatMatrix
-          arrive
-          rowHeader="Vertical"
-          cols={[...PLATFORMS]}
-          rows={matrixRows}
-          legend={STATUS_LEGEND}
-          caption="Ad policy status by vertical and platform. Hover or focus a cell for its top rejection reason; each cell opens that rule sheet."
+      <Diff
+        caption="Meta’s July 2026 change to its Health and Wellness standard: what its change log struck through, and what the standard says now."
+        source={{ label: 'Meta’s current text', href: MHW }}
+        left={{ label: 'Deleted from the standard', items: DELETED }}
+        right={{ label: 'In the standard now', items: NOW }}
+      />
+      <div class="cp-band adr-band">
+        <h3 id="meta-which-standard" class="adr-band-h">Health and Wellness vs Drugs and Pharmaceuticals: which standard applies?</h3>
+        <DecisionFork
+          caption="Which Meta standard a weight-loss ad follows, from the quoted Health and Wellness text below."
+          q="Prescription weight-loss product?"
+          yes={{ result: 'Drugs and Pharmaceuticals', detail: 'LegitScript, authorization from Meta, the United States, Canada or New Zealand only, 18 or older', tone: 'accent' }}
+          no={{ result: 'Health and Wellness', detail: '18+ targeting for dietary, health, weight loss or weight gain products and services', tone: 'ok' }}
+          note="The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated."
         />
+        <div class="pg-prose">
+          <p>Meta’s Health and Wellness standard says: “For weight loss products that require prescription, please refer to Drugs and Pharmaceuticals ads policy and comply with the geo-targeting, and written permission requirements.” So a prescription weight-loss product, such as a GLP-1, follows the <a href={MDP} target="_blank" rel="noopener">Drugs and Pharmaceuticals standard</a>, which Meta last changed in February 2025:</p>
+          <ul>
+            <li>Online pharmacies and telehealth providers must be actively certified with LegitScript and must obtain authorization from Meta.</li>
+            <li>Ads may target only the United States, Canada or New Zealand, only the countries the advertiser is certified in, and only people 18 or older.</li>
+            <li>Ads that educate about prescription drugs or promote telehealth services generally need no written authorization.</li>
+            <li>The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated.</li>
+          </ul>
+          <p>Vertical by vertical: <a href="/advertising/med-spa-on-meta/">med spa</a>, <a href="/advertising/glp-1-on-meta/">GLP-1</a>, <a href="/advertising/supplements-on-meta/">supplements</a>, <a href="/advertising/trt-on-meta/">TRT</a> and <a href="/advertising/telehealth-on-meta/">telehealth</a> on Meta.</p>
+        </div>
       </div>
+    </>
+  )}
+
+  {googleHubLive ? (
+    <div class="pg-prose">
+      <h2 id="google-ads">Google Ads healthcare rules</h2>
+      <p>Google limits prescription drug terms in ads and landing pages to the US, Canada and New Zealand and requires certification to keyword-target them. Drug terms, unapproved substances and the 2026 telemedicine market changes are on our <a href="/advertising/google/">Google Ads healthcare policy overview</a>.</p>
     </div>
-  </PageHero>
-
-  <section class="iwrap adv-doc">
-    <div class="container">
-      <div class="prose adv-index">
-        {metaHubLive ? (
-          <div id="meta-july-2026">
-            <h2>Meta Health and Wellness, July 2026: what changed</h2>
-            <p>In July 2026 Meta rewrote its Health and Wellness ad standard: before and after images are now allowed for cosmetic procedures (18+), and its negative self-perception wording became a ban on statements of inferiority about appearance. The full change, and which Meta standard applies to your ad, is on our <a href="/advertising/meta/">Meta health and wellness ad policy overview</a>.</p>
-          </div>
-        ) : (
-          <>
-            <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
-            <p>Meta rewrote its <a href={MHW} target="_blank" rel="noopener">Health and Wellness ad standard</a> in July 2026. Its change log shows the deleted text struck through. Checked {checked}.</p>
-            <Compare
-              arrive
-              variant="diff"
-              class="adv-diff"
-              caption="Meta’s July 2026 change to its Health and Wellness standard: what its change log struck through, and what the standard says now."
-              source={{ label: 'Meta’s current text', href: MHW }}
-              left={{ label: 'Deleted from the standard', items: DELETED }}
-              right={{ label: 'In the standard now', items: NOW }}
-            />
-
-            <div class="adv-band" data-tone="tint">
-              <h3 id="meta-which-standard">Health and Wellness vs Drugs and Pharmaceuticals: which standard applies?</h3>
-              <DecisionTree
-                class="adv-tree"
-                caption="Which Meta standard a weight-loss ad follows, from the quoted Health and Wellness text below."
-                root={{
-                  q: 'Prescription weight-loss product?',
-                  yes: { result: 'Drugs and Pharmaceuticals', detail: 'LegitScript, authorization from Meta, the United States, Canada or New Zealand only, 18 or older', tone: 'accent' },
-                  no: { result: 'Health and Wellness', detail: '18+ targeting for dietary, health, weight loss or weight gain products and services', tone: 'ok' },
-                }}
-                note="The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated."
-              />
-              <p>Meta’s Health and Wellness standard says: “For weight loss products that require prescription, please refer to Drugs and Pharmaceuticals ads policy and comply with the geo-targeting, and written permission requirements.” So a prescription weight-loss product, such as a GLP-1, follows the <a href={MDP} target="_blank" rel="noopener">Drugs and Pharmaceuticals standard</a>, which Meta last changed in February 2025:</p>
-              <ul>
-                <li>Online pharmacies and telehealth providers must be actively certified with LegitScript and must obtain authorization from Meta.</li>
-                <li>Ads may target only the United States, Canada or New Zealand, only the countries the advertiser is certified in, and only people 18 or older.</li>
-                <li>Ads that educate about prescription drugs or promote telehealth services generally need no written authorization.</li>
-                <li>The standard says nothing about imagery, before and after, compounded drugs or brand-name injectables. Whether the Health and Wellness imagery rules also apply to a prescription ad is not stated.</li>
-              </ul>
-              <p>Vertical by vertical: <a href="/advertising/med-spa-on-meta/">med spa</a>, <a href="/advertising/glp-1-on-meta/">GLP-1</a>, <a href="/advertising/supplements-on-meta/">supplements</a>, <a href="/advertising/trt-on-meta/">TRT</a> and <a href="/advertising/telehealth-on-meta/">telehealth</a> on Meta.</p>
-            </div>
-          </>
-        )}
-
-        {googleHubLive ? (
-          <div id="google-ads">
-            <h2>Google Ads healthcare rules</h2>
-            <p>Google limits prescription drug terms in ads and landing pages to the US, Canada and New Zealand and requires certification to keyword-target them. Drug terms, unapproved substances and the 2026 telemedicine market changes are on our <a href="/advertising/google/">Google Ads healthcare policy overview</a>.</p>
-          </div>
-        ) : (
-          <>
-            <h2 id="google-ads">Google Ads healthcare rules: drug terms and certification</h2>
-            <p>Google’s <a href={G_TERMS} target="_blank" rel="noopener">restricted drug terms policy</a> lets ads and landing pages use prescription drug terms for promotion only in campaigns targeting Canada, New Zealand or the United States, and only certified advertisers may keyword-target them. Prescribing and pharmacy services need LegitScript and then Google certification; the steps, and Google’s 2026 telemedicine changes for New Zealand and Spain, are on the <a href="/advertising/telehealth-on-google/">telehealth on Google sheet</a>. Checked {checked}.</p>
-            <Flow
-              pulse
-              class="adv-flow"
-              caption="Prescribing and pharmacy services need LegitScript and then Google certification; only certified advertisers may keyword-target prescription drug terms."
-              nodes={[
-                { label: 'LegitScript', sub: 'Prescribing and pharmacy services' },
-                { label: 'Then Google certification', sub: 'The steps are on the telehealth on Google sheet', href: '/advertising/telehealth-on-google/' },
-                { label: 'Keyword-target prescription drug terms', sub: 'Only certified advertisers', tone: 'ok' },
-              ]}
-            />
-          </>
-        )}
-
-        <h2 id="matrix">Status by vertical and platform</h2>
-        <p class="adv-cols">
-          {PLATFORMS.map((pl) => <a href={columnLink[pl].href}><span class="adv-cols__k">{pl}</span>{columnLink[pl].label}</a>)}
-        </p>
+  ) : (
+    <>
+      <div class="pg-prose">
+        <h2 id="google-ads">Google Ads healthcare rules: drug terms and certification</h2>
+        <p>Google’s <a href={G_TERMS} target="_blank" rel="noopener">restricted drug terms policy</a> lets ads and landing pages use prescription drug terms for promotion only in campaigns targeting Canada, New Zealand or the United States, and only certified advertisers may keyword-target them. Prescribing and pharmacy services need LegitScript and then Google certification; the steps, and Google’s 2026 telemedicine changes for New Zealand and Spain, are on the <a href="/advertising/telehealth-on-google/">telehealth on Google sheet</a>. Checked {checked}.</p>
       </div>
+      <CertChain
+        caption="Prescribing and pharmacy services need LegitScript and then Google certification; only certified advertisers may keyword-target prescription drug terms."
+        nodes={[
+          { label: 'LegitScript', sub: 'Prescribing and pharmacy services' },
+          { label: 'Then Google certification', sub: 'The steps are on the telehealth on Google sheet', href: '/advertising/telehealth-on-google/' },
+          { label: 'Keyword-target prescription drug terms', sub: 'Only certified advertisers', tone: 'ok' },
+        ]}
+      />
+    </>
+  )}
 
-      <div class="adv-groups">
-        {verticals.map((v) => (
-          <div class="adv-group ch-card" data-reveal>
-            <div class="adv-group__side">
-              <span class="adv-group__ic" aria-hidden="true">{v.name.charAt(0)}</span>
-              <h3 class="adv-group__h">{v.name}</h3>
-            </div>
-            <div class="adv-cards">
-              {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p, i) => (
-                <a class="adv-card" data-k-light href={policyHref(p)} style={`--i:${i}`}>
-                  <span class="adv-card__top"><span class="lc-tag">{p.platform.toUpperCase()}</span><StatusBadge status={p.status} /></span>
-                  <h4>{p.vertical} on {p.platform}</h4>
-                  <p>{p.rejectionReasons[0]}.</p>
-                  <span class="lc-more">Read the rules →</span>
-                </a>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      <div class="callout reveal adv-bigger ch-card ch-edge">
-        <span class="cl-label">The bigger picture</span>
-        For the FTC and FDA standards underneath these platform rules (structure/function claims, LegitScript, compounded GLP-1, health-data privacy), see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
-      </div>
+  <div class="pg-prose"><h2 id="matrix">Status by vertical and platform</h2></div>
+  <p class="adr-cols reveal">
+    {PLATFORMS.map((pl) => (
+      <a class="adr-col" href={columnLink[pl].href}>
+        <span class="adr-col-ic" aria-hidden="true"><Ic name={PLATFORM_ICON[pl]} /></span>
+        <span class="adr-col-txt"><span class="adr-col-k">{pl}</span>{columnLink[pl].label}</span>
+      </a>
+    ))}
+  </p>
+  <figure class="adr-mtx reveal">
+    <div class="cp-table adr-mtx-table" data-cols="4">
+      <table>
+        <thead><tr><th scope="col">Vertical</th>{PLATFORMS.map((pl) => <th scope="col">{pl}</th>)}</tr></thead>
+        <tbody>
+          {verticals.map((v) => (
+            <tr>
+              <th scope="row" data-label="">{v.name}</th>
+              {PLATFORMS.map((pl) => {
+                const c = cell(v.slug, pl);
+                return (
+                  <td data-label={pl}>
+                    {c && (
+                      <a class="adr-mtx-cell" href={policyHref(c)}>
+                        <Badge status={c.status} />
+                        <span class="adr-mtx-tip">{c.rejectionReasons[0]}</span>
+                      </a>
+                    )}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  </section>
+    <figcaption>Ad policy status by vertical and platform. Hover or focus a cell for its top rejection reason; each cell opens that rule sheet.</figcaption>
+  </figure>
 
-  <CtaBand heading="Don’t risk a disabled ad account." text="We review every account and asset against these platform rules before launch, the single biggest thing generalist agencies get wrong in health." />
-</BaseLayout>
+  <div class="adr-vgs">
+    {verticals.map((v, vi) => (
+      <div class="adr-vg reveal" data-hue={HUES[vi % 3]}>
+        <div class="adr-vg-head">
+          <span class="adr-vg-ic" aria-hidden="true">{v.name.charAt(0)}</span>
+          <h3>{v.name}</h3>
+        </div>
+        <div class="adr-vg-cards">
+          {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p, i) => (
+            <a class="adr-sheet" href={policyHref(p)} style={`--i:${i}`}>
+              <span class="adr-sheet-top"><span class="adr-sheet-k"><Ic name={PLATFORM_ICON[p.platform]} />{p.platform.toUpperCase()}</span><Badge status={p.status} /></span>
+              <h4>{p.vertical} on {p.platform}</h4>
+              <p>{p.rejectionReasons[0]}.</p>
+              <span class="adr-sheet-go">Read the rules <span aria-hidden="true">→</span></span>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="cp-callout adr-bigger reveal">
+    <span class="cp-callout-ic" aria-hidden="true"></span>
+    <div class="cp-callout-body">
+      <p><span class="adr-bigger-k">The bigger picture</span>For the FTC and FDA standards underneath these platform rules (structure/function claims, LegitScript, compounded GLP-1, health-data privacy), see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.</p>
+    </div>
+  </div>
+</FamilyPage>

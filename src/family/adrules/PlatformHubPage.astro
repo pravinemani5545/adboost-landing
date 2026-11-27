@@ -1,0 +1,145 @@
+---
+// Platform policy hub template on the family layer (/advertising/meta/, /advertising/google/; health
+// plan N2, N3). Data: src/data/platformHubs.ts. Dates: src/data/pages.json (`publish`, then
+// `updated` once the page is edited). A family port of src/components/PlatformHub.astro: every word,
+// heading, link, FAQ and JSON-LD node is the same; only the layout and the graphics are new.
+//   hero     the platform's status for each vertical (PlatformPanel)
+//   intro    the status card: each vertical's status, linked to its rule sheet
+//   chapters the hub's own questions (the July 2026 change as a diff), the vertical table with
+//            status badges, the dated change log, then the FAQ cards and the sources card
+//   end      the platform's rule sheets as link cards, the Zero-Ban card in the rail, the closing card
+import FamilyPage from '../FamilyPage.astro';
+import PlatformPanel from './PlatformPanel.astro';
+import StatusCard from './StatusCard.astro';
+import ChangeLog from './ChangeLog.astro';
+import WhatChanged from './WhatChanged.astro';
+import Badge from './Badge.astro';
+import { esc } from './status';
+import { fmtDay, policyHref } from '../../components/adv/status';
+import { AD_POLICIES } from '../../data/adPolicies';
+import type { PlatformHub } from '../../data/platformHubs';
+import { PAGES, pageDate } from '../../lib/live';
+import { metaDescription, seoTitle } from '../../lib/seo';
+import { siteBase } from '../../lib/site';
+import { ogImageFor } from '../../lib/og';
+import { articleNode, breadcrumb, faqPage } from '../../lib/schema';
+import '../../styles/family/adrules.css';
+
+interface Props { hub: PlatformHub }
+const { hub } = Astro.props;
+const SITE = siteBase(Astro.site);
+const path = `/advertising/${hub.slug}/`;
+const published = PAGES[path]?.publish;
+if (!published) throw new Error(`src/data/pages.json needs a "publish" date for ${path}`);
+const updated = pageDate(path) ?? published;
+
+const title = seoTitle(path, hub.seoTitle);
+const description = metaDescription(path, hub.metaDescription);
+const crumb = `${hub.platform} health ad policy`;
+const sheets = AD_POLICIES.filter((p) => p.platform === hub.platform);
+const jsonLd = [
+  articleNode(SITE, { headline: hub.h1, description, path, datePublished: published, dateModified: updated, authorIsOrg: true, image: ogImageFor(path) }),
+  breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: crumb, href: path }]),
+  faqPage(hub.faq),
+];
+const toc = [
+  ...hub.sections.map((s) => ({ id: s.id, label: s.question })),
+  { id: 'verticals', label: 'Rules by vertical' },
+  { id: 'changes', label: 'Change log' },
+  { id: 'faq', label: 'FAQ' },
+];
+// changeLog is newest first and keeps the platform's precision (YYYY-MM stays a month).
+const sourceLabel = (url: string) => hub.sources.find((s) => s.url === url)?.label ?? `${hub.platform} policy`;
+const latestMonth = hub.changeLog[0] ? fmtDay(hub.changeLog[0].date.slice(0, 7)) : '';
+// The H1 accent: the policy it names ("ad policy:", "healthcare policy:"). The span ends at a space,
+// so the H1 text is unchanged; an H1 without either phrase takes FamilyPage's default accent.
+const h1Html = esc(hub.h1).replace(/ (ad policy|healthcare policy): /, ' <span class="serif">$1:</span> ');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  ogType: 'article',
+  h1: hub.h1,
+  ...(h1Html.includes('class="serif"') ? { h1Html } : {}),
+  summary: esc(hub.answer),
+  summaryLabel: 'The short answer',
+  related: [{
+    heading: `${hub.platform} rule sheets`,
+    level: 4 as const,
+    links: [...sheets.map((p) => ({ href: policyHref(p), label: `${p.vertical} on ${p.platform}` })), { href: '/advertising/', label: 'All platforms and verticals' }],
+  }],
+};
+const checked = fmtDay(hub.checkedOn);
+const byline = [
+  { text: `Rules checked against ${hub.platform}’s live policy on ${checked}`, icon: 'check' as const },
+  { text: `Updated ${fmtDay(updated)}`, icon: 'date' as const },
+];
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: crumb }]}
+  eyebrow={`${hub.platform.toUpperCase()} · HEALTH AD POLICY`}
+  schema={jsonLd}
+  byline={byline}
+  toc={toc}
+>
+  <PlatformPanel slot="hero" platform={hub.platform} title={`${hub.platform} status by vertical`} rows={sheets.map((p) => ({ label: p.vertical, status: p.status }))} checked={checked} />
+
+  <div slot="aside" class="pg-card adr-zbp">
+    <div class="adr-zbp-art" aria-hidden="true"><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick is-open"></span><i></i></div>
+    <h4>Zero-Ban Protocol</h4>
+    <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>
+    <a class="adr-zbp-go" href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist <span aria-hidden="true">→</span></a>
+  </div>
+
+  <StatusCard
+    label={`${hub.platform} status by vertical`}
+    caption={`All five verticals on ${hub.platform}. Each row opens that rule sheet.`}
+    items={sheets.map((p) => ({ label: p.vertical, status: p.status, href: policyHref(p) }))}
+  />
+
+  {hub.sections.map((s) => (
+    s.id === 'what-changed'
+      ? <><div class="pg-prose"><h2 id={s.id}>{s.question}</h2></div><WhatChanged html={s.html} platform={hub.platform} month={latestMonth} /></>
+      : <div class="pg-prose"><h2 id={s.id}>{s.question}</h2><Fragment set:html={s.html} /></div>
+  ))}
+
+  <div class="pg-prose"><h2 id="verticals">Which {hub.platform} rule sheet covers your vertical?</h2></div>
+  <div class="cp-table adr-vt reveal" data-cols="3">
+    <table>
+      <thead><tr><th>Vertical</th><th>Status on {hub.platform}</th><th>Rule sheet</th></tr></thead>
+      <tbody>
+        {sheets.map((p) => (
+          <tr>
+            <td data-label="Vertical">{p.vertical}</td>
+            <td data-label={`Status on ${hub.platform}`}><Badge status={p.status} /></td>
+            <td data-label="Rule sheet"><a href={policyHref(p)}>{p.vertical} on {p.platform}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pg-prose"><h2 id="changes">What changed, and when?</h2></div>
+  <ChangeLog
+    caption={`${hub.platform} policy changes, newest first. Where ${hub.platform}’s date has no reliable day, only the month is given.`}
+    entries={[...hub.changeLog].sort((a, b) => b.date.localeCompare(a.date)).map((c) => ({ date: c.date, text: c.change, sources: [{ label: sourceLabel(c.sourceUrl), url: c.sourceUrl }] }))}
+  />
+
+  <div class="pg-prose"><h2 id="faq">FAQ</h2></div>
+  <div class="cp-faq-list">
+    {hub.faq.map((f, i) => (
+      <div class:list={['pg-qa', 'reveal', i % 3 && `d${i % 3}`]}>
+        <h3>{f.q}</h3>
+        <div class="pg-qa-a" set:html={f.a} />
+      </div>
+    ))}
+  </div>
+  <section class="adr-src reveal">
+    <h3>Sources</h3>
+    <p class="adr-fine">Ad policies change. This page reflects {hub.platform}’s published policy as checked on {fmtDay(hub.checkedOn)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+    <ol>
+      {hub.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+    </ol>
+  </section>
+</FamilyPage>

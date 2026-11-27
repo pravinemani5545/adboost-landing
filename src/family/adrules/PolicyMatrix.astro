@@ -1,0 +1,42 @@
+---
+// /advertising/ hero: the policy matrix, every vertical against Meta, Google and TikTok, each cell
+// tinted with its status (the colours every status already has) and carrying its label, the
+// legend under it. Chips restate the column links the page carries ("July 2026 change",
+// "Certification steps" or the overviews, when live). Decorative (aria-hidden): the same matrix
+// is a real table, with links, in the #matrix chapter.
+import Win from '../graphics/Win.astro';
+import Chip from '../graphics/Chip.astro';
+import Ic from '../graphics/Ic.astro';
+import { STATUS_LABEL, type Platform, type PolicyStatus } from '../../data/adPolicies';
+import { STATUS_TONE } from '../../components/adv/status';
+import { LEGEND, PLATFORM_ICON, statusMark } from './status';
+
+interface Props {
+  title: string;
+  platforms: Platform[];
+  rows: { name: string; cells: (PolicyStatus | null)[] }[];
+  chips?: { title: string; label: string; icon: string }[];
+}
+const { title, platforms, rows, chips = [] } = Astro.props;
+const POS = ['left:-30px;top:-26px', 'right:-28px;bottom:-30px'];
+---
+<div class="adr-pm" aria-hidden="true">
+  <Win name={title}>
+    <div class="adr-pm-grid" style={`--cols:${platforms.length}`}>
+      <span class="adr-pm-corner"></span>
+      {platforms.map((pl) => <span class="adr-pm-col"><span class="ui-ic n"><Ic name={PLATFORM_ICON[pl]} /></span>{pl}</span>)}
+      {rows.map((r, i) => (
+        <>
+          <span class="adr-pm-row" style={`--i:${i}`}>{r.name}</span>
+          {r.cells.map((s, j) => s
+            ? <span class="adr-pm-cell" data-level={STATUS_TONE[s]} style={`--i:${i * platforms.length + j}`}><span class="adr-pm-m">{statusMark(s)}</span><span class="adr-pm-l">{STATUS_LABEL[s]}</span></span>
+            : <span class="adr-pm-cell is-none"></span>)}
+        </>
+      ))}
+    </div>
+    <ul class="adr-pm-legend">
+      {LEGEND.map((l) => <li data-level={l.level}><span class="adr-badge-m">{l.mark}</span>{l.label}</li>)}
+    </ul>
+  </Win>
+  {chips.map((c, i) => <Chip title={c.title} label={c.label} icon={c.icon} tone={i ? 'b' : 'g'} style={POS[i]} />)}
+</div>
