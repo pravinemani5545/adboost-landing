@@ -15,6 +15,10 @@ import { pageDate } from '../../lib/live';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, definedTerm } from '../../lib/schema';
 import '../../styles/pages/reference.css';
+import '../../styles/resources/base.css';
+import '../../styles/resources/glossary.css';
+import { lists, tables } from '../../components/resources/html';
+import ResIcon from '../../components/resources/ResIcon.astro';
 
 export function getStaticPaths() {
   return GLOSSARY.map((t) => ({ params: { term: t.slug } }));
@@ -47,7 +51,7 @@ const hero = {
   eyebrow: 'GLOSSARY',
   title: t.term,
   meta: updatedLabel ? [`Updated ${updatedLabel}`, 'AdBoost Health'] : undefined,
-  class: 'rf-hero',
+  class: 'rf-hero rs-gthero',
 };
 
 // Topic-aware related resources per term (fallback = default trio below).
@@ -137,15 +141,28 @@ const RESOURCES: Record<string, Resource[]> = {
 };
 const resources = RESOURCES[t.slug] ?? DEFAULT_RESOURCES;
 
+
 const jsonLd = [
   definedTerm(SITE, { term: t.term, description: t.definition, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term, href: path }]),
 ];
+
+// The body as written, with hooks for the card styles: its opening sentence (bare text before the
+// first heading) as a paragraph, the paragraph under "The formula and a worked example" as a
+// formula card, tables as cards with phone labels, bold-led lists as key points. No word changes.
+const termBody = (html: string) => {
+  let out = html.replace(/^([^<][\s\S]*?)(?=<h3\b|$)/, '<p class="rs-term-open">$1</p>');
+  out = out.replace(/(<h3>The formula and a worked example<\/h3>)\s*(<p>[\s\S]*?<\/p>)/, '$1<div class="rs-callout rs-callout--formula">$2</div>');
+  return lists(tables(out));
+};
+const isCompliance = t.family === 'health-specific compliance and measurement';
+const famLabel = isCompliance ? 'Compliance' : 'Unit economics';
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
   {hasAside ? (
     <PageHero {...hero}>
-      <div slot="aside" class="rf-hero-card k-card k-card--float">
+      <div slot="aside" class:list={['rf-hero-card', 'k-card', 'k-card--float', 'rs-fcard', t.formula ? 'rs-fcard--formula' : 'rs-fcard--concept']}>
+        <span class="rs-fcard__bar" aria-hidden="true"><span></span><span></span><span></span></span>
         {t.formula && <p class="rf-hero-card__label">Formula</p>}
         {t.formula && <Equation arrive formula={t.formula} example={worked?.example} illustrative={worked?.illustrative} caption={eqCaption} />}
         {cd?.kind === 'flow' && <Flow arrive {...cd} />}
@@ -156,40 +173,44 @@ const jsonLd = [
     </PageHero>
   ) : <PageHero {...hero} />}
 
-  <section class="iwrap-sm">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          <div class="prose">
-            <h2 class="rf-term-q">What is {name}?</h2>
-            <div class="answer-box"><span class="al">Definition</span>{t.definition}</div>
-            {t.guide && <p class="rf-term-guide"><a href={t.guide.href}>{t.guide.label} →</a></p>}
-            {t.body && <div class="rf-term-body" set:html={t.body} />}
-
-            {related.length > 0 && (
-              <>
-                <h2 class="rf-term-q">Related terms</h2>
-                <Related term={t} related={related} />
-              </>
-            )}
-          </div>
-        </div>
-        <aside class="doc-aside">
-          <div class="aside-card">
-            <h2 class="rf-aside-h">Put the numbers to work</h2>
-            <p>Benchmark your own metrics against your vertical in seconds.</p>
-            <div class="link-list">
-              {resources.map((r) => <a href={r.href}>{r.label}</a>)}
-              <a href="/glossary/">Back to glossary</a>
+  <section class="rs-gterm">
+    <div class="container rs-gdoc">
+      <div class="rs-gdoc__main">
+        <div class="rs-prose rs-tables">
+          <h2 class="rs-gq">What is {name}?</h2>
+          <div class="rs-def">
+            <div class="rs-def__head">
+              <span class="al">Definition</span>
+              <span class:list={['rs-fam', isCompliance && 'rs-fam--c']} aria-hidden="true">{famLabel}</span>
             </div>
+            <p class="rs-def__text">{t.definition}</p>
           </div>
-          <div class="aside-card night">
-            <h2 class="rf-aside-h">Want these working in your favor?</h2>
-            <p>We benchmark your account and map the fastest levers to move it.</p>
-            <a class="btn btn-primary" href="/book/">Book a free audit →</a>
-          </div>
-        </aside>
+          {t.guide && <p class="rs-gguide"><a href={t.guide.href}><span>{t.guide.label}</span> <span aria-hidden="true">→</span></a></p>}
+          {t.body && <div class="rs-term-body" set:html={termBody(t.body)} />}
+
+          {related.length > 0 && (
+            <>
+              <h2 class="rs-gq">Related terms</h2>
+              <Related term={t} related={related} />
+            </>
+          )}
+        </div>
       </div>
+      <aside class="rs-side">
+        <div class="rs-sidecard">
+          <h2>Put the numbers to work</h2>
+          <p>Benchmark your own metrics against your vertical in seconds.</p>
+          <ul class="rs-links">
+            {resources.map((r) => <li><a href={r.href}><ResIcon href={r.href} /><span>{r.label}</span></a></li>)}
+            <li><a href="/glossary/"><ResIcon href="/glossary/" /><span>Back to glossary</span></a></li>
+          </ul>
+        </div>
+        <div class="rs-nightcard">
+          <h2>Want these working in your favor?</h2>
+          <p>We benchmark your account and map the fastest levers to move it.</p>
+          <a class="btn btn-primary" href="/book/">Book a free audit →</a>
+        </div>
+      </aside>
     </div>
   </section>
 

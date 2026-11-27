@@ -1,4 +1,6 @@
 ---
+// The glossary hub: hero (with a card stack drawn from the terms below), an A to Z jump bar, term
+// cards grouped by first letter, then the guide and the metric map. Styles: resources/glossary.css.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
@@ -6,7 +8,10 @@ import MetricMap from './_MetricMap.astro';
 import { GLOSSARY } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
+import { splitTerm } from './_diagrams';
 import '../../styles/pages/reference.css';
+import '../../styles/resources/base.css';
+import '../../styles/resources/glossary.css';
 
 const SITE = siteBase(Astro.site);
 const sorted = [...GLOSSARY].sort((a, b) => a.term.localeCompare(b.term));
@@ -23,6 +28,21 @@ const jsonLd = [
 ];
 const mapCaption = `All ${GLOSSARY.length} terms in the two families above.`;
 const mapHint = 'A line joins two terms when either entry lists the other as related; hover or focus a term to light its links.';
+
+// A to Z: the letters the terms start with get a jump link, the others are shown dimmed.
+const letterOf = (term: string) => term.charAt(0).toUpperCase();
+const groups = [...new Set(sorted.map((t) => letterOf(t.term)))].map((letter) => ({
+  letter,
+  terms: sorted.filter((t) => letterOf(t.term) === letter),
+}));
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const has = new Set(groups.map((g) => g.letter));
+// the family as a short card label (the words the guide below uses for each family)
+const famLabel = (f?: string) => (f === 'health-specific compliance and measurement' ? 'Compliance' : 'Unit economics');
+// hero stack: three terms from the list below, front card in full (decorative, aria-hidden)
+const pick = (slug: string) => sorted.find((t) => t.slug === slug);
+const stack = (['roas', 'ltv-cac-ratio', 'cac'].map(pick).filter(Boolean) as typeof sorted).slice(-3);
+const stackFallback = stack.length === 3 ? stack : sorted.slice(0, 3);
 ---
 <BaseLayout {title} {description} canonicalPath="/glossary/" {jsonLd}>
   <PageHero
@@ -31,29 +51,72 @@ const mapHint = 'A line joins two terms when either entry lists the other as rel
     title='Health & performance marketing <span class="serif">glossary</span>'
     lede="The metrics and rules that decide whether a health brand scales profitably, defined in plain English, every example drawn from real health verticals."
     art="/art/glossary/hub"
-    class="rf-hero rf-hero--hub"
-  />
+    class="rf-hero rf-hero--hub rs-ghero"
+  >
+    <div slot="aside" class="rs-gstack" aria-hidden="true">
+      <div class="rs-gstack__az">
+        {LETTERS.map((l) => <span class:list={[has.has(l) && 'on']}>{l}</span>)}
+      </div>
+      {stackFallback.map((t, i) => {
+        const s = splitTerm(t.term);
+        return (
+          <div class={`rs-gstack__card rs-gstack__card--${i}`}>
+            <span class="rs-gstack__top">
+              <span class:list={['rs-fam', t.family === 'health-specific compliance and measurement' && 'rs-fam--c']}>{famLabel(t.family)}</span>
+              {t.formula && <span class="rs-fx">ƒx</span>}
+            </span>
+            <span class="rs-gstack__name">{s.name}</span>
+            {s.expansion && <span class="rs-gstack__x">{s.expansion}</span>}
+            {i === 2 && <span class="rs-gstack__def">{t.short}</span>}
+            {i === 2 && <span class="rs-gstack__bars"><span></span><span></span><span></span></span>}
+          </div>
+        );
+      })}
+    </div>
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="rs-gindex">
+    <nav class="rs-az" aria-label="Glossary A to Z">
+      <div class="container rs-az__row">
+        <span class="rs-az__k" aria-hidden="true">A to Z</span>
+        <ol class="rs-az__list">
+          {LETTERS.map((l) => (
+            <li>{has.has(l) ? <a href={`#az-${l.toLowerCase()}`}>{l}</a> : <span aria-hidden="true">{l}</span>}</li>
+          ))}
+        </ol>
+      </div>
+    </nav>
     <div class="container">
-      <div class="glossary-grid">
-        {sorted.map((t) => (
-          <a class="gcard rf-gcard" href={`/glossary/${t.slug}/`}>
-            <h2>{t.term}</h2>
-            <p>{t.short}</p>
-          </a>
+      <div class="rs-azgroups">
+        {groups.map((g, gi) => (
+          <div class="rs-azgroup" id={`az-${g.letter.toLowerCase()}`}>
+            <p class="rs-azgroup__l" aria-hidden="true"><span>{g.letter}</span></p>
+            <div class="rs-azgroup__cards rs-rise" data-draw>
+              {g.terms.map((t, i) => (
+                <a class="k-card k-card--link rs-tcard" href={`/glossary/${t.slug}/`} style={`--i:${i}`}>
+                  <span class="rs-tcard__top">
+                    <span class:list={['rs-fam', t.family === 'health-specific compliance and measurement' && 'rs-fam--c']}>{famLabel(t.family)}</span>
+                    {t.formula && <span class="rs-fx" aria-hidden="true">ƒx</span>}
+                  </span>
+                  <h2>{t.term}</h2>
+                  <p>{t.short}</p>
+                  <span class="rs-tcard__go" aria-hidden="true">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="k-band rf-guide" data-tone="tint">
+  <section class="k-band rf-guide rs-gguide" data-tone="tint">
     <div class="container">
       <div class="prose rf-guide__prose">
         <h2>How to use this glossary</h2>
         <p>Every definition here is written for one reader: a health or telehealth operator deciding where the next dollar of ad spend goes. The entries fall into two families. The first is unit economics and paid media: CAC, LTV:CAC, MER, POAS, payback period, and the creative and funnel metrics (hook rate, creative fatigue, landing page conversion rate) that move them. The second is health-specific compliance and measurement: LegitScript certification, structure/function claims, HIPAA-compliant marketing, and the tracking layer (iOS ATT, CAPI, server-side tracking) that decides what you can measure and what you may legally send to an ad platform.</p>
       </div>
-      <div class="rf-map">
+      <div class="rf-map rs-gmap">
         <MetricMap terms={GLOSSARY} caption={mapCaption} hint={mapHint} />
       </div>
       <div class="prose rf-guide__prose">
