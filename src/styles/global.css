@@ -352,7 +352,7 @@ section { position: relative; z-index: 1; }
 .spot-pic .label { position: absolute; top: 20px; left: 22px; display: flex; gap: 8px; align-items: center; color: #fff; font-family: "Geist Mono", monospace; font-size: 11px; letter-spacing: .08em; }
 .spot-pic .label .ldot { width: 6px; height: 6px; border-radius: 50%; background: #fff; animation: livePulse2 2s ease-out infinite; }
 @keyframes livePulse2 { 50% { transform: scale(.8); opacity: .5; } }
-.spot-pic .person-card { position: absolute; left: 22px; right: 22px; bottom: 22px; background: rgba(10, 10, 15, .45); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, .16); border-radius: var(--k-r-md); padding: 16px 18px; color: #fff; }
+.spot-pic .person-card { position: absolute; left: 22px; right: 22px; bottom: 22px; background: rgba(10, 10, 15, .45); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, .16); border-radius: var(--k-r-md); padding: 16px 18px; color: #fff; }
 .spot-pic .person-card .name { font-size: 17px; font-weight: 600; letter-spacing: -.015em; }
 .spot-pic .person-card .role { font-size: 12.5px; color: rgba(255, 255, 255, .7); margin-top: 3px; font-family: "Geist Mono", monospace; letter-spacing: .04em; }
 .spot-pic .metric { position: absolute; top: 22px; right: 22px; background: rgba(10, 10, 15, .45); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, .16); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; color: #fff; gap: 2px; }
