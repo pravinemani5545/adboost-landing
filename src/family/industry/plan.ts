@@ -256,7 +256,7 @@ export const PLANS: Record<string, IndustryPlan> = {
         { name: 'Meta/Instagram', role: 'top-of-funnel awareness', icon: 'feed' },
         { name: 'quiz, email', role: 'first-party data capture', icon: 'mail' },
       ] },
-      { kind: 'hooks', hooks: ['Covered by your insurance - check in 60 seconds', 'First appointment in days, not months', 'You don’t have to be in crisis to get help'] },
+      { kind: 'hooks', hooks: ['Covered by your insurance: check in 60 seconds', 'First appointment in days, not months', 'You don’t have to be in crisis to get help'] },
       { kind: 'flow', stages: [] },
     ],
     flags: [
