@@ -437,14 +437,20 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       <p>Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch.</p>
       <a class="btn btn-ghost" href="/advertising/">See all ad rules <span class="chev" set:html={chev} /></a>
     </div>
-    <div class="comp-fig k-card k-card--raised">
+    <!-- The card itself rises in; the matrix inside never hides (arrive: its cells only grow in
+         place), so the card is never an empty white box while it waits for its reveal. -->
+    <div class="comp-stage">
+    <div class="comp-fig k-card k-card--raised reveal d1">
+      <span class="comp-fig__bar" aria-hidden="true"><span class="comp-dots"><i></i><i></i><i></i></span><span class="comp-fig__ghost"></span></span>
       <HeatMatrix
+        arrive
         rowHeader="Vertical"
         cols={PLATFORMS}
         rows={policyRows}
         legend={policyLegend}
         caption={`Ad policy status by vertical and platform. Rules checked ${rulesChecked}; each cell opens its rule sheet.`}
       />
+    </div>
     </div>
   </div>
 </section>

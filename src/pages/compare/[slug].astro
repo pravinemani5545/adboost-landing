@@ -6,12 +6,15 @@ import Faq from '../../components/Faq.astro';
 import Compare from '../../kit/diagram/Compare.astro';
 import Timeline from '../../kit/diagram/Timeline.astro';
 import Versus from './_Versus.astro';
+import Toc from '../../components/Toc.astro';
 import { COMPARES, getCompare } from '../../data/compare';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage } from '../../lib/schema';
 import '../../styles/pages/reference.css';
+import '../../styles/pages/chapters.css';
+import '../../styles/pages/compare.css';
 
 export function getStaticPaths() {
   return COMPARES.map((c) => ({ params: { slug: c.slug } }));
@@ -58,6 +61,8 @@ const toc = [
   { id: 'faq', label: 'FAQ' },
 ];
 
+const xIcon = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+
 // Full-service page only (brief 5.5): the speed answer's three milestones on a day scale. The
 // labels are that answer's own words; the build stops if the answer no longer says them.
 let speedRail: { phases: { meta: string; label: string; start: number }[] } | undefined;
@@ -83,21 +88,21 @@ if (c.slug === 'full-service-healthcare-agency-alternative') {
     meta={['Published by AdBoost Health', ...(updatedLabel ? [`Updated ${updatedLabel}`] : [])]}
     class="rf-hero rf-hero--compare"
   >
-    <div slot="aside" class="rf-hero-card k-card k-card--float">
+    <div slot="aside" class="rf-hero-card cmp-vcard k-card k-card--float k-card--glass">
       <Versus them={them} dimensions={c.rows.map((r) => r.dimension)} />
     </div>
   </PageHero>
 
   <section class="iwrap-sm">
     <div class="container">
-     <div class="doc-grid">
-      <div class="doc-main">
+     <div class="doc-grid k-scrub-scope">
+      <div class="doc-main ch-doc">
       <p class="rf-intent"><strong>Who this page is for:</strong> {c.intent}</p>
 
       <div class="prose">
         <h2 id="choose">Should you choose {themLower} or AdBoost Health?</h2>
         <div class="tablewrap">
-          <table class="dtable rf-choose">
+          <table class="dtable rf-choose cmp-choose">
             <thead><tr><th>Choose {themLower} if</th><th>Choose AdBoost Health if</th></tr></thead>
             <tbody>
               <tr>
@@ -133,8 +138,10 @@ if (c.slug === 'full-service-healthcare-agency-alternative') {
             </div>
           </details>
         </div>
-        <p><strong>Their focus:</strong> {c.theirFocus}</p>
-        <p><strong>Ours:</strong> {c.ourDifference}</p>
+        <div class="ch-split cmp-focus">
+          <div class="ch-card ch-side" data-reveal><p><strong>Their focus:</strong> {c.theirFocus}</p></div>
+          <div class="ch-card ch-side ch-side--us" data-reveal style="--i:1"><p><strong>Ours:</strong> {c.ourDifference}</p></div>
+        </div>
 
         {c.tradeoffs.map((t) => (
           <>
@@ -188,18 +195,15 @@ if (c.slug === 'full-service-healthcare-agency-alternative') {
         )}
 
         <h2 id="not-fit">When is AdBoost Health not the right fit?</h2>
-        <p>{c.bestWhen}</p>
-        <ul>{c.notFit.map((x) => <li>{x}</li>)}</ul>
+        <p class="cmp-best">{c.bestWhen}</p>
+        <ul class="cmp-notfit ch-stagger">{c.notFit.map((x) => <li class="ch-card" data-reveal><span class="ch-tick ch-tick--x" aria-hidden="true" set:html={xIcon} /><span>{x}</span></li>)}</ul>
 
         <h2 id="faq">Frequently asked questions</h2>
       </div>
-      <div class="rf-faq"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
+      <div class="rf-faq ch-panel ch-card"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
       </div>
       <aside class="doc-aside">
-        <div class="aside-toc">
-          <div class="at-label">On this page</div>
-          <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-        </div>
+        <Toc items={toc} />
         <div class="aside-card">
           <h2 class="rf-aside-h">Other comparisons</h2>
           <div class="link-list">
