@@ -1,10 +1,13 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 import { transformSync } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 import { PAGES, PREVIEW_ALL, gatedPaths, isLive, pageDate } from './src/lib/live.ts';
 import { SEO_STRICT } from './src/lib/seo.ts';
+import { LAYER_ORDER } from './src/lib/layers.ts';
 
 // The site is authored as if it sat at the root of SITE: every link, canonical,
 // sitemap entry and schema URL is written or derived that way, and the release
@@ -128,12 +131,42 @@ const releaseGates = {
   },
 };
 
+// Top-level blocks of a stylesheet as [prelude, body] pairs (strings, comments and escapes skipped),
+// and the class names a block's selectors use. For the cascade-layer guards below.
+const cssBlocks = (css) => {
+  const out = [];
+  let depth = 0, start = 0, open = 0, pre = '';
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+    if (c === '\\') { i++; continue; }
+    if (c === '/' && css[i + 1] === '*') {
+      const end = css.indexOf('*/', i + 2);
+      i = end < 0 ? css.length : end + 1;
+      if (depth === 0) start = i + 1;
+      continue;
+    }
+    if (c === '"' || c === "'") { for (i++; i < css.length && css[i] !== c; i++) if (css[i] === '\\') i++; continue; }
+    if (c === '{') { if (depth++ === 0) { pre = css.slice(start, i).trim(); open = i + 1; } }
+    else if (c === '}') { if (--depth === 0) { out.push([pre, css.slice(open, i)]); start = i + 1; } }
+    else if (c === ';' && depth === 0) start = i + 1;
+  }
+  return out;
+};
+const cssClassNames = (block) =>
+  [...block.replace(/\{[^{}]*\}/g, '{}').replace(/"[^"]*"|'[^']*'/g, '').matchAll(/\.((?:\\.|[A-Za-z_-])(?:\\.|[\w-])*)/g)]
+    .map((m) => m[1].replace(/\\/g, ''));
+
 // ── Build guards (health plan T2) ────────────────────────────────────────────
 // Errors (always fail the build):
 //   - an internal link (<a href>, canonical, or a URL in llms*.txt) to a URL
 //     that is neither built nor redirected
 //   - an em-dash (U+2014 or its entities) anywhere in dist: HTML, XML, llms text and the built
 //     CSS and JS (stylesheets are external, so a CSS comment or content string is checked too)
+//   - a page that loads a stylesheet before it has declared the cascade-layer order (the first
+//     sheet a browser reads would then decide whether utilities or the site's own CSS win)
+//   - a class name styled by both systems: a rule in the site's own CSS (`legacy` layer) and a
+//     Tailwind utility of the same name. Rename the class, or switch the utility off with
+//     `@source not inline("name")` in src/styles/globals.css.
 // Warnings (fail only with SEO_STRICT, see src/lib/seo.ts):
 //   - an internal link to a redirected URL (link the destination instead)
 //   - a built page shadowed by a vercel.json redirect (finish the merge)
@@ -152,6 +185,13 @@ const siteGuards = {
       }
       const errors = [];
       const warnings = [];
+      const layered = { legacy: new Set(), utilities: new Set() };
+      const readLayers = (css) => {
+        for (const [pre, body] of cssBlocks(css)) {
+          const layer = /^@layer (legacy|utilities)$/.exec(pre)?.[1];
+          if (layer) for (const name of cssClassNames(body)) layered[layer].add(name);
+        }
+      };
 
       const check = (from, href) => {
         let target = href.startsWith(SITE) ? href.slice(SITE.length) || '/' : href;
@@ -174,10 +214,20 @@ const siteGuards = {
         if (isHtml) {
           for (const m of body.matchAll(/<a\b[^>]*?\shref="([^"]*)"/g)) check(f, m[1]);
           for (const m of body.matchAll(/<link\b[^>]*?rel="canonical"[^>]*?href="([^"]*)"/g)) check(f, m[1]);
+          const order = body.indexOf(`<style>${LAYER_ORDER}</style>`);
+          const firstSheet = body.search(/<link\b[^>]*\brel="stylesheet"|@layer [a-z]+\s*\{/);
+          if (firstSheet > -1 && (order < 0 || order > firstSheet)) errors.push(`${f} loads a stylesheet before declaring the cascade-layer order`);
+          for (const m of body.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)) readLayers(m[1]);
+        } else if (f.endsWith('.css')) {
+          readLayers(body);
         } else if (isTxt) {
           for (const m of body.matchAll(new RegExp(`${escapeRe(SITE)}(/[^\\s)>\\]"]*)`, 'g'))) check(f, m[1]);
           for (const m of body.matchAll(/\]\((\/[^)\s]*)\)/g)) check(f, m[1]);
         }
+      }
+
+      for (const name of layered.utilities) {
+        if (layered.legacy.has(name)) errors.push(`the class "${name}" is styled by the site's own CSS and by a Tailwind utility of the same name`);
       }
 
       for (const p of built) {
@@ -233,6 +283,29 @@ const minifyInlineScripts = {
   },
 };
 
+// React is a build-time renderer on this site (shadcn/ui components become plain HTML).
+// @astrojs/react still emits its browser runtime for islands (_astro/client.*.js, about 220KB),
+// and no page has an island: when nothing in the build refers to that file it is removed, so the
+// deployment carries no React runtime. A page that hydrates a component (client:*) keeps it.
+const dropUnusedReactRuntime = {
+  name: 'drop-unused-react-runtime',
+  hooks: {
+    'astro:build:done': ({ dir, logger }) => {
+      const dist = new URL(dir).pathname;
+      const assets = path.join(dist, '_astro');
+      if (!fs.existsSync(assets)) return;
+      const runtimes = fs.readdirSync(assets).filter((f) => /^client\.[\w-]+\.js$/.test(f));
+      if (!runtimes.length) return;
+      const sources = walk(dist).filter((f) => /\.(html|js)$/.test(f));
+      for (const name of runtimes) {
+        const used = sources.some((f) => path.basename(f) !== name && fs.readFileSync(f, 'utf8').includes(name));
+        if (used) logger.warn(`${name} (the React browser runtime) is referenced by a page: an island ships React to visitors`);
+        else fs.rmSync(path.join(assets, name));
+      }
+    },
+  },
+};
+
 // Diagram kit fixtures (/free/kit/diagrams/, /free/kit/diagrams-night/): visual QA only. The route
 // lives in src/kit/fixtures/ and is injected in dev and PREVIEW_ALL builds only, so a production
 // build has no fixture page in its module graph.
@@ -254,6 +327,42 @@ const kitFixtures = {
 // Lighthouse mobile on HTTP/2 + brotli (10 pages, median of 3) put this level with or ahead of
 // inlineStylesheets: 'always', which re-sends ~20KB brotli of CSS in every page's HTML.
 const kitDiagramCss = (id) => (id.includes('/src/kit/diagram/') && /[?&]type=style/.test(id) ? 'kit-diagrams' : undefined);
+
+// ── Cascade layers ───────────────────────────────────────────────────────────
+// src/styles/globals.css is the design-system entry shared with the other sections of
+// www.adboost.media (Tailwind v4 + shadcn/ui). Its cascade layers are, lowest first:
+//   properties, theme, base, legacy, components, utilities
+// Everything this site wrote itself (the kit, global.css, interior.css, page CSS and every scoped
+// <style>) is wrapped in `legacy` here, so a shadcn component or a utility class always wins over
+// it, while the site's own rules keep exactly the order they always had among themselves.
+// The wrap runs after Vite's CSS step (imports are inlined, Astro has scoped the selectors) and
+// before the bundle is minified with esbuild, so the kit never passes through Tailwind's
+// Lightning CSS (which drops animation-timeline). @view-transition stays outside the layer.
+// The Shell prints LAYER_ORDER (src/lib/layers.ts) in <head> before any stylesheet; the build
+// guards check that, and that no class name is styled by both systems.
+const TW_ENTRY = '/src/styles/globals.css';
+const legacyLayer = {
+  name: 'legacy-layer',
+  transform(code, id) {
+    // Every stylesheet of this site: a .css file or an .astro <style> (its id ends in lang.css),
+    // also when the dev server asks for it as ?inline. Never the raw or url form, never the
+    // Tailwind entry.
+    const file = id.split('?')[0];
+    if (!/\.css(?:$|[?&])/.test(id) || /[?&](?:raw|url)(?:$|&)/.test(id)) return;
+    if (!file.includes('/src/') || file.includes('/node_modules/') || file.endsWith(TW_ENTRY)) return;
+    const hoisted = [];
+    const body = code.replace(
+      /@media[^{}]*\{\s*@view-transition\s*\{[^{}]*\}\s*\}|@view-transition\s*\{[^{}]*\}/g,
+      (rule) => { hoisted.push(rule); return ''; },
+    );
+    const bare = body.replace(/\/\*[\s\S]*?\*\//g, '');
+    if (/@(view-transition|import|charset|namespace)\b/.test(bare)) {
+      this.error(`legacy-layer: ${id} has an @import, @charset, @namespace or nested @view-transition rule that cannot be moved into a cascade layer`);
+    }
+    if (!bare.trim()) return hoisted.length ? { code: hoisted.join('\n'), map: null } : undefined;
+    return { code: `${hoisted.join('\n')}\n@layer legacy {\n${body}\n}\n`, map: null };
+  },
+};
 
 // Markdown tables (blog posts): one table look site-wide. Each table gets the .dtable class and
 // a .tablewrap wrapper that scrolls on phones instead of crushing the columns. No dependencies:
@@ -395,11 +504,17 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   markdown: { rehypePlugins: [rehypeTableWrap] },
   vite: {
+    // Tailwind compiles src/styles/globals.css only; legacyLayer puts every other stylesheet of
+    // this site in the `legacy` cascade layer (see above).
+    plugins: [tailwindcss(), legacyLayer],
     // esbuild, not Lightning CSS: Lightning CSS drops animation-timeline (scroll-driven motion).
     build: { cssMinify: 'esbuild', rollupOptions: { output: { manualChunks: kitDiagramCss } } },
   },
   integrations: [
     kitFixtures,
+    // React only renders shadcn/ui components to HTML at build time; no page ships a React
+    // runtime unless a component is given a client: directive (none is).
+    react(),
     sitemap({
       filter: (page) => inSitemap(new URL(page).pathname),
       serialize(item) {
@@ -408,6 +523,7 @@ export default defineConfig({
       },
     }),
     releaseGates,
+    dropUnusedReactRuntime,
     minifyInlineScripts,
     siteGuards,
     relocate,

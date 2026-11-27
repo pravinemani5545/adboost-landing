@@ -8,6 +8,49 @@ Hard rules that bind every user of the kit (full list in `redesign/v2/HEALTH-BRI
 no em-dash anywhere (CSS comments included), no invented numbers, content visible without JS,
 reduced motion is a complete static design, LCP paints on the first frame, t.js attribution unchanged.
 
+## Design system: Tailwind v4 and shadcn/ui (shared with the other sections of www.adboost.media)
+
+Health is one section of www.adboost.media, next to Ecommerce, SaaS & Apps and Automation (the
+adboost-media repo). All of them share one foundation, `src/styles/globals.css`, so a component
+written for one section drops into another and only its accent colour changes.
+
+- **What it is.** Tailwind v4 (no preflight) and shadcn/ui (`src/components/ui`: Button, Badge, Card,
+  Separator, copied unchanged from adboost-media, plus `src/components/site/ButtonLink.astro` for
+  links that look like buttons). React renders them to HTML at build time. No `client:` directive,
+  no React runtime in the browser: the build removes the unused runtime file and warns if a page
+  ever references it.
+- **Layers.** Lowest first: `properties, theme, base, legacy, components, utilities`
+  (`src/lib/layers.ts`). Tailwind and shadcn own all of them except `legacy`. Everything this site
+  wrote itself (this kit, `global.css`, `interior.css`, page CSS and every scoped `<style>`) is put
+  in `legacy` by the `legacyLayer` step in `astro.config.mjs`. So: among themselves the site's own
+  rules behave exactly as before, and a utility class or a shadcn component always wins over them,
+  whatever the selector. The Shell prints the layer order in `<head>` before any stylesheet; the
+  build fails if a page does not.
+- **Tokens.** `src/styles/site-tokens.css` (`--k-*`) stays the one source of truth for Health's
+  colours. `globals.css` only aliases it: shadcn's names (`--background`, `--foreground`,
+  `--primary`, `--border`, `--ring`, `--radius`, ...) and the section names the Media sections use
+  (`--brand`, `--brand-hover`, `--brand-ink`, `--brand-deep`, `--brand-bright`, `--brand-on-dark`,
+  `--brand-rgb`, `--dark`, `--dark-2`, `--dark-foot`, `--line-3`). Change a colour in
+  `site-tokens.css`, never in `globals.css`. `<body data-section="health">` (set by the Shell on
+  every page) is what selects the Health accent.
+- **Where utilities work.** Tailwind reads `src/components`, `src/layouts` and `src/pages` only.
+  Not `src/kit` (kit components use kit classes), not the data files, not Markdown.
+- **Class names.** Tailwind writes a utility for any class name it knows as soon as the word
+  appears in a file it reads (a `display: grid` in a `<style>` block is enough for `.grid`). Never
+  give one of the site's own classes a name Tailwind owns (`container`, `grid`, `flex`, `block`,
+  `hidden`, `table`, `underline`, `uppercase`, `border`, `shadow`, `ring`, `transition`, `filter`,
+  `fixed`, `relative`, `sr-only` ...). The build fails on a class that has both a rule in the
+  site's CSS and a utility. The three that existed when the foundation was added:
+  - `container`: the site's own width class, used everywhere. Tailwind's is switched off
+    (`@source not inline("container")` in `globals.css`).
+  - `underline`: the highlighted word in the home hero. Renamed `hl`, the name the Media sections
+    use for the same thing.
+  - `dark`: shadcn's `dark:` variant looks for an ancestor with the class `dark`, and the site
+    is light only, so that class must never be set. The dark aside card was `.aside-card.dark`; it
+    is `.aside-card.night` now.
+- **A block written with utilities** opts in to a local reset with the class `tw` (no default
+  margins on headings, paragraphs and lists), because preflight is off.
+
 ## Files
 
 ```
@@ -35,6 +78,7 @@ LeadLayout), except `/` and `/404`.
 | Token | Health | Role |
 |---|---|---|
 | `--k-accent` | #0057ff | fill |
+| `--k-accent-rgb` | 0 87 255 | the fill as an r g b triplet, for `rgb(var(--k-accent-rgb) / a)` |
 | `--k-accent-strong` | #0048d9 | fill on hover |
 | `--k-accent-on` | #fff | text on the fill |
 | `--k-accent-ink` | #0057ff | accent text on paper |
@@ -301,7 +345,7 @@ sits before its `.tablewrap`.
 - First viewport: `.arrive` only, never `[data-reveal]`. Reserve aspect ratios; counts reserve their width.
 - The legacy inline styles are now redundant and can be deleted with the markup you touch:
   `style="display:block;margin-top:16px"` on `.phero .sec-eyebrow`, `style="color:#fff"` on
-  `.aside-card.dark h4`, `style="color:var(--blue)"` on body links in `.doc-main`.
+  `.aside-card.night h4`, `style="color:var(--blue)"` on body links in `.doc-main`.
 - `.callout.ok` exists for the green "how to comply" callout.
 - **A named slot written inside an expression always counts as filled.** `{cond && <div slot="aside">...</div>}`
   makes `Astro.slots.has('aside')` true even when `cond` is false, so `PageHero` (and `SectionHead`'s

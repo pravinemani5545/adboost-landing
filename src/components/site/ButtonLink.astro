@@ -1,0 +1,25 @@
+---
+// A link styled as a shadcn/ui Button. shadcn's `asChild` cannot wrap markup that
+// comes from an .astro file, so links use the component's variant classes directly
+// (the pattern its docs give for links). `arrow` adds the small arrow chip.
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { ArrowRight } from 'lucide-react';
+interface Props {
+  href: string;
+  variant?: 'default' | 'outline' | 'secondary' | 'ghost' | 'link' | 'onDark';
+  size?: 'sm' | 'default' | 'lg';
+  arrow?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'default', size = 'default', arrow = false, class: cls, ...rest } = Astro.props;
+---
+<a href={href} class={cn(buttonVariants({ variant, size }), cls)} {...rest}>
+  <slot />
+  {arrow && (
+    <span class="grid size-5 place-items-center rounded-full bg-current/15 transition-transform duration-200 group-hover/button:translate-x-0.5">
+      <ArrowRight className="size-3" strokeWidth={2.4} />
+    </span>
+  )}
+</a>

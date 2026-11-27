@@ -54,9 +54,14 @@ Rules:
 - Same no-em-dash rule applies to hero copy.
 - For adboost.media blog posts (when that blog exists), use the same pattern with the `adboost-media-social` skill's cyan system instead.
 
-## Design tokens
+## Design system
 
-Palette from `src/styles/global.css`: blue `#0057ff` (primary), ink `#0a0a0f`, surfaces `#f6f7f9`/`#eceef3`, coral `#ff6b3d`, green `#16a34a`. Fonts: Geist + Instrument Serif (italic accents).
+Read `src/kit/KIT.md` before touching styles: it is the contract for the kit (tokens, cards, chrome, motion, diagrams) and for the foundation shared with the other sections of www.adboost.media.
+
+- **Foundation:** `src/styles/globals.css` is Tailwind v4 (no preflight) + shadcn/ui, the same entry as adboost-media. shadcn components are in `src/components/ui` (copied unchanged from adboost-media; keep them identical) and render to HTML at build time: no `client:` directives, no React in the browser.
+- **Colours:** `src/styles/site-tokens.css` (`--k-*`) is the one source of truth. Blue `#0057ff` (accent), ink `#0a0a0f`, surfaces `#f6f7f9`/`#eceef3`, green `#16a34a`. `globals.css` aliases those to shadcn's names and to the section names Media uses (`--brand`, ...); `<body data-section="health">` selects the Health accent. Fonts: Geist + Instrument Serif (italic accents).
+- **Cascade layers:** `properties, theme, base, legacy, components, utilities`. All of this site's own CSS is put in `legacy` at build time, so utilities and shadcn components always win over it.
+- **Never name a class after a Tailwind utility** (`container`, `grid`, `flex`, `hidden`, `underline`, `table`, `border`, ...). The build fails on one. `container` is the site's own (Tailwind's is switched off).
 
 ## Commands
 

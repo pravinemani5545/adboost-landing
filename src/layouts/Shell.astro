@@ -4,9 +4,15 @@
 // sticky phone CTA, footer, the kit script, then the newsletter popup or the visit mark. chrome="lead" swaps nav and footer for the minimal lead-magnet header and
 // footer (no phone CTA). Layouts wrap this; pages never import it directly except / and 404.
 //
+// Design system (shared with the other sections of www.adboost.media): src/styles/globals.css is
+// Tailwind v4 + shadcn/ui; everything else below is this site's own CSS and lands in the `legacy`
+// cascade layer (astro.config.mjs, legacyLayer). The inline <style> in <head> fixes the layer
+// order before any stylesheet loads; <body data-section="health"> selects the Health accent.
+//
 // Tracker contract (adboost-admin t.js): one pageview per real page load, so no <ClientRouter/>
 // and prefetch only (never prerender). /book/ labels come from DOM ancestry: nav, .mobile-cta,
 // .cta-band, footer. See src/kit/KIT.md.
+import '../styles/globals.css';
 import '../kit/css/index.css';
 import '../styles/site-tokens.css';
 import '../styles/global.css';
@@ -24,6 +30,7 @@ import FamilyBar from '../components/FamilyBar.astro';
 import { FAMILY_HOME, FAMILY_LINKS } from '../lib/site';
 import revealSrc from '../kit/scripts/reveal.ts?raw';
 import { transformSync } from 'esbuild';
+import { LAYER_ORDER } from '../lib/layers';
 
 interface Props extends SiteHeadProps {
   chrome?: 'full' | 'lead';
@@ -57,6 +64,7 @@ const showPopup = popup === true && chrome === 'full' && !NO_POPUP.includes(path
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <KitHead />
+<style is:inline set:html={LAYER_ORDER}></style>
 <SiteHead {...head} />
 <Fonts preloadSerif={preloadSerif} />
 <link rel="preconnect" href="https://admin.adboost.health" />
@@ -65,7 +73,7 @@ const showPopup = popup === true && chrome === 'full' && !NO_POPUP.includes(path
 <slot name="head" />
 <script defer src="https://admin.adboost.health/t.js"></script>
 </head>
-<body class={bodyClass}>
+<body class={bodyClass} data-section="health">
 <a href="#main" class="k-skip">Skip to content</a>
 
 {chrome === 'full' && <FamilyBar current="health" home={FAMILY_HOME} links={FAMILY_LINKS} />}

@@ -195,9 +195,9 @@
 .aside-card { padding: 20px; }
 .aside-card h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
 .aside-card p { margin: 0 0 14px; font-size: 13px; color: var(--k-ink-3); line-height: 1.5; }
-.aside-card.dark { background: linear-gradient(180deg, var(--k-night-2), var(--k-night)); color: var(--k-on-night); border-color: rgb(255 255 255 / .08); box-shadow: var(--k-edge-night), var(--k-e2); }
-.aside-card.dark h4 { color: var(--k-on-night); }
-.aside-card.dark p { color: var(--k-on-night-2); }
+.aside-card.night { background: linear-gradient(180deg, var(--k-night-2), var(--k-night)); color: var(--k-on-night); border-color: rgb(255 255 255 / .08); box-shadow: var(--k-edge-night), var(--k-e2); }
+.aside-card.night h4 { color: var(--k-on-night); }
+.aside-card.night p { color: var(--k-on-night-2); }
 .link-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
 .link-list a { display: block; padding: 8px 0; font-size: 13.5px; color: var(--k-ink-2); border-bottom: 1px solid var(--k-paper-3); }
 .link-list a:hover { color: var(--k-accent-ink); }

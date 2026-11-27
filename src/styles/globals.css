@@ -1,0 +1,139 @@
+/* ================================================================
+   Design-system entry, shared with the other sections of www.adboost.media
+   (adboost-media: src/styles/globals.css). Loaded by the Shell on every page.
+
+   1. Tailwind v4 and shadcn/ui. Preflight is left out on purpose: the site has
+      its own base styles, and a reset would shift every page.
+   2. Cascade layers, lowest first: properties, theme, base, legacy, components,
+      utilities. Everything this site wrote itself (the kit in src/kit, global.css,
+      interior.css, page CSS and every scoped <style>) is put in `legacy` by the
+      legacyLayer step in astro.config.mjs, so shadcn components and utility
+      classes always win over it. The Shell declares the order once, in <head>,
+      before any stylesheet.
+   3. Tokens. The kit's site tokens (src/styles/site-tokens.css, --k-*) stay the
+      one source of truth for Health's colours. shadcn's names (--background,
+      --primary, --border, ...) and the section names the Media sections use
+      (--brand, --brand-deep, --dark, ...) are aliases of them, so components
+      copied from that site work here unchanged and turn Health blue.
+
+   shadcn components live in src/components/ui. They render to HTML at build
+   time; nothing here ships a React runtime to the browser.
+   ================================================================ */
+
+@layer properties, theme, base, legacy, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+/* Utilities are generated only from templates and components, never from the
+   Markdown content, the data files or the kit (ordinary words there would become
+   classes). A class name this site already uses for something else is switched
+   off here, so Tailwind never styles it: see "Class names" in src/kit/KIT.md. */
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@source "../components";
+@source "../layouts";
+@source "../pages";
+@source not inline("container");
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* The site is light only. Tie `dark:` to a class that is never set, so an
+   operating system in dark mode cannot switch shadcn components over. */
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-heading: var(--font-display);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  /* the section accent, for utilities such as text-brand-deep or bg-brand/10 */
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-ink: var(--brand-ink);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ---- neutrals: shadcn's names, read from the kit ---- */
+:root {
+  --background: var(--k-paper);
+  --foreground: var(--k-ink);
+  --card: var(--k-paper);
+  --card-foreground: var(--k-ink);
+  --popover: var(--k-paper);
+  --popover-foreground: var(--k-ink);
+  --secondary: var(--k-paper-2);
+  --secondary-foreground: var(--k-ink);
+  --muted: var(--k-paper-2);
+  --muted-foreground: var(--k-ink-3);
+  --accent: var(--k-paper-2);
+  --accent-foreground: var(--k-ink);
+  --destructive: var(--k-bad);
+  --border: var(--k-line);
+  --input: var(--k-line-2);
+  --radius: var(--k-r-md);
+  /* names the Media sections' components and styles read */
+  --line-3: var(--k-line-3);
+  --font-display: var(--k-font-sans);
+  --font-body: var(--k-font-sans);
+  --font-serif: var(--k-font-serif);
+  --font-mono: var(--k-font-mono);
+}
+
+/* ---- the Health accent ----
+   One accent per section, chosen by <body data-section> (the Shell sets "health"
+   on every page). Same names as the Media sections:
+   --brand          fills (buttons, dots, highlights); --brand-ink is the text on it
+   --brand-deep     links, serif accents and small text on white (AA on white)
+   --brand-on-dark  the accent as text on the dark bands and footer
+   --brand-rgb      the accent as an r g b triplet, for glows and tints
+   --aura-a/-b      the two soft glows behind heroes
+   --dark*          the dark bands and the footer
+   Every value comes from the kit's site tokens. */
+body,
+body[data-section="health"] {
+  --brand: var(--k-accent);
+  --brand-hover: var(--k-accent-strong);
+  --brand-ink: var(--k-accent-on);
+  --brand-deep: var(--k-accent-ink);
+  --brand-bright: var(--k-accent-bright);
+  --brand-on-dark: var(--k-accent-bright);
+  --brand-rgb: var(--k-accent-rgb);
+  --aura-a: var(--k-accent-rgb);
+  --aura-b: var(--k-accent-rgb);
+  --dark: var(--k-night);
+  --dark-2: var(--k-night-2);
+  --dark-foot: var(--k-night);
+}
+
+body {
+  --primary: var(--brand);
+  --primary-foreground: var(--brand-ink);
+  --ring: var(--brand-deep);
+}
+
+@layer base {
+  * { @apply border-border outline-ring/50; }
+  /* Preflight is off, so a block written with utility classes opts in to a local
+     reset with .tw: no default margins on headings, paragraphs and lists. */
+  .tw :where(h1, h2, h3, h4, p, ul, ol, figure, blockquote) { margin: 0; padding: 0; }
+  .tw :where(ul, ol) { list-style: none; }
+}

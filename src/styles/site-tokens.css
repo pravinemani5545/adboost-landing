@@ -2,6 +2,7 @@
    Media and AgenticBoost ship their own copy of this file with their own values. */
 :root {
   --k-accent: #0057ff;               /* fill */
+  --k-accent-rgb: 0 87 255;          /* the same colour as an r g b triplet, for rgb(... / a) glows and tints */
   --k-accent-strong: #0048d9;        /* fill, hover */
   --k-accent-on: #fff;               /* text on the fill */
   --k-accent-ink: #0057ff;           /* accent text on paper */
