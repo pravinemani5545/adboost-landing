@@ -439,3 +439,42 @@ html:not(.js) .marquee { animation: none; }
 @media (max-width: 760px) {
   .fl-step .num { position: static; display: block; margin: 0 0 12px; }
 }
+
+/* ---------- the compliance matrix (cm-): the kit HeatMatrix's table, drawn on the home page itself ----------
+   Same structure, marks and colours as src/kit/diagram/HeatMatrix.astro, on kit tokens, without
+   the shared diagram stylesheet. Cells grow in place (scale only) once the card is drawn. */
+.cm { margin: 0; container: cm / inline-size; }
+.cm [data-level] { --ink: var(--k-accent-ink); --fill: var(--k-accent); --soft: var(--k-accent-soft); }
+.cm [data-level="ok"] { --ink: var(--k-ok-ink); --fill: var(--k-ok); --soft: var(--k-ok-soft); }
+.cm [data-level="warn"] { --ink: var(--k-warn-ink); --fill: var(--k-warn); --soft: var(--k-warn-soft); }
+.cm [data-level="bad"] { --ink: var(--k-bad-ink); --fill: var(--k-bad); --soft: var(--k-bad-soft); }
+.cm-wrap { position: relative; margin: -4px; overflow-x: auto; overscroll-behavior-x: contain; }
+.cm-table { border-collapse: separate; border-spacing: 4px; margin: 0; width: 100%; table-layout: auto; font-size: var(--k-fs-small); }
+.cm-table th, .cm-table td { padding: 0; text-align: left; vertical-align: middle; border: 0; background: none; }
+.cm-table tr { background: none; }
+.cm-table thead th { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--k-ink-3); padding: 2px 6px 6px; width: calc(70% / 3); }
+.cm-table thead .cm-corner { width: 30%; }
+.cm-table tbody th { font-weight: 600; color: var(--k-ink); padding: 6px 8px 6px 2px; line-height: var(--k-lh-snug); }
+.cm-table td { position: relative; height: 1px; }
+.cm-cell { box-sizing: border-box; height: 100%; min-height: 48px; display: flex; align-items: center; gap: 7px; padding: 9px 10px; border-radius: var(--k-r-sm); background: var(--soft); color: var(--ink); font-weight: 500; line-height: var(--k-lh-snug); text-decoration: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fill) 22%, transparent); }
+a.cm-cell { transition: transform var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease); }
+a.cm-cell:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fill) 55%, transparent), var(--k-e2); }
+a.cm-cell:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+.cm-empty .cm-cell { justify-content: center; color: var(--k-ink-3); background: var(--k-paper-2); box-shadow: inset 0 0 0 1px var(--k-line); }
+.cm-m { flex: none; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; font-size: 10px; line-height: 1; background: #fff; color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fill) 40%, transparent); }
+.cm-legend { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--k-fs-small); color: var(--k-ink-2); }
+.cm-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.cm-sw { width: 18px; height: 18px; border-radius: 6px; display: grid; place-items: center; font-size: 10px; line-height: 1; background: var(--soft); color: var(--ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fill) 30%, transparent); }
+.cm-cap { margin: 12px 0 0; font-size: var(--k-fs-small); line-height: var(--k-lh-body); color: var(--k-ink-3); }
+@container cm (max-width: 459px) {
+  .cm-wrap { margin: -3px; }
+  .cm-table { border-spacing: 3px; font-size: 12px; }
+  .cm-table thead th { padding-inline: 3px; letter-spacing: .06em; width: calc(73% / 3); }
+  .cm-table thead .cm-corner { width: 27%; }
+  .cm-cell { padding: 7px 6px; gap: 4px; min-height: 44px; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .cm-m { width: 15px; height: 15px; font-size: 9px; }
+  .cm-table tbody th { font-size: 12.5px; }
+}
+.js.motion .cm td > .cm-cell { animation: cm-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(200ms + var(--i) * var(--k-stagger)); }
+.js.motion .cm:not(.in) td > .cm-cell { animation-play-state: paused; }
+@keyframes cm-in { from { transform: scale(.94); } }

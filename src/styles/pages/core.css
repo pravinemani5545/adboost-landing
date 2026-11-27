@@ -166,7 +166,7 @@
 .fq-aside .aside-toc::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--grad-brand); }
 .fq-aside .aside-toc ul { counter-reset: fqt; }
 .fq-aside .aside-toc li { counter-increment: fqt; }
-.fq-aside .aside-toc a { display: flex; gap: 10px; min-height: 40px; align-items: center; border-radius: 0 10px 10px 0; }
+.fq-aside .aside-toc a { display: flex; gap: 10px; min-height: 44px; align-items: center; border-radius: 0 10px 10px 0; }
 .fq-aside .aside-toc a::before { content: counter(fqt, decimal-leading-zero); content: counter(fqt, decimal-leading-zero) / ""; flex-shrink: 0; font-family: var(--k-font-mono); font-size: 10.5px; color: var(--mute); }
 .fq-aside .aside-toc a.active { background: linear-gradient(90deg, rgb(var(--hue-a) / .12), transparent); }
 .fq-aside .aside-card.night { border-radius: 22px; background: radial-gradient(80% 90% at 100% 0%, rgb(var(--hue-b) / .5), transparent 60%), radial-gradient(70% 80% at 0% 100%, rgb(var(--hue-c) / .35), transparent 60%), linear-gradient(180deg, var(--k-night), var(--k-night-2)); }

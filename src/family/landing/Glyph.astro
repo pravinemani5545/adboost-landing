@@ -3,7 +3,7 @@
 // a feed post for Meta, a vertical video for TikTok, a landing page, a pulse for health, a
 // policy shield, a booking calendar. Shapes only (no words, no numbers), hidden from assistive
 // technology. Port of adboost-media src/components/blocks/ServiceGlyph.astro with Health's own
-// kinds added. Colours: .fl-glyph rules in src/styles/family/landing.css (--ta = the hue).
+// kinds added. Colours: .fl-glyph rules in src/styles/family/landing-pages.css (--ta = the hue).
 export type GlyphKind = 'search' | 'feed' | 'video' | 'page' | 'pulse' | 'flow' | 'shield' | 'calendar';
 interface Props { kind: GlyphKind; class?: string }
 const { kind, class: cls } = Astro.props;

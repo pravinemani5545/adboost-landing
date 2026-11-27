@@ -2,7 +2,7 @@
 import Shell from '../layouts/Shell.astro';
 import Faq from '../components/Faq.astro';
 import ButtonLink from '../components/site/ButtonLink.astro';
-import HeatMatrix from '../kit/diagram/HeatMatrix.astro';
+import { TONE_MARK } from '../kit/diagram/util';
 import { BOOK_PATH } from '../lib/site';
 import { organizationNode } from '../lib/schema';
 import { getPublishedPosts } from '../lib/blog';
@@ -485,14 +485,39 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
     <div class="comp-stage" data-tone="paper">
     <div class="comp-fig k-card k-card--raised reveal d1">
       <span class="comp-fig__bar" aria-hidden="true"><span class="comp-dots"><i></i><i></i><i></i></span><span class="comp-fig__ghost"></span></span>
-      <HeatMatrix
-        arrive
-        rowHeader="Vertical"
-        cols={PLATFORMS}
-        rows={policyRows}
-        legend={policyLegend}
-        caption={`Ad policy status by vertical and platform. Rules checked ${rulesChecked}; each cell opens its rule sheet.`}
-      />
+      {/* The vertical x platform matrix, drawn here instead of with the kit's HeatMatrix so the home
+          page does not load the shared diagram stylesheet (93 KB, render-blocking) for one table.
+          Same table, cells, marks, legend and caption as the HeatMatrix renders; styles in home.css. */}
+      <figure class="cm" data-draw>
+        <div class="cm-wrap">
+          <table class="cm-table">
+            <thead>
+              <tr>
+                <th scope="col" class="cm-corner">Vertical</th>
+                {PLATFORMS.map((c) => <th scope="col">{c}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {policyRows.map((r, ri) => (
+                <tr>
+                  <th scope="row">{r.label}</th>
+                  {r.cells.map((c, ci) => c ? (
+                    <td data-level={c.level} style={`--i:${ri + ci}`}>
+                      <a class="cm-cell" href={c.href}><span class="cm-m" aria-hidden="true">{TONE_MARK[c.level]}</span><span class="cm-t">{c.text}</span></a>
+                    </td>
+                  ) : (
+                    <td class="cm-empty" style={`--i:${ri + ci}`}><span class="cm-cell"><span aria-hidden="true">·</span><span class="k-vh">No entry</span></span></td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ul class="cm-legend">
+          {policyLegend.map((l) => <li data-level={l.level}><span class="cm-sw" aria-hidden="true">{TONE_MARK[l.level]}</span>{l.label}</li>)}
+        </ul>
+        <figcaption class="cm-cap">{`Ad policy status by vertical and platform. Rules checked ${rulesChecked}; each cell opens its rule sheet.`}</figcaption>
+      </figure>
     </div>
     </div>
   </div>
