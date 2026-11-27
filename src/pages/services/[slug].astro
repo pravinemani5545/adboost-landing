@@ -11,9 +11,9 @@
 //   end      FAQ cards, the old sidebar's link groups as link cards, the closing card
 import FamilyPage from '../../family/FamilyPage.astro';
 import ButtonLink from '../../components/site/ButtonLink.astro';
-import Timeline from '../../kit/diagram/Timeline.astro';
 import { parsePhase } from '../../kit/diagram/parse';
 import Win from '../../family/graphics/Win.astro';
+import Gantt from '../../family/graphics/Gantt.astro';
 import PaidMediaHero from '../../family/graphics/services/PaidMediaHero.astro';
 import CreativeHero from '../../family/graphics/services/CreativeHero.astro';
 import CroHero from '../../family/graphics/services/CroHero.astro';
@@ -146,8 +146,7 @@ const byline = updated ? [{ text: 'AdBoost Health', icon: 'org' as const }, { te
   <div class="cp-fig svc-gantt reveal">
     <Win name="How it works" pill={{ text: `${s.process.length} phases`, tone: 'b' }}>
       <div class="svc-gantt-body">
-        <Timeline
-          variant="gantt"
+        <Gantt
           unit={ganttUnit}
           rowIdPrefix="phase"
           caption="Each phase on the weeks this page gives it. Open bars are ongoing work with no end date."
