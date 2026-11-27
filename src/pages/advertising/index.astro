@@ -83,7 +83,7 @@ const NOW = [
         <Video src="/art/advertising/hub-loop.mp4" webm="/art/advertising/hub-loop.webm" poster="/art/advertising/hub-loop-poster.webp" width={1280} height={720} />
       </div>
       <div class="adv-aside adv-matrix__card k-card k-card--glass">
-        <p class="adv-aside__label"><span class="adv-aside__dot" aria-hidden="true"></span>Status by vertical and platform</p>
+        <p class="adv-aside__label"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>Status by vertical and platform</p>
         <HeatMatrix
           arrive
           rowHeader="Vertical"
@@ -172,11 +172,14 @@ const NOW = [
 
       <div class="adv-groups">
         {verticals.map((v) => (
-          <div class="adv-group">
-            <h3 class="adv-group__h">{v.name}</h3>
-            <div class="grid-cards three adv-cards">
+          <div class="adv-group ch-card" data-reveal>
+            <div class="adv-group__side">
+              <span class="adv-group__ic" aria-hidden="true">{v.name.charAt(0)}</span>
+              <h3 class="adv-group__h">{v.name}</h3>
+            </div>
+            <div class="adv-cards">
               {AD_POLICIES.filter((p) => p.verticalSlug === v.slug).map((p, i) => (
-                <a class="lcard adv-card" data-k-light href={policyHref(p)} data-reveal style={`--i:${i}`}>
+                <a class="adv-card" data-k-light href={policyHref(p)} style={`--i:${i}`}>
                   <span class="adv-card__top"><span class="lc-tag">{p.platform.toUpperCase()}</span><StatusBadge status={p.status} /></span>
                   <h4>{p.vertical} on {p.platform}</h4>
                   <p>{p.rejectionReasons[0]}.</p>
@@ -187,7 +190,7 @@ const NOW = [
           </div>
         ))}
       </div>
-      <div class="callout reveal adv-bigger">
+      <div class="callout reveal adv-bigger ch-card ch-edge">
         <span class="cl-label">The bigger picture</span>
         For the FTC and FDA standards underneath these platform rules (structure/function claims, LegitScript, compounded GLP-1, health-data privacy), see our <a href="/blog/glp1-advertising-compliance-2026/">GLP-1 advertising compliance guide</a>.
       </div>
