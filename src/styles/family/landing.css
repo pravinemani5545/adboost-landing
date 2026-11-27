@@ -142,7 +142,7 @@
 /* the italic serif carries its gradient word by word (a transformed word would fall outside a clipped parent) */
 .is-split .serif .w { padding: .14em .12em .22em 0; margin: -.14em -.12em -.22em 0; }
 .js.motion :is(.reveal, [data-reveal]) .is-split .w,
-.js.motion .is-split:is(.reveal, [data-reveal]) .w { transition: opacity .55s var(--ease), transform .7s var(--ease); transition-delay: calc(var(--i) * 42ms + 80ms); }
+.js.motion .is-split:is(.reveal, [data-reveal]) .w { transition: opacity .5s var(--ease), transform .6s var(--ease); transition-delay: calc(var(--i) * 32ms + 40ms); }
 .js.motion :is(.reveal, [data-reveal]):not(.in) .is-split .w,
 .js.motion .is-split:is(.reveal, [data-reveal]):not(.in) .w { opacity: 0; transform: translateY(.42em); }
 /* a heading block that splits keeps its place: its parts arrive in order instead of as one block */

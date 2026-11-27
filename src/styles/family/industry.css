@@ -743,6 +743,8 @@
 .ix .ix-ch-art::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background-image: radial-gradient(circle at 1px 1px, rgb(var(--k-shadow-rgb) / .1) 1px, transparent 1.5px); background-size: 16px 16px; -webkit-mask-image: radial-gradient(80% 70% at 100% 0%, #000, transparent 75%); mask-image: radial-gradient(80% 70% at 100% 0%, #000, transparent 75%); }
 .ix .ix-ch-art > .ixs { position: relative; max-width: 520px; margin-inline: auto; }
 .ix .ix-ch-art > .ixs-flow, .ix .ix-ch-art > .ixs-stack, .ix .ix-ch-art > .ixs-cycle { background: #fff; }
+/* a chain across a chapter spans the panel, so its stages read as a row instead of a small card in empty space */
+.ix .ix-ch-art > .ixs-flow { max-width: none; padding: 20px 20px 16px; }
 .ix .ix-ch-art .ixs-flow .ixs-chain { grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 10px; }
 .ix .ix-ch-art .ixs-flow .ixs-chain::before { left: 15px; right: calc(100% / var(--n) - 15px); top: 22px; bottom: auto; width: auto; height: 2px; background: repeating-linear-gradient(90deg, rgb(var(--hue-b) / .7) 0 5px, transparent 5px 9px); }
 .ix .ix-ch-art .ixs-flow .ixs-chain li { grid-template-columns: minmax(0, 1fr); justify-items: start; align-content: start; gap: 10px; padding: 7px 0 0; }
@@ -800,7 +802,7 @@
 .ixhub .ixhub-thumb { position: absolute; z-index: 1; right: 12%; top: 22px; width: 92px; overflow: hidden; padding: 4px; border-radius: 16px; background: #0b0d14; box-shadow: 0 0 0 4px rgb(255 255 255 / .7), 0 24px 40px -22px rgb(var(--k-shadow-rgb) / .55); transform: rotate(6deg); transition: transform .5s var(--ease); }
 .ixhub .ixhub-thumb img { display: block; width: 100%; height: auto; aspect-ratio: 634 / 1000; object-fit: cover; object-position: 50% 25%; border-radius: 12px; }
 .ixhub .ixhub-card:hover .ixhub-thumb { transform: rotate(10deg) translateY(-4px); }
-.ixhub .ixhub-card.s4 .ixhub-thumb { width: 110px; right: 10%; top: 32px; }
+.ixhub .ixhub-card.s4 .ixhub-thumb { width: 124px; right: 10%; top: 32px; }
 .ixhub .ixhub-sketch { position: absolute; z-index: 1; right: 12%; top: 30px; display: grid; gap: 6px; width: 96px; padding: 12px 10px; border-radius: 16px; background: #fff; box-shadow: 0 0 0 1px rgb(255 255 255 / .8), 0 24px 40px -22px rgb(var(--tb) / .6); transform: rotate(5deg); transition: transform .5s var(--ease); }
 .ixhub .ixhub-sketch i { display: block; height: 14px; border-radius: 7px; background: var(--bg-2); }
 .ixhub .ixhub-sketch i.bar { height: 4px; background: linear-gradient(90deg, rgb(var(--ta)) 40%, var(--bg-3) 40%); }
@@ -809,6 +811,7 @@
 .ixhub .ixhub-card:hover .ixhub-sketch { transform: rotate(9deg) translateY(-4px); }
 .ixhub .ixhub-body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: 22px 24px 24px; }
 .ixhub .ixhub-card.s4 .ixhub-body { justify-content: center; padding: 30px 32px; }
+.ixhub .ixhub-card.s4 .ixhub-cac { margin-top: 10px; }
 .ixhub .ixhub-tag { font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .12em; color: var(--mute); }
 .ixhub .ixhub-card h2 { margin: 0; font-family: var(--font-display); font-weight: var(--fw-display); font-size: 22px; line-height: 1.2; letter-spacing: -.022em; color: var(--text); }
 .ixhub .ixhub-card.s4 h2 { font-size: clamp(24px, 2.2vw, 30px); }
