@@ -94,6 +94,9 @@
    graphic arrive with a short slide (transform only) that ends within 400ms, and every entrance
    inside the graphic starts at first paint, transform only (nothing fades in) */
 .family .fp-hero { --k-t-air: .34s; }
+/* nor is what shows under the hero on the first screen: the key facts and the first two blocks of
+   the first chapter are complete at first paint (no fade-in waiting for the scroll script) */
+.js.motion .family .fp-hero + .cp-grid :is(.cp-facts-wide, .cp-body > .cp-ch:first-child > :nth-child(-n+2), .cp-body > .cp-ch:first-child > :nth-child(-n+2) *):is(.reveal, [data-reveal]) { opacity: 1; translate: none; animation: none; }
 .family .cp-hero::after { content: ""; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgb(var(--hue-a) / .45) 22%, rgb(var(--hue-b) / .45) 50%, rgb(var(--hue-c) / .5) 78%, transparent); }
 .family .cp-hero > .bd { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
 .family .cp-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr); gap: 44px; }
