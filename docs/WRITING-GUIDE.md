@@ -120,7 +120,7 @@ in numeric ranges such as 45-55, and the site uses them in CAC ranges).
 
 ### Platform hubs N2 and N3
 
-`src/data/platformHubs.ts` (type + empty list), `src/components/PlatformHub.astro` (template),
+`src/data/platformHubs.ts` (type + empty list), `src/family/adrules/PlatformHubPage.astro` (template),
 `src/pages/advertising/[hub].astro` (route). Add one record per hub; `pages.json` already holds
 the publish dates. The template renders: breadcrumbs, H1, "Rules checked against <platform>'s
 live policy on <checkedOn>" and "Updated <date>", the answer box, your question H2 sections,
