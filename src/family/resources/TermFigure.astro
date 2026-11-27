@@ -1,0 +1,265 @@
+---
+// The hero graphic of a glossary term, in the family's product-UI style (src/family/graphics).
+// It replaces the kit card the old hero carried and draws the same strings from the same sources,
+// so every word is the page's own:
+//   formula  the term's printed formula as tokens (kit parseFormula), with the body's own worked
+//            example under it when it prints one (workedExample), tagged "Illustrative example"
+//            when that paragraph calls its numbers illustrative
+//   flow / compare / cycle / funnel
+//            the concept diagram src/pages/glossary/_diagrams.ts builds from the entry's copy
+//            (every phrase there is checked against the copy at build time)
+// Both are figures with a visible caption (the caption the old card printed): they carry the
+// page's formula or steps, so their text stays readable. A term with neither (iOS ATT) draws the
+// body's own worked example ("100 patients subscribe ... only 40 opted into tracking") as a
+// decorative signal panel instead; no number in it that the page does not print.
+import Win from '../graphics/Win.astro';
+import Ic from '../graphics/Ic.astro';
+import Chip from '../graphics/Chip.astro';
+import { parseFormula, type FormulaToken } from '../../kit/diagram/parse';
+import { concept, splitTerm, workedExample } from '../../pages/glossary/_diagrams';
+import { getTerm, type Term } from '../../data/glossary';
+
+interface Props { term: Term }
+const { term: t } = Astro.props;
+const { name } = splitTerm(t.term);
+const isCompliance = t.family === 'health-specific compliance and measurement';
+const famLabel = isCompliance ? 'Compliance' : 'Unit economics';
+
+const worked = workedExample(t);
+const eqs = t.formula ? parseFormula(t.formula) : [];
+const ex = worked ? parseFormula(worked.example)[0] : undefined;
+const fx = t.formula?.includes(' · ') ? 'formulas' : 'formula';
+const eqCaption = worked
+  ? `The ${name} ${fx} and the worked example from this page.`
+  : `The ${name} ${fx}, as this page defines it.`;
+const cd = t.formula ? undefined : concept(t);
+// the formula card's footer: the terms this entry lists as related (their cards are on the page)
+const relatedNames = (t.related ?? []).map((r) => getTerm(r)).filter((r) => r !== undefined).map((r) => splitTerm(r.term).name);
+const tokClass = (tok: FormulaToken, lhs: boolean) =>
+  tok.type === 'op' ? (tok.op === '=' ? 'tf-op tf-eq' : 'tf-op') : tok.type === 'paren' ? 'tf-paren' : lhs ? 'tf-term tf-lhs' : 'tf-term';
+
+// iOS ATT: the copy's worked example, only its own words and numbers
+const att = t.slug === 'ios-att';
+const ICON_STEPS = ['search', 'calendar', 'doc', 'check', 'shield', 'flag'];
+---
+{eqs.length > 0 && (
+  <figure class="tf">
+    <Win name="Formula" pill={{ text: famLabel, tone: isCompliance ? 'c' : '' }}>
+      <div class="tf-body">
+        {eqs.map((e) => (
+          <p class="tf-line">
+            {e.tokens.map((tok, i) => <span class={tokClass(tok, i < e.lhs.length)} style={`--i:${i}`}>{tok.text}</span>)}
+          </p>
+        ))}
+        {ex && (
+          <div class="tf-ex">
+            {worked?.illustrative && <span class="tf-tag">Illustrative example</span>}
+            <p class="tf-line tf-line-ex">
+              <span class="tf-lead" aria-hidden="true">→</span>
+              {ex.tokens.map((tok, i) => <span class:list={[tokClass(tok, false), ex.result === tok && 'tf-res']} style={`--i:${i + 3}`}>{tok.text}</span>)}
+            </p>
+          </div>
+        )}
+      </div>
+      {relatedNames.length > 0 && (
+        <div class="tf-rel" aria-hidden="true">
+          <span class="ui-lab">Related terms</span>
+          {relatedNames.map((n) => <span class="tf-rel-p">{n}</span>)}
+        </div>
+      )}
+    </Win>
+    <figcaption class="tf-cap">{eqCaption}</figcaption>
+  </figure>
+)}
+
+{cd?.kind === 'flow' && (
+  <figure class="tf">
+    <Win name={name} pill={{ text: famLabel, tone: 'c' }}>
+      <ol class="tf-flow">
+        {cd.nodes.map((n, i) => (
+          <li class:list={['tf-node', n.tone === 'ok' && 'is-ok']} style={`--i:${i}`}>
+            <span class="tf-node-ic"><Ic name={n.tone === 'ok' ? 'check' : ICON_STEPS[i % ICON_STEPS.length]} /></span>
+            <span class="tf-node-txt">
+              <span class="tf-node-l">{n.label}</span>
+              {n.sub && <span class="tf-node-s">{n.sub}</span>}
+              {n.branches && (
+                <span class="tf-branches">
+                  {n.branches.map((b) => <span class:list={['tf-br', b.tone === 'bad' ? 'is-bad' : 'is-ok']}><Ic name={b.tone === 'bad' ? 'x' : 'check'} />{b.label}</span>)}
+                </span>
+              )}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </Win>
+    <figcaption class="tf-cap">{cd.caption}</figcaption>
+  </figure>
+)}
+
+{cd?.kind === 'compare' && (
+  <figure class="tf">
+    <Win name={name} pill={{ text: famLabel, tone: 'c' }}>
+      <div class="tf-cmp">
+        {[cd.left, cd.right].map((side) => (
+          <div class:list={['tf-col', side.tone === 'bad' ? 'is-bad' : 'is-ok']}>
+            <p class="tf-col-h"><span class="tf-col-ic"><Ic name={side.tone === 'bad' ? 'x' : 'check'} /></span>{side.label}</p>
+            <ul>{side.items.map((it, i) => <li style={`--i:${i}`}>{it}</li>)}</ul>
+          </div>
+        ))}
+      </div>
+    </Win>
+    <figcaption class="tf-cap">{cd.caption}</figcaption>
+  </figure>
+)}
+
+{cd?.kind === 'cycle' && (
+  <figure class="tf">
+    <Win name={name} pill={{ text: cd.center, tone: 'b' }}>
+      <ol class="tf-cycle">
+        {cd.steps.map((s, i) => (
+          <li style={`--i:${i}`}>
+            <span class="tf-cyc-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <span class="tf-node-txt"><span class="tf-node-l">{s.label}</span>{s.detail && <span class="tf-node-s">{s.detail}</span>}</span>
+          </li>
+        ))}
+      </ol>
+      <svg class="tf-loop" viewBox="0 0 24 100" preserveAspectRatio="none" aria-hidden="true"><path d="M2 92 H14 Q20 92 20 86 V14 Q20 8 14 8 H6" pathLength="1" /><path d="M9 4 5 8 9 12" /></svg>
+    </Win>
+    <figcaption class="tf-cap">{cd.caption}</figcaption>
+  </figure>
+)}
+
+{cd?.kind === 'funnel' && (
+  <figure class="tf">
+    <Win name={name} pill={{ text: famLabel, tone: '' }}>
+      <ol class="tf-funnel">
+        {cd.stages.map((s, i) => (
+          <li style={`--i:${i};--w:${100 - i * 14}%`}>
+            <span class="tf-fbar"><span class="tf-node-l">{s.label}</span></span>
+            {s.note && <span class="tf-fnote">{s.note}</span>}
+          </li>
+        ))}
+      </ol>
+    </Win>
+    <figcaption class="tf-cap">{cd.caption}</figcaption>
+  </figure>
+)}
+
+{att && (
+  <div class="tf tf-att" aria-hidden="true">
+    <Win name="iOS ATT" pill={{ text: 'Illustrative', tone: 'n' }}>
+      <div class="tf-prompt">
+        <span class="tf-prompt-ic"><Ic name="lock" /></span>
+        <span class="tf-prompt-txt"><b>App Tracking Transparency</b><span class="ui-lab">opt-in prompt</span></span>
+        <span class="tf-prompt-btns"><i></i><i class="on"></i></span>
+      </div>
+      <ul class="tf-att-rows">
+        <li><span class="tf-att-l"><b>100 patients subscribe</b><span class="ui-lab">after clicking iPhone ads</span></span><span class="tf-att-bar"><i class="ui-fill" style="width:100%"></i></span></li>
+        <li><span class="tf-att-l"><b>40 opted into tracking</b><span class="ui-lab">observes those 40 directly</span></span><span class="tf-att-bar"><i class="ui-fill" style="width:40%"></i></span></li>
+        <li class="is-model"><span class="tf-att-l"><b>Models an estimate for the rest</b><span class="ui-lab">modeled conversions</span></span><span class="tf-att-bar"><i class="tf-hatch" style="width:100%"></i></span></li>
+      </ul>
+    </Win>
+    <Chip title="CAPI" label="deduplicated against the pixel" icon="shield" tone="b" style="right:-26px;bottom:-34px" />
+  </div>
+)}
+
+<style>
+  .tf { position: relative; margin: 0; }
+  .tf :global(.ui) { font-size: 13px; }
+  .tf-cap { display: flex; gap: 10px; align-items: baseline; margin: 14px 6px 0; font-size: 12.5px; line-height: 1.5; color: var(--mute); text-wrap: pretty; }
+  .tf-cap::before { content: ""; flex-shrink: 0; width: 16px; height: 1px; margin-bottom: 4px; background: var(--line-3); }
+
+  /* formula */
+  .tf-body { display: grid; gap: 14px; padding: 20px 18px 20px; }
+  .tf-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; }
+  .tf-term { display: inline-flex; align-items: center; min-height: 34px; padding: 6px 12px; border-radius: 11px; font-size: 13.5px; font-weight: 500; line-height: 1.3; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line-2), 0 6px 14px -10px rgb(var(--k-shadow-rgb) / .35); }
+  .tf-lhs { color: #fff; font-weight: 600; background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
+  .tf-op { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-family: var(--font-mono); font-size: 13px; color: var(--deep-a); background: rgb(var(--hue-a) / .1); }
+  .tf-eq { color: #fff; background: var(--text); }
+  .tf-paren { font-family: var(--font-mono); font-size: 16px; color: var(--mute); }
+  .tf-ex { position: relative; display: grid; gap: 10px; padding: 14px; border-radius: 14px; background: radial-gradient(80% 120% at 100% 0%, rgb(var(--hue-a) / .1), transparent 60%), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .tf-tag { justify-self: start; padding: 4px 9px; border-radius: 99px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .tf-lead { font-family: var(--font-mono); color: var(--mute); }
+  .tf-line-ex .tf-term { min-height: 30px; padding: 4px 10px; font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .tf-line-ex .tf-res { color: #fff; background: var(--grad-brand); box-shadow: 0 10px 20px -10px rgb(var(--hue-b) / .9); }
+  .tf-rel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 12px 16px 14px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
+  .tf-rel .ui-lab { margin-right: 4px; }
+  .tf-rel-p { padding: 4px 10px; border-radius: 99px; font-size: 11.5px; font-weight: 500; color: var(--text-2); background: #fff; box-shadow: inset 0 0 0 1px var(--line-2); }
+  :global(.js.motion) .tf-line > span { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .07s); }
+  @keyframes tf-in { from { opacity: 0; translate: 0 6px; } }
+
+  /* flow */
+  .tf-flow { position: relative; list-style: none; display: grid; gap: 8px; margin: 0; padding: 16px; }
+  .tf-flow::before { content: ""; position: absolute; left: 31px; top: 30px; bottom: 30px; width: 2px; border-radius: 2px; background: linear-gradient(rgb(var(--hue-a) / .45), rgb(var(--hue-b) / .3), rgb(var(--hue-c) / .35)); }
+  .tf-node { position: relative; display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; align-items: start; margin: 0; padding: 10px 12px 10px 0; }
+  .tf-node-ic { position: relative; z-index: 1; display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; color: var(--deep-a); background: #fff; box-shadow: 0 0 0 1px var(--line-2), 0 0 0 4px #fff; }
+  .tf-node-ic :global(.gi) { width: 15px; height: 15px; }
+  .tf-node.is-ok .tf-node-ic { color: #fff; background: var(--grad-brand); box-shadow: 0 0 0 4px #fff, 0 10px 18px -8px rgb(var(--hue-b) / .9); }
+  .tf-node-txt { display: grid; gap: 3px; min-width: 0; padding-top: 2px; }
+  .tf-node-l { font-size: 13.5px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; color: var(--text); }
+  .tf-node-s { font-size: 12px; line-height: 1.45; color: var(--text-2); }
+  .tf-branches { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tf-br { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px 4px 6px; border-radius: 99px; font-size: 11.5px; line-height: 1.3; }
+  .tf-br :global(.gi) { width: 12px; height: 12px; stroke-width: 2.4; }
+  .tf-br.is-ok { color: var(--ok-ink); background: var(--ok-soft); }
+  .tf-br.is-bad { color: var(--k-bad-ink); background: var(--k-bad-soft); }
+  :global(.js.motion) .tf-node { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .09s); }
+
+  /* compare: a claims checker, the two columns of the page's table */
+  .tf-cmp { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tf-col { min-width: 0; padding: 14px 14px 16px; }
+  .tf-col + .tf-col { border-left: 1px solid var(--line); }
+  .tf-col.is-bad { background: linear-gradient(180deg, rgb(var(--k-bad-rgb, 220 38 38) / .04), transparent 70%); }
+  .tf-col-h { display: flex; align-items: flex-start; gap: 8px; margin: 0 0 10px; font-family: var(--font-mono); font-size: 10px; font-weight: 500; line-height: 1.4; letter-spacing: .08em; text-transform: uppercase; color: var(--text-2); }
+  .tf-col-ic { display: grid; place-items: center; flex-shrink: 0; width: 18px; height: 18px; border-radius: 6px; }
+  .tf-col-ic :global(.gi) { width: 11px; height: 11px; stroke-width: 2.8; }
+  .is-ok .tf-col-ic { color: var(--ok-ink); background: var(--ok-soft); }
+  .is-bad .tf-col-ic { color: var(--k-bad-ink); background: var(--k-bad-soft); }
+  .tf-col ul { list-style: none; display: grid; gap: 7px; margin: 0; padding: 0; }
+  .tf-col li { margin: 0; padding: 8px 10px; border-radius: 10px; font-size: 12px; line-height: 1.4; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line); }
+  .is-bad li { color: var(--text-2); background: var(--bg-2); }
+  :global(.js.motion) .tf-col li { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i) * .08s); }
+
+  /* cycle: the pipeline in order, with the loop back to the start drawn on the right */
+  .tf-cycle { list-style: none; display: grid; gap: 8px; margin: 0; padding: 16px 44px 16px 16px; }
+  .tf-cycle li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; margin: 0; padding: 10px 12px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 8px 16px -14px rgb(var(--k-shadow-rgb) / .35); }
+  .tf-cyc-n { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: #fff; background: var(--cp-vivid); }
+  .tf-cycle li:nth-child(2) .tf-cyc-n { background: linear-gradient(135deg, var(--deep-b), var(--deep-c)); }
+  .tf-cycle li:nth-child(3) .tf-cyc-n { background: linear-gradient(135deg, var(--deep-c), var(--deep-a)); }
+  .tf-loop { position: absolute; right: 12px; top: 56px; bottom: 16px; width: 24px; height: calc(100% - 72px); fill: none; stroke: rgb(var(--hue-b) / .55); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+  .tf-loop path { vector-effect: non-scaling-stroke; }
+  :global(.js.motion) .tf-cycle li { animation: tf-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .09s); }
+
+  /* funnel */
+  .tf-funnel { list-style: none; display: grid; gap: 8px; margin: 0; padding: 18px 16px; }
+  .tf-funnel li { display: grid; justify-items: center; gap: 5px; margin: 0; }
+  .tf-fbar { display: grid; place-items: center; width: var(--w); min-height: 40px; padding: 8px 12px; border-radius: 12px; text-align: center; background: linear-gradient(90deg, rgb(var(--hue-a) / .16), rgb(var(--hue-b) / .14), rgb(var(--hue-c) / .16)); box-shadow: inset 0 0 0 1px rgb(var(--hue-a) / .22); }
+  .tf-funnel li:last-child .tf-fbar { background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9); }
+  .tf-funnel li:last-child .tf-node-l { color: #fff; }
+  .tf-fnote { padding: 3px 9px; border-radius: 99px; font-size: 11.5px; line-height: 1.35; text-align: center; color: var(--deep-a); background: rgb(var(--hue-a) / .08); }
+  :global(.js.motion) .tf-fbar { animation: tf-grow .6s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .1s); }
+  @keyframes tf-grow { from { opacity: 0; scale: .9 1; } }
+
+  /* iOS ATT: the prompt and the reporting gap of the page's worked example */
+  .tf-prompt { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 14px 14px 4px; padding: 12px; border-radius: 14px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .tf-prompt-ic { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: #fff; background: var(--cp-vivid); }
+  .tf-prompt-ic :global(.gi) { width: 16px; height: 16px; }
+  .tf-prompt-txt b { display: block; font-size: 13px; letter-spacing: -.01em; }
+  .tf-prompt-btns { display: flex; gap: 6px; }
+  .tf-prompt-btns i { display: block; width: 34px; height: 20px; border-radius: 99px; background: var(--line-2); }
+  .tf-prompt-btns i.on { background: var(--grad-brand); }
+  .tf-att-rows { list-style: none; margin: 0; padding: 8px 0 10px; }
+  .tf-att-rows li { display: grid; grid-template-columns: minmax(0, 1fr) 38%; gap: 14px; align-items: center; margin: 0; padding: 10px 16px; border-bottom: 1px solid var(--line); }
+  .tf-att-rows li:last-child { border-bottom: 0; }
+  .tf-att-l b { display: block; font-size: 13px; letter-spacing: -.01em; }
+  .tf-att-bar { display: block; height: 8px; border-radius: 99px; background: var(--bg-3); overflow: hidden; }
+  .tf-att-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--grad-brand); }
+  .tf-att-bar > .tf-hatch { background: repeating-linear-gradient(135deg, rgb(var(--hue-b) / .5) 0 4px, rgb(var(--hue-b) / .15) 4px 8px); }
+  .is-model { background: linear-gradient(90deg, rgb(var(--hue-b) / .05), transparent 70%); }
+
+  @media (max-width: 480px) {
+    .tf-cmp { grid-template-columns: minmax(0, 1fr); }
+    .tf-col + .tf-col { border-left: 0; border-top: 1px solid var(--line); }
+    .tf-att-rows li { grid-template-columns: minmax(0, 1fr) 30%; }
+  }
+</style>
