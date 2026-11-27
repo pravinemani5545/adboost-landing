@@ -1,20 +1,28 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
-import Compare from '../../kit/diagram/Compare.astro';
-import Timeline from '../../kit/diagram/Timeline.astro';
-import Versus from './_Versus.astro';
-import Toc from '../../components/Toc.astro';
+// /compare/<slug>/ on the family layer (src/family/FamilyPage.astro; src/family/README.md). Every
+// word, heading, link, FAQ and JSON-LD node is the one this page had on the old interior layout;
+// only the layout and the graphics are new.
+//   hero     the versus card: the two options and the dimensions the table compares
+//   chapters which to choose (the table as two contrasting card columns), side by side (one card
+//            per dimension, the full table in a disclosure, their focus and ours as fit cards), the
+//            buyer questions (the speed answer with its timeline figure), the nine questions (strong
+//            answer and red flag cards), when we are not the right fit
+//   rail     "See if we're the right fit", then the sticky "On this page"
+//   end      FAQ cards, the other comparisons as link cards, the closing card (.cta-band)
+import FamilyPage from '../../family/FamilyPage.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import Versus from '../../family/adrules/Versus.astro';
+import VsRows from '../../family/adrules/VsRows.astro';
+import SpeedTimeline from '../../family/adrules/SpeedTimeline.astro';
+import Ic from '../../family/graphics/Ic.astro';
+import { esc } from '../../family/adrules/status';
+import { updatedLabel } from '../../family/dates';
 import { COMPARES, getCompare } from '../../data/compare';
-import { siteBase } from '../../lib/site';
+import { BOOK_PATH, siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, faqPage } from '../../lib/schema';
-import '../../styles/pages/reference.css';
-import '../../styles/pages/chapters.css';
-import '../../styles/pages/compare.css';
+import '../../styles/family/adrules.css';
 
 export function getStaticPaths() {
   return COMPARES.map((c) => ({ params: { slug: c.slug } }));
@@ -27,7 +35,7 @@ const title = seoTitle(path, c.metaTitle);
 const description = metaDescription(path, c.metaDescription);
 // Content date: src/data/pages.json (sitemap lastmod, this label and dateModified).
 const updated = pageDate(path);
-const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const updatedText = updatedLabel(path);
 const them = c.themLabel;
 const themLower = them.charAt(0).toLowerCase() + them.slice(1);
 const plain = (html: string) => html.replace(/<[^>]+>/g, '');
@@ -61,166 +69,160 @@ const toc = [
   { id: 'faq', label: 'FAQ' },
 ];
 
-const xIcon = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
-
-// Full-service page only (brief 5.5): the speed answer's three milestones on a day scale. The
-// labels are that answer's own words; the build stops if the answer no longer says them.
-let speedRail: { phases: { meta: string; label: string; start: number }[] } | undefined;
-if (c.slug === 'full-service-healthcare-agency-alternative') {
-  const speed = plain(c.tradeoffs.find((t) => t.id === 'speed')?.html ?? '');
-  for (const phrase of ['setup takes 5 days', 'Most partners see directional movement on CAC or ROAS within two weeks', 'the full system compounds by day 31']) {
-    if (!speed.includes(phrase)) throw new Error(`[compare] the speed answer no longer says "${phrase}"`);
-  }
-  speedRail = {
+// "How fast does each one start?": the speed answer's milestones on a day scale, and the other
+// option's lane in the answer's own words. Every phrase is checked against the answer, so the
+// figure cannot drift from the text (the full-service labels are the ones its old rail printed).
+const SPEED: Record<string, { phrases: string[]; themText: string; phases: { meta: string; label: string; start: number }[]; caption: string }> = {
+  'full-service-healthcare-agency-alternative': {
+    phrases: ['setup takes 5 days', 'Most partners see directional movement on CAC or ROAS within two weeks', 'the full system compounds by day 31', 'A full-service engagement’s timeline depends on its scope'],
+    themText: 'A full-service engagement’s timeline depends on its scope',
     phases: [
       { meta: '5 days', label: 'Setup', start: 5 },
       { meta: 'Within two weeks', label: 'Most partners see directional movement on CAC or ROAS', start: 14 },
       { meta: 'Day 31', label: 'The full system compounds', start: 31 },
     ],
-  };
+    caption: 'AdBoost Health’s first 31 days on a day scale, from the answer above: setup takes 5 days, most partners see directional movement within two weeks, and the full system compounds by day 31.',
+  },
+  'in-house-growth-team-alternative': {
+    phrases: ['setup takes 5 days', 'directional movement on CAC or ROAS within two weeks', 'the system compounds by day 31', 'the timeline depends on how quickly you can hire'],
+    themText: 'the timeline depends on how quickly you can hire',
+    phases: [
+      { meta: '5 days', label: 'setup', start: 5 },
+      { meta: 'within two weeks', label: 'directional movement on CAC or ROAS', start: 14 },
+      { meta: 'day 31', label: 'the system compounds', start: 31 },
+    ],
+    caption: 'AdBoost Health’s setup takes 5 days; most partners see directional movement on CAC or ROAS within two weeks, and the system compounds by day 31.',
+  },
+};
+const speed = SPEED[c.slug];
+if (speed) {
+  const text = plain(c.tradeoffs.find((t) => t.id === 'speed')?.html ?? '');
+  for (const phrase of speed.phrases) {
+    if (!text.includes(phrase)) throw new Error(`[compare] the speed answer of ${c.slug} no longer says "${phrase}"`);
+  }
 }
+
+const xIcon = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  ogType: 'article',
+  h1: c.h1,
+  summary: esc(c.answer),
+  summaryLabel: 'The short answer',
+  lede: `<strong>Who this page is for:</strong> ${esc(c.intent)}`,
+  faqs: c.faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+  related: [{
+    heading: 'Other comparisons',
+    level: 2 as const,
+    links: [
+      ...COMPARES.filter((x) => x.slug !== c.slug).map((x) => ({ href: `/compare/${x.slug}/`, label: x.h1.replace('AdBoost Health vs. ', 'vs. ') })),
+      ...(c.slug !== 'generalist-dtc-agency-alternative' ? [{ href: '/compare/generalist-dtc-agency-alternative/#how-to-choose', label: 'How to choose a health growth agency' }] : []),
+      { href: '/about/', label: 'Why health-only' },
+    ],
+  }],
+};
+const byline = [{ text: 'Published by AdBoost Health', icon: 'org' as const }, ...(updatedText ? [{ text: `Updated ${updatedText}`, icon: 'date' as const }] : [])];
 ---
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor }]}
-    title={c.h1}
-    answer={c.answer}
-    meta={['Published by AdBoost Health', ...(updatedLabel ? [`Updated ${updatedLabel}`] : [])]}
-    class="rf-hero rf-hero--compare"
-  >
-    <div slot="aside" class="rf-hero-card cmp-vcard k-card k-card--float k-card--glass">
-      <Versus them={them} dimensions={c.rows.map((r) => r.dimension)} />
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Compare', href: '/compare/' }, { label: c.competitor }]}
+  eyebrow="COMPARE"
+  schema={jsonLd}
+  byline={byline}
+  toc={toc}
+  figureAt={speed ? { id: 'speed', skip: 1 } : undefined}
+>
+  <Versus slot="hero" them={them} dimensions={c.rows.map((r) => r.dimension)} />
+  {speed && <SpeedTimeline slot="figure" them={them} themText={speed.themText} phases={speed.phases} total={31} caption={speed.caption} />}
+
+  <div slot="aside" class="pg-card is-night adr-side">
+    <h2>See if we’re the right fit</h2>
+    <p>Free 30-minute call with a senior strategist: no pitch, just a plan.</p>
+    <ButtonLink href={BOOK_PATH} class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  <div class="pg-prose"><h2 id="choose">Should you choose {themLower} or AdBoost Health?</h2></div>
+  <div class="adr-choose reveal">
+    <table>
+      <thead><tr><th scope="col" class="is-them"><span class="adr-choose-ic" aria-hidden="true"><Ic name="users" /></span>Choose {themLower} if</th><th scope="col" class="is-us"><span class="adr-choose-ic" aria-hidden="true"><Ic name="shield" /></span>Choose AdBoost Health if</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="is-them" data-label={`Choose ${themLower} if`}><ul>{c.chooseThem.map((x) => <li>{x}</li>)}</ul></td>
+          <td class="is-us" data-label="Choose AdBoost Health if"><ul>{c.chooseUs.map((x) => <li>{x}</li>)}</ul></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pg-prose"><h2 id="compare">How do they compare, side by side?</h2></div>
+  <VsRows
+    them={them}
+    rows={c.rows}
+    caption={`${them} against AdBoost Health on each dimension. The table below holds the same rows.`}
+  />
+  <details class="adr-more reveal">
+    <summary><span class="adr-more-chev" aria-hidden="true"></span>Side by side as a table</summary>
+    <div class="cp-table adr-more-table" data-cols="3">
+      <table>
+        <thead><tr><th></th><th>{them}</th><th>AdBoost Health</th></tr></thead>
+        <tbody>
+          {c.rows.map((r) => (
+            <tr><td data-label="">{r.dimension}</td><td data-label={them} class="is-them">{r.them}</td><td data-label="AdBoost Health">{r.us}</td></tr>
+          ))}
+        </tbody>
+      </table>
     </div>
-  </PageHero>
+  </details>
+  <div class="adr-focus">
+    <div class="adr-focus-col is-them reveal"><span class="adr-focus-ic" aria-hidden="true"><Ic name="users" /></span><p><strong>Their focus:</strong> {c.theirFocus}</p></div>
+    <div class="adr-focus-col is-us reveal d1"><span class="adr-focus-ic" aria-hidden="true"><Ic name="target" /></span><p><strong>Ours:</strong> {c.ourDifference}</p></div>
+  </div>
 
-  <section class="iwrap-sm">
-    <div class="container">
-     <div class="doc-grid k-scrub-scope">
-      <div class="doc-main ch-doc">
-      <p class="rf-intent"><strong>Who this page is for:</strong> {c.intent}</p>
+  {c.tradeoffs.map((t, i) => (
+    i === 0 || t.id === 'speed'
+      ? <div class="pg-prose"><h2 id={t.id}>{t.q}</h2><Fragment set:html={t.html} /></div>
+      : <><div class="pg-prose"><h2 id={t.id}>{t.q}</h2></div><div class="adr-tint reveal"><div class="pg-prose"><Fragment set:html={t.html} /></div></div></>
+  ))}
 
-      <div class="prose">
-        <h2 id="choose">Should you choose {themLower} or AdBoost Health?</h2>
+  {c.questions && (
+    <>
+      <div class="pg-prose">
+        <h2 id="how-to-choose">How do you choose a health growth agency? Nine questions to ask</h2>
+        <p>{c.questions.intro}</p>
+      </div>
+      <ol class="adr-qs">
+        {c.questions.items.map((it, i) => (
+          <li class="adr-q reveal" style={`--i:${i}`}>
+            <h3>{i + 1}. {it.q}</h3>
+            <p set:html={it.a} />
+            <div class="adr-qa">
+              <p class="adr-qa-card is-ok"><span class="adr-qa-k"><span class="adr-qa-m" aria-hidden="true">✓</span>A strong answer</span><span class="adr-qa-v">{it.strong}</span></p>
+              <p class="adr-qa-card is-bad"><span class="adr-qa-k"><span class="adr-qa-m" aria-hidden="true">✕</span>Red flag</span><span class="adr-qa-v">{it.flag}</span></p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <div class="pg-prose">
+        <h3>The nine questions at a glance</h3>
         <div class="tablewrap">
-          <table class="dtable rf-choose cmp-choose">
-            <thead><tr><th>Choose {themLower} if</th><th>Choose AdBoost Health if</th></tr></thead>
+          <table>
+            <thead><tr><th>#</th><th>Question</th><th>A strong answer</th><th>Red flag</th></tr></thead>
             <tbody>
-              <tr>
-                <td><ul>{c.chooseThem.map((x) => <li>{x}</li>)}</ul></td>
-                <td><ul>{c.chooseUs.map((x) => <li>{x}</li>)}</ul></td>
-              </tr>
+              {c.questions.items.map((it, i) => (
+                <tr><td>{i + 1}</td><td>{it.q}</td><td>{it.strong}</td><td>{it.flag}</td></tr>
+              ))}
             </tbody>
           </table>
         </div>
-
-        <h2 id="compare">How do they compare, side by side?</h2>
-        <div class="rf-figure">
-          <Compare
-            variant="vs"
-            caption={`${them} against AdBoost Health on each dimension. The table below holds the same rows.`}
-            left={{ label: them, items: [] }}
-            right={{ label: 'AdBoost Health', items: [] }}
-            rows={c.rows.map((r) => ({ label: r.dimension, left: r.them, right: r.us }))}
-          />
-        </div>
-        <div class="k-disclosure rf-tablemore">
-          <details>
-            <summary><span class="rf-tablemore__chev" aria-hidden="true"></span>Side by side as a table</summary>
-            <div class="tablewrap">
-              <table class="dtable">
-                <thead><tr><th></th><th>{them}</th><th>AdBoost Health</th></tr></thead>
-                <tbody>
-                  {c.rows.map((r) => (
-                    <tr><td class="row-h">{r.dimension}</td><td class="rf-them">{r.them}</td><td>{r.us}</td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </details>
-        </div>
-        <div class="ch-split cmp-focus">
-          <div class="ch-card ch-side" data-reveal><p><strong>Their focus:</strong> {c.theirFocus}</p></div>
-          <div class="ch-card ch-side ch-side--us" data-reveal style="--i:1"><p><strong>Ours:</strong> {c.ourDifference}</p></div>
-        </div>
-
-        {c.tradeoffs.map((t) => (
-          <>
-            <h2 id={t.id}>{t.q}</h2>
-            <Fragment set:html={t.html} />
-            {t.id === 'speed' && speedRail && (
-              <div class="rf-figure">
-                <Timeline
-                  variant="rail"
-                  total={31}
-                  caption="AdBoost Health’s first 31 days on a day scale, from the answer above: setup takes 5 days, most partners see directional movement within two weeks, and the full system compounds by day 31."
-                  phases={speedRail.phases}
-                />
-              </div>
-            )}
-          </>
-        ))}
-
-        {c.questions && (
-          <>
-            <h2 id="how-to-choose">How do you choose a health growth agency? Nine questions to ask</h2>
-            <p>{c.questions.intro}</p>
-            {c.questions.items.map((it, i) => (
-              <>
-                <h3>{i + 1}. {it.q}</h3>
-                <p set:html={it.a} />
-                <div class="rf-qa" data-reveal>
-                  <p class="rf-qa__card rf-qa__card--ok">
-                    <span class="rf-qa__k"><span class="rf-qa__m" aria-hidden="true">✓</span>A strong answer</span>
-                    <span class="rf-qa__v">{it.strong}</span>
-                  </p>
-                  <p class="rf-qa__card rf-qa__card--bad">
-                    <span class="rf-qa__k"><span class="rf-qa__m" aria-hidden="true">✕</span>Red flag</span>
-                    <span class="rf-qa__v">{it.flag}</span>
-                  </p>
-                </div>
-              </>
-            ))}
-            <h3>The nine questions at a glance</h3>
-            <div class="tablewrap">
-              <table class="dtable">
-                <thead><tr><th>#</th><th>Question</th><th>A strong answer</th><th>Red flag</th></tr></thead>
-                <tbody>
-                  {c.questions.items.map((it, i) => (
-                    <tr><td>{i + 1}</td><td class="row-h">{it.q}</td><td>{it.strong}</td><td class="rf-them">{it.flag}</td></tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-
-        <h2 id="not-fit">When is AdBoost Health not the right fit?</h2>
-        <p class="cmp-best">{c.bestWhen}</p>
-        <ul class="cmp-notfit ch-stagger">{c.notFit.map((x) => <li class="ch-card" data-reveal><span class="ch-tick ch-tick--x" aria-hidden="true" set:html={xIcon} /><span>{x}</span></li>)}</ul>
-
-        <h2 id="faq">Frequently asked questions</h2>
       </div>
-      <div class="rf-faq ch-panel ch-card"><Faq items={c.faq} idPrefix={`cmp-${c.slug}`} /></div>
-      </div>
-      <aside class="doc-aside">
-        <Toc items={toc} />
-        <div class="aside-card">
-          <h2 class="rf-aside-h">Other comparisons</h2>
-          <div class="link-list">
-            {COMPARES.filter((x) => x.slug !== c.slug).map((x) => <a href={`/compare/${x.slug}/`}>{x.h1.replace('AdBoost Health vs. ', 'vs. ')}</a>)}
-            {c.slug !== 'generalist-dtc-agency-alternative' && <a href="/compare/generalist-dtc-agency-alternative/#how-to-choose">How to choose a health growth agency</a>}
-            <a href="/about/">Why health-only</a>
-          </div>
-        </div>
-        <div class="aside-card night">
-          <h2 class="rf-aside-h">See if we’re the right fit</h2>
-          <p>Free 30-minute call with a senior strategist: no pitch, just a plan.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
+    </>
+  )}
 
-  <CtaBand />
-</BaseLayout>
+  <div class="pg-prose"><h2 id="not-fit">When is AdBoost Health not the right fit?</h2></div>
+  <p class="adr-best reveal"><span class="adr-best-ic" aria-hidden="true"><Ic name="users" /></span><span>{c.bestWhen}</span></p>
+  <ul class="adr-notfit">
+    {c.notFit.map((x, i) => <li class="reveal" style={`--i:${i}`}><span class="adr-notfit-x" aria-hidden="true" set:html={xIcon} /><span>{x}</span></li>)}
+  </ul>
+</FamilyPage>

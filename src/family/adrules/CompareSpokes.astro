@@ -1,0 +1,28 @@
+---
+// /compare/ hero: AdBoost Health at the centre and the alternatives these breakdowns weigh against
+// it on three spokes, each with when it wins, in the words of the page's "In short" answer, and
+// linked to its breakdown (a port of the kit HubSpoke the page used). Caption visible.
+import Ic from '../graphics/Ic.astro';
+interface Props { hub: string; spokes: { label: string; sub?: string; href: string }[]; caption: string }
+const { hub, spokes, caption } = Astro.props;
+const ICONS = ['layers', 'users', 'cart'];
+---
+<figure class="adr-hs">
+  <div class="adr-hs-stage">
+    <svg class="adr-hs-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M50 50 L22 16" /><path d="M50 50 L78 16" /><path d="M50 50 L50 86" />
+    </svg>
+    <div class="adr-hs-hub"><span class="adr-hs-mark" aria-hidden="true"><Ic name="shield" /></span><b>{hub}</b></div>
+    <ul class="adr-hs-spokes">
+      {spokes.map((s, i) => (
+        <li class={`s${i}`} style={`--i:${i}`}>
+          <a href={s.href}>
+            <span class="adr-hs-ic" aria-hidden="true"><Ic name={ICONS[i % ICONS.length]} /></span>
+            <span class="adr-hs-txt"><span class="adr-hs-label">{s.label}</span>{s.sub && <span class="adr-hs-sub">{s.sub}</span>}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

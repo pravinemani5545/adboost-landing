@@ -1,0 +1,22 @@
+---
+// "How do they compare, side by side?" on the family layer (it replaces the kit Compare "vs"
+// variant): one card per dimension, the other option's answer on the left in grey and AdBoost
+// Health's on the right in the section blue, with the column labels repeated on phones, where the
+// two answers stack. Text and order are the page's (compare.ts rows). Caption visible.
+interface Props { them: string; rows: { dimension: string; them: string; us: string }[]; caption: string }
+const { them, rows, caption } = Astro.props;
+---
+<figure class="adr-vr reveal">
+  <div class="adr-vr-head" aria-hidden="true"><span class="is-them">{them}</span><span class="adr-vs-badge">vs</span><span class="is-us">AdBoost Health</span></div>
+  <ol class="adr-vr-rows">
+    {rows.map((r, i) => (
+      <li style={`--i:${i}`}>
+        <p class="adr-vr-dim">{r.dimension}</p>
+        <p class="adr-vr-l"><span class="adr-vr-tag">{them}</span>{r.them}</p>
+        <span class="adr-vr-rail" aria-hidden="true"><i></i></span>
+        <p class="adr-vr-r"><span class="adr-vr-tag">AdBoost Health</span>{r.us}</p>
+      </li>
+    ))}
+  </ol>
+  <figcaption>{caption}</figcaption>
+</figure>
