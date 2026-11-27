@@ -1,0 +1,71 @@
+---
+// "Which ad rules and claims trip up <vertical> brands?": the callout beside an ad-review panel,
+// then the platform rule sheets as status cards.
+//   callout   "Watch for this", the vertical's landmine and its guide link, unchanged.
+//   review    a decorative review window: the phrases of the callout itself, each with a mark
+//             (blocked, needs care, allowed, a requirement). Hidden from assistive technology:
+//             it restates the callout.
+//   cards     one card per platform rule sheet (status, and the link the page always had); a
+//             platform whose sheet the callout already links shows its status without the link.
+import Win from '../graphics/Win.astro';
+import Icon from './Icon.astro';
+import { STATUS_LABEL } from '../../data/adPolicies';
+import type { PolicyStatus } from '../../data/adPolicies';
+import type { FlagTone } from './plan';
+
+interface Props {
+  id: string;
+  heading: string;
+  landmine: string;
+  guide: { href: string; label: string };
+  flags: { text: string; tone: FlagTone }[];
+  cards: { platform: string; status: PolicyStatus; label: string; href?: string }[];
+}
+const { id, heading, landmine, guide, flags, cards } = Astro.props;
+const MARK: Record<FlagTone, string> = { bad: 'x', warn: 'alert', ok: 'check', info: 'shield' };
+const PILL: Record<PolicyStatus, string> = { allowed: 'ok', restricted: 'warn', cert: '', prohibited: 'bad' };
+const PF: Record<string, string> = { Meta: 'feed', Google: 'search', TikTok: 'video' };
+---
+<section class="ix-ch ix-rules" aria-labelledby={id}>
+  <header class="ix-ch-head reveal">
+    <span class="ix-ch-n" aria-hidden="true"></span>
+    <h2 id={id}>{heading}</h2>
+  </header>
+  <div class="ix-rules-top">
+    <div class="ix-watch reveal">
+      <span class="ix-watch-lab"><span class="ix-watch-ic" aria-hidden="true"><Icon name="alert" /></span>Watch for this</span>
+      <p>{landmine} <a href={guide.href}>{guide.label}</a></p>
+    </div>
+    <div class="ix-review reveal d1" aria-hidden="true">
+      <Win name="Ad rules to watch">
+        <ul class="ix-flags">
+          {flags.map((f, i) => (
+            <li class={`t-${f.tone}`} style={`--i:${i}`}><span class="ix-flag-mk"><Icon name={MARK[f.tone]} /></span><span>{f.text}</span></li>
+          ))}
+        </ul>
+      </Win>
+    </div>
+  </div>
+  {cards.length > 0 && (
+    <ul class="ix-rule-cards">
+      {cards.map((c, i) => {
+        const inner = (
+          <>
+            <span class="ix-rc-top">
+              <span class="ix-rc-pf" aria-hidden="true"><Icon name={PF[c.platform] ?? 'globe'} /></span>
+              <span class="ix-rc-name">{c.platform}</span>
+              <span class:list={['ui-pill', PILL[c.status]]}><span class="ld" aria-hidden="true"></span>{STATUS_LABEL[c.status]}</span>
+            </span>
+            <span class="ix-rc-sk" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="ix-rc-t">{c.label}{c.href && <span aria-hidden="true"> →</span>}</span>
+          </>
+        );
+        return (
+          <li class:list={['reveal', i % 3 && `d${i % 3}`]}>
+            {c.href ? <a class="ix-rc" href={c.href}>{inner}</a> : <div class="ix-rc is-static">{inner}</div>}
+          </li>
+        );
+      })}
+    </ul>
+  )}
+</section>

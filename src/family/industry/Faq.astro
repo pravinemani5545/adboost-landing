@@ -1,0 +1,32 @@
+---
+// The industry FAQ (port of adboost-media src/components/industry/Faq.astro): the heading in a
+// sticky column with a small chat drawing, each question a numbered card. Native <details>, so
+// every answer is in the HTML whether its card is open or closed (crawlers, answer engines and
+// find-in-page read it); the first starts open. The page's FAQPage JSON-LD is built from the same
+// strings. Answers are trusted inline HTML, as Health's Faq component took them.
+interface Props { id: string; lead: string; accent: string; items: { q: string; a: string }[]; idPrefix: string }
+const { id, lead, accent, items, idPrefix } = Astro.props;
+---
+<section class="ix-faq" aria-labelledby={id}>
+  <div class="container ix-faq-grid">
+    <div class="ix-faq-side">
+      <div class="ix-faq-head reveal">
+        <span class="kicker"><span class="k-dot" aria-hidden="true"></span>FAQ</span>
+        <h2 id={id}>{lead} <span class="serif">{accent}</span></h2>
+      </div>
+      <div class="ix-faq-art reveal d1" aria-hidden="true">
+        <span class="fq-b q"><i class="fq-ic">?</i><i class="fq-l w1"></i><i class="fq-l w2"></i></span>
+        <span class="fq-b a"><i class="fq-l w3"></i><i class="fq-l w4"></i><i class="fq-l w5"></i></span>
+        <span class="fq-b q sm"><i class="fq-ic">?</i><i class="fq-l w6"></i></span>
+      </div>
+    </div>
+    <div class="ix-faq-list">
+      {items.map((f, i) => (
+        <details class:list={['ix-qa', 'reveal', i % 3 && `d${i % 3}`]} id={`${idPrefix}-${i}`} open={i === 0}>
+          <summary><span class="ix-qn" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><h3>{f.q}</h3><span class="ix-pm" aria-hidden="true"></span></summary>
+          <div class="ix-ans" set:html={f.a} />
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

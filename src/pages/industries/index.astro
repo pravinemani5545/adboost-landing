@@ -1,11 +1,28 @@
 ---
+// /industries/ on the AdBoost family design (the hub of adboost-media's /industries/, in Health's
+// hues). Same title, description, JSON-LD, H1, lede, figures and cards as before; only the layout
+// and the drawings are new.
+//   hero   the H1 with its serif accent, the lede and the trust line beside a stack of the
+//          verticals: the "Verticals we scale" window (every vertical's typical CAC on one axis,
+//          linked, with the three figures under it) in front of four of the real ad creatives,
+//          one per vertical they match, fanned behind it (decorative, nothing attached to them)
+//   cards  the nine verticals as a bento: a drawing (the vertical's glyph, its creative or an
+//          intake sketch) over the category, name, pain point, typical CAC with its range on the
+//          shared axis and the link to the playbook
+//   end    the closing card (.cta-band), CtaBand's copy
+import '../../styles/family/tokens.css';
+import '../../styles/family/content.css';
+import '../../styles/family/industry.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Bars from '../../kit/diagram/Bars.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Backdrop from '../../family/Backdrop.astro';
+import Chip from '../../family/graphics/Chip.astro';
+import InlineCta from '../../family/InlineCta.astro';
+import Icon from '../../family/industry/Icon.astro';
+import Snapshot from '../../family/industry/Snapshot.astro';
+import { PLANS } from '../../family/industry/plan';
 import { VERTICALS } from '../../data/verticals';
-import { CAC_BREAK, cacItem, cacNotes, miniScale } from './_cac';
-import '../../styles/pages/industries.css';
+import { CAC_BREAK, cacNotes, miniScale } from './_cac';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
 
@@ -24,86 +41,93 @@ const jsonLd = [
 
 // Mini range bars on the cards share the hero chart's axis (same break, same scale).
 const mini = miniScale(VERTICALS);
-// The first row of cards can sit in the first viewport on desktop: it is never hidden
-// ([data-draw] only grows its mini bar); later rows reveal.
-const FIRST_ROW = 3;
+// The bento: wide cards (art beside the text) and regular ones, on a 6-column grid.
+const SPAN = [4, 2, 2, 2, 2, 2, 4, 3, 3];
+// The creatives fanned behind the hero window, each from the vertical it matches (plan.ts).
+const fan = VERTICALS.map((v) => PLANS[v.slug]?.creative).filter((c): c is string => Boolean(c)).slice(0, 3);
 ---
 <BaseLayout {title} {description} canonicalPath="/industries/" {jsonLd}>
-  <PageHero
-    class="ind-hero"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries' }]}
-    eyebrow="INDUSTRIES"
-    title='We only grow <span class="serif">health</span> brands.'
-    lede="Every vertical has its own economics, ad-policy landmines, and definition of a good CAC. Pick yours for the specific playbook, benchmarks, and compliance rules that apply."
-    meta={[`${VERTICALS.length} verticals`, 'Compliance-first', 'Setup in 5 days']}
-    art="/art/industries/hub"
-  >
-    <div slot="aside" class="hero-panel ind-panel">
-      <div class="hp-head">
-        <span class="t"><span class="live-dot"></span>Verticals we scale</span>
-        <span class="m">TYPICAL CAC</span>
+  <div class="family ix ixhub">
+    <header class="cp-hero ix-hero ixhub-hero" data-spot>
+      <Backdrop texture={['dots', 'grid']} spotlight focus={['74%', '30%']} />
+      <div class="container ixhub-grid">
+        <div class="cp-head ix-head">
+          <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Industries' }]} />
+          <span class="kicker arrive"><span class="k-dot" aria-hidden="true"></span>INDUSTRIES</span>
+          <h1 class="arrive">We only grow <span class="serif">health</span> brands.</h1>
+          <p class="ix-lede arrive" style="--d:60ms">Every vertical has its own economics, ad-policy landmines, and definition of a good CAC. Pick yours for the specific playbook, benchmarks, and compliance rules that apply.</p>
+          <p class="ix-trust arrive" style="--d:110ms">{[`${VERTICALS.length} verticals`, 'Compliance-first', 'Setup in 5 days'].map((m) => <span>{m}</span>)}</p>
+        </div>
+        <div class="ixhub-stage stage arrive" style="--d:140ms">
+          <span class="stage-plate" aria-hidden="true"></span>
+          <span class="stage-ring" aria-hidden="true"></span>
+          <div class="ixhub-fan" aria-hidden="true">
+            {fan.map((src, k) => (
+              <span class="ixhub-ph" style={`--k:${k}`}><img src={src} alt="" width="634" height="1136" loading="lazy" decoding="async" fetchpriority="low" /></span>
+            ))}
+          </div>
+          <Snapshot
+            class="ixhub-snap"
+            title="Verticals we scale"
+            pill="TYPICAL CAC"
+            caption={`Typical CAC by vertical, as each industry page quotes it. ${cacNotes(VERTICALS)}`}
+            foot={[{ k: 'VERTICALS', v: String(VERTICALS.length) }, { k: 'FOUNDERS SERVED', v: '71+' }, { k: 'TRACKED', v: '$153M+' }]}
+          />
+          <div aria-hidden="true"><Chip title="Compliance-first" label="Setup in 5 days" icon="shield" tone="g" style="left:-40px;bottom:120px" /></div>
+        </div>
       </div>
-      <div class="ind-panel__bars">
-        <Bars
-          arrive
-          variant="range"
-          prefix="$"
-          axisBreakAbove={CAC_BREAK}
-          caption={`Typical CAC by vertical, as each industry page quotes it. ${cacNotes(VERTICALS)}`}
-          items={VERTICALS.map((v) => cacItem(v))}
-        />
-      </div>
-      <div class="hp-foot">
-        <div class="kv"><span class="k">VERTICALS</span><div class="val">{VERTICALS.length}</div></div>
-        <div class="kv"><span class="k">FOUNDERS SERVED</span><div class="val">71+</div></div>
-        <div class="kv"><span class="k">TRACKED</span><div class="val">$153M+</div></div>
-      </div>
-    </div>
-  </PageHero>
+    </header>
 
-  <section class="iwrap">
-    <div class="container">
-      <div class="grid-cards ind-grid">
-        {VERTICALS.map((v, i) => {
-          const segs = mini.segs(v.cacLow, v.cacHigh);
-          const approx = v.cacDisplay.trim().startsWith('~');
-          const open = v.cacDisplay.trim().endsWith('+');
-          return (
-            <a
-              class="lcard"
-              href={`/industries/${v.slug}/`}
-              data-reveal={i < FIRST_ROW ? undefined : ''}
-              data-draw={i < FIRST_ROW ? '' : undefined}
-              style={`--i:${i % 3};--dd:${(i % 3) * 90 + 200}ms`}
-            >
-              <span class="ind-card__top">
-                <span class={`ind-ic ind-ic--${(i % 6) + 1}`} aria-hidden="true">{v.short[0]}</span>
-                <span class="lc-tag">{v.category}</span>
-              </span>
-              <h2>{v.short}</h2>
-              <p>{v.painPoint}</p>
-              <span class="ind-cac">
-                <span class="badge blue">Typical CAC {v.cacDisplay}</span>
-                <span class="ind-mini" aria-hidden="true">
-                  {segs.map((s, k) => (
-                    <span
-                      class:list={['ind-mini__seg', 'k-draw-x', k === 0 && approx && 'is-approx', k === segs.length - 1 && open && 'is-open']}
-                      style={`--l:${s.l}%;--w:${s.w}%`}
-                    ></span>
-                  ))}
-                  {/* the axis break is marked only on a bar that runs past it (longevity), not on all nine */}
-                  {mini.breakAt !== undefined && v.cacHigh > CAC_BREAK && <span class="ind-mini__brk" style={`--x:${mini.breakAt}%`}></span>}
+    <section class="ixhub-cards">
+      <div class="container">
+        <div class="ixhub-bento">
+          {VERTICALS.map((v, i) => {
+            const plan = PLANS[v.slug];
+            const segs = mini.segs(v.cacLow, v.cacHigh);
+            const approx = v.cacDisplay.trim().startsWith('~');
+            const open = v.cacDisplay.trim().endsWith('+');
+            const wide = SPAN[i] >= 3;
+            return (
+              <a
+                class:list={['ixhub-card', `s${SPAN[i] ?? 2}`, wide && 'is-wide', i > 1 && 'reveal', i > 1 && i % 3 && `d${i % 3}`]}
+                href={`/industries/${v.slug}/`}
+                style={`--i:${i}`}
+              >
+                <span class="ixhub-art" aria-hidden="true">
+                  <i class="ix-orbit"></i>
+                  <span class="ixhub-glyph"><Icon name={plan?.glyph ?? 'target'} /></span>
+                  {plan?.creative ? (
+                    <span class="ixhub-thumb"><img src={plan.creative} alt="" width="634" height="1136" loading="lazy" decoding="async" /></span>
+                  ) : (
+                    <span class="ixhub-sketch"><i class="bar"></i><i></i><i></i><i class="on"></i><i class="go"></i></span>
+                  )}
                 </span>
-              </span>
-              <span class="lc-more">See the playbook
-                <svg width="12" height="12" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-            </a>
-          );
-        })}
+                <span class="ixhub-body">
+                  <span class="ixhub-tag">{v.category}</span>
+                  <h2>{v.short}</h2>
+                  <p>{v.painPoint}</p>
+                  <span class="ixhub-cac">
+                    <span class="ui-pill b">Typical CAC {v.cacDisplay}</span>
+                    <span class="ixhub-mini" aria-hidden="true">
+                      {segs.map((s, k) => (
+                        <i class:list={[k === 0 && approx && 'is-approx', k === segs.length - 1 && open && 'is-open']} style={`--l:${s.l}%;--w:${s.w}%`}></i>
+                      ))}
+                      {mini.breakAt !== undefined && v.cacHigh > CAC_BREAK && <b style={`--x:${mini.breakAt}%`}></b>}
+                    </span>
+                  </span>
+                  <span class="ix-more">See the playbook
+                    <svg width="12" height="12" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                  </span>
+                </span>
+              </a>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <CtaBand />
+    <section class="ix-end">
+      <div class="container"><InlineCta /></div>
+    </section>
+  </div>
 </BaseLayout>

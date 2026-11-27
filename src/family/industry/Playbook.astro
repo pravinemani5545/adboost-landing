@@ -1,0 +1,42 @@
+---
+// "How do <vertical> brands grow profitably?": the growth playbook as a step track with drawings.
+// The H2, the pain-point paragraph and every step (H3 and text) render in order; each step is a
+// card on a numbered rail with its drawing beside the text (StepArt.astro), and the step that
+// prints the vertical's pathway carries the pathway figure with its caption, as before.
+import StepArt from './StepArt.astro';
+import type { StepArt as Art } from './plan';
+
+interface Props {
+  id: string;
+  heading: string;
+  intro: string;
+  steps: { h: string; p: string }[];
+  arts: Art[];
+  pathway?: string[];
+  pathStep: number;
+}
+const { id, heading, intro, steps, arts, pathway, pathStep } = Astro.props;
+---
+<section class="ix-ch ix-play" aria-labelledby={id}>
+  <header class="ix-ch-head reveal">
+    <span class="ix-ch-n" aria-hidden="true"></span>
+    <h2 id={id}>{heading}</h2>
+  </header>
+  <div class="pg-prose"><p class="ix-lead">{intro}</p></div>
+  <ol class="ix-steps">
+    {steps.map((s, i) => (
+      <li class="ix-step reveal" style={`--i:${i}`}>
+        <span class="ix-step-n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+        <div class="ix-step-card">
+          <div class="ix-step-txt">
+            <h3>{s.h}</h3>
+            <p>{s.p}</p>
+          </div>
+          <div class="ix-step-art">
+            <StepArt art={arts[i]} pathway={i === pathStep ? pathway : undefined} caption={i === pathStep ? `Step ${i + 1} as a path, each stage in the playbook’s own words.` : undefined} />
+          </div>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

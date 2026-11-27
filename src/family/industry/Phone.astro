@@ -1,0 +1,56 @@
+---
+// The phone in an industry hero (decorative, aria-hidden). Three faces:
+//   creative  one of the real ad creatives in public/ads that matches the vertical, framed as a
+//             post in a feed. Never a result, a number or a caption attached to it.
+//   intake    the vertical's own pathway (vertical-playbooks.ts) as an intake on a phone, first
+//             stage done, the second in progress: each stage in the playbook's words.
+//   booking   a month calendar with one consult picked, under a phrase the playbook uses.
+import Icon from './Icon.astro';
+import { cap } from './plan';
+
+interface Props {
+  creative?: string;
+  stages?: string[];
+  booking?: string;
+  class?: string;
+}
+const { creative, stages = [], booking, class: cls } = Astro.props;
+const days = Array.from({ length: 28 }, (_, i) => i);
+const open = new Set([3, 8, 10, 15, 17, 22]);
+const picked = 15;
+---
+<div class:list={['ix-phone', cls]} aria-hidden="true">
+  <div class="ix-phone-in">
+    <span class="ix-phone-notch"></span>
+    {creative ? (
+      <div class="ix-feed">
+        <div class="ix-feed-top"><i class="ix-av"></i><span class="ix-feed-lines"><i></i><i></i></span><i class="ix-feed-more"></i></div>
+        <div class="ix-feed-img"><img src={creative} alt="" width="634" height="1136" loading="lazy" decoding="async" fetchpriority="low" /></div>
+        <div class="ix-feed-bot"><Icon name="heart" /><Icon name="comment" /><Icon name="share" /><i class="ix-feed-cta"></i></div>
+      </div>
+    ) : stages.length > 0 ? (
+      <div class="ix-intake">
+        <span class="ix-intake-bar"><i style="--p:.38"></i></span>
+        <span class="ix-intake-sk"><i></i><i></i></span>
+        <ol>
+          {stages.map((s, i) => (
+            <li class:list={[i === 0 && 'is-done', i === 1 && 'is-now']} style={`--i:${i}`}>
+              <span class="ix-intake-mk">{i === 0 ? <Icon name="check" /> : <b>{i + 1}</b>}</span>
+              <span class="ix-intake-t">{cap(s)}</span>
+            </li>
+          ))}
+        </ol>
+        <i class="ix-intake-go"></i>
+      </div>
+    ) : booking ? (
+      <div class="ix-book">
+        <span class="ix-intake-sk"><i></i><i></i></span>
+        <div class="ix-cal">
+          {days.map((d) => <i class:list={[open.has(d) && 'is-open', d === picked && 'is-picked']}></i>)}
+        </div>
+        <span class="ix-book-slot"><Icon name="calendar" /><span>{booking}</span></span>
+        <span class="ix-book-times"><i></i><i class="is-on"></i><i></i></span>
+      </div>
+    ) : null}
+  </div>
+</div>

@@ -1,0 +1,78 @@
+---
+// "What does AdBoost Health do for <vertical> brands?" as a bento (port of adboost-media
+// src/components/industry/Services.astro): the three services the page always listed, each a
+// linked tile with a drawing of the service (a soft orbit, a floating icon chip, a sheen that
+// crosses on hover). Paid media draws the ad account across the three platforms, creative fans
+// out three ad cards (the vertical's own matching creative from public/ads in the middle where it
+// has one, never with a number or result attached; drawn variants beside it), CRO draws a
+// landing page with an eligibility quiz. Drawings are decorative; each tile's text is the link.
+import Icon from './Icon.astro';
+
+interface Props {
+  id: string;
+  lead: string;
+  accent: string;
+  items: { t: string; d: string; href: string; art: string }[];
+  /** the vertical's matching creative, if it has one (plan.ts) */
+  creative?: string;
+}
+const { id, lead, accent, items, creative } = Astro.props;
+const SPAN = ['b7', 'b5', 'b12'];
+const CHIP: Record<string, string> = { 'paid-media': 'chart', creative: 'play', cro: 'filter' };
+---
+<section class="ix-svc" aria-labelledby={id}>
+  <div class="container">
+    <div class="ix-shead reveal">
+      <span class="kicker"><span class="k-dot" aria-hidden="true"></span>What we do</span>
+      <h2 id={id}>{lead} <span class="serif">{accent}</span></h2>
+    </div>
+    <div class="ix-bento">
+      {items.map((s, i) => (
+        <a class:list={['ix-tile', SPAN[i] ?? 'b4', 'reveal', i % 3 && `d${i % 3}`]} href={s.href}>
+          <span class="ix-tile-art" aria-hidden="true">
+            <i class="ix-orbit"></i>
+            {s.art === 'paid-media' && (
+              <span class="ix-g-acct">
+                <span class="ix-g-bar"><span class="cp-dots"><i></i><i></i><i></i></span><i class="sk"></i></span>
+                {[['feed', 88, ''], ['search', 64, 'b'], ['video', 46, 'c']].map(([ic, w, t], k) => (
+                  <span class="ix-g-row" style={`--i:${k}`}><span class:list={['ui-ic', t]}><Icon name={ic as string} /></span><i class="sk"></i><span class="ix-g-meter"><i class="ui-fill" style={`width:${w}%`}></i></span></span>
+                ))}
+              </span>
+            )}
+            {s.art === 'creative' && (
+              <span class="ix-g-fan">
+                {[0, 1, 2].map((k) => (
+                  <span class="ix-g-card" style={`--k:${k}`}>
+                    {k === 1 && creative
+                      ? <img src={creative} alt="" width="634" height="1136" loading="lazy" decoding="async" />
+                      : <span class="ix-g-var"><span class="ixs-play"><Icon name="play" /></span><i></i><i></i></span>}
+                  </span>
+                ))}
+              </span>
+            )}
+            {s.art === 'cro' && (
+              <span class="ix-g-page">
+                <span class="ix-g-lp">
+                  <span class="ix-g-bar"><span class="cp-dots"><i></i><i></i><i></i></span><i class="sk"></i></span>
+                  <i class="h1"></i><i class="h2"></i><i class="btn"></i>
+                </span>
+                <span class="ix-g-quiz">
+                  <span class="prog"><i></i></span>
+                  <i class="q"></i>
+                  {[0, 1, 2].map((k) => <span class:list={['opt', k === 1 && 'on']}><i></i></span>)}
+                </span>
+              </span>
+            )}
+            <span class="ix-tile-chip"><Icon name={CHIP[s.art] ?? 'spark'} /></span>
+            <i class="ix-sheen"></i>
+          </span>
+          <span class="ix-tile-txt">
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+            <span class="ix-more">Learn more →</span>
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

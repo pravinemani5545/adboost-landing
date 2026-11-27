@@ -1,0 +1,79 @@
+---
+// The end of an industry page, before the closing card: related posts as cards with a page
+// drawing (port of adboost-media src/components/industry/Reading.astro), the numbered sources
+// card, and beside them the page's old sidebar as a rail of cards (the vertical at a glance with
+// its CAC drawn on the shared axis, the platform rule sheets, a small booking card).
+// Headings keep their levels and order: Related posts (h3) and its posts (h3), Sources (h3),
+// then the rail's h4s, as the old sidebar came after the text.
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import Icon from './Icon.astro';
+import { BOOK_PATH } from '../../lib/site';
+
+interface Props {
+  posts: { href: string; title: string; description: string }[];
+  sourcesNote: string;
+  sources: { label: string; url: string }[];
+  glance: { heading: string; cac: string; segs: { l: number; w: number }[]; approx?: boolean; open?: boolean; links: { href: string; label: string }[] };
+  guides: { heading: string; links: { href: string; label: string; status: string; tone: string }[] };
+  night: { heading: string; text: string };
+}
+const { posts, sourcesNote, sources, glance, guides, night } = Astro.props;
+---
+<section class="ix-read">
+  <div class="container ix-read-grid">
+    <div class="ix-read-main">
+      {posts.length > 0 && (
+        <div class="ix-posts">
+          <h3 id="related" class="ix-read-h reveal">Related posts</h3>
+          <ul>
+            {posts.map((p, i) => (
+              <li class:list={['reveal', i % 3 && `d${i % 3}`]}>
+                <a class="ix-post" href={p.href}>
+                  <span class="ix-post-art" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="blk"></i><i class="l3"></i><i class="l2"></i></span>
+                  <h3>{p.title}</h3>
+                  <p>{p.description}</p>
+                  <span class="ix-more">Read the post →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div class="ix-src reveal">
+        <h3 class="ix-read-h">Sources</h3>
+        <p class="ix-src-note">{sourcesNote}</p>
+        <ol>{sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}</ol>
+      </div>
+    </div>
+
+    <aside class="ix-rail-cards">
+      <div class="ix-rcard reveal">
+        <h4>{glance.heading}</h4>
+        <div class="ix-glance" aria-hidden="true">
+          <span class="ix-glance-v">{glance.cac}</span>
+          <span class="ix-glance-track">
+            {glance.segs.map((s, k) => <i class:list={[k === 0 && glance.approx && 'is-approx', k === glance.segs.length - 1 && glance.open && 'is-open']} style={`--l:${s.l}%;--w:${s.w}%`}></i>)}
+          </span>
+        </div>
+        <ul class="ix-rlinks">
+          {glance.links.map((l, i) => <li><a href={l.href}><span class="ix-rl-ic" aria-hidden="true"><Icon name={i === 0 ? 'book' : 'chart'} /></span><span>{l.label}</span></a></li>)}
+        </ul>
+      </div>
+      {guides.links.length > 0 && (
+        <div class="ix-rcard reveal d1">
+          <h4>{guides.heading}</h4>
+          <ul class="ix-rlinks">
+            {guides.links.map((l) => (
+              <li><a href={l.href}><span class="ix-rl-ic" aria-hidden="true"><Icon name="shield" /></span><span>{l.label}<span class:list={['ix-rl-st', 'ui-pill', l.tone]} aria-hidden="true">{l.status}</span></span></a></li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div class="ix-rcard is-night reveal d2">
+        <h4>{night.heading}</h4>
+        <p>{night.text}</p>
+        <ButtonLink href={BOOK_PATH} class="ix-rcard-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+      </div>
+    </aside>
+  </div>
+</section>

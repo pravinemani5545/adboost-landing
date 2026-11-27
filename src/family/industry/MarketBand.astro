@@ -1,0 +1,43 @@
+---
+// "What is changing in the <vertical> market in 2026?" as the page's dark band (port of
+// adboost-media src/components/industry/Problems.astro: a night band with a numbered rail).
+// The heading and the paragraph render as they always have, in place; under them the rail
+// marks the moments the paragraph itself names, in time order, each date and phrase copied out
+// of the paragraph (plan.ts, checked at build). The rail restates the paragraph, so it is hidden
+// from assistive technology; the paragraph carries the meaning. The rail line draws as the band
+// scrolls in.
+import Backdrop from '../Backdrop.astro';
+
+interface Props {
+  id: string;
+  /** the heading text before the accent, and the accent */
+  lead: string;
+  accent: string;
+  text: string;
+  timeline: { when: string; text: string }[];
+}
+const { id, lead, accent, text, timeline } = Astro.props;
+---
+<section class="ix-band" aria-labelledby={id} data-tone="night">
+  <Backdrop texture="grid" />
+  <div class="container">
+    <div class="ix-band-head reveal">
+      <div>
+        <span class="ix-band-top"><span class="ix-ch-n" aria-hidden="true"></span><span class="kicker"><span class="k-dot" aria-hidden="true"></span>Market context</span></span>
+        <h2 id={id}>{lead} <span class="serif">{accent}</span></h2>
+      </div>
+      <p>{text}</p>
+    </div>
+    <ol class="ix-rail reveal" style={`--n:${timeline.length}`} aria-hidden="true">
+      {timeline.map((t, i) => (
+        <li class="ix-stop" style={`--i:${i}`}>
+          <span class="ix-stop-n">{String(i + 1).padStart(2, '0')}</span>
+          <div class="ix-stop-card">
+            <span class="ix-stop-when">{t.when}</span>
+            <span class="ix-stop-t">{t.text}</span>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+---
+// "Vertical snapshot": every vertical's typical CAC on one axis (this one lit), then this vertical's
+// status on each ad platform, drawn as a family product-UI window. It replaces the kit Bars and
+// StatusStrip pair the industry pages drew it with before (the old _Snapshot.astro) and prints the same
+// strings: each vertical's label (a link to its page), its quoted CAC exactly as verticals.ts has
+// it, the per-cycle note, the axis ticks, the caption, each platform's status and the strip
+// caption. The hub uses it too, with no row lit and its own title.
+//
+// The bars use the shared piecewise axis (_cac.ts miniScale: 84% of the track up to the $700
+// break, the rest above it), so every page draws the same range for a vertical. A "~" fades a
+// bar's start and a "+" its end, as the caption says. Bars are shapes (aria-hidden); the label
+// and the printed range carry the meaning.
+import { VERTICALS } from '../../data/verticals';
+import { CAC_BREAK, cacItem, miniScale } from '../../pages/industries/_cac';
+
+interface Props {
+  /** the vertical whose row is lit (industry pages); none on the hub */
+  current?: string;
+  title: string;
+  pill: string;
+  caption: string;
+  /** this vertical's platform statuses (from the rule sheets) */
+  strip?: { label: string; status: string; level: string }[];
+  stripCaption?: string;
+  /** small figures under the window (the hub's) */
+  foot?: { k: string; v: string }[];
+  class?: string;
+}
+const { current, title, pill, caption, strip = [], stripCaption, foot = [], class: cls } = Astro.props;
+const scale = miniScale(VERTICALS);
+// tick marks: the same axis as the bars; the last tick is the top of the broken axis
+const top = Math.max(...VERTICALS.map((v) => v.cacHigh));
+const tickAt = (t: number) => (t >= top ? 100 : scale.segs(0, t).reduce((a, s) => a + s.w, 0) + (t > CAC_BREAK ? 4 : 0));
+const ticks = [0, 200, 400, 600, top].map((t) => ({ t, x: Math.round(tickAt(t) * 10) / 10, label: `$${t.toLocaleString('en-US')}` }));
+const TONE: Record<string, string> = { ok: 'ok', warn: 'warn', bad: 'bad', accent: '' };
+---
+<figure class:list={['ix-snap', 'ui', cls]}>
+  <div class="ui-bar"><span class="cp-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="ui-name">{title}</span><span class="ui-pill b">{pill}</span></div>
+  <ul class="ix-snap-rows">
+    {VERTICALS.map((v, i) => {
+      const it = cacItem(v, current);
+      const segs = scale.segs(v.cacLow, v.cacHigh);
+      return (
+        <li class:list={['ix-snap-row', it.highlight && 'is-lit']} aria-current={it.highlight ? 'true' : undefined} style={`--i:${i}`}>
+          <span class="ix-snap-lab">{it.href ? <a href={it.href}>{it.label}</a> : it.label}{it.unitNote && <small>{it.unitNote}</small>}</span>
+          <span class="ix-snap-v">{it.display}</span>
+          <span class="ix-snap-track" aria-hidden="true">
+            {segs.map((s, k) => (
+              <i class:list={['ix-snap-seg', k === 0 && it.approxStart && 'is-approx', k === segs.length - 1 && it.openEnd && 'is-open']} style={`--l:${s.l}%;--w:${s.w}%`}></i>
+            ))}
+            {scale.breakAt !== undefined && v.cacHigh > CAC_BREAK && <i class="ix-snap-brk" style={`--x:${scale.breakAt}%`}></i>}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+  <div class="ix-snap-axis">
+    <span class="ix-snap-ticks">{ticks.map((t) => <span style={`--x:${t.x}%`}>{t.label}</span>)}</span>
+  </div>
+  <figcaption class="ix-snap-cap">{caption}</figcaption>
+  {strip.length > 0 && (
+    <div class="ix-snap-strip">
+      <ul>
+        {strip.map((s) => (
+          <li><span class="ix-snap-pf">{s.label}</span><span class:list={['ui-pill', TONE[s.level] ?? '']}><span class="ld" aria-hidden="true"></span>{s.status}</span></li>
+        ))}
+      </ul>
+      {stripCaption && <p class="ix-snap-cap">{stripCaption}</p>}
+    </div>
+  )}
+  {foot.length > 0 && (
+    <dl class="ix-snap-foot">{foot.map((f) => <div><dt>{f.k}</dt><dd>{f.v}</dd></div>)}</dl>
+  )}
+</figure>
