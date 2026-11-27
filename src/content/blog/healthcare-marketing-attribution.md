@@ -7,7 +7,7 @@ tags: ["attribution", "analytics", "telehealth"]
 heroImage: "/blog/healthcare-marketing-attribution.webp"
 heroAlt: "AdBoost Health brand graphic: healthcare marketing attribution, with a channel performance card"
 ctaHeading: "Not sure which channels are actually driving patients?"
-ctaText: "Book a free 30-minute call - we map where your attribution is lying to you and send you a written measurement plan either way."
+ctaText: "Book a free 30-minute call: we map where your attribution is lying to you and send you a written measurement plan either way."
 ---
 
 Ask a telehealth founder or clinic owner which channel drives their patients and you usually get three answers: what Meta claims, what Google claims, and what the front desk swears is true. A fourth surface is now in play too: [AI search engines that cite brands directly](/blog/ai-search-visibility-health-brands/), which show up in almost no attribution report. The three rarely agree, and budget decisions made on the wrong one are how good channels get killed and bad ones get fed.
