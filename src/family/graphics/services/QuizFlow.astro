@@ -1,0 +1,68 @@
+---
+// /services/cro/ figure, in "How should a mental health or ADHD telehealth intake quiz work?":
+// the intake quiz the section describes, in its own words. Eligibility first, with a clear exit
+// for anyone the practice cannot serve; then the longer symptom questions, a tailored
+// recommendation, the price, and booking. Beside it, what the ad platforms receive: a conversion
+// event, never the answers. Labels are readable text; connectors and marks are shapes.
+import Fig from '../Fig.astro';
+import Win from '../Win.astro';
+import Ic from '../Ic.astro';
+const steps = [
+  { t: 'eligibility first', sub: 'age, state, kind of care', ic: 'shield' },
+  { t: 'the longer symptom questions', sub: '', ic: 'quiz' },
+  { t: 'a tailored recommendation', sub: '', ic: 'spark' },
+  { t: 'the price', sub: 'before they book', ic: 'tag' },
+  { t: 'book', sub: '', ic: 'calendar' },
+];
+---
+<Fig caption="The intake quiz as this section lays it out: eligibility first with a clear exit, the price shown after a tailored recommendation and before booking, and the answers kept out of ad pixels." class="qf">
+  <div class="qf-grid">
+    <Win name="Intake quiz" pill={{ text: 'Qualify first', tone: 'b' }}>
+      <ol class="qf-steps">
+        {steps.map((s, i) => (
+          <li style={`--i:${i}`} class:list={[i === 0 && 'is-gate', i === steps.length - 1 && 'is-end']}>
+            <span class:list={['ui-ic', i === steps.length - 1 ? 'g' : ['', 'b', 'c', 'b'][i]]}><Ic name={s.ic} /></span>
+            <span class="qf-t">{s.t}{s.sub && <small>{s.sub}</small>}</span>
+            {i === 0 && <span class="qf-exit"><Ic name="route" />a clear exit</span>}
+          </li>
+        ))}
+      </ol>
+    </Win>
+    <div class="ui qf-px">
+      <div class="ui-bar"><span class="ui-name">Ad platforms</span></div>
+      <ul class="qf-gets">
+        <li class="ok"><span class="ui-ic ok"><Ic name="check" /></span><span class="qf-tx">a conversion event</span></li>
+        <li class="no"><span class="ui-ic warn"><Ic name="x" /></span><span class="qf-tx">the answers</span></li>
+      </ul>
+    </div>
+  </div>
+</Fig>
+
+<style>
+  .qf-grid { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 16px; align-items: start; }
+  .qf-steps { position: relative; list-style: none; margin: 0; padding: 10px 16px 14px; }
+  .qf-steps::before { content: ""; position: absolute; left: 30px; top: 26px; bottom: 30px; width: 2px; border-radius: 2px; background: linear-gradient(rgb(var(--hue-a) / .5), rgb(var(--hue-b) / .35) 60%, rgb(var(--hue-c) / .3)); }
+  .qf-steps li { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 12px; margin: 0; padding: 8px 0; }
+  .qf-steps .ui-ic { position: relative; z-index: 1; box-shadow: 0 0 0 4px #fff; }
+  .qf-t { display: block; font-size: 14px; font-weight: 600; letter-spacing: -.01em; color: var(--text); }
+  .qf-t::first-letter { text-transform: uppercase; }
+  .qf-t small { display: block; margin-top: 1px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+  .qf-exit { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 99px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--warn-ink); background: var(--warn-soft); white-space: nowrap; }
+  .qf-exit :global(.gi) { width: 12px; height: 12px; }
+  .is-end .qf-t { color: var(--deep-a); }
+  .qf-px .ui-bar { height: 36px; }
+  .qf-gets { list-style: none; display: grid; gap: 8px; margin: 0; padding: 12px; }
+  .qf-gets li { display: flex; align-items: center; gap: 9px; margin: 0; padding: 7px 9px 7px 7px; border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--text); box-shadow: inset 0 0 0 1px var(--line); }
+  .qf-gets .ui-ic { width: 26px; height: 26px; border-radius: 8px; }
+  .qf-gets li.no { color: var(--text-2); text-decoration: line-through; text-decoration-color: rgb(220 38 38 / .5); }
+  .qf-tx { display: block; }
+  .qf-tx::first-letter { text-transform: uppercase; }
+  :global(.js.motion .qf.reveal:not(.in)) .qf-steps li { opacity: 0; translate: -8px 0; }
+  :global(.js.motion .qf.reveal.in) .qf-steps li { animation: qf-in .5s var(--ease) backwards; animation-delay: calc(var(--i) * .08s + .15s); }
+  @keyframes qf-in { from { opacity: 0; translate: -8px 0; } }
+  @media (max-width: 640px) {
+    .qf-grid { grid-template-columns: minmax(0, 1fr); }
+    .qf-steps li { grid-template-columns: auto minmax(0, 1fr); }
+    .qf-exit { grid-column: 2; justify-self: start; }
+  }
+</style>

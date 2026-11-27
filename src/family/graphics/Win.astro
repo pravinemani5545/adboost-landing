@@ -1,0 +1,19 @@
+---
+// The window frame every product-UI graphic is drawn in: a white card with a gradient hairline,
+// a title bar (three dots in the section hues, a mono name, an optional pill on the right) and
+// the graphic's body in the default slot. Restate the page's own words in `name` and `pill`.
+//   <Win name="Paid media" pill={{ text: '4 phases', tone: 'b' }}> ...rows... </Win>
+import Pill from './Pill.astro';
+import type { Tone } from './types';
+interface Props {
+  name: string;
+  pill?: { text: string; tone?: Tone; dot?: boolean };
+  class?: string;
+  style?: string;
+}
+const { name, pill, class: cls, style } = Astro.props;
+---
+<div class:list={['ui', cls]} style={style}>
+  <div class="ui-bar"><span class="cp-dots"><i></i><i></i><i></i></span><span class="ui-name">{name}</span>{pill && <Pill {...pill} />}</div>
+  <slot />
+</div>

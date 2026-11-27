@@ -1,18 +1,31 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import Timeline from '../../kit/diagram/Timeline.astro';
+// /services/<slug>/ on the family layer (src/family/FamilyPage.astro; how to use it:
+// src/family/README.md). Every word, heading, link, FAQ and JSON-LD node is the one this page
+// had on the old interior layout; only the layout and the graphics are new.
+//   hero     the page's subject as a product-UI card (src/family/graphics/services/*Hero)
+//   body     numbered chapters: what you get (spec grid), how it works (the phase Gantt that
+//            used to sit in the hero, then the step track), the CRO intake section, what you
+//            receive (receipt), why it is different in health (ledger, a figure of the page's
+//            own numbers, the sourced stat)
+//   rail     "See it on your account" and the sticky "On this page" list
+//   end      FAQ cards, the old sidebar's link groups as link cards, the closing card
+import FamilyPage from '../../family/FamilyPage.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 import { parsePhase } from '../../kit/diagram/parse';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
-import Toc from '../../components/Toc.astro';
+import Win from '../../family/graphics/Win.astro';
+import Gantt from '../../family/graphics/Gantt.astro';
+import PaidMediaHero from '../../family/graphics/services/PaidMediaHero.astro';
+import CreativeHero from '../../family/graphics/services/CreativeHero.astro';
+import CroHero from '../../family/graphics/services/CroHero.astro';
+import CacModel from '../../family/graphics/services/CacModel.astro';
+import HookRate from '../../family/graphics/services/HookRate.astro';
+import FunnelPath from '../../family/graphics/services/FunnelPath.astro';
+import QuizFlow from '../../family/graphics/services/QuizFlow.astro';
+import { updatedLabel } from '../../family/dates';
 import { SERVICES, getService } from '../../data/services';
-import { siteBase } from '../../lib/site';
-import { pageDate } from '../../lib/live';
+import { BOOK_PATH, siteBase } from '../../lib/site';
 import { metaDescription } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
-import '../../styles/pages/chapters.css';
-import '../../styles/pages/services.css';
 
 export function getStaticPaths() {
   return SERVICES.map((s) => ({ params: { slug: s.slug } }));
@@ -24,8 +37,7 @@ const path = `/services/${s.slug}/`;
 const title = s.seoTitle ?? `${s.h1} | AdBoost Health`;
 const description = metaDescription(path, s.metaDescription);
 // Content date: src/data/pages.json (sitemap lastmod and this label).
-const updated = pageDate(path);
-const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const updated = updatedLabel(path);
 const jsonLd = [
   serviceNode(SITE, { name: s.name, description: s.desc, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name, href: path }]),
@@ -58,41 +70,20 @@ const toc = [
   { id: 'depth', label: 'Why it matters in health' },
   { id: 'faq', label: 'FAQ' },
 ];
-// Hero Gantt: the weeks printed in each process phase ("Account & tracking audit · wk 1–2").
+// The Gantt: the weeks printed in each process phase ("Account & tracking audit · wk 1–2").
 // "ongoing" and "rolling" phases have no end, so they draw as open bars. Each row links to and
-// lights its process card below (and the card lights the row).
+// lights its step card below (and the card lights the row).
 const phases = s.process.map((p, i) => ({ ...parsePhase(p.phase), href: `#process-${i}` }));
 const ganttUnit = phases.find((p) => p.unit)?.unit;
-// The process track below: each phase's name, its printed weeks as a chip (the h3 text is
-// unchanged: the separator stays in the heading, visually hidden), and its span on the same
-// scale as the hero Gantt (an open phase starts where the one before it ends).
-const steps = (() => {
-  const dated = phases.filter((p) => typeof p.start === 'number');
-  const lo = dated.length ? Math.min(...dated.map((p) => p.start as number)) : 1;
-  const ends = phases.map((p) => (typeof p.end === 'number' ? p.end : typeof p.start === 'number' ? p.start : lo));
-  const hasOpen = phases.some((p) => p.end === 'ongoing' || p.end === undefined);
-  const hi = Math.max(...ends) + (hasOpen ? 2 : 0);
-  const span = hi - lo + 1;
-  let prevEnd = lo;
-  return s.process.map((pr, i) => {
-    const ph = phases[i];
-    const split = ph.meta !== undefined && `${ph.label} · ${ph.meta}` === pr.phase;
-    const open = ph.end === 'ongoing' || ph.end === undefined;
-    const a = typeof ph.start === 'number' ? ph.start : prevEnd;
-    const b = open ? hi : (ph.end as number);
-    if (!open) prevEnd = b;
-    return {
-      ...pr,
-      name: split ? ph.label : pr.phase,
-      when: split ? ph.meta : undefined,
-      s: Math.round(((a - lo) / span) * 1000) / 10,
-      w: Math.round(((b - a + 1) / span) * 1000) / 10,
-      open,
-    };
-  });
-})();
+// The step track: each phase's name and its printed weeks as a chip (the h3 text is unchanged:
+// the separator stays in the heading, visually hidden).
+const steps = s.process.map((pr, i) => {
+  const ph = phases[i];
+  const split = ph.meta !== undefined && `${ph.label} · ${ph.meta}` === pr.phase;
+  return { ...pr, name: split ? ph.label : pr.phase, when: split ? ph.meta : undefined };
+});
 const tick = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-// outcome card icons (decorative): target, shield, pulse, layers
+// outcome icons (decorative): target, shield, pulse, layers
 const OUT_ICONS = [
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>',
   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5-4-1.9-7-5.3-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>',
@@ -105,127 +96,115 @@ const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 // (skipped if the sentence no longer contains it).
 const STAT_FIGURE: Record<string, string> = { 'paid-media': '17.8%', creative: '30–50%', cro: '3–4×' };
 const statFigure = STAT_FIGURE[s.slug] && s.stat.text.includes(STAT_FIGURE[s.slug]) ? STAT_FIGURE[s.slug] : undefined;
+
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: s.h1,
+  summary: esc(s.answer),
+  summaryLabel: 'In short',
+  lede: esc(s.lede),
+  faqs: s.faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+  related: [
+    { heading: 'The rest of the system', level: 4 as const, links: [...otherServices.map((o) => ({ href: `/services/${o.slug}/`, label: o.name })), { href: '/industries/', label: 'Industries we serve' }] },
+    { heading: 'Definitions & tools', level: 4 as const, links: relatedResources },
+  ],
+};
+const byline = updated ? [{ text: 'AdBoost Health', icon: 'org' as const }, { text: `Updated ${updated}`, icon: 'date' as const }] : [];
 ---
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    class="svc-hero"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name }]}
-    eyebrow={s.navLabel.toUpperCase()}
-    title={esc(s.h1)}
-    lede={esc(s.lede)}
-    art={`/art/services/${s.slug}`}
-  >
-    {updatedLabel && <div class="metabar svc-metabar"><span>AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
-    <div slot="aside" class="k-card k-card--float k-card--glass svc-plan">
-      <p class="svc-plan__head"><span class="svc-plan__title"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>How it works</span><span>{s.process.length} phases</span></p>
-      <Timeline
-        arrive
-        variant="gantt"
-        unit={ganttUnit}
-        rowIdPrefix="phase"
-        caption="Each phase on the weeks this page gives it. Open bars are ongoing work with no end date."
-        phases={phases}
-      />
-    </div>
-  </PageHero>
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name }]}
+  eyebrow={s.navLabel.toUpperCase()}
+  schema={jsonLd}
+  byline={byline}
+  toc={toc}
+  faqHeading="FAQ"
+  figureAt={s.extra ? { id: s.extra.id, skip: 1 } : undefined}
+>
+  {s.slug === 'paid-media' && <PaidMediaHero slot="hero" phases={phases} />}
+  {s.slug === 'creative' && <CreativeHero slot="hero" />}
+  {s.slug === 'cro' && <CroHero slot="hero" />}
+  {s.slug === 'cro' && <QuizFlow slot="figure" />}
 
-  <section class="iwrap svc-doc">
-    <div class="container">
-      <div class="doc-grid k-scrub-scope">
-        <div class="doc-main ch-doc">
-          <div class="answer-box"><span class="al">In short</span>{s.answer}</div>
-          <div class="prose">
-            <h2 id="outcomes">What you get</h2>
-            <ul class="ch-outs">
-              {s.outcomes.map((o, i) => (
-                <li class="ch-card"><span class="ch-ico" aria-hidden="true" set:html={OUT_ICONS[i % OUT_ICONS.length]} />{o}</li>
-              ))}
-            </ul>
+  <div slot="aside" class="pg-card is-night svc-see">
+    <h4>See it on your account</h4>
+    <p>Free audit with a senior strategist: a written plan you keep either way.</p>
+    <ButtonLink href={BOOK_PATH} class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
 
-            <h2 id="process">How it works</h2>
-            <ol class="ch-track svc-process" data-draw>
-              {steps.map((p, i) => (
-                <li class="ch-step" id={`process-${i}`} style={`--i:${i}`}>
-                  <span class="ch-step__node" aria-hidden="true"></span>
-                  <div class="ch-step__card ch-card">
-                    <h3>{p.name}{p.when && <span class="ch-when"><span class="k-vh"> · </span>{p.when}</span>}</h3>
-                    <p>{p.detail}</p>
-                    <span class="ch-span" aria-hidden="true"><span class:list={['k-draw-x', p.open && 'is-open']} style={`--s:${p.s}%;--w:${p.w}%;--di:${i * 2}`}></span></span>
-                  </div>
-                </li>
-              ))}
-            </ol>
+  <div class="pg-prose"><h2 id="outcomes">What you get</h2></div>
+  <div class="cp-spec reveal">
+    <div class="cp-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="cp-bar-ghost"><i></i><i></i></span></div>
+    <ul class="cp-spec-list">
+      {s.outcomes.map((o, i) => <li><span class="cp-tile" aria-hidden="true" set:html={OUT_ICONS[i % OUT_ICONS.length]} /><span>{o}</span></li>)}
+    </ul>
+  </div>
 
-            {s.extra && (
-              <>
-                <h2 id={s.extra.id}>{s.extra.h}</h2>
-                <Fragment set:html={s.extra.html} />
-              </>
-            )}
-
-            <h2 id="deliverables">What you receive</h2>
-            <div class="ch-receipt ch-card" data-reveal>
-              <div class="ch-receipt__bar" aria-hidden="true"><span class="ch-dots"><i></i><i></i><i></i></span><span class="ch-receipt__ghost"><i></i><i></i></span></div>
-              <ul class="ch-rows">
-                {s.deliverables.map((d) => (
-                  <li><span class="ch-tick" aria-hidden="true" set:html={tick} />{d}</li>
-                ))}
-              </ul>
-              <div class="svc-measured ch-receipt__foot">
-                <p class="svc-measured__label ch-k">Measured on</p>
-                <ul class="ch-pills">{s.howMeasured.map((m) => <li class="k-chip">{m}</li>)}</ul>
-              </div>
-            </div>
-
-            <h2 id="depth">Why it’s different in health</h2>
-            <ol class="ch-ledger">
-              {s.deepPoints.map((d, i) => (<li data-reveal style={`--i:${i}`}><h3>{d.h}</h3><p>{d.p}</p></li>))}
-            </ol>
-
-            <div class="k-stat svc-stat ch-night" data-reveal>
-              <p class="svc-stat__eyebrow ch-k">By the numbers</p>
-              {statFigure && <p class="k-stat__value svc-stat__value">{statFigure}</p>}
-              <p class="k-stat__label svc-stat__text">{s.stat.text}</p>
-              <a class="k-chip svc-stat__src" href={s.stat.url} target="_blank" rel="noopener">Source: {s.stat.source}<span aria-hidden="true"> ↗</span></a>
-            </div>
-
-            <h2 id="faq">FAQ</h2>
-            <div class="ch-panel ch-card"><Faq items={s.faq} idPrefix={`svc-${s.slug}`} /></div>
-          </div>
-        </div>
-
-        <aside class="doc-aside">
-          <Toc items={toc} />
-          <div class="aside-card">
-            <h4>The rest of the system</h4>
-            <div class="link-list">
-              {otherServices.map((o) => <a href={`/services/${o.slug}/`}>{o.name}</a>)}
-              <a href="/industries/">Industries we serve</a>
-            </div>
-          </div>
-          {relatedResources.length > 0 && (
-            <div class="aside-card">
-              <h4>Definitions & tools</h4>
-              <div class="link-list">
-                {relatedResources.map((r) => <a href={r.href}>{r.label}</a>)}
-              </div>
-            </div>
-          )}
-          <div class="aside-card night">
-            <h4>See it on your account</h4>
-            <p>Free audit with a senior strategist: a written plan you keep either way.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+  <div class="pg-prose"><h2 id="process">How it works</h2></div>
+  <div class="cp-fig svc-gantt reveal">
+    <Win name="How it works" pill={{ text: `${s.process.length} phases`, tone: 'b' }}>
+      <div class="svc-gantt-body">
+        <Gantt
+          unit={ganttUnit}
+          rowIdPrefix="phase"
+          caption="Each phase on the weeks this page gives it. Open bars are ongoing work with no end date."
+          phases={phases}
+        />
       </div>
-    </div>
-  </section>
+    </Win>
+  </div>
+  <ol class="cp-steps svc-process">
+    {steps.map((p, i) => (
+      <li class="cp-step reveal" id={`process-${i}`} style={`--i:${i}`}>
+        <span class="cp-step-node" aria-hidden="true"></span>
+        <div class="cp-step-card">
+          <h3>{p.name}{p.when && <span class="cp-when"><span class="k-vh"> · </span>{p.when}</span>}</h3>
+          <p>{p.detail}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
 
-  <CtaBand />
-</BaseLayout>
+  {s.extra && <div class="pg-prose"><h2 id={s.extra.id}>{s.extra.h}</h2><Fragment set:html={s.extra.html} /></div>}
+
+  <div class="pg-prose"><h2 id="deliverables">What you receive</h2></div>
+  <div class="cp-receipt reveal">
+    <div class="cp-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="cp-bar-ghost"><i></i><i></i></span></div>
+    <ul class="cp-receipt-rows">
+      {s.deliverables.map((d) => <li><span class="cp-tick" aria-hidden="true" set:html={tick} /><span>{d}</span></li>)}
+    </ul>
+    <div class="cp-receipt-foot">
+      <p class="cp-k">Measured on</p>
+      <ul class="cp-pills">{s.howMeasured.map((m) => <li>{m}</li>)}</ul>
+    </div>
+  </div>
+
+  <div class="pg-prose"><h2 id="depth">Why it’s different in health</h2></div>
+  <ol class="cp-ledger">
+    {s.deepPoints.map((d, i) => <li class="reveal" style={`--i:${i}`}><h3>{d.h}</h3><p>{d.p}</p></li>)}
+  </ol>
+  {s.slug === 'paid-media' && <CacModel />}
+  {s.slug === 'creative' && <HookRate />}
+  {s.slug === 'cro' && <FunnelPath />}
+  <div class="cp-stat reveal">
+    <p class="cp-k">By the numbers</p>
+    {statFigure && <p class="cp-stat-value">{statFigure}</p>}
+    <p class="cp-stat-text">{s.stat.text}</p>
+    <a class="cp-stat-src" href={s.stat.url} target="_blank" rel="noopener">Source: {s.stat.source}<span aria-hidden="true"> ↗</span></a>
+  </div>
+</FamilyPage>
+
+<style>
+  .svc-gantt { padding: 18px; }
+  .svc-gantt-body { padding: 6px 18px 14px; }
+  .svc-process { margin-top: 18px; }
+  @media (max-width: 720px) { .svc-gantt { padding: 10px; } .svc-gantt-body { padding: 4px 10px 10px; } }
+</style>
 
 <script>
-  // Hovering or focusing a Gantt row lights its process card, and the card lights the row.
+  // Hovering or focusing a Gantt row lights its step card, and the card lights the row.
   for (const card of document.querySelectorAll<HTMLElement>('.svc-process > [id^="process-"]')) {
     const row = document.getElementById(`phase-${card.id.slice('process-'.length)}`);
     if (!row) continue;

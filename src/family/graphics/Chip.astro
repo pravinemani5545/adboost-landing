@@ -1,0 +1,10 @@
+---
+// A floating glass chip on the edge of a hero graphic: an icon tile, a bold title and a mono label.
+// Position it with `style` (top/right/bottom/left in px, relative to the graphic's wrapper).
+// Hidden below 1080px, where the graphic sits under the text and the chips would crowd it.
+import Ic from './Ic.astro';
+import type { Tone } from './types';
+interface Props { title: string; label?: string; icon: string; tone?: Tone; style?: string; class?: string }
+const { title, label, icon, tone = 'g', style, class: cls } = Astro.props;
+---
+<div class:list={['ui-chip', cls]} style={style}><span class:list={['ui-ic', tone]}><Ic name={icon} /></span><span><b>{title}</b>{label && <span class="ui-lab">{label}</span>}</span></div>

@@ -1,0 +1,68 @@
+---
+// /services/creative/ hero: a claims review board. Three ads in the formats the page produces
+// (static, motion, UGC), each with its review status in the page's words (pre-cleared, claims
+// review), and the page's own claim-tier example underneath: "supports healthy testosterone"
+// (defensible) against "boosts low T / treats ED" (a disease claim). Chips restate the hook rate
+// read first and the claim tier decided in the brief. Decorative (aria-hidden): every word is on
+// the page; no numbers.
+import Win from '../Win.astro';
+import Chip from '../Chip.astro';
+import Ic from '../Ic.astro';
+import Pill from '../Pill.astro';
+const ads = [
+  { kind: 'Static', status: 'Pre-cleared', tone: 'ok' as const, play: false },
+  { kind: 'UGC', status: 'Pre-cleared', tone: 'ok' as const, play: true },
+  { kind: 'Motion', status: 'Claims review', tone: 'warn' as const, play: true },
+];
+---
+<div class="crv" aria-hidden="true">
+  <Win name="Claims review" pill={{ text: 'Every asset', tone: 'b' }}>
+    <div class="crv-board">
+      {ads.map((a, i) => (
+        <div class:list={['crv-ad', `k${i}`]}>
+          <div class="crv-top"><i class="crv-av"></i><span class="ui-sk" style="width:52%"></span></div>
+          <div class="crv-img">
+            {a.play && <span class="crv-play"><Ic name="play" /></span>}
+            <span class="crv-kind">{a.kind}</span>
+          </div>
+          <Pill text={a.status} tone={a.tone} dot class="crv-status" />
+        </div>
+      ))}
+    </div>
+    <div class="crv-claims">
+      <span class="ui-lab">Claim tier</span>
+      <div class="crv-claim is-ok"><span class="ui-ic ok"><Ic name="check" /></span><span class="crv-q">"supports healthy testosterone"</span><Pill text="Defensible" tone="ok" /></div>
+      <div class="crv-claim is-no"><span class="ui-ic warn"><Ic name="x" /></span><span class="crv-q">"boosts low T / treats ED"</span><Pill text="Disease claim" tone="bad" /></div>
+    </div>
+  </Win>
+  <Chip title="Hook rate" label="read first" icon="eye" style="right:-30px;top:76px" />
+  <Chip title="Compliance" label="inside the creative brief" icon="pencil" tone="b" style="left:-34px;bottom:-50px" />
+</div>
+
+<style>
+  .crv { position: relative; }
+  .crv-board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 14px 16px 16px; }
+  .crv-ad { display: flex; flex-direction: column; gap: 7px; padding: 7px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 10px 18px -12px rgb(var(--k-shadow-rgb) / .3); }
+  .crv-top { display: flex; align-items: center; gap: 6px; }
+  .crv-av { width: 14px; height: 14px; border-radius: 50%; background: var(--grad-brand); flex-shrink: 0; }
+  .crv-img { position: relative; aspect-ratio: 1 / 1.12; border-radius: 10px; background: radial-gradient(70% 60% at 30% 30%, rgb(var(--hue-a) / .45), transparent 70%), radial-gradient(70% 70% at 80% 90%, rgb(var(--hue-c) / .45), transparent 70%), var(--bg-3); }
+  .k1 .crv-img { background: radial-gradient(70% 60% at 70% 30%, rgb(var(--hue-b) / .5), transparent 70%), radial-gradient(70% 70% at 20% 90%, rgb(var(--hue-a) / .4), transparent 70%), var(--bg-3); }
+  .k2 .crv-img { background: radial-gradient(60% 60% at 50% 35%, rgb(var(--hue-warm) / .5), transparent 70%), radial-gradient(80% 70% at 50% 100%, rgb(var(--hue-b) / .4), transparent 70%), var(--bg-3); }
+  .crv-play { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; background: rgb(255 255 255 / .92); color: var(--text); }
+  .crv-play :global(.gi) { width: 12px; height: 12px; }
+  .crv-kind { position: absolute; left: 6px; bottom: 6px; padding: 3px 7px; border-radius: 99px; background: rgb(var(--k-shadow-rgb) / .72); color: #fff; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; }
+  .crv-ad :global(.crv-status) { align-self: flex-start; font-size: 8px; padding: 3px 7px; }
+  .k2 { box-shadow: 0 0 0 1.5px rgb(245 166 35 / .55), 0 12px 22px -12px rgb(245 166 35 / .55); }
+  .crv-claims { display: grid; gap: 8px; padding: 12px 16px 16px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
+  .crv-claim { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 12px; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+  .crv-claim .ui-ic { width: 26px; height: 26px; border-radius: 8px; }
+  .crv-claim .ui-ic :global(.gi) { width: 13px; height: 13px; stroke-width: 2.4; }
+  .crv-q { min-width: 0; font-size: 12.5px; font-weight: 600; letter-spacing: -.01em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .is-no .crv-q { color: var(--text-2); text-decoration: line-through; text-decoration-color: rgb(220 38 38 / .55); }
+  :global(.js.motion) .crv-ad { animation: crv-in .55s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .1s); }
+  .k1 { --i: 1; } .k2 { --i: 2; }
+  :global(.js.motion) .crv-claim { animation: crv-in .55s var(--ease) .75s backwards; }
+  :global(.js.motion) .crv-claim.is-no { animation-delay: .85s; }
+  @keyframes crv-in { from { opacity: 0; translate: 0 8px; } }
+  @media (max-width: 480px) { .crv-board { gap: 7px; padding: 12px; } .crv-ad :global(.crv-status) { font-size: 7.5px; padding: 3px 5px; } }
+</style>

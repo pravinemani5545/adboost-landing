@@ -1,0 +1,49 @@
+---
+// "On this page" (port of adboost-media src/components/site/Toc.astro): one native <details>,
+// so the links are in the page source and work without JavaScript. From 1180px it is the
+// sticky rail beside the text; below that a collapsed box above the text (the script closes
+// it there). The script marks the section being read (aria-current) and fills the line beside
+// the list down to it (--toc-p). Anchor links only: t.js labels a booking click by its nearest
+// <nav>, so a /book/ link must never go in here.
+interface Props { items: { id: string; label: string }[]; label?: string }
+const { items, label = 'On this page' } = Astro.props;
+---
+<details class="toc" open>
+  <summary><span>{label}</span><svg class="toc-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
+  <nav aria-label={label}>
+    <ol>
+      {items.map((i) => <li><a href={`#${i.id}`}>{i.label}</a></li>)}
+    </ol>
+  </nav>
+</details>
+<script is:inline>
+(function () {
+  var d = document.currentScript.previousElementSibling;
+  if (!d || !window.matchMedia) return;
+  var wide = window.matchMedia('(min-width: 1180px)');
+  if (!wide.matches) d.open = false;
+  wide.addEventListener('change', function (e) { d.open = e.matches; });
+  d.addEventListener('click', function (e) { if (e.target.closest('a') && !wide.matches) d.open = false; });
+  function start() {
+    var list = d.querySelector('ol');
+    var links = [].slice.call(d.querySelectorAll('a'));
+    var heads = links.map(function (a) { return document.getElementById(decodeURIComponent(a.hash.slice(1))); });
+    var nav = document.querySelector('.k-nav');
+    var line = (nav ? Math.round(nav.getBoundingClientRect().bottom) : 110) + 60;
+    var queued = false;
+    function spy() {
+      queued = false;
+      var cur = -1;
+      for (var i = 0; i < heads.length; i++) if (heads[i] && heads[i].getBoundingClientRect().top <= line) cur = i;
+      links.forEach(function (a, i) { if (i === cur) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); });
+      if (list) {
+        var a = links[cur], h = list.offsetHeight || 1;
+        list.style.setProperty('--toc-p', a ? Math.min(1, (a.offsetTop + a.offsetHeight) / h).toFixed(3) : '0');
+      }
+    }
+    window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(spy); } }, { passive: true });
+    spy();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>

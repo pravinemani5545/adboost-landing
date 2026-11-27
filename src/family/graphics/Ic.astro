@@ -1,0 +1,7 @@
+---
+// One line icon from icons.ts. Decorative: always aria-hidden.
+import { ICONS } from './icons';
+interface Props { name: string; class?: string }
+const { name, class: cls } = Astro.props;
+---
+<svg class:list={['gi', cls]} viewBox="0 0 24 24" aria-hidden="true" focusable="false" set:html={ICONS[name] ?? ''} />

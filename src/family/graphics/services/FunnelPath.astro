@@ -1,0 +1,49 @@
+---
+// /services/cro/ figure, after "Why it's different in health": the full path the funnel audit
+// instruments, in the page's words ("ad → landing/quiz → checkout → rebill"), narrowing like a
+// funnel, with a leak at each step (the audit "finds the biggest drop-off"). The rebill step
+// carries the retention leak the page names ("between orders 1 and 3"). Widths only suggest a
+// funnel; no values. Step names are readable text; the drops are shapes (aria-hidden).
+import Fig from '../Fig.astro';
+import Ic from '../Ic.astro';
+const steps = [
+  { t: 'ad', ic: 'feed', note: '' },
+  { t: 'landing/quiz', ic: 'quiz', note: '' },
+  { t: 'checkout', ic: 'cart', note: '' },
+  { t: 'rebill', ic: 'refresh', note: 'between orders 1 and 3' },
+];
+---
+<Fig caption="The full path the funnel audit instruments: ad, landing/quiz, checkout, rebill. Front-end conversion and the rebill experience are both CRO surfaces." class="fp">
+  <ol class="fp-steps">
+    {steps.map((s, i) => (
+      <li class="fp-step" style={`--w:${100 - i * 13}%;--i:${i}`}>
+        <span class="fp-bar">
+          <span class:list={['ui-ic', ['', 'b', 'c', 'g'][i]]}><Ic name={s.ic} /></span>
+          <span class="fp-t">{s.t}{s.note && <small>{s.note}</small>}</span>
+          <span class="fp-leak" aria-hidden="true"><i></i><i></i></span>
+        </span>
+      </li>
+    ))}
+  </ol>
+</Fig>
+
+<style>
+  .fp-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; justify-items: center; }
+  .fp-step { width: var(--w); min-width: 260px; margin: 0; }
+  .fp-bar { position: relative; display: flex; align-items: center; gap: 12px; padding: 10px 50px 10px 10px; border-radius: 16px; background: #fff; box-shadow: var(--shadow-stack); }
+  .fp-step:nth-child(1) .fp-bar { background: linear-gradient(90deg, rgb(var(--hue-a) / .1), #fff 70%); }
+  .fp-step:nth-child(4) .fp-bar { background: linear-gradient(90deg, rgb(var(--hue-b) / .12), #fff 75%); box-shadow: var(--shadow-stack), 0 0 0 1.5px rgb(var(--hue-b) / .35); }
+  .fp-t { display: block; font-weight: 600; font-size: 14.5px; color: var(--text); }
+  .fp-t::first-letter { text-transform: uppercase; }
+  .fp-t small { display: block; margin-top: 2px; font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--deep-b); }
+  .fp-leak { position: absolute; right: 18px; top: 50%; display: grid; gap: 4px; translate: 0 -50%; }
+  .fp-leak i { display: block; width: 6px; height: 8px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--coral); opacity: .75; }
+  .fp-leak i + i { opacity: .4; margin-left: 5px; }
+  :global(.js.motion .fp.reveal:not(.in)) .fp-step { opacity: 0; translate: 0 10px; }
+  :global(.js.motion .fp.reveal.in) .fp-step { animation: fp-in .5s var(--ease) backwards; animation-delay: calc(var(--i) * .09s + .1s); }
+  :global(.js.motion) .fp-leak i { animation: fp-drip 2.4s ease-in infinite; }
+  :global(.js.motion) .fp-leak i + i { animation-delay: 1.2s; }
+  @keyframes fp-in { from { opacity: 0; translate: 0 10px; } }
+  @keyframes fp-drip { 0% { transform: translateY(-4px); opacity: 0; } 30% { opacity: .8; } 100% { transform: translateY(10px); opacity: 0; } }
+  @media (max-width: 520px) { .fp-step { width: 100%; min-width: 0; padding-inline: calc(var(--i) * 10px); } .fp-t { font-size: 13.5px; } }
+</style>

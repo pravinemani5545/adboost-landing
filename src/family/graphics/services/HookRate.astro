@@ -1,0 +1,59 @@
+---
+// /services/creative/ figure, after "Why it's different in health": hook rate on one scale with
+// the thresholds the page gives ("On Meta, >25% hook rate is table stakes, >30% good, >40%
+// elite") and how the page measures it ("3-sec views ÷ impressions"). The labels are readable
+// text; the scale and the zones are shapes (aria-hidden).
+import Fig from '../Fig.astro';
+import Win from '../Win.astro';
+const MAX = 50; // the scale's right edge, past the highest threshold the page gives
+const at = (v: number) => `${((v / MAX) * 100).toFixed(1)}%`;
+const marks = [
+  { v: 25, label: '>25%', name: 'table stakes' },
+  { v: 30, label: '>30%', name: 'good' },
+  { v: 40, label: '>40%', name: 'elite' },
+];
+---
+<Fig caption="Hook rate on Meta, with the thresholds this page gives: the point where the algorithm rewards the creative with lower CPMs and broader delivery." class="hook">
+  <Win name="Hook rate" pill={{ text: 'On Meta', tone: 'b' }}>
+    <div class="hook-body">
+      <p class="hook-formula"><span class="ui-lab">Measured on</span><span class="hook-f">3-sec views ÷ impressions</span></p>
+      <div class="hook-scale" aria-hidden="true">
+        <span class="hook-zone z0" style={`width:${at(25)}`}></span>
+        <span class="hook-zone z1" style={`left:${at(25)};width:${at(5)}`}></span>
+        <span class="hook-zone z2" style={`left:${at(30)};width:${at(10)}`}></span>
+        <span class="hook-zone z3 ui-fill" style={`left:${at(40)};width:${at(10)}`}></span>
+      </div>
+      <ol class="hook-marks">
+        {marks.map((m, i) => (
+          <li style={`--x:${at(m.v)};--i:${i}`} class={`m${i}`}><b>{m.label}</b><span>{m.name}</span></li>
+        ))}
+      </ol>
+    </div>
+  </Win>
+</Fig>
+
+<style>
+  .hook-body { padding: 18px 22px 24px; }
+  .hook-formula { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 22px; }
+  .hook-f { padding: 5px 11px; border-radius: 9px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text); background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .hook-scale { position: relative; height: 26px; border-radius: 10px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+  .hook-zone { position: absolute; top: 0; bottom: 0; }
+  .z0 { left: 0; background: repeating-linear-gradient(135deg, transparent 0 6px, rgb(var(--k-shadow-rgb) / .05) 6px 7px); }
+  .z1 { background: rgb(var(--hue-c) / .35); }
+  .z2 { background: rgb(var(--hue-a) / .45); }
+  .z3 { background: var(--cp-vivid); }
+  .hook-marks { position: relative; list-style: none; height: 46px; margin: 8px 0 0; padding: 0; }
+  .hook-marks li { position: absolute; left: var(--x); top: 0; display: grid; gap: 1px; margin: 0; padding-left: 8px; border-left: 1.5px dashed var(--line-3); }
+  .hook-marks li::before { content: ""; position: absolute; left: -5px; top: -14px; width: 8px; height: 8px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--deep-a); }
+  .hook-marks b { font-family: var(--font-display); font-size: 15px; font-weight: 600; letter-spacing: -.01em; color: var(--text); }
+  .hook-marks span { font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
+  .m2 b { background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .m2 span { color: var(--deep-a); }
+  @media (max-width: 560px) {
+    .hook-body { padding: 14px 14px 18px; }
+    .hook-marks { height: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .hook-marks li { position: static; border-left: 0; padding: 8px 10px; border-radius: 10px; background: var(--bg-2); }
+    .hook-marks li::before { display: none; }
+    .hook-marks span { white-space: normal; }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+// The dark call-to-action card that closes a family page (port of adboost-media
+// src/components/site/InlineCta.astro). Beside the text, a small drawing of a booking calendar
+// with one slot picked (decorative: no words, no numbers, hidden from assistive technology).
+//
+// It replaces Health's closing CtaBand on family pages and carries the same copy by default,
+// so a page keeps its text when it moves to the family layer. Tracker contract: the root keeps
+// the class .cta-band, so t.js still labels its /book/ click "cta-band" and the phone CTA steps
+// aside while it is on screen (src/kit/scripts/menu.ts). The heading stays an <h2>, as in CtaBand.
+import ButtonLink from '../components/site/ButtonLink.astro';
+import { BOOK_PATH } from '../lib/site';
+interface Props {
+  /** trusted inline HTML (a serif accent) */
+  heading?: string;
+  text?: string;
+  label?: string;
+  perks?: string[];
+}
+const {
+  heading = 'Ready to lower CAC and scale spend profitably?',
+  text = 'A 30-minute call with a senior strategist. Free account audit included. No pitch deck - a written plan you can keep, whether you work with us or not.',
+  label = 'Book a free strategy call',
+  perks = ['30 minutes', 'Free account audit', 'Written plan either way'],
+} = Astro.props;
+// a month of days: blanks before the 1st, then 30 days; a few are open, one is picked
+const days = Array.from({ length: 35 }, (_, i) => i);
+const open = new Set([9, 11, 15, 17, 18, 22, 24]);
+const picked = 17;
+---
+<div class="ic cta-band reveal" data-tone="night">
+  <span class="ic-aura" aria-hidden="true"></span>
+  <span class="ic-tex" aria-hidden="true"></span>
+  <div class="ic-txt">
+    <h2 class="ic-h" set:html={heading} />
+    <p class="ic-p">{text}</p>
+    <div class="ic-go"><ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>{label}</ButtonLink></div>
+    {perks.length > 0 && <ul class="ic-perks">{perks.map((p) => <li>{p}</li>)}</ul>}
+  </div>
+  <div class="ic-art" aria-hidden="true">
+    <div class="ic-cal">
+      <div class="ic-cal-top"><i class="ic-av"></i><i class="ic-l1"></i><i class="ic-l2"></i></div>
+      <div class="ic-grid">
+        {days.map((d) => <i class:list={[d < 3 && 'is-blank', open.has(d) && 'is-open', d === picked && 'is-picked']}></i>)}
+      </div>
+      <div class="ic-slot"><i class="ic-tick"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg></i><i class="ic-l3"></i><i class="ic-btn"></i></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ic { position: relative; isolation: isolate; overflow: clip; display: grid; grid-template-columns: minmax(0, 1fr) 232px; gap: 32px; align-items: center; padding: 40px 40px 40px 44px; border-radius: 28px; text-align: left; color: #fff; background: linear-gradient(180deg, var(--k-night-2), var(--k-night)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .08), 0 50px 90px -50px rgb(var(--hue-b) / .8); }
+  .ic-aura { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(70% 120% at 92% 0%, rgb(var(--hue-a) / .34), transparent 62%), radial-gradient(60% 100% at 0% 110%, rgb(var(--hue-c) / .22), transparent 60%), radial-gradient(40% 70% at 55% 120%, rgb(var(--hue-b) / .3), transparent 60%); }
+  .ic-tex { position: absolute; inset: 0; z-index: -1; pointer-events: none; background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .16) 1px, transparent 1.6px); background-size: 20px 20px; -webkit-mask-image: radial-gradient(60% 90% at 88% 30%, #000, transparent 75%); mask-image: radial-gradient(60% 90% at 88% 30%, #000, transparent 75%); }
+  .ic-h { margin: 0; font-family: var(--font-display); font-size: clamp(24px, 2.3vw, 30px); line-height: 1.12; font-weight: var(--fw-display); letter-spacing: -.026em; text-wrap: balance; color: #fff; }
+  .ic-p { margin: 12px 0 0; max-width: 56ch; font-size: 15.5px; line-height: 1.6; color: var(--on-dark-2); }
+  .ic-go { margin-top: 24px; }
+  .ic-perks { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 0; padding: 0; font-size: 12.5px; color: var(--on-dark-mute); }
+  .ic-perks li { display: inline-flex; align-items: center; gap: 7px; margin: 0; }
+  .ic-perks li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--grad-brand); }
+  .ic-art { position: relative; }
+  .ic-art::before { content: ""; position: absolute; inset: -30px; border-radius: 50%; background: radial-gradient(closest-side, rgb(var(--hue-b) / .45), transparent); filter: blur(6px); }
+  .ic-cal { position: relative; padding: 14px; border-radius: 20px; background: rgb(255 255 255 / .07); border: 1px solid rgb(255 255 255 / .16); box-shadow: 0 30px 60px -30px rgb(0 0 0 / .6), inset 0 1px 0 rgb(255 255 255 / .12); rotate: 3deg; }
+  .ic-cal i { display: block; }
+  .ic-cal-top { display: flex; align-items: center; gap: 8px; padding: 2px 2px 12px; }
+  .ic-av { width: 22px; height: 22px; border-radius: 50%; background: var(--grad-brand); flex-shrink: 0; }
+  .ic-l1 { width: 70px; height: 7px; border-radius: 99px; background: rgb(255 255 255 / .55); }
+  .ic-l2 { width: 34px; height: 7px; margin-left: auto; border-radius: 99px; background: rgb(255 255 255 / .2); }
+  .ic-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+  .ic-grid i { aspect-ratio: 1; border-radius: 6px; background: rgb(255 255 255 / .08); }
+  .ic-grid i.is-blank { background: none; }
+  .ic-grid i.is-open { background: rgb(var(--hue-c) / .22); box-shadow: inset 0 0 0 1px rgb(var(--hue-c) / .45); }
+  .ic-grid i.is-picked { background: var(--grad-brand); box-shadow: 0 0 0 3px rgb(255 255 255 / .16), 0 8px 16px -6px rgb(var(--hue-b) / .9); }
+  .ic-slot { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px; border-radius: 12px; background: rgb(255 255 255 / .94); }
+  .ic-tick { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; background: var(--grad-brand); flex-shrink: 0; }
+  .ic-tick svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .ic-l3 { flex: 1; height: 7px; border-radius: 99px; background: var(--line-2); }
+  .ic-btn { width: 34px; height: 18px; border-radius: 99px; background: var(--k-accent); }
+  :global(.js.motion) .ic-cal { animation: ic-float 8s ease-in-out infinite; }
+  :global(.js.motion) .ic-grid i.is-picked { animation: ic-pulse 2.8s ease-in-out 1s infinite; }
+  @keyframes ic-float { 50% { translate: 0 -8px; } }
+  @keyframes ic-pulse { 50% { scale: 1.12; } }
+  @media (max-width: 760px) {
+    .ic { grid-template-columns: minmax(0, 1fr); padding: 30px 22px 32px; border-radius: 24px; gap: 0; }
+    .ic-art { display: none; }
+  }
+</style>

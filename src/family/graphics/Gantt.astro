@@ -1,0 +1,74 @@
+---
+// A phase plan on a unit axis (weeks), drawn in the family's product-UI style: one row per phase
+// with its name (a link, when `href` is given) and printed span, and a bar proportional to the
+// start and end the page prints. An open phase ("ongoing", "rolling": no end) starts where the
+// phase before it ends and runs off the axis with an arrow. The same geometry as the kit's
+// Timeline gantt, without the kit diagrams stylesheet (93 KB) a page would otherwise load.
+// Phases: parsePhase() from src/kit/diagram/parse.ts ("Controlled scaling · wk 3–8").
+// The caption is visible text: say what the bars mean. Put it inside a <Win>.
+interface Phase { label: string; meta?: string; start?: number; end?: number | 'ongoing'; href?: string }
+interface Props { phases: Phase[]; unit?: string; caption: string; rowIdPrefix?: string }
+const { phases, unit, caption, rowIdPrefix } = Astro.props;
+
+const dated = phases.filter((p) => typeof p.start === 'number');
+const lo = dated.length ? Math.min(...dated.map((p) => p.start as number)) : 1;
+const ends = phases.map((p) => (typeof p.end === 'number' ? p.end : typeof p.start === 'number' ? p.start : lo));
+const hasOpen = phases.some((p) => p.end === 'ongoing' || p.end === undefined);
+const hi = Math.max(...ends) + (hasOpen ? 2 : 0);
+const span = hi - lo + 1;
+const units = Array.from({ length: span }, (_, k) => lo + k);
+const r = (n: number) => Math.round(n * 1000) / 1000;
+let prevEnd = lo;
+const bars = phases.map((p) => {
+  const open = p.end === 'ongoing' || p.end === undefined;
+  const a = typeof p.start === 'number' ? p.start : prevEnd;
+  const b = open ? hi : (p.end as number);
+  if (!open) prevEnd = b;
+  return { left: r(((a - lo) / span) * 100), width: r(((b - a + 1) / span) * 100), open };
+});
+---
+<div class="ug" style={`--units:${units.length}`}>
+  <div class="ug-axis" aria-hidden="true">
+    <span class="ug-pad"></span>
+    <span class="ug-ticks">{units.map((u, k) => <span>{k === 0 && unit && <span class="ug-unit">{unit} </span>}{String(u)}</span>)}</span>
+  </div>
+  <ol class="ug-rows">
+    {phases.map((p, i) => (
+      <li class="ug-row" id={rowIdPrefix ? `${rowIdPrefix}-${i}` : undefined} style={`--i:${i};--a:${bars[i].left}%;--w:${bars[i].width}%`}>
+        <p class="ug-label">
+          <span class="ug-name">{p.href ? <a href={p.href}>{p.label}</a> : p.label}</span>
+          {p.meta && <span class="ug-meta">{p.meta}</span>}
+        </p>
+        <span class="ug-track" aria-hidden="true"><span class:list={['ug-bar', 'ui-fill', bars[i].open && 'is-open']}></span></span>
+      </li>
+    ))}
+  </ol>
+  <p class="cp-fig-cap ug-cap">{caption}</p>
+</div>
+
+<style>
+  .ug { container: ug / inline-size; display: grid; gap: 10px; }
+  .ug-axis, .ug-row { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 18px; }
+  .ug-pad, .ug-unit { display: none; }
+  .ug-ticks { display: grid; grid-template-columns: repeat(var(--units), minmax(0, 1fr)); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .04em; color: var(--mute); }
+  .ug-ticks > span { padding-left: 4px; border-left: 1px solid var(--line); line-height: 1.8; white-space: nowrap; }
+  .ug-rows { list-style: none; display: grid; gap: 12px; margin: 0; padding: 0; }
+  .ug-row { row-gap: 6px; margin: 0; padding: 4px 6px; border-radius: 12px; transition: background .25s; }
+  .ug-label { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 0; font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--text); }
+  .ug-name a { color: inherit; text-decoration: none; }
+  .ug-name a:hover { color: var(--deep-a); }
+  .ug-meta { padding: 2px 8px; border-radius: 99px; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .04em; color: var(--deep-a); background: rgb(var(--hue-a) / .09); }
+  .ug-track { position: relative; display: block; height: 14px; border-radius: 99px; background: repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px calc(100% / var(--units))), var(--bg-2); }
+  .ug-bar { position: absolute; top: 0; bottom: 0; left: var(--a); width: var(--w); border-radius: 99px; background: var(--cp-vivid); box-shadow: 0 6px 16px -8px rgb(var(--hue-b) / .8); transition: box-shadow .25s; }
+  .ug-bar.is-open { border-radius: 99px 0 0 99px; background: linear-gradient(90deg, var(--deep-a) 0 45%, rgb(var(--hue-c) / .15)); }
+  .ug-bar.is-open::after { content: ""; position: absolute; right: 0; top: 50%; width: 7px; height: 7px; border-top: 2px solid var(--deep-a); border-right: 2px solid var(--deep-a); opacity: .6; transform: translate(-2px, -50%) rotate(45deg); }
+  .ug-row:is(:hover, :focus-within, .is-lit) { background: rgb(var(--hue-a) / .05); }
+  .ug-row:is(:hover, :focus-within, .is-lit) .ug-bar { box-shadow: 0 0 0 3px rgb(var(--hue-a) / .18), 0 8px 18px -8px rgb(var(--hue-b) / .8); }
+  .ug-cap { margin-top: 6px; }
+  :global(.js.motion) .ug-row { animation-delay: calc(var(--i) * 80ms); }
+  @container ug (min-width: 560px) {
+    .ug-axis, .ug-row { grid-template-columns: minmax(0, .95fr) minmax(0, 1.6fr); align-items: center; }
+    .ug-pad, .ug-unit { display: block; }
+    .ug-unit { display: inline; }
+  }
+</style>

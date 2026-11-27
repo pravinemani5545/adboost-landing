@@ -1,0 +1,82 @@
+---
+// /services/cro/ hero: one ad split at the click between the two pages the page compares, a
+// static page and a quiz funnel ("moving from a static page to a quiz funnel"), the quiz showing
+// its price after the questions ("as long as price is revealed after the quiz"). Conversion rate
+// is drawn as bars, not values. Chips restate the weekly A/B tests and the ad-to-page message
+// match from the page's outcomes. Decorative (aria-hidden).
+import Win from '../Win.astro';
+import Chip from '../Chip.astro';
+import Ic from '../Ic.astro';
+import Pill from '../Pill.astro';
+---
+<div class="cro" aria-hidden="true">
+  <div class="ui cro-ad">
+    <div class="cro-ad-top"><i class="cro-av"></i><span class="ui-sk d" style="width:38%"></span><Pill text="Paid traffic" tone="n" /></div>
+    <div class="cro-ad-img"><span class="ui-sk" style="width:44%;background:rgb(255 255 255 / .8)"></span></div>
+  </div>
+  <svg class="cro-split" viewBox="0 0 400 54" preserveAspectRatio="none" aria-hidden="true"><path d="M200 0 V18 Q200 26 190 26 H110 Q100 26 100 36 V54 M200 18 Q200 26 210 26 H290 Q300 26 300 36 V54" fill="none" style="stroke:rgb(var(--hue-b))" stroke-width="2" stroke-dasharray="5 5" vector-effect="non-scaling-stroke" /></svg>
+  <div class="cro-pages">
+    <Win name="Static page" class="cro-page">
+      <div class="cro-wire">
+        <div class="cro-img"></div>
+        <span class="ui-sk d" style="width:80%"></span><span class="ui-sk" style="width:58%"></span><span class="ui-sk" style="width:44%"></span>
+        <span class="cro-btn"></span>
+      </div>
+      <div class="cro-meter"><span class="ui-lab">Conversion rate</span><span class="cro-bar"><i class="ui-fill" style="width:44%"></i></span></div>
+    </Win>
+    <Win name="Quiz funnel" class="cro-page is-win">
+      <div class="cro-wire">
+        <div class="cro-steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        <span class="ui-sk d" style="width:70%"></span>
+        <div class="cro-opts">
+          <span class="cro-opt is-on"><span class="cro-tick"><Ic name="check" /></span><span class="ui-sk a" style="width:62%"></span></span>
+          <span class="cro-opt"><span class="cro-tick"></span><span class="ui-sk" style="width:48%"></span></span>
+        </div>
+        <span class="cro-price"><Ic name="tag" /><span>Price after the quiz</span></span>
+        <span class="cro-btn"></span>
+      </div>
+      <div class="cro-meter"><span class="ui-lab">Conversion rate</span><span class="cro-bar"><i class="ui-fill" style="width:88%"></i></span></div>
+    </Win>
+  </div>
+  <Chip title="Weekly A/B tests" label="landers, offers, hooks" icon="split" style="right:-26px;bottom:-50px" />
+  <Chip title="Message-match" label="from ad to page" icon="route" tone="b" style="left:-36px;top:22px" />
+</div>
+
+<style>
+  .cro { position: relative; }
+  .cro-ad { width: 62%; margin: 0 auto; padding: 10px; border-radius: 16px; }
+  .cro-ad-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .cro-ad-top :global(.ui-pill) { margin-left: auto; font-size: 8.5px; }
+  .cro-av { width: 20px; height: 20px; border-radius: 50%; background: var(--grad-brand); flex-shrink: 0; }
+  .cro-ad-img { display: flex; align-items: flex-end; height: 60px; padding: 10px; border-radius: 10px; background: radial-gradient(60% 90% at 20% 20%, rgb(var(--hue-a) / .55), transparent 70%), radial-gradient(60% 90% at 90% 80%, rgb(var(--hue-c) / .6), transparent 70%), var(--bg-3); }
+  .cro-split { display: block; width: 100%; height: 34px; }
+  .cro-pages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .cro-pages :global(.cro-page .ui-bar) { height: 34px; padding: 0 10px; gap: 8px; }
+  .cro-pages :global(.cro-page .cp-dots i) { width: 6px; height: 6px; }
+  .cro-pages :global(.cro-page .ui-name) { font-size: 9.5px; }
+  .cro-wire { display: grid; gap: 7px; padding: 12px; }
+  .cro-img { height: 70px; border-radius: 10px; background: radial-gradient(60% 70% at 50% 45%, rgb(var(--hue-b) / .4), transparent 70%), var(--bg-3); }
+  .cro-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .cro-steps i { display: block; height: 5px; border-radius: 99px; background: var(--bg-3); }
+  .cro-steps i.on { background: var(--grad-brand); }
+  .cro-opts { display: grid; gap: 5px; }
+  .cro-opt { display: flex; align-items: center; gap: 7px; padding: 6px 7px; border-radius: 8px; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .cro-opt.is-on { box-shadow: inset 0 0 0 1.5px rgb(var(--hue-a) / .6); background: rgb(var(--hue-a) / .05); }
+  .cro-tick { display: grid; place-items: center; width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; box-shadow: inset 0 0 0 1px var(--line-3); color: #fff; }
+  .is-on .cro-tick { background: var(--grad-brand); box-shadow: none; }
+  .cro-tick :global(.gi) { width: 9px; height: 9px; stroke-width: 3; }
+  .cro-opt .ui-sk { flex: 1; }
+  .cro-price { display: flex; align-items: center; gap: 6px; padding: 5px 7px; border-radius: 8px; font-family: var(--font-mono); font-size: 8.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #0e7490; background: rgb(var(--hue-c) / .14); white-space: nowrap; overflow: hidden; }
+  .cro-price :global(.gi) { width: 11px; height: 11px; }
+  .cro-btn { display: block; height: 22px; border-radius: 99px; background: var(--text); }
+  .is-win .cro-btn { background: var(--grad-brand); }
+  .cro-meter { display: grid; gap: 6px; padding: 10px 12px 12px; border-top: 1px solid var(--line); background: var(--bg-2); }
+  .cro-bar { display: block; height: 7px; border-radius: 99px; background: var(--bg-3); overflow: hidden; }
+  .cro-bar i { display: block; height: 100%; border-radius: inherit; background: var(--line-3); }
+  .is-win .cro-bar i { background: var(--grad-brand); }
+  .cro-pages :global(.is-win) { box-shadow: 0 1px 0 rgb(255 255 255 / .9) inset, var(--shadow-stack), 0 40px 70px -30px rgb(var(--hue-b) / .65); }
+  :global(.js.motion) .cro-split path { stroke-dashoffset: 40; animation: cro-dash 2.4s linear infinite; }
+  :global(.js.motion) .cro-pages :global(.is-win) { animation: fam-float 8s ease-in-out infinite; }
+  @keyframes cro-dash { to { stroke-dashoffset: 0; } }
+  @media (max-width: 480px) { .cro-ad { width: 86%; } .cro-wire { padding: 10px; } .cro-price { font-size: 7.5px; } }
+</style>

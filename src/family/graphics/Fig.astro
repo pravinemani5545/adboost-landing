@@ -1,0 +1,13 @@
+---
+// An in-body figure: the graphic (default slot) on a framed, dotted panel with a caption line.
+// A figure carries meaning, so its labels stay readable text: restate the page's own words and
+// numbers only (a worked example's figures say "Illustrative example", as the page does).
+// The caption is visible text; keep it short and factual. Pass it to FamilyPage's `figure` slot
+// with `figureAt`, or place it in a template's body yourself.
+interface Props { caption: string; class?: string; id?: string }
+const { caption, class: cls, id } = Astro.props;
+---
+<figure class:list={['cp-fig', 'reveal', cls]} id={id}>
+  <slot />
+  <figcaption>{caption}</figcaption>
+</figure>
