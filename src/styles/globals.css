@@ -107,7 +107,10 @@
    --brand-rgb      the accent as an r g b triplet, for glows and tints
    --aura-a/-b      the two soft glows behind heroes
    --dark*          the dark bands and the footer
-   Every value comes from the kit's site tokens. */
+   --hue-a/-b/-c    the accent and two neighbouring hues (blue, indigo, cyan) as
+                    r g b triplets: gradients are built from these three, as on the
+                    Media sections; --deep-* read on white, --vivid-* carry white text
+   The accent itself comes from the kit's site tokens. */
 body,
 body[data-section="health"] {
   --brand: var(--k-accent);
@@ -118,7 +121,10 @@ body[data-section="health"] {
   --brand-on-dark: var(--k-accent-bright);
   --brand-rgb: var(--k-accent-rgb);
   --aura-a: var(--k-accent-rgb);
-  --aura-b: var(--k-accent-rgb);
+  --aura-b: 99 102 241;
+  --hue-a: var(--k-accent-rgb); --hue-b: 99 102 241; --hue-c: 34 211 238; --hue-warm: 167 139 250;
+  --deep-a: var(--k-accent-ink); --deep-b: #4f46e5; --deep-c: #0891b2;
+  --vivid-a: var(--k-accent-strong); --vivid-b: #4338ca; --vivid-c: #0e7490;
   --dark: var(--k-night);
   --dark-2: var(--k-night-2);
   --dark-foot: var(--k-night);
@@ -128,6 +134,12 @@ body {
   --primary: var(--brand);
   --primary-foreground: var(--brand-ink);
   --ring: var(--brand-deep);
+  /* gradients, all from the section's three hues (same names as the Media sections) */
+  --grad-brand: linear-gradient(120deg, rgb(var(--hue-a)), rgb(var(--hue-b)) 55%, rgb(var(--hue-c)));
+  --grad-text: linear-gradient(100deg, var(--deep-a) 12%, var(--deep-b) 64%, var(--deep-c));
+  --grad-text-dark: linear-gradient(100deg, var(--k-accent-bright), #a5b4fc 60%, #67e8f9);
+  --grad-vivid: linear-gradient(135deg, var(--vivid-a), var(--vivid-b) 52%, var(--vivid-c));
+  --grad-btn: linear-gradient(110deg, var(--k-accent), #4f46e5 55%, var(--k-accent));
 }
 
 @layer base {
@@ -136,4 +148,24 @@ body {
      reset with .tw: no default margins on headings, paragraphs and lists. */
   .tw :where(h1, h2, h3, h4, p, ul, ol, figure, blockquote) { margin: 0; padding: 0; }
   .tw :where(ul, ol) { list-style: none; }
+}
+
+/* ---- gradients: the serif accent words and the primary button, as on the Media sections ----
+   A word wrapped by the kit's read-as-you-scroll script (.k-wd) carries the gradient
+   itself: a child with its own opacity falls outside its parent's clipped background. */
+@layer components {
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .serif:not(:has(.k-wd)) {
+      background-image: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      -webkit-box-decoration-break: clone; box-decoration-break: clone;
+      /* room for the italic's overhang, which a clipped background would cut off */
+      padding-inline-end: .12em; margin-inline-end: -.12em;
+    }
+    .serif .k-wd { background-image: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    :is([data-tone="night"], .k-tone-night, .spot-quote, .bigcta, .cta-band) .serif:not(:has(.k-wd)),
+    :is([data-tone="night"], .k-tone-night, .spot-quote, .bigcta, .cta-band) .serif .k-wd { background-image: var(--grad-text-dark); }
+  }
+  @media (forced-colors: active) { .serif, .serif .k-wd { background-image: none; -webkit-text-fill-color: currentColor; } }
+  .btn-primary { background-image: var(--grad-btn); background-size: 200% 100%; background-position: 0 0; transition: transform .2s cubic-bezier(.4, 0, .2, 1), box-shadow .2s cubic-bezier(.4, 0, .2, 1), background-position .6s cubic-bezier(.2, .7, .2, 1), border-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1); }
+  .btn-primary:hover { background-position: 100% 0; }
 }
