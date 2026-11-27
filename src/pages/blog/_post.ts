@@ -5,7 +5,7 @@
 // stays free of diagram CSS if it is built by a route that never imports a diagram component.
 import type { CollectionEntry } from 'astro:content';
 import { splitMarkers, type MarkerPart } from '../../kit/content/markers';
-import { faqFromBody } from '../../lib/blog';
+import { faqFromHtml } from '../../components/resources/html';
 
 type Post = CollectionEntry<'blog'>;
 
@@ -63,7 +63,8 @@ export function postLayoutProps(post: Post, all: Post[], site: string) {
     post: post.data,
     readMinutes: readMinutes(post),
     related,
-    faq: faqFromBody(post.body),
+    // From the rendered HTML, so the FAQPage JSON-LD carries exactly the text the page shows.
+    faq: faqFromHtml(post.rendered?.html ?? ''),
     toc: postToc(post),
   };
 }

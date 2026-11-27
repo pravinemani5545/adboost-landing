@@ -43,7 +43,7 @@ interface Props {
   };
   readMinutes?: number;
   related?: RelatedPost[];
-  /** The post's visible FAQ section (faqFromBody), emitted as FAQPage JSON-LD */
+  /** The post's visible FAQ section (faqFromHtml), emitted as FAQPage JSON-LD */
   faq?: { q: string; a: string }[];
   /** The post's h2s for the page index (long posts only; empty hides it) */
   toc?: { id: string; html: string }[];
