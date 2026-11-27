@@ -1,0 +1,36 @@
+---
+// The closing card of a blog post: the family's dark call-to-action card (src/family/InlineCta.astro,
+// a port of adboost-media src/components/site/InlineCta.astro), with the post's own heading and text.
+//
+// A variant, not InlineCta itself, for one reason: the tracker contract. InlineCta carries .cta-band,
+// so t.js would label its /book/ click "cta-band". A post's banner has always been an "inline" CTA
+// (no nav, .mobile-cta, .cta-band or footer ancestor), and the admin reports read it under that label,
+// so this card keeps it. Same drawing (a booking calendar with one slot picked, decorative), no perks
+// row (the post banner never had one). It keeps .cta-banner, the class the kit's phone CTA steps
+// aside for (src/kit/scripts/menu.ts), which t.js does not read. Styles: src/styles/family/blog.css (.post-ic*).
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import { BOOK_PATH } from '../../lib/site';
+interface Props { heading: string; text: string }
+const { heading, text } = Astro.props;
+const days = Array.from({ length: 35 }, (_, i) => i);
+const open = new Set([9, 11, 15, 17, 18, 22, 24]);
+const picked = 17;
+---
+<div class="post-ic cta-banner reveal" data-tone="night">
+  <span class="post-ic-aura" aria-hidden="true"></span>
+  <span class="post-ic-tex" aria-hidden="true"></span>
+  <div class="post-ic-txt">
+    <h2 class="post-ic-h">{heading}</h2>
+    <p class="post-ic-p">{text}</p>
+    <div class="post-ic-go"><ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>Book a free strategy call</ButtonLink></div>
+  </div>
+  <div class="post-ic-art" aria-hidden="true">
+    <div class="post-ic-cal">
+      <div class="post-ic-top"><i class="av"></i><i class="l1"></i><i class="l2"></i></div>
+      <div class="post-ic-grid">
+        {days.map((d) => <i class:list={[d < 3 && 'is-blank', open.has(d) && 'is-open', d === picked && 'is-picked']}></i>)}
+      </div>
+      <div class="post-ic-slot"><i class="tick"><svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7" /></svg></i><i class="l3"></i><i class="go"></i></div>
+    </div>
+  </div>
+</div>

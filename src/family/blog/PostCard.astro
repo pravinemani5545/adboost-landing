@@ -1,0 +1,67 @@
+---
+// A blog post as a card, on the family layer: the blog index and "Keep reading" under a post.
+// Port of adboost-media src/components/site/PostCard.astro (+ src/components/blog/post-card.css),
+// in Health's hues. Styles: src/styles/family/blog.css (.pc*).
+// variant:  card     image on top (the default)
+//           feature  the index's lead story: a large framed image beside the text
+//           wide     a large card in the index's first row
+//           side     a compact card with the image on the left
+//           half     a card at half the row's width
+//           row      a list row: small image on the left, text on the right
+// Health extras kept from the old card: `flag` ("Latest") before the category, `vt` (the
+// view-transition hook BlogLayout's head script reads) and the title's heading level.
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  image?: string;
+  alt?: string;
+  date?: Date;
+  category?: string;
+  minutes?: number;
+  /** heading level of the title: 2 on the index (cards sit under the H1), 3 under "Keep reading" */
+  level?: 2 | 3;
+  variant?: 'card' | 'feature' | 'wide' | 'side' | 'half' | 'row';
+  /** the first card on a page loads its image eagerly */
+  eager?: boolean;
+  /** the view-transition hook (post slug) on the index */
+  vt?: string;
+  /** a small flag before the category ("Latest") */
+  flag?: string;
+  class?: string;
+}
+const { href, title, description, image, alt = '', date, category, minutes, level = 3, variant = 'card', eager = false, vt, flag, class: cls } = Astro.props;
+const H = level === 2 ? 'h2' : 'h3';
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+<a href={href} class:list={['pc', `pc-${variant}`, !image && 'pc-noimg', cls]}>
+  <span class="pc-in">
+    {image && (
+      <span class="pc-media" data-vt-card={vt}>
+        <img
+          src={`${image}?v=2`}
+          alt={alt}
+          width="640"
+          height="360"
+          loading={eager ? 'eager' : 'lazy'}
+          decoding={eager ? undefined : 'async'}
+          fetchpriority={eager ? 'high' : undefined}
+        />
+      </span>
+    )}
+    <span class="pc-body">
+      {(flag || category || date || minutes) && (
+        <span class="pc-meta">
+          {flag && <span class="pc-flag">{flag}</span>}
+          {category && <span class="pc-cat">{category}</span>}
+          {date && <time datetime={date.toISOString()}>{fmt(date)}</time>}
+          {date && minutes && <span class="pc-sep" aria-hidden="true">·</span>}
+          {minutes && <span class="pc-min">{minutes} min read</span>}
+        </span>
+      )}
+      <H class="pc-title">{title}</H>
+      <span class="pc-desc">{description}</span>
+      <span class="pc-go">Read article <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+    </span>
+  </span>
+</a>
