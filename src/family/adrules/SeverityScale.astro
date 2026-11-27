@@ -1,0 +1,19 @@
+---
+// The severity scale in a rule sheet's dark #enforcement band: the sheet's own enforcement phrases
+// (enforcement.ts, verbatim and build-checked) on a track that runs from amber to red, the last
+// step the most serious one the text names. Decorative (aria-hidden): the paragraph beside it is
+// the text; the scale only draws its order.
+interface Props { steps: string[] }
+const { steps } = Astro.props;
+---
+<div class="adr-sev" aria-hidden="true" style={`--n:${steps.length}`}>
+  <div class="adr-sev-head"><span class="ui-lab">Enforcement</span><span class="adr-sev-bars"><i></i><i></i><i></i></span></div>
+  <ol class="adr-sev-steps">
+    {steps.map((s, i) => (
+      <li style={`--i:${i};--k:${steps.length > 1 ? i / (steps.length - 1) : 1}`}>
+        <span class="adr-sev-node"><i></i></span>
+        <span class="adr-sev-t">{s}</span>
+      </li>
+    ))}
+  </ol>
+</div>

@@ -1,0 +1,49 @@
+---
+// #prohibited on the family layer, as rule cards in two honestly labelled tiers (the same split as
+// src/components/adv/RuleTiers.astro): left, the platform's own written rules, each with a red
+// "Not allowed" pill (the chapter asks what these ads can't say or show); right, what AdBoost also
+// keeps out, each with an amber "Our guidance" pill, because it is our guidance, not the platform's
+// wording. A guidance item's citation link moves to the source line under the cards, as before.
+// A sheet with no guidance keeps the single list of the platform's rules, as cards.
+import Ic from '../graphics/Ic.astro';
+import { linksIn, stripTags } from '../../components/adv/status';
+
+interface Props {
+  platform: string;
+  inline: string;
+  prohibited: string[];
+  guidance?: string[];
+  sources?: { label: string; url: string }[];
+}
+const { platform, inline, prohibited, guidance = [], sources = [] } = Astro.props;
+const links = guidance.flatMap(linksIn);
+if (links.length > 1) throw new Error(`[adr rule tiers] ${platform}/${inline}: more than one link in guidance; the figure carries one source`);
+const link = links[0] && { label: sources.find((s) => s.url === links[0].url)?.label ?? links[0].label, href: links[0].url };
+---
+{guidance.length > 0 ? (
+  <figure class="adr-tiers reveal">
+    <div class="adr-tier is-rule">
+      <p class="adr-tier-h"><span class="adr-tier-ic" aria-hidden="true"><Ic name="ban" /></span>{platform}’s written rules</p>
+      <ul class="adr-rules">
+        {prohibited.map((x, i) => <li class="adr-rule" style={`--i:${i}`}><span class="ui-pill bad"><span class="ld"></span>Not allowed</span><span class="adr-rule-t">{x}</span></li>)}
+      </ul>
+    </div>
+    <div class="adr-tier is-guide">
+      <p class="adr-tier-h"><span class="adr-tier-ic" aria-hidden="true"><Ic name="flag" /></span>Our guidance, not {platform}’s</p>
+      <ul class="adr-rules">
+        {guidance.map((x, i) => <li class="adr-rule" style={`--i:${i}`}><span class="ui-pill warn"><span class="ld"></span>Our guidance</span><span class="adr-rule-t">{stripTags(x)}</span></li>)}
+      </ul>
+    </div>
+    <figcaption>
+      <span>Left: {platform}’s own written rules. Right: what we also keep out of {inline} creative. This is our guidance, not {platform}’s wording.</span>
+      {link && <span class="adr-src-line">Source: <a href={link.href} target="_blank" rel="noopener">{link.label}</a></span>}
+    </figcaption>
+  </figure>
+) : (
+  <div class="adr-tiers-one reveal">
+    <p class="adr-tier-h"><span class="adr-tier-ic" aria-hidden="true"><Ic name="ban" /></span>{platform}’s own written rules:</p>
+    <ul class="adr-rules adr-rules-2">
+      {prohibited.map((x, i) => <li class="adr-rule" style={`--i:${i}`}><span class="ui-pill bad"><span class="ld"></span>Not allowed</span><span class="adr-rule-t">{x}</span></li>)}
+    </ul>
+  </div>
+)}

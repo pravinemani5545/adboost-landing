@@ -1,0 +1,12 @@
+---
+// A policy status badge on the family layer: the same status, colour and mark as
+// src/components/adv/StatusBadge.astro (allowed green, restricted amber, requires certification
+// blue, prohibited red), drawn as a family pill. The label carries the meaning; the mark is
+// decorative. Styles: src/styles/family/adrules.css (.adr-badge).
+import { STATUS_LABEL, type PolicyStatus } from '../../data/adPolicies';
+import { STATUS_TONE } from '../../components/adv/status';
+import { statusMark } from './status';
+interface Props { status: PolicyStatus; class?: string }
+const { status, class: cls } = Astro.props;
+---
+<span class:list={['adr-badge', cls]} data-level={STATUS_TONE[status]}><span class="adr-badge-m" aria-hidden="true">{statusMark(status)}</span>{STATUS_LABEL[status]}</span>
