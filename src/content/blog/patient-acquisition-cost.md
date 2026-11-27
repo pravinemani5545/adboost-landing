@@ -8,7 +8,7 @@ tags: ["cac", "telehealth", "benchmarks"]
 heroImage: "/blog/patient-acquisition-cost.webp"
 heroAlt: "AdBoost Health brand graphic: patient acquisition cost explained, with a cost-per-patient metric card"
 ctaHeading: "Find out what's actually inflating your CAC."
-ctaText: "Free 30-minute call - we audit your acquisition math end to end, from ad account to intake flow, and hand you the written plan."
+ctaText: "Free 30-minute call: we audit your acquisition math end to end, from ad account to intake flow, and hand you the written plan."
 ---
 
 Ask five health founders for their patient acquisition cost and you'll get five numbers calculated five different ways. One counts ad spend only. One includes agency fees. One divides by leads instead of patients. None of them can compare notes, and worse, none of them can make a confident budget decision, because the number underneath the decision isn't real.

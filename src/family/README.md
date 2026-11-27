@@ -22,6 +22,18 @@ indigo and cyan. Reference pages: `/services/` and `/services/{paid-media,creati
 | `../styles/family/tokens.css` | Media's token names mapped to Health's values, on `.family` only |
 | `../styles/family/content.css` | every family class, all scoped under `.family` |
 
+### Area folders
+
+Each area of the site keeps its own components in a folder here and its styles in `src/styles/family/`:
+
+| Folder | Pages | Stylesheets (`src/styles/family/`) |
+|---|---|---|
+| `industry/` | `/industries/` and the vertical pages | `industry.css` |
+| `adrules/` | `/advertising/` (hub, rule sheets, platform hubs: `PlatformHubPage.astro`) and `/compare/` | `adrules.css` |
+| `blog/` | `/blog/` and the posts (`BlogLayout`) | `blog-cards.css`, `blog-index.css`, `blog-post.css` |
+| `resources/` | the glossary terms and the calculators in `/tools/` | `resources.css`, `glossary.css`, `tools.css`, `grain.css` |
+| `landing/` | home, about, FAQ, book, newsletter, legal pages, 404, Zero-Ban Protocol | `landing.css`, `landing-pages.css` |
+
 Nothing here touches a page that does not use it: the CSS is imported by FamilyPage (and the
 primitives), and every rule is scoped under `.family`. A page that is not a FamilyPage but wants the
 classes or primitives (an industry or tool template) imports both CSS files and puts

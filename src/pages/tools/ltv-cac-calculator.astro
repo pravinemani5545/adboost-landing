@@ -20,8 +20,8 @@ const title = 'Free LTV:CAC Ratio & Payback Calculator | AdBoost Health';
 const description = 'Calculate lifetime value, your LTV:CAC ratio, and payback period for a subscription health or DTC brand. Free, with the 3:1 benchmark built in.';
 const faq = [
   { q: 'What is a good LTV:CAC ratio?', a: '3:1 or higher is the standard benchmark for a healthy, scalable model. Below 3:1 usually means you’re buying revenue at a loss after overhead; far above 5:1 can mean you’re under-investing in growth.' },
-  { q: 'How is payback period calculated?', a: 'Payback (months) = CAC ÷ monthly gross profit per customer. It tells you how long until a customer repays their acquisition cost - critical for cash-efficient scaling in subscription health.' },
-  { q: 'How do I estimate lifetime value?', a: 'LTV ≈ monthly revenue × gross margin × average months retained. Retention is the biggest lever in subscription health - small changes in months-retained move LTV dramatically.' },
+  { q: 'How is payback period calculated?', a: 'Payback (months) = CAC ÷ monthly gross profit per customer. It tells you how long until a customer repays their acquisition cost, critical for cash-efficient scaling in subscription health.' },
+  { q: 'How do I estimate lifetime value?', a: 'LTV ≈ monthly revenue × gross margin × average months retained. Retention is the biggest lever in subscription health: small changes in months-retained move LTV dramatically.' },
 ];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'LTV:CAC Calculator', href: path }]),
@@ -45,7 +45,7 @@ const data = {
   seoTitle: title,
   metaDescription: description,
   h1: "LTV:CAC & payback calculator",
-  summary: esc("The single most important unit-economics check for a subscription health brand - lifetime value, LTV:CAC ratio, and how many months until a customer pays you back."),
+  summary: esc("The single most important unit-economics check for a subscription health brand: lifetime value, LTV:CAC ratio, and how many months until a customer pays you back."),
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
@@ -181,12 +181,12 @@ const hero = {
       </div>
   <ol class="cp-steps tc-steps">
     <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Estimate lifetime value.</strong> LTV ≈ monthly revenue × gross margin × average months retained.</p></div></li>
-    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide LTV by CAC.</strong> The ratio is lifetime value ÷ acquisition cost - aim for at least 3:1.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide LTV by CAC.</strong> The ratio is lifetime value ÷ acquisition cost; aim for at least 3:1.</p></div></li>
     <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Calculate payback.</strong> Payback (months) = CAC ÷ monthly gross profit per customer.</p></div></li>
   </ol>
   
   <div class="pg-prose"><h2 id="what-the-numbers-mean">What the numbers mean</h2>
-      <p>A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC - it’s <a href="/glossary/churn-rate/#retention-rate">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. For the full definition and where the 3:1 rule comes from, see <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> in the glossary, and <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a> for context.</p></div>
+      <p>A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC; it’s <a href="/glossary/churn-rate/#retention-rate">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. For the full definition and where the 3:1 rule comes from, see <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> in the glossary, and <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a> for context.</p></div>
 </FamilyPage>
 
 <script>

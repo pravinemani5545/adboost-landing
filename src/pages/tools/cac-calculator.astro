@@ -18,9 +18,9 @@ const path = '/tools/cac-calculator/';
 const title = 'Free CAC Calculator for Health & DTC Brands | AdBoost Health';
 const description = 'Calculate your customer acquisition cost (CAC) in seconds and see how it compares to 2026 health-vertical benchmarks. Free, no signup.';
 const faq = [
-  { q: 'How is CAC calculated?', a: 'CAC = total acquisition spend ÷ new customers acquired in the same period. Include ad spend, agency/creative fees, and tools - not just media - for a fully-loaded number.' },
+  { q: 'How is CAC calculated?', a: 'CAC = total acquisition spend ÷ new customers acquired in the same period. Include ad spend, agency/creative fees, and tools (not just media) for a fully-loaded number.' },
   { q: 'What should I include in acquisition spend?', a: 'For a fully-loaded CAC, include paid media, creative production, agency or team cost attributable to acquisition, and martech. A media-only CAC understates what a customer really costs.' },
-  { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV - aim for an LTV:CAC of at least 3:1.' },
+  { q: 'What’s a good CAC for a health brand?', a: 'It depends on your vertical and LTV: supplements target sub-$40–$200, telehealth $150–$500, GLP-1 $180–$400. The number only matters against LTV: aim for an LTV:CAC of at least 3:1.' },
 ];
 const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator', href: path }]),
@@ -62,7 +62,7 @@ const data = {
   summary: esc("Work out your true customer acquisition cost, then see how it stacks up against 2026 health-vertical benchmarks."),
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
   ctaHeading: "Think your CAC is too high?",
-  ctaText: "Book a free audit - we’ll benchmark your account and show you the fastest levers to bring CAC down.",
+  ctaText: "Book a free audit: we’ll benchmark your account and show you the fastest levers to bring CAC down.",
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs entirely in your browser', icon: 'check' as const }];
 // The hero: this calculator's formula as a chain, with the values it shows on load
@@ -100,7 +100,7 @@ const hero = {
   </div>
   <div slot="aside" class="pg-card is-night">
     <h4>Think your CAC is too high?</h4>
-    <p>Free audit - we benchmark your account and map the fastest levers to bring it down.</p>
+    <p>Free audit: we benchmark your account and map the fastest levers to bring it down.</p>
     <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
   </div>
 
@@ -152,7 +152,7 @@ const hero = {
           <div class="cr-note" id="cacNote">{initial.note}</div>
         </div>
       </div>
-  <p class="tool-fine tc-fine">Runs entirely in your browser - nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional - verify against your own account.</p>
+  <p class="tool-fine tc-fine">Runs entirely in your browser: nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional. Verify against your own account.</p>
   
   <div class="pg-prose"><h2 id="how-cac-is-calculated">How CAC is calculated</h2>
       <p><a href="/glossary/cac/">Customer acquisition cost</a> is fully-loaded spend divided by the customers that spend bought. The trap is counting media only: creative and fees are part of what a customer really costs.</p>
@@ -164,7 +164,7 @@ const hero = {
   </ol>
   
   <div class="pg-prose"><h2 id="how-to-read-your-cac">How to read your CAC</h2>
-      <p>CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/">LTV:CAC ratio</a> - aim for at least 3:1 - and see the full <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a>.</p></div>
+      <p>CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/">LTV:CAC ratio</a> (aim for at least 3:1) and see the full <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a>.</p></div>
 </FamilyPage>
 
 <script>

@@ -1,5 +1,5 @@
 // Platform policy hubs (health plan N2 and N3): /advertising/meta/ and
-// /advertising/google/, rendered by src/components/PlatformHub.astro through
+// /advertising/google/, rendered by src/family/adrules/PlatformHubPage.astro through
 // src/pages/advertising/[hub].astro. A hub states the platform's shared health
 // rules once, with a dated change log, and links that platform's five rule
 // sheets, which keep only their vertical deltas.
