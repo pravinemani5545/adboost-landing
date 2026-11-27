@@ -1,3 +1,4 @@
+@import "./base.css";
 /* Tools: the hub (calculator window hero, one card per calculator with its graphic, the guide)
    and the five calculators as app cards (window bar, inputs, live result with the formula, steps
    as a track, FAQ card, side cards). Loaded after styles/pages/tools.css, which keeps the live

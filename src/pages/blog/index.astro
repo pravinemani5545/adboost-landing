@@ -27,23 +27,23 @@ posts.forEach((p, i) => {
     topicMap.set(slug, t);
   }
 });
-const topics = [...topicMap.values()].sort((a, b) => b.count - a.count || a.label.localeCompare(b.label));
+// each topic gets a short key (tp0, tp1, ...): the radio id and the word in each card's data-t
+const topics = [...topicMap.values()]
+  .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
+  .map((t, i) => ({ ...t, key: `tp${i}` }));
+const keyOf = new Map(topics.map((t) => [t.slug, t.key]));
 const SHOWN = 9;
 const lead = topics.slice(0, SHOWN);
 const more = topics.slice(SHOWN);
-const topicsOf = (tags: string[]) => ` ${[...new Set(tags.map(slugify))].join(' ')} `;
+const topicsOf = (tags: string[]) => [...new Set(tags.map((t) => keyOf.get(slugify(t))))].join(' ');
 
-// One rule per topic: hide what it does not cover, dim the latest post when it is not on the topic,
-// and say so when the latest post is the only one on it.
+// One rule per topic: the cards it does not cover get --rs-off (blog.css hides a feed card with it
+// and dims the latest post), and a note shows when the latest post is the only one on the topic.
 const filterCss = topics
   .map((t) => {
-    const on = `.rs-blog:has(#tp-${t.slug}:checked)`;
-    const rules = [
-      `${on} .rs-feed>li:not([data-topics~="${t.slug}"]){display:none}`,
-      `${on} .rs-feature:not([data-topics~="${t.slug}"]){opacity:.42;filter:saturate(.2)}`,
-    ];
-    if (t.feed === 0) rules.push(`${on} .rs-feed__empty{display:block}`);
-    return rules.join('');
+    const on = `.rs-blog:has(#${t.key}:checked)`;
+    return `${on} :is(.rs-feed>li,.rs-feature):not([data-t~=${t.key}]){--rs-off:none;--rs-dim:.42;--rs-f:saturate(.2)}` +
+      (t.feed === 0 ? `${on} .rs-feed__empty{display:block}` : '');
   })
   .join('');
 
@@ -81,8 +81,8 @@ const [latest, ...rest] = posts;
               <label class="rs-chip" for="tp-all">All topics</label>
               {lead.map((t) => (
                 <>
-                  <input class="rs-topic-in" type="radio" name="topic" id={`tp-${t.slug}`} value={t.slug} />
-                  <label class="rs-chip" for={`tp-${t.slug}`}>{t.label}</label>
+                  <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                  <label class="rs-chip" for={t.key}>{t.label}</label>
                 </>
               ))}
             </div>
@@ -92,8 +92,8 @@ const [latest, ...rest] = posts;
                 <div class="rs-topics__row">
                   {more.map((t) => (
                     <>
-                      <input class="rs-topic-in" type="radio" name="topic" id={`tp-${t.slug}`} value={t.slug} />
-                      <label class="rs-chip" for={`tp-${t.slug}`}>{t.label}</label>
+                      <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                      <label class="rs-chip" for={t.key}>{t.label}</label>
                     </>
                   ))}
                 </div>
@@ -102,7 +102,7 @@ const [latest, ...rest] = posts;
           </fieldset>
         </div>
         {latest && (
-          <div class="rs-feature arrive" style="--d:120ms" data-topics={topicsOf(latest.data.tags)}>
+          <div class="rs-feature arrive" style="--d:120ms" data-t={topicsOf(latest.data.tags)}>
             <PostCard
               href={`/blog/${latest.id}/`}
               title={latest.data.title}
@@ -127,7 +127,7 @@ const [latest, ...rest] = posts;
         {rest.map((post, i) => (
           <li
             class={`rs-feed__item rs-feed__item--${PATTERN[i % PATTERN.length]}`}
-            data-topics={topicsOf(post.data.tags)}
+            data-t={topicsOf(post.data.tags)}
             data-reveal={i >= REVEAL_FROM ? '' : undefined}
             style={i >= REVEAL_FROM ? `--i:${i % 3}` : undefined}
           >

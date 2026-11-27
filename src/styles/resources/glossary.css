@@ -1,3 +1,4 @@
+@import "./base.css";
 /* Glossary: the hub (card stack hero, A to Z bar, letter groups of term cards, the metric map) and
    the term pages (formula or concept card, definition card, body cards, related term cards, the
    side cards). src/pages/glossary/*. Shared parts are in base.css. */

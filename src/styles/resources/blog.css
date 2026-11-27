@@ -1,3 +1,4 @@
+@import "./base.css";
 /* Blog: the index (hero with the latest post and the topic filter, varied rows) and posts
    (article hero, page index with reading progress, card prose, CTA, "Keep reading").
    BlogLayout.astro, src/pages/blog/*, src/components/resources/PostCard.astro. Shared parts
@@ -59,7 +60,7 @@
   text-wrap: balance;
 }
 .rs-bhero .blog-head p { margin: 0; max-width: 46ch; font-size: var(--k-fs-lede); line-height: 1.6; color: var(--k-ink-3); text-wrap: pretty; }
-.rs-feature { position: relative; transition: opacity var(--k-d-base) var(--k-ease), filter var(--k-d-base) var(--k-ease); }
+.rs-feature { position: relative; opacity: var(--rs-dim, 1); filter: var(--rs-f, none); transition: opacity var(--k-d-base) var(--k-ease), filter var(--k-d-base) var(--k-ease); }
 .rs-feature::before {
   content: "";
   position: absolute;
@@ -116,7 +117,7 @@
 /* feed: varied rows (wide x2, standard x3, compact x4), an even grid while a topic is chosen */
 .rs-feedwrap { padding-top: clamp(40px, 5vw, 64px); }
 .rs-feed { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
-.rs-feed__item { grid-column: span 4; min-width: 0; }
+.rs-feed__item { grid-column: span 4; min-width: 0; display: var(--rs-off, block); }
 .rs-feed__item--wide { grid-column: span 6; }
 .rs-feed__item--row { grid-column: span 6; }
 .rs-feed__item--row .rs-pcard { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1fr); background: linear-gradient(135deg, var(--k-paper), color-mix(in srgb, var(--k-accent) 3%, var(--k-paper-2))); }
@@ -249,7 +250,7 @@
 .rs-tags li { padding: 4px 10px; border-radius: var(--k-r-pill); font-size: 12px; font-weight: 500; color: var(--k-ink-2); background: rgb(255 255 255 / 0.75); box-shadow: inset 0 0 0 1px var(--k-line); }
 
 /* ================= post: body ================= */
-.rs-body { display: grid; grid-template-columns: minmax(0, 720px); justify-content: center; padding-top: clamp(36px, 5vw, 60px); }
+.rs-body { display: grid; grid-template-columns: minmax(0, 720px); justify-content: start; padding-top: clamp(36px, 5vw, 60px); }
 .rs-article { min-width: 0; counter-reset: rs-h2 rs-fig; }
 @media (min-width: 1100px) {
   .rs-body.has-toc { grid-template-columns: 236px minmax(0, 720px); column-gap: 84px; justify-content: space-between; }
