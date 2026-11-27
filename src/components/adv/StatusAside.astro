@@ -1,7 +1,8 @@
 ---
 // Hero aside for the rule sheets and platform hubs: a glass card holding a StatusStrip
 // (the current page raised and ringed, the others linked), the status legend with the
-// current status lit, and the "Rules checked" and "Updated" lines. First viewport: the
+// current status lit, on a rule sheet its own top rejection reasons as a checklist, and the
+// "Rules checked" and "Updated" lines. First viewport: the
 // strip uses `arrive` (never hidden; cells cascade in by transform only).
 import StatusStrip from '../../kit/diagram/StatusStrip.astro';
 import type { StatusItem, Tone } from '../../kit/diagram/types';
@@ -17,12 +18,24 @@ interface Props {
   platform: string;
   checkedOn: string;
   updated: string;
+  /** Rule sheets: the sheet's own top rejection reasons, drawn as the card's checklist. A
+      decorative repeat of the #rejections list on the same page (aria-hidden), wide screens only. */
+  reasons?: { label: string; items: string[] };
 }
-const { label, caption, items, legend, orientation = 'row', compact = false, platform, checkedOn, updated } = Astro.props;
+const { label, caption, items, legend, orientation = 'row', compact = false, platform, checkedOn, updated, reasons } = Astro.props;
+const xIcon = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
 ---
 <div class="adv-aside k-card k-card--glass">
-  <p class="adv-aside__label"><span class="adv-aside__dot" aria-hidden="true"></span>{label}</p>
+  <p class="adv-aside__label"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>{label}</p>
   <StatusStrip arrive {caption} {items} {legend} {orientation} {compact} />
+  {reasons && reasons.items.length > 0 && (
+    <div class="adv-aside__check" aria-hidden="true" data-draw>
+      <p class="ch-k">{reasons.label}</p>
+      <ul>
+        {reasons.items.map((r, i) => <li style={`--i:${i}`}><span class="ch-tick ch-tick--x" set:html={xIcon} /><span>{r}</span></li>)}
+      </ul>
+    </div>
+  )}
   <p class="adv-aside__foot">
     <span>Rules checked against {platform}’s live policy on <time datetime={checkedOn}>{fmtDay(checkedOn)}</time></span>
     <span>Updated <time datetime={updated}>{fmtDay(updated)}</time></span>

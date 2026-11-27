@@ -3,41 +3,6 @@
    platform hubs. Kit tokens only (src/kit/KIT.md). Prefix: adv-.
    ============================================================ */
 
-/* ---------- status badge: the HeatMatrix cell chip (tinted, with its mark), one look for every status ---------- */
-.adv-badge {
-  --adv-ink: var(--k-accent-ink);
-  --adv-fill: var(--k-accent);
-  --adv-soft: var(--k-accent-soft);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 3px 10px 3px 4px;
-  border-radius: var(--k-r-sm);
-  background: var(--adv-soft);
-  color: var(--adv-ink);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--adv-fill) 22%, transparent);
-  font-size: 12.5px;
-  font-weight: 500;
-  line-height: 1.35;
-  white-space: nowrap;
-}
-.adv-badge[data-level="ok"] { --adv-ink: var(--k-ok-ink); --adv-fill: var(--k-ok); --adv-soft: var(--k-ok-soft); }
-.adv-badge[data-level="warn"] { --adv-ink: var(--k-warn-ink); --adv-fill: var(--k-warn); --adv-soft: var(--k-warn-soft); }
-.adv-badge[data-level="bad"] { --adv-ink: var(--k-bad-ink); --adv-fill: var(--k-bad); --adv-soft: var(--k-bad-soft); }
-.adv-badge__m {
-  flex: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-size: 9px;
-  line-height: 1;
-  background: var(--k-paper);
-  color: var(--adv-ink);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--adv-fill) 40%, transparent);
-}
-
 /* ---------- hero ---------- */
 .adv-hero .phero-grid { align-items: center; }
 /* rule sheets and hubs: long H1s, a compact status card */
@@ -236,31 +201,6 @@
 /* ---------- sidebar: other platforms and related reading share one card ---------- */
 .adv-links .adv-links__h { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--k-line); }
 
-/* ---------- sidebar index: progress spine ---------- */
-.adv-toc__rail { position: relative; }
-.adv-toc__rail ul { position: relative; z-index: 1; }
-.aside-toc.adv-toc a { margin-left: 0; padding-left: 14px; }
-.adv-toc__track {
-  position: absolute;
-  left: 0;
-  top: 2px;
-  bottom: 2px;
-  width: 2px;
-  border-radius: 2px;
-  overflow: clip;
-  background: var(--k-line);
-}
-.adv-toc__fill {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: color-mix(in srgb, var(--k-accent) 42%, transparent);
-}
-/* where scroll-driven CSS is missing, Toc.astro's fallback script drives the fill */
-@supports not (animation-timeline: view()) {
-  .js.motion .adv-toc__fill { scale: 1 0; }
-}
-
 /* ---------- index ---------- */
 .adv-index { max-width: 860px; }
 .prose .adv-cols { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 0; }
@@ -302,4 +242,69 @@
   .adv-aside { padding: 14px 12px 12px; border-radius: var(--k-r-lg); }
   .adv-matrix__card { padding-inline: 8px; margin-inline: calc(8px - var(--k-gutter)); }
   .adv-matrix__card .adv-aside__label, .adv-matrix__card .adv-aside__foot { padding-inline: 4px; }
+}
+
+/* ---------- hero card: the window dots, and the sheet's top rejection reasons as its checklist ---------- */
+.adv-aside__label .ch-dots { margin-right: 4px; }
+.adv-aside__check { display: grid; gap: 10px; padding-top: 14px; border-top: 1px solid var(--k-line); }
+.adv-aside__check ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.adv-aside__check li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 9px 12px 9px 10px;
+  border-radius: var(--k-r-sm);
+  background: var(--k-paper);
+  box-shadow: inset 0 0 0 1px var(--k-line), var(--k-e1);
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--k-ink-2);
+}
+.js.motion .adv-aside__check[data-draw].in li {
+  animation: k-pop var(--k-t-bounce) var(--k-spring-bounce) backwards;
+  animation-delay: calc(500ms + var(--i, 0) * 90ms);
+}
+@media (max-width: 1023px) { .adv-aside__check { display: none; } }
+
+/* ---------- the pre-launch checklist: a receipt card ---------- */
+.prose .adv-checklist.ch-receipt { padding: 0; margin: 18px 0 8px; background: var(--k-paper); border-color: var(--k-line); }
+.prose .adv-checklist .ch-receipt__bar .cl-label { margin: 0; color: var(--k-ok-ink); }
+.prose .adv-checklist .ch-rows { margin: 0; }
+.prose .adv-checklist .ch-receipt__foot { display: block; font-size: 13px; }
+
+/* ---------- requirements: a document card ---------- */
+.prose .adv-req { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 16px; padding: 20px 22px; background: var(--k-paper); border-color: var(--k-line); }
+.prose .adv-req :is(p, ul) { margin-bottom: 0; }
+.prose .adv-req .cl-label { color: var(--k-accent-ink); }
+
+/* ---------- enforcement: a night statement card ---------- */
+.adv-enforce { display: grid; gap: 14px; }
+.adv-enforce__mark { display: flex; gap: 6px; }
+.adv-enforce__mark span { width: 30px; height: 6px; border-radius: 3px; background: rgb(255 255 255 / .16); }
+.adv-enforce__mark span:nth-child(2) { background: color-mix(in srgb, var(--k-warn) 75%, transparent); }
+.adv-enforce__mark span:nth-child(3) { background: color-mix(in srgb, var(--k-bad) 80%, transparent); }
+.prose .adv-enforce p { font-size: clamp(15.5px, 1.3vw, 17px); line-height: 1.66; }
+
+/* ---------- the compliant path: a green-edged card with its tick ---------- */
+.prose .adv-path {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 16px;
+  padding: 20px 22px;
+  border-color: transparent;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--k-ok) 7%, var(--k-paper)), var(--k-paper)) padding-box,
+    linear-gradient(140deg, color-mix(in srgb, var(--k-ok) 60%, transparent), var(--k-line) 55%, color-mix(in srgb, var(--k-ok) 30%, transparent)) border-box;
+  box-shadow: var(--k-e2), var(--k-edge-light);
+}
+.adv-path__ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, var(--k-ok), color-mix(in srgb, var(--k-ok) 60%, #0e7490)); box-shadow: 0 10px 20px -10px color-mix(in srgb, var(--k-ok) 80%, transparent); }
+.adv-path__ico svg { width: 16px; height: 16px; }
+.prose .adv-path :is(p, ul) { margin-bottom: 0; }
+
+/* ---------- top rejection reasons: lift on hover ---------- */
+.prose .adv-rejects li { transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease); }
+@media (hover: hover) { .prose .adv-rejects li:hover { translate: 0 -2px; box-shadow: var(--k-e3), var(--k-edge-light); } }
+@media (max-width: 560px) {
+  .prose :is(.adv-req, .adv-path) { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 18px; }
 }

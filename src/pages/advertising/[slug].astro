@@ -7,7 +7,7 @@ import Flow from '../../kit/diagram/Flow.astro';
 import StatusAside from '../../components/adv/StatusAside.astro';
 import ChangeLog from '../../components/adv/ChangeLog.astro';
 import RuleTiers from '../../components/adv/RuleTiers.astro';
-import Toc from '../../components/adv/Toc.astro';
+import Toc from '../../components/Toc.astro';
 import { certFlowFor } from '../../components/adv/certFlows';
 import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, fmtDay, policyHref } from '../../components/adv/status';
 import { AD_POLICIES, getAdPolicy, platformOverview, POLICY_YEAR, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
@@ -18,6 +18,7 @@ import { getPublishedPosts } from '../../lib/blog';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { ogImageFor } from '../../lib/og';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
+import '../../styles/pages/chapters.css';
 import '../../styles/pages/advertising.css';
 
 export function getStaticPaths() {
@@ -123,6 +124,8 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}`, href: path }]),
   faqPage(p.faq),
 ];
+const tick = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const docIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>';
 const toc = [
   { id: 'status', label: 'Is it allowed?' },
   { id: 'cert', label: 'Certification' },
@@ -153,13 +156,14 @@ const toc = [
       platform={p.platform}
       checkedOn={RULES_CHECKED_ON}
       {updated}
+      reasons={{ label: 'Top rejection reasons', items: p.rejectionReasons.slice(0, 3) }}
     />
   </PageHero>
 
   <section class="iwrap adv-doc">
     <div class="container">
       <div class="doc-grid k-scrub-scope">
-        <div class="doc-main">
+        <div class="doc-main ch-doc">
           <div class="prose">
             {p.changeNotes && p.changeNotes.length > 0 && (
               <ChangeLog
@@ -175,12 +179,12 @@ const toc = [
             </p>
 
             {p.checklist && (
-              <div class="callout adv-checklist">
-                <span class="cl-label">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span>
-                <ul>
-                  {p.checklist.items.map((x) => <li>{x}</li>)}
+              <div class="callout adv-checklist ch-receipt ch-card">
+                <div class="ch-receipt__bar"><span class="cl-label">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+                <ul class="ch-rows">
+                  {p.checklist.items.map((x) => <li><span class="ch-tick" aria-hidden="true" set:html={tick} />{x}</li>)}
                 </ul>
-                <span class="adv-checklist__src">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
+                <span class="adv-checklist__src ch-receipt__foot">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
               </div>
             )}
 
@@ -196,7 +200,7 @@ const toc = [
             </div>
 
             <h2 id="requirements">Which disclaimers and landing-page rules apply?</h2>
-            <div class="callout"><span class="cl-label">Requirements</span><Fragment set:html={p.requirements} /></div>
+            <div class="callout adv-req ch-card" data-reveal><span class="adv-req__ico ch-ico" aria-hidden="true" set:html={docIcon} /><div><span class="cl-label">Requirements</span><Fragment set:html={p.requirements} /></div></div>
 
             <h2 id="rejections">Why do <Fragment set:html={inlineHtml} /> ads get rejected on {p.platform}?</h2>
             <ul class="adv-rejects">
@@ -206,10 +210,13 @@ const toc = [
             </ul>
 
             <h2 id="enforcement">What happens when {p.platform} enforces these rules?</h2>
-            <p set:html={p.enforcement} />
+            <div class="ch-night adv-enforce" data-reveal>
+              <span class="adv-enforce__mark" aria-hidden="true"><span></span><span></span><span></span></span>
+              <p set:html={p.enforcement} />
+            </div>
 
             <h2 id="comply">How do compliant <Fragment set:html={inlineHtml} /> brands still advertise on {p.platform}?</h2>
-            <div class="callout ok"><span class="cl-label">The compliant path</span><Fragment set:html={p.howToComply} /></div>
+            <div class="callout ok adv-path" data-reveal><span class="adv-path__ico" aria-hidden="true" set:html={tick} /><div><span class="cl-label">The compliant path</span><Fragment set:html={p.howToComply} /></div></div>
 
             {(p.sections ?? []).map((s) => (
               <>
@@ -223,13 +230,15 @@ const toc = [
             )}
 
             <h2 id="faq">What else do <Fragment set:html={inlineHtml} /> brands ask about {p.platform} ads?</h2>
-            <Faq items={p.faq} idPrefix={`adv-${p.slug}`} />
+            <div class="ch-panel ch-card"><Faq items={p.faq} idPrefix={`adv-${p.slug}`} /></div>
 
             <h3>Sources</h3>
-            <p class="adv-fine">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
-            <ul class="adv-sources">
-              {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
-            </ul>
+            <div class="ch-src">
+              <p class="adv-fine">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+              <ul class="adv-sources">
+                {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+              </ul>
+            </div>
           </div>
         </div>
 
