@@ -3,8 +3,9 @@
 // src/components/industry/Services.astro): the three services the page always listed, each a
 // linked tile with a drawing of the service (a soft orbit, a floating icon chip, a sheen that
 // crosses on hover). Paid media draws the ad account across the three platforms, creative fans
-// out three of the real ad creatives from public/ads (no numbers or results attached), CRO draws
-// a landing page with an eligibility quiz. Drawings are decorative; each tile's text is the link.
+// out three ad cards (the vertical's own matching creative from public/ads in the middle where it
+// has one, never with a number or result attached; drawn variants beside it), CRO draws a
+// landing page with an eligibility quiz. Drawings are decorative; each tile's text is the link.
 import Icon from './Icon.astro';
 
 interface Props {
@@ -12,10 +13,10 @@ interface Props {
   lead: string;
   accent: string;
   items: { t: string; d: string; href: string; art: string }[];
-  /** three creatives for the creative tile */
-  creatives: string[];
+  /** the vertical's matching creative, if it has one (plan.ts) */
+  creative?: string;
 }
-const { id, lead, accent, items, creatives } = Astro.props;
+const { id, lead, accent, items, creative } = Astro.props;
 const SPAN = ['b7', 'b5', 'b12'];
 const CHIP: Record<string, string> = { 'paid-media': 'chart', creative: 'play', cro: 'filter' };
 ---
@@ -40,8 +41,12 @@ const CHIP: Record<string, string> = { 'paid-media': 'chart', creative: 'play', 
             )}
             {s.art === 'creative' && (
               <span class="ix-g-fan">
-                {creatives.map((src, k) => (
-                  <span class="ix-g-card" style={`--k:${k}`}><img src={src} alt="" width="634" height="1136" loading="lazy" decoding="async" /></span>
+                {[0, 1, 2].map((k) => (
+                  <span class="ix-g-card" style={`--k:${k}`}>
+                    {k === 1 && creative
+                      ? <img src={creative} alt="" width="634" height="1136" loading="lazy" decoding="async" />
+                      : <span class="ix-g-var"><span class="ixs-play"><Icon name="play" /></span><i></i><i></i></span>}
+                  </span>
                 ))}
               </span>
             )}
