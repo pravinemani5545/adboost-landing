@@ -4,7 +4,7 @@
 
 /* ================= hub ================= */
 /* hero: a stack of term cards with the alphabet strip above (decorative) */
-.rs-gstack { position: relative; min-height: 340px; max-width: 520px; margin-inline: auto; }
+.rs-gstack { position: relative; min-height: 360px; max-width: 520px; margin-inline: auto; }
 .rs-gstack__az {
   display: grid;
   grid-template-columns: repeat(13, minmax(0, 1fr));
@@ -30,9 +30,9 @@
   border: 1px solid var(--k-line);
   box-shadow: var(--k-e3), var(--k-edge-light);
 }
-.rs-gstack__card--0 { right: 0; top: 70px; rotate: 5deg; opacity: 0.7; }
-.rs-gstack__card--1 { right: 7%; top: 92px; rotate: 2deg; opacity: 0.88; }
-.rs-gstack__card--2 { right: 15%; top: 118px; box-shadow: var(--k-e4), var(--k-edge-light), 0 40px 80px -40px rgb(var(--hue-a) / 0.5); }
+.rs-gstack__card--0 { right: 0; top: 100px; rotate: 5deg; opacity: 0.7; }
+.rs-gstack__card--1 { right: 6%; top: 118px; rotate: 2deg; opacity: 0.88; }
+.rs-gstack__card--2 { right: 13%; top: 140px; box-shadow: var(--k-e4), var(--k-edge-light), 0 40px 80px -40px rgb(var(--hue-a) / 0.5); }
 .rs-gstack__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .rs-gstack__name { font-size: 30px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; color: var(--k-ink); }
 .rs-gstack__x { font-size: 13.5px; color: var(--k-ink-3); }

@@ -269,3 +269,30 @@
   .rs-appbar { margin: 0 -16px; padding: 12px 16px; }
   .rs-tcard2__body { padding: 20px; }
 }
+
+/* POAS: the formula block above the calculator as a card */
+.rs-tool .poas-formula-h { font-size: clamp(22px, 2.4vw, 28px); line-height: 1.2; letter-spacing: -0.024em; margin: 0 0 14px; }
+.rs-tool .tool-doc > p.poas-formula {
+  margin: 0 0 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--k-accent-line);
+  border-radius: 18px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--k-accent) 7%, var(--k-paper)), var(--k-paper) 65%);
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  font-size: 15.5px;
+}
+.rs-tool .poas-formula code {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 10px;
+  padding: 9px 14px;
+  border-radius: 12px;
+  font-family: var(--k-font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  color: #fff;
+  background: linear-gradient(160deg, #111836, var(--k-night));
+  box-shadow: var(--k-edge-night), 0 14px 28px -16px rgb(var(--hue-a) / 0.7);
+  overflow-wrap: anywhere;
+}

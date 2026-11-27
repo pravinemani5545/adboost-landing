@@ -42,7 +42,8 @@
 }
 :is(.rs-bhero__bg, .rs-phero__bg) { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
 :is(.rs-bhero__bg, .rs-phero__bg) .k-bg--grid { --k-grid-mask: 80% 70% at 22% 0%; }
-.rs-bhero__grid { display: grid; gap: 40px; }
+.rs-bhero__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; }
+.rs-bhero__head { min-width: 0; }
 @media (min-width: 1024px) {
   .rs-bhero__grid { grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr); gap: 56px; align-items: center; }
 }
@@ -183,7 +184,7 @@
   color: var(--k-ink);
   text-wrap: balance;
 }
-.rs-phero__grid { display: grid; gap: 28px; }
+.rs-phero__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 @media (min-width: 1000px) {
   .rs-phero__grid.has-art { grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr); gap: 48px; align-items: start; }
 }
