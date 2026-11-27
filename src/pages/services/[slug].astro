@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
+import Timeline from '../../kit/diagram/Timeline.astro';
+import { parsePhase } from '../../kit/diagram/parse';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
 import { SERVICES, getService } from '../../data/services';
@@ -8,6 +10,7 @@ import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { metaDescription } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
+import '../../styles/pages/services.css';
 
 export function getStaticPaths() {
   return SERVICES.map((s) => ({ params: { slug: s.slug } }));
@@ -53,23 +56,46 @@ const toc = [
   { id: 'depth', label: 'Why it matters in health' },
   { id: 'faq', label: 'FAQ' },
 ];
+// Hero Gantt: the weeks printed in each process phase ("Account & tracking audit · wk 1–2").
+// "ongoing" and "rolling" phases have no end, so they draw as open bars. Each row links to and
+// lights its process card below (and the card lights the row).
+const phases = s.process.map((p, i) => ({ ...parsePhase(p.phase), href: `#process-${i}` }));
+const ganttUnit = phases.find((p) => p.unit)?.unit;
+const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+// The stat card leads with the figure its own sentence turns on, copied out of that sentence
+// (skipped if the sentence no longer contains it).
+const STAT_FIGURE: Record<string, string> = { 'paid-media': '17.8%', creative: '30–50%', cro: '3–4×' };
+const statFigure = STAT_FIGURE[s.slug] && s.stat.text.includes(STAT_FIGURE[s.slug]) ? STAT_FIGURE[s.slug] : undefined;
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>{s.navLabel.toUpperCase()}</span>
-      <h1>{s.h1}</h1>
-      <p class="phero-lede">{s.lede}</p>
-      {updatedLabel && <div class="metabar" style="margin-top:12px"><span>AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
+  <PageHero
+    class="svc-hero"
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Services', href: '/services/' }, { label: s.name }]}
+    eyebrow={s.navLabel.toUpperCase()}
+    title={esc(s.h1)}
+    lede={esc(s.lede)}
+    art={`/art/services/${s.slug}`}
+  >
+    {updatedLabel && <div class="metabar svc-metabar"><span>AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
+    <div slot="aside" class="k-card k-card--float k-card--glass svc-plan">
+      <p class="svc-plan__head"><span class="svc-plan__title">How it works</span><span>{s.process.length} phases</span></p>
+      <Timeline
+        arrive
+        variant="gantt"
+        unit={ganttUnit}
+        rowIdPrefix="phase"
+        caption="Each phase on the weeks this page gives it. Open bars are ongoing work with no end date."
+        phases={phases}
+      />
     </div>
-  </section>
+  </PageHero>
 
-  <section class="iwrap">
+  <section class="iwrap svc-doc">
     <div class="container">
       <div class="doc-grid">
         <div class="doc-main">
-          <div class="answer-box reveal"><span class="al">In short</span>{s.answer}</div>
+          <div class="answer-box"><span class="al">In short</span>{s.answer}</div>
           <div class="prose">
             <h2 id="outcomes">What you get</h2>
             <ul class="checks">
@@ -79,9 +105,9 @@ const toc = [
             </ul>
 
             <h2 id="process">How it works</h2>
-            <div class="playbook">
-              {s.process.map((p) => (<div class="pb"><h3>{p.phase}</h3><p>{p.detail}</p></div>))}
-            </div>
+            <ol class="playbook svc-process">
+              {s.process.map((p, i) => (<li class="pb" id={`process-${i}`}><h3>{p.phase}</h3><p>{p.detail}</p></li>))}
+            </ol>
 
             {s.extra && (
               <>
@@ -96,12 +122,20 @@ const toc = [
                 <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{d}</li>
               ))}
             </ul>
-            <p style="font-size:14px;color:var(--mute)"><strong>Measured on:</strong> {s.howMeasured.join(' · ')}</p>
+            <div class="svc-measured">
+              <p class="svc-measured__label">Measured on</p>
+              <ul class="svc-chips">{s.howMeasured.map((m) => <li class="k-chip">{m}</li>)}</ul>
+            </div>
 
             <h2 id="depth">Why it’s different in health</h2>
             {s.deepPoints.map((d) => (<><h3>{d.h}</h3><p>{d.p}</p></>))}
 
-            <div class="callout"><span class="cl-label">By the numbers</span>{s.stat.text} <a href={s.stat.url} target="_blank" rel="noopener">({s.stat.source})</a></div>
+            <div class="k-stat svc-stat" data-reveal>
+              <p class="svc-stat__eyebrow">By the numbers</p>
+              {statFigure && <p class="k-stat__value svc-stat__value">{statFigure}</p>}
+              <p class="k-stat__label svc-stat__text">{s.stat.text}</p>
+              <a class="k-chip svc-stat__src" href={s.stat.url} target="_blank" rel="noopener">Source: {s.stat.source}<span aria-hidden="true"> ↗</span></a>
+            </div>
 
             <h2 id="faq">FAQ</h2>
             <Faq items={s.faq} idPrefix={`svc-${s.slug}`} />
@@ -129,7 +163,7 @@ const toc = [
             </div>
           )}
           <div class="aside-card dark">
-            <h4 style="color:#fff">See it on your account</h4>
+            <h4>See it on your account</h4>
             <p>Free audit with a senior strategist: a written plan you keep either way.</p>
             <a class="btn btn-primary" href="/book/">Book a call →</a>
           </div>
@@ -140,3 +174,21 @@ const toc = [
 
   <CtaBand />
 </BaseLayout>
+
+<script>
+  // Hovering or focusing a Gantt row lights its process card, and the card lights the row.
+  for (const card of document.querySelectorAll<HTMLElement>('.svc-process > [id^="process-"]')) {
+    const row = document.getElementById(`phase-${card.id.slice('process-'.length)}`);
+    if (!row) continue;
+    const set = (on: boolean) => {
+      row.classList.toggle('is-lit', on);
+      card.classList.toggle('is-lit', on);
+    };
+    for (const el of [row, card]) {
+      el.addEventListener('pointerenter', () => set(true));
+      el.addEventListener('pointerleave', () => set(false));
+      el.addEventListener('focusin', () => set(true));
+      el.addEventListener('focusout', () => set(false));
+    }
+  }
+</script>

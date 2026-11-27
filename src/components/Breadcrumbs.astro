@@ -1,12 +1,19 @@
 ---
+// Breadcrumb trail. Tracker contract: this is a <nav>, so it must never carry a /book/ link
+// (t.js would label the click "header").
 interface Props { items: { label: string; href?: string }[]; }
 const { items } = Astro.props;
 ---
 <nav class="crumbs" aria-label="Breadcrumb">
-  {items.map((it, i) => (
-    <>
-      {i > 0 && <span class="sep" aria-hidden="true">/</span>}
-      {it.href && i < items.length - 1 ? <a href={it.href}>{it.label}</a> : <span class="cur">{it.label}</span>}
-    </>
-  ))}
+  <ol>
+    {items.map((it, i) => {
+      const last = i === items.length - 1;
+      return (
+        <li>
+          {i > 0 && <span class="sep" aria-hidden="true">/</span>}
+          {it.href && !last ? <a href={it.href}>{it.label}</a> : <span class="cur" aria-current={last ? 'page' : undefined}>{it.label}</span>}
+        </li>
+      );
+    })}
+  </ol>
 </nav>

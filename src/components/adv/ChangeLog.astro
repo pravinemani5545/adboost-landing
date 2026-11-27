@@ -1,0 +1,42 @@
+---
+// A dated change log: the kit Timeline (log variant) plus the entries' source links, which
+// the Timeline cannot carry (diagram links are internal only). Entries render in the order
+// given: pass newest first. Dates keep the precision the data has (YYYY-MM stays a month).
+import Timeline from '../../kit/diagram/Timeline.astro';
+import type { Tone } from '../../kit/diagram/types';
+
+interface Entry {
+  date: string;
+  text: string;
+  badge?: string;
+  tone?: Tone;
+  sources?: { label: string; url: string }[];
+}
+interface Props {
+  entries: Entry[];
+  caption: string;
+  /** First-viewport placement: never hidden, draws on arrival. */
+  arrive?: boolean;
+  /** Label before the source links. */
+  sourcesLabel?: string;
+  class?: string;
+}
+const { entries, caption, arrive = false, sourcesLabel = 'Sources', class: cls } = Astro.props;
+const sources = [...new Map(entries.flatMap((e) => e.sources ?? []).map((s) => [s.url, s])).values()];
+---
+<div class:list={['adv-log', cls]}>
+  <Timeline
+    variant="log"
+    {arrive}
+    {caption}
+    phases={entries.map((e) => ({ label: e.text, meta: e.date, badge: e.badge, tone: e.tone }))}
+  />
+  {sources.length > 0 && (
+    <p class="adv-srcline">
+      <span class="adv-srcline__k">{sourcesLabel}</span>
+      {sources.map((s, i) => (
+        <>{i > 0 && <span class="adv-srcline__sep" aria-hidden="true">·</span>}<a href={s.url} target="_blank" rel="noopener">{s.label}</a></>
+      ))}
+    </p>
+  )}
+</div>

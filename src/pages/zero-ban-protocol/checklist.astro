@@ -175,8 +175,9 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
     /* Strip site chrome from the printed/saved PDF (BaseLayout nav/footer live
        outside this page's scoped styles, so these rules must be global). */
     @media print {
-      .nav, nav, footer, .skip-link, .mnav, .mobile-cta, #nav, #mnav { display: none !important; }
+      .nav, nav, footer, .fam, .skip-link, .mnav, .mobile-cta, #nav, #mnav { display: none !important; }
       html, body { background: #fff !important; }
+      body { padding-top: 0 !important; }
       main { padding-top: 0 !important; }
     }
   </style>

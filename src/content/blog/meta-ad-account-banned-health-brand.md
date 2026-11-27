@@ -11,6 +11,21 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["Meta ads", "account bans", "compliance", "health brands", "telehealth"]
 heroImage: "/blog/meta-ad-account-banned-health-brand.webp"
 heroAlt: "Illustration of a locked ad account dashboard with a recovery checklist in AdBoost blue"
+diagrams:
+  appeal-or-rebuild:
+    kind: decisiontree
+    caption: "Appeal first in most cases; rebuild only after documented denials or a circumvention flag."
+    root:
+      q: "Circumvention flag on your assets?"
+      yes: { result: "Rebuild, with new entity-level hygiene", tone: bad }
+      no:
+        q: "Two appeals denied with documentation?"
+        yes: { result: "Rebuild properly", tone: warn }
+        no:
+          q: "Business Manager itself disabled?"
+          yes: { result: "Appeal once, prepare rebuild in parallel", tone: accent }
+          no: { result: "Appeal", tone: ok, detail: "First disable, identifiable violation you can fix · Ad account disabled, Business Manager still active" }
+    note: "Someone offers you an \"aged agency account\"? Walk away. Every shortcut in this category is a circumvention trap wearing a costume."
 ---
 
 You opened Ads Manager and got the message every health founder dreads: *"Your ad account has been disabled."* Campaigns frozen mid-flight, pipeline dark, and a support interface that feels designed to make you give up.
@@ -32,6 +47,8 @@ Pull your last 30–60 days of rejected ads, your Account Quality history, and y
 ## Should you appeal or rebuild?
 
 Appeal first in most cases; rebuild only after documented denials or a circumvention flag. This is the decision that determines whether you're back in the auction in two weeks or fighting Meta for six months. The honest framework:
+
+<!-- diagram: appeal-or-rebuild -->
 
 | Situation | Move |
 |---|---|

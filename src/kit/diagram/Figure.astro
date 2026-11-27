@@ -1,0 +1,201 @@
+---
+// The frame every diagram renders in: <figure class="k-dg k-dg--{kind}"> with a visible
+// <figcaption>, an optional h3/h4 title, source line and "Illustrative example" tag.
+// It owns the diagram colour roles (--dg-*), read from the tone tokens so a diagram follows
+// the band it sits in, and the motion hooks (kit contract, src/kit/KIT.md):
+//   data-dg-anim="reveal"  the figure carries [data-reveal]: it fades and rises in, and its
+//                          parts draw when reveal.ts adds .in
+//   data-dg-anim="arrive"  first viewport (hero asides): [data-draw] instead, so the figure is
+//                          never hidden; its parts draw (transform only) when it gets .in
+//   (none)                 animate={false}: static
+// Parts sit at their keyframe start (paused) until .in. Without html.js.motion (no JS, reduced
+// motion, the 3s failsafe) nothing is hidden or animated and every diagram is fully drawn.
+import type { Base } from './types';
+
+interface Props extends Base { kind: string }
+
+const {
+  kind, caption, title, headingLevel = 3, source, theme, animate = true, arrive = false,
+  id, illustrative = false, class: cls,
+} = Astro.props;
+
+const Heading = headingLevel === 4 ? 'h4' : 'h3';
+const anim = animate ? (arrive ? 'arrive' : 'reveal') : undefined;
+const srcExternal = source?.href ? !source.href.startsWith('/') && !source.href.startsWith('#') : false;
+---
+<figure
+  id={id}
+  class:list={['k-dg', `k-dg--${kind}`, theme === 'night' && 'k-dg--night', cls]}
+  data-reveal={anim === 'reveal' ? '' : undefined}
+  data-draw={anim === 'arrive' ? '' : undefined}
+  data-dg-anim={anim}
+>
+  {title && <Heading class="k-dg__title">{title}</Heading>}
+  <div class="k-dg__body"><slot /></div>
+  <figcaption class="k-dg__cap">
+    {illustrative && <span class="k-dg__tag">Illustrative example</span>}
+    <span class="k-dg__captext">{caption}</span>
+    {source && (
+      <span class="k-dg__src">Source: {source.href
+        ? <a href={source.href} {...(srcExternal ? { target: '_blank', rel: 'noopener' } : {})}>{source.label}</a>
+        : source.label}</span>
+    )}
+  </figcaption>
+</figure>
+
+<style>
+  .k-dg {
+    /* colour roles: paper by default, from the tone the figure sits in */
+    --dg-fg: var(--t-fg);
+    --dg-fg-2: var(--t-fg-2);
+    --dg-fg-3: var(--t-fg-3);
+    --dg-line: var(--t-line);
+    --dg-line-2: var(--t-line-2);
+    --dg-card: var(--t-card);
+    --dg-card-line: var(--t-card-line);
+    --dg-glow: var(--t-glow);
+    --dg-accent: var(--t-accent);
+    --dg-accent-fill: var(--k-accent);
+    --dg-accent-soft: var(--k-accent-soft);
+    --dg-ok: var(--k-ok-ink);
+    --dg-ok-fill: var(--k-ok);
+    --dg-ok-soft: var(--k-ok-soft);
+    --dg-warn: var(--k-warn-ink);
+    --dg-warn-fill: var(--k-warn);
+    --dg-warn-soft: var(--k-warn-soft);
+    --dg-bad: var(--k-bad-ink);
+    --dg-bad-fill: var(--k-bad);
+    --dg-bad-soft: var(--k-bad-soft);
+    --dg-muted: color-mix(in srgb, var(--t-fg-3) 80%, var(--t-fg)); /* AA on --dg-muted-soft */
+    --dg-muted-fill: var(--t-line-2);
+    --dg-muted-soft: color-mix(in srgb, var(--t-fg) 4%, transparent);
+    --dg-ring: var(--k-accent);
+    --dg-raised: var(--k-e2);
+    --dg-inverse: var(--k-paper); /* text on a --dg-fg fill */
+    /* motion: inner draws start after the figure's own reveal has begun */
+    --dg-base: 140ms;
+
+    container: k-dg / inline-size;
+    position: relative;
+    margin: 0;
+    min-width: 0;
+    display: grid;
+    gap: var(--k-sp-4);
+    color: var(--dg-fg);
+    font-size: var(--k-fs-ui);
+    line-height: var(--k-lh-snug);
+  }
+
+  /* night: inside a night band, or theme="night" on a paper page */
+  :global(:is(.k-tone-night, [data-tone="night"])) .k-dg,
+  .k-dg--night {
+    --dg-accent: var(--k-accent-bright);
+    --dg-accent-soft: color-mix(in srgb, var(--k-accent) 24%, transparent);
+    --dg-ok: var(--k-ok-bright);
+    --dg-ok-soft: color-mix(in srgb, var(--k-ok) 18%, transparent);
+    --dg-warn: var(--k-warn-bright);
+    --dg-warn-soft: color-mix(in srgb, var(--k-warn) 16%, transparent);
+    --dg-bad: var(--k-bad-bright);
+    --dg-bad-soft: color-mix(in srgb, var(--k-bad) 20%, transparent);
+    --dg-muted-soft: rgb(255 255 255 / 0.05);
+    --dg-ring: var(--k-accent-bright);
+    --dg-raised: 0 18px 40px -18px rgb(0 0 0 / 0.7);
+    --dg-inverse: var(--k-night);
+  }
+  /* a paper or tint surface nested inside a night band is paper again */
+  :global([data-tone="night"] :is(.k-tone-paper, .k-tone-tint, [data-tone="paper"], [data-tone="tint"])) .k-dg:not(.k-dg--night) {
+    --dg-accent: var(--t-accent);
+    --dg-accent-soft: var(--k-accent-soft);
+    --dg-ok: var(--k-ok-ink);
+    --dg-ok-soft: var(--k-ok-soft);
+    --dg-warn: var(--k-warn-ink);
+    --dg-warn-soft: var(--k-warn-soft);
+    --dg-bad: var(--k-bad-ink);
+    --dg-bad-soft: var(--k-bad-soft);
+    --dg-muted-soft: color-mix(in srgb, var(--t-fg) 4%, transparent);
+    --dg-ring: var(--k-accent);
+    --dg-raised: var(--k-e2);
+    --dg-inverse: var(--k-paper);
+  }
+  .k-dg--night {
+    --dg-fg: var(--k-on-night);
+    --dg-fg-2: var(--k-on-night-2);
+    --dg-fg-3: var(--k-on-night-2);
+    --dg-line: rgb(255 255 255 / 0.12);
+    --dg-line-2: rgb(255 255 255 / 0.22);
+    --dg-card: rgb(255 255 255 / 0.04);
+    --dg-card-line: rgb(255 255 255 / 0.1);
+    --dg-glow: var(--k-accent-glow);
+    --dg-muted: var(--k-on-night-2);
+    --dg-muted-fill: rgb(255 255 255 / 0.24);
+    background: var(--k-night-2);
+    border-radius: var(--k-r-lg);
+    padding: clamp(var(--k-sp-4), 3cqi, var(--k-sp-6));
+    box-shadow: var(--k-edge-night), var(--k-e3);
+  }
+
+  .k-dg__title {
+    margin: 0;
+    font-size: var(--k-fs-h3);
+    font-weight: var(--k-fw-display);
+    line-height: var(--k-lh-tight);
+    letter-spacing: -0.015em;
+    color: var(--dg-fg);
+  }
+  .k-dg__body { min-width: 0; }
+
+  .k-dg__cap {
+    margin: 0;
+    text-align: left;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--k-sp-1) var(--k-sp-3);
+    font-size: var(--k-fs-small);
+    line-height: var(--k-lh-body);
+    color: var(--dg-fg-3);
+  }
+  .k-dg__captext { flex: 1 1 24ch; min-width: 0; }
+  .k-dg__tag {
+    flex: none;
+    align-self: center;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--dg-fg-2);
+    border: 1px solid var(--dg-line-2);
+    border-radius: var(--k-r-pill);
+    padding: 3px 9px;
+  }
+  .k-dg__src { flex: 1 1 100%; }
+  .k-dg__src a {
+    color: var(--dg-accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  /* inside article prose: room around the figure, and prose list rules kept out */
+  :global(.prose) .k-dg { margin-block: var(--k-sp-6); }
+  .k-dg :global(:is(ul, ol) > li) { margin-block: 0; }
+  .k-dg.k-dg :global(:is(ul, ol)) { max-width: none; }
+
+  /* shared by every diagram component */
+  .k-dg :global(.k-vh) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .k-dg :global(a:focus-visible) {
+    outline: 2px solid var(--dg-ring);
+    outline-offset: 2px;
+  }
+  @media print {
+    .k-dg :global(*) { animation: none !important; transition: none !important; }
+  }
+</style>

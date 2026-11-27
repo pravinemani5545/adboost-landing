@@ -11,6 +11,40 @@ heroImage: "/blog/telehealth-cac-benchmarks-2026.webp"
 heroAlt: "Clean data visualization of descending CAC bars in AdBoost blue on a white background"
 ctaHeading: "Benchmark your CAC against your vertical."
 ctaText: "Free 30-minute call. We audit your account against vertical benchmarks and hand you the written plan."
+diagrams:
+  cac-ranges:
+    kind: bars
+    variant: range
+    prefix: "$"
+    min: 0
+    max: 500
+    ticks: [0, 100, 200, 300, 400, 500]
+    axisLabel: "Typical blended CAC"
+    caption: "Ranges reflect blended CAC across AdBoost Health partner accounts in each vertical over the trailing 12 months, Meta + Google + TikTok combined. The Strong and Concerning lines sit under each label."
+    items:
+      - label: "Weight loss / GLP-1"
+        display: "$150–$350"
+        range: [150, 350]
+        unitNote: "Strong:\u00a0under\u00a0$180 · Concerning:\u00a0over\u00a0$400"
+        href: "/industries/glp-1-weight-loss/"
+      - label: "Hair loss / dermatology"
+        display: "$80–$180"
+        range: [80, 180]
+        unitNote: "Strong:\u00a0under\u00a0$100 · Concerning:\u00a0over\u00a0$220"
+      - label: "Mental health"
+        display: "$120–$280"
+        range: [120, 280]
+        unitNote: "Strong:\u00a0under\u00a0$150 · Concerning:\u00a0over\u00a0$320"
+        href: "/industries/mental-health/"
+      - label: "Hormone / longevity"
+        display: "$200–$450"
+        range: [200, 450]
+        unitNote: "Strong:\u00a0under\u00a0$250 · Concerning:\u00a0over\u00a0$500"
+      - label: "Supplements (subscription)"
+        display: "$40–$110"
+        range: [40, 110]
+        unitNote: "Strong:\u00a0under\u00a0$55 · Concerning:\u00a0over\u00a0$130"
+        href: "/industries/supplements-dtc/"
 ---
 
 "Is our CAC good?" is the most common question founders ask on our strategy calls - usually because their agency reports [CAC](/glossary/cac/) in a vacuum, with no category context. A $250 CAC can be excellent or existential depending on your vertical, AOV, and retention curve.
@@ -20,6 +54,8 @@ Across the health and [telehealth accounts](/industries/telehealth/) AdBoost Hea
 ## What is a good CAC for a telehealth brand in 2026?
 
 A good blended CAC in 2026 runs roughly $80–$180 for hair loss and dermatology, $120–$280 for mental health, $150–$350 for weight loss and GLP-1, $200–$450 for hormone and longevity, and $40–$110 for subscription supplements. The full ranges, from first ad dollar to converted patient (and how to calculate [patient acquisition cost](/blog/patient-acquisition-cost/) for your own account):
+
+<!-- diagram: cac-ranges -->
 
 | Vertical | Typical blended CAC | Strong | Concerning |
 |---|---|---|---|

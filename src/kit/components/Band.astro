@@ -1,0 +1,49 @@
+---
+// A page band: <section class="k-band" data-tone> with optional background layers behind the
+// content. tone="night" with slab renders paper around an inset, rounded night slab (the
+// default for night content inside a page); without slab it is full bleed.
+//   <Band tone="tint" layers={['grid']}>...</Band>
+//   <Band tone="night" slab layers={['aura', 'noise']} id="cta">...</Band>
+// container wraps the slot in .k-container (default true). dots adds the cursor spotlight
+// (data-dots); it implies the 'dots' layer.
+type Layer = 'grid' | 'dots' | 'aura' | 'mesh' | 'noise';
+interface Props {
+  tone?: 'paper' | 'tint' | 'night';
+  layers?: Layer[];
+  slab?: boolean;
+  size?: 'md' | 'sm' | 'flush';
+  container?: boolean;
+  dots?: boolean;
+  as?: 'section' | 'div' | 'aside' | 'header';
+  id?: string;
+  class?: string;
+  label?: string;
+  [key: `data-${string}`]: string | undefined;
+}
+const {
+  tone = 'paper', layers = [], slab = false, size = 'md', container = true, dots = false,
+  as: Tag = 'section', id, class: cls, label, ...rest
+} = Astro.props;
+const all = new Set<Layer>(dots ? [...layers, 'dots'] : layers);
+// noise is a night-only texture
+if (tone !== 'night') all.delete('noise');
+const isSlab = slab && tone === 'night';
+const sizeClass = size === 'sm' ? 'k-band--sm' : size === 'flush' ? 'k-band--flush' : null;
+---
+{isSlab ? (
+  <Tag id={id} class:list={['k-band', 'k-band--slab', cls]} data-tone="paper" aria-label={label} {...rest}>
+    <div class:list={['k-slab', sizeClass]} data-tone="night" data-dots={dots ? '' : undefined}>
+      {[...all].map((l) => l === 'dots'
+        ? <div class="k-bg k-bg--dots" aria-hidden="true"><div class="k-dots-clip"><div class="k-dots-spot"></div></div></div>
+        : <div class={`k-bg k-bg--${l}`} aria-hidden="true"></div>)}
+      {container ? <div class="k-container"><slot /></div> : <slot />}
+    </div>
+  </Tag>
+) : (
+  <Tag id={id} class:list={['k-band', sizeClass, cls]} data-tone={tone} data-dots={dots ? '' : undefined} aria-label={label} {...rest}>
+    {[...all].map((l) => l === 'dots'
+      ? <div class="k-bg k-bg--dots" aria-hidden="true"><div class="k-dots-clip"><div class="k-dots-spot"></div></div></div>
+      : <div class={`k-bg k-bg--${l}`} aria-hidden="true"></div>)}
+    {container ? <div class="k-container"><slot /></div> : <slot />}
+  </Tag>
+)}

@@ -10,6 +10,15 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["scaling", "media buying", "CAC", "paid media", "growth strategy"]
 heroImage: "/blog/scale-health-brand-50k-500k.webp"
 heroAlt: "Spend-tier staircase chart climbing from 50K to 500K in AdBoost blue"
+diagrams:
+  spend-tiers:
+    kind: ladder
+    direction: up
+    caption: "What usually breaks as monthly spend steps up a tier. Blended CAC drifting up 10–25% per major tier is normal; 50%+ jumps mean something structural broke. Steps are evenly spaced, not to scale."
+    levels:
+      - { label: "$50–100K", detail: "Creative fatigue outpaces production" }
+      - { label: "$100–250K", detail: "Single-channel marginal CAC turns ugly" }
+      - { label: "$250–500K", detail: "Measurement and cash flow, not ads" }
 ---
 
 Every founder who's scaled past $50K/month in ad spend has met the same wall: spend goes up 40%, CAC goes up 60%, and the P&L that worked at $50K quietly stops working at $90K. Most conclude the account is "saturated." It almost never is - what's actually happening is that the *system* that produced $50K/month efficiency was never built to produce $300K/month efficiency, and each tier of spend breaks a different part of it.
@@ -21,6 +30,8 @@ At AdBoost Health we've sat inside this climb across 71+ partner accounts and $1
 The mechanism is marginal cost, and a 10–25% blended-CAC drift per spend tier is normal. Your first dollars buy your most obvious customers: high-intent audiences, proven creative, warm retargeting. Each additional dollar has to reach someone slightly less likely to convert. **Marginal CAC - what the *next* $10K/month costs, not the blended average - is the number that governs scaling**, and most dashboards don't show it.
 
 What we see across partner accounts as spend steps up a tier on a single channel: blended CAC drifting up 10–25% per major tier is normal physics; 50%+ jumps mean something structural broke - usually creative supply or offer depth, not "audience saturation." The tiers, roughly:
+
+<!-- diagram: spend-tiers -->
 
 | Monthly spend | What usually breaks | What the account needs |
 |---|---|---|

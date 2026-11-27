@@ -1,0 +1,54 @@
+---
+// Every page's SEO head: title, description, robots, canonical, Open Graph, Twitter and JSON-LD.
+// og:image defaults to the page's own card (src/lib/og.ts, falling back to the site card); og:
+// and twitter: titles and descriptions default to the page's and can be overridden one by one.
+// og:image is always JPEG or PNG, never WebP (Facebook's scraper does not render WebP).
+import { ogImageFor } from '../../lib/og';
+import { siteBase } from '../../lib/site';
+import type { SiteHeadProps } from './head';
+
+type Props = SiteHeadProps;
+
+const {
+  title, description, canonicalPath, canonical: canonicalUrl, robots, ogType = 'website',
+  ogTitle = title, ogDescription = description, ogImage, ogImageAlt = title,
+  twitterTitle = ogTitle, twitterDescription = ogDescription, article, jsonLd,
+  bingVerify = false, social = true,
+} = Astro.props;
+
+const SITE = siteBase(Astro.site);
+const canonical = canonicalUrl ?? (canonicalPath ? `${SITE}${canonicalPath}` : undefined);
+const pagePath = canonicalPath ?? (canonical ? new URL(canonical).pathname : Astro.url.pathname);
+const ogPath = ogImage ?? ogImageFor(pagePath);
+const ogImageUrl = ogPath.startsWith('http') ? ogPath : `${SITE}${ogPath}`;
+const nodes = jsonLd == null ? null : Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+const ld = nodes && (nodes.length === 1 ? nodes[0] : { '@context': 'https://schema.org', '@graph': nodes });
+---
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+{robots && <meta name="robots" content={robots} />}
+<meta name="theme-color" content="#ffffff" />
+{bingVerify && <meta name="msvalidate.01" content="3FBFCB25924FCFDB29CB3D608918D577" />}
+{bingVerify && <meta name="msvalidate.01" content="B5351106503BCB2A44F89DA49D24780C" />}
+{social && (
+  <>
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={ogTitle} />
+    {ogDescription && <meta property="og:description" content={ogDescription} />}
+    <meta property="og:site_name" content="AdBoost Health" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    {article && <meta property="article:published_time" content={article.publishedTime} />}
+    {article && <meta property="article:author" content={article.author} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={twitterTitle} />
+    {twitterDescription && <meta name="twitter:description" content={twitterDescription} />}
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+  </>
+)}
+{canonical && <link rel="canonical" href={canonical} />}
+<link rel="alternate" type="application/rss+xml" title="AdBoost Health Blog" href={`${SITE}/rss.xml`} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+{ld && <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />}

@@ -1,0 +1,17 @@
+---
+// Diagram kit fixtures route: /free/kit/diagrams/ and /free/kit/diagrams-night/. Never ships: it
+// lives outside src/pages and astro.config.mjs injects it only in dev and PREVIEW_ALL=1 builds, so a
+// production build has no fixture page in its module graph (and no fixture-named CSS chunks).
+// It sits under /free/ because the sitemap and the content-date guard skip that prefix.
+import Fixtures from './Fixtures.astro';
+
+export function getStaticPaths() {
+  return [
+    { params: { fixture: 'diagrams' }, props: { night: false } },
+    { params: { fixture: 'diagrams-night' }, props: { night: true } },
+  ];
+}
+
+const { night } = Astro.props as { night: boolean };
+---
+<Fixtures night={night} />

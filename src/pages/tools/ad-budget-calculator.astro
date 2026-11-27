@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Figure from '../../kit/diagram/Figure.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
+import { budgetCalc } from './_calc';
+import '../../styles/pages/tools.css';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/ad-budget-calculator/';
@@ -19,61 +22,77 @@ const jsonLd = [
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator', href: path }]),
   faqPage(faq),
 ];
+
+// Default inputs, run through the same function the page script uses.
+const TARGET = 200;
+const CAC = 150;
+const AOV = 199;
+const r = budgetCalc(TARGET, CAC, AOV);
+// The chain's input terms echo what the visitor typed (not rounded: the budget uses them as typed).
+const count = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <section class="phero">
-    <div class="container">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator' }]} />
-      <span class="eyebrow sec-eyebrow" style="display:block;margin-top:16px"><span class="dot"></span>FREE TOOL</span>
-      <h1>Ad budget calculator</h1>
-      <p class="phero-lede">Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return.</p>
-    </div>
-  </section>
+  <PageHero
+    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator' }]}
+    eyebrow="FREE TOOL"
+    title="Ad budget calculator"
+    lede="Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return."
+  />
 
   <section class="iwrap-sm">
     <div class="container">
      <div class="doc-grid">
-      <div class="doc-main">
-      <div class="calc reveal">
+      <div class="doc-main tool-doc">
+      <div class="calc k-card k-card--float arrive">
         <div class="calc-fields">
           <div class="calc-field">
             <label for="target">Target new customers <span class="hint">(per month)</span></label>
-            <div class="calc-input"><input id="target" type="number" inputmode="decimal" value="200" min="0" style="padding-left:14px" /></div>
+            <div class="calc-input"><input id="target" type="number" inputmode="decimal" value={TARGET} min="0" /></div>
           </div>
           <div class="calc-field">
             <label for="cac3">Target CAC</label>
-            <div class="calc-input"><span class="pfx">$</span><input id="cac3" type="number" inputmode="decimal" value="150" min="0" /></div>
+            <div class="calc-input"><span class="pfx">$</span><input id="cac3" type="number" inputmode="decimal" value={CAC} min="0" /></div>
           </div>
           <div class="calc-field">
             <label for="aov">Avg. first-order / monthly revenue per customer</label>
-            <div class="calc-input"><span class="pfx">$</span><input id="aov" type="number" inputmode="decimal" value="199" min="0" /></div>
+            <div class="calc-input"><span class="pfx">$</span><input id="aov" type="number" inputmode="decimal" value={AOV} min="0" /></div>
           </div>
         </div>
-        <div class="calc-result">
-          <div class="cr-main">
-            <div class="cr-label">Monthly ad budget</div>
-            <div class="cr-value" id="budgetOut">$30,000</div>
-          </div>
+        <div class="calc-result" data-tone="night">
+          <Figure kind="chain" arrive class="tool-chain" caption="Ad budget = target new customers × CAC, with your numbers.">
+            <div class="tool-chain__eq">
+              <p class="tool-term tool-term--n"><span class="tool-term__k">Target new customers</span><span class="tool-term__v" id="chainN">{count(TARGET)}</span></p>
+              <span class="tool-op tool-op--x">×</span>
+              <p class="tool-term tool-term--cac"><span class="tool-term__k">Target CAC</span><span class="tool-term__v" id="chainCac">${count(CAC)}</span></p>
+              <div class="tool-chain__res">
+                <span class="tool-op tool-op--eq">=</span>
+                <div class="tool-term tool-term--res cr-main">
+                  <div class="cr-label">Monthly ad budget</div>
+                  <div class="cr-value" id="budgetOut">{r.budgetText}</div>
+                </div>
+              </div>
+            </div>
+          </Figure>
           <div class="cr-sub">
-            <div><div class="k">EXPECTED REVENUE</div><div class="v" id="revOut">$39,800</div></div>
-            <div><div class="k">BLENDED ROAS</div><div class="v" id="roasOut">1.3×</div></div>
+            <div><div class="k">EXPECTED REVENUE</div><div class="v" id="revOut">{r.revText}</div></div>
+            <div><div class="k">BLENDED ROAS</div><div class="v" id="roasOut">{r.roasText}</div></div>
           </div>
           <div class="cr-note">Plan on CAC and payback, not ROAS alone - retention decides the real return.</div>
         </div>
       </div>
-      <p style="color:var(--mute);font-size:13px;margin-top:14px">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/" style="color:var(--blue)">2026 health-vertical benchmarks</a>.</p>
+      <p class="tool-fine">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
 
-      <h2 class="sec-title" style="margin-top:40px">How the ad budget calculation works</h2>
-      <p style="color:var(--ink-2);line-height:1.72">Your monthly ad budget is a function of two numbers: how many customers you want and what each one costs to acquire. Set the target, use a realistic CAC for your vertical, and the budget follows.</p>
-      <ol style="margin-top:12px;padding-left:20px;line-height:1.72;color:var(--ink-2)">
-        <li style="margin-bottom:8px"><strong>Set your monthly customer target.</strong> Decide how many new customers or patients you want to acquire this month.</li>
-        <li style="margin-bottom:8px"><strong>Enter your target CAC.</strong> Use your current customer acquisition cost, or a <a href="/tools/cac-calculator/" style="color:var(--blue)">benchmark CAC</a> for your vertical.</li>
-        <li style="margin-bottom:8px"><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</li>
+      <h2 class="sec-title">How the ad budget calculation works</h2>
+      <p>Your monthly ad budget is a function of two numbers: how many customers you want and what each one costs to acquire. Set the target, use a realistic CAC for your vertical, and the budget follows.</p>
+      <ol class="tool-steps">
+        <li class="k-card k-card--flat" data-reveal><span><strong>Set your monthly customer target.</strong> Decide how many new customers or patients you want to acquire this month.</span></li>
+        <li class="k-card k-card--flat" data-reveal><span><strong>Enter your target CAC.</strong> Use your current customer acquisition cost, or a <a href="/tools/cac-calculator/">benchmark CAC</a> for your vertical.</span></li>
+        <li class="k-card k-card--flat" data-reveal><span><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</span></li>
       </ol>
-      <p style="color:var(--ink-2);line-height:1.72">One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/" style="color:var(--blue)">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/" style="color:var(--blue)">blended CAC</a>, not one platform's claimed number.</p>
+      <p>One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/">blended CAC</a>, not one platform's claimed number.</p>
 
-      <h2 class="sec-title" style="margin-top:36px">FAQ</h2>
-      <div style="margin-top:16px"><Faq items={faq} idPrefix="budget" /></div>
+      <h2 class="sec-title">FAQ</h2>
+      <div class="tool-faq"><Faq items={faq} idPrefix="budget" /></div>
       </div>
       <aside class="doc-aside">
         <div class="aside-card">
@@ -85,7 +104,7 @@ const jsonLd = [
           </div>
         </div>
         <div class="aside-card dark">
-          <h4 style="color:#fff">Plan your next quarter</h4>
+          <h4>Plan your next quarter</h4>
           <p>We'll pressure-test your budget and targets against your vertical's benchmarks.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
         </div>
@@ -95,28 +114,31 @@ const jsonLd = [
   </section>
 
   <CtaBand />
-
-  <script is:inline>
-    (function () {
-      const target = document.getElementById('target');
-      const cac = document.getElementById('cac3');
-      const aov = document.getElementById('aov');
-      const budgetOut = document.getElementById('budgetOut');
-      const revOut = document.getElementById('revOut');
-      const roasOut = document.getElementById('roasOut');
-      const money = (n) => '$' + Math.round(n).toLocaleString('en-US');
-      function calc() {
-        const t = parseFloat(target.value) || 0;
-        const c = parseFloat(cac.value) || 0;
-        const a = parseFloat(aov.value) || 0;
-        const budget = t * c;
-        const rev = t * a;
-        budgetOut.textContent = money(budget);
-        revOut.textContent = money(rev);
-        roasOut.textContent = budget > 0 ? (rev / budget).toFixed(1) + '×' : '-';
-      }
-      [target, cac, aov].forEach((el) => el.addEventListener('input', calc));
-      calc();
-    })();
-  </script>
 </BaseLayout>
+
+<script>
+  import { budgetCalc, num } from './_calc';
+
+  const target = document.getElementById('target') as HTMLInputElement;
+  const cac = document.getElementById('cac3') as HTMLInputElement;
+  const aov = document.getElementById('aov') as HTMLInputElement;
+  const budgetOut = document.getElementById('budgetOut')!;
+  const revOut = document.getElementById('revOut')!;
+  const roasOut = document.getElementById('roasOut')!;
+  const chainN = document.getElementById('chainN')!;
+  const chainCac = document.getElementById('chainCac')!;
+  const count = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+  function calc() {
+    const t = num(target);
+    const c = num(cac);
+    const r = budgetCalc(t, c, num(aov));
+    budgetOut.textContent = r.budgetText;
+    revOut.textContent = r.revText;
+    roasOut.textContent = r.roasText;
+    // live chain: the two inputs as the budget uses them
+    chainN.textContent = count(t);
+    chainCac.textContent = '$' + count(c);
+  }
+  [target, cac, aov].forEach((el) => el.addEventListener('input', calc));
+  calc();
+</script>

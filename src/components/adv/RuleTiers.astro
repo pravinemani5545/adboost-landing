@@ -1,0 +1,40 @@
+---
+// #prohibited as two tiers, honestly labelled: the platform's own written rules (prohibited[],
+// bad tone) against what we also keep out (guidance[], warn tone), which is AdBoost's
+// guidance, not the platform's wording. Guidance items may carry a citation link; Compare
+// renders text only, so those links move to the figure's source line. A sheet with no
+// guidance keeps a single list of the platform's rules.
+import Compare from '../../kit/diagram/Compare.astro';
+import { linksIn, stripTags } from './status';
+
+interface Props {
+  platform: string;
+  inline: string;
+  prohibited: string[];
+  guidance?: string[];
+  /** The sheet's sources, used to label a guidance item's link with its full source name. */
+  sources?: { label: string; url: string }[];
+}
+const { platform, inline, prohibited, guidance = [], sources = [] } = Astro.props;
+const links = guidance.flatMap(linksIn);
+if (links.length > 1) throw new Error(`[adv rule tiers] ${platform}/${inline}: more than one link in guidance; the figure carries one source`);
+const link = links[0] && { label: sources.find((s) => s.url === links[0].url)?.label ?? links[0].label, href: links[0].url };
+const xIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+---
+{guidance.length > 0 ? (
+  <Compare
+    variant="split"
+    class="adv-tiers"
+    caption={`Left: ${platform}’s own written rules. Right: what we also keep out of ${inline} creative. This is our guidance, not ${platform}’s wording.`}
+    source={link}
+    left={{ label: `${platform}’s written rules`, tone: 'bad', items: prohibited }}
+    right={{ label: `Our guidance, not ${platform}’s`, tone: 'warn', items: guidance.map(stripTags) }}
+  />
+) : (
+  <>
+    <p>{platform}’s own written rules:</p>
+    <ul class="xlist adv-xlist">
+      {prohibited.map((x) => <li><span class="xk" set:html={xIcon} />{x}</li>)}
+    </ul>
+  </>
+)}

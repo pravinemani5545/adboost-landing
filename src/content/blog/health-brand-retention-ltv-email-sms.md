@@ -10,6 +10,17 @@ authorTitle: "Co-Founder, AdBoost Health"
 tags: ["retention", "email marketing", "SMS", "LTV", "subscriptions", "lifecycle"]
 heroImage: "/blog/health-brand-retention-ltv-email-sms.webp"
 heroAlt: "Ascending cohort retention curves on a dashboard rendered in AdBoost blue"
+diagrams:
+  cohort-shape:
+    kind: compare
+    variant: vs
+    caption: "A healthy cohort holds 75%+ through the first rebill and flattens by cycle 3: what percentage of a monthly signup cohort is still active at each cycle."
+    left: { label: "Struggling account", items: [], tone: bad }
+    right: { label: "Healthy account", items: [], tone: ok }
+    rows:
+      - { label: "Cycle 2 (first rebill)", left: "50–60% survive", right: "75%+ survive" }
+      - { label: "Cycle 3", left: "steep continued drop", right: "curve begins flattening" }
+      - { label: "Cycle 6", left: "near zero", right: "a stable core remains" }
 ---
 
 Two supplement brands bid on the same Meta auction. Brand A breaks even at $45 CAC. Brand B breaks even at $110 because its average customer sticks around for seven orders instead of two. Brand B wins every auction that matters, scales into audiences Brand A can't touch, and - from the outside - looks like it has a better ad account. It doesn't. It has better retention.
@@ -27,6 +38,8 @@ Health is unusually well-suited to this game. Supplements, telehealth programs, 
 ## What does a healthy subscription cohort actually look like?
 
 A healthy cohort holds 75%+ through the first rebill and flattens by cycle 3 - the shape of the curve, not a blended "churn rate," is what matters: what percentage of a monthly signup cohort is still active at each cycle.
+
+<!-- diagram: cohort-shape -->
 
 | Cycle | Struggling account | Healthy account |
 |---|---|---|

@@ -1,0 +1,30 @@
+---
+// Hero aside for the rule sheets and platform hubs: a glass card holding a StatusStrip
+// (the current page raised and ringed, the others linked), the status legend with the
+// current status lit, and the "Rules checked" and "Updated" lines. First viewport: the
+// strip uses `arrive` (never hidden; cells cascade in by transform only).
+import StatusStrip from '../../kit/diagram/StatusStrip.astro';
+import type { StatusItem, Tone } from '../../kit/diagram/types';
+import { fmtDay } from './status';
+
+interface Props {
+  label: string;
+  caption: string;
+  items: StatusItem[];
+  legend?: { level: Tone; label: string }[];
+  orientation?: 'row' | 'column';
+  compact?: boolean;
+  platform: string;
+  checkedOn: string;
+  updated: string;
+}
+const { label, caption, items, legend, orientation = 'row', compact = false, platform, checkedOn, updated } = Astro.props;
+---
+<div class="adv-aside k-card k-card--glass">
+  <p class="adv-aside__label"><span class="adv-aside__dot" aria-hidden="true"></span>{label}</p>
+  <StatusStrip arrive {caption} {items} {legend} {orientation} {compact} />
+  <p class="adv-aside__foot">
+    <span>Rules checked against {platform}’s live policy on <time datetime={checkedOn}>{fmtDay(checkedOn)}</time></span>
+    <span>Updated <time datetime={updated}>{fmtDay(updated)}</time></span>
+  </p>
+</div>

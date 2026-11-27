@@ -1,0 +1,96 @@
+---
+// Ladder: ordered levels drawn as a staircase. The steps are uniform (the offset is
+// decoration, not data). direction="up" puts the first level at the bottom.
+import Figure from './Figure.astro';
+import type { LadderProps } from './types';
+import { fail } from './util';
+
+type Props = LadderProps;
+const { levels, current, direction = 'up', ...base } = Astro.props;
+if (!levels?.length) fail('ladder', base.caption, 'needs at least one level');
+const n = levels.length;
+---
+<Figure {...base} kind="ladder">
+  <ol class="dg-ladder" data-dir={direction} style={`--n:${n}`}>
+    {levels.map((l, i) => (
+      <li class="dg-rung" aria-current={current === i ? 'step' : undefined} style={`--i:${i};--k:${n === 1 ? 1 : i / (n - 1)}`}>
+        <span class="dg-num" aria-hidden="true">{i + 1}</span>
+        <div class="dg-rbody">
+          <p class="dg-label">{l.label}</p>
+          {l.detail && <p class="dg-detail">{l.detail}</p>}
+        </div>
+      </li>
+    ))}
+  </ol>
+</Figure>
+
+<style>
+  .dg-ladder {
+    --stair: clamp(10px, 5cqi, 44px);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .dg-ladder[data-dir="up"] { flex-direction: column-reverse; }
+  .dg-rung {
+    --tint: color-mix(in srgb, var(--dg-accent-fill) calc(28% + var(--k) * 72%), transparent);
+    position: relative;
+    margin-left: calc(var(--i) * var(--stair));
+    margin-right: calc((var(--n) - 1 - var(--i)) * var(--stair) * 0.25);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    padding: 12px 16px 12px 12px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+    box-shadow: var(--k-e1);
+    overflow: clip;
+  }
+  .dg-rung::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--tint);
+    transform-origin: bottom;
+  }
+  .dg-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-family: var(--k-font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--dg-accent);
+    background: var(--dg-accent-soft);
+  }
+  .dg-rbody { display: grid; gap: 3px; padding-top: 2px; min-width: 0; }
+  .dg-label { margin: 0; font-weight: 600; line-height: var(--k-lh-snug); color: var(--dg-fg); }
+  .dg-detail { margin: 0; font-size: var(--k-fs-small); line-height: var(--k-lh-body); color: var(--dg-fg-3); }
+  .dg-rung[aria-current] { border-color: color-mix(in srgb, var(--dg-accent-fill) 45%, var(--dg-card-line)); box-shadow: 0 0 0 2px var(--dg-ring), var(--dg-raised); }
+  .dg-rung[aria-current] .dg-num { background: var(--dg-accent-fill); color: var(--k-accent-on); }
+
+  :global(html.js.motion [data-dg-anim]) .dg-rung {
+    animation: k-dg-lad-in var(--k-t-soft) var(--k-spring-soft) backwards;
+    animation-delay: calc(var(--dg-base) + var(--i) * 2 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]) .dg-rung::before {
+    animation: k-dg-lad-bar var(--k-d-slow) var(--k-ease-out) backwards;
+    animation-delay: calc(var(--dg-base) + 180ms + var(--i) * 2 * var(--k-stagger));
+  }
+  :global(html.js.motion [data-dg-anim]:not(.in)) .dg-rung,
+  :global(html.js.motion [data-dg-anim]:not(.in)) .dg-rung::before { animation-play-state: paused; }
+
+  @keyframes k-dg-lad-in { from { transform: translateX(-14px); } }
+  @keyframes k-dg-lad-bar { from { transform: scaleY(0); } }
+</style>

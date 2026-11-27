@@ -1,0 +1,116 @@
+---
+// Swimlane: steps in order, each in the lane that owns it. Wide containers draw lanes as
+// rows (subgrid) with elbow connectors; narrow ones show the ordered list with each
+// step's lane as a visible tag. The lane is always in the step's own text.
+import Figure from './Figure.astro';
+import type { SwimlaneProps } from './types';
+import { fail, r4 } from './util';
+
+type Props = SwimlaneProps;
+const { lanes, steps, ...base } = Astro.props;
+if (!lanes?.length || !steps?.length) fail('swimlane', base.caption, 'needs lanes and steps');
+const laneIx = new Map(lanes.map((l, i) => [l.id, i]));
+for (const s of steps) if (!laneIx.has(s.lane)) fail('swimlane', base.caption, `step "${s.label}" names unknown lane "${s.lane}"`);
+const L = lanes.length;
+const C = steps.length;
+const wires = steps.slice(1).map((s, k) => {
+  const r1 = laneIx.get(steps[k].lane)! + 0.5;
+  const r2 = laneIx.get(s.lane)! + 0.5;
+  const x1 = k + 0.5;
+  const x2 = k + 1.5;
+  return r1 === r2 ? `M ${x1} ${r1} H ${x2}` : `M ${x1} ${r1} H ${r4(x1 + 0.5)} V ${r2} H ${x2}`;
+});
+const fit = C <= 4 ? 'sm' : C <= 6 ? 'md' : 'lg';
+---
+<Figure {...base} kind="swimlane">
+  <div class="dg-sw" data-fit={fit} style={`--lanes:${L};--cols:${C}`}>
+    <ul class="dg-lanes" aria-hidden="true">
+      {lanes.map((l, r) => <li class="dg-lane" style={`--r:${r + 1}`}><span class="dg-ll">{l.label}</span></li>)}
+    </ul>
+    <svg class="dg-wires" viewBox={`0 0 ${C} ${L}`} preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      {wires.map((d) => <path d={d} />)}
+    </svg>
+    <ol class="dg-steps">
+      {steps.map((s, i) => (
+        <li class="dg-step" style={`--c:${i + 2};--r:${laneIx.get(s.lane)! + 1};--i:${i}`}>
+          <span class="dg-lt">{lanes[laneIx.get(s.lane)!].label}</span>
+          <span class="dg-label">{s.label}</span>
+          {s.detail && <span class="dg-detail">{s.detail}</span>}
+        </li>
+      ))}
+    </ol>
+  </div>
+</Figure>
+
+<style>
+  .dg-sw { position: relative; }
+  .dg-lanes, .dg-wires { display: none; }
+  .dg-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: sw; }
+  .dg-step {
+    position: relative;
+    display: grid;
+    gap: 4px;
+    justify-items: start;
+    padding: 12px 14px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+    box-shadow: var(--k-e1);
+  }
+  .dg-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 100%;
+    width: 2px;
+    height: 18px;
+    background: var(--dg-line-2);
+  }
+  .dg-lt {
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--dg-accent);
+    background: var(--dg-accent-soft);
+    border-radius: var(--k-r-pill);
+    padding: 2px 8px;
+  }
+  .dg-label { font-weight: 600; color: var(--dg-fg); line-height: var(--k-lh-snug); }
+  .dg-detail { font-size: var(--k-fs-small); color: var(--dg-fg-3); line-height: var(--k-lh-snug); }
+
+  @container k-dg (min-width: 640px) {
+    .dg-sw[data-fit="sm"] { display: grid; grid-template-columns: minmax(84px, 0.7fr) repeat(var(--cols), minmax(0, 1fr)); grid-template-rows: repeat(var(--lanes), minmax(84px, auto)); }
+    .dg-sw[data-fit="sm"] .dg-lanes { display: grid; grid-column: 1 / -1; grid-row: 1 / -1; grid-template-columns: subgrid; grid-template-rows: subgrid; list-style: none; margin: 0; padding: 0; }
+    .dg-sw[data-fit="sm"] .dg-lane { grid-column: 1 / -1; grid-row: var(--r); display: flex; align-items: center; padding: 0 12px; border-top: 1px dashed var(--dg-line-2); background: var(--dg-muted-soft); }
+    .dg-sw[data-fit="sm"] .dg-lane:nth-child(even) { background: transparent; }
+    .dg-sw[data-fit="sm"] .dg-lane:last-child { border-bottom: 1px dashed var(--dg-line-2); }
+    .dg-sw[data-fit="sm"] .dg-wires { display: block; grid-column: 2 / -1; grid-row: 1 / -1; width: 100%; height: 100%; z-index: 1; }
+    .dg-sw[data-fit="sm"] .dg-steps { display: grid; grid-column: 1 / -1; grid-row: 1 / -1; grid-template-columns: subgrid; grid-template-rows: subgrid; gap: 0; z-index: 2; }
+    .dg-sw[data-fit="sm"] .dg-step { grid-column: var(--c); grid-row: var(--r); margin: 10px 8px; align-self: center; }
+    .dg-sw[data-fit="sm"] .dg-step::after { display: none; }
+    .dg-sw[data-fit="sm"] .dg-lt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; }
+  }
+  @container k-dg (min-width: 880px) {
+    .dg-sw[data-fit="md"] { display: grid; grid-template-columns: minmax(84px, 0.7fr) repeat(var(--cols), minmax(0, 1fr)); grid-template-rows: repeat(var(--lanes), minmax(84px, auto)); }
+    .dg-sw[data-fit="md"] .dg-lanes { display: grid; grid-column: 1 / -1; grid-row: 1 / -1; grid-template-columns: subgrid; grid-template-rows: subgrid; list-style: none; margin: 0; padding: 0; }
+    .dg-sw[data-fit="md"] .dg-lane { grid-column: 1 / -1; grid-row: var(--r); display: flex; align-items: center; padding: 0 12px; border-top: 1px dashed var(--dg-line-2); background: var(--dg-muted-soft); }
+    .dg-sw[data-fit="md"] .dg-lane:nth-child(even) { background: transparent; }
+    .dg-sw[data-fit="md"] .dg-lane:last-child { border-bottom: 1px dashed var(--dg-line-2); }
+    .dg-sw[data-fit="md"] .dg-wires { display: block; grid-column: 2 / -1; grid-row: 1 / -1; width: 100%; height: 100%; z-index: 1; }
+    .dg-sw[data-fit="md"] .dg-steps { display: grid; grid-column: 1 / -1; grid-row: 1 / -1; grid-template-columns: subgrid; grid-template-rows: subgrid; gap: 0; z-index: 2; }
+    .dg-sw[data-fit="md"] .dg-step { grid-column: var(--c); grid-row: var(--r); margin: 10px 6px; align-self: center; }
+    .dg-sw[data-fit="md"] .dg-step::after { display: none; }
+    .dg-sw[data-fit="md"] .dg-lt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; padding: 0; }
+  }
+  .dg-ll { font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--dg-fg-2); }
+  .dg-wires path { fill: none; stroke: var(--dg-accent-fill); stroke-width: 1.5; vector-effect: non-scaling-stroke; stroke-linejoin: round; opacity: 0.6; }
+
+  :global(html.js.motion [data-dg-anim]) .dg-step { animation: k-dg-sw-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 180ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-wires { animation: k-dg-sw-wipe calc(var(--cols) * 180ms + 300ms) linear backwards; animation-delay: calc(var(--dg-base) + 120ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-step, .dg-wires) { animation-play-state: paused; }
+
+  @keyframes k-dg-sw-in { from { transform: translateY(10px) scale(0.96); } }
+  @keyframes k-dg-sw-wipe { from { clip-path: inset(0 100% 0 0); } }
+</style>

@@ -1,0 +1,113 @@
+---
+// Equation: the page's printed formula as tokens (terms, operators, groups), and
+// optionally the page's own worked example under it. Tokens assemble in order; the
+// example's answer carries data-count (final value server-rendered) so the kit's count-up
+// can run it after the tokens land. Pass illustrative when the copy calls the example
+// illustrative.
+import Figure from './Figure.astro';
+import type { EquationProps } from './types';
+import { parseFormula, type FormulaToken } from './parse';
+import { fail } from './util';
+
+type Props = EquationProps;
+const { formula, example, ...base } = Astro.props;
+const eqs = parseFormula(formula ?? '');
+if (!eqs.length) fail('equation', base.caption, 'needs a formula');
+const ex = example ? parseFormula(example) : [];
+if (example && ex.length !== 1) fail('equation', base.caption, 'example must be one equation');
+
+let t = 0;
+const tick = () => t++;
+const formulaRows = eqs.map((e) => {
+  const eqAt = e.lhs.length;
+  return e.tokens.map((tok, j) => ({ tok, i: tick(), lhs: eqAt > 0 && j < eqAt }));
+});
+const exRow = ex[0]?.tokens.map((tok) => ({ tok, i: tick() })) ?? [];
+const result = ex[0]?.result;
+const cls = (tok: FormulaToken) => (tok.type === 'op' ? `dg-op dg-op-${tok.op === '=' ? 'eq' : 'x'}` : `dg-${tok.type}`);
+const countDelay = 140 + t * 70 + 200;
+---
+<Figure {...base} kind="equation">
+  <div class="dg-eqn">
+    {formulaRows.map((row) => (
+      <p class="dg-line dg-formula">
+        {row.map(({ tok, i, lhs }) => (
+          <span class:list={[cls(tok), lhs && 'dg-lhs']} style={`--i:${i}`}>{tok.text}</span>
+        ))}
+      </p>
+    ))}
+    {exRow.length > 0 && (
+      <p class="dg-line dg-example">
+        <span class="dg-lead" aria-hidden="true">→</span>
+        {exRow.map(({ tok, i }) => {
+          if (result && tok === result) {
+            const n = result.number;
+            return (
+              <span
+                class="dg-term dg-res"
+                style={`--i:${i};--w:${tok.text.length}`}
+                data-count={n.value}
+                data-prefix={n.prefix || undefined}
+                data-suffix={n.suffix || undefined}
+                data-decimals={n.decimals || undefined}
+                data-count-delay={countDelay}
+              >{tok.text}</span>
+            );
+          }
+          return <span class={cls(tok)} style={`--i:${i}`}>{tok.text}</span>;
+        })}
+      </p>
+    )}
+  </div>
+</Figure>
+
+<style>
+  .dg-eqn { display: grid; gap: 14px; }
+  .dg-line { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 8px; line-height: var(--k-lh-snug); }
+  .dg-term {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 12px;
+    border-radius: var(--k-r-sm);
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    box-shadow: var(--k-e1);
+    color: var(--dg-fg);
+    font-weight: 500;
+  }
+  .dg-term.dg-lhs {
+    background: var(--dg-accent-fill);
+    border-color: transparent;
+    color: var(--k-accent-on);
+    font-weight: 600;
+    box-shadow: 0 10px 22px -12px var(--dg-glow);
+  }
+  .dg-op { font-size: 1.25em; font-weight: 500; color: var(--dg-accent); padding: 0 2px; line-height: 1; }
+  .dg-paren { font-size: 1.6em; font-weight: 300; color: var(--dg-fg-3); line-height: 1; }
+  .dg-example { padding-top: 14px; border-top: 1px dashed var(--dg-line-2); font-family: var(--k-font-mono); font-size: var(--k-fs-small); }
+  .dg-example .dg-term { padding: 5px 10px; box-shadow: none; background: transparent; font-variant-numeric: tabular-nums; }
+  .dg-lead { color: var(--dg-fg-3); margin-right: 2px; }
+  .dg-example .dg-res {
+    background: var(--dg-accent-soft);
+    border-color: color-mix(in srgb, var(--dg-accent-fill) 30%, transparent);
+    color: var(--dg-accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: calc(var(--w) * 1ch + 20px);
+    justify-content: center;
+  }
+  @container k-dg (min-width: 520px) {
+    .dg-formula { font-size: var(--k-fs-body); }
+    .dg-term { padding: 8px 14px; }
+  }
+
+  /* motion: tokens assemble left to right, operators drop in, the answer pops last */
+  :global(html.js.motion [data-dg-anim]) .dg-term { animation: k-dg-eq-in var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 70ms); }
+  :global(html.js.motion [data-dg-anim]) :is(.dg-op, .dg-paren, .dg-lead) { animation: k-dg-eq-drop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 70ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-res { animation: k-dg-eq-pop var(--k-t-bounce) var(--k-spring-bounce) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 70ms + 120ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-term, .dg-op, .dg-paren, .dg-lead, .dg-res) { animation-play-state: paused; }
+
+  @keyframes k-dg-eq-in { from { transform: translateX(-12px); } }
+  @keyframes k-dg-eq-drop { from { transform: translateY(-10px) scale(0.6); } }
+  @keyframes k-dg-eq-pop { from { transform: scale(0.6); } }
+</style>

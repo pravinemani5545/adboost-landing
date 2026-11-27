@@ -1,0 +1,47 @@
+/* AdBoost Health brand values for the kit (src/kit/KIT.md, section "Site tokens").
+   Media and AgenticBoost ship their own copy of this file with their own values. */
+:root {
+  --k-accent: #0057ff;               /* fill */
+  --k-accent-strong: #0048d9;        /* fill, hover */
+  --k-accent-on: #fff;               /* text on the fill */
+  --k-accent-ink: #0057ff;           /* accent text on paper */
+  --k-accent-bright: #9bbcff;        /* accent text on night */
+  --k-accent-soft: #e7efff;
+  --k-accent-line: rgba(0, 87, 255, 0.28);
+  --k-accent-glow: rgba(0, 87, 255, 0.22);
+
+  --k-paper: #fff;
+  --k-paper-2: #f6f7f9;
+  --k-paper-3: #eceef3;
+  --k-ink: #0a0a0f;
+  --k-ink-2: #1a1b22;
+  --k-ink-3: #6b6f7a;                /* muted text, AA on paper and paper-2 */
+  --k-ink-4: #9aa0ac;                /* decorative only */
+  --k-line: #e5e7ee;
+  --k-line-2: #d8dce4;
+  --k-line-3: #c8cdd8;
+  --k-night: #0a0a0f;
+  --k-night-2: #0f0f17;
+  --k-on-night: #fff;
+  --k-on-night-2: rgba(255, 255, 255, 0.66);
+  --k-shadow-rgb: 10 10 15;
+  --k-fw-display: 600;
+  --k-container: 1240px;
+
+  --k-ok: #16a34a;
+  --k-ok-ink: #0a7a37;
+  --k-ok-soft: #e6f6ec;
+  --k-ok-bright: #7ee2a8;
+  --k-warn: #f5a623;
+  --k-warn-ink: #a15c00;
+  --k-warn-soft: #fdf6e7;
+  --k-warn-bright: #f5c26b;
+  --k-bad: #dc2626;
+  --k-bad-ink: #b42318;
+  --k-bad-soft: #fdecea;
+  --k-bad-bright: #ff8a6b;
+}
+/* true ultrawide (2K+) monitors only: laptops keep the 1240px container */
+@media (min-width: 2000px) {
+  :root { --k-container: 1440px; --k-gutter: 40px; }
+}

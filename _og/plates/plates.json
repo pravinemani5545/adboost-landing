@@ -1,0 +1,95 @@
+{
+  "style_light": "STYLE: abstract architectural still life photographed in a cool white seamless studio, backdrop and floor a soft cool white (#f6f7f9 fading to pure white). Materials: frosted glass and translucent layered acrylic sheets with crisp polished edges, matte white surfaces. The only colour accent is thin luminous lines of electric blue light (#0057ff), hairline width, used sparingly. Soft caustic light patterns refracted through the glass fall on the floor and backdrop, faintly blue tinted. Lab-clean minimal geometry, calm and precise, generous negative space. One soft diffuse key light from the upper left, gentle long shadows. High-key, low contrast, airy. Tack sharp glass edges, real light on real materials.",
+  "style_dark": "STYLE: abstract architectural still life photographed in a dark studio, backdrop and floor near black (#0a0a0f) with a faint deep navy falloff. Materials: smoked frosted glass and translucent layered sheets with crisp polished edges. The only colour accent is thin luminous lines of electric blue light (#0057ff), hairline width, used sparingly, with soft blue caustic reflections. Lab-clean minimal geometry, calm and precise, very generous empty dark space. Low key, quiet, premium. Tack sharp glass edges, real light on real materials.",
+  "rules": "PURELY ABSTRACT: the only things in the image are the glass forms described, the light lines, their reflections, caustics and shadows. Uninhabited. Completely free of any writing, markings, glyphs, symbols, icons, graphics, logos, numbers or watermarks; every surface is smooth and unmarked. No other objects or props of any kind. No neon, no lens flare, no bokeh balls, no warm tones, no 3D render look, no glossy plastic.",
+  "plates": [
+    {
+      "key": "advertising/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: seven thin frosted glass sheets with softly rounded corners stand upright in parallel, slightly offset in depth like the pages of a translucent file, viewed at a gentle three-quarter angle. A single thin horizontal line of electric blue light passes straight through every sheet at the same height like a scanning beam, glowing faintly where it crosses each pane. COMPOSITION: the group of sheets occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "advertising/meta",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: nine thin frosted glass sheets stand upright in a gentle concave arc, fanned like an open row, each sheet slightly overlapping the next. One thin line of electric blue light runs through the sheets as a single soft, low wave that rises and falls once across the arc. COMPOSITION: the arc occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "advertising/google",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: five thin frosted glass sheets lie flat and float stacked above one another with even gaps, each slightly smaller and offset back, forming a stepped translucent terrace. One thin vertical line of electric blue light drops straight down through the centre of every sheet, leaving a small soft blue glow where it passes through each pane. COMPOSITION: the stack occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "services/paid-media",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: three upright frosted glass panes stand one behind another at a slight angle. Four thin parallel lines of electric blue light travel horizontally through all three panes at different heights, bending very slightly and brightening where they refract through each pane, like signals passing through filters. COMPOSITION: the panes occupy the right half of the frame and the light lines fade out softly toward the left; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "services/creative",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: five tall square-cornered panels of thick frosted glass, each in a tall portrait proportion of exactly 9 wide by 16 high, stand upright in a staggered row receding in depth. Every panel is completely blank and empty, an even translucent frost with a polished edge. Only the nearest panel carries a thin outline of electric blue light along its four edges. COMPOSITION: the row occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "services/cro",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: five thin frosted glass rings stand upright on their edges, aligned one behind another along a diagonal, each ring noticeably smaller than the one before it, forming a translucent tunnel that narrows into the distance. A single thin line of electric blue light runs through the exact centre of all the rings. COMPOSITION: the rings occupy the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "services/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: three frosted glass forms rest on a low white plinth: a tall upright slab, a flat round disc standing on its edge, and a thin ring. Three thin lines of electric blue light connect the three forms into a clean triangle, floating just above the plinth. COMPOSITION: the group occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "industries/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: nine identical square frosted glass tiles float in a neat grid of exactly three rows and three columns with even gaps, tilted slightly back and seen in gentle perspective. Exactly one tile, the centre tile of the right column, glows softly from within with electric blue light and has a thin blue edge; the other eight tiles are plain frosted white. COMPOSITION: the grid occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "glossary/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: about twelve small clear frosted glass spheres of slightly different sizes rest and float at different depths, linked to their nearest neighbours by hairline filaments of electric blue light, forming a sparse, open network like a constellation. COMPOSITION: the network occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges.",
+      "takes": {
+        "2": "SCENE: about ten flat round frosted glass discs of slightly different diameters lie scattered on the white floor in a sparse, open arrangement, like lenses on a light table, seen from a high three-quarter angle. Hairline filaments of electric blue light run across the floor surface linking each disc to its nearest neighbours, forming a calm, flat network map. COMPOSITION: the network occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+      },
+      "selected": 2
+    },
+    {
+      "key": "compare/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: two thick frosted glass slabs of identical size stand upright side by side with a narrow gap between them. The right slab is lit softly from within with electric blue light and has a thin blue line along its edges; the left slab is plain matte frosted white. Soft caustics from both fall on the floor. COMPOSITION: the pair occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "tools/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: three round frosted glass discs of different sizes lie on the white floor like precision dials, each a smooth unmarked disc with a polished bevelled rim. Above each disc a single thin arc of electric blue light traces part of its circumference, like a gauge reading, each arc a different length. COMPOSITION: seen from a high three-quarter angle; the discs occupy the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "about/hub",
+      "ar": "16:9",
+      "tone": "light",
+      "scene": "SCENE: two tall frosted glass slabs stand on a white plinth, angled gently toward each other, with a lower translucent glass block between their bases. A thin line of electric blue light runs along the base, joining the three forms. COMPOSITION: the group occupies the right half of the frame; the left 40 percent is clean, empty, softly lit white studio space. Nothing touches the frame edges."
+    },
+    {
+      "key": "cta/night-1",
+      "ar": "21:9",
+      "tone": "dark",
+      "scene": "SCENE: layered smoked glass sheets recede into darkness at the far left and far right edges of the frame, their edges catching thin lines of electric blue light. COMPOSITION: wide panoramic frame; the central 60 percent is calm, empty, softly graded dark space with nothing in it."
+    },
+    {
+      "key": "cta/night-2",
+      "ar": "21:9",
+      "tone": "dark",
+      "scene": "SCENE: one long thin horizontal line of electric blue light spans the lower third of the frame, softly reflected in a glossy black floor; at the far right edge a few thin smoked glass rings stand upright and fade into darkness. COMPOSITION: wide panoramic frame; the centre and left are calm, empty, softly graded dark space."
+    }
+  ]
+}

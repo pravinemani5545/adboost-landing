@@ -8,6 +8,18 @@ heroImage: "/blog/healthcare-cro.webp"
 heroAlt: "AdBoost Health brand graphic: healthcare CRO and patient conversion, with a patient conversion funnel card"
 ctaHeading: "Find out where your visitors stop becoming patients."
 ctaText: "Free 30-minute call: we map your patient conversion funnel step by step, rank the leaks, and send you a written CRO plan either way."
+diagrams:
+  cro-roadmap:
+    kind: timeline
+    variant: gantt
+    unit: wk
+    caption: "Measure first, then fix the biggest leak, then test: a first 90 days, by week. The last row is ongoing, so its bar has no end."
+    phases:
+      - { label: "Funnel instrumentation", meta: "Weeks 1-2", start: 1, end: 2, detail: "Step events, call tracking, CRM match-back" }
+      - { label: "Qualitative research", meta: "Weeks 2-4", start: 2, end: 4, detail: "Ranked list of barriers by funnel step" }
+      - { label: "Obvious fixes", meta: "Weeks 3-6", start: 3, end: 6, detail: "Speed, mobile, form fields, message match" }
+      - { label: "Bold tests", meta: "Weeks 6-12", start: 6, end: 12, detail: "One or two high-impact tests on downstream metrics" }
+      - { label: "Follow-up operations", meta: "Ongoing", end: ongoing, detail: "Speed-to-lead and answer-rate targets" }
 ---
 
 Most healthcare marketing budgets are spent getting people to a website, and very little on what happens once they arrive. That is why so many practices and telehealth brands keep raising ad spend to hit the same patient numbers: the intent is real, and the site quietly lets most of it walk away.
@@ -122,6 +134,8 @@ Practical guardrails for any healthcare CRO program (this is operational guidanc
 ## What should a healthcare CRO roadmap look like?
 
 Measure first, then fix the biggest leak, then test. In practice, a first 90 days usually runs in this order:
+
+<!-- diagram: cro-roadmap -->
 
 | Phase | Focus | Output |
 |---|---|---|

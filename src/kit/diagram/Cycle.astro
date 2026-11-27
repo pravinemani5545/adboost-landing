@@ -1,0 +1,172 @@
+---
+// Cycle: steps that repeat. Wide containers place the steps on a ring with arrowed arcs
+// between them (aria-hidden SVG, uniform viewBox so the arcs draw with pathLength);
+// narrow ones show the ordered list with a return bracket from the last step to the first.
+import Figure from './Figure.astro';
+import type { CycleProps } from './types';
+import { fail, r4 } from './util';
+
+type Props = CycleProps;
+const { steps, center, ...base } = Astro.props;
+const n = steps?.length ?? 0;
+if (n < 3 || n > 8) fail('cycle', base.caption, `needs 3 to 8 steps (got ${n})`);
+
+const W = 100;
+const H = 80;
+const cx = 50;
+const cy = 40;
+const rx = 36;
+const ry = 29;
+const rad = (d: number) => (d * Math.PI) / 180;
+const at = (deg: number) => ({ x: cx + rx * Math.cos(rad(deg)), y: cy + ry * Math.sin(rad(deg)) });
+const step = 360 / n;
+const gap = Math.min(step * 0.3, 24);
+const nodes = steps.map((_, i) => {
+  const p = at(-90 + i * step);
+  return { x: r4((p.x / W) * 100), y: r4((p.y / H) * 100) };
+});
+const arcs = steps.map((_, i) => {
+  const t1 = -90 + i * step + gap;
+  const t2 = -90 + (i + 1) * step - gap;
+  const a = at(t1);
+  const b = at(t2);
+  const large = t2 - t1 > 180 ? 1 : 0;
+  const d = `M ${r4(a.x)} ${r4(a.y)} A ${rx} ${ry} 0 ${large} 1 ${r4(b.x)} ${r4(b.y)}`;
+  const th = rad(t2);
+  const alpha = Math.atan2(ry * Math.cos(th), -rx * Math.sin(th));
+  const L = 2.4;
+  const w = (s: number) => ({ x: r4(b.x + L * Math.cos(alpha + Math.PI + s)), y: r4(b.y + L * Math.sin(alpha + Math.PI + s)) });
+  const w1 = w(0.6);
+  const w2 = w(-0.6);
+  return { d, head: `M ${w1.x} ${w1.y} L ${r4(b.x)} ${r4(b.y)} L ${w2.x} ${w2.y}` };
+});
+const fit = n <= 4 ? 'sm' : n <= 6 ? 'md' : 'lg';
+---
+<Figure {...base} kind="cycle">
+  <div class="dg-cy" data-fit={fit}>
+    <svg class="dg-ring" viewBox={`0 0 ${W} ${H}`} aria-hidden="true" focusable="false">
+      {arcs.map((a, i) => (
+        <g style={`--i:${i}`}>
+          <path class="dg-arc" d={a.d} pathLength="1" />
+          <path class="dg-head" d={a.head} />
+        </g>
+      ))}
+    </svg>
+    {center && <p class="dg-center">{center}</p>}
+    <ol class="dg-steps">
+      {steps.map((s, i) => (
+        <li class="dg-step" style={`--i:${i};--x:${nodes[i].x}%;--y:${nodes[i].y}%`}>
+          <span class="dg-num" aria-hidden="true">{i + 1}</span>
+          <span class="dg-txt">
+            <span class="dg-sl">{s.label}</span>
+            {s.detail && <span class="dg-sd">{s.detail}</span>}
+          </span>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Figure>
+
+<style>
+  .dg-cy { position: relative; display: grid; gap: 12px; }
+  .dg-ring { display: none; }
+  .dg-center {
+    margin: 0;
+    justify-self: start;
+    font-family: var(--k-font-mono);
+    font-size: var(--k-fs-micro);
+    font-weight: 500;
+    letter-spacing: var(--k-ls-mono);
+    text-transform: uppercase;
+    color: var(--dg-accent);
+    background: var(--dg-accent-soft);
+    border-radius: var(--k-r-pill);
+    padding: 4px 10px;
+  }
+  .dg-steps { list-style: none; margin: 0; padding: 0 0 0 30px; display: grid; gap: 10px; position: relative; }
+  .dg-steps::before {
+    /* return bracket: last step back to the first */
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 20px;
+    bottom: 20px;
+    width: 16px;
+    border: 2px solid var(--dg-line-2);
+    border-right: 0;
+    border-radius: 14px 0 0 14px;
+  }
+  .dg-steps::after {
+    content: '';
+    position: absolute;
+    left: 13px;
+    top: 16px;
+    width: 7px;
+    height: 7px;
+    border-top: 2px solid var(--dg-line-2);
+    border-right: 2px solid var(--dg-line-2);
+    transform: rotate(45deg);
+  }
+  .dg-step {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+    padding: 11px 14px;
+    background: var(--dg-card);
+    border: 1px solid var(--dg-card-line);
+    border-radius: var(--k-r-md);
+    box-shadow: var(--k-e1);
+  }
+  .dg-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: var(--k-font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--dg-accent);
+    background: var(--dg-accent-soft);
+  }
+  .dg-txt { display: grid; gap: 2px; padding-top: 2px; min-width: 0; }
+  .dg-sl { font-weight: 600; color: var(--dg-fg); line-height: var(--k-lh-snug); }
+  .dg-sd { font-size: var(--k-fs-small); color: var(--dg-fg-3); line-height: var(--k-lh-snug); }
+  .dg-arc { fill: none; stroke: var(--dg-accent-fill); stroke-width: 0.45; stroke-linecap: round; stroke-dasharray: 1 1; stroke-dashoffset: 0; opacity: 0.75; }
+  .dg-head { fill: none; stroke: var(--dg-accent-fill); stroke-width: 0.45; stroke-linecap: round; stroke-linejoin: round; opacity: 0.75; }
+
+  @container k-dg (min-width: 500px) {
+    .dg-cy[data-fit="sm"] { display: block; aspect-ratio: 10 / 8; }
+    .dg-cy[data-fit="sm"] .dg-ring { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .dg-cy[data-fit="sm"] .dg-center { position: absolute; left: 50%; top: 50%; translate: -50% -50%; max-width: 30%; text-align: center; }
+    .dg-cy[data-fit="sm"] .dg-steps { position: static; padding: 0; display: block; }
+    .dg-cy[data-fit="sm"] .dg-steps::before, .dg-cy[data-fit="sm"] .dg-steps::after { display: none; }
+    .dg-cy[data-fit="sm"] .dg-step { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: min(32%, 230px); grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 6px; }
+  }
+  @container k-dg (min-width: 640px) {
+    .dg-cy[data-fit="md"] { display: block; aspect-ratio: 10 / 8; }
+    .dg-cy[data-fit="md"] .dg-ring { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .dg-cy[data-fit="md"] .dg-center { position: absolute; left: 50%; top: 50%; translate: -50% -50%; max-width: 28%; text-align: center; }
+    .dg-cy[data-fit="md"] .dg-steps { position: static; padding: 0; display: block; }
+    .dg-cy[data-fit="md"] .dg-steps::before, .dg-cy[data-fit="md"] .dg-steps::after { display: none; }
+    .dg-cy[data-fit="md"] .dg-step { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: min(26%, 210px); grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 6px; }
+  }
+  @container k-dg (min-width: 780px) {
+    .dg-cy[data-fit="lg"] { display: block; aspect-ratio: 10 / 8; }
+    .dg-cy[data-fit="lg"] .dg-ring { display: block; position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .dg-cy[data-fit="lg"] .dg-center { position: absolute; left: 50%; top: 50%; translate: -50% -50%; max-width: 26%; text-align: center; }
+    .dg-cy[data-fit="lg"] .dg-steps { position: static; padding: 0; display: block; }
+    .dg-cy[data-fit="lg"] .dg-steps::before, .dg-cy[data-fit="lg"] .dg-steps::after { display: none; }
+    .dg-cy[data-fit="lg"] .dg-step { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: min(22%, 190px); grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 6px; padding: 10px 12px; }
+  }
+
+  :global(html.js.motion [data-dg-anim]) .dg-step { animation: k-dg-cy-pop var(--k-t-soft) var(--k-spring-soft) backwards; animation-delay: calc(var(--dg-base) + var(--i) * 260ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-arc { animation: k-dg-cy-draw var(--k-d-slow) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 160ms + var(--i) * 260ms); }
+  :global(html.js.motion [data-dg-anim]) .dg-head { animation: k-dg-cy-head var(--k-d-base) var(--k-ease-out) backwards; animation-delay: calc(var(--dg-base) + 500ms + var(--i) * 260ms); }
+  :global(html.js.motion [data-dg-anim]:not(.in)) :is(.dg-step, .dg-arc, .dg-head) { animation-play-state: paused; }
+
+  @keyframes k-dg-cy-pop { from { transform: scale(0.82); } }
+  @keyframes k-dg-cy-draw { from { stroke-dashoffset: 1; } }
+  @keyframes k-dg-cy-head { from { opacity: 0; } }
+</style>

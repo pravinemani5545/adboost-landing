@@ -1,0 +1,34 @@
+---
+// Decorative, self-hosted, muted loop (media.ts). The poster is the design: it paints first and
+// is all that reduced-motion and low-power visitors ever get (no video request is made). The
+// clip loads as it nears the screen and plays only while visible. Always aria-hidden: put any
+// meaning in the surrounding copy. The box is reserved by width/height (aspect ratio), so no CLS.
+interface Props {
+  src: string;          // /path/clip.mp4 (H.264)
+  webm?: string;        // optional /path/clip.webm (VP9), preferred where supported
+  poster: string;       // /path/poster.avif|webp|jpg
+  width: number;
+  height: number;
+  class?: string;
+}
+const { src, webm, poster, width, height, class: cls } = Astro.props;
+---
+<video
+  class:list={['k-video', cls]}
+  data-src={src}
+  data-webm={webm}
+  poster={poster}
+  width={width}
+  height={height}
+  muted
+  loop
+  playsinline
+  preload="none"
+  disablepictureinpicture
+  aria-hidden="true"
+  tabindex="-1"
+></video>
+
+<style>
+  .k-video { display: block; width: 100%; height: auto; object-fit: cover; background: var(--t-card); }
+</style>
