@@ -7,8 +7,11 @@ import Bars from '../../kit/diagram/Bars.astro';
 import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
-import { cacCalc, valueClass } from './_calc';
+import { cacCalc, money, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
+import '../../styles/resources/base.css';
+import '../../styles/resources/tools.css';
+import ResIcon from '../../components/resources/ResIcon.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/cac-calculator/';
@@ -57,11 +60,12 @@ const AXIS_MAX = 600;
     lede="Work out your true customer acquisition cost, then see how it stacks up against 2026 health-vertical benchmarks."
   />
 
-  <section class="iwrap-sm">
+  <section class="iwrap-sm rs-tool">
     <div class="container">
-     <div class="doc-grid">
-      <div class="doc-main tool-doc">
-      <div class="calc k-card k-card--float arrive">
+     <div class="rs-tdoc">
+      <div class="rs-tdoc__main tool-doc">
+      <div class="calc k-card k-card--float arrive rs-calc">
+        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">CAC calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="spend">Total acquisition spend <span class="hint">(media + creative + fees, per period)</span></label>
@@ -100,6 +104,10 @@ const AXIS_MAX = 600;
               />
             </div>
           ))}
+          <div class="rs-fxline">
+            <p class="rs-fxline__sym"><span>CAC</span> = <span>total acquisition spend ÷ new customers</span></p>
+            <p class="rs-fxline__live" id="fxLive">{money(SPEND)} ÷ {CUSTOMERS.toLocaleString('en-US')} = {initial.value}</p>
+          </div>
           <div class="cr-note" id="cacNote">{initial.note}</div>
         </div>
       </div>
@@ -117,18 +125,18 @@ const AXIS_MAX = 600;
       <p>CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/">LTV:CAC ratio</a> - aim for at least 3:1 - and see the full <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a>.</p>
 
       <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq"><Faq items={faq} idPrefix="cac" /></div>
+      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="cac" /></div>
       </div>
-      <aside class="doc-aside">
-        <div class="aside-card">
+      <aside class="rs-side">
+        <div class="rs-sidecard">
           <h4>More free tools</h4>
-          <div class="link-list">
-            <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>
-            <a href="/tools/ad-budget-calculator/">Ad budget calculator</a>
-            <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
-          </div>
+          <ul class="rs-links">
+            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
+            <li><a href="/tools/ad-budget-calculator/"><ResIcon href="/tools/ad-budget-calculator/" /><span>Ad budget calculator</span></a></li>
+            <li><a href="/blog/telehealth-cac-benchmarks-2026/"><ResIcon href="/blog/telehealth-cac-benchmarks-2026/" /><span>CAC benchmarks by vertical</span></a></li>
+          </ul>
         </div>
-        <div class="aside-card night">
+        <div class="rs-nightcard">
           <h4>Think your CAC is too high?</h4>
           <p>Free audit - we benchmark your account and map the fastest levers to bring it down.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
@@ -143,7 +151,7 @@ const AXIS_MAX = 600;
 
 <script>
   import { setLive } from '../../kit/diagram/live';
-  import { cacCalc, num, valueClass } from './_calc';
+  import { cacCalc, money, num, valueClass } from './_calc';
 
   const spend = document.getElementById('spend') as HTMLInputElement;
   const customers = document.getElementById('customers') as HTMLInputElement;
@@ -151,6 +159,7 @@ const AXIS_MAX = 600;
   const out = document.getElementById('cacOut')!;
   const note = document.getElementById('cacNote')!;
   const views = [...document.querySelectorAll<HTMLElement>('.calc-viz[data-range]')];
+  const fx = document.getElementById('fxLive')!;
 
   function calc() {
     const [lo, hi] = vertical.value.split(',').map(Number);
@@ -158,6 +167,7 @@ const AXIS_MAX = 600;
     out.textContent = r.value;
     out.className = valueClass(r.verdict);
     note.textContent = r.note;
+    fx.textContent = `${money(num(spend))} ÷ ${num(customers).toLocaleString('en-US')} = ${r.value}`;
     // live visual: the selected vertical's range, with the visitor's CAC as the marker
     for (const v of views) {
       v.hidden = v.dataset.range !== vertical.value;

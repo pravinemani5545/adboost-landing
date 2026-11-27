@@ -1,0 +1,69 @@
+---
+// A small graphic of what each calculator works out (decorative, aria-hidden, shapes only, no
+// numbers): CAC a benchmark range with your marker; LTV:CAC a gauge with its three bands; the ad
+// budget its equation chain; MER revenue against spend; POAS two bars against a break-even line.
+// Lines draw and bars grow when the card arrives (data-draw); without motion they are simply there.
+interface Props { kind: 'cac' | 'ltv' | 'budget' | 'mer' | 'poas' }
+const { kind } = Astro.props;
+---
+<svg class={`rs-art rs-art--${kind}`} viewBox="0 0 240 132" aria-hidden="true" focusable="false" data-draw>
+  <defs>
+    <linearGradient id={`rs-art-g-${kind}`} x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="rgb(var(--hue-a))" />
+      <stop offset="0.6" stop-color="rgb(var(--hue-b))" />
+      <stop offset="1" stop-color="rgb(var(--hue-c))" />
+    </linearGradient>
+  </defs>
+  {kind === 'cac' && (
+    <>
+      <rect x="20" y="58" width="200" height="20" rx="10" class="rs-art__track" />
+      <rect x="92" y="58" width="78" height="20" rx="10" class="rs-art__band" />
+      <rect x="20" y="64" width="112" height="8" rx="4" fill={`url(#rs-art-g-${kind})`} class="k-draw-x" />
+      <path d="M20 96v6M86.7 96v6M153.3 96v6M220 96v6" class="rs-art__tick" />
+      <path d="M132 50 L132 34" class="rs-art__stem k-draw" pathLength="1" />
+      <rect x="108" y="14" width="48" height="22" rx="11" class="rs-art__pill k-pop" />
+      <circle cx="132" cy="68" r="9" class="rs-art__knob k-pop" />
+    </>
+  )}
+  {kind === 'ltv' && (
+    <>
+      <path d="M40 110 A80 80 0 0 1 95 34" class="rs-art__arc rs-art__arc--bad k-draw" pathLength="1" />
+      <path d="M100 32 A80 80 0 0 1 164 44" class="rs-art__arc rs-art__arc--ok k-draw" pathLength="1" style="--di:1" />
+      <path d="M169 48 A80 80 0 0 1 200 110" class="rs-art__arc rs-art__arc--warn k-draw" pathLength="1" style="--di:2" />
+      <path d="M120 110 L150 52" class="rs-art__needle k-draw" pathLength="1" style="--di:3" />
+      <circle cx="120" cy="110" r="9" class="rs-art__knob k-pop" />
+    </>
+  )}
+  {kind === 'budget' && (
+    <>
+      <rect x="14" y="40" width="58" height="52" rx="14" class="rs-art__term k-pop" />
+      <rect x="26" y="54" width="22" height="6" rx="3" class="rs-art__ln" />
+      <rect x="26" y="68" width="34" height="10" rx="5" class="rs-art__ln rs-art__ln--strong" />
+      <path d="M82 58 L94 70 M94 58 L82 70" class="rs-art__op" />
+      <rect x="104" y="40" width="58" height="52" rx="14" class="rs-art__term k-pop" style="--di:1" />
+      <rect x="116" y="54" width="22" height="6" rx="3" class="rs-art__ln" />
+      <rect x="116" y="68" width="34" height="10" rx="5" class="rs-art__ln rs-art__ln--strong" />
+      <path d="M172 60 H184 M172 68 H184" class="rs-art__op" />
+      <rect x="192" y="30" width="36" height="72" rx="14" fill={`url(#rs-art-g-${kind})`} class="rs-art__res k-draw-y" />
+    </>
+  )}
+  {kind === 'mer' && (
+    <>
+      <circle cx="78" cy="66" r="42" class="rs-art__ring" />
+      <path d="M78 24 A42 42 0 1 1 36 66" class="rs-art__seg k-draw" pathLength="1" stroke={`url(#rs-art-g-${kind})`} />
+      <circle cx="78" cy="66" r="24" class="rs-art__core" />
+      <rect x="146" y="40" width="74" height="12" rx="6" fill={`url(#rs-art-g-${kind})`} class="k-draw-x" />
+      <rect x="146" y="62" width="30" height="12" rx="6" class="rs-art__bar2 k-draw-x" />
+      <rect x="146" y="84" width="52" height="6" rx="3" class="rs-art__ln" />
+    </>
+  )}
+  {kind === 'poas' && (
+    <>
+      <path d="M20 112 H220" class="rs-art__tick" />
+      <rect x="54" y="26" width="44" height="86" rx="10" class="rs-art__bar2 k-draw-y" />
+      <rect x="132" y="52" width="44" height="60" rx="10" fill={`url(#rs-art-g-${kind})`} class="k-draw-y" />
+      <path d="M24 74 H216" class="rs-art__be" />
+      <circle cx="154" cy="52" r="6" class="rs-art__knob k-pop" />
+    </>
+  )}
+</svg>

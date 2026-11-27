@@ -10,6 +10,9 @@ import { breadcrumb, faqPage } from '../../lib/schema';
 import { ltvCalc, money, valueClass } from './_calc';
 import { monthLabel, monthTicks, paths, shape } from './_payback';
 import '../../styles/pages/tools.css';
+import '../../styles/resources/base.css';
+import '../../styles/resources/tools.css';
+import ResIcon from '../../components/resources/ResIcon.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/ltv-cac-calculator/';
@@ -43,11 +46,12 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
     lede="The single most important unit-economics check for a subscription health brand - lifetime value, LTV:CAC ratio, and how many months until a customer pays you back."
   />
 
-  <section class="iwrap-sm">
+  <section class="iwrap-sm rs-tool">
     <div class="container">
-     <div class="doc-grid">
-      <div class="doc-main tool-doc">
-      <div class="calc k-card k-card--float arrive">
+     <div class="rs-tdoc">
+      <div class="rs-tdoc__main tool-doc">
+      <div class="calc k-card k-card--float arrive rs-calc">
+        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">LTV:CAC calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="mrev">Monthly revenue per customer</label>
@@ -91,6 +95,10 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
           <div class="cr-sub">
             <div><div class="k">LIFETIME VALUE</div><div class="v" id="ltvOut">{r.ltvText}</div></div>
             <div><div class="k">PAYBACK</div><div class="v" id="pbOut">{r.paybackText}</div></div>
+          </div>
+          <div class="rs-fxline">
+            <p class="rs-fxline__sym"><span>LTV:CAC</span> = <span>lifetime value ÷ acquisition cost</span></p>
+            <p class="rs-fxline__live" id="fxLive">{r.ltvText} ÷ {money(CAC)} = {r.ratioText}</p>
           </div>
           <div class="cr-note" id="ratioNote">{r.note}</div>
         </div>
@@ -140,18 +148,18 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
       <p>A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC - it’s <a href="/glossary/churn-rate/#retention-rate">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. For the full definition and where the 3:1 rule comes from, see <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> in the glossary, and <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a> for context.</p>
 
       <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq"><Faq items={faq} idPrefix="ltv" /></div>
+      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="ltv" /></div>
       </div>
-      <aside class="doc-aside">
-        <div class="aside-card">
+      <aside class="rs-side">
+        <div class="rs-sidecard">
           <h4>More free tools</h4>
-          <div class="link-list">
-            <a href="/tools/cac-calculator/">CAC calculator</a>
-            <a href="/tools/ad-budget-calculator/">Ad budget calculator</a>
-            <a href="/blog/telehealth-cac-benchmarks-2026/">CAC benchmarks by vertical</a>
-          </div>
+          <ul class="rs-links">
+            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
+            <li><a href="/tools/ad-budget-calculator/"><ResIcon href="/tools/ad-budget-calculator/" /><span>Ad budget calculator</span></a></li>
+            <li><a href="/blog/telehealth-cac-benchmarks-2026/"><ResIcon href="/blog/telehealth-cac-benchmarks-2026/" /><span>CAC benchmarks by vertical</span></a></li>
+          </ul>
         </div>
-        <div class="aside-card night">
+        <div class="rs-nightcard">
           <h4>Fix your unit economics</h4>
           <p>We map the fastest levers to move CAC, retention, and payback.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
@@ -174,6 +182,7 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
   const ltvOut = document.getElementById('ltvOut')!;
   const pbOut = document.getElementById('pbOut')!;
   const note = document.getElementById('ratioNote')!;
+  const fx = document.getElementById('fxLive')!;
 
   // payback chart
   const plot = document.getElementById('pbPlot')!;
@@ -230,6 +239,7 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
     ratioOut.textContent = r.ratioText;
     ratioOut.className = valueClass(r.verdict);
     note.textContent = r.note;
+    fx.textContent = `${r.ltvText} ÷ ${money(cac)} = ${r.ratioText}`;
 
     setLive('ltv-gauge', r.ratio ?? 0, r.ratioText, r.ratio === null ? 'Not calculated: enter your CAC' : `${r.ratio.toFixed(1)} to 1`);
 
