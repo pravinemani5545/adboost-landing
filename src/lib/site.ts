@@ -9,15 +9,12 @@ export const EMAIL = 'hello@adboost.health';
 // CASL: newsletter signups and emails must show a mailing address (a PO box or
 // virtual mailbox is fine). Shown on /privacy/ and /newsletter/ once set.
 export const MAILING_ADDRESS = '';
-// The rest of www.adboost.media (ecommerce / DTC), which this site is published inside at
-// /health/. A same-tab link: absolute, because it leaves this site's own folder.
-export const SISTER = { label: 'AdBoost Media', href: 'https://www.adboost.media/' };
-
 // Row 1 of the navigation: the AdBoost family bar, the same on every page of
 // www.adboost.media (src/components/FamilyBar.astro is a copy of the one in the
 // adboost-media repo; keep the two files and this list identical to that site's
 // src/lib/family.ts, including each section's dot colour). The other sections are absolute links because another project
-// serves them; "/" is this site's own home, published at /health/.
+// serves them; "/" is this site's own home, published at /health/. The same list feeds the
+// "The AdBoost family" group of the phone menu and the footer's "Who we serve" column.
 const FAMILY_SITE = 'https://www.adboost.media';
 export const FAMILY_HOME = `${FAMILY_SITE}/`;
 export const FAMILY_LINKS = [

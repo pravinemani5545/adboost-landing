@@ -1,7 +1,7 @@
 // The page index in a document's aside ([data-toc], or the legacy .aside-toc): the section being
 // read is marked .active (and aria-current="location") as the page scrolls.
-// The fixed chrome above the page: the nav (68px) plus the family bar when the page has one.
-const famH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fam-h')) || 0;
+// The fixed chrome above the page: the family bar (when the page has one) and the nav.
+const chrome = Math.round(document.querySelector('.k-nav')?.getBoundingClientRect().bottom ?? 68);
 for (const toc of document.querySelectorAll('[data-toc], .aside-toc')) {
   const links = new Map<string, HTMLAnchorElement>();
   toc.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) => links.set(decodeURIComponent(a.getAttribute('href')!.slice(1)), a));
@@ -15,7 +15,7 @@ for (const toc of document.querySelectorAll('[data-toc], .aside-toc')) {
       if (a) { a.classList.add('active'); a.setAttribute('aria-current', 'location'); }
     },
     // a band just under the nav: a heading counts as read once it reaches the top fifth
-    { rootMargin: `-${88 + famH}px 0px -70% 0px`, threshold: 0 },
+    { rootMargin: `-${chrome + 20}px 0px -70% 0px`, threshold: 0 },
   );
   targets.forEach((t) => spy.observe(t));
 }

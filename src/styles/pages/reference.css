@@ -121,7 +121,9 @@
 .dg-gm-fam[data-fam="1"] .dg-gm-famh::before { background: var(--dg-fg); box-shadow: 0 0 0 3px var(--dg-line); }
 .dg-gm-count { margin-left: 6px; white-space: nowrap; font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: 0.06em; color: var(--dg-fg-3); }
 .dg-gm-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.dg-gm-node { display: grid; gap: 2px; min-width: 0; }
+.dg-gm-node { position: relative; display: grid; gap: 2px; min-width: 0; }
+/* list layout (phones, narrow columns): the whole entry is the tap target, not just the term */
+.dg-gm-link::after { content: ""; position: absolute; inset: -6px 0; }
 .dg-gm-link { justify-self: start; font-weight: 600; color: var(--dg-accent); text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); text-underline-offset: 3px; }
 .dg-gm-link:focus-visible { outline: 2px solid var(--dg-ring); outline-offset: 3px; border-radius: 4px; }
 .dg-gm-rel { font-size: var(--k-fs-small); line-height: var(--k-lh-snug); color: var(--dg-fg-3); }
@@ -144,6 +146,7 @@
     background: color-mix(in srgb, var(--dg-card) 70%, transparent);
   }
   .dg-gm-famh { position: absolute; left: 20px; top: 16px; right: 20px; margin: 0; }
+  .dg-gm-link::after { content: none; }
   .dg-gm-list { display: block; }
   .dg-gm-node {
     position: absolute;
@@ -197,7 +200,7 @@
   .dg-gm-hint { display: block; margin: 0 0 var(--k-sp-4); font-size: var(--k-fs-small); line-height: var(--k-lh-body); color: var(--dg-fg-3); }
 }
 /* the box keeps the viewBox ratio, so strokes scale evenly: widths are in box units (about 1.3px
-   at 1240px), and pathLength stays true for the kit draw-on (non-scaling strokes break its dashes).
+   at 1200px), and pathLength stays true for the kit draw-on (non-scaling strokes break its dashes).
    At rest the wires are a faint texture; a hovered or focused term draws its own links in accent. */
 .dg-gm-edge { fill: none; stroke: var(--dg-line-2); stroke-width: 0.1; stroke-linecap: round; opacity: 0.45; transition: opacity var(--k-d-fast) var(--k-ease), stroke var(--k-d-fast) var(--k-ease); }
 .dg-gm.is-hot .dg-gm-edge:not(.on) { opacity: 0.12; }
@@ -224,6 +227,7 @@
   color: var(--k-ink-2);
   transition: border-color var(--k-d-fast) var(--k-ease), color var(--k-d-fast) var(--k-ease);
 }
+@media (max-width: 760px) { .rf-tablemore summary { min-height: 44px; } }
 .rf-tablemore summary:hover { border-color: var(--k-accent-line); color: var(--k-accent-ink); }
 .rf-tablemore summary:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
 .rf-tablemore__chev { width: 8px; height: 8px; margin: 0 2px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; rotate: -45deg; transition: rotate var(--k-t-snap) var(--k-spring-snap); }

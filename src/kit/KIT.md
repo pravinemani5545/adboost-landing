@@ -48,6 +48,16 @@ written for one section drops into another and only its accent colour changes.
   - `dark`: shadcn's `dark:` variant looks for an ancestor with the class `dark`, and the site
     is light only, so that class must never be set. The dark aside card was `.aside-card.dark`; it
     is `.aside-card.night` now.
+- **One site, on every screen.** Shared with the other sections: the header row (74px, 64px from
+  720px down; lockup, 14px links, a dot on the current page, rounded menu panels, the pill button),
+  the phone menu (groups, "The AdBoost family", the Book button), buttons, the FAQ accordion, the
+  footer's structure and its "Who we serve" column, the 1200px container and the focus ring.
+  Health keeps its own headline weight (600), diagrams, art plates, night slabs and reading layout.
+  Two rules hold for every template: on a short laptop screen (1366x768) the first screen shows the
+  headline, the lede and a Book button; on a phone (390 wide) nothing overflows sideways and every
+  tap target is at least 44px (the phone rules at the end of `global.css` and `interior.css`).
+  The site's own CSS cannot restyle a shadcn Button directly (utilities outrank it): to hide or
+  move one, wrap it and style the wrapper, as `.k-nav__cta` does.
 - **A block written with utilities** opts in to a local reset with the class `tw` (no default
   margins on headings, paragraphs and lists), because preflight is off.
 
@@ -95,7 +105,7 @@ LeadLayout), except `/` and `/404`.
 | `--k-on-night`, `-2` | #fff, rgba(255,255,255,.66) | text on night |
 | `--k-shadow-rgb` | 10 10 15 | shadow colour channels |
 | `--k-fw-display` | 600 | display weight |
-| `--k-container` | 1240px (1440px from 2000px) | content width |
+| `--k-container` | 1200px (1320px from 2000px) | content width, the same on every section of www.adboost.media so the family bar and header never shift between sections |
 | `--k-ok`, `-ink`, `-soft`, `-bright` | #16a34a, #0a7a37, #e6f6ec, #7ee2a8 | status ok |
 | `--k-warn`, `-ink`, `-soft`, `-bright` | #f5a623, #a15c00, #fdf6e7, #f5c26b | status warn |
 | `--k-bad`, `-ink`, `-soft`, `-bright` | #dc2626, #b42318, #fdecea, #ff8a6b | status bad |
@@ -107,7 +117,7 @@ dots and bars, `-soft` for tinted backgrounds.
 
 - **Elevation:** `--k-e1` (rest), `--k-e2` (raised), `--k-e3` (lifted, hover), `--k-e4` (e3 + 1px ring: floating widgets, calculators, menus), `--k-edge-light` (inset top highlight on paper), `--k-edge-night` (on night), `--k-glow` (accent glow).
 - **Radii:** `--k-r-xs` 6, `--k-r-sm` 10, `--k-r-md` 14, `--k-r-lg` 22, `--k-r-xl` 30, `--k-r-pill` 999.
-- **Spacing:** `--k-sp-1..10` = 4 8 12 16 24 32 48 64 96 128. `--k-section` (band padding, clamp 64-112), `--k-section-sm` (44-72), `--k-gutter` (24, 16 below 760), `--k-measure` 68ch, `--k-nav-h` (68, 60 below 760), `--k-top` (everything fixed above the page: the family bar's `--fam-h` plus `--k-nav-h`; use it, not `--k-nav-h`, for sticky offsets, anchor offsets and anything fixed under the header).
+- **Spacing:** `--k-sp-1..10` = 4 8 12 16 24 32 48 64 96 128. `--k-section` (band padding, clamp 64-112), `--k-section-sm` (44-72), `--k-gutter` (24, 16 below 760), `--k-measure` 68ch, `--k-nav-h` (74, 64 from 720 down: the header height every section of www.adboost.media uses), `--k-top` (everything fixed above the page: the family bar's `--fam-h` plus `--k-nav-h`; use it, not `--k-nav-h`, for sticky offsets, anchor offsets and anything fixed under the header).
 - **Type:** `--k-font-sans|serif|mono`; `--k-fs-display|h1|h2|h3|lede|body|ui|small|micro`; `--k-lh-tight|snug|body`; `--k-ls-display` (-.04em), `--k-ls-mono` (.16em). **Geist Mono ships 400-500 only: never set a mono weight above 500.**
 - **Durations:** `--k-d-instant` 90, `-fast` 160, `-base` 240, `-slow` 420, `-reveal` 600, `-draw` 1100, `-count` 1300, `-vt` 240 (ms); `--k-stagger` 60ms.
 - **Easings:** `--k-ease`, `--k-ease-out`, `--k-ease-in`.
@@ -214,7 +224,7 @@ are complete without JS. **Hosts of scroll-driven effects use `overflow: clip`, 
 |---|---|
 | `[data-toc]` (and legacy `.aside-toc`) | links to `#ids` get `.active` + `aria-current="location"` as sections pass under the nav. |
 | `[data-menu]` group with `button[aria-controls]` | desktop disclosure menu (menu.ts). |
-| `#mnav` + `[aria-controls="mnav"]` + `[data-scrim]` | phone sheet: clip-path reveal, scrim, inert when closed, scroll lock, focus first item, Esc returns focus. |
+| `#mnav` + `[aria-controls="mnav"]` + `[data-scrim]` | phone sheet: clip-path reveal, scrim, inert when closed, scroll lock, focus first item, Esc returns focus. Groups (`.k-sheet__item`: a `.k-sheet__top` link or a mono `.k-sheet__lab` label, then `.k-sheet__sub` links in two columns), "The AdBoost family" (the four sections), then the Book button full width. |
 | `[data-mcta-anchor]` | the sticky phone CTA shows once this has scrolled off (default: the hero `.ctas`, else the H1). |
 | `.cta-band`, `#cta`, `.cta-banner`, `[data-mcta-hide]` | the phone CTA steps aside while any is on screen. |
 | `video[data-src]` (use `<Video>`) | decorative loop: poster first, loads near the screen, plays only while visible. Reduced motion and lowpower: poster only, no request. |
@@ -255,13 +265,14 @@ e1 + edge, one hover). Their own rules keep layout only.
 
 | Component | Props | Notes |
 |---|---|---|
-| `layouts/Shell` | SiteHead props + `chrome?: 'full'\|'lead'`, `navTransparentTop?`, `preloadSerif?`, `popup?: boolean\|'none'`, `leadTag?`, `bodyClass?`, `mainClass?`; slots: default, `head`, `scripts` | head, skip link, family bar (full chrome only), nav, `<main id="main">`, phone CTA, footer, kit script, popup or visit mark (never on `/book/`, `/zero-ban-protocol/checklist/`, `/newsletter/`). Sets `<html data-chrome>`. |
+| `layouts/Shell` | SiteHead props + `chrome?: 'full'\|'lead'`, `preloadSerif?`, `popup?: boolean\|'none'`, `leadTag?`, `bodyClass?`, `mainClass?`; slots: default, `head`, `scripts` | head, skip link, family bar (full chrome only), nav, `<main id="main">`, phone CTA, footer, kit script, popup or visit mark (never on `/book/`, `/zero-ban-protocol/checklist/`, `/newsletter/`). Sets `<html data-chrome>`. |
 | `FamilyBar` | `current`, `home`, `links` (`FAMILY_HOME`, `FAMILY_LINKS` in `src/lib/site.ts`) | Row 1 of the navigation, the same on every page of www.adboost.media: a fixed dark bar above the nav. **A copy of the adboost-media file: keep the two identical, style around it, never inside it.** It sets `--fam-h` (38px) for every page; `global.css` pushes the page down by it and sets it back to 0 on lead pages (`html[data-chrome="lead"]`), which have no bar. |
 | `site/SiteHead` | `title`, `description?`, `canonicalPath?` or `canonical?` (absolute), `robots?`, `ogType?`, `ogTitle?`, `ogDescription?`, `ogImage?`, `ogImageAlt?`, `twitterTitle?`, `twitterDescription?`, `article?`, `jsonLd?`, `bingVerify?`, `social?` | og:image defaults to `ogImageFor(path)` (`src/lib/og.ts`): `/og/<first-segment>/<rest-or-index>.jpg` when it exists in `public/`, else `/og/og-home.png`. Always JPEG/PNG. |
-| `site/Nav`, `site/Footer`, `site/MobileCta` | `Nav`: `transparentTop?` | see Tracker contract. `MobileCta` is an `<aside aria-label="Book a call">` (a landmark; not rendered from 761px) around the `.mobile-cta` link. |
+| `site/Nav`, `site/Footer`, `site/MobileCta` | none | The nav is clear over the top of every page and turns to glass once the page scrolls. See Tracker contract. `MobileCta` is an `<aside aria-label="Book a call">` (a landmark; not rendered from 761px) around the `.mobile-cta` link. |
 | `PageHero` | `crumbs?`, `eyebrow?`, `title` (HTML), `lede?` (HTML), `answer?` (HTML), `meta?: string[]`, `wide?`, `art?` (public path without extension), `layers?: ('dots'\|'mesh')[]`, `id?`, `class?`; slots: default (under the lede), `aside` | renders `.phero` (and `.phero-grid` with an aside: right column from 1024px). H1, lede, aside use `.arrive`. Art plate: `public/art/...{avif,webp}` if present, else a gradient; hidden below 1024px, lazy, alt="". |
-| `Faq` | `items: {q, a}[]`, `idPrefix?` | native `<details class="qa">` in `.faq-list.k-disclosure`; works without JS; eases open where `::details-content` is supported. Keep the page's FAQPage JSON-LD word for word in sync. |
-| `CtaBand` | `heading?` (HTML), `text?` | night slab with grid, aura, grain; `.cta-band` + `data-magnetic` button. |
+| `Faq` | `items: {q, a}[]`, `idPrefix?` | native `<details class="qa">` in `.faq-list.k-disclosure`, in the accordion style the other sections use (hairline rows, a chevron `.qa-mark` that turns, the question underlined on hover); works without JS; eases open where `::details-content` is supported. Keep the page's FAQPage JSON-LD word for word in sync. |
+| `CtaBand` | `heading?` (HTML), `text?` | night slab with grid, aura, grain; `.cta-band` + the shared button (`ButtonLink`, `data-magnetic`). |
+| `site/ButtonLink` | `href`, `variant?: 'default'\|'outline'\|'secondary'\|'ghost'\|'link'\|'onDark'`, `size?: 'sm'\|'default'\|'lg'`, `arrow?`, `class?`, any attribute | A link drawn as the shared shadcn Button (46px, `lg` 54px, pill, accent glow). Use it for new calls to action. The legacy `.btn`, `.btn-primary`, `.btn-ghost`, `.btn-lg` classes in `global.css` are drawn to the same measurements for buttons already in pages and in rendered copy: change sizes in `ui/button.tsx` first, then mirror them there. Not inside `.prose` (prose link rules underline it): use `.btn` there. |
 | `Breadcrumbs` | `items: {label, href?}[]` | `<nav class="crumbs"><ol>`; last item `aria-current="page"`. |
 
 ## Diagrams (`diagram/`)
@@ -317,9 +328,12 @@ example of each, built from the Health data files.
 `adboost-admin` t.js labels `/book/` clicks by ancestry, in order: `closest('nav')` = header,
 `.mobile-cta` = mobile, `.cta-band` = cta-band, `footer` = footer, else inline.
 
-- The Book button stays inside `<nav class="nav k-nav">`. The phone sheet `#mnav` is a sibling of the
-  nav and has no Book link. Breadcrumb and TOC `<nav>`s never carry a `/book/` link. The family bar is
-  a `<div role="navigation">`, not a `<nav>`, and has no `/book/` link either.
+- A Book button inside a `<nav>` is "header". The one in the bar is inside `<nav class="nav k-nav">`.
+  From 720px down the bar shows the logo and the menu button only (as on the other sections), and
+  the Book button lives in the phone sheet `#mnav`, which is a `<nav aria-label="Menu">` itself for
+  exactly that reason: its click is still "header". Never turn the sheet back into a `<div>` while
+  it carries a `/book/` link. Breadcrumb and TOC `<nav>`s never carry a `/book/` link. The family bar
+  is a `<div role="navigation">`, not a `<nav>`, and has no `/book/` link either.
 - Keep the `.mobile-cta` and `.cta-band` class names and the `<footer>` element. `.mobile-cta` sits on the link itself (its `<aside>` wrapper only adds the landmark).
 - One pageview per real load: no `<ClientRouter/>`, prefetch only, never prerender.
 

@@ -219,7 +219,6 @@
 .cta-band h2 { font-size: clamp(26px, 3.6vw, 40px); letter-spacing: -.03em; font-weight: var(--k-fw-display); line-height: 1.05; margin: 0 0 14px; text-wrap: balance; }
 .cta-band h2 .serif { color: var(--k-accent-bright); }
 .cta-band p { color: var(--k-on-night-2); font-size: 15.5px; line-height: 1.55; margin: 0 auto 24px; max-width: 48ch; }
-.cta-band .btn-primary { box-shadow: 0 18px 40px -10px rgb(0 87 255 / .55), inset 0 1px 0 rgb(255 255 255 / .25); }
 .cta-band .cb-perks { margin-top: 20px; display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; color: rgb(255 255 255 / .55); font-size: 12.5px; }
 .cta-band .cb-perks span { display: inline-flex; align-items: center; gap: 6px; }
 .cta-band .cb-perks span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: color-mix(in srgb, var(--k-accent) 70%, transparent); }
@@ -319,3 +318,15 @@
 /* chips row of related links in-body */
 .related-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
 @media (max-width: 560px) { .related-grid { grid-template-columns: 1fr; } }
+
+/* ---- phones: every tap target is at least 44px ---- */
+@media (max-width: 760px) {
+  /* breadcrumbs: the row keeps its height, each link's box grows around its text */
+  .crumbs a { display: inline-flex; align-items: center; min-height: 44px; margin-block: -14px; padding-inline: 8px; margin-inline: -8px; }
+  /* page index and link lists in the aside (they sit under the article on phones) */
+  .aside-toc a { display: flex; align-items: center; min-height: 44px; }
+  .link-list a { display: flex; align-items: center; min-height: 44px; }
+  .calc-input input { min-height: 44px; }
+  /* stand-alone text links in cards */
+  .bio .bio-links a, .aside-card > a:not(.btn) { display: inline-flex; align-items: center; min-height: 44px; }
+}

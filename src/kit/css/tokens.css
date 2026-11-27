@@ -37,7 +37,7 @@
   --k-section-sm: clamp(44px, 6vw, 72px);
   --k-gutter: 24px;
   --k-measure: 68ch;
-  --k-nav-h: 68px;
+  --k-nav-h: 74px;
   /* everything fixed above the page: the family bar (row 1, --fam-h, absent on lead pages) plus
      the nav. Sticky offsets, anchor offsets and the phone sheet start here. */
   --k-top: calc(var(--k-nav-h) + var(--fam-h, 0px));
@@ -121,7 +121,11 @@
   }
 }
 @media (max-width: 760px) {
-  :root { --k-gutter: 16px; --k-nav-h: 60px; }
+  :root { --k-gutter: 16px; }
+}
+/* the header row: 74px, 64px on phones, the same as every section of www.adboost.media */
+@media (max-width: 720px) {
+  :root { --k-nav-h: 64px; }
 }
 
 /* ---------- tones ----------

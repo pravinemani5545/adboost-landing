@@ -27,7 +27,7 @@
   --k-on-night-2: rgba(255, 255, 255, 0.66);
   --k-shadow-rgb: 10 10 15;
   --k-fw-display: 600;
-  --k-container: 1240px;
+  --k-container: 1200px;          /* the content width of every section of www.adboost.media */
 
   --k-ok: #16a34a;
   --k-ok-ink: #0a7a37;
@@ -42,7 +42,7 @@
   --k-bad-soft: #fdecea;
   --k-bad-bright: #ff8a6b;
 }
-/* true ultrawide (2K+) monitors only: laptops keep the 1240px container */
+/* true ultrawide (2K+) monitors only: laptops keep the 1200px container */
 @media (min-width: 2000px) {
-  :root { --k-container: 1440px; --k-gutter: 40px; }
+  :root { --k-container: 1320px; --k-gutter: 40px; }
 }

@@ -34,8 +34,6 @@ import { LAYER_ORDER } from '../lib/layers';
 
 interface Props extends SiteHeadProps {
   chrome?: 'full' | 'lead';
-  /** nav is clear over the hero until the page scrolls (home) */
-  navTransparentTop?: boolean;
   preloadSerif?: boolean;
   /** false: the visit mark instead of the newsletter popup; 'none': neither (404) */
   popup?: boolean | 'none';
@@ -45,7 +43,7 @@ interface Props extends SiteHeadProps {
   mainClass?: string;
 }
 const {
-  chrome = 'full', navTransparentTop = false, preloadSerif = true, popup = true, leadTag,
+  chrome = 'full', preloadSerif = true, popup = true, leadTag,
   bodyClass, mainClass, ...head
 } = Astro.props;
 
@@ -77,7 +75,7 @@ const showPopup = popup === true && chrome === 'full' && !NO_POPUP.includes(path
 <a href="#main" class="k-skip">Skip to content</a>
 
 {chrome === 'full' && <FamilyBar current="health" home={FAMILY_HOME} links={FAMILY_LINKS} />}
-{chrome === 'full' ? <Nav transparentTop={navTransparentTop} /> : (
+{chrome === 'full' ? <Nav /> : (
   <header class="lead-top">
     <div class="container">
       <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>AdBoost <span class="brand-sub">Health</span></span></a>

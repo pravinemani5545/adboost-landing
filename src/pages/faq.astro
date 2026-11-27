@@ -68,20 +68,13 @@ const jsonLd = [
   .faq-group { margin-bottom: var(--k-sp-6); scroll-margin-top: calc(var(--k-top) + 22px); }
   .faq-group:last-child { margin-bottom: 0; }
   .faq-group__title { font-size: 22px; letter-spacing: -0.02em; }
-  .faq-open {
-    margin-top: var(--k-sp-3);
-    overflow: clip;
-    background: var(--k-paper);
-    border: 1px solid var(--k-line);
-    border-radius: var(--k-r-lg);
-    box-shadow: var(--k-e1), var(--k-edge-light);
-  }
-  .fo-item { padding: 22px 26px; border-bottom: 1px solid var(--k-line); }
-  .fo-item:last-child { border-bottom: 0; }
-  .fo-item h3 { margin: 0 0 8px; font-size: 17px; font-weight: 600; letter-spacing: -0.01em; color: var(--k-ink); }
-  .fo-a { max-width: 68ch; color: var(--k-ink-3); font-size: 15px; line-height: 1.6; }
+  /* the same hairline rows as the accordion (Faq.astro), with every answer open */
+  .faq-open { margin-top: var(--k-sp-3); border-top: 1px solid var(--k-line); }
+  .fo-item { padding: 22px 2px 24px; border-bottom: 1px solid var(--k-line); }
+  .fo-item h3 { margin: 0 0 8px; font-size: 17.5px; line-height: 1.4; font-weight: 600; letter-spacing: -0.012em; color: var(--k-ink); }
+  .fo-a { max-width: 68ch; color: var(--k-ink-3); font-size: 15px; line-height: 1.62; }
   @media (max-width: 560px) {
-    .fo-item { padding: 18px 20px; }
-    .fo-item h3 { font-size: 15.5px; }
+    .fo-item { padding: 18px 2px 20px; }
+    .fo-item h3 { font-size: 16px; }
   }
 </style>

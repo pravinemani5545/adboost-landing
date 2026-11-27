@@ -277,6 +277,7 @@
   text-decoration: none;
   transition: border-color var(--k-d-fast) var(--k-ease), color var(--k-d-fast) var(--k-ease);
 }
+@media (max-width: 760px) { .prose .adv-cols a { min-height: 44px; align-items: center; } }
 .prose .adv-cols a:hover { border-color: var(--k-accent-line); color: var(--k-accent-ink); }
 .adv-cols__k {
   font-family: var(--k-font-mono);

@@ -77,22 +77,40 @@ a, button { touch-action: manipulation; }
 :is(a.lcard, a.gcard, a.latest-card):focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
 
 /* ============ BRAND + BUTTONS ============ */
-.brand { display: flex; align-items: center; gap: 9px; font-weight: 600; letter-spacing: -.015em; font-size: 15.5px; color: var(--k-ink); }
-.brand-mark { width: 28px; height: 28px; background: url('/logos/adboost-mark.webp') center/contain no-repeat; }
-.brand-sub { color: var(--k-ink-3); font-weight: 400; }
-.btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 999px; font-size: 13.5px; font-weight: 500; transition: transform .15s ease, box-shadow .2s ease, background .2s, border-color .2s, color .2s; white-space: nowrap; }
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0) scale(.98); }
-.btn-primary { background: var(--blue); color: #fff; box-shadow: 0 6px 18px -6px var(--blue-glow), inset 0 1px 0 rgba(255, 255, 255, .18); }
-.btn-primary:hover { background: var(--k-accent-strong); box-shadow: 0 16px 34px -10px var(--blue-glow); }
-.btn-primary .chev { width: 18px; height: 18px; border-radius: 50%; background: rgba(255, 255, 255, .18); display: grid; place-items: center; transition: transform .2s; }
-.btn-primary:hover .chev { transform: translateX(3px); }
-.btn-ghost { color: var(--ink-2); border: 1px solid var(--line); background: rgba(255, 255, 255, .6); }
-.btn-ghost:hover { background: #fff; border-color: var(--line-2); }
-.btn-lg { height: 50px; padding: 0 24px; font-size: 14.5px; }
+/* The lockup is the same on every section of www.adboost.media: the mark, then the name in bold
+   with the section's word in its accent. */
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.03em; font-size: 19px; color: var(--k-ink); white-space: nowrap; }
+.brand-mark { flex-shrink: 0; width: 28px; height: 32px; background: url('/logos/adboost-mark.webp') center/contain no-repeat; }
+.brand-sub { color: var(--k-accent-ink); }
+
+/* Buttons. New calls to action use the shared shadcn Button (src/components/ui/button.tsx, through
+   ButtonLink.astro). These classes are for the buttons already in the pages and in rendered copy:
+   they are drawn to the same measurements, so the two cannot be told apart. Sizes, weights, the
+   glow and the hover lift below mirror buttonVariants; change them there first. */
+.btn {
+  display: inline-flex; flex-shrink: 0; align-items: center; justify-content: center; gap: 10px;
+  height: 46px; padding: 0 20px; border: 1px solid transparent; border-radius: 999px; background-clip: padding-box;
+  font-size: 14px; line-height: calc(1.25 / .875); font-weight: 500; letter-spacing: -.01em; white-space: nowrap; user-select: none;
+  transition: transform .2s cubic-bezier(.4, 0, .2, 1), box-shadow .2s cubic-bezier(.4, 0, .2, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), border-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+}
+.btn:active { translate: 0 0; scale: .98; }
+.btn:focus-visible { outline: none; border-color: var(--ring); box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent); }
+.btn-primary { background-color: var(--primary); color: var(--primary-foreground); font-weight: 600; box-shadow: 0 18px 44px -16px rgb(var(--brand-rgb) / .55), inset 0 1px 0 rgb(255 255 255 / .3); }
+.btn-primary:focus-visible { box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent), 0 18px 44px -16px rgb(var(--brand-rgb) / .55), inset 0 1px 0 rgb(255 255 255 / .3); }
+/* the arrow chip */
+.btn .chev { width: 20px; height: 20px; border-radius: 50%; background: color-mix(in oklab, currentColor 15%, transparent); display: grid; place-items: center; transition: transform .2s cubic-bezier(.4, 0, .2, 1), translate .2s cubic-bezier(.4, 0, .2, 1); }
+.btn .chev svg { width: 10px; height: 10px; }
+.btn-ghost { color: var(--foreground); border-color: var(--input); background-color: var(--background); }
+.btn-lg { height: 54px; padding: 0 26px; font-size: 15px; }
+@media (hover: hover) {
+  .btn:hover { translate: 0 -2px; }
+  .btn:hover .chev { translate: 2px 0; }
+  .btn-primary:hover { background-color: var(--brand-hover); box-shadow: 0 26px 60px -20px rgb(var(--brand-rgb) / .6), inset 0 1px 0 rgb(255 255 255 / .3); }
+  .btn-ghost:hover { border-color: var(--line-3); background-color: var(--muted); }
+}
 
 /* ============ HERO ============ */
-.hero { position: relative; padding: 118px 0 80px; overflow: clip; }
+.hero { position: relative; padding: calc(var(--k-nav-h) + 50px) 0 80px; overflow: clip; }
 .hero::before { content: ""; position: absolute; left: 50%; top: -220px; width: 1200px; height: 1200px; border-radius: 50%; background: radial-gradient(50% 50% at 50% 50%, rgba(0, 87, 255, .1), transparent 70%); transform: translateX(-50%); pointer-events: none; z-index: 0; }
 .grid-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(10, 10, 15, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(10, 10, 15, .04) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(60% 50% at 50% 0%, #000, transparent 80%); -webkit-mask-image: radial-gradient(60% 50% at 50% 0%, #000, transparent 80%); }
 .hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
@@ -305,7 +323,7 @@ section { position: relative; z-index: 1; }
 .process { padding: 96px 0; background: #fff; position: relative; }
 .process::before { content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: 96px; background: linear-gradient(180deg, transparent, var(--line)); transform: translateX(-50%); }
 .process-grid { display: grid; grid-template-columns: .85fr 1.3fr; gap: 64px; align-items: start; }
-.process-left { position: sticky; top: calc(120px + var(--fam-h, 0px)); padding-top: 20px; }
+.process-left { position: sticky; top: calc(var(--k-top) + 46px); padding-top: 20px; }
 .process-left h2 { font-size: clamp(36px, 4.8vw, 60px); letter-spacing: -.035em; font-weight: 600; line-height: 1; margin: 18px 0 18px; }
 .process-left h2 .serif { color: var(--blue); display: block; }
 .process-left p { color: var(--mute); font-size: 16.5px; line-height: 1.6; max-width: 38ch; }
@@ -368,26 +386,19 @@ section { position: relative; z-index: 1; }
    Two markups share one look: <details class="qa"> (Faq.astro, works without JS) and the
    legacy <div class="qa"> with a button (home, until it moves to Faq.astro). */
 .faq { padding: 96px 0; background: linear-gradient(180deg, #fff, #fafbfd); }
-.faq-list { background: var(--k-paper); border: 1px solid var(--k-line); border-radius: var(--k-r-lg); overflow: clip; max-width: 880px; margin: 0 auto; box-shadow: 0 20px 50px -30px rgb(var(--k-shadow-rgb) / .12), var(--k-edge-light); }
-.qa { border-bottom: 1px solid var(--k-line); position: relative; transition: background-color .2s ease; }
-.faq-list .qa h3 { margin: 0; font: inherit; letter-spacing: inherit; color: inherit; }
-.qa::before { content: ""; position: absolute; left: 0; top: 50%; height: 0; width: 3px; background: var(--k-accent); transition: height .25s ease; transform: translateY(-50%); border-radius: 0 2px 2px 0; }
-.qa:hover::before, .qa:is(.open, [open])::before { height: 60%; }
-.qa:is(.open, [open]) { background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 1.5%, transparent), transparent); }
-.qa:last-child { border-bottom: 0; }
-.faq-list .qa :is(button, summary) { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 24px 26px; text-align: left; font-size: 17px; font-weight: 500; letter-spacing: -.01em; transition: color .15s; gap: 20px; }
-.faq-list .qa :is(button, summary):hover { color: var(--k-accent-ink); }
-.faq-list .qa summary:focus-visible { outline-offset: -2px; }
-.qa .plus { position: relative; width: 22px; height: 22px; flex-shrink: 0; border-radius: 50%; background: var(--k-paper-2); transition: background-color .2s; }
-.qa:is(.open, [open]) .plus { background: var(--k-accent); }
-.qa .plus::before, .qa .plus::after { content: ""; position: absolute; background: var(--k-ink-2); left: 50%; top: 50%; transform: translate(-50%, -50%); transition: background-color .2s; }
-.qa:is(.open, [open]) .plus::before, .qa:is(.open, [open]) .plus::after { background: #fff; }
-.qa .plus::before { width: 11px; height: 1.4px; }
-.qa .plus::after { width: 1.4px; height: 11px; transition: transform var(--k-t-snap) var(--k-spring-snap), background-color .2s; }
-.qa:is(.open, [open]) .plus::after { transform: translate(-50%, -50%) rotate(90deg); }
-div.qa .ans { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
-div.qa.open .ans { max-height: 280px; }
-.qa .ans-inner { padding: 0 26px 24px; color: var(--k-ink-3); font-size: 14.5px; line-height: 1.6; max-width: 64ch; }
+/* The accordion every section of www.adboost.media uses: a native <details> list between
+   hairlines, a chevron that turns, the question underlined on hover. No JS, and every answer is
+   in the page source (kit .k-disclosure eases it open where the browser can). */
+.faq-list { max-width: 880px; margin: 0 auto; border-top: 1px solid var(--k-line); }
+.qa { border-bottom: 1px solid var(--k-line); }
+.faq-list .qa summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 2px; cursor: pointer; }
+.faq-list .qa summary:focus-visible { outline-offset: 4px; border-radius: 6px; }
+.faq-list .qa h3 { margin: 0; font-size: 17.5px; line-height: 1.4; font-weight: 600; letter-spacing: -.012em; color: var(--k-ink); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 5px; transition: text-decoration-color .2s; }
+.faq-list .qa summary:hover h3 { text-decoration-color: var(--k-line-3); }
+.qa .qa-mark { position: relative; width: 20px; height: 20px; flex-shrink: 0; transition: rotate .28s var(--k-ease); }
+.qa .qa-mark::before { content: ""; position: absolute; left: 50%; top: 42%; width: 8px; height: 8px; border-right: 1.8px solid var(--k-ink-3); border-bottom: 1.8px solid var(--k-ink-3); transform: translate(-50%, -50%) rotate(45deg); }
+.qa[open] .qa-mark { rotate: 180deg; }
+.qa .ans-inner { padding: 0 2px 24px; color: var(--k-ink-3); font-size: 15px; line-height: 1.62; max-width: 64ch; }
 
 /* ============ BIG CTA ============ */
 .bigcta { padding: 96px 0; background: #0a0a0f; color: #fff; position: relative; overflow: clip; }
@@ -400,11 +411,6 @@ div.qa.open .ans { max-height: 280px; }
 .bigcta h2 { font-size: clamp(44px, 6vw, 84px); letter-spacing: -.04em; font-weight: 600; line-height: 1; margin: 18px 0 20px; text-wrap: balance; }
 .bigcta h2 .serif { color: #9bbcff; display: inline-block; }
 .bigcta p { color: rgba(255, 255, 255, .66); font-size: 17px; line-height: 1.55; margin: 0 auto 32px; max-width: 54ch; }
-.bigcta .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 18px 40px -10px rgba(0, 87, 255, .55), inset 0 1px 0 rgba(255, 255, 255, .25); }
-.bigcta .btn-primary:hover { background: #0048d9; }
-.bigcta .btn-primary .chev { background: rgba(255, 255, 255, .22); }
-.bigcta .btn-ghost { color: #fff; border-color: rgba(255, 255, 255, .18); background: transparent; }
-.bigcta .btn-ghost:hover { background: rgba(255, 255, 255, .08); }
 .bigcta .ctas { display: flex; gap: 10px; justify-content: center; align-items: center; }
 .bigcta .perks { margin-top: 28px; display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; color: rgba(255, 255, 255, .5); font-size: 13px; }
 .bigcta .perks span { display: flex; align-items: center; gap: 6px; }
@@ -446,10 +452,9 @@ div.qa.open .ans { max-height: 280px; }
   .b3 .ch-rules .r { padding: 6px 10px; font-size: 10.5px; white-space: nowrap; }
 }
 @media (max-width: 760px) {
-  .hero { padding-top: 96px; padding-bottom: 56px; }
+  .hero { padding-top: calc(var(--k-nav-h) + 36px); padding-bottom: 56px; }
   .hero h1 { font-size: clamp(36px, 9.5vw, 56px); }
   .hero .lede { font-size: 15.5px; }
-  .hero .ctas .btn-lg { padding: 12px 18px; font-size: 14px; }
   .hero .ctas { gap: 8px; }
   .hero-perks span { font-size: 11.5px; }
   .pill { font-size: 11.5px; padding: 4px 12px 4px 5px; }
@@ -562,8 +567,9 @@ div.qa.open .ans { max-height: 280px; }
   .bigcta p { font-size: 15px; }
   .bigcta .perks { font-size: 11.5px; }
 
-  .faq-list .qa :is(button, summary) { font-size: 14.5px; padding: 18px 20px; }
-  .qa .ans-inner { padding: 0 20px 20px; font-size: 13.5px; }
+  .faq-list .qa summary { padding: 18px 2px; gap: 14px; }
+  .faq-list .qa h3 { font-size: 16px; }
+  .qa .ans-inner { padding-bottom: 20px; font-size: 14.5px; }
 
   /* Faster first paint: skip rendering below-fold sections until near viewport */
   .bento, .cases, .process, .spotlight, .testimonials, .faq {
@@ -571,15 +577,11 @@ div.qa.open .ans { max-height: 280px; }
     contain-intrinsic-size: auto 1200px;
   }
 
-  .k-nav .brand > span:last-child { font-size: 14.5px; }
-  .k-nav .btn-primary { padding: 8px 14px; font-size: 13px; }
 }
 
 @media (max-width: 420px) {
   .hero h1 { font-size: 34px; }
   .hero .lede { font-size: 15px; }
-  .hero .ctas { flex-direction: column; align-items: stretch; }
-  .hero .ctas .btn { justify-content: center; }
   .ops { padding: 12px; }
   .opclient .nm { font-size: 11px; }
   .opclient .cat { font-size: 8.5px; }
@@ -592,10 +594,32 @@ div.qa.open .ans { max-height: 280px; }
   .ops-stat { padding: 4px 6px; gap: 6px; }
   .ops-stat .ico { width: 22px; height: 22px; }
   .ops-stat .ico svg { width: 12px; height: 12px; }
-  .k-nav .brand > span:last-child { font-size: 14px; }
   .bigcta h2 { font-size: 32px; }
   .section-head h2, .cases-head h2 { font-size: 30px; }
 }
 
 /* ---- larger tap target for post back-link ---- */
 .all-link { padding: 10px 0; display: inline-flex; align-items: center; }
+
+/* ============ ONE SITE: phones and laptops ============
+   The same two rules the other sections of www.adboost.media follow. */
+/* Phones: hero buttons are full width. */
+@media (max-width: 720px) {
+  .hero .ctas, .bigcta .ctas, .phero .ctas { flex-direction: column; align-items: stretch; }
+}
+/* Phones: every tap target is at least 44px (interior components: interior.css). */
+@media (max-width: 760px) {
+  .k-nav .brand, .k-foot .brand { min-height: 44px; }
+  .b1 .cat { min-height: 44px; }
+  a.k-chip { min-height: 44px; }
+  a.dg-scard { min-height: 44px; }
+  .all-link { min-height: 44px; }
+}
+/* Laptops are wide but short (1366x768 and the like): every hero keeps its headline, its lede
+   and its main button inside the first screen. */
+@media (min-width: 1000px) and (max-height: 860px) {
+  .hero { padding: calc(var(--k-nav-h) + 30px) 0 56px; }
+  .hero h1 { font-size: clamp(40px, 5.2vw, 72px); margin-top: 16px; }
+  .hero .lede { margin-top: 18px; }
+  .hero .ctas { margin-top: 24px; }
+}

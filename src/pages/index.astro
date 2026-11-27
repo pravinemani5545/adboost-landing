@@ -1,6 +1,7 @@
 ---
 import Shell from '../layouts/Shell.astro';
 import Faq from '../components/Faq.astro';
+import ButtonLink from '../components/site/ButtonLink.astro';
 import HeatMatrix from '../kit/diagram/HeatMatrix.astro';
 import { BOOK_PATH } from '../lib/site';
 import { organizationNode } from '../lib/schema';
@@ -108,7 +109,6 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
   twitterDescription="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked."
   {jsonLd}
   bingVerify
-  navTransparentTop
 >
 
 <!-- HERO: first screen, so .arrive (transform only, never hidden) instead of reveals -->
@@ -131,11 +131,8 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       </h1>
       <p class="lede arrive d1">A healthcare marketing agency for health and wellness brands. We help you acquire more customers profitably and increase retention through high-converting ads, funnels, and creative strategy, without the compliance landmines.</p>
       <div class="ctas arrive d2">
-        <a class="btn btn-primary btn-lg" href={BOOK_PATH} data-magnetic>
-          Book a free strategy call
-          <span class="chev" set:html={chev} />
-        </a>
-        <a class="btn btn-ghost btn-lg" href="#process">See how our 5-day process works</a>
+        <ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>Book a free strategy call</ButtonLink>
+        <ButtonLink href="#process" variant="outline" size="lg">See how our 5-day process works</ButtonLink>
       </div>
       <div class="hero-perks arrive d3">
         <span>Meet a senior strategist</span>
@@ -734,7 +731,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       <h2 class="reveal d1">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
       <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
       <div class="ctas reveal d3">
-        <a class="btn btn-primary btn-lg" href={BOOK_PATH} data-magnetic><span>Book a free strategy call</span><span class="chev" set:html={chev} /></a>
+        <ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>Book a free strategy call</ButtonLink>
       </div>
       <div class="perks reveal d3">
         <span>30 minutes</span>

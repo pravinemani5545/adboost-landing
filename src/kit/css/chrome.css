@@ -19,7 +19,8 @@ body {
 }
 html.scroll-locked { overflow: hidden; }
 [id] { scroll-margin-top: calc(var(--k-top) + 16px); }
-:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+/* the focus ring every section shares: 2px in the accent, 3px off the element */
+:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
 :is(.k-tone-night, [data-tone="night"]) :focus-visible { outline-color: var(--k-accent-bright); }
 ::selection { background: var(--k-accent); color: var(--k-accent-on); }
 .k-vh {
@@ -52,7 +53,7 @@ html.scroll-locked { overflow: hidden; }
   position: fixed;
   inset: var(--fam-h, 0px) 0 auto 0;
   z-index: var(--k-z-nav);
-  color: var(--k-ink-2);
+  color: color-mix(in srgb, var(--k-ink-2) 80%, transparent);
 }
 /* glass on ::before (a backdrop-filter on the nav would break the fixed phone sheet) */
 .k-nav::before {
@@ -67,9 +68,11 @@ html.scroll-locked { overflow: hidden; }
   transition: opacity var(--k-d-base) var(--k-ease), box-shadow var(--k-d-base) var(--k-ease);
 }
 .k-nav.elevated::before { box-shadow: 0 8px 24px -18px rgb(var(--k-shadow-rgb) / 0.25); }
-/* home: clear over the hero until the page scrolls (or a menu opens) */
-.k-nav[data-top="clear"]:not(.scrolled)::before { opacity: 0; }
-html.k-sheet-open .k-nav::before { opacity: 1; }
+/* clear over the top of the page until it scrolls (or the phone menu opens), as on every section.
+   Only with JS: without it nothing would ever mark the page as scrolled. */
+html.js .k-nav:not(.scrolled)::before { opacity: 0; }
+/* the phone menu is open: a solid bar above it (glass would let the scrim show through as grey) */
+html.k-sheet-open .k-nav::before { opacity: 1; background: var(--k-paper); }
 .lowpower .k-nav::before { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--k-paper); }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .k-nav::before { background: var(--k-paper); }
@@ -84,75 +87,112 @@ html.k-sheet-open .k-nav::before { opacity: 1; }
 .k-nav__links {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.k-nav__links > li { display: flex; align-items: center; }
+/* each item is a soft rounded surface on hover; a group's surface covers its label and its caret */
+.k-nav__links > li {
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  transition: background-color var(--k-d-fast) var(--k-ease);
+}
+.k-nav__links > li:hover,
+.k-nav__group.is-open { background: rgb(var(--k-shadow-rgb) / 0.05); }
 .k-nav__link {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 12px 7px;
-  font-size: 13.5px;
+  gap: 5px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
   color: inherit;
   white-space: nowrap;
   transition: color var(--k-d-fast) var(--k-ease);
 }
-.k-nav__link:hover, .k-nav__link[aria-current="page"] { color: var(--k-accent-ink); }
+.k-nav__links > li:hover > .k-nav__link,
+.k-nav__group.is-open > .k-nav__link { color: var(--k-ink); }
+/* current page: ink, medium weight and a dot in the section accent */
+.k-nav__link[aria-current="page"] { color: var(--k-ink); font-weight: 500; }
+.k-nav__link[aria-current="page"]::after {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin-left: 2px;
+  border-radius: 50%;
+  background: var(--k-accent);
+}
 .k-nav__link svg { opacity: 0.55; }
-.k-nav__actions { display: flex; align-items: center; gap: 10px; }
+.k-nav__actions { display: flex; align-items: center; gap: 12px; }
+/* the wrapper of the bar's Book button (a shadcn Button: its own display is a utility class, which
+   the site's CSS cannot override, so the wrapper is what gets hidden on phones) */
+.k-nav__cta { display: flex; }
 /* disclosure groups: the label links to the hub, the caret button opens its menu */
 .k-nav__group { position: relative; }
+.k-nav__group > .k-nav__link { padding-right: 2px; }
 .k-nav__toggle {
   display: grid;
   place-items: center;
-  width: 24px;
-  height: 32px;
-  margin-left: -6px;
-  border-radius: var(--k-r-xs);
+  width: 26px;
+  height: 40px;
+  border-radius: 10px;
   color: inherit;
 }
 .k-nav__toggle svg { opacity: 0.55; transition: rotate var(--k-t-snap) var(--k-spring-snap); }
-.k-nav__toggle[aria-expanded="true"] svg { rotate: 180deg; opacity: 0.9; }
-.k-nav__group:hover > .k-nav__link,
-.k-nav__toggle[aria-expanded="true"] { color: var(--k-accent-ink); }
+.k-nav__toggle[aria-expanded="true"] svg,
+html:not(.js) .k-nav__group:is(:hover, :focus-within) .k-nav__toggle svg { rotate: 180deg; opacity: 0.9; }
+.k-nav__group:hover > .k-nav__toggle,
+.k-nav__toggle[aria-expanded="true"] { color: var(--k-ink); }
+/* the panel: detached from the bar, centred under its label, scales in */
 .k-menu {
   position: absolute;
-  top: calc(100% - 2px);
-  left: -12px;
+  top: calc(100% + 12px);
+  left: 50%;
   z-index: var(--k-z-panel);
-  min-width: 228px;
-  padding: 8px;
+  min-width: 248px;
+  padding: 10px;
   display: grid;
   gap: 2px;
   background: var(--k-paper);
   border: 1px solid var(--k-line);
-  border-radius: var(--k-r-md);
+  border-radius: 18px;
   box-shadow: var(--k-e3), var(--k-edge-light);
   opacity: 0;
   visibility: hidden;
-  translate: 0 6px;
+  translate: -50% 6px;
+  scale: 0.97;
+  transform-origin: top center;
   transition:
-    opacity var(--k-d-fast) var(--k-ease),
-    translate var(--k-t-snap) var(--k-spring-snap),
-    visibility 0s linear var(--k-d-fast);
+    opacity 0.2s var(--k-ease),
+    translate 0.2s var(--k-ease),
+    scale 0.2s var(--k-ease),
+    visibility 0s linear 0.2s;
 }
+/* a long menu sets its links in two columns */
+.k-menu--cols { grid-template-columns: repeat(2, minmax(0, 1fr)); min-width: 430px; }
+/* the gap between the bar and the panel still counts as the menu */
+.k-menu::before { content: ""; position: absolute; inset: -13px 0 auto 0; height: 13px; }
 .k-menu a {
   display: block;
-  padding: 9px 12px;
-  border-radius: var(--k-r-sm);
-  font-size: 13.5px;
-  color: var(--k-ink-2);
-  transition: background-color var(--k-d-instant), color var(--k-d-instant);
+  padding: 11px 12px;
+  border-radius: 11px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--k-ink);
+  white-space: nowrap;
+  transition: background-color var(--k-d-instant);
 }
-.k-menu a:hover, .k-menu a:focus-visible { background: var(--k-paper-2); color: var(--k-accent-ink); }
+.k-menu a:hover, .k-menu a:focus-visible { background: var(--k-paper-2); }
+.k-menu a[aria-current="page"] { color: var(--k-accent-ink); }
 .k-nav__group.is-open > .k-menu,
 html:not(.js) .k-nav__group:is(:hover, :focus-within) > .k-menu {
   opacity: 1;
   visibility: visible;
-  translate: 0 0;
+  translate: -50% 0;
+  scale: 1;
   transition-delay: 0s;
 }
 .k-nav__ext { white-space: nowrap; }
@@ -161,11 +201,12 @@ html:not(.js) .k-nav__group:is(:hover, :focus-within) > .k-menu {
 /* burger: phones only */
 .k-burger {
   display: none;
+  flex-shrink: 0;
   place-items: center;
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  border: 1px solid var(--k-line);
+  border: 1px solid var(--k-line-2);
   background: rgb(255 255 255 / 0.7);
   color: var(--k-ink);
 }
@@ -177,6 +218,11 @@ html:not(.js) .k-burger { display: none !important; }
 @media (max-width: 760px) {
   .k-nav__links { display: none; }
   .k-burger { display: grid; }
+}
+/* phones: the bar is the logo and the menu button. The booking button moves into the menu (and
+   stays in the bar pinned to the bottom of the screen). Without JS there is no menu, so it stays. */
+@media (max-width: 720px) {
+  html.js .k-nav__cta { display: none; }
 }
 
 /* ---------- phone sheet ---------- */
@@ -200,28 +246,43 @@ html:not(.js) .k-burger { display: none !important; }
   clip-path: inset(0);
   transition: clip-path 320ms var(--k-ease-out), visibility 0s;
 }
-.k-sheet__item { border-bottom: 1px solid var(--k-paper-3); }
-.k-sheet__item:last-child { border-bottom: 0; }
+.k-sheet__item { border-bottom: 1px solid var(--k-line); }
+.k-sheet__item:last-child, .k-sheet__item:has(+ .k-sheet__item--cta) { border-bottom: 0; }
 .k-sheet__top {
   display: flex;
   align-items: center;
-  min-height: 48px;
-  padding: 6px 8px;
-  font-size: 15px;
+  min-height: 52px;
+  padding: 6px;
+  font-size: 16px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   color: var(--k-ink);
 }
+/* group label (mono, as in the footer) */
+.k-sheet__lab {
+  display: block;
+  padding: 16px 6px 4px;
+  font-family: var(--k-font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--k-ink-3);
+}
 /* sub-links: a two-column grid of full-size touch targets (44px), not a run of small grey text */
-.k-sheet__sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; padding: 0 8px 10px; }
+.k-sheet__sub { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; padding: 0 6px 10px; }
 .k-sheet__sub a {
   display: flex;
   align-items: center;
   min-height: 44px;
-  font-size: 15px;
+  font-size: 14.5px;
+  font-weight: 500;
   line-height: 1.3;
   color: var(--k-ink-2);
 }
 .k-sheet a:hover { color: var(--k-accent-ink); }
+.k-sheet__sub a[aria-current] { color: var(--k-ink); font-weight: 600; }
+.k-sheet__item--cta { padding-top: 14px; }
 .js.motion .k-sheet__item {
   opacity: 0;
   translate: 0 8px;

@@ -1,5 +1,6 @@
 ---
-// Visual FAQ: native <details>, so it opens without JS and the answers are in the HTML for
+// Visual FAQ, in the accordion style every section of www.adboost.media shares (hairline rows, a
+// chevron that turns). Native <details>, so it opens without JS and the answers are in the HTML for
 // crawlers. Where ::details-content is supported the answer eases open (kit .k-disclosure).
 // Pair with faqPage() schema at the page level for AEO/GEO; the visible text and the JSON-LD
 // must stay word for word in sync. Answers accept trusted inline HTML (links).
@@ -9,7 +10,7 @@ const { items, idPrefix = 'faq' } = Astro.props;
 <div class="faq-list faq-block k-disclosure" data-reveal>
   {items.map((it, i) => (
     <details class="qa" id={`${idPrefix}-${i}`}>
-      <summary><h3>{it.q}</h3><span class="plus" aria-hidden="true"></span></summary>
+      <summary><h3>{it.q}</h3><span class="qa-mark" aria-hidden="true"></span></summary>
       <div class="ans"><div class="ans-inner" set:html={it.a} /></div>
     </details>
   ))}

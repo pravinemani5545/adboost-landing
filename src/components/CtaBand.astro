@@ -2,6 +2,7 @@
 // The closing CTA: a night slab with its own grid, aura and grain layers. Tracker contract: the
 // .cta-band class labels its /book/ click "cta-band"; keep it. The phone CTA steps aside while
 // this is on screen. heading accepts trusted inline HTML (serif accents).
+import ButtonLink from './site/ButtonLink.astro';
 import { BOOK_PATH } from '../lib/site';
 interface Props { heading?: string; text?: string; }
 const {
@@ -18,10 +19,7 @@ const {
       <div class="inner">
         <h2 set:html={heading} />
         <p>{text}</p>
-        <a class="btn btn-primary btn-lg" href={BOOK_PATH} data-magnetic>
-          Book a free strategy call
-          <span class="chev"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M1 4.5h7M5 1l3.5 3.5L5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </a>
+        <ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>Book a free strategy call</ButtonLink>
         <div class="cb-perks">
           <span>30 minutes</span>
           <span>Free account audit</span>

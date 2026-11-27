@@ -45,7 +45,8 @@ const { source, withName = false, button = 'Subscribe' } = Astro.props;
     font: inherit; font-size: 14.5px; color: var(--ink); background: #fff; width: 100%; box-sizing: border-box;
   }
   .nlf-field input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 87, 255, .13); }
-  .nlf-btn { flex-shrink: 0; justify-content: center; cursor: pointer; border: 0; font: inherit; font-size: 13.5px; font-weight: 500; }
+  /* sits beside a 44px field: the same measurements as the newsletter button on the other sections */
+  .nlf-btn { flex-shrink: 0; justify-content: center; cursor: pointer; border: 0; font: inherit; font-size: 14px; font-weight: 600; height: 44px; }
   .nlf-btn[disabled] { opacity: .6; cursor: default; }
   .nlf-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .nlf-hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
