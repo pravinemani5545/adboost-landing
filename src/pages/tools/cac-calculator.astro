@@ -1,16 +1,15 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
 import Bars from '../../kit/diagram/Bars.astro';
 import { getVertical } from '../../data/verticals';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
 import { cacCalc, money, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import CalcHero from '../../family/resources/CalcHero.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/cac-calculator/';
@@ -50,21 +49,62 @@ const def = verticals.find((v) => v.slug === DEFAULT_SLUG)!;
 const initial = cacCalc(SPEND, CUSTOMERS, def.lo, def.hi);
 // One axis for every vertical, so switching verticals moves the bar, not the scale.
 const AXIS_MAX = 600;
----
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'CAC Calculator' }]}
-    eyebrow="FREE TOOL"
-    title="CAC calculator"
-    lede="Work out your true customer acquisition cost, then see how it stacks up against 2026 health-vertical benchmarks."
-  />
 
-  <section class="iwrap-sm rs-tool">
-    <div class="container">
-     <div class="rs-tdoc">
-      <div class="rs-tdoc__main tool-doc">
-      <div class="calc k-card k-card--float arrive rs-calc">
-        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">CAC calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
+// FamilyPage (src/family/FamilyPage.astro): the head and JSON-LD exactly as before; the FAQ as cards
+// (the same q/a the FAQPage JSON-LD carries); the closing card with this page's CtaBand copy.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: "CAC calculator",
+  summary: esc("Work out your true customer acquisition cost, then see how it stacks up against 2026 health-vertical benchmarks."),
+  faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+  ctaHeading: "Think your CAC is too high?",
+  ctaText: "Book a free audit - we’ll benchmark your account and show you the fastest levers to bring CAC down.",
+};
+const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs entirely in your browser', icon: 'check' as const }];
+// The hero: this calculator's formula as a chain, with the values it shows on load
+const hero = {
+  name: 'CAC calculator',
+  op: '÷' as const,
+  rows: [
+    { label: 'Total acquisition spend', sub: 'media + creative + fees, per period', value: money(SPEND), icon: 'layers' },
+    { label: 'New customers acquired', sub: 'same period', value: CUSTOMERS.toLocaleString('en-US'), icon: 'users' },
+  ],
+  result: { label: 'Your CAC', value: initial.value, tone: initial.verdict },
+  range: { lo: def.lo, hi: def.hi, max: AXIS_MAX, value: initial.cac ?? 0, label: `${def.label} (${def.display})` },
+  formula: 'CAC = total acquisition spend ÷ new customers',
+  chip: { title: 'Runs entirely in your browser', label: 'nothing is stored or sent', icon: 'lock' },
+};
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: "CAC Calculator" }]}
+  eyebrow="FREE TOOL"
+  schema={jsonLd}
+  byline={byline}
+  faqHeading="FAQ"
+>
+  <CalcHero slot="hero" {...hero} />
+
+  <div slot="aside" class="pg-card gl-tools">
+    <h4>More free tools</h4>
+    <ul class="gl-links">
+      <li><LinkCard href="/tools/ltv-cac-calculator/" label="LTV:CAC calculator" /></li>
+      <li><LinkCard href="/tools/ad-budget-calculator/" label="Ad budget calculator" /></li>
+      <li><LinkCard href="/blog/telehealth-cac-benchmarks-2026/" label="CAC benchmarks by vertical" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>Think your CAC is too high?</h4>
+    <p>Free audit - we benchmark your account and map the fastest levers to bring it down.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  
+  <div class="calc tc-calc reveal">
+        <div class="tc-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="tc-name">CAC calculator</span><span class="tc-live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="spend">Total acquisition spend <span class="hint">(media + creative + fees, per period)</span></label>
@@ -110,43 +150,20 @@ const AXIS_MAX = 600;
           <div class="cr-note" id="cacNote">{initial.note}</div>
         </div>
       </div>
-      <p class="tool-fine">Runs entirely in your browser - nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional - verify against your own account.</p>
-
-      <h2 class="sec-title">How CAC is calculated</h2>
+  <p class="tool-fine tc-fine">Runs entirely in your browser - nothing is stored or sent. Benchmark ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a> (methodology and sources there); they’re directional - verify against your own account.</p>
+  
+  <div class="pg-prose"><h2 id="how-cac-is-calculated">How CAC is calculated</h2>
       <p><a href="/glossary/cac/">Customer acquisition cost</a> is fully-loaded spend divided by the customers that spend bought. The trap is counting media only: creative and fees are part of what a customer really costs.</p>
-      <ol class="tool-steps">
-        <li class="k-card k-card--flat" data-reveal><span><strong>Total your acquisition spend.</strong> Add media, creative production, and the agency or team cost attributable to acquisition for one period.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Count new customers.</strong> Count the new customers or patients acquired in that same period.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Divide spend by customers.</strong> CAC = total acquisition spend ÷ new customers. $50,000 across 220 customers is about $227.</span></li>
-      </ol>
-
-      <h2 class="sec-title">How to read your CAC</h2>
-      <p>CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/">LTV:CAC ratio</a> - aim for at least 3:1 - and see the full <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a>.</p>
-
-      <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="cac" /></div>
       </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h4>More free tools</h4>
-          <ul class="rs-links">
-            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
-            <li><a href="/tools/ad-budget-calculator/"><ResIcon href="/tools/ad-budget-calculator/" /><span>Ad budget calculator</span></a></li>
-            <li><a href="/blog/telehealth-cac-benchmarks-2026/"><ResIcon href="/blog/telehealth-cac-benchmarks-2026/" /><span>CAC benchmarks by vertical</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h4>Think your CAC is too high?</h4>
-          <p>Free audit - we benchmark your account and map the fastest levers to bring it down.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
-
-  <CtaBand heading="Think your CAC is too high?" text="Book a free audit - we’ll benchmark your account and show you the fastest levers to bring CAC down." />
-</BaseLayout>
+  <ol class="cp-steps tc-steps">
+    <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Total your acquisition spend.</strong> Add media, creative production, and the agency or team cost attributable to acquisition for one period.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Count new customers.</strong> Count the new customers or patients acquired in that same period.</p></div></li>
+    <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide spend by customers.</strong> CAC = total acquisition spend ÷ new customers. $50,000 across 220 customers is about $227.</p></div></li>
+  </ol>
+  
+  <div class="pg-prose"><h2 id="how-to-read-your-cac">How to read your CAC</h2>
+      <p>CAC only means something against lifetime value. A $250 CAC is excellent for a GLP-1 program at $299/month and fatal for a $29 supplement. Once you have your CAC, check your <a href="/tools/ltv-cac-calculator/">LTV:CAC ratio</a> - aim for at least 3:1 - and see the full <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a>.</p></div>
+</FamilyPage>
 
 <script>
   import { setLive } from '../../kit/diagram/live';

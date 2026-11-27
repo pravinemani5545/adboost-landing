@@ -1,0 +1,129 @@
+---
+// The hero graphic of a calculator page, in the style of adboost-media's ROI calculator hero
+// (src/components/graphics/content/RoiChain.astro): the calculator's formula as a chain of
+// product rows (each input with its label, the page's hint and its starting value), the result
+// row, a small picture of how the page reads the result, and the formula line in mono.
+// Each page passes its own labels and the values its calculator shows on load (computed with the
+// same _calc.ts function), so every word and number is already on the page. Decorative
+// (aria-hidden): the working calculator sits right below it.
+import Win from '../graphics/Win.astro';
+import Ic from '../graphics/Ic.astro';
+import Chip from '../graphics/Chip.astro';
+import type { Tone } from '../graphics/types';
+
+interface Row { label: string; sub?: string; value: string; icon: string; /** the operator after this row (default: op) */ op?: '÷' | '×' }
+interface Band { to: number; tone: 'bad' | 'warn' | 'ok' }
+interface Props {
+  name: string;
+  rows: Row[];
+  op: '÷' | '×';
+  result: { label: string; value: string; tone?: '' | 'good' | 'bad' | 'warn' };
+  /** a gauge: bands from 0 to the last band's `to`, needle at `value` */
+  gauge?: { bands: Band[]; value: number; max?: number };
+  /** a range bar: the benchmark band [lo, hi] on 0..max, the marker at `value`, with its label */
+  range?: { lo: number; hi: number; max: number; value: number; label: string };
+  /** two small read-outs under the result */
+  subs?: { label: string; value: string }[];
+  formula: string;
+  chip?: { title: string; label?: string; icon: string; tone?: Tone };
+}
+const { name, rows, op, result, gauge, range, subs, formula, chip } = Astro.props;
+
+// gauge geometry: a half circle from 180deg to 0deg, radius 70, centre (90, 86)
+const R = 70, CX = 90, CY = 86;
+const max = gauge ? gauge.max ?? gauge.bands[gauge.bands.length - 1].to : 1;
+const pt = (v: number) => {
+  const a = Math.PI * (1 - Math.min(Math.max(v, 0), max) / max);
+  return [CX + R * Math.cos(a), CY - R * Math.sin(a)].map((n) => Math.round(n * 10) / 10);
+};
+const arcs = gauge?.bands.map((b, i) => {
+  const from = i === 0 ? 0 : gauge.bands[i - 1].to;
+  const [x1, y1] = pt(from + (i === 0 ? 0 : max * 0.012));
+  const [x2, y2] = pt(b.to - (i === gauge.bands.length - 1 ? 0 : max * 0.012));
+  return { d: `M${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2}`, tone: b.tone };
+});
+const needle = gauge ? pt(gauge.value) : undefined;
+const nx = needle ? Math.round((CX + (needle[0] - CX) * 0.78) * 10) / 10 : 0;
+const ny = needle ? Math.round((CY + (needle[1] - CY) * 0.78) * 10) / 10 : 0;
+const pct = (v: number, of: number) => `${Math.min(100, Math.max(0, (v / of) * 100)).toFixed(1)}%`;
+---
+<div class="ch" aria-hidden="true">
+  <Win name={name} pill={{ text: 'Live', tone: 'ok', dot: true }}>
+    <ul class="ch-rows">
+      {rows.map((r, i) => (
+        <li class="ch-row" style={`--i:${i}`}>
+          <span class:list={['ui-ic', i % 3 === 1 && 'b', i % 3 === 2 && 'c']}><Ic name={r.icon} /></span>
+          <span class="ch-l">{r.label}{r.sub && <small>{r.sub}</small>}</span>
+          <span class="ch-v">{r.value}</span>
+          {i < rows.length - 1 && <span class="ch-op">{r.op ?? op}</span>}
+        </li>
+      ))}
+      <li class="ch-row ch-res" style={`--i:${rows.length}`}>
+        <span class="ui-ic g"><Ic name="check" /></span>
+        <span class="ch-l">{result.label}</span>
+        <span class:list={['ch-v', 'ch-big', result.tone && `is-${result.tone}`]}>{result.value}</span>
+      </li>
+    </ul>
+    {(gauge || range || subs) && (
+      <div class="ch-read">
+        {gauge && arcs && needle && (
+          <svg class="ch-gauge" viewBox="0 0 180 96">
+            {arcs.map((a) => <path d={a.d} class={`ch-arc ${a.tone}`} />)}
+            <line x1={CX} y1={CY} x2={nx} y2={ny} class="ch-needle" />
+            <circle cx={CX} cy={CY} r="6" class="ch-hub" />
+          </svg>
+        )}
+        {range && (
+          <div class="ch-range">
+            <span class="ch-track"><i class="ch-band" style={`left:${pct(range.lo, range.max)};right:calc(100% - ${pct(range.hi, range.max)})`}></i><i class="ch-mk" style={`left:${pct(range.value, range.max)}`}></i></span>
+            <span class="ui-lab">{range.label}</span>
+          </div>
+        )}
+        {subs && (
+          <div class="ch-subs">
+            {subs.map((s) => <span class="ch-sub"><span class="ui-lab">{s.label}</span><b>{s.value}</b></span>)}
+          </div>
+        )}
+      </div>
+    )}
+    <p class="ch-fx"><span class="ui-lab">Formula</span><span>{formula}</span></p>
+  </Win>
+  {chip && <Chip title={chip.title} label={chip.label} icon={chip.icon} tone={chip.tone ?? 'b'} style="right:-22px;bottom:-50px" />}
+</div>
+
+<style>
+  .ch { position: relative; }
+  .ch-rows { list-style: none; margin: 0; padding: 12px 12px 4px; display: grid; gap: 8px; }
+  .ch-row { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; gap: 12px; align-items: center; margin: 0; padding: 10px 14px 10px 10px; border-radius: 14px; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 8px 16px -14px rgb(var(--k-shadow-rgb) / .35); }
+  .ch-l { min-width: 0; font-size: 13px; font-weight: 600; letter-spacing: -.01em; color: var(--text); }
+  .ch-l small { display: block; margin-top: 2px; font-family: var(--font-mono); font-size: 9px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+  .ch-v { font-family: var(--font-mono); font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; color: var(--text-2); }
+  .ch-op { position: absolute; z-index: 1; left: 50%; bottom: -13px; display: grid; place-items: center; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; font-family: var(--font-mono); font-size: 11px; color: var(--deep-a); background: #fff; box-shadow: 0 0 0 1px var(--line-2); }
+  .ch-res { background: radial-gradient(90% 140% at 100% 0%, rgb(var(--hue-a) / .12), transparent 60%), #fff; box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .45), 0 16px 30px -18px rgb(var(--hue-b) / .8); }
+  .ch-big { font-family: var(--font-display); font-size: 22px; font-weight: 600; letter-spacing: -.03em; color: var(--text); }
+  .ch-big.is-good { color: var(--ok-ink); }
+  .ch-big.is-bad { color: var(--k-bad-ink); }
+  .ch-big.is-warn { color: var(--warn-ink); }
+  .ch-read { display: grid; gap: 10px; margin: 8px 12px 0; padding: 12px 14px; border-radius: 14px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .ch-gauge { display: block; width: 180px; height: 96px; margin: 0 auto; overflow: visible; }
+  .ch-arc { fill: none; stroke-width: 12; stroke-linecap: round; }
+  .ch-arc.bad { stroke: rgb(var(--hue-c) / .25); }
+  .ch-arc.warn { stroke: rgb(var(--hue-b) / .4); }
+  .ch-arc.ok { stroke: rgb(var(--hue-a) / .85); }
+  .ch-needle { stroke: var(--text); stroke-width: 3; stroke-linecap: round; transform-origin: 90px 86px; }
+  .ch-hub { fill: var(--text); stroke: #fff; stroke-width: 2.5; }
+  .ch-range { display: grid; gap: 8px; }
+  .ch-track { position: relative; display: block; height: 10px; border-radius: 99px; background: var(--bg-3); }
+  .ch-band { position: absolute; top: 0; bottom: 0; border-radius: inherit; background: linear-gradient(90deg, rgb(var(--hue-a) / .45), rgb(var(--hue-c) / .45)); }
+  .ch-mk { position: absolute; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--cp-vivid); box-shadow: 0 0 0 3px #fff, 0 6px 12px -4px rgb(var(--hue-b) / .9); }
+  .ch-subs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .ch-sub { display: grid; gap: 3px; padding: 8px 10px; border-radius: 10px; background: #fff; box-shadow: 0 0 0 1px var(--line); }
+  .ch-sub b { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text); }
+  .ch-fx { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 10px 0 0; padding: 12px 16px 14px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; color: var(--text-2); background: linear-gradient(180deg, var(--bg-2), #fff); }
+  :global(.js.motion) .ch-row { animation: ch-in .5s var(--ease) backwards; animation-delay: calc(.3s + var(--i) * .09s); }
+  :global(.js.motion) .ch-needle { animation: ch-swing 1.2s var(--ease) .6s backwards; }
+  :global(.js.motion) .ch-mk { animation: ch-in .6s var(--ease) .8s backwards; }
+  @keyframes ch-in { from { opacity: 0; translate: 0 8px; } }
+  @keyframes ch-swing { from { rotate: -70deg; } }
+  @media (max-width: 480px) { .ch-gauge { width: 150px; height: 80px; } }
+</style>

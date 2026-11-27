@@ -1,15 +1,14 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
 import Gauge from '../../kit/diagram/Gauge.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
 import { merCalc, money, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import CalcHero from '../../family/resources/CalcHero.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/mer-calculator/';
@@ -29,21 +28,60 @@ const jsonLd = [
 const REV = 300000;
 const SPEND = 75000;
 const r = merCalc(REV, SPEND);
----
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'MER Calculator' }]}
-    eyebrow="FREE TOOL"
-    title="MER calculator"
-    lede="Marketing efficiency ratio (also called media efficiency ratio) is total revenue over total spend, the blended number platforms can't inflate. See what your whole account is really returning."
-  />
 
-  <section class="iwrap-sm rs-tool">
-    <div class="container">
-     <div class="rs-tdoc">
-      <div class="rs-tdoc__main tool-doc">
-      <div class="calc k-card k-card--float arrive rs-calc">
-        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">MER calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
+// FamilyPage (src/family/FamilyPage.astro): the head and JSON-LD exactly as before; the FAQ as cards
+// (the same q/a the FAQPage JSON-LD carries); the closing card with this page's CtaBand copy.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: "MER calculator",
+  summary: esc("Marketing efficiency ratio (also called media efficiency ratio) is total revenue over total spend, the blended number platforms can't inflate. See what your whole account is really returning."),
+  faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+};
+const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
+// The hero: this calculator's formula as a chain, with the values it shows on load
+const hero = {
+  name: 'MER calculator',
+  op: '÷' as const,
+  rows: [
+    { label: 'Total revenue', sub: 'all channels, per period', value: money(REV), icon: 'chart' },
+    { label: 'Total marketing spend', sub: 'same period', value: money(SPEND), icon: 'layers' },
+  ],
+  result: { label: 'MER', value: r.value, tone: r.verdict },
+  gauge: { bands: [{ to: 2, tone: 'bad' as const }, { to: 3, tone: 'warn' as const }, { to: 6, tone: 'ok' as const }], value: r.mer ?? 0 },
+  formula: 'MER = total revenue ÷ total marketing spend',
+  chip: { title: "Can't be double-counted", label: "the blended number platforms can't inflate", icon: 'shield' },
+};
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: "MER Calculator" }]}
+  eyebrow="FREE TOOL"
+  schema={jsonLd}
+  byline={byline}
+  faqHeading="FAQ"
+>
+  <CalcHero slot="hero" {...hero} />
+
+  <div slot="aside" class="pg-card gl-tools">
+    <h4>More free tools</h4>
+    <ul class="gl-links">
+      <li><LinkCard href="/tools/poas-calculator/" label="POAS calculator" /></li>
+      <li><LinkCard href="/tools/cac-calculator/" label="CAC calculator" /></li>
+      <li><LinkCard href="/tools/ltv-cac-calculator/" label="LTV:CAC calculator" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>Platform ROAS lying to you?</h4>
+    <p>We rebuild attribution to blended MER and payback so you scale on real numbers. Free audit, plan you keep either way.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  
+  <div class="calc tc-calc reveal">
+        <div class="tc-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="tc-name">MER calculator</span><span class="tc-live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="rev">Total revenue <span class="hint">(all channels, per period)</span></label>
@@ -83,43 +121,20 @@ const r = merCalc(REV, SPEND);
           <div class="cr-note" id="merNote">{r.note}</div>
         </div>
       </div>
-      <p class="tool-fine">Runs in your browser. MER is deliberately blended: it uses total revenue and total spend, so it reflects the whole business rather than any one platform's self-reported numbers.</p>
-
-      <h2 class="sec-title">How MER is calculated</h2>
+  <p class="tool-fine tc-fine">Runs in your browser. MER is deliberately blended: it uses total revenue and total spend, so it reflects the whole business rather than any one platform's self-reported numbers.</p>
+  
+  <div class="pg-prose"><h2 id="how-mer-is-calculated">How MER is calculated</h2>
       <p>Marketing efficiency ratio is the simplest honest read on efficiency: everything you made over everything you spent to make it.</p>
-      <ol class="tool-steps">
-        <li class="k-card k-card--flat" data-reveal><span><strong>Total your revenue.</strong> All revenue for the period, not just ad-attributed revenue.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Total your marketing spend.</strong> Every marketing and ad dollar for that same period.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Divide revenue by spend.</strong> MER = total revenue ÷ total marketing spend. $300,000 on $75,000 is a MER of 4.0.</span></li>
-      </ol>
-
-      <h2 class="sec-title">Why MER beats platform ROAS</h2>
-      <p>When a patient sees a Meta ad, a Google ad, and an email before subscribing, each platform can claim the same conversion, so summed platform ROAS over-counts revenue by 30-100%. MER can't be double-counted. Use it as your north star and platform ROAS only for in-channel optimization. See <a href="/glossary/mer/">marketing efficiency ratio (MER)</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, or add margin with the <a href="/tools/poas-calculator/">POAS calculator</a>.</p>
-
-      <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="mer" /></div>
       </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h4>More free tools</h4>
-          <ul class="rs-links">
-            <li><a href="/tools/poas-calculator/"><ResIcon href="/tools/poas-calculator/" /><span>POAS calculator</span></a></li>
-            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
-            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h4>Platform ROAS lying to you?</h4>
-          <p>We rebuild attribution to blended MER and payback so you scale on real numbers. Free audit, plan you keep either way.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
-
-  <CtaBand />
-</BaseLayout>
+  <ol class="cp-steps tc-steps">
+    <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Total your revenue.</strong> All revenue for the period, not just ad-attributed revenue.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Total your marketing spend.</strong> Every marketing and ad dollar for that same period.</p></div></li>
+    <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide revenue by spend.</strong> MER = total revenue ÷ total marketing spend. $300,000 on $75,000 is a MER of 4.0.</p></div></li>
+  </ol>
+  
+  <div class="pg-prose"><h2 id="why-mer-beats-platform-roas">Why MER beats platform ROAS</h2>
+      <p>When a patient sees a Meta ad, a Google ad, and an email before subscribing, each platform can claim the same conversion, so summed platform ROAS over-counts revenue by 30-100%. MER can't be double-counted. Use it as your north star and platform ROAS only for in-channel optimization. See <a href="/glossary/mer/">marketing efficiency ratio (MER)</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, or add margin with the <a href="/tools/poas-calculator/">POAS calculator</a>.</p></div>
+</FamilyPage>
 
 <script>
   import { setLive } from '../../kit/diagram/live';

@@ -1,15 +1,14 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
 import Figure from '../../kit/diagram/Figure.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb, faqPage } from '../../lib/schema';
 import { budgetCalc } from './_calc';
 import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import CalcHero from '../../family/resources/CalcHero.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/ad-budget-calculator/';
@@ -32,21 +31,60 @@ const AOV = 199;
 const r = budgetCalc(TARGET, CAC, AOV);
 // The chain's input terms echo what the visitor typed (not rounded: the budget uses them as typed).
 const count = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
----
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'Ad Budget Calculator' }]}
-    eyebrow="FREE TOOL"
-    title="Ad budget calculator"
-    lede="Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return."
-  />
 
-  <section class="iwrap-sm rs-tool">
-    <div class="container">
-     <div class="rs-tdoc">
-      <div class="rs-tdoc__main tool-doc">
-      <div class="calc k-card k-card--float arrive rs-calc">
-        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">Ad budget calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
+// FamilyPage (src/family/FamilyPage.astro): the head and JSON-LD exactly as before; the FAQ as cards
+// (the same q/a the FAQPage JSON-LD carries); the closing card with this page's CtaBand copy.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: "Ad budget calculator",
+  summary: esc("Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return."),
+  faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+};
+const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
+// The hero: this calculator's formula as a chain, with the values it shows on load
+const hero = {
+  name: 'Ad budget calculator',
+  op: '×' as const,
+  rows: [
+    { label: 'Target new customers', sub: 'per month', value: count(TARGET), icon: 'users' },
+    { label: 'Target CAC', value: `$${count(CAC)}`, icon: 'target' },
+  ],
+  result: { label: 'Monthly ad budget', value: r.budgetText },
+  subs: [{ label: 'Expected revenue', value: r.revText }, { label: 'Blended ROAS', value: r.roasText }],
+  formula: 'Ad budget = target new customers × CAC',
+  chip: { title: '30–60 fresh creatives a month', label: 'to hold that CAC', icon: 'video' },
+};
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: "Ad Budget Calculator" }]}
+  eyebrow="FREE TOOL"
+  schema={jsonLd}
+  byline={byline}
+  faqHeading="FAQ"
+>
+  <CalcHero slot="hero" {...hero} />
+
+  <div slot="aside" class="pg-card gl-tools">
+    <h4>More free tools</h4>
+    <ul class="gl-links">
+      <li><LinkCard href="/tools/cac-calculator/" label="CAC calculator" /></li>
+      <li><LinkCard href="/tools/ltv-cac-calculator/" label="LTV:CAC calculator" /></li>
+      <li><LinkCard href="/blog/telehealth-cac-benchmarks-2026/" label="CAC benchmarks by vertical" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>Plan your next quarter</h4>
+    <p>We'll pressure-test your budget and targets against your vertical's benchmarks.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  
+  <div class="calc tc-calc reveal">
+        <div class="tc-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="tc-name">Ad budget calculator</span><span class="tc-live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="target">Target new customers <span class="hint">(per month)</span></label>
@@ -83,41 +121,19 @@ const count = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 
           <div class="cr-note">Plan on CAC and payback, not ROAS alone - retention decides the real return.</div>
         </div>
       </div>
-      <p class="tool-fine">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
-
-      <h2 class="sec-title">How the ad budget calculation works</h2>
+  <p class="tool-fine tc-fine">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
+  
+  <div class="pg-prose"><h2 id="how-the-ad-budget-calculation-works">How the ad budget calculation works</h2>
       <p>Your monthly ad budget is a function of two numbers: how many customers you want and what each one costs to acquire. Set the target, use a realistic CAC for your vertical, and the budget follows.</p>
-      <ol class="tool-steps">
-        <li class="k-card k-card--flat" data-reveal><span><strong>Set your monthly customer target.</strong> Decide how many new customers or patients you want to acquire this month.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Enter your target CAC.</strong> Use your current customer acquisition cost, or a <a href="/tools/cac-calculator/">benchmark CAC</a> for your vertical.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</span></li>
-      </ol>
-      <p>One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/">blended CAC</a>, not one platform's claimed number.</p>
-
-      <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="budget" /></div>
       </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h4>More free tools</h4>
-          <ul class="rs-links">
-            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
-            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
-            <li><a href="/blog/telehealth-cac-benchmarks-2026/"><ResIcon href="/blog/telehealth-cac-benchmarks-2026/" /><span>CAC benchmarks by vertical</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h4>Plan your next quarter</h4>
-          <p>We'll pressure-test your budget and targets against your vertical's benchmarks.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
-
-  <CtaBand />
-</BaseLayout>
+  <ol class="cp-steps tc-steps">
+    <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Set your monthly customer target.</strong> Decide how many new customers or patients you want to acquire this month.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Enter your target CAC.</strong> Use your current customer acquisition cost, or a <a href="/tools/cac-calculator/">benchmark CAC</a> for your vertical.</p></div></li>
+    <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</p></div></li>
+  </ol>
+  <div class="pg-prose">
+      <p>One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/">blended CAC</a>, not one platform's claimed number.</p></div>
+</FamilyPage>
 
 <script>
   import { budgetCalc, num } from './_calc';

@@ -1,16 +1,18 @@
 ---
-// The tools hub: hero with a calculator window (decorative), one card per calculator with a small
-// graphic of what it works out, then the "which calculator" guide and its flow. Styles:
-// resources/tools.css (shared parts in resources/base.css).
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
+// /tools/ on the family layer (src/family/FamilyPage.astro; src/family/README.md). Every word,
+// heading, link and JSON-LD node is the one this page had on the old interior layout.
+//   hero   a calculator window with the five tools as tabs (decorative)
+//   body   one card per calculator with a small graphic of what it works out (the first one wide;
+//          unnumbered intro), then one chapter: which calculator to use, with its flow
+//   end    the closing card (CtaBand's copy)
+// Styles: src/styles/family/resources.css (.th-*).
+import FamilyPage from '../../family/FamilyPage.astro';
+import Win from '../../family/graphics/Win.astro';
 import Flow from '../../kit/diagram/Flow.astro';
 import ToolArt from '../../components/resources/ToolArt.astro';
 import { siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
-import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
+import '../../styles/family/resources.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'CAC, LTV:CAC & Ad Budget Calculators | AdBoost Health';
@@ -28,85 +30,85 @@ const tools = [
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }])];
 // hero window tabs: the calculators' own names, shortened to the metric
 const TABS = ['CAC', 'LTV:CAC', 'Ad Budget', 'MER', 'POAS'];
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: 'Free health-marketing calculators',
+  h1Html: 'Free <span class="serif">health-marketing</span> calculators',
+  lede: 'Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good.',
+};
 ---
-<BaseLayout {title} {description} canonicalPath="/tools/" {jsonLd}>
-  <PageHero
-    wide
-    art="/art/tools/hub"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools' }]}
-    eyebrow="FREE TOOLS"
-    title='Free <span class="serif">health-marketing</span> calculators'
-    lede="Run your own numbers in seconds - each calculator is pre-loaded with 2026 health benchmark context, so you don’t just get a figure, you get whether it’s good."
-    class="rs-thero"
-  >
-    <div slot="aside" class="rs-twin" aria-hidden="true">
-      <div class="rs-twin__bar"><span></span><span></span><span></span></div>
-      <div class="rs-twin__tabs">{TABS.map((t, i) => <span class:list={[i === 0 && 'on']}>{t}</span>)}</div>
-      <div class="rs-twin__body">
-        <div class="rs-twin__fields">
-          <span class="rs-twin__f"><i></i><b>$</b></span>
-          <span class="rs-twin__f"><i></i><b></b></span>
-          <span class="rs-twin__f rs-twin__f--sel"><i></i><b></b></span>
+<FamilyPage
+  path="/tools/"
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools' }]}
+  eyebrow="FREE TOOLS"
+  schema={jsonLd}
+  toc={false}
+>
+  <div slot="hero" class="th-art" aria-hidden="true">
+    <Win name="Calculators" pill={{ text: 'Live', tone: 'ok', dot: true }}>
+      <div class="th-tabs">{TABS.map((t, i) => <span class:list={[i === 0 && 'on']}>{t}</span>)}</div>
+      <div class="th-body">
+        <div class="th-fields">
+          <span class="th-f"><b>$</b><i></i></span>
+          <span class="th-f"><i></i></span>
+          <span class="th-f on"><i></i></span>
+          <span class="th-f"><i></i></span>
         </div>
-        <div class="rs-twin__res">
-          <svg viewBox="0 0 200 112" class="rs-twin__gauge">
-            <path d="M20 100 A80 80 0 0 1 72 25" class="rs-g rs-g--bad" />
-            <path d="M76 23.5 A80 80 0 0 1 150 30" class="rs-g rs-g--ok" />
-            <path d="M154 33 A80 80 0 0 1 180 100" class="rs-g rs-g--warn" />
-            <path d="M100 100 L132 46" class="rs-twin__needle" />
-            <circle cx="100" cy="100" r="7" class="rs-twin__hub" />
+        <div class="th-res">
+          <svg viewBox="0 0 200 112" class="th-gauge">
+            <path d="M20 100 A80 80 0 0 1 72 25" class="g bad" />
+            <path d="M76 23.5 A80 80 0 0 1 150 30" class="g ok" />
+            <path d="M154 33 A80 80 0 0 1 180 100" class="g warn" />
+            <path d="M100 100 L132 46" class="n" />
+            <circle cx="100" cy="100" r="7" class="h" />
           </svg>
-          <span class="rs-twin__lines"><i></i><i></i></span>
+          <span class="th-lines"><i></i><i></i></span>
         </div>
       </div>
-    </div>
-  </PageHero>
+    </Win>
+  </div>
 
-  <section class="iwrap rs-thub">
-    <div class="container">
-      <div class="rs-tgrid">
-        {tools.map((t, i) => (
-          <a class="k-card k-card--link rs-tcard2 arrive" href={t.href} style={`--d:${120 + i * 50}ms`}>
-            <span class="rs-tcard2__art"><ToolArt kind={t.art} /></span>
-            <span class="rs-tcard2__body">
-              <span class="rs-tcard2__ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={t.ico} /></span>
-              <h2>{t.name}</h2>
-              <p>{t.desc}</p>
-              <span class="rs-tcard2__go">Open calculator <span aria-hidden="true">→</span></span>
-            </span>
-          </a>
-        ))}
-      </div>
+  <ul class="th-tools">
+    {tools.map((t, i) => (
+      <li class:list={['reveal', i % 2 && 'd1']}>
+        <a class="th-card" href={t.href}>
+          <span class="th-art-tile"><ToolArt kind={t.art} /></span>
+          <span class="th-body2">
+            <span class="th-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={t.ico} /></span>
+            <h2>{t.name}</h2>
+            <p>{t.desc}</p>
+            <span class="th-go">Open calculator <span aria-hidden="true">→</span></span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
 
-      <div class="tools-guide rs-tguide">
-        <div class="prose">
-          <h2>Which calculator should you use?</h2>
-          <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
-          <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/capi/#server-side-tracking">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
-        </div>
-        <div class="rs-tguide__flow">
-          <Flow
-            orientation="column"
-            caption="Which calculator first, in the order this guide gives."
-            nodes={[
-              { label: 'CAC calculator', sub: 'Start here: size your acquisition cost against your vertical', href: '/tools/cac-calculator/' },
-              { label: 'LTV:CAC calculator', sub: 'Check whether that CAC is actually profitable', href: '/tools/ltv-cac-calculator/' },
-              { label: 'Ad budget calculator', sub: 'When you are planning spend: work backwards from a customer target', href: '/tools/ad-budget-calculator/' },
-              {
-                label: 'To judge whole-account efficiency',
-                icon: '→',
-                tone: 'ok',
-                branches: [
-                  { label: 'MER calculator', sub: 'Blended revenue over spend', href: '/tools/mer-calculator/' },
-                  { label: 'POAS calculator', sub: 'Layers in margin', href: '/tools/poas-calculator/' },
-                ],
-              },
-            ]}
-          />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <CtaBand />
-</BaseLayout>
+  <div class="pg-prose">
+    <h2 id="which-calculator">Which calculator should you use?</h2>
+    <p>Start with the <a href="/tools/cac-calculator/">CAC calculator</a> to size your acquisition cost against your vertical, then run the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a> to check whether that CAC is actually profitable, since a CAC only matters against lifetime value. When you are planning spend, the <a href="/tools/ad-budget-calculator/">ad budget calculator</a> works backwards from a customer target to the monthly budget it takes. To judge whole-account efficiency, the <a href="/tools/mer-calculator/">MER calculator</a> shows blended revenue over spend (the number platforms can't inflate), and the <a href="/tools/poas-calculator/">POAS calculator</a> layers in margin so you scale what's actually profitable, not just what looks efficient. Every result is directional; verify against your own account, and see the <a href="/glossary/">glossary</a> for definitions of each metric.</p>
+    <p>The numbers only mean something in context. A 3:1 <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> is healthy for a subscription supplement brand and thin for a high-touch telehealth offer, so read every result against your own margin and vertical benchmarks (see <a href="/industries/telehealth/">telehealth</a> or <a href="/industries/glp-1-weight-loss/">GLP-1</a>). When a figure looks off, the usual culprits are attribution (platform-reported <a href="/glossary/roas/">ROAS</a> overstates the truth without <a href="/glossary/capi/#server-side-tracking">server-side tracking</a>) and a media-only CAC that ignores creative and agency fees. Fixing those two is often worth more than any single budget change.</p>
+  </div>
+  <div class="th-flow reveal">
+    <Flow
+      orientation="column"
+      caption="Which calculator first, in the order this guide gives."
+      nodes={[
+        { label: 'CAC calculator', sub: 'Start here: size your acquisition cost against your vertical', href: '/tools/cac-calculator/' },
+        { label: 'LTV:CAC calculator', sub: 'Check whether that CAC is actually profitable', href: '/tools/ltv-cac-calculator/' },
+        { label: 'Ad budget calculator', sub: 'When you are planning spend: work backwards from a customer target', href: '/tools/ad-budget-calculator/' },
+        {
+          label: 'To judge whole-account efficiency',
+          icon: '→',
+          tone: 'ok',
+          branches: [
+            { label: 'MER calculator', sub: 'Blended revenue over spend', href: '/tools/mer-calculator/' },
+            { label: 'POAS calculator', sub: 'Layers in margin', href: '/tools/poas-calculator/' },
+          ],
+        },
+      ]}
+    />
+  </div>
+</FamilyPage>

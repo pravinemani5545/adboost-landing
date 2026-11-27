@@ -1,16 +1,15 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
 import Gauge from '../../kit/diagram/Gauge.astro';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { breadcrumb, faqPage } from '../../lib/schema';
 import { money, poasCalc, valueClass } from './_calc';
 import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import CalcHero from '../../family/resources/CalcHero.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/poas-calculator/';
@@ -35,25 +34,64 @@ const MARGIN = 70;
 const SPEND = 10000;
 const r = poasCalc(REV, MARGIN, SPEND);
 const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your ad spend' : `${x.toFixed(1)} times ad spend`);
----
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'POAS Calculator' }]}
-    eyebrow="FREE TOOL"
-    title="POAS calculator"
-    lede="Work out your profit on ad spend, the version of ROAS that accounts for margin, so you scale what is actually profitable, not just what looks efficient."
-  >
-    {updatedLabel && <div class="metabar tool-meta"><span>Free tool by AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
-  </PageHero>
 
-  <section class="iwrap-sm rs-tool">
-    <div class="container">
-     <div class="rs-tdoc">
-      <div class="rs-tdoc__main tool-doc rs-tables">
-      <h2 class="sec-title poas-formula-h">POAS calculator formula: profit on ad spend = gross profit ÷ ad spend</h2>
-      <p class="poas-formula"><code>POAS = (revenue from ads × gross margin) ÷ ad spend</code> A POAS of 1.0 is break-even on ad spend, before overhead. Enter your numbers and the calculator below updates as you type.</p>
-      <div class="calc k-card k-card--float arrive rs-calc">
-        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">POAS calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
+// FamilyPage (src/family/FamilyPage.astro): the head and JSON-LD exactly as before; the FAQ as cards
+// (the same q/a the FAQPage JSON-LD carries); the closing card with this page's CtaBand copy.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: "POAS calculator",
+  summary: esc("Work out your profit on ad spend, the version of ROAS that accounts for margin, so you scale what is actually profitable, not just what looks efficient."),
+  faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+};
+const byline = updatedLabel ? [{ text: 'Free tool by AdBoost Health', icon: 'org' as const }, { text: `Updated ${updatedLabel}`, icon: 'date' as const }] : [];
+// The hero: this calculator's formula as a chain, with the values it shows on load
+const hero = {
+  name: 'POAS calculator',
+  op: '÷' as const,
+  rows: [
+    { label: 'Revenue from ads', sub: 'per period', value: money(REV), icon: 'chart', op: '×' as const },
+    { label: 'Gross margin', value: `${MARGIN}%`, icon: 'tag', op: '÷' as const },
+    { label: 'Ad spend', sub: 'same period', value: money(SPEND), icon: 'layers' },
+  ],
+  result: { label: 'POAS', value: r.value, tone: r.verdict },
+  gauge: { bands: [{ to: 1, tone: 'bad' as const }, { to: 1.5, tone: 'warn' as const }, { to: 4, tone: 'ok' as const }], value: r.poas ?? 0 },
+  subs: [{ label: 'Gross profit', value: r.gpText }, { label: 'ROAS (for contrast)', value: r.roasText }],
+  formula: 'POAS = (revenue from ads × gross margin) ÷ ad spend',
+  chip: { title: 'POAS of 1.0×', label: 'break-even on ad spend', icon: 'gauge' },
+};
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: "POAS Calculator" }]}
+  eyebrow="FREE TOOL"
+  schema={jsonLd}
+  byline={byline}
+  faqHeading="FAQ"
+>
+  <CalcHero slot="hero" {...hero} />
+
+  <div slot="aside" class="pg-card gl-tools">
+    <h4>More free tools</h4>
+    <ul class="gl-links">
+      <li><LinkCard href="/tools/mer-calculator/" label="MER calculator" /></li>
+      <li><LinkCard href="/tools/cac-calculator/" label="CAC calculator" /></li>
+      <li><LinkCard href="/tools/ltv-cac-calculator/" label="LTV:CAC calculator" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>Scaling the wrong campaigns?</h4>
+    <p>We optimize health accounts to POAS and payback, not vanity ROAS. Free audit, written plan you keep either way.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  
+  <div class="pg-prose"><h2 id="formula">POAS calculator formula: profit on ad spend = gross profit ÷ ad spend</h2>
+      <p class="poas-formula"><code>POAS = (revenue from ads × gross margin) ÷ ad spend</code> A POAS of 1.0 is break-even on ad spend, before overhead. Enter your numbers and the calculator below updates as you type.</p></div>
+  <div class="calc tc-calc reveal">
+        <div class="tc-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="tc-name">POAS calculator</span><span class="tc-live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="rev">Revenue from ads <span class="hint">(per period)</span></label>
@@ -101,19 +139,20 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
           <div class="cr-note" id="poasNote">{r.note}</div>
         </div>
       </div>
-      <p class="tool-fine">Runs in your browser. POAS uses gross profit (revenue × margin), so it falls below ROAS by exactly your cost of goods. Break-even on ad spend is a POAS of 1.0, before overhead.</p>
-
-      <h2 class="sec-title">How POAS is calculated</h2>
+  <p class="tool-fine tc-fine">Runs in your browser. POAS uses gross profit (revenue × margin), so it falls below ROAS by exactly your cost of goods. Break-even on ad spend is a POAS of 1.0, before overhead.</p>
+  
+  <div class="pg-prose"><h2 id="how-it-works">How POAS is calculated</h2>
       <p>Profit on ad spend answers the question ROAS can't: after cost of goods, did these ads make money? It is gross profit per ad dollar, not revenue per ad dollar.</p>
-      <ol class="tool-steps">
-        <li class="k-card k-card--flat" data-reveal><span><strong>Enter revenue from ads.</strong> The revenue attributable to the spend you are measuring.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Enter your gross margin.</strong> Your margin after cost of goods sold, as a percentage.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Divide gross profit by ad spend.</strong> POAS = (revenue × margin) ÷ ad spend. $40,000 at 70% margin on $10,000 spend is a POAS of 2.8.</span></li>
-      </ol>
-
-      <h2 class="sec-title">POAS vs ROAS: how do your numbers compare?</h2>
+      </div>
+  <ol class="cp-steps tc-steps">
+    <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Enter revenue from ads.</strong> The revenue attributable to the spend you are measuring.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Enter your gross margin.</strong> Your margin after cost of goods sold, as a percentage.</p></div></li>
+    <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide gross profit by ad spend.</strong> POAS = (revenue × margin) ÷ ad spend. $40,000 at 70% margin on $10,000 spend is a POAS of 2.8.</p></div></li>
+  </ol>
+  
+  <div class="pg-prose"><h2 id="poas-vs-roas">POAS vs ROAS: how do your numbers compare?</h2>
       <p>The same inputs, read both ways. This table updates with the calculator above (the starting values are an illustrative example, not a benchmark).</p>
-      <div class="tablewrap">
+      <div class="cp-table reveal tc-vs" data-cols="3">
         <table class="dtable">
           <thead><tr><th></th><th>ROAS</th><th>POAS</th></tr></thead>
           <tbody>
@@ -124,8 +163,10 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
           </tbody>
         </table>
       </div>
+    </div>
+  <div class="cp-callout reveal tc-example"><span class="cp-callout-ic" aria-hidden="true"></span><div class="cp-callout-body">
       <p><strong>Same ROAS, different POAS (illustrative example).</strong> Two campaigns each spend $10,000 and drive $40,000 in revenue, so both report a 4.0× ROAS. Their margins differ:</p>
-      <div class="tablewrap">
+      <div class="cp-table" data-cols="6">
         <table class="dtable">
           <thead><tr><th>Illustrative campaign</th><th>Revenue</th><th>Gross margin</th><th>Ad spend</th><th>ROAS</th><th>POAS</th></tr></thead>
           <tbody>
@@ -134,32 +175,10 @@ const spoken = (x: number | null) => (x === null ? 'Not calculated: enter your a
           </tbody>
         </table>
       </div>
-      <p>ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with the same ROAS can have very different POAS if their margins differ, which is why optimizing to ROAS quietly scales low-margin products at a loss. For the full definitions, see <a href="/glossary/poas/">POAS</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, and check whole-account efficiency with the <a href="/tools/mer-calculator/">MER calculator</a>.</p>
-
-      <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="poas" /></div>
-      </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h4>More free tools</h4>
-          <ul class="rs-links">
-            <li><a href="/tools/mer-calculator/"><ResIcon href="/tools/mer-calculator/" /><span>MER calculator</span></a></li>
-            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
-            <li><a href="/tools/ltv-cac-calculator/"><ResIcon href="/tools/ltv-cac-calculator/" /><span>LTV:CAC calculator</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h4>Scaling the wrong campaigns?</h4>
-          <p>We optimize health accounts to POAS and payback, not vanity ROAS. Free audit, written plan you keep either way.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
-
-  <CtaBand />
-</BaseLayout>
+  </div></div>
+  <div class="pg-prose">
+      <p>ROAS is revenue per ad dollar; POAS is profit per ad dollar. Two campaigns with the same ROAS can have very different POAS if their margins differ, which is why optimizing to ROAS quietly scales low-margin products at a loss. For the full definitions, see <a href="/glossary/poas/">POAS</a> and <a href="/glossary/roas/">ROAS</a> in the glossary, and check whole-account efficiency with the <a href="/tools/mer-calculator/">MER calculator</a>.</p></div>
+</FamilyPage>
 
 <script>
   import { setLive } from '../../kit/diagram/live';
