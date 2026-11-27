@@ -89,7 +89,8 @@
 .family .th-card:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
 .family .th-art-tile { position: relative; display: grid; place-items: center; height: 150px; border-bottom: 1px solid var(--line); background: radial-gradient(70% 90% at 0% 0%, rgb(var(--hue-a) / .2), transparent 62%), radial-gradient(70% 90% at 100% 100%, rgb(var(--hue-c) / .18), transparent 62%), var(--bg-2); }
 .family .th-art-tile::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgb(var(--k-shadow-rgb) / .1) 1px, transparent 1.5px); background-size: 16px 16px; -webkit-mask-image: radial-gradient(80% 80% at 50% 0%, #000, transparent 80%); mask-image: radial-gradient(80% 80% at 50% 0%, #000, transparent 80%); }
-.family .th-art-tile .rs-art { position: relative; width: min(240px, 80%); height: auto; }
+.family .th-art-tile .ta { position: relative; }
+.family .th-art-tile { height: 168px; }
 .family .th-body2 { display: flex; flex-direction: column; gap: 10px; padding: 22px 24px 24px; }
 .family .th-ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: #fff; background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
 .family .th-tools > li:nth-child(3n+2) .th-ico { background: linear-gradient(135deg, var(--deep-b), var(--deep-c)); }
@@ -105,27 +106,6 @@
   .family .th-tools > li:first-child h2 { font-size: 26px; }
 }
 @media (max-width: 860px) { .family .th-tools { grid-template-columns: minmax(0, 1fr); } }
-/* ToolArt's drawing, in the family hues */
-.family .rs-art__track { fill: var(--bg-3); }
-.family .rs-art__band { fill: rgb(var(--hue-a) / .2); }
-.family .rs-art__tick, .family .rs-art__be { fill: none; stroke: var(--line-3); stroke-width: 2; stroke-linecap: round; }
-.family .rs-art__be { stroke: var(--deep-b); stroke-dasharray: 5 5; }
-.family .rs-art__stem { fill: none; stroke: var(--deep-a); stroke-width: 2; }
-.family .rs-art__pill { fill: var(--text); }
-.family .rs-art__knob { fill: #fff; stroke: var(--deep-a); stroke-width: 4; }
-.family .rs-art__arc { fill: none; stroke-width: 12; stroke-linecap: round; }
-.family .rs-art__arc--bad { stroke: rgb(var(--hue-c) / .35); }
-.family .rs-art__arc--ok { stroke: rgb(var(--hue-a)); }
-.family .rs-art__arc--warn { stroke: rgb(var(--hue-b) / .55); }
-.family .rs-art__needle { fill: none; stroke: var(--text); stroke-width: 4; stroke-linecap: round; }
-.family .rs-art__term { fill: #fff; stroke: var(--line-2); stroke-width: 1.5; }
-.family .rs-art__ln { fill: var(--line-2); }
-.family .rs-art__ln--strong { fill: rgb(var(--hue-a) / .45); }
-.family .rs-art__op { fill: none; stroke: var(--deep-a); stroke-width: 3; stroke-linecap: round; }
-.family .rs-art__ring { fill: none; stroke: var(--bg-3); stroke-width: 16; }
-.family .rs-art__seg { fill: none; stroke-width: 16; stroke-linecap: round; }
-.family .rs-art__core { fill: #fff; }
-.family .rs-art__bar2 { fill: rgb(var(--hue-b) / .3); }
 /* the guide's flow, framed */
 .family .th-flow { margin: 28px 0 0; padding: 22px; border-radius: 26px; background: radial-gradient(80% 90% at 0% 0%, rgb(var(--hue-a) / .08), transparent 60%), radial-gradient(70% 90% at 100% 100%, rgb(var(--hue-c) / .08), transparent 62%), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
 .family .th-flow .k-dg { margin: 0; }

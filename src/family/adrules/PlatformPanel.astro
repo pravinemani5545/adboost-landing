@@ -1,29 +1,43 @@
 ---
-// Platform hub hero (/advertising/meta/, /advertising/google/): the platform's status for each of
-// the five verticals, as a product list (vertical, status badge), with the chip restating the
-// "Rules checked" line. Decorative (aria-hidden): the status card in the body holds the same data,
-// linked to each rule sheet.
+// Platform hub hero (/advertising/meta/, /advertising/google/). The status card right under the hero
+// already lists every vertical's status, so the hero shows the other half of the page's subject:
+// how the platform's health policy has moved. Its change log (the page's own "What changed, and
+// when?" entries, newest first, dates as the data has them) drawn as a release timeline, the newest
+// entry lit, with a strip of the five verticals' status marks at the foot and the chip restating
+// the "Rules checked" line. Decorative (aria-hidden): every word and date is on the page.
+// It paints complete at first paint (short transform-only entrances under 400ms).
 import Win from '../graphics/Win.astro';
 import Chip from '../graphics/Chip.astro';
 import Ic from '../graphics/Ic.astro';
-import Badge from './Badge.astro';
-import { LEGEND, PLATFORM_ICON } from './status';
+import { PLATFORM_ICON, statusMark } from './status';
+import { STATUS_TONE } from '../../components/adv/status';
 import type { Platform, PolicyStatus } from '../../data/adPolicies';
 
-interface Props { platform: Platform; title: string; rows: { label: string; status: PolicyStatus }[]; checked: string }
-const { platform, title, rows, checked } = Astro.props;
+interface Props {
+  platform: Platform;
+  title: string;
+  /** the page's change log, newest first */
+  changes: { date: string; text: string }[];
+  rows: { label: string; status: PolicyStatus }[];
+  checked: string;
+}
+const { platform, title, changes, rows, checked } = Astro.props;
 ---
 <div class="adr-pp" aria-hidden="true">
-  <Win name={title}>
+  <Win name={title} pill={{ text: 'Newest first', tone: 'b' }}>
     <div class="adr-pp-head"><span class="ui-ic g"><Ic name={PLATFORM_ICON[platform]} /></span><b>{platform}</b></div>
-    <ul class="adr-pp-rows">
-      {rows.map((r, i) => (
-        <li style={`--i:${i}`}><span class="adr-pp-ic">{r.label.charAt(0)}</span><span class="adr-pp-name">{r.label}</span><Badge status={r.status} /></li>
+    <ol class="adr-pp-log">
+      {changes.slice(0, 4).map((c, i) => (
+        <li class:list={[i === 0 && 'is-new']} style={`--i:${i}`}>
+          <span class="adr-pp-dot"></span>
+          <span class="adr-pp-when">{c.date}</span>
+          <span class="adr-pp-txt">{c.text}</span>
+        </li>
       ))}
-    </ul>
-    <ul class="adr-pm-legend">
-      {LEGEND.map((l) => <li data-level={l.level}><span class="adr-badge-m">{l.mark}</span>{l.label}</li>)}
+    </ol>
+    <ul class="adr-pp-marks">
+      {rows.map((r) => <li data-level={STATUS_TONE[r.status]}><span class="adr-badge-m">{statusMark(r.status)}</span>{r.label}</li>)}
     </ul>
   </Win>
-  <Chip title="Rules checked" label={checked} icon="shield" style="right:-26px;bottom:-32px" />
+  <Chip title="Rules checked" label={checked} icon="shield" style="right:-26px;bottom:-40px" />
 </div>

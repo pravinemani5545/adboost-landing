@@ -3,7 +3,7 @@
 // plan N2, N3). Data: src/data/platformHubs.ts. Dates: src/data/pages.json (`publish`, then
 // `updated` once the page is edited). A family port of src/components/PlatformHub.astro: every word,
 // heading, link, FAQ and JSON-LD node is the same; only the layout and the graphics are new.
-//   hero     the platform's status for each vertical (PlatformPanel)
+//   hero     the platform's change log as a release timeline (PlatformPanel)
 //   intro    the status card: each vertical's status, linked to its rule sheet
 //   chapters the hub's own questions (the July 2026 change as a diff), the vertical table with
 //            status badges, the dated change log, then the FAQ cards and the sources card
@@ -87,7 +87,7 @@ const byline = [
   byline={byline}
   toc={toc}
 >
-  <PlatformPanel slot="hero" platform={hub.platform} title={`${hub.platform} status by vertical`} rows={sheets.map((p) => ({ label: p.vertical, status: p.status }))} checked={checked} />
+  <PlatformPanel slot="hero" platform={hub.platform} title={`${hub.platform} policy changes`} changes={[...hub.changeLog].sort((a, b) => b.date.localeCompare(a.date)).map((c) => ({ date: c.date, text: c.change }))} rows={sheets.map((p) => ({ label: p.vertical, status: p.status }))} checked={checked} />
 
   <div slot="aside" class="pg-card adr-zbp">
     <div class="adr-zbp-art" aria-hidden="true"><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick is-open"></span><i></i></div>

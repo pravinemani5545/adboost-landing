@@ -82,14 +82,21 @@ const pct = (v: number, of: number) => `${Math.min(100, Math.max(0, (v / of) * 1
           <div class="ch-out">
             <span class="ui-lab">LTV:CAC ratio</span>
             <b>Lifetime value ÷ acquisition cost</b>
-            <span class="ch-bench"><Ic name="check" />3:1 or higher</span>
+            <span class="ch-bench-row"><span class="ui-lab">Benchmark</span><span class="ch-bench"><Ic name="check" />3:1 or higher</span></span>
           </div>
           <div class="ch-out is-b">
             <span class="ui-lab">Payback</span>
             <b>CAC ÷ monthly gross profit</b>
-            <span class="ch-bench"><Ic name="clock" />Under 12 months</span>
+            <span class="ch-bench-row"><span class="ui-lab">Benchmark</span><span class="ch-bench"><Ic name="clock" />Under 12 months</span></span>
           </div>
         </div>
+      </div>
+      <div class="ch-eq">
+        <span class="ui-lab ch-eq-lab">Formula</span>
+        <span class="ch-t"><Ic name="tag" />Monthly revenue</span>
+        <span class="ch-g"><span class="ch-op">×</span><span class="ch-t"><Ic name="chart" />Gross margin</span></span>
+        <span class="ch-g"><span class="ch-op">×</span><span class="ch-t"><Ic name="refresh" />Months retained</span></span>
+        <span class="ch-g"><span class="ch-op">≈</span><span class="ch-t ch-res">LTV</span></span>
       </div>
     )}
 
@@ -188,7 +195,7 @@ const pct = (v: number, of: number) => `${Math.min(100, Math.max(0, (v / of) * 1
 <style>
   .ch { position: relative; }
   .ch-sec { display: grid; gap: 9px; padding: 14px 16px; }
-  .ch-sec + .ch-sec, .ch-eq + .ch-sec, .ch-sec + .ch-eq, .ch-vs + .ch-eq { border-top: 1px solid var(--line); }
+  .ch-sec + .ch-sec, .ch-eq + .ch-sec, .ch-sec + .ch-eq, .ch-vs + .ch-eq, .ch-tree + .ch-eq { border-top: 1px solid var(--line); }
 
   /* the formula as a chain of terms */
   .ch-eq { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; padding: 12px 16px; background: linear-gradient(180deg, var(--bg-2), #fff); }
@@ -236,6 +243,7 @@ const pct = (v: number, of: number) => `${Math.min(100, Math.max(0, (v / of) * 1
   .ch-out { display: grid; align-content: center; gap: 5px; padding: 12px; border-radius: 14px; background: radial-gradient(90% 120% at 100% 0%, rgb(var(--hue-a) / .14), transparent 60%), #fff; box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .4), 0 16px 30px -18px rgb(var(--hue-b) / .8); }
   .ch-out.is-b { background: radial-gradient(90% 120% at 100% 0%, rgb(var(--hue-b) / .14), transparent 60%), #fff; box-shadow: 0 0 0 1px var(--line-2), 0 14px 26px -18px rgb(var(--hue-b) / .6); }
   .ch-out b { font-size: 12.5px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
+  .ch-bench-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
   .ch-bench { justify-self: start; display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 6px; border-radius: 99px; font-size: 11px; font-weight: 600; color: var(--ok-ink); background: var(--ok-soft); }
   .is-b .ch-bench { color: var(--deep-b); background: rgb(var(--hue-b) / .12); }
   .ch-bench :global(.gi) { width: 11px; height: 11px; stroke-width: 2.6; }
