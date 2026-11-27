@@ -5,7 +5,7 @@
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import PostDiagram from './_Diagram.astro';
 import { getPublishedPosts } from '../../lib/blog';
-import { postLayoutProps, postParts } from './_post';
+import { postBody, postLayoutProps } from './_post';
 
 export async function getStaticPaths() {
   const all = await getPublishedPosts();
@@ -16,13 +16,13 @@ export async function getStaticPaths() {
 
 const { post, all } = Astro.props;
 const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
-const parts = postParts(post);
+const { lead, parts } = postBody(post);
 ---
 
-<BlogLayout {...postLayoutProps(post, all, site)}>
+<BlogLayout {...postLayoutProps(post, all, site)} {lead}>
   {parts.map((p) =>
     p.type === 'html'
-      ? <div class="prose prose--doc"><Fragment set:html={p.html} /></div>
-      : <PostDiagram {...p.spec} id={p.spec.id ?? `fig-${p.id}`} class:list={['post-fig', p.spec.class]} />
+      ? <div class="prose prose--doc rs-prose"><Fragment set:html={p.html} /></div>
+      : <div class="post-fig rs-fig"><PostDiagram {...p.spec} id={p.spec.id ?? `fig-${p.id}`} class:list={[p.spec.class]} /></div>
   )}
 </BlogLayout>

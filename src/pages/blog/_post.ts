@@ -5,7 +5,7 @@
 // stays free of diagram CSS if it is built by a route that never imports a diagram component.
 import type { CollectionEntry } from 'astro:content';
 import { splitMarkers, type MarkerPart } from '../../kit/content/markers';
-import { faqFromHtml } from '../../components/resources/html';
+import { enhanceProse, faqFromHtml, splitLead } from '../../components/resources/html';
 
 type Post = CollectionEntry<'blog'>;
 
@@ -15,6 +15,28 @@ const MARKER_LINE = /^[ \t]*<!--\s*diagram:[^>]*-->[ \t]*$/gm;
  *  on an unknown, duplicated, unplaced or inline marker. */
 export function postParts(post: Post): MarkerPart[] {
   return splitMarkers(post.rendered?.html ?? '', post.data.diagrams, `src/content/blog/${post.id}.md`);
+}
+
+/**
+ * The post body for the layout: the opening paragraph (the answer-first summary every post opens
+ * with, shown under the H1) and the rest, cut at the diagram markers, each run of prose with the
+ * card classes added (tables, key lists, steps, examples, FAQ cards). No word changes.
+ */
+export function postBody(post: Post): { lead: string; parts: MarkerPart[] } {
+  const parts = postParts(post);
+  let lead = '';
+  const first = parts[0];
+  if (first?.type === 'html') {
+    const [p, rest] = splitLead(first.html);
+    lead = p;
+    parts[0] = { type: 'html', html: rest };
+  }
+  return {
+    lead,
+    parts: parts
+      .map((p) => (p.type === 'html' ? { type: 'html' as const, html: enhanceProse(p.html) } : p))
+      .filter((p) => p.type !== 'html' || p.html.trim()),
+  };
 }
 
 /** Words / 200. Marker lines are not words, so adding a diagram never changes the read time. */
@@ -36,6 +58,9 @@ export function postToc(post: Post): TocItem[] {
   return items.length >= 4 && readMinutes(post) >= 6 ? items : [];
 }
 
+/** The label a card shows for a post: its first tag. */
+export const category = (post: Post) => post.data.tags[0];
+
 /** Props for BlogLayout, from the post and every published post (for related reading). site: the
  *  origin without a trailing slash. */
 export function postLayoutProps(post: Post, all: Post[], site: string) {
@@ -52,6 +77,8 @@ export function postLayoutProps(post: Post, all: Post[], site: string) {
       heroImage: p.data.heroImage,
       heroAlt: p.data.heroAlt,
       pubDate: p.data.pubDate,
+      category: category(p),
+      minutes: readMinutes(p),
     }));
 
   return {
