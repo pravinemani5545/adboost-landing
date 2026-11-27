@@ -69,6 +69,10 @@ const data = {
   }],
 };
 const checked = fmtDay(hub.checkedOn);
+// Layout only, so a run of text chapters never reads as one column: the enforcement question as a
+// dark band (as on the rule sheets), the "what is not said" and claims questions on a tinted panel.
+const DARK = new Set(['suspension']);
+const TINT = new Set(['not-said', 'claims']);
 const byline = [
   { text: `Rules checked against ${hub.platform}’s live policy on ${checked}`, icon: 'check' as const },
   { text: `Updated ${fmtDay(updated)}`, icon: 'date' as const },
@@ -101,7 +105,11 @@ const byline = [
   {hub.sections.map((s) => (
     s.id === 'what-changed'
       ? <><div class="pg-prose"><h2 id={s.id}>{s.question}</h2></div><WhatChanged html={s.html} platform={hub.platform} month={latestMonth} /></>
-      : <div class="pg-prose"><h2 id={s.id}>{s.question}</h2><Fragment set:html={s.html} /></div>
+      : DARK.has(s.id)
+        ? <section class="adr-dark reveal"><span class="adr-dark-tex" aria-hidden="true"></span><h2 id={s.id}>{s.question}</h2><Fragment set:html={s.html} /></section>
+        : TINT.has(s.id)
+          ? <><div class="pg-prose"><h2 id={s.id}>{s.question}</h2></div><div class="adr-tint reveal"><div class="pg-prose"><Fragment set:html={s.html} /></div></div></>
+          : <div class="pg-prose"><h2 id={s.id}>{s.question}</h2><Fragment set:html={s.html} /></div>
   ))}
 
   <div class="pg-prose"><h2 id="verticals">Which {hub.platform} rule sheet covers your vertical?</h2></div>

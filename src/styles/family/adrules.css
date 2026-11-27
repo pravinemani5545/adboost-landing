@@ -745,3 +745,12 @@
 .family:has(.adr-pp) .pg-prose ul:not([class]) > li:has(> strong:first-child) { margin: 0; padding: 14px 18px 14px 40px; border-radius: 16px; background: #fff; box-shadow: var(--shadow-stack); font-size: 15.5px; line-height: 1.6; }
 .family:has(.adr-pp) .pg-prose ul:not([class]) > li:has(> strong:first-child)::before { left: 18px; top: 1.45em; }
 .family:has(.adr-pp) .pg-prose ul:not([class]) > li > strong:first-child { color: var(--deep-a); }
+
+/* the compliant path: a step split at a semicolon starts lower case in the text; it reads as a
+   sentence start in its card */
+.family .adr-steps .cp-step-card p::first-letter { text-transform: uppercase; }
+/* the pre-launch checklist: open boxes to tick off against the formula, not passes */
+.family .adr-check .cp-tick { width: 20px; height: 20px; margin-top: 2px; border-radius: 6px; background: #fff; box-shadow: inset 0 0 0 1.5px rgb(var(--hue-a) / .55), 0 4px 10px -6px rgb(var(--hue-b) / .6); }
+.family .adr-check .cp-tick svg { display: none; }
+.family .adr-dark > p + p { margin-top: 14px; }
+.family .adr-dark > :is(ul, ol) { margin: 14px 0 0; padding-left: 20px; color: rgb(255 255 255 / .86); }
