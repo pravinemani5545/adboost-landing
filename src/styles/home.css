@@ -221,3 +221,221 @@ html:not(.js) .marquee { animation: none; }
 }
 .faq .faq-list .qa:last-child { border-bottom: 0; }
 @media (max-width: 560px) { .faq .faq-list { padding: 2px 16px; border-radius: var(--k-r-lg); } }
+
+/* ================================================================
+   Family pass (2026-11-27): the section-home kit of www.adboost.media (src/styles/family/
+   landing.css) applied to the Health home. Layouts alternate so no two neighbouring sections
+   share one: split hero, logo strip, creative rail, bento, dark band with a drawn hub, case
+   cards, sticky step stack, night spotlight, one-large-quote grid, blog cards, two-column FAQ.
+   ================================================================ */
+
+/* ---------- hero: layered stage ---------- */
+.fl-hero > .fl-bd { z-index: 0; }
+.fl-hero .hero-vis { z-index: 1; }
+.fl-hero .hero-vis::before { inset: -22% -16%; }
+.fl-hero .ops { z-index: 1; }
+.hv-toast {
+  position: absolute; z-index: 3; display: flex; align-items: center; gap: 11px; padding: 10px 14px 10px 10px; border-radius: 16px;
+  background: rgb(255 255 255 / .94); border: 1px solid var(--line-2);
+  box-shadow: 0 1px 0 #fff inset, 0 30px 50px -24px rgb(14 17 22 / .38), 0 10px 20px -12px rgb(var(--hue-b) / .5);
+}
+.hv-toast .lx-ic { width: 34px; height: 34px; border-radius: 11px; }
+.hv-toast .lx-ic svg { width: 17px; height: 17px; }
+.hv-toast .lx-t { font-size: 13px; }
+.hv-rules { display: flex; gap: 5px; }
+.hv-comp { top: -40px; right: 26px; }
+.hv-setup { left: -34px; bottom: -36px; flex-direction: column; align-items: flex-start; gap: 8px; padding: 11px 14px 12px; }
+.hv-days { display: grid; grid-template-columns: repeat(5, 22px); gap: 4px; }
+.hv-days i { display: block; height: 8px; border-radius: 4px; background: var(--grad-brand); }
+.hv-days i:nth-child(n+4) { background: rgb(var(--hue-b) / .35); }
+.js.motion:not(.k-vt-in) .hv-days i { animation: k-draw-x .6s var(--k-ease-out) backwards; animation-delay: calc(700ms + var(--i) * 110ms); transform-origin: left center; }
+@media (max-width: 1100px) { .hv-comp { right: 6px; } .hv-setup { left: -8px; } }
+@media (max-width: 760px) {
+  .hv-toast { display: none; }
+  .fl-hero .fl-stage-plate { inset: -14px -10px 30% 30%; }
+}
+
+/* ---------- section heads: the family kicker over Health's own heading scale ---------- */
+.fl .section-head .fl-kicker,
+.fl .cases-head .fl-kicker,
+.fl .process-left .fl-kicker { display: inline-flex; }
+.fl .section-head.fl-shead { margin-bottom: 52px; }
+.fl .section-head.fl-shead h2 { font-size: clamp(34px, 5vw, 64px); margin: 16px 0 14px; }
+.fl .section-head.fl-shead > p { font-size: 17px; color: var(--text-2); }
+.strip-num { font-weight: 600; color: var(--k-ink); }
+
+/* ---------- bento: tiles on a layered shadow, each drawing on a hue-tinted, dotted panel ---------- */
+.fl-why { background: var(--k-paper); }
+.fl-why .bento-grid { gap: 16px; }
+.fl-why .bcard { border-color: transparent; border-radius: 26px; box-shadow: var(--shadow-stack); transition: translate .35s var(--ease), box-shadow .35s var(--ease); }
+.fl-why .bcard:nth-child(3n+1) { --ta: var(--hue-a); --tb: var(--hue-b); }
+.fl-why .bcard:nth-child(3n+2) { --ta: var(--hue-b); --tb: var(--hue-c); }
+.fl-why .bcard:nth-child(3n) { --ta: var(--hue-c); --tb: var(--hue-a); }
+@media (hover: hover) {
+  .fl-why .bcard:hover { translate: 0 -4px; box-shadow: var(--shadow-stack), 0 44px 70px -44px rgb(var(--ta) / .8); }
+}
+.fl-why .bcard:not(.b4) > .vis {
+  position: relative; isolation: isolate; margin: 10px 10px 0; border-radius: 18px; border: 1px solid var(--line); overflow: clip;
+  background: radial-gradient(95% 130% at 0% 0%, rgb(var(--ta) / .2), transparent 58%), radial-gradient(95% 130% at 100% 100%, rgb(var(--tb) / .2), transparent 60%), linear-gradient(180deg, #fff, var(--bg-2));
+}
+.fl-why .bcard:not(.b4) > .vis::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, rgb(14 17 22 / .12) 1px, transparent 1.5px); background-size: 14px 14px;
+  -webkit-mask-image: radial-gradient(75% 90% at 50% 0%, #000, transparent 78%); mask-image: radial-gradient(75% 90% at 50% 0%, #000, transparent 78%);
+}
+.fl-why .b1 .vis::before { content: none; }
+.fl-why .bcard .body { border-top: 0; }
+.fl-why .bcard .tag { top: 22px; left: 24px; background: var(--k-ink); }
+.fl-why .bcard .tag::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 7px 1px 0; border-radius: 50%; background: var(--grad-brand); vertical-align: middle; }
+/* the product cards inside the panels */
+.fl-bwin { width: 100%; max-width: 330px; margin-inline: auto; }
+.fl-bwin .lx-bar .lx-dot { margin-left: auto; }
+.fl-bwin .lx-body { padding: 12px; }
+.fl-why .b2 .vis { padding: 64px 18px 18px; }
+.fl-why .b2 .partner { max-width: none; border: 0; padding: 4px; box-shadow: none; background: transparent; }
+.fl-why .b3 .vis { padding: 56px 18px 26px; }
+.shield-wrap { min-height: 150px; }
+.shield-wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.shield-wires path { stroke: rgb(var(--hue-b) / .5); stroke-width: 1.4; stroke-dasharray: 3 5; vector-effect: non-scaling-stroke; }
+.fl-why .shield { background: var(--grad-vivid); box-shadow: 0 0 0 8px rgb(var(--hue-a) / .1), 0 18px 34px -12px rgb(var(--hue-b) / .8); }
+.js.motion .fl-why .shield { animation: fl-hub-core 3.2s ease-in-out infinite; }
+.fl-why .b5 .vis { display: flex; align-items: center; padding: 60px 18px 18px; }
+.fl-why .b5 .fl-bwin { max-width: none; }
+.b5-body { padding: 0 !important; min-height: 190px; }
+.b5-body svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.fl-why .b6 .vis { padding: 60px 18px 18px; }
+.b6-body { align-items: center; justify-content: center; }
+.fl-why .b6 .meter { margin: 4px auto; }
+/* bento 04: the one wide tile is a solid gradient card in the section's hues */
+.fl-why .b4 {
+  border-color: transparent;
+  background: radial-gradient(60% 130% at 100% 0%, rgb(var(--hue-b) / .55), transparent 60%), radial-gradient(50% 110% at 78% 110%, rgb(var(--hue-c) / .45), transparent 62%), var(--grad-vivid);
+  box-shadow: 0 44px 80px -44px rgb(var(--hue-b) / .8);
+}
+.fl-why .b4 .tag { background: rgb(255 255 255 / .16); color: #fff; box-shadow: inset 0 0 0 1px rgb(255 255 255 / .3); }
+.fl-why .b4 p { color: rgb(255 255 255 / .88); }
+.fl-why .b4 .b4-k { color: rgb(255 255 255 / .82); }
+.fl-why .b4 .vis { margin: 10px; border-radius: 18px; background: rgb(255 255 255 / .1); border: 1px solid rgb(255 255 255 / .24); }
+.fl-why .b4 .vis .tile { box-shadow: 0 14px 24px -14px rgb(0 0 0 / .6); transition: translate .5s var(--ease); }
+@media (hover: hover) { .fl-why .b4:hover .vis .tile:nth-child(odd) { translate: 0 -4px; } }
+@media (max-width: 760px) { .fl-why .bcard:not(.b4) > .vis { margin: 8px 8px 0; } }
+
+/* ---------- compliance: a dark band with the hub, the matrix card straddling its lower edge ---------- */
+.fl-comp { padding: 0 0 16px; background: var(--k-paper); }
+.fl-comp-band { padding: 116px 0 210px; }
+@media (min-width: 961px) { .fl-comp .comp-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; } }
+.fl-comp .comp-head h2 { margin: 20px 0 22px; font-size: clamp(36px, 5vw, 68px); max-width: 13ch; }
+.fl-comp .comp-head h2 .serif { color: var(--k-accent-bright); }
+.fl-comp .comp-head p { color: var(--on-dark-2); font-size: 17px; max-width: 44ch; }
+.fl-comp .comp-head .btn-ghost { color: #fff; background-color: rgb(255 255 255 / .06); border-color: rgb(255 255 255 / .24); }
+@media (hover: hover) { .fl-comp .comp-head .btn-ghost:hover { background-color: rgb(255 255 255 / .12); border-color: rgb(255 255 255 / .4); } }
+.comp-hub { min-width: 0; }
+.fl-comp .comp-stage { margin-top: -150px; z-index: 2; }
+.fl-comp .comp-stage::before, .fl-comp .comp-stage::after { content: none; }
+.fl-comp .comp-fig { box-shadow: var(--shadow-stack), 0 50px 90px -50px rgb(var(--hue-b) / .7); }
+@media (max-width: 960px) {
+  .fl-comp-band { padding: 84px 0 180px; }
+  .comp-hub { max-width: 460px; }
+}
+@media (max-width: 760px) {
+  .fl-comp { padding-bottom: 8px; content-visibility: visible; }
+  .fl-comp-band { padding: 68px 0 150px; }
+  .fl-comp .comp-head h2 { font-size: 38px; }
+  .fl-comp .comp-stage { margin-top: -120px; }
+}
+@media (max-width: 420px) { .fl-comp .comp-head h2 { font-size: 32px; } }
+
+/* ---------- case studies: the three snapshots in Health's hue family ---------- */
+.cases .ccard { border-color: transparent; border-radius: 24px; box-shadow: var(--shadow-stack); }
+.cases .ccard .vis { margin: 8px 8px 0; border-radius: 18px; border-bottom: 0; }
+.cases .ccard .vis.v1 { background: radial-gradient(80% 120% at 100% 0%, rgb(var(--hue-c) / .45), transparent 60%), linear-gradient(135deg, #0b2a6b, #0057ff); }
+.cases .ccard .vis.v2 { background: radial-gradient(80% 120% at 100% 0%, rgb(var(--hue-a) / .45), transparent 60%), linear-gradient(135deg, #1e1b4b, #4f46e5); }
+.cases .ccard .vis.v3 { background: radial-gradient(80% 120% at 100% 0%, rgb(var(--hue-b) / .45), transparent 60%), linear-gradient(135deg, #083344, #0e7490); }
+.cases .ccard .vis::after { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .2) 1px, transparent 1.5px); background-size: 14px 14px; -webkit-mask-image: linear-gradient(200deg, #000, transparent 70%); mask-image: linear-gradient(200deg, #000, transparent 70%); pointer-events: none; }
+@media (hover: hover) { .cases .ccard:hover { box-shadow: var(--shadow-stack), 0 40px 70px -44px rgb(var(--hue-b) / .7); } }
+
+/* ---------- process: the steps as cards that slide over one another, a rail filling beside them ---------- */
+.fl-process .steps { position: relative; gap: 22px; padding-left: 40px; }
+.fl-process .fl-rail { left: 14px; top: 30px; bottom: 30px; }
+.fl-step { --tint-a: var(--hue-a); --tint-b: var(--hue-b); overflow: visible; padding: 28px 28px 24px; border-color: transparent; border-radius: 28px;
+  background: radial-gradient(80% 120% at 0% 0%, rgb(var(--tint-a) / .22), transparent 60%), radial-gradient(70% 120% at 100% 100%, rgb(var(--tint-b) / .2), transparent 62%), #fff;
+  box-shadow: 0 -16px 44px -30px rgb(14 17 22 / .28), 0 44px 80px -56px rgb(var(--hue-b) / .9), var(--shadow-stack); }
+.fl-step:nth-child(3) { --tint-a: var(--hue-b); --tint-b: var(--hue-c); }
+/* the node on the rail */
+.fl-step::before { content: ""; position: absolute; left: -33px; top: 38px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--deep-a); box-shadow: 0 0 0 4px rgb(var(--hue-a) / .14); }
+.fl-step:nth-child(3)::before { border-color: var(--deep-b); }
+.fl-step:nth-child(4)::before { border: 0; background: var(--grad-brand); box-shadow: 0 0 0 5px rgb(var(--hue-b) / .22); }
+.fl-step .num { top: 22px; right: 24px; font-weight: 500; color: var(--k-ink-3); }
+.fl-step .ico { background: var(--grad-brand); color: #fff; box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .8), inset 0 1px 0 rgb(255 255 255 / .4); }
+.fl-step .top p { color: var(--text-2); }
+.fl-step-win { margin-top: 22px; }
+.fl-step-win .lx-bar .lx-dot { margin-left: auto; }
+.fl-step-win .lx-body { padding: 0; background-image: none; }
+.fl-step-win .demo { margin: 0; border: 0; border-radius: 0; background: linear-gradient(180deg, #fff, var(--bg-2)); }
+.fl-step-foot { gap: 6px; }
+/* the last step: a solid gradient card (white text on the deep hues) */
+.fl-step:nth-child(4) { border-color: transparent; color: #fff;
+  background: radial-gradient(60% 120% at 100% 0%, rgb(var(--hue-b) / .5), transparent 60%), radial-gradient(50% 110% at 80% 110%, rgb(var(--hue-c) / .4), transparent 62%), var(--grad-vivid); }
+.fl-step:nth-child(4) h3 { color: #fff; }
+.fl-step:nth-child(4) .top p { color: rgb(255 255 255 / .88); }
+.fl-step:nth-child(4) .tlink { color: #fff; text-decoration-color: rgb(255 255 255 / .6); }
+.fl-step:nth-child(4) .num { color: rgb(255 255 255 / .8); }
+.fl-step:nth-child(4) .duration { color: #fff; background: rgb(255 255 255 / .16); }
+.fl-step:nth-child(4) .ico { background: rgb(255 255 255 / .16); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .3); }
+.fl-step:nth-child(4) .fl-step-win { border-color: rgb(255 255 255 / .4); }
+@media (min-width: 961px) {
+  .fl-process .fl-step { position: sticky; top: calc(var(--k-top) + 28px + var(--k) * 22px); }
+}
+@media (max-width: 760px) {
+  .fl-process .steps { padding-left: 26px; }
+  .fl-process .fl-rail { left: 7px; }
+  .fl-step { padding: 22px 18px 18px; border-radius: 22px; }
+  .fl-step::before { left: -25px; top: 30px; width: 10px; height: 10px; }
+}
+
+/* ---------- testimonials: one large quote, the other three stacked beside it ---------- */
+.fl-tgrid .tcard { border-color: transparent; border-radius: 22px; box-shadow: var(--shadow-stack); }
+@media (min-width: 1001px) {
+  .fl-tgrid { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px; }
+  .fl-tgrid .tcard { grid-column: 7 / -1; min-height: 0; padding: 22px 26px 20px; }
+  .fl-tgrid .tcard:first-child { grid-column: 1 / 7; grid-row: 1 / span 3; padding: 46px 44px 40px; justify-content: space-between; background: var(--mesh-soft), #fff; }
+  .fl-tgrid .tcard:first-child::before { font-size: 150px; top: 6px; right: 26px; color: rgb(var(--hue-b) / .22); }
+  .fl-tgrid .tcard:first-child blockquote { flex: 0 1 auto; font-size: clamp(22px, 2.3vw, 31px); font-weight: 500; line-height: 1.22; letter-spacing: -.026em; color: var(--k-ink); text-wrap: balance; }
+  .fl-tgrid .tcard:first-child .pav { width: 46px; height: 46px; font-size: 14px; }
+  .fl-tgrid .tcard:first-child .who { font-size: 15.5px; }
+  .fl-tgrid .tcard:not(:first-child) blockquote { font-size: 14.5px; }
+}
+@media (hover: hover) { .fl-tgrid .tcard:hover { box-shadow: var(--shadow-stack), 0 34px 60px -40px rgb(var(--hue-b) / .7); } }
+
+/* ---------- latest from the blog ---------- */
+.latest .latest-card { border-color: transparent; border-radius: 22px; box-shadow: var(--shadow-stack); }
+.latest .latest-card img { transition: scale .6s var(--ease); }
+@media (hover: hover) {
+  .latest .latest-card:hover { box-shadow: var(--shadow-stack), 0 34px 60px -40px rgb(var(--hue-b) / .7); }
+  .latest .latest-card:hover img { scale: 1.03; }
+}
+
+/* ---------- FAQ: the heading on the left (sticky), the accordion card on the right ---------- */
+.fl-faq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 64px; align-items: start; }
+.fl-faq .fl-shead { text-align: left; margin: 0; position: sticky; top: calc(var(--k-top) + 28px); }
+.fl-faq .fl-shead h2 { font-size: clamp(32px, 4.2vw, 54px); }
+.fl-faq .fl-shead > p { margin: 0; }
+.fl-faq .faq-list { max-width: none; box-shadow: var(--shadow-stack), 0 40px 70px -56px rgb(var(--hue-b) / .6); border-color: transparent; }
+@media (max-width: 900px) {
+  .fl-faq-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .fl-faq .fl-shead { position: static; }
+}
+
+/* ---------- closing CTA: rings rising from the bottom of the night slab ---------- */
+.fl-cta-rings { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-radial-gradient(circle at 50% 118%, transparent 0 119px, rgb(255 255 255 / .07) 119px 120px);
+  -webkit-mask-image: radial-gradient(70% 100% at 50% 100%, #000 10%, transparent 78%); mask-image: radial-gradient(70% 100% at 50% 100%, #000 10%, transparent 78%); }
+.fl-process::before { content: none; }
+/* the steps column can never be pushed wider than the screen by a card's own min-content */
+.fl-process .process-grid { grid-template-columns: minmax(0, .85fr) minmax(0, 1.3fr); }
+.fl-step, .fl-step-win { min-width: 0; }
+.fl-step-foot { flex-wrap: wrap; height: auto; min-height: 34px; padding: 7px 12px; white-space: normal; }
+@media (max-width: 760px) { .fl-process .process-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .fl-step .num { position: static; display: block; margin: 0 0 12px; }
+}
