@@ -1,16 +1,29 @@
 ---
-// Privacy and terms. A thin wrapper over the Shell (full chrome: nav with the phone menu, the
-// site footer); the Props API is unchanged. Never shows the newsletter popup.
+// Privacy and terms: the legal reading layout of the family (adboost-media
+// src/layouts/LegalPage.astro). A thin wrapper over the Shell (full chrome: nav with the phone
+// menu, the site footer); never shows the newsletter popup. One reading column with, from
+// 1180px, a sticky numbered "on this page" rail on the left built from the policy's own H2s,
+// with a reading-progress line. Every H2 in the slot gets an id so the rail can link to it.
+// The page passes its H1 and its "Last updated" date; the slot holds the policy text.
+// Styles: src/styles/pages/core.css (lg-).
 import Shell from './Shell.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Backdrop from '../family/landing/Backdrop.astro';
 import { breadcrumb } from '../lib/schema';
 import { siteBase } from '../lib/site';
+import '../styles/family/landing.css';
+import '../styles/pages/core.css';
 
 interface Props {
   title: string;
   description: string;
   canonicalPath: string;
+  /** The page's H1. */
+  h1: string;
+  /** As shown under the title, e.g. "October 30, 2026". */
+  updated: string;
 }
-const { title, description, canonicalPath } = Astro.props;
+const { title, description, canonicalPath, h1, updated } = Astro.props;
 const site = siteBase(Astro.site);
 const pageLabel = title.replace(/ \| AdBoost Health$/, '');
 const jsonLd = {
@@ -20,32 +33,44 @@ const jsonLd = {
     { '@type': 'WebPage', name: title, description, url: `${site}${canonicalPath}`, publisher: { '@type': 'Organization', name: 'AdBoost Health', url: `${site}/` } },
   ],
 };
+
+const strip = (s: string) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+const slug = (s: string) => strip(s).replace(/&/g, 'and').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const toc: { id: string; text: string }[] = [];
+const body = (await Astro.slots.render('default')).replace(/<h2(\b[^>]*)>([\s\S]*?)<\/h2>/g, (m, attrs: string, inner: string) => {
+  const id = attrs.match(/\bid="([^"]+)"/)?.[1] ?? slug(inner);
+  toc.push({ id, text: strip(inner) });
+  return /\bid=/.test(attrs) ? m : `<h2${attrs} id="${id}">${inner}</h2>`;
+});
+const rail = toc.length >= 3;
 ---
-<Shell {title} {description} {canonicalPath} {jsonLd} preloadSerif={false} popup={false}>
-  <div class="legal-band">
-    <div class="k-bg k-bg--grid" aria-hidden="true"></div>
-    <div class="legal-main container">
-      <div class="legal-prose">
-        <slot />
+<Shell {title} {description} {canonicalPath} {jsonLd} preloadSerif={false} popup={false} mainClass="fl">
+  <article class:list={['lg', rail && 'lg-has-rail']} data-pointer>
+    <Backdrop spotlight focus={['70%', '12%']} />
+    <div class="container lg-grid">
+      <header class="lg-head">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: pageLabel }]} />
+        <h1>{h1}</h1>
+        <p class="lg-updated"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><em>Last updated: {updated}</em></span></p>
+      </header>
+      {rail && (
+        <aside class="lg-rail">
+          <div class="lg-rail-box">
+            <nav aria-label="On this page" data-toc>
+              <ol>{toc.map((t) => <li><a href={`#${t.id}`}>{t.text}</a></li>)}</ol>
+            </nav>
+            <i class="lg-progress" aria-hidden="true"><i></i></i>
+          </div>
+        </aside>
+      )}
+      <div class="lg-body">
+        <div class="lg-prose" set:html={body} />
       </div>
     </div>
-  </div>
+  </article>
+  <Fragment slot="scripts">
+    <script>
+      import '../family/landing/landing';
+    </script>
+  </Fragment>
 </Shell>
-
-<style is:global>
-  /* a hero-like band: the section's hue blooms and the blueprint grid behind the top of the page */
-  .legal-band { position: relative; isolation: isolate; overflow: clip; }
-  .legal-band::before { content: ""; position: absolute; inset: -260px -8% auto; height: 900px; z-index: -1; pointer-events: none; background: radial-gradient(34% 38% at 22% 30%, rgb(var(--hue-a) / .09), transparent 70%), radial-gradient(30% 36% at 74% 40%, rgb(var(--hue-b) / .1), transparent 70%), radial-gradient(26% 30% at 94% 62%, rgb(var(--hue-c) / .1), transparent 70%); }
-  .legal-band .k-bg--grid { --k-grid-mask: 70% 40% at 30% 0%; }
-  .legal-main { padding: calc(var(--k-nav-h) + 52px) 0 80px; }
-  .legal-prose { max-width: 760px; font-size: 15.5px; line-height: 1.7; color: var(--k-ink-2); counter-reset: lg; }
-  /* every section after the title on a hairline, with a mono index (CSS counter, no text in the HTML) */
-  .legal-prose h2 { counter-increment: lg; display: flex; align-items: baseline; gap: 12px; padding-top: 22px; border-top: 1px solid var(--k-line); }
-  .legal-prose h2::before { content: counter(lg, decimal-leading-zero); content: counter(lg, decimal-leading-zero) / ""; font-family: var(--k-font-mono); font-size: 12px; font-weight: 500; letter-spacing: .1em; color: var(--k-accent-ink); }
-  .legal-prose h1 { font-size: var(--k-fs-h1); line-height: var(--k-lh-tight); letter-spacing: -0.035em; font-weight: var(--k-fw-display); color: var(--k-ink); margin: 0 0 14px; text-wrap: balance; }
-  .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--k-ink); margin: 32px 0 10px; }
-  .legal-prose p { margin: 0 0 14px; }
-  .legal-prose ul { margin: 0 0 14px; padding-left: 22px; }
-  .legal-prose li { margin-bottom: 8px; }
-  .legal-prose a { color: var(--k-accent-ink); text-decoration: underline; text-underline-offset: 3px; }
-</style>
