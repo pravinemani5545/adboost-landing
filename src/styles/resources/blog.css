@@ -537,3 +537,16 @@
   .rs-cta { border-radius: 22px; }
   .rs-cta .rs-cta__btn { width: 100%; justify-content: center; }
 }
+
+/* sub-section heads in long posts get a hue tick, so a run of h3 sections still scans */
+.rs-article .rs-prose h3:where(:not(.k-dg *, .rs-qa *)) { position: relative; padding-left: 16px; }
+.rs-article .rs-prose h3:where(:not(.k-dg *, .rs-qa *))::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  bottom: 0.3em;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--grad-brand);
+}
