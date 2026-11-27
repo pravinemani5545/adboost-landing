@@ -236,3 +236,19 @@ html:not(.motion) .family .post-progress { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .family .rs-qa { transition: none; }
 }
+
+/* a formula on its own line (html.ts formulas): a card with the family's gradient edge and an
+   equals tile, the formula itself untouched */
+.family .post-prose .rs-formula { position: relative; display: flex; align-items: center; gap: 14px; margin: 24px 0; padding: 16px 20px 16px 16px; border-radius: 18px; background: radial-gradient(80% 140% at 0% 0%, rgb(var(--hue-a) / .1), transparent 60%), #fff; box-shadow: var(--shadow-stack), inset 0 0 0 1px rgb(var(--hue-a) / .22); font-size: 16px; line-height: 1.5; }
+.family .post-prose .rs-formula::before { content: "="; display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border-radius: 11px; font-family: var(--font-mono); font-size: 16px; color: #fff; background: var(--cp-vivid); box-shadow: 0 10px 18px -10px rgb(var(--hue-b) / .9); }
+.family .post-prose .rs-formula strong { color: var(--text); font-weight: 600; }
+/* a worked example's lines (html.ts formulas): a receipt, amounts on the right, totals ruled off */
+.family .post-prose ul.rs-tally { list-style: none; max-width: 460px; margin: 22px 0; padding: 8px 0; border-radius: 18px; background: #fff; box-shadow: var(--shadow-stack); font-variant-numeric: tabular-nums; }
+.family .post-prose ul.rs-tally > li { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 0; padding: 9px 20px; font-size: 15.5px; line-height: 1.5; }
+.family .post-prose ul.rs-tally > li::before { content: none; }
+.family .post-prose ul.rs-tally > li > strong { display: contents; }
+.family .post-prose .rs-tally-v { font-family: var(--font-mono); font-size: 14.5px; color: var(--text); }
+.family .post-prose ul.rs-tally > li.is-total { color: var(--text); font-weight: 600; background: linear-gradient(90deg, rgb(var(--hue-a) / .07), transparent 80%); }
+.family .post-prose ul.rs-tally > li.is-total:first-of-type, .family .post-prose ul.rs-tally > li:not(.is-total) + li.is-total { margin-top: 6px; border-top: 1px dashed var(--line-3); }
+.family .post-prose ul.rs-tally > li.is-total .rs-tally-v { font-weight: 600; color: var(--deep-a); }
+@media (max-width: 640px) { .family .post-prose .rs-formula { font-size: 15px; padding: 14px 16px 14px 14px; } .family .post-prose ul.rs-tally > li { padding: 9px 16px; font-size: 15px; } }

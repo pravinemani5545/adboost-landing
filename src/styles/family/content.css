@@ -319,6 +319,14 @@
   .family .cp-table tbody tr > :first-child { padding-top: 10px; font-size: 15.5px; width: auto; }
   .family .cp-table tbody tr > :first-child[data-label]:not([data-label=""])::before, .family .cp-table td:not(:first-child)::before { content: attr(data-label); display: block; margin-bottom: 3px; font-family: var(--font-mono); font-size: 10px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
   .family .cp-table td[data-label=""]::before { display: none; }
+  /* a numbered table ("#" first): the number is a small badge on the card's corner, the next cell
+     reads as the card's title */
+  .family .cp-table tbody tr:has(> td[data-label="#"]:first-child) { position: relative; padding-left: 48px; }
+  .family .cp-table tbody tr > td[data-label="#"]:first-child { position: absolute; left: 14px; top: 16px; display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border-radius: 8px; font-family: var(--font-mono); font-size: 11.5px; font-weight: 500; color: var(--deep-a); background: rgb(var(--hue-a) / .1); }
+  .family .cp-table tbody tr > td[data-label="#"]:first-child:not([data-label=""])::before { display: none; }
+  .family .cp-table tbody tr > td[data-label="#"]:first-child + td { padding-top: 13px; padding-left: 0; font-weight: 600; color: var(--text); }
+  .family .cp-table tbody tr > td[data-label="#"]:first-child + td::before { display: none; }
+  .family .cp-table tbody tr:has(> td[data-label="#"]:first-child) > td { padding-left: 0; }
 }
 
 /* ---------- 6. Callouts and fit cards ---------- */

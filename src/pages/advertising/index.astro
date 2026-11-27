@@ -35,6 +35,9 @@ const cell = (verticalSlug: string, platform: Platform) => AD_POLICIES.find((p) 
 // Google's certification steps live on the telehealth sheet until /advertising/google/ is live.
 const metaHubLive = isLive('/advertising/meta/');
 const googleHubLive = isLive('/advertising/google/');
+// With both platform hubs live, the two short platform chapters sit side by side as a pair of cards
+// (each still its own numbered chapter with its own H2), instead of two thin text chapters in a row.
+const briefPair = metaHubLive && googleHubLive;
 const columnLink: Record<Platform, { href: string; label: string }> = {
   Meta: { href: platformOverview('Meta').href, label: metaHubLive ? 'Meta policy overview' : 'July 2026 change' },
   Google: googleHubLive
@@ -95,7 +98,13 @@ const HUES = ['a', 'b', 'c'];
 >
   <PolicyMatrix slot="hero" title="Status by vertical and platform" platforms={[...PLATFORMS]} rows={matrixRows} chips={chips} />
 
-  {metaHubLive ? (
+  {metaHubLive && briefPair ? (
+    <section class="adr-brief reveal">
+      <span class="adr-brief-top" aria-hidden="true"><span class="adr-brief-ic"><Ic name={PLATFORM_ICON.Meta} /></span><span class="adr-brief-k">Meta</span></span>
+      <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
+      <p>In July 2026 Meta rewrote its Health and Wellness ad standard: before and after images are now allowed for cosmetic procedures (18+), and its negative self-perception wording became a ban on statements of inferiority about appearance. The full change, and which Meta standard applies to your ad, is on our <a href="/advertising/meta/">Meta health and wellness ad policy overview</a>.</p>
+    </section>
+  ) : metaHubLive ? (
     <div class="pg-prose">
       <h2 id="meta-july-2026">Meta Health and Wellness, July 2026: what changed</h2>
       <p>In July 2026 Meta rewrote its Health and Wellness ad standard: before and after images are now allowed for cosmetic procedures (18+), and its negative self-perception wording became a ban on statements of inferiority about appearance. The full change, and which Meta standard applies to your ad, is on our <a href="/advertising/meta/">Meta health and wellness ad policy overview</a>.</p>
@@ -135,7 +144,13 @@ const HUES = ['a', 'b', 'c'];
     </>
   )}
 
-  {googleHubLive ? (
+  {googleHubLive && briefPair ? (
+    <section class="adr-brief reveal d1">
+      <span class="adr-brief-top" aria-hidden="true"><span class="adr-brief-ic is-b"><Ic name={PLATFORM_ICON.Google} /></span><span class="adr-brief-k">Google</span></span>
+      <h2 id="google-ads">Google Ads healthcare rules</h2>
+      <p>Google limits prescription drug terms in ads and landing pages to the US, Canada and New Zealand and requires certification to keyword-target them. Drug terms, unapproved substances and the 2026 telemedicine market changes are on our <a href="/advertising/google/">Google Ads healthcare policy overview</a>.</p>
+    </section>
+  ) : googleHubLive ? (
     <div class="pg-prose">
       <h2 id="google-ads">Google Ads healthcare rules</h2>
       <p>Google limits prescription drug terms in ads and landing pages to the US, Canada and New Zealand and requires certification to keyword-target them. Drug terms, unapproved substances and the 2026 telemedicine market changes are on our <a href="/advertising/google/">Google Ads healthcare policy overview</a>.</p>

@@ -183,5 +183,26 @@ export function faqCards(html: string): string {
   );
 }
 
+/* ---------- formulas and tallies ---------- */
+
+const TALLY_ITEM = /^<li>(<strong>)?([^<:]{2,48}):\s+([~$]?\d[\d,.]*[%kKmM]?)(<\/strong>)?<\/li>$/;
+
+/** A paragraph that is one bold formula ("X = ... ÷ ...") becomes a formula card; a list of three or
+ *  more "Label: amount" items (a worked example's lines) becomes a tally, the amounts aligned on the
+ *  right (a bold item is a total row). Only spans are added: no word changes. */
+export function formulas(html: string): string {
+  let out = html.replace(/<p><strong>([^<]*\s=\s[^<]*)<\/strong><\/p>/g, '<p class="rs-formula"><strong>$1</strong></p>');
+  out = out.replace(/<ul>([\s\S]*?)<\/ul>/g, (ul, inner: string) => {
+    const lis = items(inner);
+    if (lis.length < 3 || !lis.every((li) => TALLY_ITEM.test(li.trim()))) return ul;
+    const rows = lis.map((li) => li.trim().replace(TALLY_ITEM, (_m, b1, k, v, b2) => {
+      const row = `<span class="rs-tally-k">${k}:</span> <span class="rs-tally-v">${v}</span>`;
+      return b1 && b2 ? `<li class="is-total"><strong>${row}</strong></li>` : `<li>${row}</li>`;
+    }));
+    return `<ul class="rs-tally">${rows.join('')}</ul>`;
+  });
+  return out;
+}
+
 /** Everything a post body gets, in order. */
-export const enhanceProse = (html: string) => faqCards(examples(lists(tables(html))));
+export const enhanceProse = (html: string) => faqCards(examples(lists(formulas(tables(html)))));
