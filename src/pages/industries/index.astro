@@ -5,7 +5,8 @@
 //   hero   the H1 with its serif accent, the lede and the trust line beside a stack of the
 //          verticals: the "Verticals we scale" window (every vertical's typical CAC on one axis,
 //          linked, with the three figures under it) in front of four of the real ad creatives,
-//          one per vertical they match, fanned behind it (decorative, nothing attached to them)
+//          one per vertical they match, fanned behind it (decorative, nothing attached to them;
+//          in the first frame from 1080px, and not downloaded below it, where they are hidden)
 //   cards  the nine verticals as a bento: a drawing (the vertical's glyph, its creative or an
 //          intake sketch) over the category, name, pain point, typical CAC with its range on the
 //          shared axis and the link to the playbook
@@ -63,7 +64,7 @@ const fan = VERTICALS.map((v) => PLANS[v.slug]?.creative).filter((c): c is strin
           <span class="stage-ring" aria-hidden="true"></span>
           <div class="ixhub-fan" aria-hidden="true">
             {fan.map((src, k) => (
-              <span class="ixhub-ph" style={`--k:${k}`}><img src={src} alt="" width="634" height="1136" loading="lazy" decoding="async" fetchpriority="low" /></span>
+              <span class="ixhub-ph" style={`--k:${k}`}><picture><source media="(max-width: 1079.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACw=" /><img src={src} alt="" width="634" height="1136" decoding="async" fetchpriority="low" /></picture></span>
             ))}
           </div>
           <Snapshot

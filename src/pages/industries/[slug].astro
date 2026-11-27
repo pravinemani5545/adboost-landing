@@ -157,14 +157,9 @@ if (pathway && pathStep < 0) {
 const flowAt = plan.steps.findIndex((s) => s.kind === 'flow' && s.stages.length === 0);
 if (flowAt !== pathStep) throw new Error(`[industries/${v.slug}] plan.ts draws the pathway at step ${flowAt + 1}, the copy prints it at step ${pathStep + 1}`);
 
-// The hero chips: one of the page's segments, and the first platform status (or the trust
-// line's typical CAC where the vertical has no rule sheets).
-const chips = [
-  { title: plan.segment, label: 'Segments we work in', icon: 'users', tone: 'b' as const },
-  strip[0]
-    ? { title: strip[0].label, label: strip[0].status, icon: 'shield', tone: 'g' as const }
-    : { title: v.cacDisplay, label: 'Typical CAC', icon: 'gauge', tone: 'g' as const },
-];
+// The hero chip: one of the page's segments, under the phone. (The platform statuses are on the
+// window's own strip, so a second chip only repeated them over the data.)
+const chip = { title: plan.segment, label: 'Segments we work in', icon: 'users', tone: 'b' as const };
 
 // The at-a-glance card draws this vertical's CAC on the same axis as the snapshot.
 const scale = miniScale(VERTICALS);
@@ -198,7 +193,7 @@ const toc = [
       meta={[`Typical CAC ${v.cacDisplay}`, 'Compliance-first', 'Setup in 5 days']}
       updated={updated && updatedLabel ? { iso: updated, label: updatedLabel } : undefined}
       segments={pb.subSegments}
-      chips={chips}
+      chip={chip}
     >
       <Fragment slot="answer">
         <span class="pg-answer-lab">The short answer</span>
