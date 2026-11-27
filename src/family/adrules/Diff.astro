@@ -1,0 +1,27 @@
+---
+// A policy change as a diff on the family layer (it replaces the kit Compare "diff" variant on the
+// ad compliance hub and the platform hubs): what the platform's change log struck through, each line
+// in <del>, against what the standard says now, each line in <ins>, like a reviewed code change.
+// Every line is the page's own text, in the order given. The caption and source line are visible.
+interface Side { label: string; items: string[] }
+interface Props { left: Side; right: Side; caption: string; source?: { label: string; href: string }; class?: string }
+const { left, right, caption, source, class: cls } = Astro.props;
+const ext = source && !source.href.startsWith('/') && !source.href.startsWith('#');
+---
+<figure class:list={['adr-diff', 'reveal', cls]}>
+  <div class="adr-diff-cols">
+    <div class="adr-diff-side is-del">
+      <p class="adr-diff-h"><span class="adr-diff-ic" aria-hidden="true"></span>{left.label}</p>
+      <ul>{left.items.map((it, i) => <li style={`--i:${i}`}><del>{it}</del></li>)}</ul>
+    </div>
+    <span class="adr-diff-arrow" aria-hidden="true">→</span>
+    <div class="adr-diff-side is-ins">
+      <p class="adr-diff-h"><span class="adr-diff-ic" aria-hidden="true"></span>{right.label}</p>
+      <ul>{right.items.map((it, i) => <li style={`--i:${i}`}><ins>{it}</ins></li>)}</ul>
+    </div>
+  </div>
+  <figcaption>
+    <span>{caption}</span>
+    {source && <span class="adr-src-line">Source: <a href={source.href} {...(ext ? { target: '_blank', rel: 'noopener' } : {})}>{source.label}</a></span>}
+  </figcaption>
+</figure>

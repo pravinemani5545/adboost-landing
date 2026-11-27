@@ -1,0 +1,75 @@
+---
+// Rule sheet hero (/advertising/<vertical>-on-<platform>/): the ad-review panel. An ad on this
+// sheet's platform (a feed post on Meta, a search result on Google, a short video on TikTok,
+// drawn as shapes only), the sheet's status on each of the three platforms (this one lit) and
+// this sheet's own top rejection reasons, flagged. The chip restates the "Rules checked" line.
+// Decorative (aria-hidden): every word is on the page (the status card, the byline and the
+// #rejections chapter say the same); nothing here is a result or a number.
+import Win from '../graphics/Win.astro';
+import Chip from '../graphics/Chip.astro';
+import Ic from '../graphics/Ic.astro';
+import Badge from './Badge.astro';
+import { STATUS_LABEL, type Platform, type PolicyStatus } from '../../data/adPolicies';
+import { STATUS_TONE } from '../../components/adv/status';
+import { PLATFORM_ICON, statusMark, statusPill } from './status';
+
+interface Props {
+  platform: Platform;
+  vertical: string;
+  status: PolicyStatus;
+  reasons: string[];
+  strip: { platform: Platform; status: PolicyStatus; current?: boolean }[];
+  checked: string;
+}
+const { platform, vertical, status, reasons, strip, checked } = Astro.props;
+const kind = platform.toLowerCase();
+---
+<div class="adr-rv" aria-hidden="true">
+  <Win name={`${vertical} on ${platform}`} pill={{ text: STATUS_LABEL[status], tone: statusPill(status), dot: true }}>
+    <div class="adr-rv-top">
+      <div class:list={['adr-ad', `is-${kind}`]}>
+        {platform === 'Meta' && (
+          <>
+            <span class="adr-ad-head"><i class="adr-av"></i><i class="ui-sk d"></i></span>
+            <span class="adr-ad-img"><i></i><i></i></span>
+            <span class="adr-ad-foot"><i class="ui-sk"></i><i class="adr-ad-cta"></i></span>
+          </>
+        )}
+        {platform === 'Google' && (
+          <>
+            <span class="adr-ad-head"><i class="adr-av"></i><i class="ui-sk d"></i></span>
+            <i class="adr-ad-title"></i>
+            <i class="ui-sk adr-l1"></i><i class="ui-sk adr-l2"></i><i class="ui-sk adr-l3"></i>
+            <span class="adr-ad-links"><i></i><i></i><i></i><i></i></span>
+          </>
+        )}
+        {platform === 'TikTok' && (
+          <>
+            <span class="adr-ad-vid"><Ic name="play" /></span>
+            <span class="adr-ad-side"><Ic name="heart" /><Ic name="comment" /><Ic name="share" /></span>
+            <span class="adr-ad-cap"><i class="ui-sk"></i><i class="ui-sk"></i></span>
+          </>
+        )}
+        <i class="adr-scan"></i>
+        <span class="adr-stamp" data-level={STATUS_TONE[status]}>{statusMark(status)}</span>
+      </div>
+      <ul class="adr-rv-plats">
+        {strip.map((s, i) => (
+          <li class:list={[s.current && 'is-cur']} style={`--i:${i}`}>
+            <span class:list={['ui-ic', s.current ? 'g' : 'n']}><Ic name={PLATFORM_ICON[s.platform]} /></span>
+            <span class="adr-rv-pn"><b>{s.platform}</b><Badge status={s.status} /></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div class="adr-rv-flags">
+      <p class="ui-lab">Top rejection reasons</p>
+      <ol>
+        {reasons.map((r, i) => (
+          <li style={`--i:${i}`}><span class="adr-x"><Ic name="x" /></span><span>{r}</span></li>
+        ))}
+      </ol>
+    </div>
+  </Win>
+  <Chip title="Rules checked" label={checked} icon="shield" tone="g" style="right:-26px;bottom:-34px" />
+</div>

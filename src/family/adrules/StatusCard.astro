@@ -1,0 +1,43 @@
+---
+// The status spec card at the top of a rule sheet (#status, "Is it allowed?") and of a platform
+// hub: one cell per platform (or per vertical on a hub) with its status badge, the current page's
+// cell ringed and the others linked to their sheets, then the status legend (the current status
+// lit) and the caption the old hero strip carried. Every label is the page's own data.
+// Styles: src/styles/family/adrules.css (.adr-status).
+import Ic from '../graphics/Ic.astro';
+import Badge from './Badge.astro';
+import { LEGEND } from './status';
+import type { PolicyStatus } from '../../data/adPolicies';
+
+interface Item { label: string; status: PolicyStatus; href?: string; current?: boolean; icon?: string }
+interface Props { id?: string; label: string; caption: string; items: Item[] }
+const { id, label, caption, items } = Astro.props;
+const lit = new Set(items.filter((i) => i.current).map((i) => i.status));
+const go = '<path d="M5 11 11 5M6 5h5v5" />';
+---
+<div class="adr-status reveal" id={id}>
+  <div class="cp-bar"><span class="cp-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="adr-bar-lab">{label}</span></div>
+  <ul class="adr-status-cells" data-n={items.length}>
+    {items.map((it, i) => {
+      const inner = (
+        <>
+          <span class:list={['adr-cell-ic', it.current && 'is-cur']} aria-hidden="true">{it.icon ? <Ic name={it.icon} /> : it.label.charAt(0)}</span>
+          <span class="adr-cell-txt"><span class="adr-cell-name">{it.label}</span><Badge status={it.status} /></span>
+        </>
+      );
+      return (
+        <li class:list={[it.current && 'is-cur']} style={`--i:${i}`}>
+          {it.href
+            ? <a class="adr-cell" href={it.href}>{inner}<svg class="adr-cell-go" viewBox="0 0 16 16" aria-hidden="true" set:html={go} /></a>
+            : <div class="adr-cell">{inner}</div>}
+        </li>
+      );
+    })}
+  </ul>
+  <div class="adr-status-foot">
+    <ul class="adr-legend">
+      {LEGEND.map((l) => <li class:list={[lit.has(l.status) && 'is-on']} data-level={l.level}><span class="adr-badge-m" aria-hidden="true">{l.mark}</span>{l.label}</li>)}
+    </ul>
+    <p class="adr-status-cap">{caption}</p>
+  </div>
+</div>

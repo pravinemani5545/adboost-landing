@@ -1,25 +1,40 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
-import Flow from '../../kit/diagram/Flow.astro';
-import StatusAside from '../../components/adv/StatusAside.astro';
-import ChangeLog from '../../components/adv/ChangeLog.astro';
-import RuleTiers from '../../components/adv/RuleTiers.astro';
-import Toc from '../../components/Toc.astro';
+// /advertising/<vertical>-on-<platform>/: a rule sheet on the family layer (src/family/FamilyPage.astro;
+// src/family/README.md). Every word, heading, link, FAQ and JSON-LD node is the one this page had on
+// the old interior layout; only the layout and the graphics are new.
+//   hero     the ad-review panel: this platform's ad, the status on each platform, the sheet's own
+//            top rejection reasons (src/family/adrules/ReviewPanel.astro)
+//   intro    the status card (#status, "Is it allowed?"), the dated change log, the platform overview
+//            pointer and, where the sheet has one, the pre-launch checklist as a check card
+//   chapters certification (its chain, where the copy states one), what's prohibited as rule cards,
+//            requirements as a document card, rejections as a flagged list, enforcement as a dark
+//            band with a severity scale, the compliant path as a step track, the sheet's own extra
+//            questions, then the FAQ cards and the sources card
+//   rail     the Zero-Ban Protocol card and the booking card, then the sticky "On this page"
+//   end      the other platforms and related reading as link cards, the closing card (.cta-band)
+import FamilyPage from '../../family/FamilyPage.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import ReviewPanel from '../../family/adrules/ReviewPanel.astro';
+import StatusCard from '../../family/adrules/StatusCard.astro';
+import ChangeLog from '../../family/adrules/ChangeLog.astro';
+import CertChain from '../../family/adrules/CertChain.astro';
+import RuleTiers from '../../family/adrules/RuleTiers.astro';
+import SeverityScale from '../../family/adrules/SeverityScale.astro';
+import Ic from '../../family/graphics/Ic.astro';
+import { scaleFor } from '../../family/adrules/enforcement';
+import { pathSteps } from '../../family/adrules/path';
+import { PLATFORM_ICON, esc } from '../../family/adrules/status';
 import { certFlowFor } from '../../components/adv/certFlows';
-import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, fmtDay, policyHref } from '../../components/adv/status';
-import { AD_POLICIES, getAdPolicy, platformOverview, POLICY_YEAR, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
+import { PLATFORMS, fmtDay } from '../../components/adv/status';
+import { AD_POLICIES, getAdPolicy, platformOverview, POLICY_YEAR, RULES_CHECKED_ON } from '../../data/adPolicies';
 import { getVertical } from '../../data/verticals';
-import { siteBase } from '../../lib/site';
+import { BOOK_PATH, siteBase } from '../../lib/site';
 import { isLive, PAGES } from '../../lib/live';
 import { getPublishedPosts } from '../../lib/blog';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { ogImageFor } from '../../lib/og';
 import { breadcrumb, faqPage, articleNode } from '../../lib/schema';
-import '../../styles/pages/chapters.css';
-import '../../styles/pages/advertising.css';
+import '../../styles/family/adrules.css';
 
 export function getStaticPaths() {
   return AD_POLICIES.map((p) => ({ params: { slug: p.slug } }));
@@ -54,28 +69,25 @@ if (!updated) throw new Error(`src/data/pages.json needs an "updated" date for $
 const related = AD_POLICIES.filter((x) => x.verticalSlug === p.verticalSlug && x.slug !== p.slug);
 const industry = getVertical(p.verticalSlug);
 const NOTE_LABEL = { changed: 'Updated', corrected: 'Corrected', clarified: 'Clarified' } as const;
-const NOTE_TONE = { changed: 'accent', corrected: 'warn', clarified: 'muted' } as const;
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const NOTE_TONE = { changed: '', corrected: 'warn', clarified: 'n' } as const;
 // Headings keep hyphenated words whole ("GLP-1", "weight-loss"); the text is unchanged.
-const inlineHtml = esc(inline).replace(/[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+/g, '<span class="adv-nw">$&</span>');
+const inlineHtml = esc(inline).replace(/[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+/g, '<span class="adr-nw">$&</span>');
 
-// Hero aside: this vertical on the three platforms, the current sheet ringed, the others linked.
-const strip = PLATFORMS
+// This vertical on the three platforms: the status card's cells and the hero panel's rows.
+const sheets = PLATFORMS
   .map((pl) => AD_POLICIES.find((x) => x.verticalSlug === p.verticalSlug && x.platform === pl))
-  .filter((x): x is NonNullable<typeof x> => !!x)
-  .map((x) => ({
-    label: x.platform,
-    status: STATUS_LABEL[x.status],
-    level: STATUS_TONE[x.status],
-    href: x.slug === p.slug ? undefined : policyHref(x),
-    current: x.slug === p.slug || undefined,
-  }));
-const art = `/art/advertising/${p.platform === 'TikTok' ? 'hub' : p.platform.toLowerCase()}`;
+  .filter((x): x is NonNullable<typeof x> => !!x);
+const strip = sheets.map((x) => ({
+  label: x.platform,
+  platform: x.platform,
+  status: x.status,
+  icon: PLATFORM_ICON[x.platform],
+  href: x.slug === p.slug ? undefined : `/advertising/${x.slug}/`,
+  current: x.slug === p.slug || undefined,
+}));
 
-// #cert: a Flow only where this sheet's certification copy states the chain (certFlows.ts).
-// The page's one tint band goes to that Flow, else to the two-tier rules under #prohibited.
+// #cert: a chain only where this sheet's certification copy states one (certFlows.ts).
 const flow = certFlowFor(p);
-const band = flow ? 'cert' : 'prohibited';
 
 // Platform up-links (health plan O1, CN 3.4): each sheet points at the one page
 // that states its platform's shared rules. Google's certification steps live on
@@ -125,7 +137,7 @@ const jsonLd = [
   faqPage(p.faq),
 ];
 const tick = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const docIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>';
+const cross = '<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>';
 const toc = [
   { id: 'status', label: 'Is it allowed?' },
   { id: 'cert', label: 'Certification' },
@@ -137,142 +149,176 @@ const toc = [
   ...(p.sections ?? []).map((s) => ({ id: s.id, label: s.question })),
   { id: 'faq', label: 'FAQ' },
 ];
+const cert = p.certification.trimStart().startsWith('<') ? p.certification : `<p>${p.certification}</p>`;
+const steps = pathSteps(p.howToComply);
+const severity = scaleFor(p);
+
+// The H1 accent: "on Meta:", "on Google Ads:", "on TikTok:" (the words are unchanged; the span ends at a
+// space, so the H1 text reads exactly as before).
+const h1Html = esc(p.h1).replace(/ on (Meta|Google Ads|TikTok): /, ' <span class="serif">on $1:</span> ');
+if (!h1Html.includes('class="serif"')) throw new Error(`[advertising] no accent found in the H1 of ${p.slug}`);
+const checked = fmtDay(RULES_CHECKED_ON);
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  ogType: 'article',
+  h1: p.h1,
+  h1Html,
+  summary: esc(p.answer),
+  summaryLabel: 'The short answer',
+  related: [
+    {
+      heading: `${p.vertical} on other platforms`,
+      level: 4 as const,
+      links: [
+        ...related.map((r) => ({ href: `/advertising/${r.slug}/`, label: `${p.vertical} on ${r.platform}` })),
+        { href: overview.href, label: overview.label },
+      ],
+    },
+    ...(reading.length ? [{ heading: 'Related reading', level: 4 as const, links: reading }] : []),
+  ],
+  ctaHeading: esc(`Launching ${inline} ads on ${p.platform}?`),
+  ctaText: `We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`,
+};
+const byline = [
+  { text: `Rules checked against ${p.platform}’s live policy on ${checked}`, icon: 'check' as const },
+  { text: `Updated ${fmtDay(updated)}`, icon: 'date' as const },
+];
 ---
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  <PageHero
-    class="adv-hero"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]}
-    eyebrow={`${p.platform.toUpperCase()} · ${p.vertical.toUpperCase()}`}
-    title={esc(p.h1)}
-    {art}
-  >
-    <div class="answer-box arrive" id="status" style="--d:60ms"><span class="al">The short answer</span>{p.answer}</div>
-    <StatusAside
-      slot="aside"
-      label="Status on each platform"
-      caption={`${p.vertical} on Meta, Google and TikTok. This sheet covers ${p.platform}.`}
-      items={strip}
-      legend={STATUS_LEGEND}
-      platform={p.platform}
-      checkedOn={RULES_CHECKED_ON}
-      {updated}
-      reasons={{ label: 'Top rejection reasons', items: p.rejectionReasons.slice(0, 3) }}
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Ad compliance', href: '/advertising/' }, { label: `${p.vertical} on ${p.platform}` }]}
+  eyebrow={`${p.platform.toUpperCase()} · ${p.vertical.toUpperCase()}`}
+  schema={jsonLd}
+  byline={byline}
+  toc={toc}
+  figureAt={flow ? { id: 'cert', skip: 1 } : undefined}
+>
+  <ReviewPanel
+    slot="hero"
+    platform={p.platform}
+    vertical={p.vertical}
+    status={p.status}
+    reasons={p.rejectionReasons.slice(0, 3)}
+    strip={strip}
+    checked={checked}
+  />
+  {flow && <CertChain slot="figure" caption={flow.caption} nodes={flow.nodes} />}
+
+  <div slot="aside" class="pg-card adr-zbp">
+    <div class="adr-zbp-art" aria-hidden="true"><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick"></span><i></i><span class="adr-zbp-tick is-open"></span><i></i></div>
+    <h4>Zero-Ban Protocol</h4>
+    <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>
+    <a class="adr-zbp-go" href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist <span aria-hidden="true">→</span></a>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>We clear this before you launch</h4>
+    <p>Every account and asset reviewed against live {p.platform} policy, so launches don’t get yanked.</p>
+    <ButtonLink href={BOOK_PATH} class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  <StatusCard
+    id="status"
+    label="Status on each platform"
+    caption={`${p.vertical} on Meta, Google and TikTok. This sheet covers ${p.platform}.`}
+    items={strip}
+  />
+
+  {p.changeNotes && p.changeNotes.length > 0 && (
+    <ChangeLog
+      caption="Dated notes for this page. Updated: the platform changed its rules. Corrected or clarified: this page was wrong or unclear before."
+      entries={p.changeNotes.map((n) => ({ date: n.date, text: n.text, badge: NOTE_LABEL[n.kind], tone: NOTE_TONE[n.kind], sources: n.sources }))}
     />
-  </PageHero>
+  )}
 
-  <section class="iwrap adv-doc">
-    <div class="container">
-      <div class="doc-grid k-scrub-scope">
-        <div class="doc-main ch-doc">
-          <div class="prose">
-            {p.changeNotes && p.changeNotes.length > 0 && (
-              <ChangeLog
-                arrive
-                caption="Dated notes for this page. Updated: the platform changed its rules. Corrected or clarified: this page was wrong or unclear before."
-                entries={p.changeNotes.map((n) => ({ date: n.date, text: n.text, badge: NOTE_LABEL[n.kind], tone: NOTE_TONE[n.kind], sources: n.sources }))}
-              />
-            )}
+  <div class="adr-pointer reveal">
+    <span class="adr-pointer-ic" aria-hidden="true"><Ic name="layers" /></span>
+    <p>
+      {overview.lead} <a href={overview.href}>{overview.label}</a>.
+      {certSheet && <> Certification steps for every Google health ad: <a href={certSheet.href}>{certSheet.label}</a>.</>}
+    </p>
+  </div>
 
-            <p class="adv-overview">
-              {overview.lead} <a href={overview.href}>{overview.label}</a>.
-              {certSheet && <> Certification steps for every Google health ad: <a href={certSheet.href}>{certSheet.label}</a>.</>}
-            </p>
-
-            {p.checklist && (
-              <div class="callout adv-checklist ch-receipt ch-card">
-                <div class="ch-receipt__bar"><span class="cl-label">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
-                <ul class="ch-rows">
-                  {p.checklist.items.map((x) => <li><span class="ch-tick" aria-hidden="true" set:html={tick} />{x}</li>)}
-                </ul>
-                <span class="adv-checklist__src ch-receipt__foot">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></span>
-              </div>
-            )}
-
-            <div class:list={['adv-sec', band === 'cert' && 'adv-band']} data-tone={band === 'cert' ? 'tint' : undefined}>
-              <h2 id="cert">Do you need certification to run <Fragment set:html={inlineHtml} /> ads on {p.platform}?</h2>
-              {flow && <Flow pulse class="adv-flow" caption={flow.caption} nodes={flow.nodes} />}
-              <Fragment set:html={p.certification.trimStart().startsWith('<') ? p.certification : `<p>${p.certification}</p>`} />
-            </div>
-
-            <div class:list={['adv-sec', band === 'prohibited' && 'adv-band']} data-tone={band === 'prohibited' ? 'tint' : undefined}>
-              <h2 id="prohibited">What can’t <Fragment set:html={inlineHtml} /> ads say or show on {p.platform}?</h2>
-              <RuleTiers platform={p.platform} {inline} prohibited={p.prohibited} guidance={p.guidance} sources={p.sources} />
-            </div>
-
-            <h2 id="requirements">Which disclaimers and landing-page rules apply?</h2>
-            <div class="callout adv-req ch-card" data-reveal><span class="adv-req__ico ch-ico" aria-hidden="true" set:html={docIcon} /><div><span class="cl-label">Requirements</span><Fragment set:html={p.requirements} /></div></div>
-
-            <h2 id="rejections">Why do <Fragment set:html={inlineHtml} /> ads get rejected on {p.platform}?</h2>
-            <ul class="adv-rejects">
-              {p.rejectionReasons.map((x, i) => (
-                <li data-reveal style={`--i:${i}`}><span class="adv-rejects__m" aria-hidden="true">✕</span><span>{x}</span></li>
-              ))}
-            </ul>
-
-            <h2 id="enforcement">What happens when {p.platform} enforces these rules?</h2>
-            <div class="ch-night adv-enforce" data-reveal>
-              <span class="adv-enforce__mark" aria-hidden="true"><span></span><span></span><span></span></span>
-              <p set:html={p.enforcement} />
-            </div>
-
-            <h2 id="comply">How do compliant <Fragment set:html={inlineHtml} /> brands still advertise on {p.platform}?</h2>
-            <div class="callout ok adv-path" data-reveal><span class="adv-path__ico" aria-hidden="true" set:html={tick} /><div><span class="cl-label">The compliant path</span><Fragment set:html={p.howToComply} /></div></div>
-
-            {(p.sections ?? []).map((s) => (
-              <>
-                <h2 id={s.id}>{s.question}</h2>
-                <Fragment set:html={s.html} />
-              </>
-            ))}
-
-            {industry && (
-              <p>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</p>
-            )}
-
-            <h2 id="faq">What else do <Fragment set:html={inlineHtml} /> brands ask about {p.platform} ads?</h2>
-            <div class="ch-panel ch-card"><Faq items={p.faq} idPrefix={`adv-${p.slug}`} /></div>
-
-            <h3>Sources</h3>
-            <div class="ch-src">
-              <p class="adv-fine">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
-              <ul class="adv-sources">
-                {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <aside class="doc-aside">
-          <Toc items={toc} />
-          <div class="aside-card adv-links">
-            <h4>{p.vertical} on other platforms</h4>
-            <div class="link-list">
-              {related.map((r) => <a href={`/advertising/${r.slug}/`}>{p.vertical} on {r.platform}</a>)}
-              <a href={overview.href}>{overview.label}</a>
-            </div>
-            {reading.length > 0 && (
-              <>
-                <h4 class="adv-links__h">Related reading</h4>
-                <div class="link-list">
-                  {reading.map((r) => <a href={r.href}>{r.label}</a>)}
-                </div>
-              </>
-            )}
-          </div>
-          <div class="aside-card">
-            <h4>Zero-Ban Protocol</h4>
-            <p>Our free pre-launch compliance checklist for health-brand advertisers.</p>
-            <a href="/zero-ban-protocol/?utm_campaign=zbp-advertising">Get the checklist →</a>
-          </div>
-          <div class="aside-card night">
-            <h4>We clear this before you launch</h4>
-            <p>Every account and asset reviewed against live {p.platform} policy, so launches don’t get yanked.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
-      </div>
+  {p.checklist && (
+    <div class="cp-receipt adr-check reveal">
+      <div class="cp-bar"><span class="cp-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="adr-bar-lab">{p.checklist.title} (checked {fmtDay(RULES_CHECKED_ON)})</span></div>
+      <ul class="cp-receipt-rows">
+        {p.checklist.items.map((x) => <li><span class="cp-tick" aria-hidden="true" set:html={tick} /><span>{x}</span></li>)}
+      </ul>
+      <div class="cp-receipt-foot"><p class="adr-check-src">Source: <a href={p.checklist.source.url} target="_blank" rel="noopener">{p.checklist.source.label}</a></p></div>
     </div>
+  )}
+
+  <div class="pg-prose">
+    <h2 id="cert">Do you need certification to run <Fragment set:html={inlineHtml} /> ads on {p.platform}?</h2>
+    <Fragment set:html={cert} />
+  </div>
+
+  <div class="pg-prose"><h2 id="prohibited">What can’t <Fragment set:html={inlineHtml} /> ads say or show on {p.platform}?</h2></div>
+  <RuleTiers platform={p.platform} {inline} prohibited={p.prohibited} guidance={p.guidance} sources={p.sources} />
+
+  <div class="pg-prose"><h2 id="requirements">Which disclaimers and landing-page rules apply?</h2></div>
+  <div class="adr-doc reveal">
+    <div class="adr-doc-bar"><span class="adr-doc-ic" aria-hidden="true"><Ic name="doc" /></span><span class="cp-k">Requirements</span><span class="adr-doc-lines" aria-hidden="true"><i></i><i></i></span></div>
+    <div class="adr-doc-body"><p set:html={p.requirements} /></div>
+  </div>
+
+  <div class="pg-prose"><h2 id="rejections">Why do <Fragment set:html={inlineHtml} /> ads get rejected on {p.platform}?</h2></div>
+  <div class="adr-rej reveal">
+    <div class="cp-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="adr-rej-ic"><Ic name={PLATFORM_ICON[p.platform]} /></span><span class="cp-bar-ghost"><i></i><i></i></span></div>
+    <ol class="adr-rej-list">
+      {p.rejectionReasons.map((x, i) => (
+        <li style={`--i:${i}`}><span class="adr-rej-x" aria-hidden="true" set:html={cross} /><span>{x}</span></li>
+      ))}
+    </ol>
+  </div>
+
+  <section class="adr-dark reveal">
+    <span class="adr-dark-tex" aria-hidden="true"></span>
+    <h2 id="enforcement">What happens when {p.platform} enforces these rules?</h2>
+    <p set:html={p.enforcement} />
+    <SeverityScale steps={severity} />
   </section>
 
-  <CtaBand heading={`Launching ${inline} ads on ${p.platform}?`} text={`We pre-clear every account and creative against ${p.platform}'s health-vertical policy so your launch doesn't get rejected or your account disabled.`} />
-</BaseLayout>
+  <div class="pg-prose"><h2 id="comply">How do compliant <Fragment set:html={inlineHtml} /> brands still advertise on {p.platform}?</h2></div>
+  <div class="adr-path">
+    <p class="adr-path-lab"><span class="adr-path-ic" aria-hidden="true" set:html={tick} />The compliant path</p>
+    <ol class="cp-steps adr-steps">
+      {steps.map((s, i) => (
+        <li class="cp-step reveal" style={`--i:${i}`}>
+          <span class="cp-step-node" aria-hidden="true"></span>
+          <div class="cp-step-card"><p>{s.lead && <><strong>{s.lead}</strong> </>}<Fragment set:html={s.rest} /></p></div>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  {(p.sections ?? []).map((s) => (
+    <div class="pg-prose"><h2 id={s.id}>{s.question}</h2><Fragment set:html={s.html} /></div>
+  ))}
+
+  {industry && (
+    <p class="adr-pointer is-next reveal">
+      <span class="adr-pointer-ic" aria-hidden="true"><Ic name="route" /></span>
+      <span>This page covers {p.platform} policy only. For CAC benchmarks, funnel structure and creative strategy across the whole vertical, see <a href={`/industries/${p.verticalSlug}/`}>{industry.short} marketing: the full vertical playbook</a>.</span>
+    </p>
+  )}
+
+  <div class="pg-prose"><h2 id="faq">What else do <Fragment set:html={inlineHtml} /> brands ask about {p.platform} ads?</h2></div>
+  <div class="cp-faq-list">
+    {p.faq.map((f, i) => (
+      <div class:list={['pg-qa', 'reveal', i % 3 && `d${i % 3}`]}>
+        <h3>{f.q}</h3>
+        <div class="pg-qa-a" set:html={f.a} />
+      </div>
+    ))}
+  </div>
+  <section class="adr-src reveal">
+    <h3>Sources</h3>
+    <p class="adr-fine">Ad policies change. These rules were checked against {p.platform}’s published policy on {fmtDay(RULES_CHECKED_ON)}; confirm current requirements against the live policy and qualified counsel before launching. This is general information, not legal advice.</p>
+    <ol>
+      {p.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+    </ol>
+  </section>
+</FamilyPage>

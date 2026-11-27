@@ -1,0 +1,31 @@
+---
+// Comparison hero (/compare/<slug>/): the two options this page weighs, side by side in a window,
+// with a rail of the dimensions its side-by-side table compares, in table order (it replaces the
+// kit Figure the page drew before). Every string is a compare.ts field
+// (themLabel, rows[].dimension); the knots and rungs are shapes. A figure with a visible caption.
+import Ic from '../graphics/Ic.astro';
+interface Props { them: string; dimensions: string[] }
+const { them, dimensions } = Astro.props;
+const caption = `The ${dimensions.length} dimensions the side-by-side table below compares, in its order.`;
+---
+<figure class="adr-vs">
+  <div class="ui adr-vs-card">
+    <div class="ui-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="cp-bar-ghost"><i></i><i></i></span></div>
+    <p class="adr-vs-head">
+      <span class="adr-vs-side is-them"><span class="adr-vs-ic" aria-hidden="true"><Ic name="users" /></span><span>{them}</span></span>
+      <span class="adr-vs-badge">vs</span>
+      <span class="adr-vs-side is-us"><span class="adr-vs-ic" aria-hidden="true"><Ic name="shield" /></span><span>AdBoost Health</span></span>
+    </p>
+    <ol class="adr-vs-dims">
+      {dimensions.map((d, i) => (
+        <li style={`--i:${i}`}>
+          <span class="adr-vs-knot is-l" aria-hidden="true"></span>
+          <span class="adr-vs-rung" aria-hidden="true"></span>
+          <span class="adr-vs-name">{d}</span>
+          <span class="adr-vs-knot is-r" aria-hidden="true"></span>
+        </li>
+      ))}
+    </ol>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

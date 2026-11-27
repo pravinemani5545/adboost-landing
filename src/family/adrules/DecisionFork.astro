@@ -1,0 +1,26 @@
+---
+// A yes/no decision as a fork on the family layer (it replaces the kit DecisionTree on the ad
+// compliance hub): the question card on top, a line splitting to the two outcomes, each with its
+// status colour, its result and its detail, then the note and the caption. All text is the page's.
+import type { Tone } from '../../kit/diagram/types';
+import { TONE_MARK } from '../../kit/diagram/util';
+interface Leaf { result: string; detail?: string; tone?: Tone }
+interface Props { q: string; yes: Leaf; no: Leaf; note?: string; caption: string; class?: string }
+const { q, yes, no, note, caption, class: cls } = Astro.props;
+const branches = [{ k: 'Yes', ...yes }, { k: 'No', ...no }];
+---
+<figure class:list={['adr-fork', 'reveal', cls]}>
+  <div class="adr-fork-q"><span class="adr-fork-qi" aria-hidden="true">?</span><p>{q}</p></div>
+  <span class="adr-fork-lines" aria-hidden="true"><i></i><i></i></span>
+  <div class="adr-fork-bs">
+    {branches.map((b, i) => (
+      <div class="adr-fork-b" data-level={b.tone ?? 'muted'} style={`--i:${i}`}>
+        <span class="adr-fork-k">{b.k}</span>
+        <p class="adr-fork-r"><span class="adr-badge-m" aria-hidden="true">{TONE_MARK[b.tone ?? 'muted']}</span>{b.result}</p>
+        {b.detail && <p class="adr-fork-d">{b.detail}</p>}
+      </div>
+    ))}
+  </div>
+  {note && <p class="adr-fork-note">{note}</p>}
+  <figcaption>{caption}</figcaption>
+</figure>

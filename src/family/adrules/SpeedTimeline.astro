@@ -1,0 +1,39 @@
+---
+// "How fast does each one start?" as a figure (/compare/<slug>/ pages that answer it): AdBoost
+// Health's first 31 days on a day scale, its three milestones placed at the day the answer gives
+// (setup 5 days, within two weeks, day 31), and the other option's lane as an open, dashed bar
+// labelled with the answer's own words for its timeline. compare/[slug].astro checks every phrase
+// against the answer, so the drawing cannot drift from the text. Caption visible.
+interface Phase { meta: string; label: string; start: number }
+interface Props { them: string; themText: string; phases: Phase[]; total: number; caption: string }
+const { them, themText, phases, total, caption } = Astro.props;
+const at = (d: number) => `${((d / total) * 100).toFixed(2)}%`;
+---
+<figure class="cp-fig adr-tl reveal">
+  <div class="ui adr-tl-card">
+    <div class="ui-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="cp-bar-ghost"><i></i><i></i></span></div>
+    <div class="adr-tl-body">
+      <div class="adr-tl-lane is-us">
+        <p class="adr-tl-who">AdBoost Health</p>
+        <div class="adr-tl-track" aria-hidden="true">
+          <span class="adr-tl-fill ui-fill"></span>
+          {phases.map((p, i) => <span class="adr-tl-dot" style={`left:${at(p.start)};--i:${i}`}></span>)}
+        </div>
+        <ol class="adr-tl-ms">
+          {phases.map((p, i) => (
+            <li style={`--at:${at(p.start)};--i:${i}`}>
+              <span class="adr-tl-meta">{p.meta}</span>
+              <span class="adr-tl-label">{p.label}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div class="adr-tl-lane is-them">
+        <p class="adr-tl-who">{them}</p>
+        <div class="adr-tl-track is-open" aria-hidden="true"><span class="adr-tl-fill"></span></div>
+        <p class="adr-tl-note">{themText}</p>
+      </div>
+    </div>
+  </div>
+  <figcaption>{caption}</figcaption>
+</figure>

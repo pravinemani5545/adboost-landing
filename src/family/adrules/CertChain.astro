@@ -1,0 +1,26 @@
+---
+// A certification chain on the family layer: the nodes of a kit Flow (src/components/adv/certFlows.ts
+// and the hub's Google chain), each a card on a rail with an arrow to the next, the last one the
+// green "you may now" step. Labels are the page's own words (certFlowFor() checks them at build
+// time); a node with an href links to the sheet that holds the steps. The caption is visible text.
+import Ic from '../graphics/Ic.astro';
+import type { FlowNode } from '../../kit/diagram/types';
+
+interface Props { caption: string; nodes: FlowNode[]; class?: string }
+const { caption, nodes, class: cls } = Astro.props;
+---
+<figure class:list={['cp-fig', 'adr-chain', 'reveal', cls]} data-n={nodes.length}>
+  <ol class="adr-chain-list">
+    {nodes.map((n, i) => (
+      <li class:list={['adr-chain-node', n.tone === 'ok' && 'is-ok']} style={`--i:${i}`}>
+        <span class="adr-chain-ic" aria-hidden="true"><Ic name={n.tone === 'ok' ? 'check' : i === 0 ? 'shield' : 'doc'} /></span>
+        <span class="adr-chain-txt">
+          <span class="adr-chain-label">{n.href ? <a href={n.href}>{n.label}</a> : n.label}</span>
+          {n.sub && <span class="adr-chain-sub">{n.sub}</span>}
+        </span>
+        {i < nodes.length - 1 && <span class="adr-chain-arrow" aria-hidden="true"><Ic name="arrow" /></span>}
+      </li>
+    ))}
+  </ol>
+  <figcaption>{caption}</figcaption>
+</figure>

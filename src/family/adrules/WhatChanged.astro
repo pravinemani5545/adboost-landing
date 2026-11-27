@@ -1,0 +1,38 @@
+---
+// A platform hub's "what changed" section on the family layer: the same parse as
+// src/components/adv/WhatChanged.astro (the words stay exactly as written), drawn as a family Diff.
+//   <p>intro, ending "deleted:"</p>   kept as is (it carries the source link)
+//   <ul><li>...</li></ul>             left: struck through
+//   <p>X added four rules: a, b, c, and d. Rest...</p>
+//                                     right: the four rules; the rest of that paragraph
+//                                     stays a paragraph under the figure
+// If the HTML stops matching that shape, the build fails instead of guessing.
+import Diff from './Diff.astro';
+import { stripTags } from '../../components/adv/status';
+
+interface Props { html: string; platform: string; month: string }
+const { html, platform, month } = Astro.props;
+const fail = (why: string): never => { throw new Error(`[adr what-changed] ${platform}: ${why}`); };
+
+const intro = html.match(/^\s*(<p>[\s\S]*?<\/p>)/)?.[1] ?? fail('no intro paragraph');
+const list = html.match(/<ul>([\s\S]*?)<\/ul>/)?.[1] ?? fail('no deleted list');
+const deleted = [...list.matchAll(/<li>([\s\S]*?)<\/li>/g)].map((m) => stripTags(m[1]));
+const addedP = html.match(/<\/ul>\s*<p>([\s\S]*?)<\/p>\s*$/)?.[1] ?? fail('no added paragraph');
+const am = addedP.match(/^(\S+ added (\w+) rules): ([\s\S]+?\.)\s+([\s\S]+)$/) ?? fail('added paragraph shape changed');
+const [, addedLabel, count, addedList, rest] = am;
+const added = addedList
+  .replace(/\.$/, '')
+  .split(/,\s+(?:and\s+)?(?=a\s)/)
+  .map((s) => s.trim())
+  .map((s) => s[0].toUpperCase() + s.slice(1));
+const COUNTS: Record<string, number> = { two: 2, three: 3, four: 4, five: 5, six: 6 };
+if (COUNTS[count] !== added.length) fail(`"${addedLabel}" but ${added.length} items parsed`);
+if (!deleted.length) fail('empty deleted list');
+---
+<div class="pg-prose" set:html={intro} />
+<Diff
+  caption={`${platform}’s ${month} change log: the deleted text struck through, and the rules ${platform} added.`}
+  left={{ label: `${platform} deleted`, items: deleted }}
+  right={{ label: addedLabel, items: added }}
+/>
+<div class="pg-prose"><p set:html={rest} /></div>
