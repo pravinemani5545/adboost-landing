@@ -1,23 +1,26 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Equation from '../../kit/diagram/Equation.astro';
-import Flow from '../../kit/diagram/Flow.astro';
-import Compare from '../../kit/diagram/Compare.astro';
-import Cycle from '../../kit/diagram/Cycle.astro';
-import Funnel from '../../kit/diagram/Funnel.astro';
-import Related from './_Related.astro';
-import { concept, splitTerm, workedExample } from './_diagrams';
+// /glossary/<term>/ on the family layer (src/family/FamilyPage.astro; src/family/README.md). Every
+// word, heading, link and JSON-LD node is the one this page had on the old interior layout.
+//   hero   the term's formula (with the body's own worked example) or its concept diagram as a
+//          product-UI figure with its caption (src/family/resources/TermFigure.astro)
+//   body   chapter 01 "What is ...?": the definition as a spec card, the guide link, the body
+//          (the formula paragraph as a callout, tables as cards); chapter 02 the related terms as
+//          link cards with their caption
+//   rail   "Put the numbers to work" and the night card, then "On this page" (the body's h3s)
+//   end    the closing card (CtaBand's copy)
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import TermFigure from '../../family/resources/TermFigure.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import { concept, splitTerm } from './_diagrams';
 import { GLOSSARY, getTerm } from '../../data/glossary';
 import { siteBase } from '../../lib/site';
-import { pageDate } from '../../lib/live';
+import { updatedLabel } from '../../family/dates';
 import { metaDescription, seoTitle } from '../../lib/seo';
 import { breadcrumb, definedTerm } from '../../lib/schema';
-import '../../styles/pages/reference.css';
-import '../../styles/resources/glossary.css';
-import { lists, tables } from '../../components/resources/html';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import '../../styles/family/glossary.css';
+import '../../styles/family/grain.css';
 
 export function getStaticPaths() {
   return GLOSSARY.map((t) => ({ params: { term: t.slug } }));
@@ -30,28 +33,9 @@ const title = seoTitle(path, `${t.term}: Definition | AdBoost`);
 const description = metaDescription(path, t.metaDescription);
 const related = (t.related ?? []).map((r) => getTerm(r)).filter((r) => r !== undefined);
 // Content date: src/data/pages.json (sitemap lastmod and this label).
-const updated = pageDate(path);
-const updatedLabel = updated && new Date(`${updated}T00:00:00Z`).toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
-
-// Hero aside: the formula as an Equation card (with the body's own worked example where it
-// prints one), else a concept diagram built from this entry's copy (src/pages/glossary/_diagrams.ts).
-const { name } = splitTerm(t.term);
-const worked = workedExample(t);
-const fx = t.formula?.includes(' · ') ? 'formulas' : 'formula';
-const eqCaption = worked
-  ? `The ${name} ${fx} and the worked example from this page.`
-  : `The ${name} ${fx}, as this page defines it.`;
-const cd = t.formula ? undefined : concept(t);
-const hasAside = Boolean(t.formula || cd);
-// (Astro counts a slot inside an expression as filled even when it renders nothing, so the
-// hero is written twice rather than with a conditional aside.)
-const hero = {
-  crumbs: [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term }],
-  eyebrow: 'GLOSSARY',
-  title: t.term,
-  meta: updatedLabel ? [`Updated ${updatedLabel}`, 'AdBoost Health'] : undefined,
-  class: 'rf-hero rs-gthero',
-};
+const updated = updatedLabel(path);
+const { name, expansion } = splitTerm(t.term);
+const hasFigure = Boolean(t.formula || concept(t) || t.slug === 'ios-att');
 
 // Topic-aware related resources per term (fallback = default trio below).
 type Resource = { href: string; label: string };
@@ -140,78 +124,93 @@ const RESOURCES: Record<string, Resource[]> = {
 };
 const resources = RESOURCES[t.slug] ?? DEFAULT_RESOURCES;
 
-
 const jsonLd = [
   definedTerm(SITE, { term: t.term, description: t.definition, path }),
   breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term, href: path }]),
 ];
 
-// The body as written, with hooks for the card styles: its opening sentence (bare text before the
-// first heading) as a paragraph, the paragraph under "The formula and a worked example" as a
-// formula card, tables as cards with phone labels, bold-led lists as key points. No word changes.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const slugify = (s: string) => s.toLowerCase().replace(/&[a-z]+;/g, '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+// The body as written, with hooks for the family styles: its opening sentence (bare text before the
+// first heading) as a paragraph, the paragraph under "The formula and a worked example" as a formula
+// callout, and an id on each h3 that has none (for "On this page"). Tables in .tablewrap become card
+// tables in chapterize. No word changes.
+const h3s: { id: string; label: string }[] = [];
 const termBody = (html: string) => {
-  let out = html.replace(/^([^<][\s\S]*?)(?=<h3\b|$)/, '<p class="rs-term-open">$1</p>');
-  out = out.replace(/(<h3>The formula and a worked example<\/h3>)\s*(<p>[\s\S]*?<\/p>)/, '$1<div class="rs-callout rs-callout--formula">$2</div>');
-  return lists(tables(out));
+  let out = html.replace(/^([^<][\s\S]*?)(?=<h3\b|$)/, '<p class="gl-open">$1</p>');
+  out = out.replace(/(<h3>The formula and a worked example<\/h3>)\s*(<p>[\s\S]*?<\/p>)/, '$1<div class="cp-callout gl-fx"><span class="cp-callout-ic" aria-hidden="true"></span><div class="cp-callout-body">$2</div></div>');
+  out = out.replace(/<h3( id="([^"]+)")?>([\s\S]*?)<\/h3>/g, (_m, _a, id: string | undefined, inner: string) => {
+    const hid = id ?? `s-${slugify(inner.replace(/<[^>]+>/g, ''))}`;
+    h3s.push({ id: hid, label: inner.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&#39;/g, "'") });
+    return `<h3 id="${hid}">${inner}</h3>`;
+  });
+  return out;
 };
+const body = t.body ? termBody(t.body) : '';
 const isCompliance = t.family === 'health-specific compliance and measurement';
 const famLabel = isCompliance ? 'Compliance' : 'Unit economics';
+const toc = [
+  { id: 'definition', label: `What is ${name}?` },
+  ...h3s,
+  ...(related.length ? [{ id: 'related-terms', label: 'Related terms' }] : []),
+];
+const caption = `${name} and the terms its entry lists as related.`;
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  ogType: 'article',
+  h1: t.term,
+  h1Html: expansion ? `${esc(name)} <span class="serif">(${esc(expansion)})</span>` : undefined,
+};
+const byline = updated ? [{ text: `Updated ${updated}`, icon: 'date' as const }, { text: 'AdBoost Health', icon: 'org' as const }] : [];
 ---
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd} ogType="article">
-  {hasAside ? (
-    <PageHero {...hero}>
-      <div slot="aside" class:list={['rf-hero-card', 'k-card', 'k-card--float', 'rs-fcard', t.formula ? 'rs-fcard--formula' : 'rs-fcard--concept']}>
-        <span class="rs-fcard__bar" aria-hidden="true"><span></span><span></span><span></span></span>
-        {t.formula && <p class="rf-hero-card__label">Formula</p>}
-        {t.formula && <Equation arrive formula={t.formula} example={worked?.example} illustrative={worked?.illustrative} caption={eqCaption} />}
-        {cd?.kind === 'flow' && <Flow arrive {...cd} />}
-        {cd?.kind === 'compare' && <Compare arrive {...cd} />}
-        {cd?.kind === 'cycle' && <Cycle arrive {...cd} />}
-        {cd?.kind === 'funnel' && <Funnel arrive {...cd} />}
-      </div>
-    </PageHero>
-  ) : <PageHero {...hero} />}
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Glossary', href: '/glossary/' }, { label: t.term }]}
+  eyebrow="GLOSSARY"
+  schema={jsonLd}
+  byline={byline}
+  toc={toc}
+>
+  {hasFigure && <TermFigure slot="hero" term={t} />}
 
-  <section class="rs-gterm">
-    <div class="container rs-gdoc">
-      <div class="rs-gdoc__main">
-        <div class="rs-prose rs-tables">
-          <h2 class="rs-gq">What is {name}?</h2>
-          <div class="rs-def">
-            <div class="rs-def__head">
-              <span class="al">Definition</span>
-              <span class:list={['rs-fam', isCompliance && 'rs-fam--c']} aria-hidden="true">{famLabel}</span>
-            </div>
-            <p class="rs-def__text">{t.definition}</p>
-          </div>
-          {t.guide && <p class="rs-gguide"><a href={t.guide.href}><span>{t.guide.label}</span> <span aria-hidden="true">→</span></a></p>}
-          {t.body && <div class="rs-term-body" set:html={termBody(t.body)} />}
+  <div slot="aside" class="pg-card gl-tools">
+    <h2>Put the numbers to work</h2>
+    <p>Benchmark your own metrics against your vertical in seconds.</p>
+    <ul class="gl-links">
+      {resources.map((r) => <li><LinkCard href={r.href} label={r.label} /></li>)}
+      <li><LinkCard href="/glossary/" label="Back to glossary" kind="term" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h2>Want these working in your favor?</h2>
+    <p>We benchmark your account and map the fastest levers to move it.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a free audit <span aria-hidden="true">→</span></ButtonLink>
+  </div>
 
-          {related.length > 0 && (
-            <>
-              <h2 class="rs-gq">Related terms</h2>
-              <Related term={t} related={related} />
-            </>
-          )}
-        </div>
-      </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h2>Put the numbers to work</h2>
-          <p>Benchmark your own metrics against your vertical in seconds.</p>
-          <ul class="rs-links">
-            {resources.map((r) => <li><a href={r.href}><ResIcon href={r.href} /><span>{r.label}</span></a></li>)}
-            <li><a href="/glossary/"><ResIcon href="/glossary/" /><span>Back to glossary</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h2>Want these working in your favor?</h2>
-          <p>We benchmark your account and map the fastest levers to move it.</p>
-          <a class="btn btn-primary" href="/book/">Book a free audit →</a>
-        </div>
-      </aside>
+  <div class="pg-prose"><h2 id="definition">What is {name}?</h2></div>
+  <div class="gl-def reveal">
+    <div class="gl-def-bar">
+      <span class="cp-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="gl-def-k">Definition</span>
+      <span class:list={['gl-fam', isCompliance && 'is-c']} aria-hidden="true">{famLabel}</span>
     </div>
-  </section>
+    <p class="gl-def-text">{t.definition}</p>
+  </div>
+  {t.guide && <p class="gl-guide reveal"><a href={t.guide.href}><span>{t.guide.label}</span> <span aria-hidden="true">→</span></a></p>}
+  {body && <div class="pg-prose gl-body" set:html={body} />}
 
-  <CtaBand />
-</BaseLayout>
+  {related.length > 0 && (
+    <section class="gl-related">
+      <h2 id="related-terms" class="reveal">Related terms</h2>
+      <ul class="gl-related-list" data-n={related.length}>
+        {related.map((r, i) => {
+          const s = splitTerm(r.term);
+          return <li class:list={['reveal', i % 3 && `d${i % 3}`]}><LinkCard href={`/glossary/${r.slug}/`} label={s.name} note={s.expansion} kind="term" /></li>;
+        })}
+      </ul>
+      <p class="gl-related-cap">{caption}</p>
+    </section>
+  )}
+</FamilyPage>

@@ -1,0 +1,135 @@
+/* ================================================================
+   The AdBoost family layer on Health: the tools (src/pages/tools/*).
+
+   These pages are FamilyPages (src/family/FamilyPage.astro): hero band, rail, chapters, FAQ
+   cards and the closing card come from content.css. This file adds what is specific to them,
+   in the same drawing style (Media's content pages and its ROI calculator page: adboost-media src/components/automation/{CalculatorPage,RoiCalculator,ResourcesHub}.astro).
+   Every selector is scoped under .family. Motion: transform and opacity only, hidden states
+   only under html.js.motion (the kit's gate).
+   ================================================================ */
+
+/* ---------- 1. Calculators ---------- */
+/* the calculator as a product-UI card: window bar, inputs on the left, the night result panel */
+.family .tc-calc { position: relative; display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 0; padding: 0; border-radius: 24px; background: #fff; box-shadow: var(--shadow-stack), 0 50px 90px -50px rgb(var(--hue-b) / .55); overflow: hidden; }
+.family .tc-calc::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; padding: 1px; pointer-events: none; background: linear-gradient(150deg, rgb(var(--hue-a) / .7), rgb(var(--hue-b) / .25) 34%, var(--line-2) 58%, rgb(var(--hue-c) / .6)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.family .tc-bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 16px; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #fff, var(--bg-2)); }
+.family .tc-name { min-width: 0; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.family .tc-live { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 4px 9px; border-radius: 99px; font-family: var(--font-mono); font-size: 9.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ok-ink); background: var(--ok-soft); }
+.family .tc-live i { position: relative; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.family .tc-live i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: currentColor; opacity: .5; }
+.js.motion .family .tc-live i::after { animation: fam-pulse 2.4s ease-out infinite; }
+.family .tc-calc .calc-fields { gap: 16px; padding: 26px 24px 28px; align-content: start; }
+.family .tc-calc .calc-field label { font-size: 13px; font-weight: 600; color: var(--text); }
+.family .tc-calc .calc-input { min-height: 48px; border-radius: 13px; border-color: var(--line-2); background: var(--bg-2); box-shadow: inset 0 1px 2px rgb(var(--k-shadow-rgb) / .05); }
+.family .tc-calc .calc-input:focus-within { border-color: var(--k-accent); background: #fff; box-shadow: 0 0 0 4px rgb(var(--hue-a) / .12); }
+.family .tc-calc .calc-result { margin: 12px 12px 12px 0; padding: 26px 24px; border-radius: 18px; background: radial-gradient(80% 70% at 100% 0%, rgb(var(--hue-b) / .38), transparent 62%), radial-gradient(70% 60% at 0% 100%, rgb(var(--hue-c) / .18), transparent 60%), linear-gradient(180deg, var(--k-night-2), var(--k-night)); box-shadow: inset 0 1px 0 rgb(255 255 255 / .08), 0 30px 60px -36px rgb(var(--hue-b) / .8); }
+.family .tc-calc .calc-result::before { content: ""; position: absolute; inset: 0; z-index: -1; height: auto; background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .12) 1px, transparent 1.6px); background-size: 18px 18px; -webkit-mask-image: radial-gradient(70% 70% at 90% 10%, #000, transparent 75%); mask-image: radial-gradient(70% 70% at 90% 10%, #000, transparent 75%); }
+.family .tc-calc .calc-wide { grid-column: 1 / -1; margin: 0 24px 24px; padding-top: 22px; border-top: 1px solid var(--line); }
+/* the formula line in the result panel: the symbols, then the visitor's numbers */
+.family .rs-fxline { position: relative; display: grid; gap: 6px; padding: 12px 14px; border-radius: 12px; background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; }
+.family .rs-fxline p { margin: 0; }
+.family .rs-fxline__sym { color: rgb(255 255 255 / .66); }
+.family .rs-fxline__sym > span:first-child { color: #fff; }
+.family .rs-fxline__live { font-size: 13px; color: #fff; font-variant-numeric: tabular-nums; }
+@media (max-width: 760px) {
+  .family .tc-calc { grid-template-columns: minmax(0, 1fr); }
+  .family .tc-calc .calc-fields { padding: 20px 18px 8px; }
+  .family .tc-calc .calc-result { margin: 12px; padding: 22px 18px; }
+  .family .tc-calc .calc-wide { margin: 0 14px 18px; }
+}
+/* the note under the calculator */
+.family .tc-fine { position: relative; margin: 16px 0 0; padding-left: 26px; font-size: 13.5px; line-height: 1.55; color: var(--mute); }
+.family .tc-fine::before { content: ""; position: absolute; left: 0; top: 1px; width: 16px; height: 16px; background: var(--deep-a); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='10.5' width='14' height='10' rx='2.5'/%3E%3Cpath d='M8 10.5V8a4 4 0 0 1 8 0v2.5'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='10.5' width='14' height='10' rx='2.5'/%3E%3Cpath d='M8 10.5V8a4 4 0 0 1 8 0v2.5'/%3E%3C/svg%3E") center / contain no-repeat; }
+.family .tc-fine a { color: var(--deep-a); text-decoration: underline; text-underline-offset: 3px; }
+/* the steps: the family step track, the bold lead-in as the card title */
+.family .tc-steps .tc-step p { margin: 0; font-size: 15px; line-height: 1.62; color: var(--text-2); }
+.family .tc-steps .tc-step p > strong:first-child { display: block; margin-bottom: 4px; font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -.015em; color: var(--text); }
+.family .tc-steps .tc-step a { color: var(--deep-a); text-decoration: underline; text-underline-offset: 3px; }
+/* POAS: the formula paragraph, the comparison table, the illustrative pair as a worked example */
+.family .poas-formula code { display: block; width: fit-content; max-width: 100%; margin: 0 0 12px; padding: 10px 14px; border-radius: 12px; font-family: var(--font-mono); font-size: 13.5px; color: #fff; background: linear-gradient(180deg, var(--k-night-2), var(--k-night)); box-shadow: 0 14px 30px -18px rgb(var(--hue-b) / .8); white-space: normal; }
+.family .tc-vs tbody tr > :first-child { white-space: nowrap; }
+.family .tc-vs td[id], .family .tc-vs #tBe { font-family: var(--font-mono); font-weight: 600; color: var(--deep-a); }
+.family .tc-example p { margin: 0 0 14px; font-size: 15.5px; line-height: 1.65; color: var(--text-2); }
+.family .tc-example p strong { color: var(--text); }
+.family .tc-example .cp-table { margin: 0; background: #fff; }
+
+/* ---------- 2. Tools hub ---------- */
+/* hero: a calculator window with the five tools as tabs (decorative) */
+.family .th-art .ui { font-size: 13px; }
+.family .th-tabs { display: flex; gap: 4px; padding: 10px 12px 0; border-bottom: 1px solid var(--line); }
+.family .th-tabs span { padding: 7px 11px 9px; border-radius: 9px 9px 0 0; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .06em; color: var(--mute); }
+.family .th-tabs span.on { color: var(--deep-a); background: rgb(var(--hue-a) / .08); box-shadow: inset 0 -2px 0 var(--deep-a); }
+.family .th-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding: 16px; }
+.family .th-fields { display: grid; gap: 10px; align-content: start; }
+.family .th-f { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 12px; border-radius: 11px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+.family .th-f i { display: block; flex: 1; height: 7px; border-radius: 99px; background: var(--line-2); }
+.family .th-f b { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--mute); }
+.family .th-f.on { background: #fff; box-shadow: 0 0 0 1.5px rgb(var(--hue-a) / .45), 0 10px 20px -14px rgb(var(--hue-b) / .8); }
+.family .th-f.on i { background: rgb(var(--hue-a) / .35); }
+.family .th-res { position: relative; display: grid; place-items: center; gap: 8px; padding: 14px 10px 12px; border-radius: 14px; background: radial-gradient(80% 70% at 100% 0%, rgb(var(--hue-b) / .4), transparent 62%), linear-gradient(180deg, var(--k-night-2), var(--k-night)); }
+.family .th-gauge { width: 100%; max-width: 170px; height: auto; overflow: visible; }
+.family .th-gauge .g { fill: none; stroke-width: 11; stroke-linecap: round; }
+.family .th-gauge .g.bad { stroke: rgb(var(--hue-c) / .35); }
+.family .th-gauge .g.ok { stroke: rgb(var(--hue-a)); }
+.family .th-gauge .g.warn { stroke: rgb(var(--hue-b) / .6); }
+.family .th-gauge .n { stroke: #fff; stroke-width: 3.5; stroke-linecap: round; transform-origin: 100px 100px; }
+.family .th-gauge .h { fill: #fff; }
+.family .th-lines { display: grid; gap: 6px; width: 70%; }
+.family .th-lines i { display: block; height: 6px; border-radius: 99px; background: rgb(255 255 255 / .22); }
+.family .th-lines i + i { width: 60%; background: rgb(255 255 255 / .12); }
+.js.motion .family .th-gauge .n { animation: ch-swing-th 1.3s var(--ease) .5s backwards; }
+@keyframes ch-swing-th { from { rotate: -80deg; } }
+/* the calculators: one wide row card each, with the small graphic of what it works out */
+.family .th-tools { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; }
+.family .th-tools > li { margin: 0; min-width: 0; }
+.family .th-tools > li:first-child { grid-column: 1 / -1; }
+.family .th-card { position: relative; isolation: isolate; display: grid; grid-template-rows: auto 1fr; height: 100%; overflow: hidden; border-radius: 24px; background: #fff; color: var(--text); box-shadow: var(--shadow-stack); transition: transform .35s var(--ease), box-shadow .35s; }
+.family .th-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-stack), 0 44px 70px -42px rgb(var(--hue-b) / .65); }
+.family .th-card:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
+.family .th-art-tile { position: relative; display: grid; place-items: center; height: 150px; border-bottom: 1px solid var(--line); background: radial-gradient(70% 90% at 0% 0%, rgb(var(--hue-a) / .2), transparent 62%), radial-gradient(70% 90% at 100% 100%, rgb(var(--hue-c) / .18), transparent 62%), var(--bg-2); }
+.family .th-art-tile::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgb(var(--k-shadow-rgb) / .1) 1px, transparent 1.5px); background-size: 16px 16px; -webkit-mask-image: radial-gradient(80% 80% at 50% 0%, #000, transparent 80%); mask-image: radial-gradient(80% 80% at 50% 0%, #000, transparent 80%); }
+.family .th-art-tile .rs-art { position: relative; width: min(240px, 80%); height: auto; }
+.family .th-body2 { display: flex; flex-direction: column; gap: 10px; padding: 22px 24px 24px; }
+.family .th-ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: #fff; background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
+.family .th-tools > li:nth-child(3n+2) .th-ico { background: linear-gradient(135deg, var(--deep-b), var(--deep-c)); }
+.family .th-tools > li:nth-child(3n) .th-ico { background: linear-gradient(135deg, var(--deep-c), var(--deep-a)); }
+.family .th-card h2 { margin: 4px 0 0; font-family: var(--font-display); font-size: 21px; font-weight: 600; line-height: 1.25; letter-spacing: -.02em; color: var(--text); }
+.family .th-card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--text-2); }
+.family .th-go { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; min-height: 40px; margin-top: auto; padding: 0 16px; border-radius: 99px; font-size: 13.5px; font-weight: 600; color: var(--deep-a); background: rgb(var(--hue-a) / .07); box-shadow: inset 0 0 0 1px rgb(var(--hue-a) / .2); transition: background .25s, color .25s; }
+.family .th-card:hover .th-go { color: #fff; background: var(--grad-brand); box-shadow: none; }
+@media (min-width: 861px) {
+  .family .th-tools > li:first-child .th-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); grid-template-rows: none; }
+  .family .th-tools > li:first-child .th-art-tile { height: auto; min-height: 220px; border-bottom: 0; border-right: 1px solid var(--line); }
+  .family .th-tools > li:first-child .th-body2 { justify-content: center; padding: 30px 32px; }
+  .family .th-tools > li:first-child h2 { font-size: 26px; }
+}
+@media (max-width: 860px) { .family .th-tools { grid-template-columns: minmax(0, 1fr); } }
+/* ToolArt's drawing, in the family hues */
+.family .rs-art__track { fill: var(--bg-3); }
+.family .rs-art__band { fill: rgb(var(--hue-a) / .2); }
+.family .rs-art__tick, .family .rs-art__be { fill: none; stroke: var(--line-3); stroke-width: 2; stroke-linecap: round; }
+.family .rs-art__be { stroke: var(--deep-b); stroke-dasharray: 5 5; }
+.family .rs-art__stem { fill: none; stroke: var(--deep-a); stroke-width: 2; }
+.family .rs-art__pill { fill: var(--text); }
+.family .rs-art__knob { fill: #fff; stroke: var(--deep-a); stroke-width: 4; }
+.family .rs-art__arc { fill: none; stroke-width: 12; stroke-linecap: round; }
+.family .rs-art__arc--bad { stroke: rgb(var(--hue-c) / .35); }
+.family .rs-art__arc--ok { stroke: rgb(var(--hue-a)); }
+.family .rs-art__arc--warn { stroke: rgb(var(--hue-b) / .55); }
+.family .rs-art__needle { fill: none; stroke: var(--text); stroke-width: 4; stroke-linecap: round; }
+.family .rs-art__term { fill: #fff; stroke: var(--line-2); stroke-width: 1.5; }
+.family .rs-art__ln { fill: var(--line-2); }
+.family .rs-art__ln--strong { fill: rgb(var(--hue-a) / .45); }
+.family .rs-art__op { fill: none; stroke: var(--deep-a); stroke-width: 3; stroke-linecap: round; }
+.family .rs-art__ring { fill: none; stroke: var(--bg-3); stroke-width: 16; }
+.family .rs-art__seg { fill: none; stroke-width: 16; stroke-linecap: round; }
+.family .rs-art__core { fill: #fff; }
+.family .rs-art__bar2 { fill: rgb(var(--hue-b) / .3); }
+/* the guide's flow, framed */
+.family .th-flow { margin: 28px 0 0; padding: 22px; border-radius: 26px; background: radial-gradient(80% 90% at 0% 0%, rgb(var(--hue-a) / .08), transparent 60%), radial-gradient(70% 90% at 100% 100%, rgb(var(--hue-c) / .08), transparent 62%), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+.family .th-flow .k-dg { margin: 0; }
+@media (max-width: 720px) { .family .th-flow { padding: 14px; border-radius: 20px; } }
+@media (prefers-reduced-motion: reduce) {
+  .family :is(.th-card, .th-go) { transition: none; }
+  .family .th-card:hover { transform: none; }
+}

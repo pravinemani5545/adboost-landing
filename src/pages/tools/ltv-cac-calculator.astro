@@ -1,8 +1,4 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
 import Gauge from '../../kit/diagram/Gauge.astro';
 import Figure from '../../kit/diagram/Figure.astro';
 import { siteBase } from '../../lib/site';
@@ -10,8 +6,13 @@ import { breadcrumb, faqPage } from '../../lib/schema';
 import { ltvCalc, money, valueClass } from './_calc';
 import { monthLabel, monthTicks, paths, shape } from './_payback';
 import '../../styles/pages/tools.css';
-import '../../styles/resources/tools.css';
-import ResIcon from '../../components/resources/ResIcon.astro';
+import '../../styles/family/resources.css';
+import '../../styles/family/tools.css';
+import '../../styles/family/grain.css';
+import FamilyPage from '../../family/FamilyPage.astro';
+import LinkCard from '../../family/LinkCard.astro';
+import CalcHero from '../../family/resources/CalcHero.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
 
 const SITE = siteBase(Astro.site);
 const path = '/tools/ltv-cac-calculator/';
@@ -36,21 +37,61 @@ const r = ltvCalc(MREV, MARGIN, MONTHS, CAC);
 const s = shape(r.gp, MONTHS, CAC);
 const pp = paths(s);
 const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter your CAC' : `${x.toFixed(1)} to 1`);
----
-<BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: 'LTV:CAC Calculator' }]}
-    eyebrow="FREE TOOL"
-    title="LTV:CAC &amp; payback calculator"
-    lede="The single most important unit-economics check for a subscription health brand - lifetime value, LTV:CAC ratio, and how many months until a customer pays you back."
-  />
 
-  <section class="iwrap-sm rs-tool">
-    <div class="container">
-     <div class="rs-tdoc">
-      <div class="rs-tdoc__main tool-doc">
-      <div class="calc k-card k-card--float arrive rs-calc">
-        <div class="rs-appbar" aria-hidden="true"><span class="rs-appbar__dots"><i></i><i></i><i></i></span><span class="rs-appbar__t">LTV:CAC calculator</span><span class="rs-appbar__live"><i></i>Live</span></div>
+// FamilyPage (src/family/FamilyPage.astro): the head and JSON-LD exactly as before; the FAQ as cards
+// (the same q/a the FAQPage JSON-LD carries); the closing card with this page's CtaBand copy.
+const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const data = {
+  seoTitle: title,
+  metaDescription: description,
+  h1: "LTV:CAC & payback calculator",
+  summary: esc("The single most important unit-economics check for a subscription health brand - lifetime value, LTV:CAC ratio, and how many months until a customer pays you back."),
+  faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
+};
+const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
+// The hero: this calculator's formula as a chain, with the values it shows on load
+const hero = {
+  name: 'LTV:CAC calculator',
+  op: '÷' as const,
+  rows: [
+    { label: 'Lifetime value', sub: 'revenue × margin × months', value: r.ltvText, icon: 'layers' },
+    { label: 'CAC', sub: 'cost to acquire one customer', value: money(CAC), icon: 'target' },
+  ],
+  result: { label: 'LTV:CAC ratio', value: r.ratioText, tone: r.verdict },
+  gauge: { bands: [{ to: 3, tone: 'bad' as const }, { to: 5, tone: 'ok' as const }, { to: 8, tone: 'warn' as const }], value: r.ratio ?? 0 },
+  subs: [{ label: 'Payback', value: r.paybackText }, { label: 'Benchmark', value: '3:1' }],
+  formula: 'LTV:CAC = lifetime value ÷ acquisition cost',
+  chip: { title: '3:1 or higher', label: 'the benchmark for a scalable model', icon: 'gauge' },
+};
+---
+<FamilyPage
+  path={path}
+  data={data}
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Tools', href: '/tools/' }, { label: "LTV:CAC Calculator" }]}
+  eyebrow="FREE TOOL"
+  schema={jsonLd}
+  byline={byline}
+  faqHeading="FAQ"
+>
+  <CalcHero slot="hero" {...hero} />
+
+  <div slot="aside" class="pg-card gl-tools">
+    <h4>More free tools</h4>
+    <ul class="gl-links">
+      <li><LinkCard href="/tools/cac-calculator/" label="CAC calculator" /></li>
+      <li><LinkCard href="/tools/ad-budget-calculator/" label="Ad budget calculator" /></li>
+      <li><LinkCard href="/blog/telehealth-cac-benchmarks-2026/" label="CAC benchmarks by vertical" /></li>
+    </ul>
+  </div>
+  <div slot="aside" class="pg-card is-night">
+    <h4>Fix your unit economics</h4>
+    <p>We map the fastest levers to move CAC, retention, and payback.</p>
+    <ButtonLink href="/book/" class="pg-card-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
+  </div>
+
+  
+  <div class="calc tc-calc reveal">
+        <div class="tc-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span><span class="tc-name">LTV:CAC calculator</span><span class="tc-live"><i></i>Live</span></div>
         <div class="calc-fields">
           <div class="calc-field">
             <label for="mrev">Monthly revenue per customer</label>
@@ -133,43 +174,20 @@ const ratioSpoken = (x: number | null) => (x === null ? 'Not calculated: enter y
           </Figure>
         </div>
       </div>
-      <p class="tool-fine">Runs in your browser; nothing is stored. LTV here is gross-profit LTV (revenue × margin × months). The 3:1 benchmark and vertical context come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
-
-      <h2 class="sec-title">How to calculate LTV:CAC</h2>
+  <p class="tool-fine tc-fine">Runs in your browser; nothing is stored. LTV here is gross-profit LTV (revenue × margin × months). The 3:1 benchmark and vertical context come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
+  
+  <div class="pg-prose"><h2 id="how-to-calculate-ltv-cac">How to calculate LTV:CAC</h2>
       <p>Three inputs decide whether your model scales: what a customer is worth, what they cost, and how fast they pay you back.</p>
-      <ol class="tool-steps">
-        <li class="k-card k-card--flat" data-reveal><span><strong>Estimate lifetime value.</strong> LTV ≈ monthly revenue × gross margin × average months retained.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Divide LTV by CAC.</strong> The ratio is lifetime value ÷ acquisition cost - aim for at least 3:1.</span></li>
-        <li class="k-card k-card--flat" data-reveal><span><strong>Calculate payback.</strong> Payback (months) = CAC ÷ monthly gross profit per customer.</span></li>
-      </ol>
-
-      <h2 class="sec-title">What the numbers mean</h2>
-      <p>A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC - it’s <a href="/glossary/churn-rate/#retention-rate">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. For the full definition and where the 3:1 rule comes from, see <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> in the glossary, and <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a> for context.</p>
-
-      <h2 class="sec-title">FAQ</h2>
-      <div class="tool-faq rs-faqcard"><Faq items={faq} idPrefix="ltv" /></div>
       </div>
-      <aside class="rs-side">
-        <div class="rs-sidecard">
-          <h4>More free tools</h4>
-          <ul class="rs-links">
-            <li><a href="/tools/cac-calculator/"><ResIcon href="/tools/cac-calculator/" /><span>CAC calculator</span></a></li>
-            <li><a href="/tools/ad-budget-calculator/"><ResIcon href="/tools/ad-budget-calculator/" /><span>Ad budget calculator</span></a></li>
-            <li><a href="/blog/telehealth-cac-benchmarks-2026/"><ResIcon href="/blog/telehealth-cac-benchmarks-2026/" /><span>CAC benchmarks by vertical</span></a></li>
-          </ul>
-        </div>
-        <div class="rs-nightcard">
-          <h4>Fix your unit economics</h4>
-          <p>We map the fastest levers to move CAC, retention, and payback.</p>
-          <a class="btn btn-primary" href="/book/">Book a call →</a>
-        </div>
-      </aside>
-     </div>
-    </div>
-  </section>
-
-  <CtaBand />
-</BaseLayout>
+  <ol class="cp-steps tc-steps">
+    <li class="cp-step reveal" style="--i:0"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Estimate lifetime value.</strong> LTV ≈ monthly revenue × gross margin × average months retained.</p></div></li>
+    <li class="cp-step reveal" style="--i:1"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Divide LTV by CAC.</strong> The ratio is lifetime value ÷ acquisition cost - aim for at least 3:1.</p></div></li>
+    <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Calculate payback.</strong> Payback (months) = CAC ÷ monthly gross profit per customer.</p></div></li>
+  </ol>
+  
+  <div class="pg-prose"><h2 id="what-the-numbers-mean">What the numbers mean</h2>
+      <p>A ratio at or above <strong>3:1</strong> is the benchmark for a scalable model, and payback under 12 months keeps growth cash-efficient. In subscription health, the biggest lever isn’t CAC - it’s <a href="/glossary/churn-rate/#retention-rate">retention</a>: adding a few months to average lifespan moves LTV more than most CAC cuts. For the full definition and where the 3:1 rule comes from, see <a href="/glossary/ltv-cac-ratio/">LTV:CAC ratio</a> in the glossary, and <a href="/blog/telehealth-cac-benchmarks-2026/">benchmarks by vertical</a> for context.</p></div>
+</FamilyPage>
 
 <script>
   import { setLive } from '../../kit/diagram/live';

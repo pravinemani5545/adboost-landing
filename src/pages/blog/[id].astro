@@ -6,6 +6,8 @@ import BlogLayout from '../../layouts/BlogLayout.astro';
 import PostDiagram from './_Diagram.astro';
 import { getPublishedPosts } from '../../lib/blog';
 import { postBody, postLayoutProps } from './_post';
+import '../../styles/family/content.css';
+import '../../styles/family/blog-post.css';
 
 export async function getStaticPaths() {
   const all = await getPublishedPosts();
@@ -22,7 +24,7 @@ const { lead, parts } = postBody(post);
 <BlogLayout {...postLayoutProps(post, all, site)} {lead}>
   {parts.map((p) =>
     p.type === 'html'
-      ? <div class="prose prose--doc rs-prose"><Fragment set:html={p.html} /></div>
-      : <div class="post-fig rs-fig"><PostDiagram {...p.spec} id={p.spec.id ?? `fig-${p.id}`} class:list={[p.spec.class]} /></div>
+      ? <div class="pg-prose post-prose"><Fragment set:html={p.html} /></div>
+      : <div class="post-fig"><PostDiagram {...p.spec} id={p.spec.id ?? `fig-${p.id}`} class:list={[p.spec.class]} /></div>
   )}
 </BlogLayout>

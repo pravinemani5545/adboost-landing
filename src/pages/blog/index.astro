@@ -1,13 +1,22 @@
 ---
-// The blog index: a hero (H1, lede, topic filter) beside the latest post, then every other post in
-// varied rows (two wide cards, three standard, four compact, repeating). The topic filter is a
-// radio group from the posts' own tags and works without JavaScript: CSS hides the cards a topic
-// does not cover (rules generated below). The varied rows give way to an even grid while a topic
-// is chosen.
+// The blog index on the AdBoost family layer: a port of adboost-media
+// src/components/blog/BlogIndex.astro, in Health's hues.
+//   hero   full-width band (family Backdrop): kicker, H1, lede, and from 1000px a fan of
+//          playbook cards (decorative)
+//   main   the topic filter, the latest post as the lead story (a framed image beside the text),
+//          then a feed whose rows vary in a repeating pattern: one wide card beside two compact
+//          ones, a row of three, then list rows. A group the posts run out in the middle of
+//          becomes two half-width cards (two left) or a list row (one left), so no row has a hole.
+// Health's topic filter is kept as it was: a radio group from the posts' own tags that works
+// without JavaScript. CSS hides the cards a topic does not cover (rules generated below) and the
+// varied rows give way to an even grid of cards while a topic is chosen.
+// Styles: src/styles/family/blog-index.css (and blog-cards.css, from BlogLayout).
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import PostCard from '../../components/resources/PostCard.astro';
+import PostCard from '../../family/blog/PostCard.astro';
+import Backdrop from '../../family/Backdrop.astro';
 import { getPublishedPosts } from '../../lib/blog';
 import { category, readMinutes } from './_post';
+import '../../styles/family/blog-index.css';
 
 const posts = await getPublishedPosts();
 
@@ -37,21 +46,30 @@ const lead = topics.slice(0, SHOWN);
 const more = topics.slice(SHOWN);
 const topicsOf = (tags: string[]) => [...new Set(tags.map((t) => keyOf.get(slugify(t))))].join(' ');
 
-// One rule per topic: the cards it does not cover get --rs-off (blog.css hides a feed card with it
-// and dims the latest post), and a note shows when the latest post is the only one on the topic.
+// One rule per topic: the feed cards it does not cover get --bx-off (hidden) and the lead story
+// --bx-dim (dimmed); a note shows when the lead story is the only post on the topic.
 const filterCss = topics
   .map((t) => {
-    const on = `.rs-blog:has(#${t.key}:checked)`;
-    return `${on} :is(.rs-feed>li,.rs-feature):not([data-t~=${t.key}]){--rs-off:none;--rs-dim:.42;--rs-f:saturate(.2)}` +
-      (t.feed === 0 ? `${on} .rs-feed__empty{display:block}` : '');
+    const on = `.blog-x:has(#${t.key}:checked)`;
+    return `${on} :is(.blog-feed>li,.blog-lead):not([data-t~=${t.key}]){--bx-off:none;--bx-dim:.42;--bx-f:saturate(.2)}` +
+      (t.feed === 0 ? `${on} .blog-empty{display:block}` : '');
   })
   .join('');
 
-// Row pattern for the feed (the latest post leads the hero): 2 wide, 3 standard, 4 compact.
-const PATTERN = ['wide', 'wide', 'std', 'std', 'std', 'row', 'row', 'row', 'row'] as const;
-// The first screen never waits on a reveal: the hero and the first row stay put.
-const REVEAL_FROM = 2;
+// The feed (the latest post leads above it): a wide card beside two side cards, three cards, then
+// six list rows, repeating (adboost-media BlogIndex.astro).
+type Variant = 'wide' | 'side' | 'card' | 'half' | 'row';
+const GROUPS: Variant[][] = [['wide', 'side', 'side'], ['card', 'card', 'card'], ['row', 'row', 'row', 'row', 'row', 'row']];
 const [latest, ...rest] = posts;
+const variants: Variant[] = [];
+for (let g = 0; variants.length < rest.length; g = (g + 1) % GROUPS.length) {
+  const group = GROUPS[g];
+  const left = rest.length - variants.length;
+  if (left >= group.length || group[0] === 'row') variants.push(...group.slice(0, left));
+  else variants.push(...(left === 2 ? ['half', 'half'] as Variant[] : ['row'] as Variant[]));
+}
+// The first screen never waits on a reveal: the first group stays put.
+const REVEAL_FROM = 3;
 ---
 
 <BlogLayout
@@ -60,49 +78,60 @@ const [latest, ...rest] = posts;
   canonical={`${site}/blog/`}
 >
   <style is:inline set:html={filterCss}></style>
-  <div class="rs-blog">
-    <section class="rs-bhero">
-      <div class="rs-bhero__bg" aria-hidden="true">
-        <div class="k-bg k-bg--grid"></div>
-        <div class="rs-glow rs-glow--a"></div>
-        <div class="rs-glow rs-glow--b"></div>
-      </div>
-      <div class="container rs-bhero__grid">
-        <div class="rs-bhero__head">
-          <header class="blog-head">
-            <span class="eyebrow arrive"><span class="dot"></span>Blog</span>
-            <h1 class="arrive">Growth playbooks for <span class="serif">health</span> brands.</h1>
-            <p class="arrive" style="--d:60ms">What we learn managing paid media for 71+ health, telehealth, and supplement founders - written down.</p>
-          </header>
-          <fieldset class="rs-topics arrive" style="--d:90ms">
-            <legend class="rs-topics__k">Browse by topic</legend>
-            <div class="rs-topics__row">
-              <input class="rs-topic-in" type="radio" name="topic" id="tp-all" value="" checked />
-              <label class="rs-chip" for="tp-all">All topics</label>
-              {lead.map((t) => (
-                <>
-                  <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
-                  <label class="rs-chip" for={t.key}>{t.label}</label>
-                </>
-              ))}
-            </div>
-            {more.length > 0 && (
-              <details class="rs-topics__more">
-                <summary class="rs-chip rs-chip--more">More topics</summary>
-                <div class="rs-topics__row">
-                  {more.map((t) => (
-                    <>
-                      <input class="rs-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
-                      <label class="rs-chip" for={t.key}>{t.label}</label>
-                    </>
-                  ))}
-                </div>
-              </details>
-            )}
-          </fieldset>
+  <div class="family blog-x">
+    <section class="blog-hero" data-spot>
+      <Backdrop texture={['dots', 'grid']} spotlight focus={['72%', '38%']} />
+      <div class="container blog-hero-in">
+        <header class="blog-head">
+          <span class="kicker arrive"><span class="k-dot" aria-hidden="true"></span>Blog</span>
+          <h1 class="arrive">Growth playbooks for <span class="serif">health</span> brands.</h1>
+          <p class="arrive" style="--d:60ms">What we learn managing paid media for 71+ health, telehealth, and supplement founders - written down.</p>
+        </header>
+        <div class="blog-art" aria-hidden="true">
+          <span class="blog-art-plate"></span>
+          <span class="ba-card ba-c3"><span class="ba-img"><svg viewBox="0 0 120 60"><path class="ba-line" d="M6 50 C 30 44, 40 20, 62 26 S 98 12, 114 8" /><circle cx="114" cy="8" r="4" /></svg></span><i></i><i></i></span>
+          <span class="ba-card ba-c2"><span class="ba-img"><svg viewBox="0 0 120 60"><rect x="14" y="8" width="92" height="9" rx="4.5" /><rect x="26" y="24" width="68" height="9" rx="4.5" /><rect x="40" y="40" width="40" height="9" rx="4.5" /></svg></span><i></i><i></i></span>
+          <span class="ba-card ba-c1">
+            <span class="ba-bar"><b></b><b></b><b></b></span>
+            <span class="ba-img"><svg viewBox="0 0 120 60"><rect x="10" y="34" width="14" height="20" rx="3" /><rect x="30" y="24" width="14" height="30" rx="3" /><rect x="50" y="29" width="14" height="25" rx="3" /><rect x="70" y="16" width="14" height="38" rx="3" /><rect x="90" y="6" width="14" height="48" rx="3" class="ba-hi" /></svg></span>
+            <i></i><i></i><i class="ba-short"></i>
+          </span>
+          <span class="ba-chip"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" /></svg></span>
         </div>
+      </div>
+    </section>
+
+    <section class="blog-body">
+      <div class="container">
+        <fieldset class="blog-topics arrive" style="--d:90ms">
+          <legend class="blog-topics-k">Browse by topic</legend>
+          <div class="blog-topics-row">
+            <input class="blog-topic-in" type="radio" name="topic" id="tp-all" value="" checked />
+            <label class="blog-chip" for="tp-all">All topics</label>
+            {lead.map((t) => (
+              <>
+                <input class="blog-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                <label class="blog-chip" for={t.key}>{t.label}</label>
+              </>
+            ))}
+          </div>
+          {more.length > 0 && (
+            <details class="blog-topics-more">
+              <summary class="blog-chip blog-chip-more">More topics</summary>
+              <div class="blog-topics-row">
+                {more.map((t) => (
+                  <>
+                    <input class="blog-topic-in" type="radio" name="topic" id={t.key} value={t.slug} />
+                    <label class="blog-chip" for={t.key}>{t.label}</label>
+                  </>
+                ))}
+              </div>
+            </details>
+          )}
+        </fieldset>
+
         {latest && (
-          <div class="rs-feature arrive" style="--d:120ms" data-t={topicsOf(latest.data.tags)}>
+          <div class="blog-lead arrive" style="--d:120ms" data-t={topicsOf(latest.data.tags)}>
             <PostCard
               href={`/blog/${latest.id}/`}
               title={latest.data.title}
@@ -112,41 +141,41 @@ const [latest, ...rest] = posts;
               date={latest.data.pubDate}
               category={category(latest)}
               minutes={readMinutes(latest)}
-              size="feature"
+              level={2}
+              variant="feature"
               flag="Latest"
               eager
               vt={latest.id}
             />
           </div>
         )}
-      </div>
-    </section>
 
-    <section class="container rs-feedwrap" aria-label="All articles">
-      <ol class="rs-feed">
-        {rest.map((post, i) => (
-          <li
-            class={`rs-feed__item rs-feed__item--${PATTERN[i % PATTERN.length]}`}
-            data-t={topicsOf(post.data.tags)}
-            data-reveal={i >= REVEAL_FROM ? '' : undefined}
-            style={i >= REVEAL_FROM ? `--i:${i % 3}` : undefined}
-          >
-            <PostCard
-              href={`/blog/${post.id}/`}
-              title={post.data.title}
-              description={post.data.description}
-              image={post.data.heroImage}
-              alt={post.data.heroAlt}
-              date={post.data.pubDate}
-              category={category(post)}
-              minutes={readMinutes(post)}
-              size={PATTERN[i % PATTERN.length]}
-              vt={post.id}
-            />
-          </li>
-        ))}
-      </ol>
-      <p class="rs-feed__empty">The latest article, above, is the only one on this topic so far.</p>
+        <section aria-label="All articles">
+          <ol class="blog-feed">
+            {rest.map((post, i) => (
+              <li
+                class:list={[`bf-${variants[i]}`, i >= REVEAL_FROM && ['reveal', i % 3 && `d${i % 3}`]]}
+                data-t={topicsOf(post.data.tags)}
+              >
+                <PostCard
+                  href={`/blog/${post.id}/`}
+                  title={post.data.title}
+                  description={post.data.description}
+                  image={post.data.heroImage}
+                  alt={post.data.heroAlt}
+                  date={post.data.pubDate}
+                  category={category(post)}
+                  minutes={readMinutes(post)}
+                  level={2}
+                  variant={variants[i]}
+                  vt={post.id}
+                />
+              </li>
+            ))}
+          </ol>
+          <p class="blog-empty">The latest article, above, is the only one on this topic so far.</p>
+        </section>
+      </div>
     </section>
   </div>
 </BlogLayout>

@@ -1,0 +1,204 @@
+/* ================================================================
+   The AdBoost family layer on Health: the blog index (src/pages/blog/index.astro).
+   Port of adboost-media src/styles/blog.css (index hero, topics, feed), in Health's hues, with
+   Health's topic filter (a radio group that works without JavaScript).
+
+   The index is the one family page that does not load src/styles/family/content.css (54KB, the
+   long-form layout it does not use): the hero's Backdrop and kicker rules it needs are copied
+   from content.css below, unchanged. Keep them in step with content.css.
+   ================================================================ */
+
+/* ---------- 0. From content.css: kicker and Backdrop (copied, keep in step) ---------- */
+.family { position: relative; }
+.family .kicker { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+.family .kicker .k-dot { position: relative; width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand); }
+.family .kicker .k-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: rgb(var(--brand-rgb) / .5); }
+.js.motion .family .kicker .k-dot::after { animation: fam-pulse 2.4s ease-out infinite; }
+@keyframes fam-pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3.6); opacity: 0; } }
+
+/* ---------- Backdrop: texture, glow and grain behind a hero (Backdrop.astro) ---------- */
+.family .bd { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; -webkit-mask-image: linear-gradient(#000 calc(100% - 150px), transparent); mask-image: linear-gradient(#000 calc(100% - 150px), transparent); }
+.family .bd > i { position: absolute; inset: 0; display: block; }
+.family .bd-dots {
+  background-image: radial-gradient(circle at 1px 1px, rgb(var(--k-shadow-rgb) / .17) 1px, transparent 1.6px); background-size: 22px 22px;
+  -webkit-mask-image: radial-gradient(72% 66% at var(--bd-x, 64%) var(--bd-y, 34%), #000 16%, transparent 76%);
+  mask-image: radial-gradient(72% 66% at var(--bd-x, 64%) var(--bd-y, 34%), #000 16%, transparent 76%);
+}
+.family .bd-grid {
+  background-image: linear-gradient(rgb(var(--k-shadow-rgb) / .045) 1px, transparent 1px), linear-gradient(90deg, rgb(var(--k-shadow-rgb) / .045) 1px, transparent 1px); background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(80% 62% at 60% 18%, #000, transparent 86%); mask-image: radial-gradient(80% 62% at 60% 18%, #000, transparent 86%);
+}
+/* accent dots shown only around the pointer (Backdrop.astro sets --fx / --fy on the host) */
+.family .bd > .bd-lit {
+  inset: auto; left: 0; top: 0; width: 460px; height: 460px; margin: -230px 0 0 -230px; border-radius: 50%; opacity: 0; transition: opacity .4s;
+  transform: translate3d(var(--fx, -999px), var(--fy, -999px), 0);
+  background-image: radial-gradient(circle at 1px 1px, rgb(var(--brand-rgb) / .8) 1.3px, transparent 1.9px); background-size: 22px 22px;
+  background-position: calc(230px - var(--fx, 0px)) calc(230px - var(--fy, 0px));
+  -webkit-mask-image: radial-gradient(closest-side, #000, transparent); mask-image: radial-gradient(closest-side, #000, transparent);
+}
+.family [data-spot].is-lit > .bd > .bd-lit { opacity: 1; }
+@media (hover: none) { .family .bd-lit { display: none; } }
+.family .bd > .bd-glow { inset: auto; border-radius: 50%; }
+.family .bd > .bd-glow.a { top: -300px; right: -160px; width: 880px; height: 880px; background: radial-gradient(closest-side, rgb(var(--hue-a) / .2), transparent 70%); }
+.family .bd > .bd-glow.b { bottom: -400px; left: -200px; width: 760px; height: 760px; background: radial-gradient(closest-side, rgb(var(--hue-c) / .2), transparent 70%); }
+.family .bd > .bd-glow.c { top: -220px; left: 16%; width: 640px; height: 640px; background: radial-gradient(closest-side, rgb(var(--hue-b) / .16), transparent 70%); }
+.family .bd > .bd-glow.d { top: 44%; right: 2%; width: 440px; height: 440px; background: radial-gradient(closest-side, rgb(var(--hue-warm) / .14), transparent 70%); }
+.family .bd-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .055 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  -webkit-mask-image: linear-gradient(#000 45%, transparent 92%); mask-image: linear-gradient(#000 45%, transparent 92%);
+}
+.js.motion:not(.lowpower) .family .bd > .bd-glow.a { animation: fam-aura-a 24s ease-in-out infinite alternate; }
+.js.motion:not(.lowpower) .family .bd > .bd-glow.c { animation: fam-aura-b 30s ease-in-out infinite alternate; }
+@keyframes fam-aura-a { to { transform: translate3d(-90px, 60px, 0) scale(1.08); } }
+@keyframes fam-aura-b { to { transform: translate3d(80px, 40px, 0) scale(.94); } }
+
+/* ---------- 2. Index: hero ---------- */
+.family .blog-hero { position: relative; isolation: isolate; overflow: clip; padding: calc(var(--nav-h) + 58px) 0 34px; }
+.family .blog-hero-in { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 48px; align-items: center; }
+.family .blog-head { max-width: 680px; }
+.family .blog-head h1 { margin: 16px 0; font-family: var(--font-display); font-size: clamp(36px, 5vw, 62px); line-height: 1.02; letter-spacing: -.038em; font-weight: var(--fw-display); color: var(--text); text-wrap: balance; }
+.family .blog-head h1 .serif { font-size: 1.05em; letter-spacing: -.01em; }
+.family .blog-head p { margin: 0; max-width: 54ch; font-size: 17.5px; line-height: 1.55; color: var(--text-2); }
+
+/* a fan of playbook cards: a trend line, a funnel, a chart (decorative) */
+.family .blog-art { position: relative; height: 250px; }
+.family .blog-art-plate { position: absolute; inset: -14px -10px 18% 26%; border-radius: 28px; background-color: rgb(var(--hue-b) / .08);
+  background-image: radial-gradient(circle at 1px 1px, rgb(var(--hue-c) / .55) 1px, transparent 1.6px); background-size: 15px 15px;
+  -webkit-mask-image: linear-gradient(215deg, #000 22%, transparent 78%); mask-image: linear-gradient(215deg, #000 22%, transparent 78%); }
+.family .ba-card { position: absolute; display: block; width: 250px; padding: 10px 10px 14px; border-radius: 20px; background: #fff; box-shadow: var(--shadow-stack), 0 30px 50px -30px rgb(var(--k-shadow-rgb) / .3); }
+.family .ba-card > i { display: block; height: 8px; margin: 10px 6px 0; border-radius: 99px; background: var(--bg-3); }
+.family .ba-card > i + i { width: 62%; margin-top: 7px; }
+.family .ba-card > i.ba-short { width: 38%; background: rgb(var(--hue-a) / .35); }
+.family .ba-img { display: block; height: 96px; border-radius: 13px; overflow: hidden; background: radial-gradient(80% 110% at 0% 0%, rgb(var(--hue-a) / .32), transparent 62%), radial-gradient(80% 110% at 100% 100%, rgb(var(--hue-c) / .3), transparent 62%), var(--bg-2); }
+.family .ba-img svg { display: block; width: 100%; height: 100%; padding: 14px 18px; box-sizing: border-box; fill: rgb(var(--hue-b) / .55); }
+.family .ba-img .ba-line { fill: none; stroke: var(--deep-b); stroke-width: 3; stroke-linecap: round; }
+.family .ba-c3 .ba-img circle { fill: var(--deep-b); }
+.family .ba-c1 .ba-img rect { fill: rgb(var(--hue-a) / .8); }
+.family .ba-c1 .ba-img rect.ba-hi { fill: var(--deep-c); }
+.family .ba-c2 .ba-img rect:nth-child(1) { fill: rgb(var(--hue-a) / .85); }
+.family .ba-c2 .ba-img rect:nth-child(2) { fill: rgb(var(--hue-b) / .7); }
+.family .ba-c2 .ba-img rect:nth-child(3) { fill: rgb(var(--hue-c) / .8); }
+.family .ba-c3 { right: 0; top: 0; rotate: 7deg; opacity: .92; }
+.family .ba-c2 { right: 120px; top: 18px; rotate: -5deg; opacity: .96; }
+.family .ba-c1 { right: 58px; top: 46px; z-index: 2; width: 270px; }
+.family .ba-bar { display: flex; gap: 5px; padding: 2px 4px 9px; }
+.family .ba-bar b { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
+.family .ba-bar b:first-child { background: rgb(var(--hue-a)); }
+.family .ba-chip { position: absolute; z-index: 3; right: 296px; top: 190px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; rotate: -8deg; background: var(--grad-brand); box-shadow: 0 18px 30px -14px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .45); }
+.family .ba-chip svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.js.motion .family .ba-c1 { animation: fam-blog-float 8s ease-in-out infinite; }
+.js.motion .family .ba-c3 { animation: fam-blog-float 9s ease-in-out -4s infinite; }
+.js.motion .family .ba-chip { animation: fam-blog-float 7s ease-in-out -2s infinite; }
+@keyframes fam-blog-float { 50% { translate: 0 -8px; } }
+@media (max-width: 1000px) {
+  .family .blog-hero-in { grid-template-columns: minmax(0, 1fr); }
+  .family .blog-art { display: none; }
+}
+@media (max-width: 640px) { .family .blog-hero { padding: calc(var(--nav-h) + 40px) 0 22px; } .family .blog-head p { font-size: 16px; } }
+
+/* ---------- 3. Index: topic filter, lead story, feed ---------- */
+.family .blog-body { position: relative; padding: 6px 0 104px; }
+.family .blog-topics { min-width: 0; margin: 0 0 26px; padding: 0; border: 0; }
+.family .blog-topics-k { float: left; width: 100%; margin: 0 0 12px; padding: 0; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.family .blog-topics-row { clear: both; display: flex; flex-wrap: wrap; gap: 8px; }
+/* the radios stay in the tab order (arrow keys move between topics), drawn as their labels */
+.family .blog-topic-in { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+.family .blog-chip { display: inline-flex; align-items: center; height: 38px; padding: 0 15px; border-radius: 99px; border: 1px solid var(--line-2); background: rgb(255 255 255 / .8); font-size: 13.5px; font-weight: 500; color: var(--text-2); cursor: pointer; white-space: nowrap; transition: border-color .2s, color .2s, background-color .2s, transform .2s var(--ease); }
+.family .blog-chip:hover { border-color: var(--line-3); color: var(--text); transform: translateY(-1px); }
+.family .blog-topic-in:focus-visible + .blog-chip, .family .blog-chip-more:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
+.family .blog-topic-in:checked + .blog-chip { color: #fff; border-color: transparent; background: var(--text); box-shadow: 0 10px 22px -12px rgb(var(--k-shadow-rgb) / .6); }
+.family .blog-topics-more { margin-top: 8px; }
+.family .blog-chip-more { gap: 8px; list-style: none; }
+.family .blog-chip-more::-webkit-details-marker { display: none; }
+.family .blog-chip-more::after { content: ""; width: 7px; height: 7px; margin-top: -3px; border: solid currentColor; border-width: 0 1.6px 1.6px 0; rotate: 45deg; transition: rotate .25s var(--ease), margin .25s; }
+.family .blog-topics-more[open] > .blog-chip-more::after { rotate: -135deg; margin-top: 3px; }
+.family .blog-topics-more > .blog-topics-row { margin-top: 10px; }
+
+/* the lead story dims (and a feed card hides) while a topic it does not cover is chosen */
+.family .blog-lead { opacity: var(--bx-dim, 1); filter: var(--bx-f, none); transition: opacity .3s, filter .3s; }
+
+.family .blog-feed { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 22px; }
+.family .blog-feed > li { display: var(--bx-off, block); grid-column: span 4; min-width: 0; margin: 0; }
+.family .blog-feed > .bf-half { grid-column: span 6; }
+.family .blog-feed > .bf-row { grid-column: 1 / -1; }
+.family .blog-feed > .bf-wide { grid-column: span 7; grid-row: span 2; }
+.family .blog-feed > .bf-side { grid-column: span 5; }
+.family .blog-empty { display: none; margin: 8px 0 0; padding: 18px 22px; border-radius: 18px; border: 1px dashed var(--line-3); background: var(--bg-2); font-size: 15px; color: var(--text-2); }
+/* a topic chosen: one even grid of standard cards */
+.family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: span 4; grid-row: auto; }
+
+/* wide: the image in a thin gradient frame, a larger title under it (unfiltered only) */
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media { aspect-ratio: auto; padding: 10px; border-bottom: 0;
+  background: radial-gradient(70% 80% at 0% 0%, rgb(var(--hue-a) / .42), transparent 62%), radial-gradient(70% 80% at 100% 100%, rgb(var(--hue-c) / .38), transparent 62%), radial-gradient(50% 60% at 85% 15%, rgb(var(--hue-b) / .26), transparent 70%), var(--bg-2); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media img { height: auto; aspect-ratio: 16 / 9; border-radius: 14px; box-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 24px 44px -26px rgb(var(--k-shadow-rgb) / .4); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide:hover .pc-media img { transform: scale(1.02); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-body { justify-content: center; padding: 24px 30px 28px; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-title { font-size: clamp(22px, 2.1vw, 28px); line-height: 1.15; letter-spacing: -.028em; font-weight: var(--fw-display); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-desc { font-size: 15.5px; -webkit-line-clamp: 4; }
+/* side: beside the wide card, image on the left */
+@media (min-width: 1001px) {
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-in { flex-direction: row; align-items: center; gap: 20px; padding: 16px 18px 16px 16px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-media { width: 44%; border: 0; border-radius: 13px; box-shadow: 0 0 0 1px var(--line); }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-body { padding: 0; gap: 8px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-title { font-size: 17.5px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-desc { font-size: 14px; }
+}
+.family .pc-half .pc-title { font-size: 21px; }
+/* list rows: image on the left, text on the right, hairlines between */
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .bf-row { margin-top: -12px; padding-top: 6px; border-top: 1px solid var(--line-2); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-in { flex-direction: row; align-items: center; gap: 30px; padding: 18px 18px 18px 0; border-radius: 22px; background: transparent; box-shadow: none; transition: background-color .3s, box-shadow .35s; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover { transform: none; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover .pc-in { background: linear-gradient(90deg, rgb(var(--hue-a) / .09), rgb(var(--hue-b) / .05) 45%, transparent 80%); box-shadow: none; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 300px; border: 0; border-radius: 16px; box-shadow: var(--shadow-stack); transition: transform .35s var(--ease); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover .pc-media { transform: translateX(6px); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-body { padding: 0; gap: 9px; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-title { font-size: 22px; line-height: 1.2; letter-spacing: -.025em; font-weight: var(--fw-display); }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-desc { max-width: 72ch; -webkit-line-clamp: 2; }
+.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-go { padding-top: 2px; }
+
+@media (max-width: 1000px) {
+  .family .blog-feed { gap: 18px; }
+  .family .blog-feed > li, .family .blog-feed > :is(.bf-side, .bf-half) { grid-column: span 6; }
+  .family .blog-feed > :is(.bf-wide, .bf-row) { grid-column: 1 / -1; grid-row: auto; }
+  .family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: span 6; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 240px; }
+}
+@media (max-width: 640px) {
+  .family .blog-body { padding-bottom: 72px; }
+  .family .blog-topics > .blog-topics-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 6px; scrollbar-width: none; }
+  .family .blog-topics > .blog-topics-row::-webkit-scrollbar { display: none; }
+  .family .blog-chip { flex-shrink: 0; height: 44px; }
+  .family .blog-feed { gap: 16px; }
+  .family .blog-feed > li, .family .blog-feed > :is(.bf-side, .bf-half, .bf-wide), .family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: 1 / -1; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media { padding: 12px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-body { padding: 20px 20px 22px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-in { align-items: flex-start; gap: 14px; padding: 14px 0; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 118px; margin-top: 4px; border-radius: 10px; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-title { font-size: 17px; line-height: 1.28; }
+  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-desc { font-size: 14px; }
+  .family .pc-body { padding: 18px 20px 22px; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .family :is(.blog-chip, .blog-lead) { transition: none; }
+  .family .blog-chip:hover { transform: none; }
+}
+
+/* the feed renders (and fetches its images) as it nears the screen, so the lead story's image is not
+   queued behind a screenful of card images. The placeholder heights are the cards' measured heights
+   at each width (a card keeps its real height once rendered), so the page does not jump. */
+.family .blog-feed > li { content-visibility: auto; contain-intrinsic-size: auto 490px; }
+.family .blog-feed > .bf-wide { contain-intrinsic-size: auto 640px; }
+.family .blog-feed > .bf-side { contain-intrinsic-size: auto 310px; }
+.family .blog-feed > .bf-row { contain-intrinsic-size: auto 212px; }
+@media (max-width: 1000px) {
+  .family .blog-feed > .bf-wide { contain-intrinsic-size: auto 600px; }
+  .family .blog-feed > .bf-side { contain-intrinsic-size: auto 490px; }
+  .family .blog-feed > .bf-row { contain-intrinsic-size: auto 236px; }
+}
+@media (max-width: 640px) {
+  .family .blog-feed > .bf-wide { contain-intrinsic-size: auto 528px; }
+  .family .blog-feed > .bf-side { contain-intrinsic-size: auto 474px; }
+}

@@ -1,0 +1,26 @@
+/* ================================================================
+   The AdBoost family layer on Health: the rail cards and card tables of the glossary terms and the calculators.
+
+   These pages are FamilyPages (src/family/FamilyPage.astro): hero band, rail, chapters, FAQ
+   cards and the closing card come from content.css. This file adds what is specific to them,
+   in the same drawing style (Media's content pages).
+   Every selector is scoped under .family. Motion: transform and opacity only, hidden states
+   only under html.js.motion (the kit's gate).
+   ================================================================ */
+
+/* ---------- 1. Rail cards ---------- */
+.family .pg-card:not(.is-night) :is(h2, h3, h4) { margin: 0; font-family: var(--font-display); font-size: 17px; font-weight: 600; line-height: 1.3; letter-spacing: -.015em; color: var(--text); }
+.family .pg-card:not(.is-night) > p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--text-2); }
+.family .pg-card .gl-links { list-style: none; display: grid; gap: 8px; margin: 4px 0 0; padding: 0; }
+.family .pg-card .gl-links li { margin: 0; }
+.family .pg-card .gl-links .lc { min-height: 56px; padding: 10px 12px; border-radius: 14px; box-shadow: 0 0 0 1px var(--line), 0 6px 14px -12px rgb(var(--k-shadow-rgb) / .3); }
+.family .pg-card .gl-links .lc-ic { width: 32px; height: 32px; border-radius: 10px; }
+.family .pg-card .gl-links .lc-ic svg { width: 16px; height: 16px; }
+.family .pg-card .gl-links .lc-label { font-size: 14px; }
+.family .pg-card .gl-links .lc-go { margin-top: 8px; }
+.family .pg-card.is-night .btn, .family .pg-card .pg-card-go { align-self: flex-start; }
+
+/* tables the body wraps in the kit's .dtable: the family card table owns the frame */
+.family .cp-table table.dtable { min-width: 100%; }
+@media (max-width: 720px) { .family .cp-table table.dtable { min-width: 0; } }
+.family .cp-table .row-h { font-weight: 600; color: var(--text); }

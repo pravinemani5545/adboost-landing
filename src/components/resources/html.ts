@@ -80,8 +80,9 @@ function previousText(html: string, i: number): string {
 
 /* ---------- tables ---------- */
 
-/** Tables as cards: each body cell gets its column head as data-label (the stacked phone layout
- *  prints it), and explicit roles keep the table semantics when CSS changes the display. */
+/** Tables as cards: each table in the family's card frame (.cp-table, src/styles/family/content.css),
+ *  each body cell with its column head as data-label (the stacked phone layout prints it), and
+ *  explicit roles that keep the table semantics when CSS changes the display. */
 export function tables(html: string): string {
   return html.replace(/<table\b[^>]*>[\s\S]*?<\/table>/g, (table) => {
     const heads = [...(/<thead>([\s\S]*?)<\/thead>/.exec(table)?.[1] ?? '').matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/g)].map((m) => textOf(m[1]));
@@ -105,7 +106,7 @@ export function tables(html: string): string {
       }) +
       z,
     );
-    return t;
+    return `<div class="cp-table reveal" data-cols="${cols}">${t}</div>`;
   });
 }
 
@@ -135,10 +136,13 @@ export function lists(html: string): string {
 /* ---------- callouts ---------- */
 
 const EXAMPLE = /illustrative example/i;
+const EXAMPLE_HEAD = /\b(illustrative|worked) example\b/i;
 
 /** A paragraph that introduces an illustrative example (in its opening words) becomes an example
- *  callout; when it ends with a colon, the table or list it introduces goes in with it. Never
- *  inside the FAQ (answers stay plain Q and A). */
+ *  callout; when it ends with a colon, the table or list it introduces goes in with it. An h3 that
+ *  names a worked or illustrative example ("A worked example") becomes one with everything under it
+ *  up to the next h2 or h3, the heading as the card's title (as adboost-media's post-html.ts does).
+ *  Never inside the FAQ (answers stay plain Q and A). */
 export function examples(html: string): string {
   const blocks = topLevel(html, ['p', 'div', 'ul', 'ol', 'blockquote', 'h2', 'h3', 'h4', 'table']);
   let out = '';
@@ -148,6 +152,15 @@ export function examples(html: string): string {
     const b = blocks[i];
     const el = html.slice(b.start, b.end);
     if (b.tag === 'h2') inFaq = /^\s*FAQ\s*$/.test(textOf(el));
+    if (!inFaq && b.tag === 'h3' && EXAMPLE_HEAD.test(textOf(el))) {
+      let j = i + 1;
+      while (j < blocks.length && blocks[j].tag !== 'h2' && blocks[j].tag !== 'h3') j++;
+      const end = blocks[j - 1].end;
+      out += html.slice(last, b.start) + `<div class="rs-callout rs-callout--example rs-callout--section">${html.slice(b.start, end)}</div>`;
+      last = end;
+      i = j - 1;
+      continue;
+    }
     if (inFaq || b.tag !== 'p') continue;
     const text = textOf(el);
     if (!EXAMPLE.test(text.slice(0, 90))) continue;
