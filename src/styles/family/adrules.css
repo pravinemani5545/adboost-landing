@@ -76,9 +76,10 @@
 .family .adr-rv-flags li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; margin: 0; padding: 8px 10px; border-radius: 11px; font-size: 12.5px; line-height: 1.4; color: var(--text); background: linear-gradient(90deg, var(--k-bad-soft), rgb(255 255 255 / 0) 85%); }
 .family .adr-x { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; color: #fff; background: var(--k-bad); }
 .family .adr-x .gi { width: 12px; height: 12px; stroke-width: 2.6; }
-.js.motion .family .adr-rv-plats li, .js.motion .family .adr-rv-flags li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .09s); }
-.js.motion .family .adr-rv-flags li { animation-delay: calc(.7s + var(--i, 0) * .1s); }
-@keyframes adr-in { from { opacity: 0; translate: 0 8px; } }
+/* hero graphics paint complete at first paint: rows settle in, transform only, under 400ms */
+.js.motion .family .adr-rv-plats li, .js.motion .family .adr-rv-flags li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
+.js.motion .family .adr-rv-flags li { animation-delay: calc(40ms + var(--i, 0) * 30ms); }
+@keyframes adr-in { from { translate: 0 6px; } }
 @media (max-width: 480px) {
   .family .adr-rv-top { grid-template-columns: 112px minmax(0, 1fr); gap: 12px; padding: 12px; }
   .family .adr-ad { min-height: 150px; }
@@ -357,8 +358,8 @@
 .family .adr-pm-l { font-size: 10.5px; font-weight: 600; line-height: 1.2; color: var(--lv-ink); }
 .family .adr-pm-legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 0; padding: 11px 16px 13px; border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--bg-2), #fff); }
 .family .adr-pm-legend li { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-size: 11.5px; color: var(--text-2); }
-.js.motion .family .adr-pm-cell { animation: adr-pop .45s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .035s); }
-@keyframes adr-pop { from { opacity: 0; scale: .85; } }
+.js.motion .family .adr-pm-cell { animation: adr-pop .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 4ms); }
+@keyframes adr-pop { from { scale: .94; } }
 @media (max-width: 480px) {
   .family .adr-pm-grid { grid-template-columns: minmax(0, 1fr) repeat(var(--cols), 44px); gap: 5px; padding: 12px 10px 10px; }
   .family .adr-pm-cell { align-items: center; min-height: 38px; padding: 0; }
@@ -508,7 +509,7 @@
 .family .adr-pp-name { min-width: 0; font-size: 13px; font-weight: 600; letter-spacing: -.01em; }
 .family .adr-pp-rows .adr-badge { font-size: 11px; padding: 2px 8px 2px 3px; }
 .family .adr-pp-rows .adr-badge-m { width: 15px; height: 15px; font-size: 8px; }
-.js.motion .family .adr-pp-rows li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .08s); }
+.js.motion .family .adr-pp-rows li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 25ms); }
 @media (max-width: 420px) { .family .adr-pp-rows li { grid-template-columns: minmax(0, 1fr) auto; } .family .adr-pp-ic { display: none; } }
 /* platform hub vertical table */
 .family .adr-vt td { vertical-align: middle; }
@@ -535,7 +536,7 @@
 .family .adr-vs-rung { position: absolute; left: 22px; right: 22px; top: 50%; height: 1px; background: linear-gradient(90deg, var(--line-2), rgb(var(--hue-a) / .5)); }
 .family .adr-vs-name { position: relative; justify-self: center; padding: 6px 12px; border-radius: 99px; font-size: 12.5px; font-weight: 600; line-height: 1.3; text-align: center; color: var(--text); background: #fff; box-shadow: 0 0 0 1px var(--line), 0 6px 14px -10px rgb(var(--k-shadow-rgb) / .35); }
 .family .adr-vs > figcaption { margin: 14px 4px 0; font-size: 12.5px; line-height: 1.5; color: var(--mute); }
-.js.motion .family .adr-vs-dims li { animation: adr-in .5s var(--ease) backwards; animation-delay: calc(.4s + var(--i, 0) * .08s); }
+.js.motion .family .adr-vs-dims li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 20ms); }
 @media (max-width: 480px) { .family .adr-vs-head { grid-template-columns: minmax(0, 1fr); } .family .adr-vs-badge { justify-self: center; } .family .adr-vs-side { font-size: 13.5px; } }
 
 /* choose: the table as two contrasting card columns */
@@ -700,7 +701,7 @@
 .family .adr-hs-label { font-family: var(--font-display); font-size: 14px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; }
 .family .adr-hs-sub { font-size: 12.5px; line-height: 1.45; color: var(--text-2); }
 .family .adr-hs > figcaption { margin: 14px 4px 0; font-size: 12.5px; line-height: 1.5; color: var(--mute); }
-.js.motion .family .adr-hs-spokes li { animation: adr-in .55s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .12s); }
+.js.motion .family .adr-hs-spokes li { animation: adr-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
 @media (max-width: 1079.98px) {
   .family .adr-hs-stage { height: auto; display: grid; gap: 12px; }
   .family .adr-hs-lines { display: none; }

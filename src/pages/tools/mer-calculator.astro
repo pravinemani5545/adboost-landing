@@ -42,19 +42,13 @@ const data = {
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
-// The hero: this calculator's formula as a chain, with the values it shows on load
+// The hero: what the page explains around the calculator (CalcHero.astro), not a copy of it
 const hero = {
-  name: 'MER calculator',
-  op: '÷' as const,
-  rows: [
-    { label: 'Total revenue', sub: 'all channels, per period', value: money(REV), icon: 'chart' },
-    { label: 'Total marketing spend', sub: 'same period', value: money(SPEND), icon: 'layers' },
-  ],
-  result: { label: 'MER', value: r.value, tone: r.verdict },
-  gauge: { bands: [{ to: 2, tone: 'bad' as const }, { to: 3, tone: 'warn' as const }, { to: 6, tone: 'ok' as const }], value: r.mer ?? 0 },
-  formula: 'MER = total revenue ÷ total marketing spend',
-  chip: { title: "Can't be double-counted", label: "the blended number platforms can't inflate", icon: 'shield' },
+  kind: 'mer' as const,
+  name: 'Why MER beats platform ROAS',
+  pill: { text: 'Blended', tone: 'b' as const },
 };
+
 ---
 <FamilyPage
   path={path}

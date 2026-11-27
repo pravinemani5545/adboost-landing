@@ -77,8 +77,9 @@
 .family .th-lines { display: grid; gap: 6px; width: 70%; }
 .family .th-lines i { display: block; height: 6px; border-radius: 99px; background: rgb(255 255 255 / .22); }
 .family .th-lines i + i { width: 60%; background: rgb(255 255 255 / .12); }
-.js.motion .family .th-gauge .n { animation: ch-swing-th 1.3s var(--ease) .5s backwards; }
-@keyframes ch-swing-th { from { rotate: -80deg; } }
+/* the hero paints complete: the needle settles in under 400ms from a nearby angle */
+.js.motion .family .th-gauge .n { animation: ch-swing-th .38s var(--ease) backwards; }
+@keyframes ch-swing-th { from { rotate: -24deg; } }
 /* the calculators: one wide row card each, with the small graphic of what it works out */
 .family .th-tools { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0; padding: 0; }
 .family .th-tools > li { margin: 0; min-width: 0; }

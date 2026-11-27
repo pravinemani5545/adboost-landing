@@ -49,20 +49,13 @@ const data = {
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
-// The hero: this calculator's formula as a chain, with the values it shows on load
+// The hero: what the page explains around the calculator (CalcHero.astro), not a copy of it
 const hero = {
-  name: 'LTV:CAC calculator',
-  op: '÷' as const,
-  rows: [
-    { label: 'Lifetime value', sub: 'revenue × margin × months', value: r.ltvText, icon: 'layers' },
-    { label: 'CAC', sub: 'cost to acquire one customer', value: money(CAC), icon: 'target' },
-  ],
-  result: { label: 'LTV:CAC ratio', value: r.ratioText, tone: r.verdict },
-  gauge: { bands: [{ to: 3, tone: 'bad' as const }, { to: 5, tone: 'ok' as const }, { to: 8, tone: 'warn' as const }], value: r.ratio ?? 0 },
-  subs: [{ label: 'Payback', value: r.paybackText }, { label: 'Benchmark', value: '3:1' }],
-  formula: 'LTV:CAC = lifetime value ÷ acquisition cost',
-  chip: { title: '3:1 or higher', label: 'the benchmark for a scalable model', icon: 'gauge' },
+  kind: 'ltv' as const,
+  name: 'How to calculate LTV:CAC',
+  pill: { text: 'Two answers', tone: 'b' as const },
 };
+
 ---
 <FamilyPage
   path={path}

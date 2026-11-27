@@ -35,7 +35,7 @@ const ads = [
       <div class="crv-claim is-no"><span class="ui-ic warn"><Ic name="x" /></span><span class="crv-q">"boosts low T / treats ED"</span><Pill text="Disease claim" tone="bad" /></div>
     </div>
   </Win>
-  <Chip title="Hook rate" label="read first" icon="eye" style="right:-30px;top:76px" />
+  <Chip title="Hook rate" label="read first" icon="eye" style="right:-30px;top:-58px" />
   <Chip title="Compliance" label="inside the creative brief" icon="pencil" tone="b" style="left:-34px;bottom:-50px" />
 </div>
 
@@ -59,10 +59,11 @@ const ads = [
   .crv-claim .ui-ic :global(.gi) { width: 13px; height: 13px; stroke-width: 2.4; }
   .crv-q { min-width: 0; font-size: 12.5px; font-weight: 600; letter-spacing: -.01em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .is-no .crv-q { color: var(--text-2); text-decoration: line-through; text-decoration-color: rgb(220 38 38 / .55); }
-  :global(.js.motion) .crv-ad { animation: crv-in .55s var(--ease) backwards; animation-delay: calc(.35s + var(--i, 0) * .1s); }
+  /* first paint: the ads and claims are there at once and settle in under 400ms */
+  :global(.js.motion) .crv-ad { animation: crv-in .3s var(--ease) backwards; animation-delay: calc(var(--i, 0) * 30ms); }
   .k1 { --i: 1; } .k2 { --i: 2; }
-  :global(.js.motion) .crv-claim { animation: crv-in .55s var(--ease) .75s backwards; }
-  :global(.js.motion) .crv-claim.is-no { animation-delay: .85s; }
-  @keyframes crv-in { from { opacity: 0; translate: 0 8px; } }
+  :global(.js.motion) .crv-claim { animation: crv-in .3s var(--ease) 60ms backwards; }
+  :global(.js.motion) .crv-claim.is-no { animation-delay: 90ms; }
+  @keyframes crv-in { from { translate: 0 6px; } }
   @media (max-width: 480px) { .crv-board { gap: 7px; padding: 12px; } .crv-ad :global(.crv-status) { font-size: 7.5px; padding: 3px 5px; } }
 </style>

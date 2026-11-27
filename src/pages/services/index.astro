@@ -7,6 +7,7 @@
 import FamilyPage from '../../family/FamilyPage.astro';
 import HubSpoke from '../../kit/diagram/HubSpoke.astro';
 import ServiceTiles from '../../family/graphics/services/ServiceTiles.astro';
+import Ic from '../../family/graphics/Ic.astro';
 import { SERVICES } from '../../data/services';
 import { SERVICE_ICON as SYS_ICON } from '../../components/serviceArt';
 import { siteBase } from '../../lib/site';
@@ -102,17 +103,50 @@ const data = {
       </div>
     </div>
   </div>
-  <div class="cp-night reveal">
+  <div class="cp-night svc-close reveal">
+    <span class="svc-close-ic" aria-hidden="true"><Ic name="layers" /></span>
     <p>Because one team owns all three, a rejected ad, a weak landing page, and a broken tracking pixel get fixed in one place instead of pointing fingers across vendors. That is why partners average 24% lower CAC in the first 30 days and see results by day 31. Compare the model against <a href="/compare/">the usual alternatives</a>, or review benchmarks by vertical for <a href="/industries/telehealth/">telehealth</a> and <a href="/industries/glp-1-weight-loss/">GLP-1 weight loss</a>.</p>
   </div>
 </FamilyPage>
 
 <style>
   .svc-tri { padding: 18px 18px 6px; }
-  .svc-sys { display: grid; gap: 12px; }
-  .svc-sys .cp-card { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 18px; padding: 22px 24px 22px 22px; }
-  .svc-sys .cp-card h3 { margin: 4px 0 8px; }
+  /* the three services as one connected card: a column each, joined by a line through their tiles
+     (the rows above are links; this is the system, so it reads differently) */
+  .svc-sys { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 24px; background: #fff; box-shadow: var(--shadow-stack), 0 40px 80px -50px rgb(var(--hue-b) / .5); }
+  .svc-sys::before { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; padding: 1px; pointer-events: none; background: linear-gradient(150deg, rgb(var(--hue-a) / .7), rgb(var(--hue-b) / .25) 36%, var(--line) 62%, rgb(var(--hue-c) / .6)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .svc-sys::after { content: ""; position: absolute; left: 44px; right: calc(33.333% - 44px); top: 45px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgb(var(--hue-a) / .55), rgb(var(--hue-b) / .45), rgb(var(--hue-c) / .55)); }
+  .svc-sys .cp-card { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 14px; padding: 26px 26px 28px; border-radius: 0; background: transparent; box-shadow: none; }
+  .svc-sys .cp-card:hover { transform: none; box-shadow: none; background: linear-gradient(180deg, rgb(var(--hue-a) / .05), transparent 70%); }
+  .svc-sys .cp-card + .cp-card { border-left: 1px solid var(--line); }
+  .svc-sys .cp-card:first-child { border-radius: 24px 0 0 24px; }
+  .svc-sys .cp-card:last-child { border-radius: 0 24px 24px 0; }
+  .svc-sys .cp-tile { box-shadow: 0 0 0 6px #fff, 0 10px 18px -10px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
+  .svc-sys .cp-card h3 { margin: 0 0 8px; }
+  .svc-sys .cp-card p { font-size: 14.5px; }
   .cp-tile.is-b { background: linear-gradient(135deg, var(--deep-b), var(--deep-c)); }
   .cp-tile.is-c { background: linear-gradient(135deg, var(--deep-c), var(--deep-a)); }
-  @media (max-width: 640px) { .svc-tri :global(.dg-scard) { min-height: 44px; } .svc-sys .cp-card { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 20px 18px; } .svc-tri { padding: 10px 10px 2px; } }
+  /* the closing note: a light statement card, so the page ends on one dark card (the call to action) */
+  .cp-night.svc-close { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 18px; align-items: start; color: var(--text); font-size: 17px; line-height: 1.7; background: radial-gradient(70% 120% at 0% 0%, rgb(var(--hue-a) / .1), transparent 60%), radial-gradient(60% 120% at 100% 100%, rgb(var(--hue-c) / .1), transparent 62%), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .cp-night.svc-close :global(a) { color: var(--deep-a); text-decoration-color: rgb(var(--hue-a) / .45); }
+  .svc-close-ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; color: #fff; background: var(--cp-vivid); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .3); }
+  .svc-close-ic :global(.gi) { width: 19px; height: 19px; }
+  /* no rail on this page: the diagram and the system card step out of the reading column a little */
+  @media (min-width: 1180px) { .svc-tri, .svc-sys { margin-inline: -70px; } .svc-sys::after { left: 46px; right: calc(33.333% - 46px); } }
+  @media (max-width: 860px) {
+    .svc-sys { grid-template-columns: minmax(0, 1fr); }
+    .svc-sys::after { left: 41px; right: auto; top: 44px; bottom: 44px; width: 2px; height: auto; background: linear-gradient(180deg, rgb(var(--hue-a) / .55), rgb(var(--hue-b) / .45), rgb(var(--hue-c) / .55)); }
+    .svc-sys .cp-card { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 16px; padding: 24px 22px; }
+    .svc-sys .cp-card + .cp-card { border-left: 0; border-top: 1px solid var(--line); }
+    .svc-sys .cp-card:first-child { border-radius: 24px 24px 0 0; }
+    .svc-sys .cp-card:last-child { border-radius: 0 0 24px 24px; }
+  }
+  @media (max-width: 640px) {
+    .svc-tri :global(.dg-scard) { min-height: 44px; }
+    .svc-tri { padding: 10px 10px 2px; }
+    .svc-sys::after { left: 37px; }
+    .svc-sys .cp-card { padding: 20px 18px; gap: 14px; }
+    .cp-night.svc-close { grid-template-columns: minmax(0, 1fr); gap: 12px; font-size: 16px; }
+    .svc-close-ic { width: 36px; height: 36px; border-radius: 11px; }
+  }
 </style>
