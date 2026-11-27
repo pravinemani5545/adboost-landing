@@ -315,7 +315,7 @@ section { position: relative; z-index: 1; }
 .ccard .stats .s { padding: 16px 14px; border-right: 1px solid var(--line); text-align: left; }
 .ccard .stats .s:last-child { border-right: 0; }
 .ccard .stats .s .l { font-family: "Geist Mono", monospace; font-size: 10px; color: var(--mute); letter-spacing: .06em; text-transform: uppercase; }
-.ccard .stats .s .v { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin-top: 4px; line-height: 1; }
+.ccard .stats .s .v { font-size: 18px; font-weight: 600; letter-spacing: -.02em; margin-top: 4px; line-height: 1; white-space: nowrap; }
 .ccard .stats .s .v .blue { color: var(--blue); }
 .ccard .stats .s .v .green { color: var(--k-ok-ink); } /* status text on paper: the ink tone passes AA */
 

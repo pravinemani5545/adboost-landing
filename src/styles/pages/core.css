@@ -169,6 +169,8 @@
 .fq-group .faq-list .qa:last-child { border-bottom: 0; }
 .fq-group .faq-list .qa[open] { background: linear-gradient(90deg, rgb(var(--ta) / .06), transparent 70%); }
 .fq-aside { position: sticky; top: calc(var(--k-top) + 24px); display: grid; gap: 14px; }
+.fq-aside.toc-wait .aside-toc { opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+.fq-aside.toc-wait.toc-on .aside-toc { opacity: 1; visibility: visible; transition: opacity .25s ease; }
 .fq-aside .aside-toc { position: relative; overflow: clip; margin: 0; padding: 22px 18px 16px; border-radius: 22px; border: 0; background: rgb(255 255 255 / .9); box-shadow: var(--shadow-stack); }
 .fq-aside .aside-toc::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: var(--grad-brand); }
 .fq-aside .aside-toc ul { counter-reset: fqt; }

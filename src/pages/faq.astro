@@ -68,18 +68,30 @@ const jsonLd = [
         ))}
       </div>
       <aside class="fq-aside">
-        <div class="aside-toc">
-          <div class="at-label">Jump to</div>
-          <ul>{groups.map((g) => <li><a href={`#${groupId(g.title)}`}>{g.title}</a></li>)}</ul>
-        </div>
         <div class="aside-card night">
           <h4>Still have a question?</h4>
           <p>Ask a senior strategist on a free 30-minute call.</p>
           <a class="btn btn-primary" href="/book/">Book a call →</a>
         </div>
+        <div class="aside-toc">
+          <div class="at-label">Jump to</div>
+          <ul>{groups.map((g) => <li><a href={`#${groupId(g.title)}`}>{g.title}</a></li>)}</ul>
+        </div>
       </aside>
     </div>
   </section>
+
+<script is:inline>
+  // The rail's "Jump to" list repeats the hero's index card. While that card is on screen the
+  // list stays hidden (space kept, so nothing moves); once it scrolls away the list appears.
+  (function () {
+    var idx = document.querySelector('.fq-index');
+    var aside = document.querySelector('.fq-aside');
+    if (!idx || !aside || !('IntersectionObserver' in window)) return;
+    aside.classList.add('toc-wait');
+    new IntersectionObserver(function (e) { aside.classList.toggle('toc-on', !e[0].isIntersecting); }).observe(idx);
+  })();
+</script>
 
   <CtaBand />
 </div>
