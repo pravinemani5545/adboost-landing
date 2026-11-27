@@ -45,6 +45,8 @@ const description = 'Pick a time for a free 30-minute strategy call with a senio
           <div class="bk-bar" aria-hidden="true"><span class="bk-dots"><i></i><i></i><i></i></span><i class="bk-url"></i></div>
           <div class="bk-frame">
             <iframe src={BOOKING_EMBED_URL} title="Book a free strategy call with AdBoost Health" loading="eager"></iframe>
+            {/* the calendar skeleton (core.css) steps aside once Google's page has loaded: its background is transparent */}
+            <script is:inline>(function () { var f = document.currentScript.previousElementSibling; f.addEventListener('load', function () { f.parentNode.classList.add('is-loaded'); }, { once: true }); })();</script>
           </div>
         </div>
       </div>

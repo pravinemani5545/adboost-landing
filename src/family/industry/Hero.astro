@@ -9,7 +9,7 @@
 //          card position, under the head across the full width;
 //   stage  the page's graphic: the vertical snapshot window (the page's own CAC and platform
 //          data), with a phone behind it (a matching ad creative, the vertical's intake or a
-//          booking calendar) and two floating chips (a segment, a platform status).
+//          booking calendar) and one floating chip under the phone (a segment the page works in).
 // The grid puts the stage beside the head from 1080px, but in the HTML it follows the answer,
 // so the answer comes before any graphic in reading order (and on phones).
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
@@ -27,13 +27,13 @@ interface Props {
   meta: string[];
   updated?: { iso: string; label: string };
   segments: string[];
-  chips: { title: string; label?: string; icon: string; tone?: '' | 'b' | 'c' | 'g' | 'ok' | 'warn' }[];
+  /** one floating chip, under the phone and clear of the window's data */
+  chip: { title: string; label?: string; icon: string; tone?: '' | 'b' | 'c' | 'g' | 'ok' | 'warn' };
 }
-const { crumbs, eyebrow, h1, lede, meta, updated, segments, chips } = Astro.props;
+const { crumbs, eyebrow, h1, lede, meta, updated, segments, chip } = Astro.props;
 const words = h1.trim().split(/\s+/);
 const h1Lead = words.slice(0, -2).join(' ');
 const h1Tail = words.slice(-2).join(' ');
-const CHIP_AT = ['left:-30px;bottom:22px', 'left:-24px;top:-10px'];
 ---
 <header class="cp-hero ix-hero" data-spot>
   <Backdrop texture={['dots', 'grid']} spotlight focus={['74%', '30%']} />
@@ -53,7 +53,8 @@ const CHIP_AT = ['left:-30px;bottom:22px', 'left:-24px;top:-10px'];
       </p>
     </div>
 
-    <div class="ix-top arrive" style="--d:130ms">
+    {/* the short answer: no entrance (a delayed one held back its paint, and it is usually the LCP element) */}
+    <div class="ix-top">
       <div class="ix-answer">
         <slot name="answer" />
       </div>
@@ -69,7 +70,7 @@ const CHIP_AT = ['left:-30px;bottom:22px', 'left:-24px;top:-10px'];
       <div class="ix-par ix-par-back" style="--dp:1.6"><slot name="phone" /></div>
       <div class="ix-stage-main"><slot name="stage" /></div>
       <div class="ix-par" style="--dp:2.2" aria-hidden="true">
-        {chips.map((c, i) => <Chip title={c.title} label={c.label} icon={c.icon} tone={c.tone} class={`ix-chip-${i}`} style={CHIP_AT[i]} />)}
+        <Chip title={chip.title} label={chip.label} icon={chip.icon} tone={chip.tone} class="ix-chip" />
       </div>
     </div>
   </div>

@@ -56,7 +56,6 @@ const PF: Record<string, string> = { Meta: 'feed', Google: 'search', TikTok: 'vi
               <span class="ix-rc-name">{c.platform}</span>
               <span class:list={['ui-pill', PILL[c.status]]}><span class="ld" aria-hidden="true"></span>{STATUS_LABEL[c.status]}</span>
             </span>
-            <span class="ix-rc-sk" aria-hidden="true"><i></i><i></i><i></i></span>
             <span class="ix-rc-t">{c.label}{c.href && <span aria-hidden="true"> →</span>}</span>
           </>
         );

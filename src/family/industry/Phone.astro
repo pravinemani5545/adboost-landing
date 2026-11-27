@@ -25,7 +25,13 @@ const picked = 15;
     {creative ? (
       <div class="ix-feed">
         <div class="ix-feed-top"><i class="ix-av"></i><span class="ix-feed-lines"><i></i><i></i></span><i class="ix-feed-more"></i></div>
-        <div class="ix-feed-img"><img src={creative} alt="" width="634" height="1136" loading="lazy" decoding="async" fetchpriority="low" /></div>
+        <div class="ix-feed-img">
+          {/* in the first frame from 640px (eager); below 640px the phone is hidden, so a 1px stand-in keeps the creative from downloading there */}
+          <picture>
+            <source media="(max-width: 639.98px)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACw=" />
+            <img src={creative} alt="" width="634" height="1136" decoding="async" fetchpriority="low" />
+          </picture>
+        </div>
         <div class="ix-feed-bot"><Icon name="heart" /><Icon name="comment" /><Icon name="share" /><i class="ix-feed-cta"></i></div>
       </div>
     ) : stages.length > 0 ? (

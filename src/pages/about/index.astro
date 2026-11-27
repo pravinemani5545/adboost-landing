@@ -97,14 +97,15 @@ const jsonLd = [
     </div>
   </section>
 
-  <!-- THE NUMBERS: four cards; below the fold they count up to the printed figure (kit count.ts) -->
+  <!-- THE NUMBERS: four cards, on the first screen of a laptop, so they arrive (transform only) instead of
+       waiting for a reveal; below the fold they count up to the printed figure (kit count.ts) -->
   <section class="ab-stats-band">
     <div class="container">
       <div class="ab-stats">
-        <div class="ab-stat reveal"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[0]} /><div class="sv fl-grad-num"><Count value="71+" /></div><div class="sl">Founders served</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.38"></i><i style="--h:.52"></i><i style="--h:.48"></i><i style="--h:.7"></i><i style="--h:.86"></i></span></div>
-        <div class="ab-stat reveal d1"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[1]} /><div class="sv fl-grad-num"><Count value="$153M+" /></div><div class="sl">Tracked revenue</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.3"></i><i style="--h:.42"></i><i style="--h:.58"></i><i style="--h:.74"></i><i style="--h:.94"></i></span></div>
-        <div class="ab-stat reveal d2"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[2]} /><div class="sv"><span class="fl-grad-num"><Count value="4.9" class="sv-n" /></span><span class="sv-of"> / 5</span></div><div class="sl">Average partner rating</div><span class="ab-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
-        <div class="ab-stat reveal d3"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[3]} /><div class="sv fl-grad-num"><Count value="8,400+" /></div><div class="sl">Creatives shipped</div><span class="ab-tiles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
+        <div class="ab-stat arrive" style="--d:140ms"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[0]} /><div class="sv fl-grad-num"><Count value="71+" /></div><div class="sl">Founders served</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.38"></i><i style="--h:.52"></i><i style="--h:.48"></i><i style="--h:.7"></i><i style="--h:.86"></i></span></div>
+        <div class="ab-stat arrive" style="--d:180ms"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[1]} /><div class="sv fl-grad-num"><Count value="$153M+" /></div><div class="sl">Tracked revenue</div><span class="ab-stat-art" aria-hidden="true"><i style="--h:.3"></i><i style="--h:.42"></i><i style="--h:.58"></i><i style="--h:.74"></i><i style="--h:.94"></i></span></div>
+        <div class="ab-stat arrive" style="--d:220ms"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[2]} /><div class="sv"><span class="fl-grad-num"><Count value="4.9" class="sv-n" /></span><span class="sv-of"> / 5</span></div><div class="sl">Average partner rating</div><span class="ab-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+        <div class="ab-stat arrive" style="--d:260ms"><span class="fl-ic" aria-hidden="true" set:html={STAT_ICON[3]} /><div class="sv fl-grad-num"><Count value="8,400+" /></div><div class="sl">Creatives shipped</div><span class="ab-tiles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span></div>
       </div>
     </div>
   </section>

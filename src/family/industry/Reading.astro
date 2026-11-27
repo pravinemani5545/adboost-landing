@@ -1,10 +1,14 @@
 ---
-// The end of an industry page, before the closing card: related posts as cards with a page
-// drawing (port of adboost-media src/components/industry/Reading.astro), the numbered sources
-// card, and beside them the page's old sidebar as a rail of cards (the vertical at a glance with
-// its CAC drawn on the shared axis, the platform rule sheets, a small booking card).
+// The end of an industry page, before the closing card, as one calm sequence of rows in one card
+// style (white, the layered shadow, one radius):
+//   1. related posts: three cards across the full width (port of adboost-media
+//      src/components/industry/Reading.astro);
+//   2. the numbered sources, one full-width card, the list in two columns;
+//   3. the page's old sidebar as a row of equal cards: the vertical at a glance (its CAC drawn on
+//      the shared axis), the platform rule sheets, and a small booking card. The booking card is
+//      light, so the closing card below stays the one dark call to action.
 // Headings keep their levels and order: Related posts (h3) and its posts (h3), Sources (h3),
-// then the rail's h4s, as the old sidebar came after the text.
+// then the old sidebar's h4s, as the old sidebar came after the text.
 import ButtonLink from '../../components/site/ButtonLink.astro';
 import Icon from './Icon.astro';
 import { BOOK_PATH } from '../../lib/site';
@@ -18,35 +22,38 @@ interface Props {
   night: { heading: string; text: string };
 }
 const { posts, sourcesNote, sources, glance, guides, night } = Astro.props;
+const cards = guides.links.length > 0 ? 3 : 2;
 ---
 <section class="ix-read">
-  <div class="container ix-read-grid">
-    <div class="ix-read-main">
-      {posts.length > 0 && (
-        <div class="ix-posts">
-          <h3 id="related" class="ix-read-h reveal">Related posts</h3>
-          <ul>
-            {posts.map((p, i) => (
-              <li class:list={['reveal', i % 3 && `d${i % 3}`]}>
-                <a class="ix-post" href={p.href}>
-                  <span class="ix-post-art" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="blk"></i><i class="l3"></i><i class="l2"></i></span>
-                  <h3>{p.title}</h3>
-                  <p>{p.description}</p>
-                  <span class="ix-more">Read the post →</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <div class="ix-src reveal">
-        <h3 class="ix-read-h">Sources</h3>
-        <p class="ix-src-note">{sourcesNote}</p>
-        <ol>{sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}</ol>
+  <div class="container ix-read-in">
+    {posts.length > 0 && (
+      <div class="ix-posts">
+        <h3 id="related" class="ix-read-h reveal">Related posts</h3>
+        <ul>
+          {posts.map((p, i) => (
+            <li class:list={['reveal', i % 3 && `d${i % 3}`]}>
+              <a class="ix-post" href={p.href}>
+                <span class="ix-post-art" aria-hidden="true"><i class="l1"></i><i class="l2"></i><i class="blk"></i><i class="l3"></i><i class="l2"></i></span>
+                <h3>{p.title}</h3>
+                <p>{p.description}</p>
+                <span class="ix-more">Read the post →</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
+    )}
+
+    <div class="ix-src reveal">
+      <div class="ix-src-head">
+        <span class="ix-src-ic" aria-hidden="true"><Icon name="doc" /></span>
+        <h3 class="ix-read-h">Sources</h3>
+      </div>
+      <p class="ix-src-note">{sourcesNote}</p>
+      <ol>{sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}</ol>
     </div>
 
-    <aside class="ix-rail-cards">
+    <aside class="ix-rail-cards" data-n={cards}>
       <div class="ix-rcard reveal">
         <h4>{glance.heading}</h4>
         <div class="ix-glance" aria-hidden="true">
@@ -69,7 +76,8 @@ const { posts, sourcesNote, sources, glance, guides, night } = Astro.props;
           </ul>
         </div>
       )}
-      <div class="ix-rcard is-night reveal d2">
+      <div class:list={['ix-rcard', 'is-book', 'reveal', cards === 3 ? 'd2' : 'd1']}>
+        <span class="ix-book-ic" aria-hidden="true"><Icon name="calendar" /></span>
         <h4>{night.heading}</h4>
         <p>{night.text}</p>
         <ButtonLink href={BOOK_PATH} class="ix-rcard-go">Book a call <span aria-hidden="true">→</span></ButtonLink>
