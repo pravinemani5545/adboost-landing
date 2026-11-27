@@ -220,20 +220,20 @@
 .rs-tool .tool-doc > .sec-title { margin-top: 56px; font-size: clamp(26px, 3vw, 36px); }
 .rs-tool .tool-doc > p:not(.tool-fine) { font-size: 16.5px; line-height: 1.72; max-width: 70ch; }
 .rs-tool .tool-fine {
-  display: flex;
-  gap: 10px;
+  position: relative;
   margin-top: 16px;
-  padding: 12px 16px;
+  padding: 12px 16px 12px 42px;
   border-radius: 14px;
   background: var(--k-paper-2);
   border: 1px solid var(--k-line);
 }
 .rs-tool .tool-fine::before {
   content: "";
-  flex: none;
+  position: absolute;
+  left: 16px;
+  top: 14px;
   width: 16px;
   height: 16px;
-  margin-top: 2px;
   border-radius: 50%;
   background: var(--k-ok);
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5zm-1.2 14.2-3.9-3.9 1.4-1.4 2.5 2.5 5.4-5.4 1.4 1.4z'/%3E%3C/svg%3E") center / contain no-repeat;
