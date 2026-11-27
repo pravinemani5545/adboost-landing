@@ -20,6 +20,9 @@ export const GET: APIRoute = async ({ site }) => {
     md.replace(/\[([^\]]+)\]\((?:https:\/\/www\.adboost\.health)?(\/[^)\s#?]*)[^)\s]*\)/g, (link, text, path) =>
       unbuilt.has(path) ? text : link);
   const plain = (html: string) => html.replace(/<[^>]+>/g, '');
+  // A "<!-- diagram: id -->" line places a figure in the rendered post (src/kit/content/markers.ts).
+  // It is layout, not content: it stays out of this text.
+  const noMarkers = (md: string) => md.replace(/^<!-- diagram: [\w-]+ -->[ \t]*\r?\n(?:[ \t]*\r?\n)?/gm, '');
 
   const body = `# AdBoost Health - Full Content
 
@@ -34,7 +37,7 @@ URL: ${base}/blog/${p.id}/
 Author: ${p.data.author}, ${p.data.authorTitle}
 Published: ${p.data.pubDate.toISOString().slice(0, 10)}
 
-${unwrap(p.body ?? '')}`
+${unwrap(noMarkers(p.body ?? ''))}`
   )
   .join('\n\n')}
 
