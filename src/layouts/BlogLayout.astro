@@ -9,7 +9,8 @@
 //          progress line (long posts only). Tables are cards, worked examples callouts, the FAQ
 //          numbered cards, diagrams framed figures (src/components/resources/html.ts adds the hooks)
 //   end    the author card, the closing card, "Keep reading" on a tinted band
-// Styles: src/styles/family/{tokens,content,blog}.css (every rule under .family).
+// Styles: src/styles/family/{tokens,blog-cards}.css here; the post routes add content.css and
+// blog-post.css, the index blog-index.css (every rule under .family).
 //
 // Tracker contract: the closing card's Book link is "inline" for t.js (no nav, .mobile-cta,
 // .cta-band or footer ancestor: src/family/blog/PostCta.astro), and the page index is a <nav>
@@ -23,8 +24,8 @@ import PostCard from '../family/blog/PostCard.astro';
 import PostCta from '../family/blog/PostCta.astro';
 import { decode } from '../components/resources/html';
 import '../styles/family/tokens.css';
-import '../styles/family/content.css';
-import '../styles/family/blog.css';
+import '../styles/family/blog-cards.css';
+import '../styles/family/grain.css';
 
 interface RelatedPost {
   href: string;

@@ -5,6 +5,8 @@
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getPublishedPosts } from '../../lib/blog';
 import { postBody, postLayoutProps } from './_post';
+import '../../styles/family/content.css';
+import '../../styles/family/blog-post.css';
 
 export async function getStaticPaths() {
   const all = await getPublishedPosts();

@@ -1,207 +1,13 @@
 /* ================================================================
-   The AdBoost family layer on Health: the blog (index, posts, post cards).
-
-   A port of www.adboost.media's blog, in Health's hues:
-     adboost-media src/components/blog/post-card.css   1. the post card
-     adboost-media src/styles/blog.css                 1-8 (index, post hero, figures, examples,
-                                                       FAQ cards, author card, keep reading)
-     adboost-media src/components/site/InlineCta.astro 7. the closing card (as .post-ic)
-   Health's own parts on top: the topic filter (a radio group that works without JavaScript),
-   the post's topics under the hero image, the hooks src/components/resources/html.ts adds to a
-   post's rendered Markdown (.cp-table, .rs-keys, .rs-steps, .rs-check, .rs-callout, .rs-qa), and
-   the kit diagrams between prose runs (.post-fig).
-
-   Token names are Media's, mapped to Health's values on .family (tokens.css). Every selector is
-   scoped under .family, which only the blog index (.blog-x) and a post (.pg-post) carry.
-   Motion animates transform, translate, scale and opacity only; hidden states live under
-   html.js.motion, so without JavaScript or with reduced motion everything is complete and still.
-
-   1. Post card and its variants
-   2. Index: hero and the fan of playbook cards
-   3. Index: topic filter, lead story, feed
-   4. Post: reading progress
-   5. Post: the article hero
-   6. Post: the reading column (prose hooks, figures, worked examples, FAQ cards)
-   7. Post: author card and closing card
-   8. Post: keep reading
+   The AdBoost family layer on Health: a blog post (src/layouts/BlogLayout.astro).
+   Port of adboost-media src/styles/blog.css (post hero, figures, worked examples, FAQ cards,
+   author card, keep reading) and src/components/site/InlineCta.astro (the closing card, as
+   .post-ic), in Health's hues, plus the hooks src/components/resources/html.ts adds to a post's
+   rendered Markdown (.cp-table, .rs-keys, .rs-steps, .rs-check, .rs-callout, .rs-qa) and the kit
+   diagrams between prose runs (.post-fig). Loaded by the post routes with the family
+   content.css (reading grid, "On this page", prose, card tables). Scoped under .family; motion
+   is transform and opacity only, hidden states only under html.js.motion.
    ================================================================ */
-
-/* the accent as small text on white or a light tint, a step darker than --deep-a so it stays AA */
-.family.blog-x, .family.pg-post { --ink-a: color-mix(in oklab, var(--deep-a) 82%, #000); }
-
-/* ---------- 1. Post card ---------- */
-.family .pc { position: relative; display: block; height: 100%; border-radius: 22px; color: inherit; text-decoration: none; transition: transform .35s var(--ease); }
-.family .pc:hover { transform: translateY(-4px); }
-.family .pc:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 4px; }
-.family .pc-in { display: flex; flex-direction: column; height: 100%; overflow: hidden; border-radius: 22px; background: #fff; box-shadow: var(--shadow-stack); transition: box-shadow .35s var(--ease); }
-.family .pc:hover .pc-in { box-shadow: var(--shadow-stack), 0 44px 70px -42px rgb(var(--hue-b) / .6); }
-.family .pc-media { position: relative; display: block; flex-shrink: 0; overflow: hidden; aspect-ratio: 16 / 9; background: var(--bg-2); border-bottom: 1px solid var(--line); }
-.family .pc-media img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
-.family .pc:hover .pc-media img { transform: scale(1.045); }
-.family .pc-body { display: flex; flex: 1; flex-direction: column; gap: 10px; padding: 20px 24px 24px; }
-.family .pc-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-family: var(--font-mono); font-size: 11px; line-height: 1.4; letter-spacing: .07em; text-transform: uppercase; color: var(--mute); }
-.family .pc-cat, .family .pc-flag { display: inline-flex; align-items: center; padding: 4px 9px; border-radius: 99px; font-weight: 500; }
-.family .pc-cat { color: var(--ink-a); background: linear-gradient(90deg, rgb(var(--hue-a) / .14), rgb(var(--hue-b) / .11)); }
-.family .pc-flag { color: #fff; background: var(--cp-vivid); box-shadow: 0 8px 16px -10px rgb(var(--hue-b) / .9); }
-.family .pc-sep { color: var(--line-3); }
-/* reading time with a small clock, so it reads well when the line wraps */
-.family .pc-min { display: inline-flex; align-items: center; gap: 5px; }
-.family .pc-min::before { content: ""; width: 11px; height: 11px; flex-shrink: 0; background: currentColor; opacity: .8;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9.5'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E") center / contain no-repeat; }
-.family .pc-title { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 19px; line-height: 1.28; letter-spacing: -.02em; color: var(--text); text-wrap: balance; }
-.family .pc-desc { display: -webkit-box; margin: 0; font-size: 14.5px; line-height: 1.58; color: var(--text-2); -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.family .pc-go { display: inline-flex; align-items: center; gap: 7px; margin-top: auto; padding-top: 6px; font-size: 13.5px; font-weight: 600; color: var(--brand-deep); }
-.family .pc-go svg { transition: transform .25s var(--ease); }
-.family .pc:hover .pc-go svg { transform: translateX(3px); }
-.family .pc-noimg .pc-in { background: linear-gradient(160deg, #fff 55%, rgb(var(--hue-a) / .08)); }
-
-/* the lead story: a large framed image beside the text */
-.family .pc-feature { height: auto; }
-.family .pc-feature .pc-in { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr); align-items: center; padding: 12px; border-radius: 32px; border: 1px solid transparent;
-  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(140deg, rgb(var(--hue-a)), rgb(var(--hue-b) / .4) 32%, var(--line) 55%, rgb(var(--hue-c) / .9)) border-box;
-  box-shadow: var(--shadow-stack), 0 60px 100px -60px rgb(var(--hue-b) / .55); }
-.family .pc-feature .pc-media { aspect-ratio: auto; padding: 14px; border: 0; border-radius: 22px;
-  background: radial-gradient(70% 90% at 0% 0%, rgb(var(--hue-a) / .45), transparent 62%), radial-gradient(70% 90% at 100% 100%, rgb(var(--hue-c) / .4), transparent 62%), radial-gradient(60% 60% at 80% 10%, rgb(var(--hue-b) / .3), transparent 70%), var(--bg-2); }
-.family .pc-feature .pc-media img { height: auto; aspect-ratio: 16 / 9; border-radius: 14px; box-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 30px 50px -30px rgb(var(--k-shadow-rgb) / .45); }
-.family .pc-feature:hover .pc-media img { transform: scale(1.02); }
-.family .pc-feature .pc-body { gap: 14px; padding: 26px 34px 28px 40px; }
-.family .pc-feature .pc-title { font-size: clamp(24px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -.032em; font-weight: var(--fw-display); }
-.family .pc-feature .pc-desc { font-size: 16px; line-height: 1.6; -webkit-line-clamp: 5; }
-.family .pc-feature .pc-go { align-self: flex-start; margin-top: 8px; min-height: 44px; padding: 0 16px 0 18px; border-radius: 99px; color: var(--brand-ink); background: var(--grad-btn); background-color: var(--brand); background-size: 200% 100%; box-shadow: 0 14px 30px -16px rgb(var(--hue-b) / .9); transition: background-position .6s var(--ease); }
-.family .pc-feature:hover .pc-go { background-position: 100% 0; }
-@media (max-width: 1000px) {
-  .family .pc-feature .pc-in { grid-template-columns: minmax(0, 1fr); padding: 10px; border-radius: 26px; }
-  .family .pc-feature .pc-media { padding: 10px; border-radius: 18px; }
-  .family .pc-feature .pc-body { padding: 20px 16px 18px; }
-}
-
-/* ---------- 2. Index: hero ---------- */
-.family .blog-hero { position: relative; isolation: isolate; overflow: clip; padding: calc(var(--nav-h) + 58px) 0 34px; }
-.family .blog-hero-in { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 48px; align-items: center; }
-.family .blog-head { max-width: 680px; }
-.family .blog-head h1 { margin: 16px 0; font-family: var(--font-display); font-size: clamp(36px, 5vw, 62px); line-height: 1.02; letter-spacing: -.038em; font-weight: var(--fw-display); color: var(--text); text-wrap: balance; }
-.family .blog-head h1 .serif { font-size: 1.05em; letter-spacing: -.01em; }
-.family .blog-head p { margin: 0; max-width: 54ch; font-size: 17.5px; line-height: 1.55; color: var(--text-2); }
-
-/* a fan of playbook cards: a trend line, a funnel, a chart (decorative) */
-.family .blog-art { position: relative; height: 250px; }
-.family .blog-art-plate { position: absolute; inset: -14px -10px 18% 26%; border-radius: 28px; background-color: rgb(var(--hue-b) / .08);
-  background-image: radial-gradient(circle at 1px 1px, rgb(var(--hue-c) / .55) 1px, transparent 1.6px); background-size: 15px 15px;
-  -webkit-mask-image: linear-gradient(215deg, #000 22%, transparent 78%); mask-image: linear-gradient(215deg, #000 22%, transparent 78%); }
-.family .ba-card { position: absolute; display: block; width: 250px; padding: 10px 10px 14px; border-radius: 20px; background: #fff; box-shadow: var(--shadow-stack), 0 30px 50px -30px rgb(var(--k-shadow-rgb) / .3); }
-.family .ba-card > i { display: block; height: 8px; margin: 10px 6px 0; border-radius: 99px; background: var(--bg-3); }
-.family .ba-card > i + i { width: 62%; margin-top: 7px; }
-.family .ba-card > i.ba-short { width: 38%; background: rgb(var(--hue-a) / .35); }
-.family .ba-img { display: block; height: 96px; border-radius: 13px; overflow: hidden; background: radial-gradient(80% 110% at 0% 0%, rgb(var(--hue-a) / .32), transparent 62%), radial-gradient(80% 110% at 100% 100%, rgb(var(--hue-c) / .3), transparent 62%), var(--bg-2); }
-.family .ba-img svg { display: block; width: 100%; height: 100%; padding: 14px 18px; box-sizing: border-box; fill: rgb(var(--hue-b) / .55); }
-.family .ba-img .ba-line { fill: none; stroke: var(--deep-b); stroke-width: 3; stroke-linecap: round; }
-.family .ba-c3 .ba-img circle { fill: var(--deep-b); }
-.family .ba-c1 .ba-img rect { fill: rgb(var(--hue-a) / .8); }
-.family .ba-c1 .ba-img rect.ba-hi { fill: var(--deep-c); }
-.family .ba-c2 .ba-img rect:nth-child(1) { fill: rgb(var(--hue-a) / .85); }
-.family .ba-c2 .ba-img rect:nth-child(2) { fill: rgb(var(--hue-b) / .7); }
-.family .ba-c2 .ba-img rect:nth-child(3) { fill: rgb(var(--hue-c) / .8); }
-.family .ba-c3 { right: 0; top: 0; rotate: 7deg; opacity: .92; }
-.family .ba-c2 { right: 120px; top: 18px; rotate: -5deg; opacity: .96; }
-.family .ba-c1 { right: 58px; top: 46px; z-index: 2; width: 270px; }
-.family .ba-bar { display: flex; gap: 5px; padding: 2px 4px 9px; }
-.family .ba-bar b { width: 8px; height: 8px; border-radius: 50%; background: var(--line-2); }
-.family .ba-bar b:first-child { background: rgb(var(--hue-a)); }
-.family .ba-chip { position: absolute; z-index: 3; right: 296px; top: 190px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; rotate: -8deg; background: var(--grad-brand); box-shadow: 0 18px 30px -14px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .45); }
-.family .ba-chip svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.js.motion .family .ba-c1 { animation: fam-blog-float 8s ease-in-out infinite; }
-.js.motion .family .ba-c3 { animation: fam-blog-float 9s ease-in-out -4s infinite; }
-.js.motion .family .ba-chip { animation: fam-blog-float 7s ease-in-out -2s infinite; }
-@keyframes fam-blog-float { 50% { translate: 0 -8px; } }
-@media (max-width: 1000px) {
-  .family .blog-hero-in { grid-template-columns: minmax(0, 1fr); }
-  .family .blog-art { display: none; }
-}
-@media (max-width: 640px) { .family .blog-hero { padding: calc(var(--nav-h) + 40px) 0 22px; } .family .blog-head p { font-size: 16px; } }
-
-/* ---------- 3. Index: topic filter, lead story, feed ---------- */
-.family .blog-body { position: relative; padding: 6px 0 104px; }
-.family .blog-topics { min-width: 0; margin: 0 0 26px; padding: 0; border: 0; }
-.family .blog-topics-k { float: left; width: 100%; margin: 0 0 12px; padding: 0; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
-.family .blog-topics-row { clear: both; display: flex; flex-wrap: wrap; gap: 8px; }
-/* the radios stay in the tab order (arrow keys move between topics), drawn as their labels */
-.family .blog-topic-in { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
-.family .blog-chip { display: inline-flex; align-items: center; height: 38px; padding: 0 15px; border-radius: 99px; border: 1px solid var(--line-2); background: rgb(255 255 255 / .8); font-size: 13.5px; font-weight: 500; color: var(--text-2); cursor: pointer; white-space: nowrap; transition: border-color .2s, color .2s, background-color .2s, transform .2s var(--ease); }
-.family .blog-chip:hover { border-color: var(--line-3); color: var(--text); transform: translateY(-1px); }
-.family .blog-topic-in:focus-visible + .blog-chip, .family .blog-chip-more:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
-.family .blog-topic-in:checked + .blog-chip { color: #fff; border-color: transparent; background: var(--text); box-shadow: 0 10px 22px -12px rgb(var(--k-shadow-rgb) / .6); }
-.family .blog-topics-more { margin-top: 8px; }
-.family .blog-chip-more { gap: 8px; list-style: none; }
-.family .blog-chip-more::-webkit-details-marker { display: none; }
-.family .blog-chip-more::after { content: ""; width: 7px; height: 7px; margin-top: -3px; border: solid currentColor; border-width: 0 1.6px 1.6px 0; rotate: 45deg; transition: rotate .25s var(--ease), margin .25s; }
-.family .blog-topics-more[open] > .blog-chip-more::after { rotate: -135deg; margin-top: 3px; }
-.family .blog-topics-more > .blog-topics-row { margin-top: 10px; }
-
-/* the lead story dims (and a feed card hides) while a topic it does not cover is chosen */
-.family .blog-lead { opacity: var(--bx-dim, 1); filter: var(--bx-f, none); transition: opacity .3s, filter .3s; }
-
-.family .blog-feed { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 22px; }
-.family .blog-feed > li { display: var(--bx-off, block); grid-column: span 4; min-width: 0; margin: 0; }
-.family .blog-feed > .bf-half { grid-column: span 6; }
-.family .blog-feed > .bf-row { grid-column: 1 / -1; }
-.family .blog-feed > .bf-wide { grid-column: span 7; grid-row: span 2; }
-.family .blog-feed > .bf-side { grid-column: span 5; }
-.family .blog-empty { display: none; margin: 8px 0 0; padding: 18px 22px; border-radius: 18px; border: 1px dashed var(--line-3); background: var(--bg-2); font-size: 15px; color: var(--text-2); }
-/* a topic chosen: one even grid of standard cards */
-.family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: span 4; grid-row: auto; }
-
-/* wide: the image in a thin gradient frame, a larger title under it (unfiltered only) */
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media { aspect-ratio: auto; padding: 10px; border-bottom: 0;
-  background: radial-gradient(70% 80% at 0% 0%, rgb(var(--hue-a) / .42), transparent 62%), radial-gradient(70% 80% at 100% 100%, rgb(var(--hue-c) / .38), transparent 62%), radial-gradient(50% 60% at 85% 15%, rgb(var(--hue-b) / .26), transparent 70%), var(--bg-2); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media img { height: auto; aspect-ratio: 16 / 9; border-radius: 14px; box-shadow: 0 1px 0 rgb(255 255 255 / .8) inset, 0 24px 44px -26px rgb(var(--k-shadow-rgb) / .4); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide:hover .pc-media img { transform: scale(1.02); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-body { justify-content: center; padding: 24px 30px 28px; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-title { font-size: clamp(22px, 2.1vw, 28px); line-height: 1.15; letter-spacing: -.028em; font-weight: var(--fw-display); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-desc { font-size: 15.5px; -webkit-line-clamp: 4; }
-/* side: beside the wide card, image on the left */
-@media (min-width: 1001px) {
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-in { flex-direction: row; align-items: center; gap: 20px; padding: 16px 18px 16px 16px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-media { width: 44%; border: 0; border-radius: 13px; box-shadow: 0 0 0 1px var(--line); }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-body { padding: 0; gap: 8px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-title { font-size: 17.5px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-side .pc-desc { font-size: 14px; }
-}
-.family .pc-half .pc-title { font-size: 21px; }
-/* list rows: image on the left, text on the right, hairlines between */
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .bf-row { margin-top: -12px; padding-top: 6px; border-top: 1px solid var(--line-2); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-in { flex-direction: row; align-items: center; gap: 30px; padding: 18px 18px 18px 0; border-radius: 22px; background: transparent; box-shadow: none; transition: background-color .3s, box-shadow .35s; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover { transform: none; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover .pc-in { background: linear-gradient(90deg, rgb(var(--hue-a) / .09), rgb(var(--hue-b) / .05) 45%, transparent 80%); box-shadow: none; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 300px; border: 0; border-radius: 16px; box-shadow: var(--shadow-stack); transition: transform .35s var(--ease); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row:hover .pc-media { transform: translateX(6px); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-body { padding: 0; gap: 9px; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-title { font-size: 22px; line-height: 1.2; letter-spacing: -.025em; font-weight: var(--fw-display); }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-desc { max-width: 72ch; -webkit-line-clamp: 2; }
-.family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-go { padding-top: 2px; }
-
-@media (max-width: 1000px) {
-  .family .blog-feed { gap: 18px; }
-  .family .blog-feed > li, .family .blog-feed > :is(.bf-side, .bf-half) { grid-column: span 6; }
-  .family .blog-feed > :is(.bf-wide, .bf-row) { grid-column: 1 / -1; grid-row: auto; }
-  .family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: span 6; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 240px; }
-}
-@media (max-width: 640px) {
-  .family .blog-body { padding-bottom: 72px; }
-  .family .blog-topics > .blog-topics-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 6px; scrollbar-width: none; }
-  .family .blog-topics > .blog-topics-row::-webkit-scrollbar { display: none; }
-  .family .blog-chip { flex-shrink: 0; height: 44px; }
-  .family .blog-feed { gap: 16px; }
-  .family .blog-feed > li, .family .blog-feed > :is(.bf-side, .bf-half, .bf-wide), .family.blog-x:has(.blog-topic-in:checked:not(#tp-all)) .blog-feed > li { grid-column: 1 / -1; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-media { padding: 12px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-wide .pc-body { padding: 20px 20px 22px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-in { align-items: flex-start; gap: 14px; padding: 14px 0; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-media { width: 118px; margin-top: 4px; border-radius: 10px; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-title { font-size: 17px; line-height: 1.28; }
-  .family.blog-x:not(:has(.blog-topic-in:checked:not(#tp-all))) .pc-row .pc-desc { font-size: 14px; }
-  .family .pc-body { padding: 18px 20px 22px; }
-}
 
 /* ---------- 4. Post: reading progress ---------- */
 .family .post-progress { position: fixed; z-index: 49; inset: var(--top) 0 auto 0; height: 3px; pointer-events: none; }
@@ -216,9 +22,13 @@ html:not(.motion) .family .post-progress { display: none; }
 .family .post-hero { position: relative; isolation: isolate; overflow: clip; padding: calc(var(--nav-h) + 50px) 0 64px; }
 .family .post-hero::after { content: ""; position: absolute; z-index: 1; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgb(var(--hue-a) / .45) 22%, rgb(var(--hue-b) / .45) 50%, rgb(var(--hue-c) / .5) 78%, transparent); }
 .family .post-hero > .bd { -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+/* the Backdrop's glows anchored from the top here: the article hero settles its height as the web
+   fonts arrive, and a glow hung from the bottom (or at a % of the height) would move with it (CLS) */
+.family .post-hero > .bd > .bd-glow.b { bottom: auto; top: 380px; }
+.family .post-hero > .bd > .bd-glow.d { top: 300px; }
 .family .post-hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 780px); justify-content: center; gap: 36px; }
 .family .post-hero-text { min-width: 0; }
-.family .post-hero-text .crumbs { font-size: 13px; letter-spacing: 0; color: var(--mute); }
+.family .post-hero-text .crumbs { font-family: var(--font-body); font-size: 13px; letter-spacing: 0; color: var(--mute); }
 .family .post-hero-text .crumbs a { color: var(--mute); }
 .family .post-hero-text .crumbs a:hover { color: var(--text); }
 .family .post-hero-text .crumbs .cur { color: var(--text-2); }
@@ -301,6 +111,19 @@ html:not(.motion) .family .post-progress { display: none; }
 .family .post-prose .tablewrap > .cp-table { margin: 0; }
 .family .cp-table table.dtable { min-width: 100%; }
 @media (max-width: 720px) { .family .cp-table table.dtable { min-width: 0; } }
+/* wide comparison tables: headers wrap so the table fits the column; one that still has to scroll
+   shows a soft shadow on the edge with more table behind it (scroll-attached, no JS) */
+@media (min-width: 721px) {
+  .family .post-prose .cp-table:is([data-cols="4"], [data-cols="5"], [data-cols="6"], [data-cols="7"]) thead th { white-space: normal; min-width: 88px; line-height: 1.35; vertical-align: bottom; }
+  .family .post-prose .cp-table {
+    background:
+      linear-gradient(90deg, #fff 30%, rgb(255 255 255 / 0)) left / 32px 100% no-repeat local,
+      linear-gradient(270deg, #fff 30%, rgb(255 255 255 / 0)) right / 32px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgb(var(--k-shadow-rgb) / .16), transparent) left / 14px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgb(var(--k-shadow-rgb) / .16), transparent) right / 14px 100% no-repeat scroll,
+      #fff;
+  }
+}
 
 /* key points (a list whose every item opens with a bold lead-in): one card, a row per point */
 .family .post-prose .rs-keys { list-style: none; margin: 26px 0; padding: 6px 0; border-radius: 20px; background: #fff; box-shadow: var(--shadow-stack); }
@@ -389,7 +212,8 @@ html:not(.motion) .family .post-progress { display: none; }
 .family .post-ic-slot .tick svg { width: 13px; height: 13px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .family .post-ic-slot .l3 { flex: 1; height: 7px; border-radius: 99px; background: var(--line-2); }
 .family .post-ic-slot .go { width: 34px; height: 18px; border-radius: 99px; background: var(--k-accent); }
-.js.motion .family .post-ic-cal { animation: fam-blog-float 8s ease-in-out infinite; }
+.js.motion .family .post-ic-cal { animation: fam-post-float 8s ease-in-out infinite; }
+@keyframes fam-post-float { 50% { translate: 0 -8px; } }
 @media (max-width: 760px) {
   .family .post-ic { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 30px 22px 32px; border-radius: 24px; }
   .family .post-ic-art { display: none; }
@@ -408,8 +232,7 @@ html:not(.motion) .family .post-progress { display: none; }
 @media (max-width: 640px) { .family .post-related { padding: 56px 0 80px; } }
 .family .cp-grid.post-grid + .post-related { margin-top: 0; }
 
+
 @media (prefers-reduced-motion: reduce) {
-  .family :is(.pc, .pc-in, .pc-media img, .pc-go svg, .blog-chip, .rs-qa, .blog-lead) { transition: none; }
-  .family .pc:hover, .family .blog-chip:hover { transform: none; }
-  .family .pc:hover .pc-media img { transform: none; }
+  .family .rs-qa { transition: none; }
 }

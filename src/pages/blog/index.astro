@@ -10,12 +10,13 @@
 // Health's topic filter is kept as it was: a radio group from the posts' own tags that works
 // without JavaScript. CSS hides the cards a topic does not cover (rules generated below) and the
 // varied rows give way to an even grid of cards while a topic is chosen.
-// Styles: src/styles/family/blog.css.
+// Styles: src/styles/family/blog-index.css (and blog-cards.css, from BlogLayout).
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import PostCard from '../../family/blog/PostCard.astro';
 import Backdrop from '../../family/Backdrop.astro';
 import { getPublishedPosts } from '../../lib/blog';
 import { category, readMinutes } from './_post';
+import '../../styles/family/blog-index.css';
 
 const posts = await getPublishedPosts();
 

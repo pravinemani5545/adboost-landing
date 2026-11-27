@@ -1,0 +1,21 @@
+/* ================================================================
+   Override of the family Backdrop's grain (src/styles/family/content.css .bd-grain, and its copy in
+   blog-index.css) for the blog, glossary and tools pages.
+
+   The grain is drawn as a background image (a data-URI SVG noise) over the whole hero, so Chrome
+   counts it as an image candidate for Largest Contentful Paint: on a hero shorter than the screen
+   it becomes the page's LCP element and Lighthouse times it like an image download. Here the same
+   noise XX   alpha, faded out towards the bottom), but a mask is not an LCP candidate, so the page's LCP is
+   its text or its real image. Suggested for content.css itself (shared file, not edited here).
+   ================================================================ */
+.family .bd > i.bd-grain {
+  background: rgb(0 0 0 / .055);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(#000 45%, transparent 92%);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"), linear-gradient(#000 45%, transparent 92%);
+  -webkit-mask-size: 180px 180px, 100% 100%;
+  mask-size: 180px 180px, 100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
