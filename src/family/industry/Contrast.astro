@@ -1,0 +1,30 @@
+---
+// "Common mistakes" and "What good looks like" as two contrasting cards side by side: the
+// mistakes on a warm, muted card with a cross on each item, what good looks like on a lit card
+// with a tick. Both H2s keep their text and order (mistakes first), each heading its own card;
+// the caption under the pair is the one the page has always printed.
+import Icon from './Icon.astro';
+
+interface Props {
+  mistakes: { id: string; heading: string; items: string[] };
+  good: { id: string; heading: string; items: string[] };
+  caption: string;
+}
+const { mistakes, good, caption } = Astro.props;
+---
+<div class="ix-contrast">
+  <div class="ix-vs">
+    <section class="ix-vs-card is-no reveal" aria-labelledby={mistakes.id}>
+      <span class="ix-vs-lab"><span class="ix-vs-ic" aria-hidden="true"><Icon name="x" /></span>Common mistakes</span>
+      <h2 id={mistakes.id}>{mistakes.heading}</h2>
+      <ul>{mistakes.items.map((m, i) => <li style={`--i:${i}`}><span class="ix-vs-mk" aria-hidden="true"><Icon name="x" /></span><span>{m}</span></li>)}</ul>
+    </section>
+    <span class="ix-vs-mid" aria-hidden="true"><Icon name="arrow" /></span>
+    <section class="ix-vs-card is-yes reveal d1" aria-labelledby={good.id}>
+      <span class="ix-vs-lab"><span class="ix-vs-ic" aria-hidden="true"><Icon name="check" /></span>What good looks like</span>
+      <h2 id={good.id}>{good.heading}</h2>
+      <ul>{good.items.map((m, i) => <li style={`--i:${i}`}><span class="ix-vs-mk" aria-hidden="true"><Icon name="check" /></span><span>{m}</span></li>)}</ul>
+    </section>
+  </div>
+  <p class="ix-cap">{caption}</p>
+</div>

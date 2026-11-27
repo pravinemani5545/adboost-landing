@@ -1,0 +1,125 @@
+---
+// The drawing beside one growth-playbook step (Playbook.astro), in the family product-UI style.
+// Every label is a phrase of that step (plan.ts, checked at build); bars, curves and tiles are
+// shapes with no values. Decorative (aria-hidden), except the pathway: the chain the step prints
+// with arrows is a figure with the caption the page has always shown under it.
+import Icon from './Icon.astro';
+import { cap, type StepArt } from './plan';
+
+interface Props {
+  art: StepArt;
+  /** the vertical's pathway, for a flow drawn from it (kind flow with no stages of its own) */
+  pathway?: string[];
+  /** the caption of the pathway figure */
+  caption?: string;
+}
+const { art, pathway = [], caption } = Astro.props;
+const isPath = art.kind === 'flow' && art.stages.length === 0;
+const stages = art.kind === 'flow' ? (isPath ? pathway.map(cap) : art.stages) : [];
+// bar shapes for the channel mix: the first channel the step names leads, the rest follow
+const MIX = [92, 70, 54, 42, 34];
+const TONES = ['', 'b', 'c', '', 'b'];
+---
+{art.kind === 'mix' && (
+  <div class="ixs ixs-mix ui" aria-hidden="true">
+    <div class="ui-bar"><span class="cp-dots"><i></i><i></i><i></i></span><span class="ixs-bar-sk"><i></i><i></i></span></div>
+    <ul class="ixs-rows">
+      {art.rows.map((r, i) => (
+        <li class:list={[r.tone === 'off' && 'is-off']} style={`--i:${i}`}>
+          <span class:list={['ui-ic', r.tone === 'off' ? 'warn' : TONES[i]]}><Icon name={r.icon} /></span>
+          <span class="ixs-name"><b>{r.name}</b>{r.role && <small>{r.role}</small>}</span>
+          {r.tone === 'off'
+            ? <span class="ixs-off"><Icon name="ban" /></span>
+            : <span class="ixs-meter"><i class="ui-fill" style={`width:${MIX[i] ?? 30}%`}></i></span>}
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+{art.kind === 'search' && (
+  <div class="ixs ixs-search ui" aria-hidden="true">
+    <div class="ixs-q"><Icon name="search" /><span>{art.queries[0]}</span><i class="ixs-caret"></i></div>
+    <ul class="ixs-sugg">
+      {art.queries.map((q, i) => <li style={`--i:${i}`}><Icon name="search" /><span>{q}</span></li>)}
+    </ul>
+    <div class="ixs-res">
+      <span class="ixs-res-tag"></span><i class="ixs-res-t"></i><i class="ixs-res-l"></i><i class="ixs-res-l s"></i>
+    </div>
+  </div>
+)}
+
+{art.kind === 'hooks' && (
+  <div class="ixs ixs-hooks" aria-hidden="true">
+    {[0, 1, 2].map((i) => (
+      <div class:list={['ixs-ad', i === 1 && 'is-win']} style={`--i:${i}`}>
+        <span class="ixs-ad-top"><i class="ixs-av"></i><i></i></span>
+        <span class="ixs-ad-img">
+          {art.hooks[i] ? <span class="ixs-ad-hook">{art.hooks[i]}</span> : <span class="ixs-play"><Icon name="play" /></span>}
+        </span>
+        <span class="ixs-ad-bot"><i></i><i class="go"></i></span>
+      </div>
+    ))}
+  </div>
+)}
+
+{art.kind === 'flow' && (
+  isPath ? (
+    <figure class="ixs ixs-flow is-path">
+      <ol class="ixs-chain" style={`--n:${stages.length}`}>
+        {stages.map((s, i) => (
+          <li style={`--i:${i}`}><span class="ixs-node">{i === stages.length - 1 ? <Icon name="check" /> : <b aria-hidden="true">{i + 1}</b>}</span><span class="ixs-stage">{s}</span></li>
+        ))}
+      </ol>
+      {caption && <figcaption>{caption}</figcaption>}
+    </figure>
+  ) : (
+    <div class="ixs ixs-flow" aria-hidden="true">
+      <ol class="ixs-chain" style={`--n:${stages.length}`}>
+        {stages.map((s, i) => (
+          <li style={`--i:${i}`}><span class="ixs-node">{i === stages.length - 1 ? <Icon name="check" /> : <b>{i + 1}</b>}</span><span class="ixs-stage">{s}</span></li>
+        ))}
+      </ol>
+    </div>
+  )
+)}
+
+{art.kind === 'curve' && (
+  <div class="ixs ixs-curve ui" aria-hidden="true">
+    <div class="ui-bar"><span class="cp-dots"><i></i><i></i><i></i></span><span class="ixs-bar-sk"><i></i><i></i></span></div>
+    <div class="ixs-plot">
+      <svg viewBox="0 0 300 130" preserveAspectRatio="none">
+        <rect class="ixs-zone" x="0" y="0" width="92" height="130" />
+        <path class="ixs-grid" d="M0 32.5H300M0 65H300M0 97.5H300" />
+        <path class="ixs-area" d="M0 12 C30 14 60 48 92 70 S180 92 300 98 V130 H0 Z" />
+        <path class="ixs-line" d="M0 12 C30 14 60 48 92 70 S180 92 300 98" pathLength="1" />
+        <path class="ixs-line2" d="M0 12 C40 13 80 22 120 30 S220 40 300 44" pathLength="1" />
+      </svg>
+      <span class="ixs-note"><Icon name="alert" />{art.note}</span>
+    </div>
+  </div>
+)}
+
+{art.kind === 'stack' && (
+  <div class="ixs ixs-stack" aria-hidden="true">
+    {art.layers.map((l, i) => (
+      <span class="ixs-layer" style={`--i:${i};--w:${100 - (art.layers.length - 1 - i) * 9}%`}><i class="ixs-layer-ic"><Icon name={i === art.layers.length - 1 ? 'spark' : 'layers'} /></i>{l}</span>
+    ))}
+  </div>
+)}
+
+{art.kind === 'cycle' && (
+  <div class="ixs ixs-cycle" aria-hidden="true">
+    <div class="ixs-ring">
+      <svg viewBox="0 0 200 200">
+        <circle class="ixs-track" cx="100" cy="100" r="78" />
+        <circle class="ixs-arc" cx="100" cy="100" r="78" pathLength="100" />
+        <g class="ixs-spin"><circle class="ixs-dot" cx="100" cy="22" r="7" /></g>
+      </svg>
+      <span class="ixs-center"><Icon name="refresh" /><b>{art.center}</b></span>
+    </div>
+    <ul class="ixs-nodes">
+      {art.nodes.map((n, i) => <li style={`--i:${i}`}><i></i>{n}</li>)}
+    </ul>
+  </div>
+)}

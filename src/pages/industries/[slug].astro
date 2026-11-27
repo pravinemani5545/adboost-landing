@@ -1,20 +1,44 @@
 ---
+// /industries/<slug>/ on the AdBoost family design: the port of adboost-media's vertical page
+// (src/components/page/IndustryPage.astro and src/components/industry/*) onto Health's family
+// layer (src/family, class="family", tokens.css + content.css), in Health's blue, indigo and cyan.
+// Every heading, sentence, FAQ, link and JSON-LD node is the one this page had on the old
+// interior layout, in the same order; only the layout and the graphics are new.
+//
+//   hero     H1 with its serif accent, lede, buttons, trust line; the short answer and the
+//            segments on a raised card; the vertical snapshot window with a phone (a matching
+//            ad creative, the intake or a booking calendar) and chips (src/family/industry/Hero)
+//   guide    the buyer questions as chapters beside the sticky "On this page" rail
+//   band     the market paragraph as the dark band, its own moments on a numbered rail
+//   body     the growth playbook as a step track with a drawing per step, the ad rules (callout,
+//            review panel, platform status cards), mistakes and what good looks like as two cards
+//   end      services bento, FAQ cards, related posts, sources, the old sidebar as rail cards,
+//            the closing card (.cta-band)
+// Layout decisions per vertical (creative, chips, timeline, step drawings, flags) live in
+// src/family/industry/plan.ts, every label checked against this page's copy at build time.
+import '../../styles/family/tokens.css';
+import '../../styles/family/content.css';
+import '../../styles/family/industry.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import CtaBand from '../../components/CtaBand.astro';
-import Faq from '../../components/Faq.astro';
-import Toc from '../../components/Toc.astro';
-import StatusBadge from '../../components/adv/StatusBadge.astro';
-import { SERVICE_ART } from '../../components/serviceArt';
-import Snapshot from './_Snapshot.astro';
-import Flow from '../../kit/diagram/Flow.astro';
-import Compare from '../../kit/diagram/Compare.astro';
+import Toc from '../../family/Toc.astro';
+import InlineCta from '../../family/InlineCta.astro';
+import Hero from '../../family/industry/Hero.astro';
+import Snapshot from '../../family/industry/Snapshot.astro';
+import Phone from '../../family/industry/Phone.astro';
+import Chapter from '../../family/industry/Chapter.astro';
+import MarketBand from '../../family/industry/MarketBand.astro';
+import Playbook from '../../family/industry/Playbook.astro';
+import Rules from '../../family/industry/Rules.astro';
+import Contrast from '../../family/industry/Contrast.astro';
+import Services from '../../family/industry/Services.astro';
+import Faq from '../../family/industry/Faq.astro';
+import Reading from '../../family/industry/Reading.astro';
+import { PLANS, checkPlan } from '../../family/industry/plan';
 import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook, type Source } from '../../data/vertical-playbooks';
 import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
 import { PLATFORMS, STATUS_TONE, policyHref } from '../../components/adv/status';
-import '../../styles/pages/chapters.css';
-import '../../styles/pages/industries.css';
+import { cacNotes, miniScale } from './_cac';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { getPublishedPosts } from '../../lib/blog';
@@ -29,6 +53,9 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const v = getVertical(slug!)!;
 const pb = getPlaybook(v.slug)!;
+const plan = PLANS[v.slug];
+if (!plan) throw new Error(`[industries/${v.slug}] no layout plan in src/family/industry/plan.ts`);
+checkPlan(v, pb, plan);
 const SITE = siteBase(Astro.site);
 const path = `/industries/${v.slug}/`;
 const title = seoTitle(path, v.seoTitle ?? `${v.short} Marketing Agency | AdBoost Health`);
@@ -104,18 +131,22 @@ const services = [
   { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/', art: 'creative' },
   { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/', art: 'cro' },
 ];
-// Vertical snapshot (hero aside) and the body diagrams. Every string and number below comes
-// from verticals.ts, vertical-playbooks.ts or adPolicies.ts as printed on the site.
-const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Every string and number below comes from verticals.ts, vertical-playbooks.ts or adPolicies.ts
+// as printed on the site.
 const guides = [...platformGuides].sort((a, b) => PLATFORMS.indexOf(a.platform) - PLATFORMS.indexOf(b.platform));
-const strip = guides.map((p) => ({ label: p.platform, status: STATUS_LABEL[p.status], level: STATUS_TONE[p.status], href: policyHref(p) }));
-// The hero strip shows each platform's status; the body links each rule sheet under the callout,
-// skipping one the callout already links.
-const ruleLinks = guides.filter((p) => policyHref(p) !== verticalBlog.href);
+const strip = guides.map((p) => ({ label: p.platform, status: STATUS_LABEL[p.status], level: STATUS_TONE[p.status] }));
 const checkedLabel = new Date(`${RULES_CHECKED_ON}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+// The platform status cards: every rule sheet; the one the callout already links keeps its
+// status and drops its own link (the old page skipped that card for the same reason).
+const ruleCards = guides.map((p) => ({
+  platform: p.platform,
+  status: p.status,
+  label: `${p.vertical} ads on ${p.platform}: what is allowed`,
+  href: policyHref(p) !== verticalBlog.href ? policyHref(p) : undefined,
+}));
+const PILL_TONE: Record<string, string> = { allowed: 'ok', restricted: 'warn', cert: '', prohibited: 'bad' };
 
 // The funnel path: only a chain the copy already prints with arrows (see Playbook.pathway).
-// It is drawn under the step that prints it.
 const pathway = pb.pathway?.length ? pb.pathway : undefined;
 const pathStep = pathway
   ? pb.growthPlaybook.findIndex((s) => s.h.includes(pathway.join(' → ')) || s.p.includes(pathway.join(' → ')))
@@ -123,6 +154,26 @@ const pathStep = pathway
 if (pathway && pathStep < 0) {
   throw new Error(`[industries/${v.slug}] pathway "${pathway.join(' → ')}" is not printed in any growth playbook step`);
 }
+const flowAt = plan.steps.findIndex((s) => s.kind === 'flow' && s.stages.length === 0);
+if (flowAt !== pathStep) throw new Error(`[industries/${v.slug}] plan.ts draws the pathway at step ${flowAt + 1}, the copy prints it at step ${pathStep + 1}`);
+
+// The hero chips: one of the page's segments, and the first platform status (or the trust
+// line's typical CAC where the vertical has no rule sheets).
+const chips = [
+  { title: plan.segment, label: 'Segments we work in', icon: 'users', tone: 'b' as const },
+  strip[0]
+    ? { title: strip[0].label, label: strip[0].status, icon: 'shield', tone: 'g' as const }
+    : { title: v.cacDisplay, label: 'Typical CAC', icon: 'gauge', tone: 'g' as const },
+];
+
+// The at-a-glance card draws this vertical's CAC on the same axis as the snapshot.
+const scale = miniScale(VERTICALS);
+const glanceSegs = scale.segs(v.cacLow, v.cacHigh);
+
+// Headings split for their serif accents (text unchanged).
+const marketH = `What is changing in the ${v.inline} market in 2026?`;
+const servicesLead = 'What does AdBoost Health do for';
+const servicesAccent = `${v.inline} brands?`;
 
 const toc = [
   ...pb.questions.map((q) => ({ id: q.id, label: q.nav })),
@@ -136,168 +187,109 @@ const toc = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd}>
-  <PageHero
-    class="ind-hero"
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]}
-    eyebrow={v.category}
-    title={esc(v.h1)}
-    lede={esc(v.lede)}
-    art="/art/industries/hub"
-  >
-    <div class="phero-meta">
-      <span>Typical CAC {v.cacDisplay}</span>
-      <span>Compliance-first</span>
-      <span>Setup in 5 days</span>
-      {updatedLabel && <span>Updated <time datetime={updated}>{updatedLabel}</time></span>}
-    </div>
-    <div slot="aside" class="k-card k-card--float k-card--glass ind-snap ind-snap--hero">
-      <Snapshot slug={v.slug} short={v.short} strip={strip} checkedLabel={checkedLabel} />
-    </div>
-  </PageHero>
+  <div class="family ix" data-ind={v.slug}>
+    <div class="read-bar" aria-hidden="true"></div>
 
-  <section class="iwrap ind-doc">
-    <div class="container">
-      <div class="doc-grid k-scrub-scope">
-        <div class="doc-main ch-doc">
-          <div class="answer-box">
-            <span class="al">The short answer</span>
-            {v.summary} {v.proofLine} We only work in health, so the playbook, creative and policy review are built for {v.inline} brands.
-            {listicle && <span class="ind-listicle">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
-          </div>
-          {/* below 1024px the hero has no aside: the snapshot follows the short answer instead */}
-          <div class="k-card k-card--raised ind-snap ind-snap--body">
-            <Snapshot slug={v.slug} short={v.short} strip={strip} checkedLabel={checkedLabel} />
-          </div>
-          <div class="ind-segs">
-            <p class="ind-snap__label">Segments we work in</p>
-            <ul class="ind-chips">{pb.subSegments.map((s) => <li class="k-chip">{s}</li>)}</ul>
-          </div>
-          <div class="prose">
-            {pb.questions.map((q) => (
-              <>
-                <h2 id={q.id}>{q.q}</h2>
-                <Fragment set:html={q.html} />
-              </>
-            ))}
+    <Hero
+      crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries', href: '/industries/' }, { label: v.short }]}
+      eyebrow={v.category}
+      h1={v.h1}
+      lede={v.lede}
+      meta={[`Typical CAC ${v.cacDisplay}`, 'Compliance-first', 'Setup in 5 days']}
+      updated={updated && updatedLabel ? { iso: updated, label: updatedLabel } : undefined}
+      segments={pb.subSegments}
+      chips={chips}
+    >
+      <Fragment slot="answer">
+        <span class="pg-answer-lab">The short answer</span>
+        {`${v.summary} ${v.proofLine} We only work in health, so the playbook, creative and policy review are built for ${v.inline} brands.`}
+        {listicle && <span class="ix-listicle">{listicle.lead} <a href={listicle.href}>{listicle.anchor}</a>.</span>}
+      </Fragment>
+      <Phone slot="phone" creative={plan.creative} stages={plan.phone?.kind === 'intake' ? pathway : undefined} booking={plan.phone?.kind === 'booking' ? plan.phone.label : undefined} />
+      <Snapshot
+        slot="stage"
+        current={v.slug}
+        title="Vertical snapshot"
+        pill="Typical CAC"
+        caption={`Typical CAC by vertical, as each industry page quotes it, with ${v.short} lit. ${cacNotes(VERTICALS)}`}
+        strip={strip}
+        stripCaption={`${v.short} ad rules on each platform, from our rule sheets (checked ${checkedLabel}).`}
+      />
+    </Hero>
 
-            <h2 id="market">What is changing in the {v.inline} market in 2026?</h2>
-            <div class="ch-night ind-market" data-reveal>
-              <span class="ind-market__mark" aria-hidden="true"><svg viewBox="0 0 120 40" fill="none"><path d="M2 34 C20 32 30 24 44 24 S70 30 84 16 S108 8 118 4" stroke="url(#indmk)" stroke-width="2.2" stroke-linecap="round" pathLength="1" class="k-draw"/><defs><linearGradient id="indmk" x1="0" x2="1"><stop offset="0" style="stop-color:var(--k-accent-bright)"/><stop offset="1" style="stop-color:rgb(var(--hue-c))"/></linearGradient></defs></svg></span>
-              <p>{pb.marketContext}</p>
-            </div>
-
-            <h2 id="playbook">How do {v.inline} brands grow profitably?</h2>
-            <p>{v.painPoint}</p>
-            <ol class="ind-steps" data-draw>
-              {pb.growthPlaybook.map((s, i) => (
-                <li class="ind-step" style={`--i:${i}`}>
-                  <span class="ind-step__n" aria-hidden="true">{i + 1}</span>
-                  <div class="ind-step__body ch-card">
-                    <h3>{s.h}</h3>
-                    <p>{s.p}</p>
-                    {i === pathStep && pathway && (
-                      <Flow
-                        class="ind-path"
-                        numbered={false}
-                        pulse
-                        caption={`Step ${i + 1} as a path, each stage in the playbook’s own words.`}
-                        nodes={pathway.map((label) => ({ label: label.charAt(0).toUpperCase() + label.slice(1) }))}
-                      />
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ol>
-
-            <h2 id="landmine">Which ad rules and claims trip up {v.inline} brands?</h2>
-            <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
-            {ruleLinks.length > 0 && (
-              <ul class="ind-rulelinks ch-stagger">
-                {ruleLinks.map((p) => (
-                  <li data-reveal>
-                    <a class="ind-rule-card" href={policyHref(p)}>
-                      <span class="ind-rule-card__top"><span class="ind-rule-card__pf" aria-hidden="true">{p.platform.charAt(0)}</span><StatusBadge status={p.status} /></span>
-                      <span class="ind-rule-card__t">{p.vertical} ads on {p.platform}: what is allowed<span aria-hidden="true"> →</span></span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <div class="ind-cmp">
-              <div class="ind-cmp__heads">
-                <h2 id="mistakes">What are the most common {v.inline} marketing mistakes?</h2>
-                <h2 id="good">What does good performance look like for {v.inline} brands?</h2>
-              </div>
-              <Compare
-                variant="split"
-                caption={`The ${v.inline} mistakes we see most, set against what good performance looks like.`}
-                left={{ label: 'Common mistakes', items: pb.commonMistakes }}
-                right={{ label: 'What good looks like', items: pb.whatGoodLooksLike }}
-              />
-            </div>
-
-            <h2 id="services">What does AdBoost Health do for {v.inline} brands?</h2>
-            <div class="ind-svc ch-stagger">
-              {services.map((s) => (
-                <a class="lcard ind-svc__card" href={s.href} data-reveal>
-                  <span class="ch-art" aria-hidden="true" set:html={SERVICE_ART[s.art]} />
-                  <h3>{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span>
-                </a>
-              ))}
-            </div>
-
-            <h2 id="faq">{v.short} marketing FAQ</h2>
-            <div class="ch-panel ch-card"><Faq items={faqAll} idPrefix={`ind-${v.slug}`} /></div>
-
-            {relatedPosts.length > 0 && (
-              <>
-                <h3 id="related">Related posts</h3>
-                <div class="related-grid ind-cards">
-                  {relatedPosts.map(({ p, href }) => (
-                    <a class="lcard" href={href}><h3>{p.data.title}</h3><p>{p.data.description}</p><span class="lc-more">Read the post →</span></a>
-                  ))}
-                </div>
-              </>
-            )}
-
-            <h3>Sources</h3>
-            <div class="ch-src">
-              <p class="ind-src-note">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
-              <ul class="ind-src-list">
-                {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
-              </ul>
-            </div>
-          </div>
+    <section class="ix-guide">
+      <div class="container ix-guide-grid">
+        <div class="ix-guide-rail"><div class="ix-rail-box"><Toc items={toc} /></div></div>
+        <div class="ix-guide-main">
+          {pb.questions.map((q) => <Chapter id={q.id} q={q.q} html={q.html} sources={q.sources} art={plan.questions?.[q.id]} />)}
         </div>
-
-        <aside class="doc-aside">
-          <Toc items={toc} />
-          <div class="aside-card">
-            <h4>{v.short} at a glance</h4>
-            <div class="link-list">
-              <a href="/glossary/cac/">Typical CAC {v.cacDisplay} →</a>
-              <a href="/tools/cac-calculator/">Benchmark your CAC</a>
-              <a href="/tools/ltv-cac-calculator/">Check your LTV:CAC</a>
-            </div>
-          </div>
-          {platformGuides.length > 0 && (
-            <div class="aside-card">
-              <h4>Platform compliance guides</h4>
-              <div class="link-list">
-                {platformGuides.map((p) => <a href={`/advertising/${p.slug}/`}>{p.vertical} ads on {p.platform}: what is allowed</a>)}
-              </div>
-            </div>
-          )}
-          <div class="aside-card night">
-            <h4>Lower CAC on your {v.inline} brand</h4>
-            <p>Free audit with a senior strategist: a written plan you keep either way.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <CtaBand heading={`Ready to lower CAC on your ${v.inline} brand?`} />
+    <MarketBand
+      id="market"
+      lead={marketH.replace(/ in 2026\?$/, '')}
+      accent="in 2026?"
+      text={pb.marketContext}
+      timeline={plan.timeline}
+    />
+
+    <section class="ix-guide ix-guide-b">
+      <div class="container ix-wide">
+        <Playbook
+          id="playbook"
+          heading={`How do ${v.inline} brands grow profitably?`}
+          intro={v.painPoint}
+          steps={pb.growthPlaybook}
+          arts={plan.steps}
+          pathway={pathway}
+          pathStep={pathStep}
+        />
+        <Rules
+          id="landmine"
+          heading={`Which ad rules and claims trip up ${v.inline} brands?`}
+          landmine={v.adLandmine}
+          guide={verticalBlog}
+          flags={plan.flags}
+          cards={ruleCards}
+        />
+        <Contrast
+          mistakes={{ id: 'mistakes', heading: `What are the most common ${v.inline} marketing mistakes?`, items: pb.commonMistakes }}
+          good={{ id: 'good', heading: `What does good performance look like for ${v.inline} brands?`, items: pb.whatGoodLooksLike }}
+          caption={`The ${v.inline} mistakes we see most, set against what good performance looks like.`}
+        />
+      </div>
+    </section>
+
+    <Services id="services" lead={servicesLead} accent={servicesAccent} items={services} creatives={['/ads/nectar.webp', '/ads/cabo.webp', '/ads/limitless.webp']} />
+
+    <Faq id="faq" lead={`${v.short} marketing`} accent="FAQ" items={faqAll} idPrefix={`ind-${v.slug}`} />
+
+    <Reading
+      posts={relatedPosts.map(({ p, href }) => ({ href, title: p.data.title, description: p.data.description }))}
+      sourcesNote="Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice."
+      sources={sources}
+      glance={{
+        heading: `${v.short} at a glance`,
+        cac: v.cacDisplay,
+        segs: glanceSegs,
+        approx: v.cacDisplay.trim().startsWith('~'),
+        open: v.cacDisplay.trim().endsWith('+'),
+        links: [
+          { href: '/glossary/cac/', label: `Typical CAC ${v.cacDisplay} →` },
+          { href: '/tools/cac-calculator/', label: 'Benchmark your CAC' },
+          { href: '/tools/ltv-cac-calculator/', label: 'Check your LTV:CAC' },
+        ],
+      }}
+      guides={{
+        heading: 'Platform compliance guides',
+        links: platformGuides.map((p) => ({ href: `/advertising/${p.slug}/`, label: `${p.vertical} ads on ${p.platform}: what is allowed`, status: STATUS_LABEL[p.status], tone: PILL_TONE[p.status] })),
+      }}
+      night={{ heading: `Lower CAC on your ${v.inline} brand`, text: 'Free audit with a senior strategist: a written plan you keep either way.' }}
+    />
+
+    <section class="ix-end">
+      <div class="container"><InlineCta heading={`Ready to lower CAC on your ${v.inline} brand?`} /></div>
+    </section>
+  </div>
 </BaseLayout>

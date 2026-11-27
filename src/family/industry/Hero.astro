@@ -1,0 +1,94 @@
+---
+// The industry hero (port of adboost-media IndustryPage's hero, Stage and stat card).
+//
+// A full-width band (family Backdrop: dots, line grid, aura in Health's three hues) holding, in
+// reading order:
+//   head   crumbs, the category eyebrow, the H1 with its serif accent, the lede, two buttons
+//          (Book a call, and the growth playbook further down) and the trust line;
+//   lead   the short answer and the segments the page works in, on one raised card: Media's stat
+//          card position, under the head across the full width;
+//   stage  the page's graphic: the vertical snapshot window (the page's own CAC and platform
+//          data), with a phone behind it (a matching ad creative, the vertical's intake or a
+//          booking calendar) and two floating chips (a segment, a platform status).
+// The grid puts the stage beside the head from 1080px, but in the HTML it follows the answer,
+// so the answer comes before any graphic in reading order (and on phones).
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ButtonLink from '../../components/site/ButtonLink.astro';
+import Backdrop from '../Backdrop.astro';
+import Chip from '../graphics/Chip.astro';
+import { BOOK_PATH } from '../../lib/site';
+
+interface Props {
+  crumbs: { label: string; href?: string }[];
+  eyebrow: string;
+  h1: string;
+  lede: string;
+  /** the trust line under the buttons */
+  meta: string[];
+  updated?: { iso: string; label: string };
+  segments: string[];
+  chips: { title: string; label?: string; icon: string; tone?: '' | 'b' | 'c' | 'g' | 'ok' | 'warn' }[];
+}
+const { crumbs, eyebrow, h1, lede, meta, updated, segments, chips } = Astro.props;
+const words = h1.trim().split(/\s+/);
+const h1Lead = words.slice(0, -2).join(' ');
+const h1Tail = words.slice(-2).join(' ');
+const CHIP_AT = ['left:-30px;bottom:22px', 'left:-24px;top:-10px'];
+---
+<header class="cp-hero ix-hero" data-spot>
+  <Backdrop texture={['dots', 'grid']} spotlight focus={['74%', '30%']} />
+  <div class="container ix-hero-grid">
+    <div class="cp-head ix-head">
+      <Breadcrumbs items={crumbs} />
+      <span class="kicker arrive"><span class="k-dot" aria-hidden="true"></span>{eyebrow}</span>
+      <h1 class="arrive">{h1Lead} <span class="serif">{h1Tail}</span></h1>
+      <p class="ix-lede arrive" style="--d:60ms">{lede}</p>
+      <div class="ix-cta arrive" style="--d:90ms">
+        <ButtonLink href={BOOK_PATH} size="lg" arrow>Book a call</ButtonLink>
+        <ButtonLink href="#playbook" size="lg" variant="outline">The growth playbook</ButtonLink>
+      </div>
+      <p class="ix-trust arrive" style="--d:110ms">
+        {meta.map((m) => <span>{m}</span>)}
+        {updated && <span>Updated <time datetime={updated.iso}>{updated.label}</time></span>}
+      </p>
+    </div>
+
+    <div class="ix-top arrive" style="--d:130ms">
+      <div class="ix-answer">
+        <slot name="answer" />
+      </div>
+      <div class="ix-segs">
+        <p class="ix-segs-lab">Segments we work in</p>
+        <ul class="ix-chips">{segments.map((s, i) => <li style={`--i:${i}`}>{s}</li>)}</ul>
+      </div>
+    </div>
+
+    <div class="ix-stage stage arrive" style="--d:150ms" data-ix-par>
+      <span class="stage-plate" aria-hidden="true"></span>
+      <span class="stage-ring" aria-hidden="true"></span>
+      <div class="ix-par ix-par-back" style="--dp:1.6"><slot name="phone" /></div>
+      <div class="ix-stage-main"><slot name="stage" /></div>
+      <div class="ix-par" style="--dp:2.2" aria-hidden="true">
+        {chips.map((c, i) => <Chip title={c.title} label={c.label} icon={c.icon} tone={c.tone} class={`ix-chip-${i}`} style={CHIP_AT[i]} />)}
+      </div>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  // The stage's back layers drift a little with the pointer (industry.css reads --px / --py).
+  // Fine pointers with motion on only; reduced motion and low-power devices stay still.
+  (function () {
+    var root = document.documentElement.classList;
+    var st = document.querySelector('[data-ix-par]');
+    if (!st || !root.contains('motion') || root.contains('lowpower') || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var hero = st.closest('header') || st, raf = 0, x = 0, y = 0;
+    function set() { raf = 0; st.style.setProperty('--px', x.toFixed(3)); st.style.setProperty('--py', y.toFixed(3)); }
+    hero.addEventListener('pointermove', function (e) {
+      var r = hero.getBoundingClientRect();
+      x = (e.clientX - r.left) / r.width - .5; y = (e.clientY - r.top) / r.height - .5;
+      if (!raf) raf = requestAnimationFrame(set);
+    }, { passive: true });
+    hero.addEventListener('pointerleave', function () { x = 0; y = 0; if (!raf) raf = requestAnimationFrame(set); });
+  })();
+</script>

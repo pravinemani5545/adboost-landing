@@ -1,0 +1,76 @@
+---
+// One buyer question of an industry page as a chapter (port of adboost-media
+// src/components/industry/Chapter.astro). The H2 and every block of the answer render in their
+// original order; only the shape changes:
+//   - a numbered tile beside the H2 (the number is CSS, never text);
+//   - the first paragraph, which answers the question, raised as a lead card;
+//   - tables as family card tables (cp-table: rounded frame, tinted header, data-label cells that
+//     stack as cards on phones), with a platform tile on Meta / Google / TikTok rows;
+//   - when the question cites platform policies, a rail card beside the text lists them (the
+//     same documents, linked, as in the page's Sources), or a row under a table;
+//   - a question with neither gets a drawing under its answer (plan.ts `questions`, every label
+//     a phrase of the answer).
+import Icon from './Icon.astro';
+import StepArt from './StepArt.astro';
+import { topBlocks, tableCard } from '../chapterize';
+import type { StepArt as Art } from './plan';
+
+interface Props {
+  id: string;
+  q: string;
+  html: string;
+  sources?: { label: string; url: string }[];
+  art?: Art;
+}
+const { id, q, html, sources = [], art } = Astro.props;
+
+const PF: Record<string, string> = { Meta: 'feed', Google: 'search', TikTok: 'video' };
+const ICON_SVG: Record<string, string> = {
+  feed: '<rect x="5" y="3.5" width="14" height="17" rx="2.5"/><rect x="8" y="7" width="8" height="6.5" rx="1.2"/><path d="M8 16.5h5"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 4.5 4.5"/>',
+  video: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="M10.5 9.5v5l4.2-2.5z" fill="currentColor" stroke="none"/>',
+};
+const pfTile = (name: string) => `<span class="ix-pf" aria-hidden="true"><svg class="gi" viewBox="0 0 24 24">${ICON_SVG[PF[name]]}</svg></span>`;
+
+let firstP = true;
+const blocks = topBlocks(html).map((b) => {
+  if (b.tag === 'p' && firstP) { firstP = false; return b.html.replace(/^<p>/, '<p class="ix-lead">'); }
+  if (b.tag === 'div' && /class="tablewrap"/.test(b.attrs)) {
+    const t = b.html.slice(b.html.indexOf('>') + 1, b.html.lastIndexOf('</div>'));
+    // a platform tile before Meta / Google / TikTok in a row's first cell
+    return tableCard(t).replace(/(<td class="row-h"[^>]*>)(Meta|Google|TikTok)(<\/td>)/g, (_, a, n, c) => `${a}<span class="ix-pf-cell">${pfTile(n)}${n}</span>${c}`);
+  }
+  return b.html;
+});
+// the answer's first block (the lead card) and the rest, so a drawing can sit between them
+const lead = blocks[0] ?? '';
+const rest = blocks.slice(1).join('');
+// beside the text when the answer is prose; under it when the answer carries a table (the table
+// keeps the full column)
+const side = sources.length > 0 && !/<table/.test(html);
+---
+<section class:list={['ix-ch', side && 'has-side']} aria-labelledby={id}>
+  <header class="ix-ch-head reveal">
+    <span class="ix-ch-n" aria-hidden="true"></span>
+    <h2 id={id}>{q}</h2>
+  </header>
+  <div class="ix-ch-body">
+    <div class="ix-ch-text">
+      <div class="pg-prose" set:html={lead} />
+      {art && <div class="ix-ch-art reveal"><StepArt art={art} /></div>}
+      {rest && <div class="pg-prose" set:html={rest} />}
+    </div>
+    {sources.length > 0 && (
+      <aside class:list={['ix-ch-side', 'reveal', side ? 'd1' : 'is-row']} aria-label="Sources">
+        <div class="ix-docs">
+          <p class="ix-docs-lab"><Icon name="shield" />Sources</p>
+          <ul>
+            {sources.map((s) => (
+              <li><a href={s.url} target="_blank" rel="noopener"><span class="ix-doc-ic" aria-hidden="true"><Icon name="doc" /></span><span>{s.label}</span></a></li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    )}
+  </div>
+</section>
