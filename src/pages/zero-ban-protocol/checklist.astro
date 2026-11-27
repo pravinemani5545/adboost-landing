@@ -3,6 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { siteBase } from '../../lib/site';
 import { isLive } from '../../lib/live';
 import { breadcrumb } from '../../lib/schema';
+import Backdrop from '../../family/landing/Backdrop.astro';
+import '../../styles/family/landing.css';
 
 const SITE = siteBase(Astro.site);
 const path = '/zero-ban-protocol/checklist/';
@@ -18,7 +20,8 @@ const MDP = 'https://transparency.meta.com/policies/ad-standards/restricted-good
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Zero-Ban Protocol', href: path }])];
 ---
 <BaseLayout {title} {description} canonicalPath={path} {jsonLd} noindex={true}>
-  <section class="zbc">
+  <section class="zbc fl" data-pointer>
+    <div class="zbc-band" aria-hidden="true"><Backdrop spotlight focus={['60%', '30%']} /></div>
     <div class="zbc-wrap">
       <header class="zbc-head">
         <span class="zbc-eyebrow">THE ZERO-BAN PROTOCOL</span>
@@ -41,6 +44,8 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
         <p>Bans aren&rsquo;t random. Meta is a social platform, and its whole job is keeping people on it and feeling good while they&rsquo;re there. Every rejection you&rsquo;ll ever get traces back to something that threatened that experience. Get that frame and the rest of this protocol makes sense.</p>
       </div>
 
+      <div class="zbc-track k-scrub-scope">
+      <span class="fl-rail zbc-line" aria-hidden="true"><i class="k-spine"></i></span>
       <ol class="zbc-steps">
         <li class="zbc-cp" id="lane">
           <div class="zbc-rail"><span class="zbc-code">00</span></div>
@@ -145,6 +150,7 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
           </div>
         </li>
       </ol>
+      </div>
 
       <div class="zbc-recap reveal">
         <span class="zbc-recap-label">The 6 triggers we design around</span>
@@ -273,5 +279,37 @@ const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'The Ze
       .zbc-cta-status { color:#16a34a; }
       a { color:#0057ff !important; text-decoration:none; }
     }
+  </style>
+
+  <style>
+    /* Family pass: the header on the family backdrop (src/styles/family/landing.css), the
+       checkpoints on one rail that fills as the list is read, gradient checkpoint tiles, the
+       teardowns and recap as cards, the closing call to action as a gradient card. */
+    .fl.zbc { position: relative; isolation: isolate; }
+    .fl .zbc-band { position: absolute; inset: 0 0 auto; height: 720px; z-index: -1; pointer-events: none; }
+    .fl .zbc-band .fl-bd { pointer-events: none; }
+    .fl .zbc-eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--deep-a); }
+    .fl .zbc-eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--grad-brand); }
+    .fl .zbc-head h1 em { background-image: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-inline-end: .12em; margin-inline-end: -.12em; }
+    .fl .zbc-tagm { background: #fff; border-color: var(--line); box-shadow: 0 6px 14px -10px rgb(14 17 22 / .25); }
+    .fl .zbc-pdf { background: #fff; box-shadow: var(--shadow-stack); border-color: transparent; }
+    .fl .zbc-frame { position: relative; border: 0; border-radius: 18px; background: #fff; box-shadow: var(--shadow-stack); padding: 20px 22px 20px 26px; }
+    .fl .zbc-frame::before { content: ""; position: absolute; left: -1px; top: 16px; bottom: 16px; width: 3px; border-radius: 3px; background: linear-gradient(180deg, var(--deep-a), var(--deep-b), rgb(var(--hue-c))); }
+    .fl .zbc-track { position: relative; }
+    .fl .zbc-line { left: 21px; top: 40px; bottom: 40px; }
+    .fl .zbc-code { background: var(--grad-brand); box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9), inset 0 1px 0 rgb(255 255 255 / .4); }
+    .fl .zbc-cp + .zbc-cp { border-top-color: var(--line); }
+    .fl .zbc-cp-tag { color: var(--deep-a); }
+    .fl .zbc-td-col { border-radius: 16px; box-shadow: 0 16px 30px -24px rgb(14 17 22 / .4); }
+    .fl .zbc-recap { border: 0; border-radius: 20px; background: var(--mesh-soft), var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+    .fl .zbc-recap-label { color: var(--deep-a); }
+    .fl .zbc-cta { position: relative; overflow: hidden; border-radius: 22px; background: radial-gradient(60% 130% at 100% 0%, rgb(var(--hue-b) / .5), transparent 60%), radial-gradient(50% 110% at 80% 110%, rgb(var(--hue-c) / .4), transparent 62%), var(--grad-vivid); box-shadow: 0 44px 80px -44px rgb(var(--hue-b) / .8); }
+    .fl .zbc-cta-status { color: #b5f5cf; }
+    .fl .zbc-cta p { color: rgb(255 255 255 / .86); }
+    .fl .zbc-cta-btn { display: inline-flex; align-items: center; min-height: 44px; background: #fff; color: var(--k-ink); }
+    .fl .zbc-pdf { min-height: 44px; }
+    .fl .zbc-cta-btn:hover { background: #eef3ff; }
+    @media (max-width: 560px) { .zbc-line { left: 16px; } }
+    @media print { .zbc-band, .zbc-line { display: none !important; } .zbc-cta { background: #fff !important; box-shadow: none; } .zbc-cta-btn { display: none !important; } }
   </style>
 </BaseLayout>

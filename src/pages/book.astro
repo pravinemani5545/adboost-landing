@@ -6,27 +6,57 @@
 // Not indexed.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { BOOKING_EMBED_URL } from '../lib/site';
+import Backdrop from '../family/landing/Backdrop.astro';
+import '../styles/family/landing.css';
+import '../styles/pages/core.css';
+
+// What happens on the call, as a step track beside the calendar: each step is a phrase from the
+// lede under the heading (decorative; the lede is the content).
+const STEPS = [
+  { t: '30 minutes', s: 'with a senior strategist', ic: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>' },
+  { t: 'Google Meet', s: '', ic: '<rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10l5-3v10l-5-3"/>' },
+  { t: 'Free account audit included', s: '', ic: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>' },
+  { t: 'a written plan you keep', s: 'whether you work with us or not', ic: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>' },
+];
 
 const title = 'Book a Free Strategy Call | AdBoost Health';
 const description = 'Pick a time for a free 30-minute strategy call with a senior AdBoost Health strategist. Free account audit included.';
 ---
 <BaseLayout {title} {description} canonicalPath="/book/" noindex>
-  <section class="phero wide">
-    <div class="container">
-      <span class="eyebrow sec-eyebrow" style="display:block"><span class="dot"></span>Strategy call</span>
-      <h1>Book your free <span class="serif">strategy call</span></h1>
-      <p class="phero-lede">30 minutes with a senior strategist on Google Meet. Free account audit included, and a written plan you keep whether you work with us or not.</p>
-    </div>
-  </section>
-
-  <section class="iwrap">
-    <div class="container">
-      <div class="book-frame">
-        <div class="book-frame__bar" aria-hidden="true"><span class="book-dots"><i></i><i></i><i></i></span><span class="book-frame__url"></span></div>
-        <iframe src={BOOKING_EMBED_URL} title="Book a free strategy call with AdBoost Health" loading="eager"></iframe>
+<div class="fl">
+  <section class="bk" data-pointer>
+    <Backdrop spotlight />
+    <div class="container bk-in">
+      <header class="bk-head">
+        <span class="eyebrow fl-kicker"><span class="dot"></span>Strategy call</span>
+        <h1 class="arrive">Book your free <span class="serif">strategy call</span></h1>
+        <p class="phero-lede arrive" style="--d:60ms">30 minutes with a senior strategist on Google Meet. Free account audit included, and a written plan you keep whether you work with us or not.</p>
+      </header>
+      <div class="bk-card arrive" style="--d:120ms">
+        <ol class="bk-steps" aria-hidden="true">
+          {STEPS.map((st, i) => (
+            <li style={`--i:${i}`}>
+              <span class="bk-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" set:html={st.ic} /></span>
+              <span class="bk-t"><b>{st.t}</b>{st.s && <span>{st.s}</span>}</span>
+            </li>
+          ))}
+        </ol>
+        <div class="bk-window">
+          <div class="bk-bar" aria-hidden="true"><span class="bk-dots"><i></i><i></i><i></i></span><i class="bk-url"></i></div>
+          <div class="bk-frame">
+            <iframe src={BOOKING_EMBED_URL} title="Book a free strategy call with AdBoost Health" loading="eager"></iframe>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+</div>
+
+<Fragment slot="scripts">
+<script>
+  import '../family/landing/landing';
+</script>
+</Fragment>
 
   <script is:inline>
     (function () {
@@ -42,16 +72,3 @@ const description = 'Pick a time for a free 30-minute strategy call with a senio
     })();
   </script>
 </BaseLayout>
-
-<style>
-  .book-frame { position: relative; background: #fff; border: 1px solid var(--k-line); border-radius: var(--k-r-xl); overflow: hidden; box-shadow: var(--k-e3), var(--k-edge-light), 0 50px 90px -60px rgb(var(--hue-b) / .7); }
-  .book-frame__bar { display: flex; align-items: center; gap: 16px; padding: 12px 18px; border-bottom: 1px solid var(--k-line); background: linear-gradient(90deg, rgb(var(--hue-a) / .05), rgb(var(--hue-b) / .04) 60%, rgb(var(--hue-c) / .05)), var(--k-paper-2); }
-  .book-dots { display: inline-flex; gap: 6px; }
-  .book-dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--k-line-2); }
-  .book-dots i:nth-child(1) { background: color-mix(in srgb, var(--k-bad) 55%, var(--k-paper)); }
-  .book-dots i:nth-child(2) { background: color-mix(in srgb, var(--k-warn) 60%, var(--k-paper)); }
-  .book-dots i:nth-child(3) { background: color-mix(in srgb, var(--k-ok) 55%, var(--k-paper)); }
-  .book-frame__url { flex: 0 1 280px; height: 10px; border-radius: 5px; background: var(--k-paper-3); }
-  .book-frame iframe { display: block; width: 100%; height: 760px; border: 0; }
-  @media (max-width: 640px) { .book-frame iframe { height: 1000px; } }
-</style>

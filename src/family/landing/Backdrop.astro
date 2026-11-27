@@ -1,0 +1,24 @@
+---
+// The layered background of a hero or a band, back to front: texture (dots, a line grid or
+// rings), drifting glows in Health's three hues plus a warm one, grain. `spotlight` adds
+// accent dots that show around the pointer; the host needs data-pointer (landing.ts tracks
+// it). Port of adboost-media src/components/blocks/Backdrop.astro. Decorative.
+type Texture = 'dots' | 'grid' | 'rings';
+interface Props {
+  texture?: Texture | Texture[];
+  glow?: boolean;
+  spotlight?: boolean;
+  /** Where the dots are strongest, as CSS percentages. */
+  focus?: [string, string];
+  /** No fade at the bottom edge. */
+  full?: boolean;
+}
+const { texture = 'dots', glow = true, spotlight = false, focus, full = false } = Astro.props;
+const textures = [texture].flat();
+---
+<div class:list={['fl-bd', { full }]} aria-hidden="true" style={focus ? `--bd-x:${focus[0]};--bd-y:${focus[1]}` : undefined}>
+  {textures.map((t) => <i class={`fl-bd-${t}`}></i>)}
+  {spotlight && <i class="fl-bd-lit"></i>}
+  {glow && <><i class="fl-bd-glow a"></i><i class="fl-bd-glow b"></i><i class="fl-bd-glow c"></i><i class="fl-bd-glow d"></i></>}
+  <i class="fl-bd-grain"></i>
+</div>

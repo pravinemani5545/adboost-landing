@@ -1,0 +1,28 @@
+---
+// A product-UI window: a title bar (three dots, an optional mono title or a blank address
+// bar, an optional status pill) over a dotted body that holds the drawing. Port of
+// adboost-media src/components/landing/Win.astro. By default it is a picture of an
+// interface, so it is hidden from assistive technology and its few words restate the page;
+// pass decorative={false} when the body holds the page's own content.
+interface Props {
+  title?: string;
+  status?: string;
+  /** Status pill colour: a = the section accent, b / c its neighbours, ok / warn / bad = status, mute = grey. */
+  tone?: 'a' | 'b' | 'c' | 'ok' | 'warn' | 'bad' | 'mute';
+  dark?: boolean;
+  decorative?: boolean;
+  class?: string;
+  /** Extra classes on the body. */
+  body?: string;
+}
+const { title, status, tone = 'a', dark = false, decorative = true, class: cls, body } = Astro.props;
+---
+<div class:list={['lx-win', { 'lx-night': dark }, cls]} aria-hidden={decorative ? 'true' : undefined}>
+  <div class="lx-bar" aria-hidden={decorative ? undefined : 'true'}>
+    <span class="lx-dots"><i></i><i></i><i></i></span>
+    {title ? <span class="lx-title">{title}</span> : <i class="lx-url"></i>}
+    {status && <span class:list={['lx-pill', tone !== 'a' && tone]}><span class="lx-dot live"></span>{status}</span>}
+  </div>
+  <div class:list={['lx-body', body]}><slot /></div>
+  {Astro.slots.has('foot') && <div class="lx-foot"><slot name="foot" /></div>}
+</div>

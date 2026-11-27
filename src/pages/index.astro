@@ -2,12 +2,15 @@
 import Shell from '../layouts/Shell.astro';
 import Faq from '../components/Faq.astro';
 import ButtonLink from '../components/site/ButtonLink.astro';
-import HeatMatrix from '../kit/diagram/HeatMatrix.astro';
+import { TONE_MARK } from '../kit/diagram/util';
 import { BOOK_PATH } from '../lib/site';
 import { organizationNode } from '../lib/schema';
 import { getPublishedPosts } from '../lib/blog';
 import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../data/adPolicies';
 import { PLATFORMS, STATUS_LEGEND, STATUS_TONE, policyHref } from '../components/adv/status';
+import Backdrop from '../family/landing/Backdrop.astro';
+import Hub from '../family/landing/Hub.astro';
+import '../styles/family/landing.css';
 import '../styles/home.css';
 
 const SITE = Astro.site?.href.replace(/\/$/, '') ?? 'https://www.adboost.health';
@@ -109,11 +112,15 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
   twitterDescription="Lower CAC, scale paid profitably. 71+ founders served. $153M+ tracked."
   {jsonLd}
   bingVerify
+  mainClass="fl"
 >
 
-<!-- HERO: first screen, so .arrive (transform only, never hidden) instead of reveals -->
-<header class="hero">
-  <span class="grid-bg"></span>
+<!-- HERO: first screen, so .arrive (transform only, never hidden) instead of reveals. Layered
+     back to front: the dot backdrop with its glows (and accent dots around the pointer), the
+     dotted plate and dashed ring, the overview card, then two floating cards that restate this
+     page (bento 03, the 5-day setup stamp). Each layer leans by its own depth (landing.ts). -->
+<header class="hero fl-hero" data-pointer>
+  <Backdrop spotlight focus={['70%', '28%']} />
   <div class="container hero-grid">
     <div class="hero-copy">
       <div class="arrive">
@@ -145,8 +152,18 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       </div>
     </div>
 
-    <div class="hero-vis arrive d2">
-      <div class="ops k-glass" id="ops">
+    <div class="hero-vis fl-stage arrive d2" data-parallax>
+      <i class="fl-stage-plate" aria-hidden="true" data-depth="0.5"></i>
+      <i class="fl-stage-ring" aria-hidden="true" data-depth="1.6"></i>
+      <div class="hv-toast hv-comp fl-float" data-depth="2.4" aria-hidden="true">
+        <span class="lx-ic solid"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5-4-1.9-7-5.3-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg></span>
+        <span class="lx-tx"><span class="lx-t">Compliance-first creative</span><span class="hv-rules"><span class="lx-pill ok">FTC review</span><span class="lx-pill">Rx language</span></span></span>
+      </div>
+      <div class="hv-toast hv-setup fl-float slow" data-depth="1.9" aria-hidden="true">
+        <span class="lx-lab">5-DAY SETUP</span>
+        <span class="hv-days">{[0, 1, 2, 3, 4].map((i) => <i style={`--i:${i}`}></i>)}</span>
+      </div>
+      <div class="ops k-glass" id="ops" data-depth="1">
         <div class="ops-head">
           <div class="title">
             <span class="live-dot"></span>
@@ -267,8 +284,8 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 <section class="creative-strip" data-tone="tint">
   <div class="container">
     <div class="strip-head reveal">
-      <h2>Creative built for the <span class="serif">scroll</span>, and the rules of every health platform.</h2>
-      <div class="right">2,400+ <a class="tlink" href="/services/creative/">static & motion creatives</a> shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.</div>
+      <h2 class="fl-words">Creative built for the <span class="serif">scroll</span>, and the rules of every health platform.</h2>
+      <div class="right"><span class="strip-num" data-count>2,400+</span> <a class="tlink" href="/services/creative/">static & motion creatives</a> shipped this year. Every asset reviewed against Meta, Google & TikTok health policies before launch.</div>
     </div>
     <div class="phone-rail-wrap reveal d1">
     <div class="phone-rail" id="phoneRail">
@@ -281,12 +298,12 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 </section>
 
 <!-- BENTO -->
-<section id="why" class="bento">
+<section id="why" class="bento fl-why">
   <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow"><span class="dot"></span>WHY PARTNERS LOVE US</span>
-      <h2>Built for health brands. <span class="serif">Designed to scale.</span></h2>
-      <p>Five things every founder gets from our healthcare marketing services on day one, and the reason our partners average <b>24% lower CAC</b> in the first 30 days.</p>
+    <div class="section-head fl-shead center reveal">
+      <span class="eyebrow fl-kicker"><span class="dot"></span>WHY PARTNERS LOVE US</span>
+      <h2 class="fl-words">Built for health brands. <span class="serif">Designed to scale.</span></h2>
+      <p>Five things every founder gets from our healthcare marketing services on day one, and the reason our partners average <b data-count>24% lower CAC</b> in the first 30 days.</p>
     </div>
 
     <div class="bento-grid">
@@ -311,13 +328,18 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       <div class="bcard b2 reveal d1">
         <span class="tag">02 · YOUR TEAM</span>
         <div class="vis">
-          <div class="partner">
-            <div class="top">
-              <div class="pv">PA</div>
-              <div><div class="who">Pira Ahilan</div><div class="role">CO-FOUNDER</div></div>
+          <div class="lx-win fl-bwin">
+            <div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot ok live"></span></div>
+            <div class="lx-body">
+              <div class="partner">
+                <div class="top">
+                  <div class="pv">PA</div>
+                  <div><div class="who">Pira Ahilan</div><div class="role">CO-FOUNDER</div></div>
+                </div>
+                <div class="msg">New angle live tonight, should pull CAC under $38 by Friday ✦</div>
+                <div class="status"><span class="pulse"></span>Replies in 12m on avg.</div>
+              </div>
             </div>
-            <div class="msg">New angle live tonight, should pull CAC under $38 by Friday ✦</div>
-            <div class="status"><span class="pulse"></span>Replies in 12m on avg.</div>
           </div>
         </div>
         <div class="body">
@@ -331,6 +353,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
         <span class="tag">03 · COMPLIANT</span>
         <div class="vis">
           <div class="shield-wrap">
+            <svg class="shield-wires" viewBox="0 0 300 160" preserveAspectRatio="none" fill="none" aria-hidden="true"><path d="M70 28C112 28 112 80 150 80M70 80H150M70 132C112 132 112 80 150 80M230 28C188 28 188 80 150 80M230 80H150M230 132C188 132 188 80 150 80" /></svg>
             <div class="ch-rules left">
               <span class="r">GLP-1 claims</span>
               <span class="r">Before/after</span>
@@ -359,9 +382,9 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
           <h3>20+ new creatives shipped every month.</h3>
           <p>Static, motion, and UGC, produced in-house, tested against an indexed library of winning angles, then scaled to the highest performers.</p>
           <div class="b4-stats">
-            <div><div class="mono b4-k">CREATIVES SHIPPED · ALL-TIME</div><div class="b4-v">8,416</div></div>
-            <div><div class="mono b4-k">WIN RATE</div><div class="b4-v">38%</div></div>
-            <div><div class="mono b4-k">UGC CREATORS</div><div class="b4-v">140+</div></div>
+            <div><div class="mono b4-k">CREATIVES SHIPPED · ALL-TIME</div><div class="b4-v" data-count>8,416</div></div>
+            <div><div class="mono b4-k">WIN RATE</div><div class="b4-v" data-count>38%</div></div>
+            <div><div class="mono b4-k">UGC CREATORS</div><div class="b4-v" data-count>140+</div></div>
           </div>
         </div>
         <div class="vis">
@@ -373,6 +396,9 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       <div class="bcard b5 reveal">
         <span class="tag">05 · COMPOUNDING</span>
         <div class="vis">
+          <div class="lx-win fl-bwin">
+          <div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot live"></span></div>
+          <div class="lx-body b5-body">
           <svg viewBox="0 0 600 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <defs>
               <linearGradient id="g5" x1="0" x2="0" y1="0" y2="1">
@@ -397,6 +423,8 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <text x="12" y="25" font-family="Geist" font-size="13" font-weight="600" fill="#0a0a0f">$182k tracked</text>
             </g>
           </svg>
+          </div>
+          </div>
         </div>
         <div class="body">
           <h3>A system that compounds while you sleep.</h3>
@@ -408,6 +436,9 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
       <div class="bcard b6 reveal d1">
         <span class="tag">06 · CONVERSION</span>
         <div class="vis">
+          <div class="lx-win fl-bwin">
+          <div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot c live"></span></div>
+          <div class="lx-body b6-body">
           <div class="meter" data-meter={METER}>
             <svg viewBox="0 0 240 240" width="200" height="200" aria-hidden="true">
               <circle cx="120" cy="120" r="100" stroke="#eef0f4" stroke-width="14" fill="none"/>
@@ -417,6 +448,8 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <strong class="meter-num">{METER}%</strong>
               <span>AVG LANDER LIFT<br />vs. baseline</span>
             </div></div>
+          </div>
+          </div>
           </div>
         </div>
         <div class="body">
@@ -428,28 +461,63 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
   </div>
 </section>
 
-<!-- COMPLIANCE BY PLATFORM: a compact teaser of the /advertising/ rule sheets -->
-<section id="compliance" class="comp" data-tone="tint" aria-labelledby="comp-title">
-  <div class="container comp-grid">
-    <div class="comp-head reveal">
-      <span class="eyebrow"><span class="dot"></span>COMPLIANCE BY PLATFORM</span>
-      <h2 id="comp-title">What’s allowed, by <span class="serif">platform</span> and vertical</h2>
-      <p>Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch.</p>
-      <a class="btn btn-ghost" href="/advertising/">See all ad rules <span class="chev" set:html={chev} /></a>
+<!-- COMPLIANCE BY PLATFORM: a compact teaser of the /advertising/ rule sheets. The top is a dark
+     band: the heading (it fills in word by word as it is scrolled through) beside the three
+     platforms the paragraph names, wired to one review; the matrix card straddles its lower edge. -->
+<section id="compliance" class="comp fl-comp" aria-labelledby="comp-title">
+  <div class="fl-dark fl-comp-band" data-tone="night">
+    <Backdrop texture="grid" full />
+    <div class="container comp-grid">
+      <div class="comp-head reveal">
+        <span class="eyebrow fl-kicker"><span class="dot"></span>COMPLIANCE BY PLATFORM</span>
+        <h2 id="comp-title" class="fl-statement" data-words>What’s allowed, by <span class="serif">platform</span> and vertical</h2>
+        <p class="fl-lede">Every account is reviewed against Meta, Google, and TikTok health-vertical policies before launch.</p>
+        <a class="btn btn-ghost" href="/advertising/">See all ad rules <span class="chev" set:html={chev} /></a>
+      </div>
+      <div class="comp-hub reveal d1">
+        <Hub core="shield" label="health-vertical policies" nodes={[{ label: 'Meta' }, { label: 'Google' }, { label: 'TikTok' }]} />
+      </div>
     </div>
+  </div>
+  <div class="container">
     <!-- The card itself rises in; the matrix inside never hides (arrive: its cells only grow in
          place), so the card is never an empty white box while it waits for its reveal. -->
-    <div class="comp-stage">
+    <div class="comp-stage" data-tone="paper">
     <div class="comp-fig k-card k-card--raised reveal d1">
       <span class="comp-fig__bar" aria-hidden="true"><span class="comp-dots"><i></i><i></i><i></i></span><span class="comp-fig__ghost"></span></span>
-      <HeatMatrix
-        arrive
-        rowHeader="Vertical"
-        cols={PLATFORMS}
-        rows={policyRows}
-        legend={policyLegend}
-        caption={`Ad policy status by vertical and platform. Rules checked ${rulesChecked}; each cell opens its rule sheet.`}
-      />
+      {/* The vertical x platform matrix, drawn here instead of with the kit's HeatMatrix so the home
+          page does not load the shared diagram stylesheet (93 KB, render-blocking) for one table.
+          Same table, cells, marks, legend and caption as the HeatMatrix renders; styles in home.css. */}
+      <figure class="cm" data-draw>
+        <div class="cm-wrap">
+          <table class="cm-table">
+            <thead>
+              <tr>
+                <th scope="col" class="cm-corner">Vertical</th>
+                {PLATFORMS.map((c) => <th scope="col">{c}</th>)}
+              </tr>
+            </thead>
+            <tbody>
+              {policyRows.map((r, ri) => (
+                <tr>
+                  <th scope="row">{r.label}</th>
+                  {r.cells.map((c, ci) => c ? (
+                    <td data-level={c.level} style={`--i:${ri + ci}`}>
+                      <a class="cm-cell" href={c.href}><span class="cm-m" aria-hidden="true">{TONE_MARK[c.level]}</span><span class="cm-t">{c.text}</span></a>
+                    </td>
+                  ) : (
+                    <td class="cm-empty" style={`--i:${ri + ci}`}><span class="cm-cell"><span aria-hidden="true">·</span><span class="k-vh">No entry</span></span></td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <ul class="cm-legend">
+          {policyLegend.map((l) => <li data-level={l.level}><span class="cm-sw" aria-hidden="true">{TONE_MARK[l.level]}</span>{l.label}</li>)}
+        </ul>
+        <figcaption class="cm-cap">{`Ad policy status by vertical and platform. Rules checked ${rulesChecked}; each cell opens its rule sheet.`}</figcaption>
+      </figure>
     </div>
     </div>
   </div>
@@ -460,8 +528,8 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
   <div class="container">
     <div class="cases-head reveal">
       <div>
-        <span class="eyebrow"><span class="dot"></span>REAL RESULTS</span>
-        <h2>Numbers from <span class="serif">real</span> partners.</h2>
+        <span class="eyebrow fl-kicker"><span class="dot"></span>REAL RESULTS</span>
+        <h2 class="fl-words">Numbers from <span class="serif">real</span> partners.</h2>
       </div>
       <div class="r">Snapshots from the last 12 months. Brand names anonymized, happy to walk through the underlying account on a call.</div>
     </div>
@@ -541,12 +609,12 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 </section>
 
 <!-- PROCESS -->
-<section id="process" class="process" data-tone="tint">
+<section id="process" class="process fl-process" data-tone="tint">
   <div class="container">
     <div class="process-grid">
       <div class="process-left reveal">
-        <span class="eyebrow"><span class="dot"></span>HOW IT WORKS</span>
-        <h2>Set up in 5 days.<span class="serif">Results in 31.</span></h2>
+        <span class="eyebrow fl-kicker"><span class="dot"></span>HOW IT WORKS</span>
+        <h2 class="fl-words">Set up in 5 days.<span class="serif">Results in 31.</span></h2>
         <p>No 90-day onboarding. No “strategy decks.” Health brands can’t afford to lose a quarter to a slow agency, neither can we.</p>
         <div class="stamps">
           <span class="stamp">5-DAY SETUP</span>
@@ -559,8 +627,11 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
         </div>
       </div>
 
-      <div class="steps">
-        <div class="step reveal">
+      <!-- the three steps slide over one another (sticky); the rail beside them fills as the list is
+           scrolled through, and each step's product card holds its own drawing -->
+      <div class="steps fl-steps k-scrub-scope">
+        <span class="fl-rail" aria-hidden="true"><i class="k-spine"></i></span>
+        <div class="step fl-step reveal" style="--k:0">
           <span class="num">01 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 4h14v16l-7-3.5L5 20V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
@@ -568,6 +639,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <span class="duration">DAY 0–1</span>
             </div>
           </div>
+          <div class="lx-win fl-step-win"><div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot live"></span></div><div class="lx-body">
           <div class="demo">
             <svg viewBox="0 0 380 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <g class="gauge" transform="translate(190 140)">
@@ -578,9 +650,10 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <text x="190" y="170" text-anchor="middle" font-family="Geist Mono" font-size="10" fill="#6b6f7a" letter-spacing="0.6">GROWTH LEVERS · 7 OF 10 ACTIVE</text>
             </svg>
           </div>
+          </div></div>
         </div>
 
-        <div class="step reveal">
+        <div class="step fl-step reveal" style="--k:1">
           <span class="num">02 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 13l4 4 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -588,6 +661,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <span class="duration">DAY 2–5</span>
             </div>
           </div>
+          <div class="lx-win fl-step-win"><div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot b live"></span></div><div class="lx-body">
           <div class="demo">
             <svg viewBox="0 0 600 142" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
               <defs><linearGradient id="gp2" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0057ff" stop-opacity=".2"/><stop offset="1" stop-color="#0057ff" stop-opacity="0"/></linearGradient></defs>
@@ -598,9 +672,10 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
             </svg>
             <span class="demo-chip demo-chip--center">$4,880 · spike day</span>
           </div>
+          </div><div class="lx-foot fl-step-foot" aria-hidden="true"><span class="lx-pill">channels</span><span class="lx-pill b">creative library</span><span class="lx-pill c">offer architecture</span></div></div>
         </div>
 
-        <div class="step reveal">
+        <div class="step fl-step reveal" style="--k:2">
           <span class="num">03 / 03</span>
           <div class="top">
             <div class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19l5-5 4 4 7-9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -608,6 +683,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
               <span class="duration">DAY 6–31</span>
             </div>
           </div>
+          <div class="lx-win fl-step-win"><div class="lx-bar" aria-hidden="true"><span class="lx-dots"><i></i><i></i><i></i></span><i class="lx-url"></i><span class="lx-dot c live"></span></div><div class="lx-body">
           <div class="demo">
             <svg viewBox="0 0 600 142" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
               <defs><linearGradient id="gp3" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#0057ff" stop-opacity=".2"/><stop offset="1" stop-color="#0057ff" stop-opacity="0"/></linearGradient></defs>
@@ -619,6 +695,7 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
             </svg>
             <span class="demo-chip demo-chip--d31">DAY 31</span>
           </div>
+          </div><div class="lx-foot fl-step-foot" aria-hidden="true"><span class="lx-pill">creative testing</span><span class="lx-pill b">weekly iteration</span></div></div>
         </div>
       </div>
     </div>
@@ -661,11 +738,12 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 <section class="testimonials" data-dots>
   <div class="k-bg k-bg--dots" aria-hidden="true"><div class="k-dots-clip"><div class="k-dots-spot"></div></div></div>
   <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow"><span class="dot"></span>REAL STORIES, REAL RESULTS</span>
-      <h2>Founders who stopped <span class="serif">guessing</span>.</h2>
+    <div class="section-head fl-shead center reveal">
+      <span class="eyebrow fl-kicker"><span class="dot"></span>REAL STORIES, REAL RESULTS</span>
+      <h2 class="fl-words">Founders who stopped <span class="serif">guessing</span>.</h2>
     </div>
-    <div class="t-grid">
+    <!-- one large quote, the other three stacked beside it -->
+    <div class="t-grid fl-tgrid">
       <div class="tcard reveal">
         <div class="stars" role="img" aria-label="Rated 5 out of 5">★★★★★</div>
         <blockquote>“Instant results. We had demos within 30 days. They communicate, they ship, and they actually care about the outcome.”</blockquote>
@@ -693,14 +771,14 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 <!-- LATEST FROM THE BLOG -->
 <section id="latest" class="latest" data-tone="tint">
   <div class="container">
-    <div class="section-head">
-      <span class="eyebrow"><span class="dot"></span>FROM THE BLOG</span>
-      <h2>Latest from the <span class="serif">blog</span>.</h2>
+    <div class="section-head fl-shead center reveal">
+      <span class="eyebrow fl-kicker"><span class="dot"></span>FROM THE BLOG</span>
+      <h2 class="fl-words">Latest from the <span class="serif">blog</span>.</h2>
       <p>New playbooks on health ad policy, CAC and creative. <a class="tlink" href="/blog/">See every post</a>.</p>
     </div>
     <div class="latest-grid">
       {latest.map((post) => (
-        <a class="latest-card" href={`/blog/${post.id}/`}>
+        <a class="latest-card reveal" href={`/blog/${post.id}/`}>
           {/* ?v=N matches the hero cache-bust in src/pages/blog/index.astro and BlogLayout.astro */}
           {post.data.heroImage && <img src={`${post.data.heroImage}?v=2`} alt={post.data.heroAlt ?? ''} loading="lazy" width="640" height="360" />}
           <div class="lb">
@@ -715,26 +793,27 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 </section>
 
 <!-- FAQ: native <details>, open without JS; the FAQPage JSON-LD is built from the same FAQ list -->
-<section id="faq" class="faq">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow"><span class="dot"></span>FAQ</span>
-      <h2>Answers to <span class="serif">popular questions.</span></h2>
+<section id="faq" class="faq fl-faq">
+  <div class="container fl-faq-grid">
+    <div class="section-head fl-shead reveal">
+      <span class="eyebrow fl-kicker"><span class="dot"></span>FAQ</span>
+      <h2 class="fl-words">Answers to <span class="serif">popular questions.</span></h2>
       <p>If you’re <a class="tlink" href="/compare/">vetting agencies</a> right now, these are the questions we hear before every kickoff.</p>
     </div>
-    <Faq items={FAQ} idPrefix="faq-a" />
+    <div class="fl-faq-list reveal d1"><Faq items={FAQ} idPrefix="faq-a" /></div>
   </div>
 </section>
 
 <!-- BIG CTA: an inset night slab. Not .cta-band: its /book/ click stays labelled "inline". -->
 <section id="cta" class="k-band k-band--slab cta-slab" data-tone="paper">
   <div class="k-slab bigcta" data-tone="night">
+    <div class="fl-cta-rings" aria-hidden="true"></div>
     <div class="k-bg k-bg--grid" aria-hidden="true"></div>
     <div class="k-bg k-bg--aura" aria-hidden="true"></div>
     <div class="k-bg k-bg--noise" aria-hidden="true"></div>
     <div class="container inner">
       <div class="reveal"><span class="pill"><span class="pdot"><svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M2 4.5l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Booking <b>4 founders</b> this month</span></span></div>
-      <h2 class="reveal d1">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
+      <h2 class="reveal d1 fl-words">Ready to lower CAC and<br />scale spend <span class="serif">profitably</span>?</h2>
       <p class="reveal d2">A 30-minute call. Account audit included. No pitch deck, just a real plan you can take to your team, whether you work with us or not.</p>
       <div class="ctas reveal d3">
         <ButtonLink href={BOOK_PATH} size="lg" arrow data-magnetic>Book a free strategy call</ButtonLink>
@@ -749,6 +828,9 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
 </section>
 
 <Fragment slot="scripts">
+<script>
+  import '../family/landing/landing';
+</script>
 <script is:inline>
   // Page-only behaviour. Nav, phone menu, reveals, line draws, count-ups and the phone CTA come
   // from the kit (src/kit/scripts). Everything here is decoration over a complete server render.
@@ -801,21 +883,6 @@ const chev = '<svg width="9" height="9" viewBox="0 0 9 9" fill="none" aria-hidde
     io.observe(meter);
   })();
 
-  // ---- subtle ops parallax on mouse (translate only, rAF-batched, disabled off-screen)
-  const ops = document.getElementById('ops');
-  if (ops && motion && !document.documentElement.classList.contains('lowpower') && window.matchMedia('(pointer: fine)').matches) {
-    let mx = 0, my = 0, ticking = false, active = false;
-    const apply = () => { ticking = false; ops.style.transform = `translate3d(${mx * -8}px, ${my * -6}px, 0)`; };
-    const onMove = (e) => {
-      mx = e.clientX / window.innerWidth - .5;
-      my = e.clientY / window.innerHeight - .5;
-      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
-    };
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !active) { active = true; document.addEventListener('mousemove', onMove, { passive: true }); }
-      else if (!e.isIntersecting && active) { active = false; document.removeEventListener('mousemove', onMove); ops.style.transform = ''; }
-    }, { threshold: 0 }).observe(ops);
-  }
 </script>
 </Fragment>
 </Shell>

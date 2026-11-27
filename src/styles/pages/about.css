@@ -1,0 +1,140 @@
+/* /about/ only (src/pages/about/index.astro), on the family kit (src/styles/family/landing.css):
+   the hero band with the founders wired to the agency, the figures as cards, two numbered
+   chapters with a product card beside each, the system diagram on its own card, the location
+   card and the team as rich cards. */
+
+/* ---------- hero ---------- */
+.ab-hero .crumbs { margin-bottom: 2px; }
+.ab-hero-vis { padding: 10px 0; }
+.ab-hero-vis .fl-stage-plate { inset: -10px -20px 22% 26%; }
+.ab-hero-vis .fl-hub { max-width: 540px; }
+.ab-hero-vis .fl-hub-node { padding: 7px 14px 7px 7px; font-size: 13.5px; line-height: 1.2; }
+.ab-pin {
+  position: absolute; z-index: 3; left: 0; top: 8%; display: inline-flex; align-items: center; gap: 9px; padding: 9px 14px 9px 11px; border-radius: 99px;
+  background: rgb(255 255 255 / .92); border: 1px solid var(--line-2); box-shadow: 0 24px 40px -22px rgb(14 17 22 / .4); font-size: 12.5px; font-weight: 500; color: var(--text);
+}
+.ab-pin i { width: 9px; height: 9px; border-radius: 50%; background: var(--grad-brand); box-shadow: 0 0 0 4px rgb(var(--hue-a) / .16); }
+@media (max-width: 1023px) {
+  .ab-hero-vis { max-width: 520px; }
+}
+@media (max-width: 640px) {
+  .ab-hero-vis { display: none; }
+}
+
+/* ---------- the figures: four cards, each with a small drawing ---------- */
+.ab-stats-band { position: relative; z-index: 2; margin-top: -28px; }
+.ab-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.ab-stat {
+  position: relative; overflow: clip; display: grid; gap: 4px; padding: 22px 22px 20px; border-radius: 22px; background: #fff; box-shadow: var(--shadow-stack);
+  --ta: var(--hue-a); transition: translate .35s var(--ease), box-shadow .35s var(--ease);
+}
+.ab-stat:nth-child(2) { --ta: var(--hue-b); }
+.ab-stat:nth-child(3) { --ta: var(--hue-c); }
+.ab-stat::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, rgb(var(--ta)), transparent 70%); }
+.ab-stat::after { content: ""; position: absolute; inset: auto -30% -60% 30%; height: 140px; background: radial-gradient(closest-side, rgb(var(--ta) / .16), transparent); pointer-events: none; }
+@media (hover: hover) { .ab-stat:hover { translate: 0 -4px; box-shadow: var(--shadow-stack), 0 34px 60px -40px rgb(var(--ta) / .8); } }
+.ab-stat .fl-ic { width: 40px; height: 40px; border-radius: 12px; margin-bottom: 12px; }
+.ab-stat .fl-ic svg { width: 19px; height: 19px; }
+.ab-stat:nth-child(2) .fl-ic { background: linear-gradient(120deg, rgb(var(--hue-b)), rgb(var(--hue-c))); }
+.ab-stat:nth-child(3) .fl-ic { background: linear-gradient(120deg, rgb(var(--hue-c)), rgb(var(--hue-a))); }
+.ab-stat .sv { font-size: clamp(30px, 3.4vw, 42px); font-weight: var(--k-fw-display); letter-spacing: -.035em; line-height: 1.05; color: var(--text); }
+.ab-stat .sv :global(.sv-n), .ab-stat .sv [data-count] { min-width: 0; }
+.ab-stat .sv-of { font-size: 18px; color: var(--k-ink-3); -webkit-text-fill-color: currentColor; }
+.ab-stat .sl { font-family: var(--k-font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+/* the drawings: rising bars, five stars, a wall of creatives */
+.ab-stat-art { position: absolute; right: 18px; top: 22px; display: flex; align-items: flex-end; gap: 4px; height: 34px; }
+.ab-stat-art i { display: block; width: 6px; height: calc(var(--h) * 100%); border-radius: 3px; background: linear-gradient(180deg, rgb(var(--ta)), rgb(var(--ta) / .3)); transform-origin: 50% 100%; }
+.ab-stars { position: absolute; right: 18px; top: 28px; display: flex; gap: 3px; }
+.ab-stars i { width: 12px; height: 12px; background: #f5a623; clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.ab-tiles { position: absolute; right: 18px; top: 20px; display: grid; grid-template-columns: repeat(3, 12px); gap: 3px; }
+.ab-tiles i { height: 17px; border-radius: 3px; background: rgb(var(--hue-b) / .28); }
+.ab-tiles i:nth-child(2), .ab-tiles i:nth-child(6) { background: var(--grad-brand); }
+.js.motion .ab-stat:is(.reveal):not(.in) .ab-stat-art i { transform: scaleY(.1); }
+.js.motion .ab-stat .ab-stat-art i { transition: transform .8s var(--ease); transition-delay: .35s; }
+@media (max-width: 960px) { .ab-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) {
+  .ab-stat { padding: 18px 16px 16px; }
+  .ab-stat-art, .ab-stars, .ab-tiles { display: none; }
+}
+
+/* ---------- chapter 01: the policy review card ---------- */
+.ab-ch1 .fl-stage-plate { inset: -26px -26px 30% 30%; }
+.ab-rules { max-width: 460px; margin-left: auto; }
+.ab-rules .lx-body { gap: 10px; padding: 16px; }
+.ab-rules .lx-t::first-letter { text-transform: uppercase; }
+.ab-rules .lx-foot .lx-dot { margin-right: 2px; }
+
+/* ---------- chapter 02: both halves of the auction, the engine underneath ---------- */
+.ab-ch2 .fl-stage-ring { left: auto; right: -60px; bottom: -60px; }
+.ab-auction { max-width: 460px; }
+.ab-halves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ab-half { display: grid; justify-items: center; gap: 10px; padding: 12px 10px; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 6px 14px -10px rgb(14 17 22 / .22); }
+.ab-half-art { display: block; width: 100%; border-radius: 10px; padding: 8px 4px; background: radial-gradient(90% 120% at 0% 0%, rgb(var(--hue-a) / .2), transparent 62%), var(--bg-2); }
+.ab-half-art.c { background: radial-gradient(90% 120% at 100% 0%, rgb(var(--hue-b) / .22), transparent 62%), var(--bg-2); }
+.ab-half-art.c .fl-glyph { --ta: var(--hue-b); }
+.ab-half .fl-glyph { width: 100%; height: auto; }
+.ab-engine { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgb(var(--hue-a) / .45); background: #fff; box-shadow: 0 0 0 3px rgb(var(--hue-a) / .08); }
+.ab-engine .lx-t { flex: 0 0 auto; }
+.ab-engine-bar { position: relative; flex: 1; height: 6px; overflow: hidden; border-radius: 3px; background: var(--bg-3); }
+.ab-engine-bar i { position: absolute; inset: 0; width: 30%; border-radius: inherit; background: linear-gradient(90deg, transparent, rgb(var(--hue-a)), rgb(var(--hue-c)), transparent); transform: translateX(-100%); }
+.js.motion .ab-engine-bar i { animation: ab-run 3.2s cubic-bezier(.5, 0, .5, 1) 1s infinite; }
+@keyframes ab-run { to { transform: translateX(340%); } }
+/* the system diagram on a card */
+.ab-map { max-width: 760px; margin: clamp(48px, 6vw, 72px) auto 0; }
+.ab-map-win { border-color: transparent; box-shadow: var(--shadow-stack), 0 50px 90px -56px rgb(var(--hue-b) / .7); }
+.ab-map-win .lx-bar .lx-dot { margin-left: auto; }
+.ab-map-win .lx-body { padding: clamp(16px, 3vw, 30px); background-image: none; }
+/* where we work: a location card with a small map */
+.ab-where { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 0; max-width: 880px; margin: 48px auto 0; overflow: clip; border-radius: 24px; background: #fff; box-shadow: var(--shadow-stack); }
+.ab-where-art { position: relative; overflow: clip; min-height: 190px; background: radial-gradient(70% 70% at 50% 50%, rgb(var(--hue-a) / .18), transparent 70%), linear-gradient(160deg, #eef3ff, #f4f1ff); }
+.ab-where-grid { position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgb(var(--hue-b) / .45) 1px, transparent 1.6px); background-size: 12px 12px; -webkit-mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 80%); mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent 80%); }
+.ab-where-pin { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; margin: -30px 0 0 -18px; border-radius: 50% 50% 50% 0; rotate: -45deg; background: var(--grad-vivid); box-shadow: 0 14px 24px -10px rgb(var(--hue-b) / .9); }
+.ab-where-pin i { position: absolute; inset: 11px; border-radius: 50%; background: #fff; }
+.ab-where-ring { position: absolute; left: 50%; top: 50%; width: 70px; height: 70px; margin: -35px 0 0 -35px; border-radius: 50%; border: 1.5px solid rgb(var(--hue-a) / .5); }
+.ab-where-ring.b { width: 130px; height: 130px; margin: -65px 0 0 -65px; border-style: dashed; border-color: rgb(var(--hue-b) / .4); }
+.js.motion .ab-where-ring { animation: ab-ping 3s ease-out infinite; }
+.js.motion .ab-where-ring.b { animation-delay: 1.5s; }
+@keyframes ab-ping { 0% { transform: scale(.6); opacity: 1; } 100% { transform: scale(1.4); opacity: 0; } }
+.ab-where-txt { padding: 26px 30px; }
+.ab-where-txt h3 { margin: 0 0 8px; font-size: 19px; font-weight: 600; letter-spacing: -.015em; color: var(--text); }
+.ab-where-txt p { margin: 0; font-size: 15px; line-height: 1.65; color: var(--text-2); }
+.ab-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.ab-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--line-2); background: #fff; font-size: 14px; font-weight: 500; color: var(--text); transition: border-color .2s, color .2s, translate .2s; }
+.ab-links a:hover { border-color: rgb(var(--hue-a) / .6); color: var(--k-accent-ink); translate: 0 -2px; }
+.ab-links a:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+@media (max-width: 640px) {
+  .ab-where { grid-template-columns: minmax(0, 1fr); }
+  .ab-where-art { min-height: 130px; }
+  .ab-where-txt { padding: 22px 20px; }
+}
+
+/* ---------- the team: rich cards ---------- */
+.ab-team-sec .fl-shead { margin-bottom: 44px; }
+.ab-team { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ab-bio { position: relative; display: flex; flex-direction: column; overflow: clip; padding: 0 24px 24px; border-radius: 26px; background: #fff; box-shadow: var(--shadow-stack); --ta: var(--hue-a); --tb: var(--hue-b); transition: translate .35s var(--ease), box-shadow .35s var(--ease); }
+.ab-bio:nth-child(2) { --ta: var(--hue-b); --tb: var(--hue-c); }
+.ab-bio:nth-child(3) { --ta: var(--hue-c); --tb: var(--hue-a); }
+@media (hover: hover) { .ab-bio:hover { translate: 0 -4px; box-shadow: var(--shadow-stack), 0 44px 70px -44px rgb(var(--ta) / .8); } }
+.ab-bio-top { position: relative; display: flex; align-items: flex-start; justify-content: space-between; height: 128px; margin: 10px -14px 0; padding: 14px 14px 0; border-radius: 18px; overflow: clip;
+  background: radial-gradient(95% 130% at 0% 0%, rgb(var(--ta) / .3), transparent 58%), radial-gradient(95% 130% at 100% 100%, rgb(var(--tb) / .28), transparent 60%), linear-gradient(180deg, #fff, var(--bg-2)); border: 1px solid var(--line); }
+.ab-bio-top::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px, rgb(14 17 22 / .12) 1px, transparent 1.5px); background-size: 14px 14px; -webkit-mask-image: radial-gradient(75% 90% at 50% 0%, #000, transparent 78%); mask-image: radial-gradient(75% 90% at 50% 0%, #000, transparent 78%); }
+.ab-bio-glyph { position: relative; width: 132px; opacity: .9; }
+.ab-bio-glyph .fl-glyph { width: 100%; height: auto; --ta: inherit; }
+.ab-bio .lx-pill { position: relative; }
+.ab-bio .avatar { position: relative; width: 96px; height: 96px; margin-top: -48px; border-radius: 26px; display: grid; place-items: center; overflow: clip; background: var(--grad-vivid); color: #fff; font-weight: 600; box-shadow: 0 0 0 5px #fff, 0 22px 34px -18px rgb(var(--tb) / .9); }
+.ab-bio .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 26px; }
+.ab-bio h3 { margin: 18px 0 0; font-size: 20px; font-weight: 600; letter-spacing: -.02em; color: var(--text); }
+.ab-bio .role { align-self: flex-start; margin-top: 6px; padding: 4px 10px; border-radius: 99px; background: rgb(var(--ta) / .12); font-family: var(--k-font-mono); font-size: 11px; letter-spacing: .06em; color: var(--k-accent-ink); }
+.ab-bio:nth-child(2) .role { color: var(--deep-b); }
+.ab-bio:nth-child(3) .role { color: #0e7490; }
+.ab-bio p { flex: 1; margin: 14px 0 0; font-size: 14.5px; line-height: 1.65; color: var(--text-2); }
+.ab-bio .bio-links { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.ab-bio .bio-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 600; color: var(--k-accent-ink); }
+@media (max-width: 960px) { .ab-team { grid-template-columns: minmax(0, 1fr); max-width: 560px; margin-inline: auto; } }
+/* chapter 02: the text is long, so the auction card stays in view beside it */
+@media (min-width: 961px) {
+  .ab-ch2 .fl-ch-grid { align-items: start; }
+  .ab-ch2 .fl-ch-vis { position: sticky; top: calc(var(--k-top) + 40px); padding-top: 64px; }
+  .ab-auction { max-width: 500px; }
+}
+.ab-ch1 { padding-bottom: clamp(48px, 6vw, 80px); }

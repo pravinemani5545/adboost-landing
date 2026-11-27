@@ -1,9 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Backdrop from '../family/landing/Backdrop.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Faq from '../components/Faq.astro';
-import '../styles/pages/chapters.css';
+import '../styles/family/landing.css';
+import '../styles/family/landing-pages.css';
+import '../styles/pages/core.css';
 import { siteBase } from '../lib/site';
 import { breadcrumb, faqPage } from '../lib/schema';
 import { FAQ_GROUPS } from '../data/faq';
@@ -26,81 +29,64 @@ const jsonLd = [
 ];
 ---
 <BaseLayout {title} {description} canonicalPath="/faq/" {jsonLd}>
-  <PageHero
-    crumbs={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]}
-    eyebrow="FAQ"
-    title='Answers to <span class="serif">popular questions</span>'
-    lede="The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results."
-    class="faq-hero"
-  >
-    <nav slot="aside" class="k-card k-card--float k-card--glass faq-index" aria-label="Question groups">
-      <p class="faq-index__head"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>Jump to</p>
-      <ul>
-        {groups.map((g, i) => (
-          <li><a href={`#${groupId(g.title)}`}><span class="ch-ico" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} /><span>{g.title}</span><span class="faq-index__go" aria-hidden="true">→</span></a></li>
-        ))}
-      </ul>
-    </nav>
-  </PageHero>
-
-  <section class="iwrap">
-    <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
-          {groups.map((g, i) => (
-            <div id={groupId(g.title)} class="faq-group ch-card" data-reveal={i > 0 ? '' : undefined}>
-              <div class="faq-group__head">
-                <span class="ch-ico" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} />
-                <h2 class="sec-title faq-group__title">{g.title}</h2>
-              </div>
-              <Faq items={g.items} idPrefix={`faq-${groupId(g.title)}`} openFirst />
-            </div>
-          ))}
-        </div>
-        <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">Jump to</div>
-            <ul>{groups.map((g) => <li><a href={`#${groupId(g.title)}`}>{g.title}</a></li>)}</ul>
-          </div>
-          <div class="aside-card night">
-            <h4>Still have a question?</h4>
-            <p>Ask a senior strategist on a free 30-minute call.</p>
-            <a class="btn btn-primary" href="/book/">Book a call →</a>
-          </div>
-        </aside>
+<div class="fl">
+  <section class="fl-ph fq-hero" data-pointer>
+    <Backdrop spotlight focus={['72%', '40%']} />
+    <div class="container fl-ph-grid">
+      <div>
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'FAQ' }]} />
+        <span class="eyebrow fl-kicker sec-eyebrow"><span class="dot"></span>FAQ</span>
+        <h1 class="arrive">Answers to <span class="serif">popular questions</span></h1>
+        <p class="fl-ph-lede arrive" style="--d:60ms">The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results.</p>
+      </div>
+      <div class="fl-ph-vis fl-stage arrive" style="--d:120ms">
+        <i class="fl-stage-plate" aria-hidden="true"></i>
+        <nav class="fq-index" aria-label="Question groups">
+          <p class="fq-index__head"><span class="lx-dots" aria-hidden="true"><i></i><i></i><i></i></span>Jump to</p>
+          <ul>
+            {groups.map((g, i) => (
+              <li><a href={`#${groupId(g.title)}`}><span class="fl-ic" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} /><span>{g.title}</span><span class="fq-index__go" aria-hidden="true">→</span></a></li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </div>
   </section>
 
+  <section class="fq-body">
+    <div class="container fq-grid">
+      <div class="fq-groups">
+        {groups.map((g, i) => (
+          <div id={groupId(g.title)} class="fq-group" data-reveal={i > 0 ? '' : undefined}>
+            <div class="fq-group__head">
+              <span class="fl-ic" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} />
+              <h2 class="sec-title fq-group__title">{g.title}</h2>
+              <span class="fq-group__n" aria-hidden="true"></span>
+            </div>
+            <Faq items={g.items} idPrefix={`faq-${groupId(g.title)}`} openFirst />
+          </div>
+        ))}
+      </div>
+      <aside class="fq-aside">
+        <div class="aside-toc">
+          <div class="at-label">Jump to</div>
+          <ul>{groups.map((g) => <li><a href={`#${groupId(g.title)}`}>{g.title}</a></li>)}</ul>
+        </div>
+        <div class="aside-card night">
+          <h4>Still have a question?</h4>
+          <p>Ask a senior strategist on a free 30-minute call.</p>
+          <a class="btn btn-primary" href="/book/">Book a call →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
   <CtaBand />
+</div>
+
+<Fragment slot="scripts">
+<script>
+  import '../family/landing/landing';
+</script>
+</Fragment>
 </BaseLayout>
-
-<style>
-  /* Each group is a card holding a native <details> accordion (Faq.astro): every answer is in the
-     HTML whether open or closed, and the first answer of each group starts open. The visible text
-     matches the FAQPage JSON-LD built from the same FAQ_GROUPS. */
-  .faq-group { margin-bottom: var(--k-sp-5); padding: 22px 28px 6px; border-radius: var(--k-r-xl); scroll-margin-top: calc(var(--k-top) + 22px); }
-  .faq-group:last-child { margin-bottom: 0; }
-  .faq-group:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
-  .faq-group:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
-  .faq-group__head { display: flex; align-items: center; gap: 14px; padding-bottom: 6px; }
-  .faq-group__title { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
-  .faq-group :global(.faq-list) { max-width: none; }
-  .faq-group :global(.faq-list .qa:last-child) { border-bottom: 0; }
-
-  /* the hero index card */
-  .faq-index { display: grid; gap: 12px; padding: var(--k-sp-5); }
-  .faq-index__head { margin: 0; display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--k-line); font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--k-ink); }
-  .faq-index ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .faq-index li:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
-  .faq-index li:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
-  .faq-index a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border-radius: var(--k-r-md); background: var(--k-paper); border: 1px solid var(--k-line); box-shadow: var(--k-e1); font-size: 15px; font-weight: 600; color: var(--k-ink); transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease); }
-  .faq-index a:hover { translate: 4px 0; border-color: var(--k-accent-line); box-shadow: var(--k-e2); }
-  .faq-index a:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
-  .faq-index__go { color: var(--k-accent-ink); }
-  @media (max-width: 1023px) { :global(.faq-hero .phero-aside) { display: none; } }
-  @media (max-width: 560px) {
-    .faq-group { padding: 18px 16px 2px; border-radius: var(--k-r-lg); }
-    .faq-group__title { font-size: 20px; }
-  }
-</style>

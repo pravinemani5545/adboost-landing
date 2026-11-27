@@ -1,6 +1,8 @@
 ---
 import LeadLayout from '../../layouts/LeadLayout.astro';
 import { CONSENT_LEAD_MAGNET } from '../../lib/newsletter';
+import Backdrop from '../../family/landing/Backdrop.astro';
+import '../../styles/family/landing.css';
 const title = 'Zero-Ban Protocol: Free Compliance Checklist | AdBoost';
 const description = 'Get the exact compliance protocol behind $50K/month in peptide & GLP-1 Meta ad spend, with zero bans. Free checklist for health-brand advertisers.';
 const steps = [
@@ -12,8 +14,8 @@ const steps = [
 ];
 ---
 <LeadLayout {title} {description} canonicalPath="/zero-ban-protocol/">
-  <section class="zbp">
-    <div class="zbp-glow" aria-hidden="true"></div>
+  <section class="zbp fl" data-pointer>
+    <Backdrop spotlight focus={['30%', '20%']} />
     <div class="container zbp-grid">
       <div class="zbp-left">
         <span class="zbp-eyebrow"><span class="zbp-dot"></span>FREE PROTOCOL · PEPTIDE &amp; GLP-1 META ADS</span>
@@ -21,7 +23,7 @@ const steps = [
         <p class="zbp-sub">The <strong>Zero-Ban Protocol</strong> we run on every peptide and GLP-1 account before we spend a dollar. Run it against your own account before your next launch, so you stop learning where Meta&rsquo;s lines are the expensive way, by crossing them.</p>
 
         <div class="zbp-inside-label">The 5 checkpoints you run before launch</div>
-        <ol class="zbp-steps">
+        <ol class="zbp-steps k-scrub-scope">
           {steps.map((s) => (
             <li class="zbp-step">
               <span class="zbp-step-code">{s.code}</span>
@@ -36,7 +38,7 @@ const steps = [
 
       <div class="zbp-right">
         <div class="zbp-status" role="img" aria-label="Ad account status moves from restricted to cleared">
-          <div class="zst-top"><span class="zst-live"></span>META ADS MANAGER · ACCOUNT STATUS</div>
+          <div class="zst-top"><span class="lx-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="zst-live"></span>META ADS MANAGER · ACCOUNT STATUS</div>
           <div class="zst-row">
             <span class="zst-pill restricted">● RESTRICTED</span>
             <span class="zst-desc">One rejection from disablement</span>
@@ -256,4 +258,33 @@ const steps = [
       io.observe(el);
     })();
   </script>
+
+  <style>
+    /* Family pass: the lead page on the family backdrop (src/styles/family/landing.css), the five
+       checkpoints as a step track with gradient tiles on one rail, the status card as a product
+       window and the form on a card with a gradient edge. Text and form unchanged. */
+    .fl.zbp { isolation: isolate; }
+    .fl .zbp > .container { position: relative; z-index: 1; }
+    .fl .zbp-eyebrow { color: var(--deep-a); }
+    .fl .zbp-dot { background: var(--grad-brand); box-shadow: 0 0 0 4px rgb(var(--hue-a) / .14); }
+    .fl .zbp-h1 em { background-image: var(--grad-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-inline-end: .12em; margin-inline-end: -.12em; }
+    .fl .zbp-num { color: var(--deep-a); background: linear-gradient(#fff, #fff) padding-box, var(--grad-brand) border-box; border-color: transparent; box-shadow: 0 10px 22px -14px rgb(var(--hue-b) / .8); }
+    .fl .zbp-inside-label { border-top: 0; padding-top: 0; }
+    .fl .zbp-steps { position: relative; gap: 10px; }
+    .fl .zbp-steps::before { content: ""; position: absolute; left: 17px; top: 22px; bottom: 22px; width: 2px; border-radius: 2px; background: var(--line-2); }
+    .fl .zbp-step { position: relative; grid-template-columns: 36px 1fr; align-items: center; padding: 10px 14px 10px 0; border-radius: 16px; transition: background .3s, translate .3s var(--ease); }
+    .fl .zbp-step:hover { background: linear-gradient(90deg, rgb(var(--hue-a) / .08), transparent 80%); translate: 4px 0; }
+    .fl .zbp-step-code { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: #fff; color: var(--deep-a); box-shadow: var(--shadow-stack); font-size: 12px; }
+    .fl .zbp-step:last-child .zbp-step-code { background: var(--grad-brand); color: #fff; box-shadow: 0 12px 22px -12px rgb(var(--hue-b) / .9); }
+    .fl .zbp-step-desc { color: var(--text-2); }
+    .fl .zbp-status { background: #fff; border: 0; border-radius: 18px; padding: 0 16px 14px; box-shadow: var(--shadow-stack), 0 40px 70px -50px rgb(var(--hue-b) / .7); overflow: hidden; }
+    .zst-top { margin: 0 -16px; padding: 11px 16px; background: linear-gradient(180deg, #fff, var(--bg-2)); border-bottom: 1px solid var(--line); }
+    .zst-top .lx-dots { margin-right: 4px; }
+    .zst-row { padding: 12px 10px 4px; }
+    .zst-row.after { margin-top: 2px; padding: 10px; border-radius: 12px; background: linear-gradient(90deg, rgb(22 163 74 / .08), transparent 80%); }
+    .fl .zbp-card { border: 1px solid transparent; border-radius: 22px; background: linear-gradient(#fff, #fff) padding-box, linear-gradient(135deg, rgb(var(--hue-a)), rgb(var(--hue-b) / .5) 34%, var(--line) 58%, rgb(var(--hue-c) / .9)) border-box; box-shadow: var(--shadow-stack), 0 50px 90px -60px rgb(var(--hue-b) / .8); }
+    .fl .zbp-btn { background-image: var(--grad-btn); background-size: 200% 100%; transition: background-position .6s var(--ease), transform .12s, box-shadow .2s; }
+    .fl .zbp-btn:hover { background-position: 100% 0; }
+    .fl .zbp-step-desc, .fl .zst-desc, .fl .zbp-card-sub, .fl .zbp-trust { color: var(--k-ink-3); }
+  </style>
 </LeadLayout>
