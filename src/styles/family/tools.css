@@ -19,6 +19,9 @@
 .family .tc-live i::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: currentColor; opacity: .5; }
 .js.motion .family .tc-live i::after { animation: fam-pulse 2.4s ease-out infinite; }
 .family .tc-calc .calc-fields { gap: 16px; padding: 26px 24px 28px; align-content: start; }
+/* side by side, a short set of inputs sits centred against the taller result panel, on a faint
+   tint, instead of leaving an empty block under the last field */
+@media (min-width: 761px) { .family .tc-calc .calc-fields { align-content: center; background: radial-gradient(90% 60% at 0% 100%, rgb(var(--hue-a) / .06), transparent 70%), radial-gradient(70% 50% at 100% 0%, rgb(var(--hue-c) / .05), transparent 70%); } }
 .family .tc-calc .calc-field label { font-size: 13px; font-weight: 600; color: var(--text); }
 .family .tc-calc .calc-input { min-height: 48px; border-radius: 13px; border-color: var(--line-2); background: var(--bg-2); box-shadow: inset 0 1px 2px rgb(var(--k-shadow-rgb) / .05); }
 .family .tc-calc .calc-input:focus-within { border-color: var(--k-accent); background: #fff; box-shadow: 0 0 0 4px rgb(var(--hue-a) / .12); }
