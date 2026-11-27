@@ -48,7 +48,17 @@ if (motionOn()) {
   const ioDraw = new IntersectionObserver(land, { rootMargin: '0px 0px -40px 0px', threshold: 0.25 });
 
   whenShown(() => {
-    for (const el of $$(ALL)) (el.matches('.drawline, [data-draw]') ? ioDraw : io).observe(el);
+    // Whatever is already on screen at load (the first screen, or the target of a deep link) is
+    // shown in its final state at once, with no fade and no draw: a visitor never watches the page
+    // they just opened assemble itself. Measured in one pass before any class changes, so the page
+    // lays out once. Everything below the fold still arrives as it scrolls into view.
+    const els = $$(ALL);
+    const vh = window.innerHeight;
+    const onScreen = els.map((el) => { const r = el.getBoundingClientRect(); return r.top < vh && r.bottom > 0; });
+    els.forEach((el, k) => {
+      if (onScreen[k]) { el.classList.add('k-now'); arrive(el); }
+      else (el.matches('.drawline, [data-draw]') ? ioDraw : io).observe(el);
+    });
   });
 
   // keyboard users never land inside something still waiting to arrive

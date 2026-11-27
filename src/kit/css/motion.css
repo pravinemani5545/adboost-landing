@@ -30,6 +30,9 @@
 }
 .js.motion [data-reveal="left"].in { animation-name: k-fade, k-from-left; }
 .js.motion [data-reveal="right"].in { animation-name: k-fade, k-from-right; }
+/* On screen at load (reveal.ts adds .k-now): the final state at once, no fade, no draw. */
+.js.motion .k-now.in { animation: none; }
+.js.motion .k-now :is(.k-draw, .k-draw-x, .k-draw-y), .js.motion .k-now.drawline { transition: none; animation: none; }
 
 /* ---------- first screen: transform only, never hidden from paint timing ----------
    Skipped on a page revealed by a view transition (html.k-vt-in): the transition is its entrance. */
