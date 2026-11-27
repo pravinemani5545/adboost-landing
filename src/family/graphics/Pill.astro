@@ -1,0 +1,8 @@
+---
+// A status pill: mono, uppercase, tinted. tone: '' (hue a, blue) | 'b' (indigo) | 'c' (cyan) |
+// 'n' (neutral) | 'ok' (green) | 'warn' (amber) | 'bad' (red). dot adds a small status dot.
+import type { Tone } from './types';
+interface Props { text: string; tone?: Tone; dot?: boolean; class?: string }
+const { text, tone = '', dot = false, class: cls } = Astro.props;
+---
+<span class:list={['ui-pill', tone, cls]}>{dot && <span class="ld"></span>}{text}</span>

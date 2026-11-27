@@ -1,0 +1,253 @@
+---
+// The family page: Health's long-form interior layout, a port of adboost-media
+// src/layouts/ContentPage.astro. It renders, in this order: breadcrumbs, one H1, the answer box,
+// the lede, the byline, the page's graphic; then "On this page", key facts, the body as numbered
+// chapters, FAQ, sources, related links, the page's aside and the closing call-to-action card.
+// How to use it: src/family/README.md.
+//
+// Head tags and JSON-LD: FamilyPage builds none of its own. `data.seoTitle`,
+// `data.metaDescription`, `data.ogImage`, `data.ogType`, `data.noindex` and `schema` go to
+// BaseLayout unchanged, so a page that moves here keeps its title, description, canonical, robots,
+// Open Graph tags and JSON-LD byte for byte. Pass exactly what the page passed to BaseLayout before.
+//
+// Layout
+//   Hero: a full-width band (Backdrop: dots, line grid, aura in the three Health hues) with the
+//   title block on the left and, from 1080px, the page's graphic on the right (`hero` slot). A
+//   page without a graphic shows its key facts there as a spec card instead. The answer box
+//   always comes before the graphic in the HTML.
+//   Body: one 780px reading column. From 1180px a rail beside it holds the page's aside (`aside`
+//   slot) and the sticky "On this page" list with its progress line. In the HTML the list comes
+//   before the text and the aside after it, so headings keep the order they had in the old
+//   sidebar layout and phones get the list first.
+//   The body (default slot) is regrouped into numbered chapters at build time (chapterize.ts):
+//   text and order unchanged. A `figure` slot is placed after the heading named by `figureAt`.
+import '../styles/family/tokens.css';
+import '../styles/family/content.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Backdrop from './Backdrop.astro';
+import Toc from './Toc.astro';
+import LinkCard from './LinkCard.astro';
+import InlineCta from './InlineCta.astro';
+import { chapterize, headingsOf, type FigureAt } from './chapterize';
+import { isLive } from '../lib/live';
+
+export interface FamilyData {
+  /** the page's <title>, exactly as before */
+  seoTitle: string;
+  /** the meta description, exactly as before (omitted when the page had none) */
+  metaDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  noindex?: boolean;
+  /** H1 as plain text: its last words take the serif accent (two words, or one for a short H1) */
+  h1: string;
+  /** H1 as trusted HTML, used as is (a page that marks its own accent); the text must equal h1 */
+  h1Html?: string;
+  /** the answer box under the H1 (trusted HTML) */
+  summary?: string;
+  /** the answer box's small label, e.g. "In short" or "The short answer" */
+  summaryLabel?: string;
+  /** a supporting paragraph under the answer box (trusted HTML) */
+  lede?: string;
+  /** key facts; value is trusted inline HTML */
+  keyFacts?: { label: string; value: string }[];
+  /** FAQ; a is trusted HTML and must match the page's FAQPage JSON-LD word for word */
+  faqs?: { q: string; a: string }[];
+  sources?: { title: string; url: string; note?: string }[];
+  /** groups of related links, each under its own heading */
+  related?: { heading: string; level?: 2 | 3 | 4; links: { href: string; label: string; note?: string }[] }[];
+  /** the closing card; defaults are Health's CtaBand copy */
+  ctaHeading?: string;
+  ctaText?: string;
+  ctaPerks?: string[];
+}
+export interface BylineItem { text: string; icon?: 'org' | 'date' | 'check'; href?: string }
+
+interface Props {
+  /** canonical path, authored form ("/services/paid-media/") */
+  path: string;
+  data: FamilyData;
+  /** the breadcrumb trail as Health's Breadcrumbs takes it; the last item is this page */
+  crumbs: { label: string; href?: string }[];
+  /** mono label above the H1, printed as given */
+  eyebrow?: string;
+  /** the page's complete JSON-LD, passed to BaseLayout unchanged */
+  schema?: unknown;
+  /** the row under the answer box ("AdBoost Health", "Updated October 2026", ...) */
+  byline?: BylineItem[];
+  /** button label of the closing card (default: "Book a free strategy call", as CtaBand) */
+  ctaLabel?: string;
+  /** "On this page" entries; default: every <h2 id> in the body, then the FAQ. false: none */
+  toc?: { id: string; label: string }[] | false;
+  /** FAQ heading text and id */
+  faqHeading?: string;
+  faqId?: string;
+  /** where the `figure` slot goes in the body */
+  figureAt?: FigureAt;
+  hideNewsletterPopup?: boolean;
+}
+const {
+  path, data, crumbs, eyebrow, schema, byline = [], ctaLabel, figureAt,
+  faqHeading = 'Frequently asked questions', faqId = 'faq', hideNewsletterPopup,
+} = Astro.props;
+
+const hero = Astro.slots.has('hero') ? (await Astro.slots.render('hero')).trim() : '';
+const figure = Astro.slots.has('figure') ? (await Astro.slots.render('figure')).trim() : '';
+const factsArt = Astro.slots.has('facts-art') ? (await Astro.slots.render('facts-art')).trim() : '';
+const aside = Astro.slots.has('aside') ? (await Astro.slots.render('aside')).trim() : '';
+const body = await Astro.slots.render('default');
+const chapters = chapterize(body, figure && figureAt ? { html: figure, at: figureAt } : undefined);
+
+const faqs = data.faqs ?? [];
+const sources = data.sources ?? [];
+const pathOf = (href: string) => href.replace(/[?#].*$/, '');
+const related = (data.related ?? [])
+  .map((g) => ({ ...g, links: g.links.filter((l) => !l.href.startsWith('/') || isLive(pathOf(l.href))) }))
+  .filter((g) => g.links.length);
+
+const toc = Astro.props.toc === false ? [] : Astro.props.toc ?? [...headingsOf(body), ...(faqs.length ? [{ id: faqId, label: faqHeading }] : [])];
+const hasToc = toc.length >= 3;
+const hasRail = hasToc || Boolean(aside);
+
+// No graphic of its own: the key facts become the hero's spec card.
+const facts = data.keyFacts ?? [];
+const factsInHero = !hero && facts.length > 0;
+const hasArt = Boolean(hero) || factsInHero;
+
+const words = data.h1.trim().split(/\s+/);
+const tail = words.length >= 3 ? 2 : 1;
+const h1Lead = words.slice(0, -tail).join(' ');
+const h1Tail = words.slice(-tail).join(' ');
+
+const BYLINE_ICON = {
+  org: '<path d="M3 14V3.5L8 2l5 1.5V14M6 6h1M9 6h1M6 9h1M9 9h1M6.5 14v-2.5h3V14" />',
+  date: '<rect x="2.5" y="3.5" width="11" height="10" rx="2" /><path d="M2.5 6.5h11M5.5 2v3M10.5 2v3" />',
+  check: '<path d="M3 8.5l3 3 7-7" />',
+};
+---
+
+<BaseLayout
+  title={data.seoTitle}
+  description={data.metaDescription}
+  canonicalPath={path}
+  ogImage={data.ogImage}
+  ogType={data.ogType}
+  noindex={data.noindex}
+  jsonLd={schema}
+  hideNewsletterPopup={hideNewsletterPopup}
+>
+  <div class:list={['family', hasRail && 'pg-has-rail']}>
+    <div class="read-bar" aria-hidden="true"></div>
+
+    <header class:list={['cp-hero', hasArt && 'has-art']} data-spot>
+      <Backdrop texture={['dots', 'grid']} spotlight focus={['72%', '34%']} />
+      <div class="container cp-hero-grid">
+        <div class="cp-head">
+          <Breadcrumbs items={crumbs} />
+          {eyebrow && <span class="kicker arrive"><span class="k-dot" aria-hidden="true"></span>{eyebrow}</span>}
+          {data.h1Html
+            ? <h1 class="arrive" set:html={data.h1Html} />
+            : <h1 class="arrive">{h1Lead && `${h1Lead} `}<span class="serif">{h1Tail}</span></h1>}
+          {data.summary && (
+            <div class="pg-answer arrive" style="--d:60ms">
+              {data.summaryLabel && <span class="pg-answer-lab">{data.summaryLabel}</span>}
+              <Fragment set:html={data.summary} />
+            </div>
+          )}
+          {data.lede && <p class="cp-lede arrive" style="--d:90ms" set:html={data.lede} />}
+          {byline.length > 0 && (
+            <p class="pg-byline arrive" style="--d:120ms">
+              {byline.map((b) => (
+                <span>
+                  {b.icon && <svg class="cp-bi" viewBox="0 0 16 16" aria-hidden="true" set:html={BYLINE_ICON[b.icon]} />}
+                  {b.href ? <a href={b.href}>{b.text}</a> : b.text}
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
+
+        {hero && (
+          <div class="cp-art stage arrive" style="--d:140ms">
+            <span class="stage-plate" aria-hidden="true"></span>
+            <span class="stage-ring" aria-hidden="true"></span>
+            <Fragment set:html={hero} />
+          </div>
+        )}
+        {factsInHero && (
+          <div class="cp-art cp-art-facts stage arrive" style="--d:140ms">
+            <span class="stage-plate" aria-hidden="true"></span>
+            <span class="stage-ring" aria-hidden="true"></span>
+            <section class="cp-facts" aria-label="Key facts">
+              {factsArt && <div class="cp-facts-art" aria-hidden="true"><Fragment set:html={factsArt} /></div>}
+              <div class="cp-facts-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span></div>
+              <dl>
+                {facts.map((f, i) => <div class="cp-fact" style={`--i:${i}`}><dt>{f.label}</dt><dd set:html={f.value} /></div>)}
+              </dl>
+            </section>
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="container cp-grid">
+      {hasToc && <div class="cp-toc-cell"><Toc items={toc} /></div>}
+
+      <div class="cp-main">
+        {!factsInHero && facts.length > 0 && (
+          <section class="cp-facts cp-facts-wide reveal" aria-label="Key facts">
+            <div class="cp-facts-bar" aria-hidden="true"><span class="cp-dots"><i></i><i></i><i></i></span></div>
+            <dl>
+              {facts.map((f) => <div class="cp-fact"><dt>{f.label}</dt><dd set:html={f.value} /></div>)}
+            </dl>
+          </section>
+        )}
+
+        <div class="cp-body"><Fragment set:html={chapters} /></div>
+
+        {faqs.length > 0 && (
+          <section class="cp-faq" aria-labelledby={faqId}>
+            <div class="cp-ch-head reveal"><h2 id={faqId}>{faqHeading}</h2></div>
+            <div class="cp-faq-list">
+              {faqs.map((f, i) => (
+                <div class:list={['pg-qa', 'reveal', i % 3 && `d${i % 3}`]}>
+                  <h3>{f.q}</h3>
+                  <div class="pg-qa-a" set:html={f.a} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {sources.length > 0 && (
+          <section class="cp-sources" aria-labelledby="sources">
+            <h2 id="sources">Sources</h2>
+            <ol class="reveal">
+              {sources.map((s) => <li><a href={s.url} rel="noopener">{s.title}</a>{s.note && <>, {s.note}</>}</li>)}
+            </ol>
+          </section>
+        )}
+
+        {related.map((g) => {
+          const H = `h${g.level ?? 2}` as 'h2' | 'h3' | 'h4';
+          return (
+            <section class="cp-related">
+              <H>{g.heading}</H>
+              <ul data-n={g.links.length}>
+                {g.links.map((r, i) => <li class:list={['reveal', i % 3 && `d${i % 3}`]}><LinkCard href={r.href} label={r.label} note={r.note} /></li>)}
+              </ul>
+            </section>
+          );
+        })}
+      </div>
+
+      {aside && <aside class="cp-aside"><Fragment set:html={aside} /></aside>}
+
+      <section class="cp-cta">
+        <InlineCta heading={data.ctaHeading} text={data.ctaText} label={ctaLabel} perks={data.ctaPerks} />
+      </section>
+    </div>
+  </div>
+  <slot name="scripts" slot="scripts" />
+</BaseLayout>

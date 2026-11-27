@@ -1,0 +1,15 @@
+---
+// One row of a product list, inside <ul class="ui-rows">: an optional toggle, an icon tile, a name
+// (with an optional mono sub-label) and a meter. `meter` is a bar length in percent, a shape only:
+// never print it as a number. The bar fills when the graphic arrives.
+import Ic from './Ic.astro';
+import type { Tone } from './types';
+interface Props { name: string; sub?: string; icon: string; tone?: Tone; meter?: number; toggle?: 'on' | 'off'; i?: number }
+const { name, sub, icon, tone = '', meter, toggle, i = 0 } = Astro.props;
+---
+<li class="ui-row" style={`--i:${i}`}>
+  {toggle ? <span class:list={['ui-tog', toggle === 'off' && 'off']}></span> : <span></span>}
+  <span class:list={['ui-ic', tone]}><Ic name={icon} /></span>
+  <span class="ui-row-name">{name}{sub && <small>{sub}</small>}</span>
+  {meter !== undefined ? <span class="ui-meter"><i class="ui-fill" style={`width:${meter}%`}></i></span> : <span></span>}
+</li>

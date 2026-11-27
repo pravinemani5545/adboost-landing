@@ -1,0 +1,40 @@
+---
+// The layered background of a hero (port of adboost-media src/components/blocks/Backdrop.astro),
+// back to front: texture (dots and/or a line grid), drifting glows in Health's three hues plus a
+// soft violet, grain. `spotlight` adds accent dots that show around the pointer: the host element
+// needs data-spot (the script below sets --fx / --fy on it and .is-lit while the pointer is over it;
+// fine pointers with motion on only). Decorative: aria-hidden. Styles: styles/family/content.css.
+type Texture = 'dots' | 'grid';
+interface Props {
+  texture?: Texture | Texture[];
+  glow?: boolean;
+  spotlight?: boolean;
+  /** where the dot texture is strongest, as CSS percentages */
+  focus?: [string, string];
+}
+const { texture = 'dots', glow = true, spotlight = false, focus } = Astro.props;
+const textures = [texture].flat();
+---
+<div class="bd" aria-hidden="true" style={focus ? `--bd-x:${focus[0]};--bd-y:${focus[1]}` : undefined}>
+  {textures.map((t) => <i class={`bd-${t}`}></i>)}
+  {spotlight && <i class="bd-lit"></i>}
+  {glow && <><i class="bd-glow a"></i><i class="bd-glow b"></i><i class="bd-glow c"></i><i class="bd-glow d"></i></>}
+  <i class="bd-grain"></i>
+</div>
+{spotlight && (
+  <script is:inline>
+  (function () {
+    var root = document.documentElement.classList;
+    if (!root.contains('motion') || root.contains('lowpower') || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var host = document.currentScript.parentElement;
+    if (!host || host.__famSpot) return;
+    host.__famSpot = true;
+    var r = null, x = 0, y = 0, queued = false;
+    var paint = function () { queued = false; if (!r) r = host.getBoundingClientRect(); host.style.setProperty('--fx', (x - r.left).toFixed(0) + 'px'); host.style.setProperty('--fy', (y - r.top).toFixed(0) + 'px'); };
+    host.addEventListener('pointerenter', function () { r = null; host.classList.add('is-lit'); });
+    host.addEventListener('pointerleave', function () { host.classList.remove('is-lit'); });
+    host.addEventListener('pointermove', function (e) { x = e.clientX; y = e.clientY; if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+    window.addEventListener('scroll', function () { r = null; }, { passive: true });
+  })();
+  </script>
+)}

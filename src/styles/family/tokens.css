@@ -1,0 +1,85 @@
+/* ================================================================
+   The AdBoost family layer on Health: token bridge.
+
+   The family layout (src/family, src/styles/family/content.css) is a port of the
+   long-form pages of www.adboost.media (adboost-media: src/layouts/ContentPage.astro,
+   src/styles/content.css). Its CSS reads Media's token names. This file maps each of
+   them to Health's own values, so the same rules draw Health's pages in Health's
+   blue, indigo and cyan.
+
+   Scope: everything here is set on .family, the root element FamilyPage renders (and
+   any page that opts in with class="family"). A page without .family reads none of it, so
+   every Health page that is not on the family layer is unchanged.
+
+   Where each value comes from:
+   - neutrals: the kit's site tokens (src/styles/site-tokens.css, --k-*), which are
+     already Media's neutrals within a shade (paper-2 is the same #f6f7f9, line-3 the
+     same #c8cdd8). Two names have no Health step of their own:
+       --text-2  Media's body grey (#474d57). Health's --k-ink-2 is near black and
+                 --k-ink-3 is the muted grey; this sits between them, AA on paper-2.
+       --coral   the warning bar in figures (Media's #ff6b3d).
+   - the accent and its gradients: already on <body data-section="health"> in
+     src/styles/globals.css (--brand*, --hue-a/-b/-c, --deep-*, --vivid-*,
+     --grad-brand, --grad-text). Not repeated here.
+   - type: the kit fonts (Geist, Geist Mono, Instrument Serif); Health keeps its own
+     headline weight (--k-fw-display, 600).
+   - chrome: --nav-h and the fixed rows above the page come from the kit (--k-nav-h,
+     --fam-h, --k-top).
+   ================================================================ */
+
+.family {
+  /* surfaces and lines */
+  --bg: var(--k-paper);
+  --bg-2: var(--k-paper-2);
+  --bg-3: var(--k-paper-3);
+  --card: var(--k-paper);
+  --line: var(--k-line);
+  --line-2: var(--k-line-2);
+  --line-3: var(--k-line-3);
+
+  /* text */
+  --text: var(--k-ink);
+  --text-2: #474d57;
+  --mute: var(--k-ink-3);
+  --mute-2: var(--k-ink-3);
+
+  /* dark cards and bands */
+  --on-dark: var(--k-on-night);
+  --on-dark-2: rgb(255 255 255 / .74);
+  --on-dark-mute: rgb(255 255 255 / .56);
+  --dark-line: rgb(255 255 255 / .1);
+  --dark-line-2: rgb(255 255 255 / .18);
+
+  /* status colours used by figures */
+  --coral: #ff6b3d;
+  --ok-ink: var(--k-ok-ink);
+  --ok-soft: var(--k-ok-soft);
+  --warn-ink: #9a3412;
+  --warn-soft: #ffedd5;
+
+  /* shape, depth and motion */
+  --pill: var(--k-r-pill);
+  --r-card: var(--k-r-lg);
+  --ease: var(--k-ease);
+  --ease-out: var(--k-ease-out);
+  --shadow: var(--k-e2);
+  --shadow-stack:
+    0 0 0 1px rgb(var(--k-shadow-rgb) / .05),
+    0 1px 1px -.5px rgb(var(--k-shadow-rgb) / .05),
+    0 3px 3px -1.5px rgb(var(--k-shadow-rgb) / .05),
+    0 6px 6px -3px rgb(var(--k-shadow-rgb) / .05),
+    0 12px 12px -6px rgb(var(--k-shadow-rgb) / .05),
+    0 24px 24px -12px rgb(var(--k-shadow-rgb) / .05);
+
+  /* type */
+  --fw-display: var(--k-fw-display);
+
+  /* chrome: the header row (74px, 64px on phones) and everything fixed above the page */
+  --nav-h: var(--k-nav-h);
+  --top: var(--k-top);
+
+  /* a gradient dark enough to carry white text, from the section's readable hues */
+  --cp-vivid: linear-gradient(135deg, var(--deep-a), var(--deep-b) 55%, var(--deep-c));
+  /* text and icons drawn on --grad-brand: Health's blue is dark, so white (Media's cyan takes ink) */
+  --on-grad: #fff;
+}
