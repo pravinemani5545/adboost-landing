@@ -41,7 +41,7 @@ const data = {
   seoTitle: title,
   metaDescription: description,
   h1: "Ad budget calculator",
-  summary: esc("Work backwards from a customer target to the monthly ad budget it takes - with the revenue and ROAS that budget should return."),
+  summary: esc("Work backwards from a customer target to the monthly ad budget it takes, with the revenue and ROAS that budget should return."),
   faqs: faq.map((f) => ({ q: f.q, a: esc(f.a) })),
 };
 const byline = [{ text: 'AdBoost Health', icon: 'org' as const }, { text: 'Runs in your browser', icon: 'check' as const }];
@@ -120,7 +120,7 @@ const hero = {
             <div><div class="k">EXPECTED REVENUE</div><div class="v" id="revOut">{r.revText}</div></div>
             <div><div class="k">BLENDED ROAS</div><div class="v" id="roasOut">{r.roasText}</div></div>
           </div>
-          <div class="cr-note">Plan on CAC and payback, not ROAS alone - retention decides the real return.</div>
+          <div class="cr-note">Plan on CAC and payback, not ROAS alone: retention decides the real return.</div>
         </div>
       </div>
   <p class="tool-fine tc-fine">Runs in your browser. This sizes media at your target CAC; remember health accounts also need budget for 30–60 fresh creatives a month to hold that CAC. Target-CAC and creative-volume ranges come from our <a href="/blog/telehealth-cac-benchmarks-2026/">2026 health-vertical benchmarks</a>.</p>
@@ -134,7 +134,7 @@ const hero = {
     <li class="cp-step reveal" style="--i:2"><span class="cp-step-node" aria-hidden="true"></span><div class="cp-step-card tc-step"><p><strong>Multiply target by CAC.</strong> Ad budget = target new customers × CAC. 200 customers at a $150 CAC needs about $30,000 in monthly acquisition spend.</p></div></li>
   </ol>
   <div class="pg-prose">
-      <p>One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS - a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/">blended CAC</a>, not one platform's claimed number.</p></div>
+      <p>One caveat health brands miss: media is not the whole budget. Holding a benchmark CAC in a policed vertical takes 30-60 fresh, compliant creatives a month; running five to ten typically pushes CAC 40-80% higher. Plan on CAC and payback rather than ROAS: a strong ROAS that ignores retention and margin still loses money in subscription health. Once you have a budget, sanity-check the unit economics with the <a href="/tools/ltv-cac-calculator/">LTV:CAC calculator</a>, and judge the result on <a href="/glossary/blended-cac/">blended CAC</a>, not one platform's claimed number.</p></div>
 </FamilyPage>
 
 <script>

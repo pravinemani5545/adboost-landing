@@ -17,9 +17,9 @@ export function cacCalc(spend: number, customers: number, lo: number, hi: number
   if (customers <= 0) return { cac: null, value: '-', verdict: '', note: 'Enter the number of customers acquired.' };
   const cac = spend / customers;
   const range = money(lo) + '–' + money(hi);
-  if (cac < lo) return { cac, value: money(cac), verdict: 'good', note: 'Below the typical ' + range + ' range for your vertical - strong, if retention holds.' };
+  if (cac < lo) return { cac, value: money(cac), verdict: 'good', note: 'Below the typical ' + range + ' range for your vertical: strong, if retention holds.' };
   if (cac <= hi) return { cac, value: money(cac), verdict: '', note: 'Within the typical ' + range + ' range for your vertical.' };
-  return { cac, value: money(cac), verdict: 'bad', note: 'Above the typical ' + range + ' range - there’s likely room to bring this down.' };
+  return { cac, value: money(cac), verdict: 'bad', note: 'Above the typical ' + range + ' range: there’s likely room to bring this down.' };
 }
 
 /* ---------- LTV:CAC and payback ---------- */
@@ -49,9 +49,9 @@ export function ltvCalc(mrev: number, margin: number, months: number, cac: numbe
   const shown = Math.round(ratio * 10) / 10;
   if (shown >= 3) {
     const veryHigh = shown > LTV_VERY_HIGH;
-    return { ...base, ratio, ratioText, verdict: veryHigh ? 'warn' : 'good', note: 'Healthy - at or above the 3:1 benchmark.' + (veryHigh ? ' Very high - you may be under-investing in growth.' : '') };
+    return { ...base, ratio, ratioText, verdict: veryHigh ? 'warn' : 'good', note: 'Healthy: at or above the 3:1 benchmark.' + (veryHigh ? ' Very high: you may be under-investing in growth.' : '') };
   }
-  return { ...base, ratio, ratioText, verdict: 'bad', note: 'Below the 3:1 benchmark - you’re likely buying revenue at a loss after overhead.' };
+  return { ...base, ratio, ratioText, verdict: 'bad', note: 'Below the 3:1 benchmark: you’re likely buying revenue at a loss after overhead.' };
 }
 
 /* ---------- ad budget ---------- */
@@ -69,9 +69,9 @@ export function merCalc(rev: number, spend: number): MerResult {
   const mer = rev / spend;
   const x = mer.toFixed(1);
   const value = x + '×';
-  if (mer >= 3) return { mer, value, verdict: 'good', note: 'Total revenue is ' + x + '× total spend - efficient for most health/DTC models.' };
-  if (mer >= 2) return { mer, value, verdict: '', note: 'Total revenue is ' + x + '× total spend - workable, watch margin and overhead.' };
-  return { mer, value, verdict: 'bad', note: 'Total revenue is only ' + x + '× total spend - likely unprofitable after costs.' };
+  if (mer >= 3) return { mer, value, verdict: 'good', note: 'Total revenue is ' + x + '× total spend: efficient for most health/DTC models.' };
+  if (mer >= 2) return { mer, value, verdict: '', note: 'Total revenue is ' + x + '× total spend: workable, watch margin and overhead.' };
+  return { mer, value, verdict: 'bad', note: 'Total revenue is only ' + x + '× total spend: likely unprofitable after costs.' };
 }
 
 /* ---------- POAS ---------- */
