@@ -13,11 +13,13 @@
   background: linear-gradient(180deg, var(--k-paper), #fafbfd);
   border-bottom: 1px solid var(--k-line);
 }
-/* aura */
+/* aura: the section's three hues (blue, indigo, cyan) as soft blooms, as on the Media sections */
 .phero::before {
-  content: ""; position: absolute; left: 50%; top: -300px; z-index: -1; width: 1100px; height: 1100px;
-  border-radius: 50%; translate: -50% 0; pointer-events: none;
-  background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--k-accent) 8%, transparent), transparent 70%);
+  content: ""; position: absolute; inset: -260px -8% auto; height: 1000px; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(34% 38% at 22% 30%, rgb(var(--hue-a) / .09), transparent 70%),
+    radial-gradient(30% 36% at 74% 40%, rgb(var(--hue-b) / .11), transparent 70%),
+    radial-gradient(26% 30% at 94% 62%, rgb(var(--hue-c) / .12), transparent 70%);
 }
 /* blueprint grid: the same grid as .k-bg--grid */
 .phero::after {
@@ -48,7 +50,27 @@
 .phero-meta span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--k-accent); }
 /* split hero: text + aside; the aside takes the right column from 1024px */
 .phero-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, .92fr); gap: 56px; align-items: center; }
-.phero-aside { position: relative; min-width: 0; }
+.phero-aside { position: relative; isolation: isolate; min-width: 0; }
+/* the stage behind a hero card (wide screens): a tilted plate of hue-tinted dots and a hairline ring,
+   so the card floats on something instead of on the page */
+@media (min-width: 1024px) {
+  .phero-aside::before,
+  .phero-aside::after { content: ""; position: absolute; z-index: -1; pointer-events: none; border-radius: calc(var(--k-r-xl) + 6px); }
+  .phero-aside::before {
+    inset: 9% -5% -7% 12%;
+    rotate: 3deg;
+    background-color: rgb(var(--hue-b) / .06);
+    background-image: radial-gradient(circle at 1px 1px, rgb(var(--hue-b) / .34) 1px, transparent 1.6px);
+    background-size: 14px 14px;
+    -webkit-mask-image: linear-gradient(160deg, #000 30%, transparent 92%);
+    mask-image: linear-gradient(160deg, #000 30%, transparent 92%);
+  }
+  .phero-aside::after {
+    inset: -14px -14px -14px -14px;
+    border: 1px solid rgb(var(--hue-a) / .14);
+    background: radial-gradient(60% 50% at 100% 0%, rgb(var(--hue-c) / .12), transparent 70%);
+  }
+}
 @media (max-width: 1023px) {
   .phero-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
   .phero-grid .hero-panel, .phero-aside { max-width: 560px; }
@@ -107,11 +129,15 @@
 
 /* ---- answer-first / callout blocks (AEO) ---- */
 .answer-box {
-  border: 1px solid var(--k-line); border-left: 3px solid var(--k-accent); border-radius: var(--k-r-md);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 3%, transparent), transparent);
-  padding: 18px 22px; margin: 6px 0 24px; max-width: 900px;
+  position: relative; overflow: clip;
+  border: 1px solid var(--k-line); border-radius: var(--k-r-md);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--k-accent) 3.5%, var(--k-paper)), var(--k-paper));
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  padding: 18px 22px 18px 25px; margin: 6px 0 24px; max-width: 900px;
   font-size: 16px; line-height: 1.62; color: var(--k-ink-2); text-wrap: pretty;
 }
+/* the left edge in the section's gradient */
+.answer-box::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: linear-gradient(180deg, rgb(var(--hue-a)), rgb(var(--hue-b)) 60%, rgb(var(--hue-c))); }
 .answer-box strong { color: var(--k-ink); }
 .answer-box .al { display: block; font-family: var(--k-font-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--k-accent-ink); margin-bottom: 6px; }
 .callout { border: 1px solid var(--k-line); border-radius: var(--k-r-md); padding: 16px 18px; margin: 20px 0; font-size: 14.5px; line-height: 1.6; color: var(--k-ink-2); background: var(--k-paper-2); }
@@ -178,7 +204,7 @@
 /* only tables of 4+ columns keep a floor (and scroll on a phone); 2-3 columns fit the screen */
 .dtable:has(tr > :nth-child(4)) { min-width: 560px; }
 :is(.dtable, .prose table:where(:not(.k-dg *))) :is(th, td) { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--k-line); vertical-align: top; }
-:is(.dtable, .prose table:where(:not(.k-dg *))) thead th { font-family: var(--k-font-mono); font-size: 11px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--k-ink-3); background: var(--k-paper-2); }
+:is(.dtable, .prose table:where(:not(.k-dg *))) thead th { font-family: var(--k-font-mono); font-size: 11px; font-weight: 500; letter-spacing: .05em; text-transform: uppercase; color: var(--k-ink-3); background: linear-gradient(90deg, rgb(var(--hue-a) / .05), rgb(var(--hue-b) / .04) 60%, rgb(var(--hue-c) / .05)), var(--k-paper-2); }
 :is(.dtable, .prose table:where(:not(.k-dg *))) tbody tr:last-child td { border-bottom: 0; }
 :is(.dtable, .prose table:where(:not(.k-dg *))) tbody tr { transition: background-color var(--k-d-instant); }
 :is(.dtable, .prose table:where(:not(.k-dg *))) tbody tr:hover { background: color-mix(in srgb, var(--k-accent) 2.5%, transparent); }
@@ -195,12 +221,13 @@
 .aside-card { padding: 20px; }
 .aside-card h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
 .aside-card p { margin: 0 0 14px; font-size: 13px; color: var(--k-ink-3); line-height: 1.5; }
-.aside-card.night { background: linear-gradient(180deg, var(--k-night-2), var(--k-night)); color: var(--k-on-night); border-color: rgb(255 255 255 / .08); box-shadow: var(--k-edge-night), var(--k-e2); }
+.aside-card.night { position: relative; overflow: clip; isolation: isolate; background: radial-gradient(90% 70% at 100% 0%, rgb(var(--hue-b) / .38), transparent 62%), radial-gradient(70% 60% at 0% 100%, rgb(var(--hue-c) / .18), transparent 60%), linear-gradient(180deg, var(--k-night-2), var(--k-night)); color: var(--k-on-night); border-color: rgb(255 255 255 / .08); box-shadow: var(--k-edge-night), var(--k-e2); }
 .aside-card.night h4 { color: var(--k-on-night); }
 .aside-card.night p { color: var(--k-on-night-2); }
 .link-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 2px; }
 .link-list a { display: block; padding: 8px 0; font-size: 13.5px; color: var(--k-ink-2); border-bottom: 1px solid var(--k-paper-3); }
-.link-list a:hover { color: var(--k-accent-ink); }
+.link-list a { transition: color var(--k-d-fast) var(--k-ease), padding-left var(--k-t-snap) var(--k-spring-snap); }
+.link-list a:hover { color: var(--k-accent-ink); padding-left: 4px; }
 .link-list li:last-child a { border-bottom: 0; }
 /* minmax(0, 1fr), not 1fr: a wide table inside .tablewrap must scroll in its wrapper, not widen the column past the phone screen */
 @media (max-width: 900px) { .doc-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; } .doc-aside { position: static; } }
@@ -308,6 +335,14 @@
 .aside-toc a { display: block; padding: 6px 0 6px 12px; margin-left: -12px; font-size: 13px; color: var(--k-ink-2); border-left: 2px solid transparent; transition: color var(--k-d-fast), border-color var(--k-d-fast); }
 .aside-toc a:hover { color: var(--k-accent-ink); border-color: var(--k-accent); }
 .aside-toc a.active { color: var(--k-accent-ink); border-color: var(--k-accent); font-weight: 500; }
+/* the page index with a reading-progress spine (Toc.astro): the spine fills as the document is read */
+.toc-rail { box-shadow: var(--k-e1), var(--k-edge-light); }
+.toc-rail__body { position: relative; }
+.toc-rail__body ul { position: relative; z-index: 1; }
+.aside-toc.toc-rail a { margin-left: 0; padding-left: 14px; }
+.toc-rail__track { position: absolute; left: 0; top: 2px; bottom: 2px; width: 2px; border-radius: 2px; overflow: clip; background: var(--k-line); }
+.toc-rail__fill { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgb(var(--hue-a)), rgb(var(--hue-b)) 60%, rgb(var(--hue-c))); opacity: .55; }
+@supports not (animation-timeline: view()) { .js.motion .toc-rail__fill { scale: 1 0; } }
 
 /* section anchor offset for the fixed nav */
 .doc-main :is(h2, h3)[id] { scroll-margin-top: calc(var(--k-top) + 22px); }

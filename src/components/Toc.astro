@@ -1,16 +1,17 @@
 ---
-// The document index in the sidebar, with a progress spine. The spine fills as the reader moves
-// through the nearest .k-scrub-scope (the doc grid): scroll-driven CSS where supported
-// (kit motion.css), a small rAF fallback elsewhere, and fully drawn without motion or JS.
-// toc.ts marks the section being read (.active, aria-current) through the legacy .aside-toc
-// hook. Never put a /book/ link in here: t.js would label it "header" (closest nav).
-interface Props { items: { id: string; label: string }[] }
-const { items } = Astro.props;
+// The document index in the sidebar of every long interior page, with a progress spine. The spine
+// fills as the reader moves through the nearest .k-scrub-scope (the doc grid): scroll-driven CSS
+// where supported (kit motion.css), a small rAF fallback elsewhere, and fully drawn without motion
+// or JS. toc.ts marks the section being read (.active, aria-current) through the .aside-toc hook,
+// and the dot on the spine follows it. Styles: interior.css (.toc-rail).
+// Never put a /book/ link in here: t.js would label it "header" (closest nav).
+interface Props { items: { id: string; label: string }[]; label?: string }
+const { items, label = 'On this page' } = Astro.props;
 ---
-<nav class="aside-toc adv-toc" aria-label="On this page">
-  <div class="at-label">On this page</div>
-  <div class="adv-toc__rail">
-    <span class="adv-toc__track" aria-hidden="true"><span class="k-spine adv-toc__fill"></span></span>
+<nav class="aside-toc toc-rail" aria-label={label}>
+  <div class="at-label">{label}</div>
+  <div class="toc-rail__body">
+    <span class="toc-rail__track" aria-hidden="true"><span class="k-spine toc-rail__fill"></span></span>
     <ul>{items.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
   </div>
 </nav>
@@ -19,7 +20,7 @@ const { items } = Astro.props;
   // Fallback for browsers without scroll-driven animations: the same fill, driven by scroll.
   const root = document.documentElement;
   if (root.classList.contains('motion') && !CSS.supports('animation-timeline: view()')) {
-    for (const fill of document.querySelectorAll<HTMLElement>('.adv-toc__fill')) {
+    for (const fill of document.querySelectorAll<HTMLElement>('.toc-rail__fill')) {
       const scope = fill.closest<HTMLElement>('.k-scrub-scope');
       if (!scope) continue;
       let raf = 0;

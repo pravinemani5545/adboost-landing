@@ -4,11 +4,18 @@ import PageHero from '../../components/PageHero.astro';
 import NewsletterForm from '../../components/NewsletterForm.astro';
 import { EMAIL, MAILING_ADDRESS, siteBase } from '../../lib/site';
 import { breadcrumb } from '../../lib/schema';
+import '../../styles/pages/chapters.css';
 
 const SITE = siteBase(Astro.site);
 const title = 'Newsletter: Health Ad Policy & Growth Notes | AdBoost Health';
 const description = 'The AdBoost Health newsletter: short notes on Meta, Google and TikTok ad policy changes and what is working for GLP-1, telehealth and supplement brands.';
 const jsonLd = [breadcrumb(SITE, [{ label: 'Home', href: '/' }, { label: 'Newsletter', href: '/newsletter/' }])];
+// topic card icons (decorative): a policy page, a rising line, a clean inbox
+const TOPIC_ICON = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-5 4 4 7-9"/><path d="M15 8h5v5"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/></svg>',
+];
 const topics = [
   { h: 'Policy changes, early', p: 'When Meta, Google or TikTok change what health brands can run, you hear what changed, who it hits and what to do about it.' },
   { h: 'What is working now', p: 'Angles, formats and funnel fixes from the GLP-1, telehealth and supplement accounts we run, with the numbers that matter.' },
@@ -25,6 +32,19 @@ const topics = [
     <div class="nl-signup arrive">
       <NewsletterForm source="newsletter-page" withName button="Subscribe" />
     </div>
+    {/* decorative: an inbox with the three kinds of note this page describes */}
+    <div slot="aside" class="k-card k-card--float k-card--glass nl-inbox" aria-hidden="true">
+      <p class="nl-inbox__head"><span class="ch-dots"><i></i><i></i><i></i></span><span class="nl-inbox__bar"></span></p>
+      <ul>
+        {topics.map((t, i) => (
+          <li style={`--i:${i}`}>
+            <span class="nl-inbox__av"><span class="brand-mark"></span></span>
+            <span class="nl-inbox__txt"><b>AdBoost Health</b><span>{t.h}</span><i></i></span>
+            <span class="nl-inbox__dot"></span>
+          </li>
+        ))}
+      </ul>
+    </div>
   </PageHero>
 
   <section class="iwrap">
@@ -33,13 +53,14 @@ const topics = [
       <div class="grid-cards three nl-topics">
         {topics.map((t) => (
           <div class="lcard">
+            <span class="ch-ico" aria-hidden="true" set:html={TOPIC_ICON[topics.indexOf(t)]} />
             <h2>{t.h}</h2>
             <p>{t.p}</p>
           </div>
         ))}
       </div>
 
-      <div class="prose nl-who">
+      <div class="prose nl-who ch-card ch-edge" data-reveal>
         <h2>Who sends it</h2>
         <p>
           AdBoost Health{MAILING_ADDRESS && `, ${MAILING_ADDRESS}`}. Questions or requests: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>.
@@ -54,5 +75,24 @@ const topics = [
 <style>
   .nl-signup { --d: 120ms; max-width: 520px; margin-top: 26px; }
   .nl-topics .lcard h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.25; text-wrap: balance; }
-  .nl-who { max-width: 760px; margin-top: var(--k-sp-7); }
+  .nl-who { max-width: 760px; margin-top: var(--k-sp-7); padding: clamp(22px, 3vw, 30px); }
+  .nl-who h2 { margin-top: 0; }
+  .nl-topics .lcard { gap: 12px; }
+  .nl-topics .lcard:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
+  .nl-topics .lcard:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
+  .nl-inbox { display: grid; gap: 12px; padding: var(--k-sp-5); }
+  .nl-inbox__head { margin: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--k-line); }
+  .nl-inbox__bar { width: 46%; height: 10px; border-radius: 5px; background: var(--k-paper-3); }
+  .nl-inbox ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .nl-inbox li { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 12px 14px 12px 12px; border-radius: var(--k-r-md); background: var(--k-paper); border: 1px solid var(--k-line); box-shadow: var(--k-e1); }
+  .nl-inbox li:first-child { border-color: var(--k-accent-line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--k-accent) 10%, transparent), var(--k-e2); }
+  .nl-inbox__av { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--k-accent-soft); }
+  .nl-inbox__av .brand-mark { width: 20px; height: 22px; }
+  .nl-inbox__txt { display: grid; gap: 3px; min-width: 0; }
+  .nl-inbox__txt b { font-size: 12px; font-weight: 500; color: var(--k-ink-3); }
+  .nl-inbox__txt span { font-size: 14.5px; font-weight: 600; color: var(--k-ink); }
+  .nl-inbox__txt i { display: block; width: 80%; height: 7px; margin-top: 4px; border-radius: 4px; background: var(--k-paper-3); }
+  .nl-inbox__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--k-accent); }
+  .nl-inbox li:not(:first-child) .nl-inbox__dot { background: var(--k-line-2); }
+  @media (max-width: 1023px) { :global(.phero-aside):has(.nl-inbox) { display: none; } }
 </style>

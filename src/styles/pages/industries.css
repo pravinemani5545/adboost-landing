@@ -22,18 +22,9 @@
   color: var(--k-ink-3);
 }
 .ind-snap__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--k-sp-3); }
-.ind-snap__title { color: var(--k-ink); }
-.ind-snap__title::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--k-accent);
-  vertical-align: middle;
-  translate: 0 -1px;
-}
+.ind-snap__title { display: inline-flex; align-items: center; gap: 12px; color: var(--k-ink); }
+.ind-snap__title::after { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--k-ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--k-ok) 20%, transparent); }
+.ind-snap__head { padding-bottom: 12px; border-bottom: 1px solid var(--k-line); align-items: center; }
 .ind-snap__part { display: grid; gap: var(--k-sp-3); padding-top: var(--k-sp-4); border-top: 1px solid var(--k-line); }
 /* the snapshot is the hero aside from 1024px; below that the hero has no aside and the same
    snapshot follows the short answer, so a phone reads the answer before the chart */
@@ -43,15 +34,16 @@
   .ind-snap--body { display: grid; margin-top: var(--k-sp-5); }
 }
 .ind-segs { display: grid; gap: var(--k-sp-3); margin: var(--k-sp-5) 0 var(--k-sp-7); }
-.ind-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
-.ind-chips .k-chip { white-space: normal; line-height: 1.35; }
+.ind-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.ind-chips .k-chip { white-space: normal; line-height: 1.35; padding: 6px 12px 6px 10px; border-color: transparent; background: linear-gradient(var(--k-paper), var(--k-paper)) padding-box, linear-gradient(120deg, rgb(var(--hue-a) / .45), var(--k-line) 50%, rgb(var(--hue-c) / .45)) border-box; box-shadow: var(--k-e1); color: var(--k-ink-2); }
+.ind-chips .k-chip::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 50%; background: var(--grad-brand); }
 
 /* hub hero panel: the legacy .hero-panel frame around the CAC range bars */
 .ind-panel .ind-panel__bars { padding: var(--k-sp-4) 14px var(--k-sp-2); }
 .ind-panel .hp-foot { border-top: 1px solid var(--k-line); }
 
 /* ============ growth playbook: numbered steps on a scroll-filled spine ============ */
-.prose .ind-steps { list-style: none; margin: 26px 0 8px; padding: 0; display: grid; gap: 30px; }
+.prose .ind-steps { list-style: none; margin: 26px 0 8px; padding: 0; display: grid; gap: 14px; }
 .prose .ind-step { margin: 0; }
 .ind-step {
   --dot: 32px;
@@ -73,7 +65,7 @@
   border-radius: 2px;
 }
 .ind-step::before { background: var(--k-line-2); }
-.ind-step::after { background: var(--k-accent); transform-origin: center top; }
+.ind-step::after { background: var(--grad-brand); transform-origin: center top; }
 .ind-step__n {
   position: relative;
   z-index: 1;
@@ -87,10 +79,14 @@
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   color: var(--k-accent-on);
-  background: var(--k-accent);
-  box-shadow: 0 0 0 5px var(--k-accent-soft);
+  background: var(--grad-vivid);
+  box-shadow: 0 0 0 5px var(--k-paper), 0 0 0 6px rgb(var(--hue-a) / .18), 0 10px 22px -10px rgb(var(--hue-b) / .8);
 }
-.ind-step__body { min-width: 0; padding-top: 3px; }
+.ind-step__body { min-width: 0; padding: 18px 20px; transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease); }
+@media (hover: hover) { .ind-step:hover .ind-step__body { translate: 0 -2px; box-shadow: var(--k-e3), var(--k-edge-light); border-color: var(--k-line-2); } }
+.ind-step__n { margin-top: 16px; }
+.ind-step:not(:last-child)::before, .ind-step:not(:last-child)::after { top: calc(var(--dot) + 22px); bottom: -14px; }
+@media (max-width: 560px) { .ind-step { --dot: 28px; gap: 12px; } .ind-step__body { padding: 16px; } }
 .prose .ind-step__body h3 { margin: 0 0 8px; font-size: 18.5px; line-height: 1.3; text-wrap: balance; }
 .prose .ind-step__body > p { margin: 0; font-size: 15.5px; line-height: 1.68; color: var(--k-ink-2); }
 .prose .ind-step__body .ind-path { margin: var(--k-sp-5) 0 0; }
@@ -123,11 +119,34 @@
 }
 
 /* ============ ad rules: each platform's rule sheet, linked under the callout ============ */
-.prose .ind-rulelinks { list-style: none; margin: calc(var(--k-sp-2) * -1) 0 var(--k-sp-5); padding: 0; display: flex; flex-wrap: wrap; gap: var(--k-sp-2) var(--k-sp-5); font-size: var(--k-fs-small); }
-.prose .ind-rulelinks li { margin: 0; }
+.doc-main .prose .ind-rulelinks { list-style: none; max-width: none; margin: 4px 0 var(--k-sp-5); padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.prose .ind-rulelinks li { margin: 0; display: flex; }
+.prose a.ind-rule-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 16px 18px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-md);
+  background: var(--k-paper);
+  box-shadow: var(--k-e1), var(--k-edge-light);
+  color: var(--k-ink);
+  text-decoration: none;
+  transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease);
+}
+@media (hover: hover) { .prose a.ind-rule-card:hover { translate: 0 -3px; box-shadow: var(--k-e3), var(--k-edge-light); border-color: var(--k-accent-line); } }
+.prose a.ind-rule-card:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 3px; }
+.ind-rule-card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ind-rule-card__pf { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 13px; font-weight: 600; color: #fff; background: linear-gradient(135deg, rgb(var(--hue-a)), rgb(var(--hue-b))); }
+.ind-rulelinks li:nth-child(2) .ind-rule-card__pf { background: linear-gradient(135deg, rgb(var(--hue-b)), rgb(var(--hue-c))); }
+.ind-rulelinks li:nth-child(3) .ind-rule-card__pf { background: linear-gradient(135deg, rgb(var(--hue-c)), rgb(var(--hue-a))); }
+.ind-rule-card__t { font-size: 14.5px; font-weight: 500; line-height: 1.4; }
+.prose a.ind-rule-card:hover .ind-rule-card__t { color: var(--k-accent-ink); }
 
 /* ============ mistakes vs good: both questions head the two columns ============ */
-.ind-cmp { container: ind-cmp / inline-size; margin-top: 44px; }
+.ind-cmp { container: ind-cmp / inline-size; margin-top: 64px; }
 .ind-cmp__heads { display: grid; gap: 6px; }
 .prose .ind-cmp__heads h2 { margin: 0; font-size: clamp(20px, 2.1vw, 24px); }
 .prose .ind-cmp .k-dg { margin-top: var(--k-sp-4); }
@@ -198,3 +217,18 @@
   border-inline: 1px solid var(--k-ink-4);
   transform: skewX(-18deg);
 }
+
+/* ============ market context: a night statement card ============ */
+.ind-market { display: grid; gap: 14px; }
+.ind-market__mark { display: block; width: 120px; height: 40px; }
+.ind-market__mark svg { width: 100%; height: 100%; overflow: visible; }
+.prose .ind-market p { font-size: clamp(15.5px, 1.3vw, 17px); line-height: 1.66; }
+
+/* ============ what we do: the three services with their drawings ============ */
+.ind-svc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.ind-svc__card { padding: 8px 8px 18px; gap: 8px; }
+.ind-svc__card .ch-art { height: 120px; margin-bottom: 8px; }
+.ind-svc__card:nth-child(2) .ch-art { --ta: var(--hue-b); --tb: var(--hue-a); }
+.ind-svc__card:nth-child(3) .ch-art { --ta: var(--hue-c); --tb: var(--hue-b); }
+.prose .ind-svc__card :is(h3, p, .lc-more) { margin: 0 10px; }
+@media (max-width: 760px) { .ind-svc { grid-template-columns: minmax(0, 1fr); } .ind-svc__card .ch-art { height: 140px; } }

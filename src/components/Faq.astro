@@ -4,12 +4,13 @@
 // crawlers. Where ::details-content is supported the answer eases open (kit .k-disclosure).
 // Pair with faqPage() schema at the page level for AEO/GEO; the visible text and the JSON-LD
 // must stay word for word in sync. Answers accept trusted inline HTML (links).
-interface Props { items: { q: string; a: string }[]; idPrefix?: string; }
-const { items, idPrefix = 'faq' } = Astro.props;
+// openFirst: the first answer starts open (the /faq/ page opens each group's first answer).
+interface Props { items: { q: string; a: string }[]; idPrefix?: string; openFirst?: boolean; }
+const { items, idPrefix = 'faq', openFirst = false } = Astro.props;
 ---
 <div class="faq-list faq-block k-disclosure" data-reveal>
   {items.map((it, i) => (
-    <details class="qa" id={`${idPrefix}-${i}`}>
+    <details class="qa" id={`${idPrefix}-${i}`} open={openFirst && i === 0}>
       <summary><h3>{it.q}</h3><span class="qa-mark" aria-hidden="true"></span></summary>
       <div class="ans"><div class="ans-inner" set:html={it.a} /></div>
     </details>

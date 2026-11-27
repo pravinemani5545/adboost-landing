@@ -176,3 +176,48 @@ html:not(.js) .marquee { animation: none; }
 @media (max-width: 420px) {
   .comp-head h2 { font-size: 30px; }
 }
+
+/* ---------- compliance matrix: a product card on a hue stage ---------- */
+.comp-stage { position: relative; isolation: isolate; min-width: 0; }
+.comp-stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 10% -4% -8% 14%;
+  rotate: -2.5deg;
+  border-radius: calc(var(--k-r-xl) + 6px);
+  background-color: rgb(var(--hue-b) / .06);
+  background-image: radial-gradient(circle at 1px 1px, rgb(var(--hue-b) / .32) 1px, transparent 1.6px);
+  background-size: 14px 14px;
+  -webkit-mask-image: linear-gradient(200deg, #000 30%, transparent 90%);
+  mask-image: linear-gradient(200deg, #000 30%, transparent 90%);
+  pointer-events: none;
+}
+.comp-stage::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -18% -10% -12% 10%;
+  background: radial-gradient(40% 40% at 70% 30%, rgb(var(--hue-c) / .16), transparent 70%), radial-gradient(40% 40% at 30% 80%, rgb(var(--hue-a) / .12), transparent 70%);
+  pointer-events: none;
+}
+.comp-fig { border-radius: var(--k-r-xl); box-shadow: var(--k-e3), var(--k-edge-light), 0 40px 70px -46px rgb(var(--hue-b) / .7); }
+.comp-fig__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: -4px 0 14px; padding-bottom: 12px; border-bottom: 1px solid var(--k-line); }
+.comp-dots { display: inline-flex; gap: 5px; }
+.comp-dots i { width: 8px; height: 8px; border-radius: 50%; }
+.comp-dots i:nth-child(1) { background: color-mix(in srgb, var(--k-bad) 55%, var(--k-paper)); }
+.comp-dots i:nth-child(2) { background: color-mix(in srgb, var(--k-warn) 60%, var(--k-paper)); }
+.comp-dots i:nth-child(3) { background: color-mix(in srgb, var(--k-ok) 55%, var(--k-paper)); }
+.comp-fig__ghost { width: 74px; height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--k-line-2) 60%, rgb(var(--hue-a) / .4) 60%); }
+@media (max-width: 960px) { .comp-stage::before, .comp-stage::after { display: none; } }
+
+/* ---------- FAQ: the accordion on a card ---------- */
+.faq .faq-list {
+  padding: 4px 28px;
+  border: 1px solid var(--k-line);
+  border-radius: var(--k-r-xl);
+  background: var(--k-paper);
+  box-shadow: var(--k-e2), var(--k-edge-light), 0 40px 70px -56px rgb(var(--hue-b) / .6);
+}
+.faq .faq-list .qa:last-child { border-bottom: 0; }
+@media (max-width: 560px) { .faq .faq-list { padding: 2px 16px; border-radius: var(--k-r-lg); } }

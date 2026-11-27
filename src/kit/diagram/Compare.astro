@@ -135,6 +135,14 @@ const rm = markOf(R);
     transform: translateY(3px);
   }
   .dg-divider { display: none; }
+  /* split: each side washes in its tone from the top, the head is a tinted pill, and the items
+     sit on dashed hairlines so a long list reads as rows */
+  .dg-split .dg-side { background: linear-gradient(180deg, color-mix(in srgb, var(--tone-soft) 75%, var(--dg-card)), var(--dg-card) 96px); }
+  .dg-split .dg-head { justify-self: start; padding: 4px 10px; border-radius: var(--k-r-pill); background: var(--dg-card); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tone-fill) 30%, transparent); }
+  .dg-split .dg-items { gap: 0; }
+  .dg-split .dg-items li { padding: 10px 0; }
+  .dg-split .dg-items li + li { border-top: 1px dashed var(--dg-line); }
+  .dg-split .dg-items li:last-child { padding-bottom: 0; }
 
   /* diff */
   del, ins { text-decoration: none; }

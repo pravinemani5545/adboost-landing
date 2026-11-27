@@ -3,6 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHero from '../../components/PageHero.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Toc from '../../components/Toc.astro';
+import StatusBadge from '../../components/adv/StatusBadge.astro';
+import { SERVICE_ART } from '../../components/serviceArt';
 import Snapshot from './_Snapshot.astro';
 import Flow from '../../kit/diagram/Flow.astro';
 import Compare from '../../kit/diagram/Compare.astro';
@@ -10,6 +13,7 @@ import { VERTICALS, getVertical } from '../../data/verticals';
 import { getPlaybook, type Source } from '../../data/vertical-playbooks';
 import { AD_POLICIES, RULES_CHECKED_ON, STATUS_LABEL } from '../../data/adPolicies';
 import { PLATFORMS, STATUS_TONE, policyHref } from '../../components/adv/status';
+import '../../styles/pages/chapters.css';
 import '../../styles/pages/industries.css';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
@@ -96,9 +100,9 @@ const sources: Source[] = [...pb.questions.flatMap((q) => q.sources), ...v.sourc
   .filter((s, i, all) => all.findIndex((x) => x.url === s.url) === i);
 
 const services = [
-  { t: 'Compliant paid media', d: 'Meta, Google & TikTok, structured for this vertical’s auction.', href: '/services/paid-media/' },
-  { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/' },
-  { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/' },
+  { t: 'Compliant paid media', d: 'Meta, Google & TikTok, structured for this vertical’s auction.', href: '/services/paid-media/', art: 'paid-media' },
+  { t: 'In-house creative', d: '20+ compliant variants a month, built around winning angles.', href: '/services/creative/', art: 'creative' },
+  { t: 'CRO & funnels', d: 'Quiz funnels and landers tuned to LTV and payback.', href: '/services/cro/', art: 'cro' },
 ];
 // Vertical snapshot (hero aside) and the body diagrams. Every string and number below comes
 // from verticals.ts, vertical-playbooks.ts or adPolicies.ts as printed on the site.
@@ -153,8 +157,8 @@ const toc = [
 
   <section class="iwrap ind-doc">
     <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
+      <div class="doc-grid k-scrub-scope">
+        <div class="doc-main ch-doc">
           <div class="answer-box">
             <span class="al">The short answer</span>
             {v.summary} {v.proofLine} We only work in health, so the playbook, creative and policy review are built for {v.inline} brands.
@@ -177,7 +181,10 @@ const toc = [
             ))}
 
             <h2 id="market">What is changing in the {v.inline} market in 2026?</h2>
-            <p>{pb.marketContext}</p>
+            <div class="ch-night ind-market" data-reveal>
+              <span class="ind-market__mark" aria-hidden="true"><svg viewBox="0 0 120 40" fill="none"><path d="M2 34 C20 32 30 24 44 24 S70 30 84 16 S108 8 118 4" stroke="url(#indmk)" stroke-width="2.2" stroke-linecap="round" pathLength="1" class="k-draw"/><defs><linearGradient id="indmk" x1="0" x2="1"><stop offset="0" style="stop-color:var(--k-accent-bright)"/><stop offset="1" style="stop-color:rgb(var(--hue-c))"/></linearGradient></defs></svg></span>
+              <p>{pb.marketContext}</p>
+            </div>
 
             <h2 id="playbook">How do {v.inline} brands grow profitably?</h2>
             <p>{v.painPoint}</p>
@@ -185,7 +192,7 @@ const toc = [
               {pb.growthPlaybook.map((s, i) => (
                 <li class="ind-step" style={`--i:${i}`}>
                   <span class="ind-step__n" aria-hidden="true">{i + 1}</span>
-                  <div class="ind-step__body">
+                  <div class="ind-step__body ch-card">
                     <h3>{s.h}</h3>
                     <p>{s.p}</p>
                     {i === pathStep && pathway && (
@@ -205,8 +212,15 @@ const toc = [
             <h2 id="landmine">Which ad rules and claims trip up {v.inline} brands?</h2>
             <div class="callout warn"><span class="cl-label">Watch for this</span>{v.adLandmine} <a href={verticalBlog.href}>{verticalBlog.label}</a></div>
             {ruleLinks.length > 0 && (
-              <ul class="ind-rulelinks">
-                {ruleLinks.map((p) => <li><a href={policyHref(p)}>{p.vertical} ads on {p.platform}: what is allowed<span aria-hidden="true"> →</span></a></li>)}
+              <ul class="ind-rulelinks ch-stagger">
+                {ruleLinks.map((p) => (
+                  <li data-reveal>
+                    <a class="ind-rule-card" href={policyHref(p)}>
+                      <span class="ind-rule-card__top"><span class="ind-rule-card__pf" aria-hidden="true">{p.platform.charAt(0)}</span><StatusBadge status={p.status} /></span>
+                      <span class="ind-rule-card__t">{p.vertical} ads on {p.platform}: what is allowed<span aria-hidden="true"> →</span></span>
+                    </a>
+                  </li>
+                ))}
               </ul>
             )}
 
@@ -224,14 +238,17 @@ const toc = [
             </div>
 
             <h2 id="services">What does AdBoost Health do for {v.inline} brands?</h2>
-            <div class="related-grid ind-cards">
+            <div class="ind-svc ch-stagger">
               {services.map((s) => (
-                <a class="lcard" href={s.href}><h3>{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span></a>
+                <a class="lcard ind-svc__card" href={s.href} data-reveal>
+                  <span class="ch-art" aria-hidden="true" set:html={SERVICE_ART[s.art]} />
+                  <h3>{s.t}</h3><p>{s.d}</p><span class="lc-more">Learn more →</span>
+                </a>
               ))}
             </div>
 
             <h2 id="faq">{v.short} marketing FAQ</h2>
-            <Faq items={faqAll} idPrefix={`ind-${v.slug}`} />
+            <div class="ch-panel ch-card"><Faq items={faqAll} idPrefix={`ind-${v.slug}`} /></div>
 
             {relatedPosts.length > 0 && (
               <>
@@ -245,18 +262,17 @@ const toc = [
             )}
 
             <h3>Sources</h3>
-            <p class="ind-src-note">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
-            <ul class="ind-src-list">
-              {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
-            </ul>
+            <div class="ch-src">
+              <p class="ind-src-note">Platform policies checked against each platform’s live policy on Oct 30, 2026. Ad policies change; confirm current requirements with the platform and qualified counsel before launching. This is general information, not legal advice.</p>
+              <ul class="ind-src-list">
+                {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.label}</a></li>)}
+              </ul>
+            </div>
           </div>
         </div>
 
         <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-          </div>
+          <Toc items={toc} />
           <div class="aside-card">
             <h4>{v.short} at a glance</h4>
             <div class="link-list">

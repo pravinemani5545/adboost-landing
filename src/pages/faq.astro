@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CtaBand from '../components/CtaBand.astro';
+import Faq from '../components/Faq.astro';
+import '../styles/pages/chapters.css';
 import { siteBase } from '../lib/site';
 import { breadcrumb, faqPage } from '../lib/schema';
 import { FAQ_GROUPS } from '../data/faq';
@@ -10,6 +12,12 @@ const SITE = siteBase(Astro.site);
 const groups = FAQ_GROUPS;
 const all = groups.flatMap((g) => g.items);
 const groupId = (title: string) => title.toLowerCase().replace(/\W+/g, '-');
+// group icons (decorative): working together, compliance, creative and performance
+const GROUP_ICON = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2.5 20a5.5 5.5 0 0111 0M16 11a3 3 0 100-6M18 20h3.5a5 5 0 00-5-5"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5-4-1.9-7-5.3-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18l5-5 4 4 7-9"/><path d="M15 8h5v5"/></svg>',
+];
 const title = 'Frequently Asked Questions | AdBoost Health';
 const description = 'Answers to the questions health founders ask before hiring a growth agency: how we work, compliance, creative, and how fast you see results.';
 const jsonLd = [
@@ -23,24 +31,29 @@ const jsonLd = [
     eyebrow="FAQ"
     title='Answers to <span class="serif">popular questions</span>'
     lede="The questions we hear before every kickoff: how we work, how we handle compliance, and how fast you can expect results."
-    wide
-  />
+    class="faq-hero"
+  >
+    <nav slot="aside" class="k-card k-card--float k-card--glass faq-index" aria-label="Question groups">
+      <p class="faq-index__head"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>Jump to</p>
+      <ul>
+        {groups.map((g, i) => (
+          <li><a href={`#${groupId(g.title)}`}><span class="ch-ico" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} /><span>{g.title}</span><span class="faq-index__go" aria-hidden="true">→</span></a></li>
+        ))}
+      </ul>
+    </nav>
+  </PageHero>
 
   <section class="iwrap">
     <div class="container">
       <div class="doc-grid">
         <div class="doc-main">
           {groups.map((g, i) => (
-            <div id={groupId(g.title)} class="faq-group" data-reveal={i > 0 ? '' : undefined}>
-              <h2 class="sec-title faq-group__title">{g.title}</h2>
-              <div class="faq-open">
-                {g.items.map((it) => (
-                  <div class="fo-item">
-                    <h3>{it.q}</h3>
-                    <div class="fo-a" set:html={it.a} />
-                  </div>
-                ))}
+            <div id={groupId(g.title)} class="faq-group ch-card" data-reveal={i > 0 ? '' : undefined}>
+              <div class="faq-group__head">
+                <span class="ch-ico" aria-hidden="true" set:html={GROUP_ICON[i % GROUP_ICON.length]} />
+                <h2 class="sec-title faq-group__title">{g.title}</h2>
               </div>
+              <Faq items={g.items} idPrefix={`faq-${groupId(g.title)}`} openFirst />
             </div>
           ))}
         </div>
@@ -63,18 +76,31 @@ const jsonLd = [
 </BaseLayout>
 
 <style>
-  /* Answers render open (health plan O18): readable without JavaScript, and the
-     visible text matches the FAQPage JSON-LD built from the same FAQ_GROUPS. */
-  .faq-group { margin-bottom: var(--k-sp-6); scroll-margin-top: calc(var(--k-top) + 22px); }
+  /* Each group is a card holding a native <details> accordion (Faq.astro): every answer is in the
+     HTML whether open or closed, and the first answer of each group starts open. The visible text
+     matches the FAQPage JSON-LD built from the same FAQ_GROUPS. */
+  .faq-group { margin-bottom: var(--k-sp-5); padding: 22px 28px 6px; border-radius: var(--k-r-xl); scroll-margin-top: calc(var(--k-top) + 22px); }
   .faq-group:last-child { margin-bottom: 0; }
-  .faq-group__title { font-size: 22px; letter-spacing: -0.02em; }
-  /* the same hairline rows as the accordion (Faq.astro), with every answer open */
-  .faq-open { margin-top: var(--k-sp-3); border-top: 1px solid var(--k-line); }
-  .fo-item { padding: 22px 2px 24px; border-bottom: 1px solid var(--k-line); }
-  .fo-item h3 { margin: 0 0 8px; font-size: 17.5px; line-height: 1.4; font-weight: 600; letter-spacing: -0.012em; color: var(--k-ink); }
-  .fo-a { max-width: 68ch; color: var(--k-ink-3); font-size: 15px; line-height: 1.62; }
+  .faq-group:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
+  .faq-group:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
+  .faq-group__head { display: flex; align-items: center; gap: 14px; padding-bottom: 6px; }
+  .faq-group__title { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
+  .faq-group :global(.faq-list) { max-width: none; }
+  .faq-group :global(.faq-list .qa:last-child) { border-bottom: 0; }
+
+  /* the hero index card */
+  .faq-index { display: grid; gap: 12px; padding: var(--k-sp-5); }
+  .faq-index__head { margin: 0; display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--k-line); font-family: var(--k-font-mono); font-size: var(--k-fs-micro); font-weight: 500; letter-spacing: var(--k-ls-mono); text-transform: uppercase; color: var(--k-ink); }
+  .faq-index ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .faq-index li:nth-child(2) .ch-ico { --ta: var(--hue-b); --tb: var(--hue-c); }
+  .faq-index li:nth-child(3) .ch-ico { --ta: var(--hue-c); --tb: var(--hue-a); }
+  .faq-index a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 10px 14px 10px 10px; border-radius: var(--k-r-md); background: var(--k-paper); border: 1px solid var(--k-line); box-shadow: var(--k-e1); font-size: 15px; font-weight: 600; color: var(--k-ink); transition: translate var(--k-t-snap) var(--k-spring-snap), box-shadow var(--k-d-base) var(--k-ease), border-color var(--k-d-base) var(--k-ease); }
+  .faq-index a:hover { translate: 4px 0; border-color: var(--k-accent-line); box-shadow: var(--k-e2); }
+  .faq-index a:focus-visible { outline: 2px solid var(--k-accent); outline-offset: 2px; }
+  .faq-index__go { color: var(--k-accent-ink); }
+  @media (max-width: 1023px) { :global(.faq-hero .phero-aside) { display: none; } }
   @media (max-width: 560px) {
-    .fo-item { padding: 18px 2px 20px; }
-    .fo-item h3 { font-size: 16px; }
+    .faq-group { padding: 18px 16px 2px; border-radius: var(--k-r-lg); }
+    .faq-group__title { font-size: 20px; }
   }
 </style>

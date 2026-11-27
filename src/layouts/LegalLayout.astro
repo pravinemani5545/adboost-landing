@@ -22,16 +22,26 @@ const jsonLd = {
 };
 ---
 <Shell {title} {description} {canonicalPath} {jsonLd} preloadSerif={false} popup={false}>
-  <div class="legal-main container">
-    <div class="legal-prose">
-      <slot />
+  <div class="legal-band">
+    <div class="k-bg k-bg--grid" aria-hidden="true"></div>
+    <div class="legal-main container">
+      <div class="legal-prose">
+        <slot />
+      </div>
     </div>
   </div>
 </Shell>
 
 <style is:global>
+  /* a hero-like band: the section's hue blooms and the blueprint grid behind the top of the page */
+  .legal-band { position: relative; isolation: isolate; overflow: clip; }
+  .legal-band::before { content: ""; position: absolute; inset: -260px -8% auto; height: 900px; z-index: -1; pointer-events: none; background: radial-gradient(34% 38% at 22% 30%, rgb(var(--hue-a) / .09), transparent 70%), radial-gradient(30% 36% at 74% 40%, rgb(var(--hue-b) / .1), transparent 70%), radial-gradient(26% 30% at 94% 62%, rgb(var(--hue-c) / .1), transparent 70%); }
+  .legal-band .k-bg--grid { --k-grid-mask: 70% 40% at 30% 0%; }
   .legal-main { padding: calc(var(--k-nav-h) + 52px) 0 80px; }
-  .legal-prose { max-width: 720px; font-size: 15.5px; line-height: 1.7; color: var(--k-ink-2); }
+  .legal-prose { max-width: 760px; font-size: 15.5px; line-height: 1.7; color: var(--k-ink-2); counter-reset: lg; }
+  /* every section after the title on a hairline, with a mono index (CSS counter, no text in the HTML) */
+  .legal-prose h2 { counter-increment: lg; display: flex; align-items: baseline; gap: 12px; padding-top: 22px; border-top: 1px solid var(--k-line); }
+  .legal-prose h2::before { content: counter(lg, decimal-leading-zero); content: counter(lg, decimal-leading-zero) / ""; font-family: var(--k-font-mono); font-size: 12px; font-weight: 500; letter-spacing: .1em; color: var(--k-accent-ink); }
   .legal-prose h1 { font-size: var(--k-fs-h1); line-height: var(--k-lh-tight); letter-spacing: -0.035em; font-weight: var(--k-fw-display); color: var(--k-ink); margin: 0 0 14px; text-wrap: balance; }
   .legal-prose h2 { font-size: 20px; letter-spacing: -.015em; font-weight: 600; color: var(--k-ink); margin: 32px 0 10px; }
   .legal-prose p { margin: 0 0 14px; }

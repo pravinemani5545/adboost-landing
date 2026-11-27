@@ -5,11 +5,13 @@ import Timeline from '../../kit/diagram/Timeline.astro';
 import { parsePhase } from '../../kit/diagram/parse';
 import CtaBand from '../../components/CtaBand.astro';
 import Faq from '../../components/Faq.astro';
+import Toc from '../../components/Toc.astro';
 import { SERVICES, getService } from '../../data/services';
 import { siteBase } from '../../lib/site';
 import { pageDate } from '../../lib/live';
 import { metaDescription } from '../../lib/seo';
 import { breadcrumb, faqPage, serviceNode } from '../../lib/schema';
+import '../../styles/pages/chapters.css';
 import '../../styles/pages/services.css';
 
 export function getStaticPaths() {
@@ -61,6 +63,42 @@ const toc = [
 // lights its process card below (and the card lights the row).
 const phases = s.process.map((p, i) => ({ ...parsePhase(p.phase), href: `#process-${i}` }));
 const ganttUnit = phases.find((p) => p.unit)?.unit;
+// The process track below: each phase's name, its printed weeks as a chip (the h3 text is
+// unchanged: the separator stays in the heading, visually hidden), and its span on the same
+// scale as the hero Gantt (an open phase starts where the one before it ends).
+const steps = (() => {
+  const dated = phases.filter((p) => typeof p.start === 'number');
+  const lo = dated.length ? Math.min(...dated.map((p) => p.start as number)) : 1;
+  const ends = phases.map((p) => (typeof p.end === 'number' ? p.end : typeof p.start === 'number' ? p.start : lo));
+  const hasOpen = phases.some((p) => p.end === 'ongoing' || p.end === undefined);
+  const hi = Math.max(...ends) + (hasOpen ? 2 : 0);
+  const span = hi - lo + 1;
+  let prevEnd = lo;
+  return s.process.map((pr, i) => {
+    const ph = phases[i];
+    const split = ph.meta !== undefined && `${ph.label} · ${ph.meta}` === pr.phase;
+    const open = ph.end === 'ongoing' || ph.end === undefined;
+    const a = typeof ph.start === 'number' ? ph.start : prevEnd;
+    const b = open ? hi : (ph.end as number);
+    if (!open) prevEnd = b;
+    return {
+      ...pr,
+      name: split ? ph.label : pr.phase,
+      when: split ? ph.meta : undefined,
+      s: Math.round(((a - lo) / span) * 1000) / 10,
+      w: Math.round(((b - a + 1) / span) * 1000) / 10,
+      open,
+    };
+  });
+})();
+const tick = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+// outcome card icons (decorative): target, shield, pulse, layers
+const OUT_ICONS = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5-4-1.9-7-5.3-7-9.5V6l7-3z"/><path d="M9 12l2.2 2.2L15.5 10"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-6 5 12 2.5-6h4"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg>',
+];
 const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 // The stat card leads with the figure its own sentence turns on, copied out of that sentence
@@ -79,7 +117,7 @@ const statFigure = STAT_FIGURE[s.slug] && s.stat.text.includes(STAT_FIGURE[s.slu
   >
     {updatedLabel && <div class="metabar svc-metabar"><span>AdBoost Health</span><span class="dot"></span><span>Updated {updatedLabel}</span></div>}
     <div slot="aside" class="k-card k-card--float k-card--glass svc-plan">
-      <p class="svc-plan__head"><span class="svc-plan__title">How it works</span><span>{s.process.length} phases</span></p>
+      <p class="svc-plan__head"><span class="svc-plan__title"><span class="ch-dots" aria-hidden="true"><i></i><i></i><i></i></span>How it works</span><span>{s.process.length} phases</span></p>
       <Timeline
         arrive
         variant="gantt"
@@ -93,20 +131,29 @@ const statFigure = STAT_FIGURE[s.slug] && s.stat.text.includes(STAT_FIGURE[s.slu
 
   <section class="iwrap svc-doc">
     <div class="container">
-      <div class="doc-grid">
-        <div class="doc-main">
+      <div class="doc-grid k-scrub-scope">
+        <div class="doc-main ch-doc">
           <div class="answer-box"><span class="al">In short</span>{s.answer}</div>
           <div class="prose">
             <h2 id="outcomes">What you get</h2>
-            <ul class="checks">
-              {s.outcomes.map((o) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{o}</li>
+            <ul class="ch-outs">
+              {s.outcomes.map((o, i) => (
+                <li class="ch-card"><span class="ch-ico" aria-hidden="true" set:html={OUT_ICONS[i % OUT_ICONS.length]} />{o}</li>
               ))}
             </ul>
 
             <h2 id="process">How it works</h2>
-            <ol class="playbook svc-process">
-              {s.process.map((p, i) => (<li class="pb" id={`process-${i}`}><h3>{p.phase}</h3><p>{p.detail}</p></li>))}
+            <ol class="ch-track svc-process" data-draw>
+              {steps.map((p, i) => (
+                <li class="ch-step" id={`process-${i}`} style={`--i:${i}`}>
+                  <span class="ch-step__node" aria-hidden="true"></span>
+                  <div class="ch-step__card ch-card">
+                    <h3>{p.name}{p.when && <span class="ch-when"><span class="k-vh"> · </span>{p.when}</span>}</h3>
+                    <p>{p.detail}</p>
+                    <span class="ch-span" aria-hidden="true"><span class:list={['k-draw-x', p.open && 'is-open']} style={`--s:${p.s}%;--w:${p.w}%;--di:${i * 2}`}></span></span>
+                  </div>
+                </li>
+              ))}
             </ol>
 
             {s.extra && (
@@ -117,36 +164,38 @@ const statFigure = STAT_FIGURE[s.slug] && s.stat.text.includes(STAT_FIGURE[s.slu
             )}
 
             <h2 id="deliverables">What you receive</h2>
-            <ul class="checks">
-              {s.deliverables.map((d) => (
-                <li><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12l4.5 4.5L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{d}</li>
-              ))}
-            </ul>
-            <div class="svc-measured">
-              <p class="svc-measured__label">Measured on</p>
-              <ul class="svc-chips">{s.howMeasured.map((m) => <li class="k-chip">{m}</li>)}</ul>
+            <div class="ch-receipt ch-card" data-reveal>
+              <div class="ch-receipt__bar" aria-hidden="true"><span class="ch-dots"><i></i><i></i><i></i></span><span class="ch-receipt__ghost"><i></i><i></i></span></div>
+              <ul class="ch-rows">
+                {s.deliverables.map((d) => (
+                  <li><span class="ch-tick" aria-hidden="true" set:html={tick} />{d}</li>
+                ))}
+              </ul>
+              <div class="svc-measured ch-receipt__foot">
+                <p class="svc-measured__label ch-k">Measured on</p>
+                <ul class="ch-pills">{s.howMeasured.map((m) => <li class="k-chip">{m}</li>)}</ul>
+              </div>
             </div>
 
             <h2 id="depth">Why it’s different in health</h2>
-            {s.deepPoints.map((d) => (<><h3>{d.h}</h3><p>{d.p}</p></>))}
+            <ol class="ch-ledger">
+              {s.deepPoints.map((d, i) => (<li data-reveal style={`--i:${i}`}><h3>{d.h}</h3><p>{d.p}</p></li>))}
+            </ol>
 
-            <div class="k-stat svc-stat" data-reveal>
-              <p class="svc-stat__eyebrow">By the numbers</p>
+            <div class="k-stat svc-stat ch-night" data-reveal>
+              <p class="svc-stat__eyebrow ch-k">By the numbers</p>
               {statFigure && <p class="k-stat__value svc-stat__value">{statFigure}</p>}
               <p class="k-stat__label svc-stat__text">{s.stat.text}</p>
               <a class="k-chip svc-stat__src" href={s.stat.url} target="_blank" rel="noopener">Source: {s.stat.source}<span aria-hidden="true"> ↗</span></a>
             </div>
 
             <h2 id="faq">FAQ</h2>
-            <Faq items={s.faq} idPrefix={`svc-${s.slug}`} />
+            <div class="ch-panel ch-card"><Faq items={s.faq} idPrefix={`svc-${s.slug}`} /></div>
           </div>
         </div>
 
         <aside class="doc-aside">
-          <div class="aside-toc">
-            <div class="at-label">On this page</div>
-            <ul>{toc.map((t) => <li><a href={`#${t.id}`}>{t.label}</a></li>)}</ul>
-          </div>
+          <Toc items={toc} />
           <div class="aside-card">
             <h4>The rest of the system</h4>
             <div class="link-list">
