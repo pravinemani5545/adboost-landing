@@ -1,0 +1,68 @@
+---
+// /services/paid-media/ figure, after "Why it's different in health": the CAC-by-condition model
+// the page delivers, drawn from the page's own figures. Top: consultation CAC against
+// paying-patient CAC ("the gap is ~2×"). Bottom: the fully-loaded ranges the page gives per
+// condition (ED ~$70–140, hair loss ~$90–170, ADHD/mental health $200–400) on one scale.
+// The labels are readable text; the bars are shapes (aria-hidden).
+import Fig from '../Fig.astro';
+import Win from '../Win.astro';
+const MAX = 420; // the scale's right edge, a little past the highest figure the page gives
+const at = (v: number) => `${((v / MAX) * 100).toFixed(1)}%`;
+const rows = [
+  { name: 'ED', range: '~$70–140', lo: 70, hi: 140 },
+  { name: 'hair loss', range: '~$90–170', lo: 90, hi: 170 },
+  { name: 'ADHD/mental health', range: '$200–400', lo: 200, hi: 400 },
+];
+---
+<Fig caption="The CAC-by-condition model: consultation CAC against paying-patient CAC, and the fully-loaded ranges this section gives per condition." class="cacm">
+  <Win name="CAC by condition" pill={{ text: 'Fully-loaded', tone: 'b' }}>
+    <div class="cacm-gap">
+      <div class="cacm-pair">
+        <span class="cacm-lab">consultation CAC</span>
+        <span class="cacm-track" aria-hidden="true"><i class="ui-fill cacm-half"></i></span>
+      </div>
+      <div class="cacm-pair">
+        <span class="cacm-lab">paying-patient CAC</span>
+        <span class="cacm-track" aria-hidden="true"><i class="ui-fill cacm-full"></i></span>
+      </div>
+      <span class="cacm-x"><b>~2×</b><span class="ui-lab">the gap</span></span>
+    </div>
+    <ul class="cacm-rows">
+      {rows.map((r, i) => (
+        <li style={`--i:${i}`}>
+          <span class="cacm-name">{r.name}</span>
+          <span class="cacm-scale" aria-hidden="true"><i class="ui-fill cacm-range" style={`left:${at(r.lo)};width:calc(${at(r.hi)} - ${at(r.lo)})`}></i></span>
+          <span class="cacm-val">{r.range}</span>
+        </li>
+      ))}
+    </ul>
+  </Win>
+</Fig>
+
+<style>
+  .cacm-gap { position: relative; display: grid; gap: 10px; padding: 18px 120px 18px 20px; border-bottom: 1px solid var(--line); }
+  .cacm-pair { display: grid; grid-template-columns: 150px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .cacm-lab, .cacm-name { font-size: 13px; font-weight: 600; color: var(--text); }
+  .cacm-lab::first-letter, .cacm-name::first-letter { text-transform: uppercase; }
+  .cacm-track { position: relative; display: block; height: 22px; border-radius: 8px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); }
+  .cacm-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; }
+  .cacm-half { width: 48%; background: linear-gradient(90deg, rgb(var(--hue-c) / .55), rgb(var(--hue-a) / .55)); }
+  .cacm-full { width: 96%; background: var(--cp-vivid); box-shadow: 0 10px 20px -12px rgb(var(--hue-b) / .9); }
+  .cacm-x { position: absolute; right: 20px; top: 50%; display: grid; justify-items: center; gap: 2px; padding: 8px 12px; border-radius: 14px; background: #fff; box-shadow: var(--shadow-stack); translate: 0 -50%; }
+  .cacm-x b { font-family: var(--font-display); font-size: 24px; font-weight: 600; letter-spacing: -.02em; background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .cacm-rows { list-style: none; margin: 0; padding: 12px 20px 16px; }
+  .cacm-rows li { display: grid; grid-template-columns: 150px minmax(0, 1fr) 92px; align-items: center; gap: 12px; margin: 0; padding: 9px 0; border-top: 1px dashed var(--line); }
+  .cacm-rows li:first-child { border-top: 0; }
+  .cacm-scale { position: relative; display: block; height: 12px; border-radius: 99px; background: repeating-linear-gradient(90deg, var(--bg-2) 0 calc(25% - 1px), var(--line-2) calc(25% - 1px) 25%); }
+  .cacm-range { position: absolute; top: 0; bottom: 0; border-radius: 99px; background: var(--grad-brand); box-shadow: 0 6px 14px -6px rgb(var(--hue-b) / .8); }
+  .cacm-rows li:nth-child(3) .cacm-range { background: linear-gradient(90deg, var(--deep-b), var(--deep-a)); }
+  .cacm-val { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--deep-a); text-align: right; white-space: nowrap; }
+  @media (max-width: 600px) {
+    .cacm-gap { padding: 14px 14px 16px; }
+    .cacm-pair { grid-template-columns: minmax(0, 1fr); gap: 5px; }
+    .cacm-x { position: static; translate: none; grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 8px; padding: 6px 10px; justify-self: start; }
+    .cacm-rows { padding: 8px 14px 12px; }
+    .cacm-rows li { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; }
+    .cacm-scale { grid-column: 1 / -1; grid-row: 2; }
+  }
+</style>
